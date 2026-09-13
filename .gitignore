@@ -1,0 +1,73 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+.env
+.env.*
+coverage
+
+# cloudflare: .dev.vars holds the local NSRDB_API_KEY, .wrangler is local worker state
+.dev.vars
+.dev.vars.*
+.wrangler/
+
+playwright-report
+test-results
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# this project is bun-only, see scripts/only-bun.mjs
+yarn.lock
+package-lock.json
+pnpm-lock.yaml
+.pnp.*
+.yarn/
+.yarnrc.yml
+
+# agent scratch, not project artifacts
+.playwright-mcp/
+
+# outreach drafts: correspondence and strategy, not project artifacts
+outreach/
+
+# the recorded explainer film and its raw screencast: rebuildable with bun run demo
+/demo/
+
+# stray screenshots dropped in the repo root by hand
+/mobile-*.png
+
+# the agent's sentence embedder and the onnxruntime it runs on: 58 MB, fetched by
+# `bun run fetch-agent-model`. Not a diff. Without it src/agent/embedding.ts falls back to the
+# lexical router; CI fetches it because `bun run test` hard-fails without it
+/models/
+
+# Rust build output for crates/agv-sim; `bun run rust:wasm` rebuilds it
+target/
+# and the copy of it the browser fetches, which the same command writes. Not committed for the
+# same reason `models/` is not: it is a build product of a toolchain. An app built without it has
+# no physics at all and says so (src/sim/core.ts), which is why `bun run build` runs rust:wasm first
+/public/agv-sim.wasm
+
+# internal working notes, deliberately not in the public repo
+.persona-weather/
+
+qa-video/

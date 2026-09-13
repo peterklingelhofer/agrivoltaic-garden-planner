@@ -1,0 +1,116 @@
+/**
+ * Emits the Rust copies of the numeric tables that still have a TypeScript original.
+ *
+ * The SPA periodic terms and the DIRINT coefficients have no TypeScript original: they live only in
+ * `crates/agv-sim/src/spa_tables.rs` and `dirint_tables.rs`, which are hand-maintained against
+ * their published sources and carry their provenance headers. One copy needs no drift check.
+ *
+ * `perez-tables.ts` stays generated, because `src/sim/skydome.ts` still reads the Perez 1993
+ * luminance table from it and skydome isn't ported.
+ *
+ * `the port document` names this as the thing that quietly forks: these tables are hand-maintained
+ * TypeScript, and a Rust port that retypes them has two sources of truth and no way to notice when
+ * they drift. Nobody diffs hundreds of rows of astronomical or radiometric coefficients by eye.
+ *
+ * So they're not retyped. Node 24 imports the `.ts` directly (type stripping, no build step and
+ * no parser of our own), and this writes what it read. `bun run generate` runs it and CI diffs the
+ * result, which is the same drift check `scripts/generate-citations.mjs` already gets.
+ *
+ * The direction is deliberate: TypeScript is upstream because that is where the tables have been
+ * reviewed and tested against the published sources. If the Rust crate ever becomes the reference
+ * implementation, reverse this file rather than editing both ends.
+ *
+ *     node scripts/generate-rust-tables.mjs
+ */
+import { writeFileSync } from 'node:fs'
+
+const ROOT = new URL('..', import.meta.url)
+
+/**
+ * Each table carries `#[rustfmt::skip]`, because rustfmt would fold the short ones onto a single
+ * line and `cargo fmt --check` would then disagree with the generator on every run. A generated
+ * file has to be stable under both, and the row-per-line shape is the one worth keeping: it's
+ * what makes a diff against the TypeScript readable.
+ *
+ * Rust needs every f64 literal to look like one. `0` is an integer literal and won't coerce
+ * inside a `[f64; 3]`, and `1e8` is fine but `175347046` isn't, so everything gets a decimal
+ * point unless it already carries an exponent
+ */
+const literal = (value) => {
+  if (!Number.isFinite(value)) throw new Error(`non-finite table value: ${String(value)}`)
+  const text = String(value)
+  return /[.e]/.test(text) ? text : `${text}.0`
+}
+
+/**
+ * A table of rows becomes `&[[f64; N]]`; a flat list of numbers becomes `&[f64]`.
+ *
+ * `chunk` wraps a flat list at that many values per line. Without it the DIRINT table is one
+ * 1 260-value line about nine thousand characters wide, which no diff can say anything useful
+ * about. Chunking it at its own innermost dimension gives one line per precipitable-water group,
+ * so a changed coefficient shows up as a changed group rather than as the whole table
+ */
+const emit = (name, rows, chunk) => {
+  if (!Array.isArray(rows) || rows.length === 0) throw new Error(`${name} is empty or not a table`)
+  if (typeof rows[0] === 'number') {
+    if (chunk === undefined) {
+      return `#[rustfmt::skip]\npub static ${name}: &[f64] = &[${rows.map(literal).join(', ')}];\n`
+    }
+    const lines = []
+    for (let start = 0; start < rows.length; start += chunk) {
+      const group = rows.slice(start, start + chunk).map(literal)
+      lines.push(`    ${group.join(', ')},`)
+    }
+    return `#[rustfmt::skip]\npub static ${name}: &[f64] = &[\n${lines.join('\n')}\n];\n`
+  }
+  const width = rows[0].length
+  for (const row of rows) {
+    if (row.length !== width) throw new Error(`${name} has ragged rows: ${String(row.length)}`)
+  }
+  const body = rows.map((row) => `    [${row.map(literal).join(', ')}],`).join('\n')
+  return `#[rustfmt::skip]\npub static ${name}: &[[f64; ${String(width)}]] = &[\n${body}\n];\n`
+}
+
+/**
+ * One entry per generated Rust file. `lints` is emitted as inner attributes, because a generated
+ * file has to carry its own context: clippy reads the four 3.14 coefficients in the SPA tables as
+ * somebody fumbling PI, and they're the published values to the published precision
+ */
+const OUTPUTS = [
+  {
+    source: 'src/sim/perez-tables.ts',
+    out: 'crates/agv-sim/src/perez_tables.rs',
+    provenance: [
+      'Perez, Ineichen, Seals, Michalsky & Stewart 1990, Solar Energy 44(5) 271-289.',
+      'Eight sky-clearness bins by six F coefficients, and the lower edges that select a bin.',
+    ],
+    lints: [],
+    names: ['PEREZ_1990_ALLSITES', 'PEREZ_EPSILON_EDGES'],
+  },
+]
+
+let total = 0
+for (const output of OUTPUTS) {
+  const tables = await import(new URL(output.source, ROOT).href)
+  const blocks = output.names.map((name) => {
+    const rows = tables[name]
+    if (rows === undefined) throw new Error(`${output.source} exports no ${name}`)
+    total += Array.isArray(rows) ? rows.length : 0
+    return emit(name, rows, output.chunk)
+  })
+  const lints =
+    output.lints.length === 0
+      ? ''
+      : `${output.lints.map((l) => (l.startsWith('#!') ? l : `// ${l}`)).join('\n')}\n\n`
+  const header = [
+    `// GENERATED by scripts/generate-rust-tables.mjs from ${output.source}`,
+    '// Do not edit. Edit the TypeScript and re-run `bun run generate`.',
+    '//',
+    ...output.provenance.map((line) => `// ${line}`),
+    '',
+    '',
+  ].join('\n')
+  writeFileSync(new URL(output.out, ROOT), header + lints + blocks.join('\n'))
+  console.log(`${output.out} written: ${String(output.names.length)} tables`)
+}
+console.log(`${String(total)} rows in total`)

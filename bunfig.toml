@@ -1,0 +1,8 @@
+# `bun test` configuration
+[test]
+# installs the Rust physics core and the agent flag before every test file. Bun runs this once per
+# isolated file, which is the guarantee vitest's `setupFiles` gave.
+#
+# The DOM is NOT here. It's added by `test:dom` in package.json and withheld from `test:scene`,
+# because the two halves of the suite want opposite things. See test/dom.ts
+preload = ["./test/setup.ts"]
