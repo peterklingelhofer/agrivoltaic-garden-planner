@@ -1,0 +1,503 @@
+{
+  "layers": [
+    {
+      "generator": "scripts/fetch-static-layers.mjs",
+      "generatedAt": "2026-08-01",
+      "format": "AGDG v1, see docs/STATIC-LAYERS.md",
+      "validated": true,
+      "path": "public/data/koppen-beck-2018.grid",
+      "citekey": "beck2018-koppen",
+      "licence": "CC BY 4.0",
+      "attribution": "Beck et al. 2018, Koppen-Geiger 1 km",
+      "source": {
+        "landing": "https://figshare.com/articles/dataset/Present_and_future_K_ppen-Geiger_climate_classification_maps_at_1-km_resolution/6396959",
+        "doi": "10.6084/m9.figshare.6396959",
+        "download": "https://ndownloader.figshare.com/files/12407516",
+        "entry": "Beck_KG_V1_present_0p083.tif",
+        "retrieved": "2026-08-01",
+        "sha256": "a33f861200e32e80d5615bba1350ceeb8b0f5e6a6ffdc18b2d1715a3293d7b4b"
+      },
+      "processing": [
+        "read Beck_KG_V1_present_0p083.tif, the 5 arcmin (0.0833 deg) present-day classification Beck et al. publish alongside the 1 km raster",
+        "no resampling: the shipped cells are the published 5 arcmin cells, flipped to south-up",
+        "class 0 (ocean and no data) becomes the no-data sentinel; classes 1-30 keep the published legend order",
+        "row-predicted varint run-length coding, see docs/STATIC-LAYERS.md"
+      ],
+      "resolution": {
+        "shippedCellDeg": 0.08333333333333333,
+        "sourceCellDeg": 0.008333333333333333,
+        "note": "the 1 km raster is 933 megapixels and cannot be bundled; the published 5 arcmin aggregate is what ships"
+      },
+      "grid": {
+        "cols": 4320,
+        "rows": 2160
+      },
+      "file": {
+        "bytes": 490809,
+        "gzipBytes": 219116,
+        "sha256": "e1c836de9701c21c1e315add4f48b2df1d2f0233970561b91f039fd303132047"
+      },
+      "probes": [
+        {
+          "site": "Amherst, Massachusetts",
+          "source": "Dfa",
+          "shipped": "Dfa"
+        },
+        {
+          "site": "Davis, California",
+          "source": "Csa",
+          "shipped": "Csa"
+        },
+        {
+          "site": "Denver, Colorado",
+          "source": "BSk",
+          "shipped": "BSk"
+        },
+        {
+          "site": "Miami, Florida",
+          "source": "Am",
+          "shipped": "Am"
+        },
+        {
+          "site": "International Falls, Minnesota",
+          "source": "Dfb",
+          "shipped": "Dfb"
+        },
+        {
+          "site": "Tucson, Arizona",
+          "source": "BWh",
+          "shipped": "BWh"
+        },
+        {
+          "site": "Berlin, Germany",
+          "source": "Dfb",
+          "shipped": "Dfb"
+        },
+        {
+          "site": "Reykjavik, Iceland",
+          "source": "Dfc",
+          "shipped": "Dfc"
+        },
+        {
+          "site": "Nairobi, Kenya",
+          "source": "Cfb",
+          "shipped": "Cfb"
+        },
+        {
+          "site": "Christchurch, New Zealand",
+          "source": "Cfb",
+          "shipped": "Cfb"
+        }
+      ],
+      "sourceAgreement": {
+        "comparedPoints": 34359436,
+        "exactPercent": 96.95,
+        "adjacentClassPercent": 1.59,
+        "otherPercent": 1.46
+      }
+    },
+    {
+      "generator": "scripts/fetch-static-layers.mjs",
+      "generatedAt": "2026-08-01",
+      "format": "AGDG v1, see docs/STATIC-LAYERS.md",
+      "validated": true,
+      "path": "public/data/usda-phzm-2023.grid",
+      "citekey": "usda-phzm-2023",
+      "licence": "OSU retains ownership; free reproduction and redistribution under the terms below",
+      "attribution": "USDA-ARS and Oregon State University PRISM Climate Group",
+      "licenceConditions": "Terms of Use:\n\nUnder the terms of a Specific Cooperative Agreement between the US Department of Agriculture and Oregon State University (OSU), OSU retains ownership of the GIS datasets underlying the official 2023 USDA Plant Hardiness Zone Map. These datasets may be freely reproduced and redistributed, subject to the following conditions: (1) Both the USDA-ARS logo and OSU logo must be prominently displayed on any maps derived from the GIS datasets. (2) The data may not be altered in any way unless (a) there is an explicit and prominently displayed disclaimer that the map is not the official USDA Plant Hardiness Zone Map, and (b) the USDA-ARS and OSU logos are eliminated.\n\nUSDA-ARS logo:  https://prism.oregonstate.edu/inc/images/usda-ars_logo.png\nOSU logo:  https://prism.oregonstate.edu/inc/images/oregonstate_logo.png",
+      "disclaimerRequired": true,
+      "source": {
+        "landing": "https://prism.oregonstate.edu/phzm/",
+        "download": "https://prism.oregonstate.edu/phzm/data/2023/phzm_us_grid_2023.zip",
+        "entry": "phzm_us_grid_2023.bil",
+        "mirror": "https://agdatacommons.nal.usda.gov/articles/dataset/2023_USDA_Plant_Hardiness_Zone_Map_Mean_Annual_Extreme_Low_Temperature_Rasters/25343293",
+        "retrieved": "2026-08-01",
+        "sha256": "7834bb8f93e5b62c1e09374ba65afa7c91d638a0456ea241f668d7023cc4b785"
+      },
+      "processing": [
+        "read phzm_us_grid_2023.bil, the 30 arcsec (800 m) 1991-2020 mean annual extreme minimum temperature in degF",
+        "nearest-neighbour resample of the cell centres to 0.02 deg",
+        "classify each resampled value into the published 5 degF half-zones counted from -60 degF",
+        "row-predicted varint run-length coding, see docs/STATIC-LAYERS.md"
+      ],
+      "resolution": {
+        "shippedCellDeg": 0.02,
+        "sourceCellDeg": 0.008333333333,
+        "note": "CONUS only. Alaska, Hawaii and Puerto Rico are separate PRISM grids and are not bundled, so those sites fall through to the Open-Meteo derivation"
+      },
+      "grid": {
+        "cols": 2928,
+        "rows": 1294,
+        "classes": [
+          "3a",
+          "3b",
+          "4a",
+          "4b",
+          "5a",
+          "5b",
+          "6a",
+          "6b",
+          "7a",
+          "7b",
+          "8a",
+          "8b",
+          "9a",
+          "9b",
+          "10a",
+          "10b",
+          "11a",
+          "11b",
+          "12a"
+        ]
+      },
+      "file": {
+        "bytes": 589652,
+        "gzipBytes": 228053,
+        "sha256": "c7850f163cf82a47788c87f751df81d9cc1e478956bd1b435a4c55e511851159"
+      },
+      "probes": [
+        {
+          "site": "Amherst, Massachusetts",
+          "source": "6a",
+          "shipped": "6a"
+        },
+        {
+          "site": "Davis, California",
+          "source": "9b",
+          "shipped": "9b"
+        },
+        {
+          "site": "Denver, Colorado",
+          "source": "6a",
+          "shipped": "6a"
+        },
+        {
+          "site": "Miami, Florida",
+          "source": "11a",
+          "shipped": "11a"
+        },
+        {
+          "site": "International Falls, Minnesota",
+          "source": "3b",
+          "shipped": "3b"
+        },
+        {
+          "site": "Tucson, Arizona",
+          "source": "9b",
+          "shipped": "9b"
+        },
+        {
+          "site": "Berlin, Germany",
+          "source": null,
+          "shipped": null
+        },
+        {
+          "site": "Reykjavik, Iceland",
+          "source": null,
+          "shipped": null
+        },
+        {
+          "site": "Nairobi, Kenya",
+          "source": null,
+          "shipped": null
+        },
+        {
+          "site": "Christchurch, New Zealand",
+          "source": null,
+          "shipped": null
+        }
+      ],
+      "sourceAgreement": {
+        "comparedPoints": 1346433,
+        "exactPercent": 93.92,
+        "adjacentClassPercent": 5.92,
+        "otherPercent": 0.16
+      }
+    },
+    {
+      "generator": "scripts/fetch-static-layers.mjs",
+      "generatedAt": "2026-08-01",
+      "format": "AGDG v1, see docs/STATIC-LAYERS.md",
+      "validated": true,
+      "path": "public/data/nrcan-hardiness.grid",
+      "citekey": "mckenney2025-canada-zones",
+      "licence": "Open Government Licence - Canada",
+      "attribution": "Contains information licensed under the Open Government Licence - Canada: Plant Hardiness Zones of Canada, Natural Resources Canada",
+      "scheme": "nrcan",
+      "schemeNote": "a composite index of seven climate variables (Ouellet and Sherk 1967, reinterpolated by McKenney et al.), not a winter minimum temperature. No temperature is derivable from a zone label and none is recorded here",
+      "source": {
+        "landing": "https://open.canada.ca/data/en/dataset/adda404d-93e4-48e9-b6bf-5d1d3952ff22",
+        "download": "https://ftp.maps.canada.ca/pub/nrcan_rncan/Geographical-maps_Carte-geographique/Plant-Hardiness-Zones_Zones-rusticite/Shapefiles/PlantHardinessZones_SHP_EN.zip",
+        "entry": "plantHardinessZones_EN.shp",
+        "service": "https://maps-cartes.services.geo.ca/server_serveur/rest/services/NRCan/PlantHardiness_en/MapServer/0",
+        "retrieved": "2026-08-01",
+        "sha256": "8362ce6096ad262210cd40f77c2a25dd100ea2cf3240c28f10a92a8472644379"
+      },
+      "processing": [
+        "read plantHardinessZones_EN.shp, the 4th edition 1991-2020 zone polygons, and the ph_zone column of plantHardinessZones_EN.dbf",
+        "unproject every vertex from EPSG:3978 Lambert conformal conic to lon/lat, so the raster is built in the frame the app samples",
+        "scan-convert the rings at 0.01 deg, then take each 0.05 deg cell from its centre subcell, or from the majority of its 25 subcells when the centre is uncovered and the cell is at least half covered",
+        "row-predicted varint run-length coding, see docs/STATIC-LAYERS.md"
+      ],
+      "resolution": {
+        "shippedCellDeg": 0.05,
+        "referenceCellDeg": 0.005,
+        "note": "the source is vector, so there is no native cell size; agreement is measured against a 0.005 deg rasterisation of the same polygons"
+      },
+      "grid": {
+        "cols": 1769,
+        "rows": 830,
+        "classes": [
+          "0a",
+          "0b",
+          "1a",
+          "1b",
+          "2a",
+          "2b",
+          "3a",
+          "3b",
+          "4a",
+          "4b",
+          "5a",
+          "5b",
+          "6a",
+          "6b",
+          "7a",
+          "7b",
+          "8a",
+          "8b",
+          "9a"
+        ]
+      },
+      "file": {
+        "bytes": 180761,
+        "gzipBytes": 75194,
+        "sha256": "bf6051cb51b33ac8e4c606652bc6c3e088cee2c8926fe61eeaec8c721c54cf8c"
+      },
+      "probes": [
+        {
+          "site": "Toronto, Ontario",
+          "published": "7a",
+          "source": "7a",
+          "shipped": "7a"
+        },
+        {
+          "site": "Vancouver, British Columbia",
+          "published": "9a",
+          "source": "9a",
+          "shipped": "9a"
+        },
+        {
+          "site": "Winnipeg, Manitoba",
+          "published": "3b",
+          "source": "3b",
+          "shipped": "3b"
+        },
+        {
+          "site": "Whitehorse, Yukon",
+          "published": "1b",
+          "source": "1b",
+          "shipped": "1b"
+        },
+        {
+          "site": "Montreal, Quebec",
+          "published": "5b",
+          "source": "5b",
+          "shipped": "5b"
+        },
+        {
+          "site": "Halifax, Nova Scotia",
+          "published": "6b",
+          "source": "6b",
+          "shipped": "6b"
+        },
+        {
+          "site": "Calgary, Alberta",
+          "published": "4a",
+          "source": "4a",
+          "shipped": "4a"
+        },
+        {
+          "site": "Saskatoon, Saskatchewan",
+          "published": "3a",
+          "source": "3a",
+          "shipped": "3a"
+        },
+        {
+          "site": "Ottawa, Ontario",
+          "published": "5b",
+          "source": "5b",
+          "shipped": "5b"
+        },
+        {
+          "site": "Quebec City, Quebec",
+          "published": "5a",
+          "source": "5a",
+          "shipped": "5a"
+        },
+        {
+          "site": "St John's, Newfoundland",
+          "published": "6a",
+          "source": "6a",
+          "shipped": "6a"
+        },
+        {
+          "site": "Iqaluit, Nunavut",
+          "published": "0a",
+          "source": "0a",
+          "shipped": "0a"
+        },
+        {
+          "site": "Yellowknife, Northwest Territories",
+          "published": "1b",
+          "source": "1b",
+          "shipped": "1b"
+        },
+        {
+          "site": "Fredericton, New Brunswick",
+          "published": "5a",
+          "source": "5a",
+          "shipped": "5a"
+        },
+        {
+          "site": "Charlottetown, Prince Edward Island",
+          "published": "5b",
+          "source": "5b",
+          "shipped": "5b"
+        }
+      ],
+      "sourceAgreement": {
+        "comparedPoints": 7539568,
+        "exactPercent": 94.54,
+        "adjacentClassPercent": 4.21,
+        "otherPercent": 1.25
+      }
+    },
+    {
+      "generator": "scripts/fetch-plant-traits.mjs",
+      "generatedAt": "2026-08-15",
+      "format": "AGDG v2, see docs/STATIC-LAYERS.md",
+      "validated": true,
+      "path": "public/data/wgsrpd-level3.grid",
+      "citekey": "govaerts2021-wcvp",
+      "licence": "CC BY 4.0",
+      "attribution": "TDWG World Geographical Scheme for Recording Plant Distributions, edition 2",
+      "source": {
+        "landing": "https://github.com/tdwg/wgsrpd",
+        "download": "https://raw.githubusercontent.com/tdwg/wgsrpd/master/geojson/level3.geojson",
+        "entry": "level3.geojson",
+        "retrieved": "2026-08-15",
+        "sha256": "c172bcf6aba20e19477adc60aebf0023068f0175dca8480f0760b090dcf64840"
+      },
+      "processing": [
+        "read the published level 3 polygons, the botanical countries Kew indexes distributions by",
+        "scan converted at half a degree, one class per LEVEL3_COD, features written in file order so a later polygon wins where two overlap",
+        "row-predicted varint run-length coding over 16-bit cells, which is version 2 of the format: 369 areas do not fit in the byte per cell the climate layers use"
+      ],
+      "resolution": {
+        "shippedCellDeg": 0.5,
+        "sourceCellDeg": null,
+        "note": "the source is vector, so there is no source cell size and the shipped one is a choice rather than a resampling. Half a degree resolves whole botanical countries and not their coastlines, which is the precision the checklist behind it claims"
+      },
+      "grid": {
+        "cols": 721,
+        "rows": 361
+      },
+      "file": {
+        "bytes": 35256,
+        "gzipBytes": 15466,
+        "sha256": "9f30d42641e9cc612b0b8934a3c0d6178fc67c1ea4b95f4a16e08844fb3e0d55"
+      },
+      "probes": [
+        {
+          "site": "Amherst, Massachusetts",
+          "latitudeDeg": 42.3732,
+          "longitudeDeg": -72.5199,
+          "source": "MAS",
+          "shipped": "MAS"
+        },
+        {
+          "site": "Davis, California",
+          "latitudeDeg": 38.5449,
+          "longitudeDeg": -121.7405,
+          "source": "CAL",
+          "shipped": "CAL"
+        },
+        {
+          "site": "Denver, Colorado",
+          "latitudeDeg": 39.7392,
+          "longitudeDeg": -104.9903,
+          "source": "COL",
+          "shipped": "COL"
+        },
+        {
+          "site": "Berlin, Germany",
+          "latitudeDeg": 52.52,
+          "longitudeDeg": 13.405,
+          "source": "GER",
+          "shipped": "GER"
+        },
+        {
+          "site": "Nairobi, Kenya",
+          "latitudeDeg": -1.2864,
+          "longitudeDeg": 36.8172,
+          "source": "KEN",
+          "shipped": "KEN"
+        },
+        {
+          "site": "Jerusalem",
+          "latitudeDeg": 31.7683,
+          "longitudeDeg": 35.2137,
+          "source": "PAL",
+          "shipped": "PAL"
+        },
+        {
+          "site": "Cusco, Peru",
+          "latitudeDeg": -13.5319,
+          "longitudeDeg": -71.9675,
+          "source": "PER",
+          "shipped": "PER"
+        },
+        {
+          "site": "Christchurch, New Zealand",
+          "latitudeDeg": -43.5321,
+          "longitudeDeg": 172.6362,
+          "source": "NZS",
+          "shipped": "NZS"
+        },
+        {
+          "site": "Tokyo, Japan",
+          "latitudeDeg": 35.6762,
+          "longitudeDeg": 139.6503,
+          "source": "JAP",
+          "shipped": "JAP"
+        },
+        {
+          "site": "mid-Atlantic, no land",
+          "latitudeDeg": 30,
+          "longitudeDeg": -40,
+          "source": null,
+          "shipped": null
+        }
+      ],
+      "sourceAgreement": {
+        "comparedPoints": 21447,
+        "exactPercent": 93.67,
+        "adjacentCellPercent": 6.26,
+        "otherPercent": 0.07,
+        "note": "sampled at cell centres, half a cell off the lattice the raster is built on, so this measures the cost of the half-degree cell and not the scan converter reading back its own input"
+      }
+    }
+  ],
+  "notShipped": [
+    {
+      "generator": "scripts/fetch-static-layers.mjs",
+      "generatedAt": "2026-08-01",
+      "layer": "OPHZ, Oregon PRISM Hardiness Zones",
+      "source": "https://github.com/kgjenkins/ophz",
+      "licence": "Open Data Commons PDDL v1.0",
+      "reason": "OPHZ is traced from the 2012 USDA map image, not the 2023 one its own README links, and the shipped scheme is usda-2023. Amherst MA reads 5b from OPHZ and 6a from the 2023 PRISM grid, so bundling it would have labelled 2012 zones as 2023. The official 2023 PRISM raster ships instead"
+    }
+  ]
+}

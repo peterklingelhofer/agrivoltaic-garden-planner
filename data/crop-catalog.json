@@ -1,0 +1,5345 @@
+{
+  "format": "agv-crop-catalog/1",
+  "generatedFrom": "src/data/catalog/rows.ts",
+  "provenance": {
+    "sourceId": "curated-extension-ecocrop",
+    "licence": "Public domain (US Extension, FAO-56) and FAO open data (ECOCROP)",
+    "attribution": "Curated from USDA and land-grant Extension publications, FAO ECOCROP and FAO Irrigation and Drainage Paper 56 Table 22",
+    "viralLicence": false
+  },
+  "columns": [
+    "id",
+    "acceptedName",
+    "family",
+    "commonNames",
+    "laubGroup",
+    "dliClass",
+    "habit",
+    "archetype",
+    "dliMin",
+    "dliTargetLow",
+    "dliTargetHigh",
+    "tier",
+    "shade",
+    "daysToMaturity",
+    "spacingCm",
+    "heightM",
+    "widthM",
+    "overrides"
+  ],
+  "crops": [
+    {
+      "id": "tomato",
+      "acceptedName": "Solanum lycopersicum",
+      "family": "Solanaceae",
+      "commonNames": "tomato",
+      "laubGroup": "fruity-vegetables",
+      "dliClass": "solanaceae",
+      "habit": "vining-trellised",
+      "archetype": "warm",
+      "dliMin": 15,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 30,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 80,
+      "spacingCm": 60,
+      "heightM": 1.8,
+      "widthM": 0.6,
+      "overrides": {
+        "harvestDays": 60,
+        "zr": 1.1,
+        "p": 0.4,
+        "gddBase": 10,
+        "dtmRef": "transplant",
+        "support": "cage",
+        "dliCitations": [
+          "runkle2011-vegetable-dli"
+        ]
+      }
+    },
+    {
+      "id": "pepper-sweet",
+      "acceptedName": "Capsicum annuum",
+      "family": "Solanaceae",
+      "commonNames": "sweet pepper|bell pepper",
+      "laubGroup": "fruity-vegetables",
+      "dliClass": "solanaceae",
+      "habit": "bush",
+      "archetype": "warm",
+      "dliMin": 15,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 30,
+      "tier": "C",
+      "shade": 2,
+      "daysToMaturity": 75,
+      "spacingCm": 45,
+      "heightM": 0.8,
+      "widthM": 0.5,
+      "overrides": {
+        "harvestDays": 60,
+        "zr": 0.75,
+        "p": 0.3,
+        "dtmRef": "transplant",
+        "minSoilTempC": 18,
+        "dliCitations": [
+          "runkle2011-vegetable-dli"
+        ]
+      }
+    },
+    {
+      "id": "pepper-hot",
+      "acceptedName": "Capsicum frutescens",
+      "family": "Solanaceae",
+      "commonNames": "hot pepper|chilli",
+      "laubGroup": "fruity-vegetables",
+      "dliClass": "solanaceae",
+      "habit": "bush",
+      "archetype": "warm",
+      "dliMin": 15,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 30,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 85,
+      "spacingCm": 45,
+      "heightM": 0.9,
+      "widthM": 0.5,
+      "overrides": {
+        "harvestDays": 60,
+        "zr": 0.75,
+        "p": 0.3,
+        "dtmRef": "transplant",
+        "minSoilTempC": 18,
+        "dliCitations": [
+          "runkle2011-vegetable-dli"
+        ]
+      }
+    },
+    {
+      "id": "eggplant",
+      "acceptedName": "Solanum melongena",
+      "family": "Solanaceae",
+      "commonNames": "eggplant|aubergine",
+      "laubGroup": "fruity-vegetables",
+      "dliClass": "solanaceae",
+      "habit": "bush",
+      "archetype": "hot",
+      "dliMin": 14,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 28,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 85,
+      "spacingCm": 60,
+      "heightM": 1,
+      "widthM": 0.7,
+      "overrides": {
+        "harvestDays": 60,
+        "dtmRef": "transplant",
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "tomatillo",
+      "acceptedName": "Physalis philadelphica",
+      "family": "Solanaceae",
+      "commonNames": "tomatillo",
+      "laubGroup": "fruity-vegetables",
+      "dliClass": "solanaceae",
+      "habit": "bush",
+      "archetype": "warm",
+      "dliMin": 14,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 28,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 80,
+      "spacingCm": 90,
+      "heightM": 1.2,
+      "widthM": 1,
+      "overrides": {
+        "harvestDays": 60,
+        "dtmRef": "transplant",
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "cucumber",
+      "acceptedName": "Cucumis sativus",
+      "family": "Cucurbitaceae",
+      "commonNames": "cucumber",
+      "laubGroup": "fruity-vegetables",
+      "dliClass": "cucurbits",
+      "habit": "vining-trellised",
+      "archetype": "warm",
+      "dliMin": 15,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 30,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 55,
+      "spacingCm": 45,
+      "heightM": 2,
+      "widthM": 0.5,
+      "overrides": {
+        "harvestDays": 45,
+        "zr": 0.95,
+        "p": 0.5,
+        "dliCitations": [
+          "runkle2011-vegetable-dli"
+        ]
+      }
+    },
+    {
+      "id": "squash-summer",
+      "acceptedName": "Cucurbita pepo",
+      "family": "Cucurbitaceae",
+      "commonNames": "summer squash|zucchini|courgette",
+      "laubGroup": "fruity-vegetables",
+      "dliClass": "cucurbits",
+      "habit": "bush",
+      "archetype": "warm",
+      "dliMin": 12,
+      "dliTargetLow": 18,
+      "dliTargetHigh": 25,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 50,
+      "spacingCm": 90,
+      "heightM": 0.8,
+      "widthM": 1.2,
+      "overrides": {
+        "harvestDays": 50,
+        "zr": 0.8,
+        "p": 0.5,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "squash-winter",
+      "acceptedName": "Cucurbita maxima",
+      "family": "Cucurbitaceae",
+      "commonNames": "winter squash",
+      "laubGroup": "fruity-vegetables",
+      "dliClass": "cucurbits",
+      "habit": "vining-ground",
+      "archetype": "warm",
+      "dliMin": 14,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 28,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 100,
+      "spacingCm": 150,
+      "heightM": 0.5,
+      "widthM": 3,
+      "overrides": {
+        "zr": 0.8,
+        "p": 0.5,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "pumpkin",
+      "acceptedName": "Cucurbita moschata",
+      "family": "Cucurbitaceae",
+      "commonNames": "pumpkin",
+      "laubGroup": "fruity-vegetables",
+      "dliClass": "cucurbits",
+      "habit": "vining-ground",
+      "archetype": "warm",
+      "dliMin": 14,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 28,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 110,
+      "spacingCm": 180,
+      "heightM": 0.5,
+      "widthM": 3.5,
+      "overrides": {
+        "zr": 0.8,
+        "p": 0.5,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "melon",
+      "acceptedName": "Cucumis melo",
+      "family": "Cucurbitaceae",
+      "commonNames": "melon|muskmelon|cantaloupe",
+      "laubGroup": "fruity-vegetables",
+      "dliClass": "cucurbits",
+      "habit": "vining-ground",
+      "archetype": "hot",
+      "dliMin": 16,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 30,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 85,
+      "spacingCm": 120,
+      "heightM": 0.4,
+      "widthM": 2.5,
+      "overrides": {
+        "zr": 1.15,
+        "p": 0.4,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "watermelon",
+      "acceptedName": "Citrullus lanatus",
+      "family": "Cucurbitaceae",
+      "commonNames": "watermelon",
+      "laubGroup": "fruity-vegetables",
+      "dliClass": "cucurbits",
+      "habit": "vining-ground",
+      "archetype": "hot",
+      "dliMin": 16,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 30,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 95,
+      "spacingCm": 150,
+      "heightM": 0.4,
+      "widthM": 3,
+      "overrides": {
+        "zr": 1.1,
+        "p": 0.4,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "okra",
+      "acceptedName": "Abelmoschus esculentus",
+      "family": "Malvaceae",
+      "commonNames": "okra",
+      "laubGroup": "fruity-vegetables",
+      "dliClass": "cucurbits",
+      "habit": "upright-herb",
+      "archetype": "hot",
+      "dliMin": 16,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 30,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 60,
+      "spacingCm": 45,
+      "heightM": 1.5,
+      "widthM": 0.6,
+      "overrides": {
+        "harvestDays": 60,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "bean-bush",
+      "acceptedName": "Phaseolus vulgaris",
+      "family": "Fabaceae",
+      "commonNames": "bush bean|snap bean",
+      "laubGroup": "grain-legumes",
+      "dliClass": "grain-legumes",
+      "habit": "bush",
+      "archetype": "warm",
+      "dliMin": 12,
+      "dliTargetLow": 18,
+      "dliTargetHigh": 25,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 55,
+      "spacingCm": 15,
+      "heightM": 0.5,
+      "widthM": 0.3,
+      "overrides": {
+        "harvestDays": 21,
+        "zr": 0.6,
+        "p": 0.45,
+        "nfix": true,
+        "succession": 14,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "bean-pole",
+      "acceptedName": "Phaseolus vulgaris",
+      "family": "Fabaceae",
+      "commonNames": "pole bean|climbing bean",
+      "laubGroup": "grain-legumes",
+      "dliClass": "grain-legumes",
+      "habit": "vining-trellised",
+      "archetype": "warm",
+      "dliMin": 12,
+      "dliTargetLow": 18,
+      "dliTargetHigh": 25,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 65,
+      "spacingCm": 20,
+      "heightM": 2.5,
+      "widthM": 0.3,
+      "overrides": {
+        "harvestDays": 45,
+        "zr": 0.6,
+        "p": 0.45,
+        "nfix": true,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "bean-runner",
+      "acceptedName": "Phaseolus coccineus",
+      "family": "Fabaceae",
+      "commonNames": "runner bean",
+      "laubGroup": "grain-legumes",
+      "dliClass": "grain-legumes",
+      "habit": "vining-trellised",
+      "archetype": "cool",
+      "dliMin": 12,
+      "dliTargetLow": 18,
+      "dliTargetHigh": 25,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 70,
+      "spacingCm": 20,
+      "heightM": 2.5,
+      "widthM": 0.3,
+      "overrides": {
+        "nfix": true,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "pea-garden",
+      "acceptedName": "Pisum sativum",
+      "family": "Fabaceae",
+      "commonNames": "garden pea|snap pea|snow pea",
+      "laubGroup": "grain-legumes",
+      "dliClass": "grain-legumes",
+      "habit": "vining-trellised",
+      "archetype": "cool",
+      "dliMin": 8,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 20,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 60,
+      "spacingCm": 8,
+      "heightM": 1.5,
+      "widthM": 0.2,
+      "overrides": {
+        "zr": 0.8,
+        "p": 0.35,
+        "gddBase": 4.5,
+        "nfix": true,
+        "succession": 14,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "fava-bean",
+      "acceptedName": "Vicia faba",
+      "family": "Fabaceae",
+      "commonNames": "fava bean|broad bean",
+      "laubGroup": "grain-legumes",
+      "dliClass": "grain-legumes",
+      "habit": "upright-herb",
+      "archetype": "cool",
+      "dliMin": 8,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 20,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 90,
+      "spacingCm": 20,
+      "heightM": 1.2,
+      "widthM": 0.3,
+      "overrides": {
+        "nfix": true,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "cowpea",
+      "acceptedName": "Vigna unguiculata",
+      "family": "Fabaceae",
+      "commonNames": "cowpea|southern pea|black-eyed pea",
+      "laubGroup": "grain-legumes",
+      "dliClass": "grain-legumes",
+      "habit": "bush",
+      "archetype": "hot",
+      "dliMin": 14,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 28,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 70,
+      "spacingCm": 20,
+      "heightM": 0.6,
+      "widthM": 0.4,
+      "overrides": {
+        "harvestDays": 30,
+        "nfix": true,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "soybean-edamame",
+      "acceptedName": "Glycine max",
+      "family": "Fabaceae",
+      "commonNames": "edamame|soybean",
+      "laubGroup": "grain-legumes",
+      "dliClass": "grain-legumes",
+      "habit": "upright-herb",
+      "archetype": "warm",
+      "dliMin": 14,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 28,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 85,
+      "spacingCm": 15,
+      "heightM": 0.8,
+      "widthM": 0.3,
+      "overrides": {
+        "nfix": true,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "lentil",
+      "acceptedName": "Lens culinaris",
+      "family": "Fabaceae",
+      "commonNames": "lentil",
+      "laubGroup": "grain-legumes",
+      "dliClass": "grain-legumes",
+      "habit": "upright-herb",
+      "archetype": "cool",
+      "dliMin": 12,
+      "dliTargetLow": 18,
+      "dliTargetHigh": 25,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 100,
+      "spacingCm": 10,
+      "heightM": 0.4,
+      "widthM": 0.2,
+      "overrides": {
+        "nfix": true,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "chickpea",
+      "acceptedName": "Cicer arietinum",
+      "family": "Fabaceae",
+      "commonNames": "chickpea|garbanzo",
+      "laubGroup": "grain-legumes",
+      "dliClass": "grain-legumes",
+      "habit": "bush",
+      "archetype": "warm",
+      "dliMin": 14,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 28,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 100,
+      "spacingCm": 25,
+      "heightM": 0.5,
+      "widthM": 0.4,
+      "overrides": {
+        "nfix": true,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "peanut",
+      "acceptedName": "Arachis hypogaea",
+      "family": "Fabaceae",
+      "commonNames": "peanut|groundnut",
+      "laubGroup": "grain-legumes",
+      "dliClass": "grain-legumes",
+      "habit": "bush",
+      "archetype": "hot",
+      "dliMin": 14,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 28,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 130,
+      "spacingCm": 30,
+      "heightM": 0.5,
+      "widthM": 0.6,
+      "overrides": {
+        "nfix": true,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "sweet-corn",
+      "acceptedName": "Zea mays",
+      "family": "Poaceae",
+      "commonNames": "sweet corn|maize",
+      "laubGroup": "maize-c4",
+      "dliClass": "maize-c4",
+      "habit": "clumping-grass",
+      "archetype": "warm",
+      "dliMin": 18,
+      "dliTargetLow": 25,
+      "dliTargetHigh": 35,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 80,
+      "spacingCm": 30,
+      "heightM": 2.2,
+      "widthM": 0.5,
+      "overrides": {
+        "zr": 1,
+        "p": 0.5,
+        "gddBase": 6.7,
+        "gddUpper": 30,
+        "betweenCm": 75,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "wheat-spring",
+      "acceptedName": "Triticum aestivum",
+      "family": "Poaceae",
+      "commonNames": "spring wheat",
+      "laubGroup": "c3-cereals",
+      "dliClass": "c3-cereals",
+      "habit": "clumping-grass",
+      "archetype": "cool",
+      "dliMin": 14,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 28,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 110,
+      "spacingCm": 12,
+      "heightM": 1,
+      "widthM": 0.15,
+      "overrides": {
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "barley",
+      "acceptedName": "Hordeum vulgare",
+      "family": "Poaceae",
+      "commonNames": "barley",
+      "laubGroup": "c3-cereals",
+      "dliClass": "c3-cereals",
+      "habit": "clumping-grass",
+      "archetype": "cool",
+      "dliMin": 14,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 28,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 100,
+      "spacingCm": 12,
+      "heightM": 0.9,
+      "widthM": 0.15,
+      "overrides": {
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "oat",
+      "acceptedName": "Avena sativa",
+      "family": "Poaceae",
+      "commonNames": "oat",
+      "laubGroup": "c3-cereals",
+      "dliClass": "c3-cereals",
+      "habit": "clumping-grass",
+      "archetype": "cool",
+      "dliMin": 14,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 28,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 100,
+      "spacingCm": 12,
+      "heightM": 1.1,
+      "widthM": 0.15,
+      "overrides": {
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "rye-cereal",
+      "acceptedName": "Secale cereale",
+      "family": "Poaceae",
+      "commonNames": "cereal rye",
+      "laubGroup": "c3-cereals",
+      "dliClass": "c3-cereals",
+      "habit": "clumping-grass",
+      "archetype": "cool",
+      "dliMin": 12,
+      "dliTargetLow": 18,
+      "dliTargetHigh": 26,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 120,
+      "spacingCm": 12,
+      "heightM": 1.4,
+      "widthM": 0.15,
+      "overrides": {
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "quinoa",
+      "acceptedName": "Chenopodium quinoa",
+      "family": "Amaranthaceae",
+      "commonNames": "quinoa",
+      "laubGroup": "c3-cereals",
+      "dliClass": "c3-cereals",
+      "habit": "upright-herb",
+      "archetype": "cool",
+      "dliMin": 14,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 28,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 110,
+      "spacingCm": 30,
+      "heightM": 1.5,
+      "widthM": 0.4,
+      "overrides": {
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "amaranth-grain",
+      "acceptedName": "Amaranthus cruentus",
+      "family": "Amaranthaceae",
+      "commonNames": "grain amaranth",
+      "laubGroup": "c3-cereals",
+      "dliClass": "c3-cereals",
+      "habit": "upright-herb",
+      "archetype": "hot",
+      "dliMin": 14,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 28,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 110,
+      "spacingCm": 30,
+      "heightM": 1.8,
+      "widthM": 0.5,
+      "overrides": {
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "goosefoot",
+      "acceptedName": "Chenopodium berlandieri",
+      "family": "Amaranthaceae",
+      "commonNames": "goosefoot|pitseed goosefoot",
+      "laubGroup": "c3-cereals",
+      "dliClass": "c3-cereals",
+      "habit": "upright-herb",
+      "archetype": "cool",
+      "dliMin": 12,
+      "dliTargetLow": 18,
+      "dliTargetHigh": 26,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 110,
+      "spacingCm": 30,
+      "heightM": 1.2,
+      "widthM": 0.4,
+      "overrides": {
+        "dliCitations": [
+          "mueller2025-eastern-ag-complex"
+        ]
+      }
+    },
+    {
+      "id": "sumpweed",
+      "acceptedName": "Iva annua",
+      "family": "Asteraceae",
+      "commonNames": "sumpweed|marsh elder",
+      "laubGroup": "c3-cereals",
+      "dliClass": "c3-cereals",
+      "habit": "upright-herb",
+      "archetype": "warm",
+      "dliMin": 12,
+      "dliTargetLow": 18,
+      "dliTargetHigh": 26,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 120,
+      "spacingCm": 40,
+      "heightM": 1.5,
+      "widthM": 0.5,
+      "overrides": {
+        "dliCitations": [
+          "mueller2025-eastern-ag-complex"
+        ]
+      }
+    },
+    {
+      "id": "potato",
+      "acceptedName": "Solanum tuberosum",
+      "family": "Solanaceae",
+      "commonNames": "potato",
+      "laubGroup": "tubers-root-crops",
+      "dliClass": "root-tuber",
+      "habit": "upright-herb",
+      "archetype": "cool",
+      "dliMin": 12,
+      "dliTargetLow": 18,
+      "dliTargetHigh": 25,
+      "tier": "B",
+      "shade": 1,
+      "daysToMaturity": 100,
+      "spacingCm": 30,
+      "heightM": 0.6,
+      "widthM": 0.5,
+      "overrides": {
+        "zr": 0.5,
+        "p": 0.35,
+        "maxRsr": 0.5,
+        "maxRsrTier": "B",
+        "betweenCm": 75,
+        "dliCitations": [
+          "weselek2021-potato",
+          "laub2022-shade-meta"
+        ]
+      }
+    },
+    {
+      "id": "sweet-potato",
+      "acceptedName": "Ipomoea batatas",
+      "family": "Convolvulaceae",
+      "commonNames": "sweet potato",
+      "laubGroup": "tubers-root-crops",
+      "dliClass": "root-tuber",
+      "habit": "vining-ground",
+      "archetype": "hot",
+      "dliMin": 14,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 28,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 110,
+      "spacingCm": 30,
+      "heightM": 0.3,
+      "widthM": 1.5,
+      "overrides": {
+        "zr": 1.25,
+        "p": 0.65,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "carrot",
+      "acceptedName": "Daucus carota",
+      "family": "Apiaceae",
+      "commonNames": "carrot",
+      "laubGroup": "tubers-root-crops",
+      "dliClass": "root-tuber",
+      "habit": "rosette",
+      "archetype": "cool",
+      "dliMin": 8,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 20,
+      "tier": "B",
+      "shade": 1,
+      "daysToMaturity": 75,
+      "spacingCm": 6,
+      "heightM": 0.35,
+      "widthM": 0.15,
+      "overrides": {
+        "zr": 0.75,
+        "p": 0.35,
+        "succession": 21,
+        "dliCitations": [
+          "weselek2021-potato",
+          "laub2022-shade-meta"
+        ]
+      }
+    },
+    {
+      "id": "beet",
+      "acceptedName": "Beta vulgaris",
+      "family": "Amaranthaceae",
+      "commonNames": "beet|beetroot",
+      "laubGroup": "tubers-root-crops",
+      "dliClass": "root-tuber",
+      "habit": "rosette",
+      "archetype": "cool",
+      "dliMin": 8,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 20,
+      "tier": "B",
+      "shade": 1,
+      "daysToMaturity": 60,
+      "spacingCm": 10,
+      "heightM": 0.35,
+      "widthM": 0.2,
+      "overrides": {
+        "succession": 21,
+        "dliCitations": [
+          "weselek2021-potato",
+          "laub2022-shade-meta"
+        ]
+      }
+    },
+    {
+      "id": "radish",
+      "acceptedName": "Raphanus sativus",
+      "family": "Brassicaceae",
+      "commonNames": "radish",
+      "laubGroup": "tubers-root-crops",
+      "dliClass": "root-tuber",
+      "habit": "rosette",
+      "archetype": "cool",
+      "dliMin": 6,
+      "dliTargetLow": 12,
+      "dliTargetHigh": 18,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 28,
+      "spacingCm": 5,
+      "heightM": 0.2,
+      "widthM": 0.1,
+      "overrides": {
+        "zr": 0.4,
+        "p": 0.3,
+        "succession": 10,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "turnip",
+      "acceptedName": "Brassica rapa",
+      "family": "Brassicaceae",
+      "commonNames": "turnip",
+      "laubGroup": "tubers-root-crops",
+      "dliClass": "root-tuber",
+      "habit": "rosette",
+      "archetype": "cool",
+      "dliMin": 8,
+      "dliTargetLow": 12,
+      "dliTargetHigh": 18,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 50,
+      "spacingCm": 10,
+      "heightM": 0.35,
+      "widthM": 0.25,
+      "overrides": {
+        "succession": 21,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "rutabaga",
+      "acceptedName": "Brassica napus",
+      "family": "Brassicaceae",
+      "commonNames": "rutabaga|swede",
+      "laubGroup": "tubers-root-crops",
+      "dliClass": "root-tuber",
+      "habit": "rosette",
+      "archetype": "cool",
+      "dliMin": 10,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 20,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 90,
+      "spacingCm": 20,
+      "heightM": 0.4,
+      "widthM": 0.3,
+      "overrides": {
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "parsnip",
+      "acceptedName": "Pastinaca sativa",
+      "family": "Apiaceae",
+      "commonNames": "parsnip",
+      "laubGroup": "tubers-root-crops",
+      "dliClass": "root-tuber",
+      "habit": "rosette",
+      "archetype": "cool",
+      "dliMin": 8,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 20,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 120,
+      "spacingCm": 10,
+      "heightM": 0.4,
+      "widthM": 0.2,
+      "overrides": {
+        "life": "biennial",
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "celeriac",
+      "acceptedName": "Apium graveolens",
+      "family": "Apiaceae",
+      "commonNames": "celeriac|celery root",
+      "laubGroup": "tubers-root-crops",
+      "dliClass": "root-tuber",
+      "habit": "rosette",
+      "archetype": "cool",
+      "dliMin": 8,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 20,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 110,
+      "spacingCm": 25,
+      "heightM": 0.5,
+      "widthM": 0.35,
+      "overrides": {
+        "dtmRef": "transplant",
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "kohlrabi",
+      "acceptedName": "Brassica oleracea",
+      "family": "Brassicaceae",
+      "commonNames": "kohlrabi",
+      "laubGroup": "tubers-root-crops",
+      "dliClass": "root-tuber",
+      "habit": "rosette",
+      "archetype": "cool",
+      "dliMin": 8,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 20,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 55,
+      "spacingCm": 20,
+      "heightM": 0.4,
+      "widthM": 0.3,
+      "overrides": {
+        "succession": 21,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "jerusalem-artichoke",
+      "acceptedName": "Helianthus tuberosus",
+      "family": "Asteraceae",
+      "commonNames": "jerusalem artichoke|sunchoke",
+      "laubGroup": "tubers-root-crops",
+      "dliClass": "root-tuber",
+      "habit": "upright-herb",
+      "archetype": "hardy-perennial",
+      "dliMin": 12,
+      "dliTargetLow": 18,
+      "dliTargetHigh": 26,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 130,
+      "spacingCm": 45,
+      "heightM": 2.5,
+      "widthM": 0.6,
+      "overrides": {
+        "life": "perennial",
+        "coldC": -30,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "horseradish",
+      "acceptedName": "Armoracia rusticana",
+      "family": "Brassicaceae",
+      "commonNames": "horseradish",
+      "laubGroup": "tubers-root-crops",
+      "dliClass": "root-tuber",
+      "habit": "rosette",
+      "archetype": "hardy-perennial",
+      "dliMin": 8,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 20,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 150,
+      "spacingCm": 45,
+      "heightM": 0.8,
+      "widthM": 0.6,
+      "overrides": {
+        "life": "perennial",
+        "coldC": -34,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "onion-bulb",
+      "acceptedName": "Allium cepa",
+      "family": "Amaryllidaceae",
+      "commonNames": "bulb onion",
+      "laubGroup": "tubers-root-crops",
+      "dliClass": "alliums",
+      "habit": "upright-herb",
+      "archetype": "cool",
+      "dliMin": 14,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 28,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 110,
+      "spacingCm": 12,
+      "heightM": 0.5,
+      "widthM": 0.15,
+      "overrides": {
+        "zr": 0.45,
+        "p": 0.3,
+        "k": 0.35,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "shallot",
+      "acceptedName": "Allium cepa",
+      "family": "Amaryllidaceae",
+      "commonNames": "shallot",
+      "laubGroup": "tubers-root-crops",
+      "dliClass": "alliums",
+      "habit": "upright-herb",
+      "archetype": "cool",
+      "dliMin": 12,
+      "dliTargetLow": 18,
+      "dliTargetHigh": 25,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 100,
+      "spacingCm": 15,
+      "heightM": 0.4,
+      "widthM": 0.15,
+      "overrides": {
+        "synonyms": [
+          "Allium cepa Aggregatum group"
+        ],
+        "k": 0.35,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "garlic",
+      "acceptedName": "Allium sativum",
+      "family": "Amaryllidaceae",
+      "commonNames": "garlic",
+      "laubGroup": "tubers-root-crops",
+      "dliClass": "alliums",
+      "habit": "upright-herb",
+      "archetype": "cool",
+      "dliMin": 12,
+      "dliTargetLow": 18,
+      "dliTargetHigh": 25,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 270,
+      "spacingCm": 15,
+      "heightM": 0.6,
+      "widthM": 0.15,
+      "overrides": {
+        "zr": 0.4,
+        "p": 0.3,
+        "k": 0.35,
+        "window": [
+          10,
+          7
+        ],
+        "sow": [
+          280,
+          296
+        ],
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "leek",
+      "acceptedName": "Allium ampeloprasum",
+      "family": "Amaryllidaceae",
+      "commonNames": "leek",
+      "laubGroup": "tubers-root-crops",
+      "dliClass": "alliums",
+      "habit": "upright-herb",
+      "archetype": "cool",
+      "dliMin": 8,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 20,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 120,
+      "spacingCm": 15,
+      "heightM": 0.7,
+      "widthM": 0.2,
+      "overrides": {
+        "k": 0.35,
+        "dtmRef": "transplant",
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "scallion",
+      "acceptedName": "Allium fistulosum",
+      "family": "Amaryllidaceae",
+      "commonNames": "scallion|bunching onion|spring onion",
+      "laubGroup": "tubers-root-crops",
+      "dliClass": "alliums",
+      "habit": "upright-herb",
+      "archetype": "cool",
+      "dliMin": 6,
+      "dliTargetLow": 12,
+      "dliTargetHigh": 18,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 60,
+      "spacingCm": 5,
+      "heightM": 0.4,
+      "widthM": 0.1,
+      "overrides": {
+        "k": 0.35,
+        "succession": 21,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "chives",
+      "acceptedName": "Allium schoenoprasum",
+      "family": "Amaryllidaceae",
+      "commonNames": "chives",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "alliums",
+      "habit": "clumping-grass",
+      "archetype": "cool-perennial",
+      "dliMin": 6,
+      "dliTargetLow": 12,
+      "dliTargetHigh": 18,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 80,
+      "spacingCm": 20,
+      "heightM": 0.35,
+      "widthM": 0.25,
+      "overrides": {
+        "life": "perennial",
+        "coldC": -34,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "lettuce-leaf",
+      "acceptedName": "Lactuca sativa",
+      "family": "Asteraceae",
+      "commonNames": "leaf lettuce|loose-leaf lettuce",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "rosette",
+      "archetype": "cool",
+      "dliMin": 5.8,
+      "dliTargetLow": 14.4,
+      "dliTargetHigh": 17,
+      "tier": "A",
+      "shade": 2,
+      "daysToMaturity": 45,
+      "spacingCm": 20,
+      "heightM": 0.25,
+      "widthM": 0.25,
+      "overrides": {
+        "zr": 0.4,
+        "p": 0.3,
+        "ceiling": 17,
+        "ceilingDays": 3,
+        "succession": 14,
+        "dliCitations": [
+          "both1997-cornell-lettuce-light",
+          "brechner2013-cornell-lettuce-handbook",
+          "kelly2020-lettuce-dli",
+          "pennisi2020-lettuce-basil-ppfd"
+        ],
+        "dliCaveat": "5.8 mol/m2/d is the lowest level Pennisi et al. 2020 grew lettuce at (100 µmol/m2/s for 16 h), where it still produced a crop with the least biomass; Kelly et al. 2020 grew two cultivars from 6.9. No trial in the corpus places a failure point below that, so the floor is where measurement stops. The target runs from Pennisi et al.’s optimum, 14.4, past which yield stopped rising, to the Cornell CEA programme’s 17"
+      }
+    },
+    {
+      "id": "lettuce-head",
+      "acceptedName": "Lactuca sativa",
+      "family": "Asteraceae",
+      "commonNames": "head lettuce|romaine|cos",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "rosette",
+      "archetype": "cool",
+      "dliMin": 5.8,
+      "dliTargetLow": 14.4,
+      "dliTargetHigh": 17,
+      "tier": "A",
+      "shade": 2,
+      "daysToMaturity": 65,
+      "spacingCm": 30,
+      "heightM": 0.3,
+      "widthM": 0.3,
+      "overrides": {
+        "zr": 0.4,
+        "p": 0.3,
+        "ceiling": 17,
+        "ceilingDays": 3,
+        "succession": 14,
+        "dliCitations": [
+          "both1997-cornell-lettuce-light",
+          "brechner2013-cornell-lettuce-handbook",
+          "kelly2020-lettuce-dli",
+          "pennisi2020-lettuce-basil-ppfd"
+        ],
+        "dliCaveat": "5.8 mol/m2/d is the lowest level Pennisi et al. 2020 grew lettuce at (100 µmol/m2/s for 16 h), where it still produced a crop with the least biomass; Kelly et al. 2020 grew two cultivars from 6.9. No trial in the corpus places a failure point below that, so the floor is where measurement stops. The target runs from Pennisi et al.’s optimum, 14.4, past which yield stopped rising, to the Cornell CEA programme’s 17"
+      }
+    },
+    {
+      "id": "spinach",
+      "acceptedName": "Spinacia oleracea",
+      "family": "Amaranthaceae",
+      "commonNames": "spinach",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "rosette",
+      "archetype": "cool",
+      "dliMin": 6,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 20,
+      "tier": "C",
+      "shade": 2,
+      "daysToMaturity": 42,
+      "spacingCm": 15,
+      "heightM": 0.25,
+      "widthM": 0.2,
+      "overrides": {
+        "zr": 0.4,
+        "p": 0.2,
+        "succession": 14,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "swiss-chard",
+      "acceptedName": "Beta vulgaris",
+      "family": "Amaranthaceae",
+      "commonNames": "swiss chard|silverbeet",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "rosette",
+      "archetype": "cool",
+      "dliMin": 6,
+      "dliTargetLow": 12,
+      "dliTargetHigh": 18,
+      "tier": "C",
+      "shade": 2,
+      "daysToMaturity": 55,
+      "spacingCm": 25,
+      "heightM": 0.5,
+      "widthM": 0.35,
+      "overrides": {
+        "synonyms": [
+          "Beta vulgaris subsp. vulgaris Cicla group"
+        ],
+        "harvestDays": 90,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "kale",
+      "acceptedName": "Brassica oleracea",
+      "family": "Brassicaceae",
+      "commonNames": "kale|borecole",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "upright-herb",
+      "archetype": "cool",
+      "dliMin": 6,
+      "dliTargetLow": 12,
+      "dliTargetHigh": 18,
+      "tier": "B",
+      "shade": 2,
+      "daysToMaturity": 60,
+      "spacingCm": 40,
+      "heightM": 0.7,
+      "widthM": 0.5,
+      "overrides": {
+        "synonyms": [
+          "Brassica oleracea Acephala group"
+        ],
+        "harvestDays": 90,
+        "dliCitations": [
+          "weselek2021-potato",
+          "laub2022-shade-meta"
+        ]
+      }
+    },
+    {
+      "id": "collards",
+      "acceptedName": "Brassica oleracea",
+      "family": "Brassicaceae",
+      "commonNames": "collards|collard greens",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "upright-herb",
+      "archetype": "cool",
+      "dliMin": 6,
+      "dliTargetLow": 12,
+      "dliTargetHigh": 18,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 70,
+      "spacingCm": 45,
+      "heightM": 0.8,
+      "widthM": 0.6,
+      "overrides": {
+        "harvestDays": 90,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "mustard-greens",
+      "acceptedName": "Brassica juncea",
+      "family": "Brassicaceae",
+      "commonNames": "mustard greens|brown mustard",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "rosette",
+      "archetype": "cool",
+      "dliMin": 6,
+      "dliTargetLow": 12,
+      "dliTargetHigh": 18,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 45,
+      "spacingCm": 20,
+      "heightM": 0.5,
+      "widthM": 0.3,
+      "overrides": {
+        "succession": 14,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "arugula",
+      "acceptedName": "Eruca vesicaria",
+      "family": "Brassicaceae",
+      "commonNames": "arugula|rocket",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "rosette",
+      "archetype": "cool",
+      "dliMin": 5,
+      "dliTargetLow": 10,
+      "dliTargetHigh": 16,
+      "tier": "C",
+      "shade": 2,
+      "daysToMaturity": 35,
+      "spacingCm": 12,
+      "heightM": 0.25,
+      "widthM": 0.2,
+      "overrides": {
+        "succession": 10,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "mizuna",
+      "acceptedName": "Brassica rapa",
+      "family": "Brassicaceae",
+      "commonNames": "mizuna",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "rosette",
+      "archetype": "cool",
+      "dliMin": 5,
+      "dliTargetLow": 10,
+      "dliTargetHigh": 16,
+      "tier": "C",
+      "shade": 2,
+      "daysToMaturity": 40,
+      "spacingCm": 20,
+      "heightM": 0.3,
+      "widthM": 0.3,
+      "overrides": {
+        "synonyms": [
+          "Brassica rapa var. nipposinica"
+        ],
+        "succession": 14,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "tatsoi",
+      "acceptedName": "Brassica rapa",
+      "family": "Brassicaceae",
+      "commonNames": "tatsoi",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "rosette",
+      "archetype": "cool",
+      "dliMin": 5,
+      "dliTargetLow": 10,
+      "dliTargetHigh": 16,
+      "tier": "C",
+      "shade": 2,
+      "daysToMaturity": 45,
+      "spacingCm": 20,
+      "heightM": 0.2,
+      "widthM": 0.25,
+      "overrides": {
+        "synonyms": [
+          "Brassica rapa var. rosularis"
+        ],
+        "succession": 14,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "bok-choy",
+      "acceptedName": "Brassica rapa",
+      "family": "Brassicaceae",
+      "commonNames": "bok choy|pak choi",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "rosette",
+      "archetype": "cool",
+      "dliMin": 6,
+      "dliTargetLow": 12,
+      "dliTargetHigh": 18,
+      "tier": "C",
+      "shade": 2,
+      "daysToMaturity": 50,
+      "spacingCm": 20,
+      "heightM": 0.3,
+      "widthM": 0.25,
+      "overrides": {
+        "synonyms": [
+          "Brassica rapa Chinensis group"
+        ],
+        "succession": 14,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "endive",
+      "acceptedName": "Cichorium endivia",
+      "family": "Asteraceae",
+      "commonNames": "endive|escarole",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "rosette",
+      "archetype": "cool",
+      "dliMin": 6,
+      "dliTargetLow": 12,
+      "dliTargetHigh": 17,
+      "tier": "C",
+      "shade": 2,
+      "daysToMaturity": 80,
+      "spacingCm": 30,
+      "heightM": 0.3,
+      "widthM": 0.35,
+      "overrides": {
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "radicchio",
+      "acceptedName": "Cichorium intybus",
+      "family": "Asteraceae",
+      "commonNames": "radicchio|chicory",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "rosette",
+      "archetype": "cool",
+      "dliMin": 6,
+      "dliTargetLow": 12,
+      "dliTargetHigh": 17,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 85,
+      "spacingCm": 25,
+      "heightM": 0.3,
+      "widthM": 0.3,
+      "overrides": {
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "celery",
+      "acceptedName": "Apium graveolens",
+      "family": "Apiaceae",
+      "commonNames": "celery",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "upright-herb",
+      "archetype": "cool",
+      "dliMin": 8,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 20,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 120,
+      "spacingCm": 25,
+      "heightM": 0.6,
+      "widthM": 0.3,
+      "overrides": {
+        "dtmRef": "transplant",
+        "p": 0.2,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "nz-spinach",
+      "acceptedName": "Tetragonia tetragonioides",
+      "family": "Aizoaceae",
+      "commonNames": "New Zealand spinach",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "vining-ground",
+      "archetype": "warm",
+      "dliMin": 8,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 20,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 60,
+      "spacingCm": 45,
+      "heightM": 0.4,
+      "widthM": 1,
+      "overrides": {
+        "harvestDays": 90,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "sorrel",
+      "acceptedName": "Rumex acetosa",
+      "family": "Polygonaceae",
+      "commonNames": "sorrel|garden sorrel",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "understory-herbs",
+      "habit": "rosette",
+      "archetype": "cool-perennial",
+      "dliMin": 4,
+      "dliTargetLow": 8,
+      "dliTargetHigh": 14,
+      "tier": "C",
+      "shade": 2,
+      "daysToMaturity": 60,
+      "spacingCm": 30,
+      "heightM": 0.4,
+      "widthM": 0.3,
+      "overrides": {
+        "life": "perennial",
+        "coldC": -34,
+        "harvestDays": 120,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "mache",
+      "acceptedName": "Valerianella locusta",
+      "family": "Caprifoliaceae",
+      "commonNames": "mache|corn salad|lambs lettuce",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "understory-herbs",
+      "habit": "rosette",
+      "archetype": "cool",
+      "dliMin": 4,
+      "dliTargetLow": 8,
+      "dliTargetHigh": 14,
+      "tier": "C",
+      "shade": 2,
+      "daysToMaturity": 60,
+      "spacingCm": 10,
+      "heightM": 0.12,
+      "widthM": 0.12,
+      "overrides": {
+        "window": [
+          2,
+          5
+        ],
+        "succession": 14,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "claytonia",
+      "acceptedName": "Claytonia perfoliata",
+      "family": "Montiaceae",
+      "commonNames": "claytonia|miner's lettuce",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "understory-herbs",
+      "habit": "rosette",
+      "archetype": "cool",
+      "dliMin": 3,
+      "dliTargetLow": 6,
+      "dliTargetHigh": 12,
+      "tier": "C",
+      "shade": 2,
+      "daysToMaturity": 50,
+      "spacingCm": 12,
+      "heightM": 0.15,
+      "widthM": 0.15,
+      "overrides": {
+        "window": [
+          2,
+          5
+        ],
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "watercress",
+      "acceptedName": "Nasturtium officinale",
+      "family": "Brassicaceae",
+      "commonNames": "watercress",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "understory-herbs",
+      "habit": "groundcover",
+      "archetype": "cool-perennial",
+      "dliMin": 4,
+      "dliTargetLow": 8,
+      "dliTargetHigh": 14,
+      "tier": "C",
+      "shade": 2,
+      "daysToMaturity": 55,
+      "spacingCm": 20,
+      "heightM": 0.2,
+      "widthM": 0.4,
+      "overrides": {
+        "life": "perennial",
+        "coldC": -20,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "orach",
+      "acceptedName": "Atriplex hortensis",
+      "family": "Amaranthaceae",
+      "commonNames": "orach|mountain spinach",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "upright-herb",
+      "archetype": "cool",
+      "dliMin": 6,
+      "dliTargetLow": 12,
+      "dliTargetHigh": 18,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 50,
+      "spacingCm": 30,
+      "heightM": 1.2,
+      "widthM": 0.4,
+      "overrides": {
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "purslane",
+      "acceptedName": "Portulaca oleracea",
+      "family": "Portulacaceae",
+      "commonNames": "purslane",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "groundcover",
+      "archetype": "warm",
+      "dliMin": 6,
+      "dliTargetLow": 12,
+      "dliTargetHigh": 18,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 50,
+      "spacingCm": 20,
+      "heightM": 0.15,
+      "widthM": 0.4,
+      "overrides": {
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "good-king-henry",
+      "acceptedName": "Blitum bonus-henricus",
+      "family": "Amaranthaceae",
+      "commonNames": "good king henry",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "understory-herbs",
+      "habit": "rosette",
+      "archetype": "cool-perennial",
+      "dliMin": 4,
+      "dliTargetLow": 8,
+      "dliTargetHigh": 14,
+      "tier": "C",
+      "shade": 2,
+      "daysToMaturity": 90,
+      "spacingCm": 40,
+      "heightM": 0.5,
+      "widthM": 0.4,
+      "overrides": {
+        "life": "perennial",
+        "coldC": -30,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "sea-kale",
+      "acceptedName": "Crambe maritima",
+      "family": "Brassicaceae",
+      "commonNames": "sea kale",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "brassicas",
+      "habit": "rosette",
+      "archetype": "cool-perennial",
+      "dliMin": 6,
+      "dliTargetLow": 12,
+      "dliTargetHigh": 18,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 200,
+      "spacingCm": 60,
+      "heightM": 0.7,
+      "widthM": 0.8,
+      "overrides": {
+        "life": "perennial",
+        "coldC": -25,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "cabbage",
+      "acceptedName": "Brassica oleracea",
+      "family": "Brassicaceae",
+      "commonNames": "cabbage",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "brassicas",
+      "habit": "rosette",
+      "archetype": "cool",
+      "dliMin": 8,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 20,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 85,
+      "spacingCm": 40,
+      "heightM": 0.4,
+      "widthM": 0.5,
+      "overrides": {
+        "zr": 0.65,
+        "p": 0.45,
+        "synonyms": [
+          "Brassica oleracea Capitata group"
+        ],
+        "dtmRef": "transplant",
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "broccoli",
+      "acceptedName": "Brassica oleracea",
+      "family": "Brassicaceae",
+      "commonNames": "broccoli",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "brassicas",
+      "habit": "upright-herb",
+      "archetype": "cool",
+      "dliMin": 10,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 20,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 70,
+      "spacingCm": 45,
+      "heightM": 0.6,
+      "widthM": 0.5,
+      "overrides": {
+        "zr": 0.5,
+        "p": 0.45,
+        "synonyms": [
+          "Brassica oleracea Italica group"
+        ],
+        "dtmRef": "transplant",
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "cauliflower",
+      "acceptedName": "Brassica oleracea",
+      "family": "Brassicaceae",
+      "commonNames": "cauliflower",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "brassicas",
+      "habit": "upright-herb",
+      "archetype": "cool",
+      "dliMin": 10,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 20,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 80,
+      "spacingCm": 50,
+      "heightM": 0.6,
+      "widthM": 0.6,
+      "overrides": {
+        "synonyms": [
+          "Brassica oleracea Botrytis group"
+        ],
+        "dtmRef": "transplant",
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "brussels-sprouts",
+      "acceptedName": "Brassica oleracea",
+      "family": "Brassicaceae",
+      "commonNames": "brussels sprouts",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "brassicas",
+      "habit": "upright-herb",
+      "archetype": "cool",
+      "dliMin": 10,
+      "dliTargetLow": 16,
+      "dliTargetHigh": 22,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 110,
+      "spacingCm": 60,
+      "heightM": 0.9,
+      "widthM": 0.6,
+      "overrides": {
+        "synonyms": [
+          "Brassica oleracea Gemmifera group"
+        ],
+        "dtmRef": "transplant",
+        "fallHarvest": true,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "napa-cabbage",
+      "acceptedName": "Brassica rapa",
+      "family": "Brassicaceae",
+      "commonNames": "napa cabbage|chinese cabbage",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "brassicas",
+      "habit": "rosette",
+      "archetype": "cool",
+      "dliMin": 8,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 20,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 70,
+      "spacingCm": 35,
+      "heightM": 0.4,
+      "widthM": 0.4,
+      "overrides": {
+        "synonyms": [
+          "Brassica rapa Pekinensis group"
+        ],
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "romanesco",
+      "acceptedName": "Brassica oleracea",
+      "family": "Brassicaceae",
+      "commonNames": "romanesco",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "brassicas",
+      "habit": "upright-herb",
+      "archetype": "cool",
+      "dliMin": 10,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 20,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 90,
+      "spacingCm": 50,
+      "heightM": 0.6,
+      "widthM": 0.6,
+      "overrides": {
+        "dtmRef": "transplant",
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "basil",
+      "acceptedName": "Ocimum basilicum",
+      "family": "Lamiaceae",
+      "commonNames": "basil|sweet basil",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "upright-herb",
+      "archetype": "warm",
+      "dliMin": 12.9,
+      "dliTargetLow": 14.4,
+      "dliTargetHigh": 17.8,
+      "tier": "A",
+      "shade": 1,
+      "daysToMaturity": 60,
+      "spacingCm": 25,
+      "heightM": 0.6,
+      "widthM": 0.4,
+      "overrides": {
+        "harvestDays": 90,
+        "succession": 21,
+        "dliCitations": [
+          "dou2018-basil-dli",
+          "pennisi2020-lettuce-basil-ppfd",
+          "walters2018-basil-species-dli"
+        ],
+        "dliCaveat": "12.9 mol/m2/d is the level Dou et al. 2018 suggest for commercial production, the lowest of their five at which yield and nutritional quality were both high; their plants still grew at 9.3 with 54 to 79 percent less shoot mass, and Walters and Currey 2018 found 59 percent less at 7 or below than at about 15. The target runs from Pennisi et al. 2020’s optimum, 14.4, to 17.8, the top of Dou et al.’s range, where shoot mass was highest"
+      }
+    },
+    {
+      "id": "parsley",
+      "acceptedName": "Petroselinum crispum",
+      "family": "Apiaceae",
+      "commonNames": "parsley",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "understory-herbs",
+      "habit": "rosette",
+      "archetype": "cool",
+      "dliMin": 5,
+      "dliTargetLow": 10,
+      "dliTargetHigh": 16,
+      "tier": "C",
+      "shade": 2,
+      "daysToMaturity": 75,
+      "spacingCm": 20,
+      "heightM": 0.35,
+      "widthM": 0.3,
+      "overrides": {
+        "life": "biennial",
+        "harvestDays": 120,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "cilantro",
+      "acceptedName": "Coriandrum sativum",
+      "family": "Apiaceae",
+      "commonNames": "cilantro|coriander",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "understory-herbs",
+      "habit": "upright-herb",
+      "archetype": "cool",
+      "dliMin": 5,
+      "dliTargetLow": 10,
+      "dliTargetHigh": 16,
+      "tier": "C",
+      "shade": 2,
+      "daysToMaturity": 45,
+      "spacingCm": 15,
+      "heightM": 0.5,
+      "widthM": 0.2,
+      "overrides": {
+        "succession": 14,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "dill",
+      "acceptedName": "Anethum graveolens",
+      "family": "Apiaceae",
+      "commonNames": "dill",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "upright-herb",
+      "archetype": "cool",
+      "dliMin": 10,
+      "dliTargetLow": 16,
+      "dliTargetHigh": 22,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 60,
+      "spacingCm": 25,
+      "heightM": 1,
+      "widthM": 0.3,
+      "overrides": {
+        "succession": 21,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "mint",
+      "acceptedName": "Mentha spicata",
+      "family": "Lamiaceae",
+      "commonNames": "mint|spearmint",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "understory-herbs",
+      "habit": "rhizomatous",
+      "archetype": "cool-perennial",
+      "dliMin": 4,
+      "dliTargetLow": 8,
+      "dliTargetHigh": 14,
+      "tier": "C",
+      "shade": 2,
+      "daysToMaturity": 70,
+      "spacingCm": 40,
+      "heightM": 0.6,
+      "widthM": 0.9,
+      "overrides": {
+        "life": "perennial",
+        "coldC": -29,
+        "harvestDays": 120,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "oregano",
+      "acceptedName": "Origanum vulgare",
+      "family": "Lamiaceae",
+      "commonNames": "oregano",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "bush",
+      "archetype": "hardy-perennial",
+      "dliMin": 12,
+      "dliTargetLow": 18,
+      "dliTargetHigh": 25,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 90,
+      "spacingCm": 30,
+      "heightM": 0.5,
+      "widthM": 0.5,
+      "overrides": {
+        "life": "perennial",
+        "coldC": -23,
+        "temp": [
+          0,
+          12,
+          30,
+          40
+        ],
+        "harvestDays": 120,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "thyme",
+      "acceptedName": "Thymus vulgaris",
+      "family": "Lamiaceae",
+      "commonNames": "thyme",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "bush",
+      "archetype": "hardy-perennial",
+      "dliMin": 12,
+      "dliTargetLow": 18,
+      "dliTargetHigh": 25,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 90,
+      "spacingCm": 30,
+      "heightM": 0.3,
+      "widthM": 0.4,
+      "overrides": {
+        "life": "perennial",
+        "coldC": -23,
+        "temp": [
+          0,
+          12,
+          30,
+          40
+        ],
+        "harvestDays": 150,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "rosemary",
+      "acceptedName": "Salvia rosmarinus",
+      "family": "Lamiaceae",
+      "commonNames": "rosemary",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "bush",
+      "archetype": "subtropical",
+      "dliMin": 14,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 28,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 200,
+      "spacingCm": 60,
+      "heightM": 1.2,
+      "widthM": 1,
+      "overrides": {
+        "life": "woody-perennial",
+        "coldC": -12,
+        "deciduous": false,
+        "harvestDays": 200,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "sage",
+      "acceptedName": "Salvia officinalis",
+      "family": "Lamiaceae",
+      "commonNames": "sage|common sage",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "bush",
+      "archetype": "hardy-perennial",
+      "dliMin": 12,
+      "dliTargetLow": 18,
+      "dliTargetHigh": 25,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 120,
+      "spacingCm": 50,
+      "heightM": 0.7,
+      "widthM": 0.8,
+      "overrides": {
+        "life": "woody-perennial",
+        "coldC": -23,
+        "temp": [
+          0,
+          12,
+          30,
+          40
+        ],
+        "deciduous": false,
+        "harvestDays": 150,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "tarragon",
+      "acceptedName": "Artemisia dracunculus",
+      "family": "Asteraceae",
+      "commonNames": "tarragon|french tarragon",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "upright-herb",
+      "archetype": "hardy-perennial",
+      "dliMin": 8,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 20,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 100,
+      "spacingCm": 45,
+      "heightM": 0.8,
+      "widthM": 0.5,
+      "overrides": {
+        "life": "perennial",
+        "coldC": -29,
+        "harvestDays": 120,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "lemon-balm",
+      "acceptedName": "Melissa officinalis",
+      "family": "Lamiaceae",
+      "commonNames": "lemon balm",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "understory-herbs",
+      "habit": "bush",
+      "archetype": "cool-perennial",
+      "dliMin": 4,
+      "dliTargetLow": 8,
+      "dliTargetHigh": 14,
+      "tier": "C",
+      "shade": 2,
+      "daysToMaturity": 80,
+      "spacingCm": 40,
+      "heightM": 0.7,
+      "widthM": 0.6,
+      "overrides": {
+        "life": "perennial",
+        "coldC": -29,
+        "harvestDays": 120,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "lovage",
+      "acceptedName": "Levisticum officinale",
+      "family": "Apiaceae",
+      "commonNames": "lovage",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "understory-herbs",
+      "habit": "upright-herb",
+      "archetype": "cool-perennial",
+      "dliMin": 6,
+      "dliTargetLow": 12,
+      "dliTargetHigh": 18,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 120,
+      "spacingCm": 60,
+      "heightM": 1.8,
+      "widthM": 0.9,
+      "overrides": {
+        "life": "perennial",
+        "coldC": -34,
+        "harvestDays": 120,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "marjoram",
+      "acceptedName": "Origanum majorana",
+      "family": "Lamiaceae",
+      "commonNames": "marjoram|sweet marjoram",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "bush",
+      "archetype": "warm",
+      "dliMin": 12,
+      "dliTargetLow": 18,
+      "dliTargetHigh": 25,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 80,
+      "spacingCm": 25,
+      "heightM": 0.4,
+      "widthM": 0.35,
+      "overrides": {
+        "harvestDays": 90,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "fennel-bulb",
+      "acceptedName": "Foeniculum vulgare",
+      "family": "Apiaceae",
+      "commonNames": "fennel|florence fennel",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "upright-herb",
+      "archetype": "cool",
+      "dliMin": 12,
+      "dliTargetLow": 18,
+      "dliTargetHigh": 25,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 90,
+      "spacingCm": 25,
+      "heightM": 1,
+      "widthM": 0.4,
+      "overrides": {
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "shiso",
+      "acceptedName": "Perilla frutescens",
+      "family": "Lamiaceae",
+      "commonNames": "shiso|perilla",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "upright-herb",
+      "archetype": "warm",
+      "dliMin": 6,
+      "dliTargetLow": 12,
+      "dliTargetHigh": 18,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 70,
+      "spacingCm": 30,
+      "heightM": 0.8,
+      "widthM": 0.4,
+      "overrides": {
+        "harvestDays": 80,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "chervil",
+      "acceptedName": "Anthriscus cerefolium",
+      "family": "Apiaceae",
+      "commonNames": "chervil",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "understory-herbs",
+      "habit": "rosette",
+      "archetype": "cool",
+      "dliMin": 3,
+      "dliTargetLow": 6,
+      "dliTargetHigh": 12,
+      "tier": "C",
+      "shade": 2,
+      "daysToMaturity": 50,
+      "spacingCm": 15,
+      "heightM": 0.4,
+      "widthM": 0.2,
+      "overrides": {
+        "succession": 14,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "summer-savory",
+      "acceptedName": "Satureja hortensis",
+      "family": "Lamiaceae",
+      "commonNames": "summer savory",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "upright-herb",
+      "archetype": "warm",
+      "dliMin": 12,
+      "dliTargetLow": 18,
+      "dliTargetHigh": 25,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 65,
+      "spacingCm": 20,
+      "heightM": 0.4,
+      "widthM": 0.25,
+      "overrides": {
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "bay-laurel",
+      "acceptedName": "Laurus nobilis",
+      "family": "Lauraceae",
+      "commonNames": "bay laurel|sweet bay",
+      "laubGroup": "fruits",
+      "dliClass": "leafy-greens",
+      "habit": "columnar-tree",
+      "archetype": "subtropical",
+      "dliMin": 8,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 22,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 1000,
+      "spacingCm": 200,
+      "heightM": 4,
+      "widthM": 2.5,
+      "overrides": {
+        "life": "woody-perennial",
+        "coldC": -9,
+        "deciduous": false,
+        "yearsToMature": 8,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "winter-savory",
+      "acceptedName": "Satureja montana",
+      "family": "Lamiaceae",
+      "commonNames": "winter savory",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "bush",
+      "archetype": "hardy-perennial",
+      "dliMin": 12,
+      "dliTargetLow": 18,
+      "dliTargetHigh": 25,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 120,
+      "spacingCm": 30,
+      "heightM": 0.4,
+      "widthM": 0.4,
+      "overrides": {
+        "life": "perennial",
+        "coldC": -23,
+        "temp": [
+          0,
+          12,
+          30,
+          40
+        ],
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "hyssop",
+      "acceptedName": "Hyssopus officinalis",
+      "family": "Lamiaceae",
+      "commonNames": "hyssop",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "bush",
+      "archetype": "hardy-perennial",
+      "dliMin": 12,
+      "dliTargetLow": 18,
+      "dliTargetHigh": 25,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 120,
+      "spacingCm": 40,
+      "heightM": 0.6,
+      "widthM": 0.5,
+      "overrides": {
+        "life": "perennial",
+        "coldC": -29,
+        "temp": [
+          0,
+          12,
+          30,
+          40
+        ],
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "anise-hyssop",
+      "acceptedName": "Agastache foeniculum",
+      "family": "Lamiaceae",
+      "commonNames": "anise hyssop",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "upright-herb",
+      "archetype": "hardy-perennial",
+      "dliMin": 10,
+      "dliTargetLow": 16,
+      "dliTargetHigh": 24,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 120,
+      "spacingCm": 45,
+      "heightM": 0.9,
+      "widthM": 0.5,
+      "overrides": {
+        "life": "perennial",
+        "coldC": -34,
+        "dliCitations": [
+          "fiedler2007-insectary"
+        ]
+      }
+    },
+    {
+      "id": "strawberry",
+      "acceptedName": "Fragaria x ananassa",
+      "family": "Rosaceae",
+      "commonNames": "strawberry",
+      "laubGroup": "berries",
+      "dliClass": "strawberry",
+      "habit": "rosette",
+      "archetype": "cool-perennial",
+      "dliMin": 25,
+      "dliTargetLow": 25,
+      "dliTargetHigh": 30,
+      "tier": "C",
+      "shade": 2,
+      "daysToMaturity": 365,
+      "spacingCm": 35,
+      "heightM": 0.25,
+      "widthM": 0.4,
+      "overrides": {
+        "life": "perennial",
+        "coldC": -25,
+        "yearsToMature": 2,
+        "harvestDays": 30,
+        "maxRsr": 0.1,
+        "maxRsrTier": "B",
+        "dliCitations": [
+          "widmer-strawberry-dli",
+          "kubota-osu-strawberry-dli"
+        ]
+      }
+    },
+    {
+      "id": "raspberry",
+      "acceptedName": "Rubus idaeus",
+      "family": "Rosaceae",
+      "commonNames": "raspberry",
+      "laubGroup": "berries",
+      "dliClass": "cane-bush-berries",
+      "habit": "caned",
+      "archetype": "cool-perennial",
+      "dliMin": 15,
+      "dliTargetLow": 18,
+      "dliTargetHigh": 25,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 730,
+      "spacingCm": 60,
+      "heightM": 1.8,
+      "widthM": 0.8,
+      "overrides": {
+        "life": "woody-perennial",
+        "coldC": -34,
+        "yearsToMature": 2,
+        "harvestDays": 30,
+        "dliCitations": [
+          "widmer-strawberry-dli"
+        ]
+      }
+    },
+    {
+      "id": "blackberry",
+      "acceptedName": "Rubus fruticosus",
+      "family": "Rosaceae",
+      "commonNames": "blackberry",
+      "laubGroup": "berries",
+      "dliClass": "cane-bush-berries",
+      "habit": "caned",
+      "archetype": "cool-perennial",
+      "dliMin": 12,
+      "dliTargetLow": 18,
+      "dliTargetHigh": 26,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 730,
+      "spacingCm": 90,
+      "heightM": 2,
+      "widthM": 1.2,
+      "overrides": {
+        "life": "woody-perennial",
+        "coldC": -23,
+        "yearsToMature": 2,
+        "harvestDays": 30,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "blueberry",
+      "acceptedName": "Vaccinium corymbosum",
+      "family": "Ericaceae",
+      "commonNames": "blueberry|highbush blueberry",
+      "laubGroup": "berries",
+      "dliClass": "cane-bush-berries",
+      "habit": "bush",
+      "archetype": "cool-perennial",
+      "dliMin": 12,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 26,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 1460,
+      "spacingCm": 150,
+      "heightM": 1.6,
+      "widthM": 1.4,
+      "overrides": {
+        "life": "woody-perennial",
+        "coldC": -29,
+        "yearsToMature": 5,
+        "ph": [
+          4,
+          4.5,
+          5.5,
+          6
+        ],
+        "chillHours": 800,
+        "deciduous": true,
+        "harvestDays": 30,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "lingonberry",
+      "acceptedName": "Vaccinium vitis-idaea",
+      "family": "Ericaceae",
+      "commonNames": "lingonberry|cowberry",
+      "laubGroup": "berries",
+      "dliClass": "cane-bush-berries",
+      "habit": "groundcover",
+      "archetype": "cool-perennial",
+      "dliMin": 8,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 20,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 1095,
+      "spacingCm": 40,
+      "heightM": 0.3,
+      "widthM": 0.4,
+      "overrides": {
+        "life": "woody-perennial",
+        "coldC": -40,
+        "yearsToMature": 3,
+        "ph": [
+          2.7,
+          4,
+          4.9,
+          8.2
+        ],
+        "envCitations": [
+          "tirmenstein1991-lingonberry-feis"
+        ],
+        "maxRsr": 0.5,
+        "maxRsrTier": "C",
+        "harvestDays": 21,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "lowbush-blueberry",
+      "acceptedName": "Vaccinium angustifolium",
+      "family": "Ericaceae",
+      "commonNames": "lowbush blueberry|wild blueberry",
+      "laubGroup": "berries",
+      "dliClass": "cane-bush-berries",
+      "habit": "bush",
+      "archetype": "cool-perennial",
+      "dliMin": 12,
+      "dliTargetLow": 18,
+      "dliTargetHigh": 24,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 1095,
+      "spacingCm": 60,
+      "heightM": 0.4,
+      "widthM": 0.6,
+      "overrides": {
+        "life": "woody-perennial",
+        "coldC": -40,
+        "yearsToMature": 3,
+        "ph": [
+          2.8,
+          4.2,
+          5.2,
+          6.6
+        ],
+        "envCitations": [
+          "tirmenstein1991-lowbush-blueberry-feis"
+        ],
+        "deciduous": true,
+        "harvestDays": 21,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "cranberry",
+      "acceptedName": "Vaccinium macrocarpon",
+      "family": "Ericaceae",
+      "commonNames": "cranberry|large cranberry",
+      "laubGroup": "berries",
+      "dliClass": "cane-bush-berries",
+      "habit": "groundcover",
+      "archetype": "cool-perennial",
+      "dliMin": 12,
+      "dliTargetLow": 18,
+      "dliTargetHigh": 25,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 1095,
+      "spacingCm": 30,
+      "heightM": 0.2,
+      "widthM": 0.5,
+      "overrides": {
+        "life": "woody-perennial",
+        "coldC": -35,
+        "yearsToMature": 3,
+        "ph": [
+          3.2,
+          4,
+          5.5,
+          6.5
+        ],
+        "envCitations": [],
+        "harvestDays": 21,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "teaberry",
+      "acceptedName": "Gaultheria procumbens",
+      "family": "Ericaceae",
+      "commonNames": "eastern teaberry|wintergreen|checkerberry",
+      "laubGroup": "berries",
+      "dliClass": "understory-herbs",
+      "habit": "groundcover",
+      "archetype": "cool-perennial",
+      "dliMin": 3,
+      "dliTargetLow": 6,
+      "dliTargetHigh": 12,
+      "tier": "C",
+      "shade": 2,
+      "daysToMaturity": 730,
+      "spacingCm": 30,
+      "heightM": 0.15,
+      "widthM": 0.3,
+      "overrides": {
+        "life": "perennial",
+        "coldC": -40,
+        "ph": [
+          3.5,
+          4.5,
+          6,
+          7
+        ],
+        "envCitations": [
+          "coladonato1994-teaberry-feis"
+        ],
+        "maxRsr": 0.75,
+        "maxRsrTier": "C",
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "sweetfern",
+      "acceptedName": "Comptonia peregrina",
+      "family": "Myricaceae",
+      "commonNames": "sweetfern",
+      "laubGroup": "forages",
+      "dliClass": "forages-c3-pasture",
+      "habit": "bush",
+      "archetype": "hardy-perennial",
+      "dliMin": 8,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 20,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 1095,
+      "spacingCm": 90,
+      "heightM": 1.2,
+      "widthM": 1.2,
+      "overrides": {
+        "role": "nurse",
+        "life": "woody-perennial",
+        "nfix": true,
+        "coldC": -40,
+        "yearsToMature": 3,
+        "ph": [
+          3.5,
+          4.5,
+          6.5,
+          7.5
+        ],
+        "envCitations": [],
+        "deciduous": true,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "currant-red",
+      "acceptedName": "Ribes rubrum",
+      "family": "Grossulariaceae",
+      "commonNames": "red currant|white currant",
+      "laubGroup": "berries",
+      "dliClass": "cane-bush-berries",
+      "habit": "bush",
+      "archetype": "cool-perennial",
+      "dliMin": 5,
+      "dliTargetLow": 10,
+      "dliTargetHigh": 16,
+      "tier": "C",
+      "shade": 2,
+      "daysToMaturity": 1095,
+      "spacingCm": 120,
+      "heightM": 1.4,
+      "widthM": 1.2,
+      "overrides": {
+        "life": "woody-perennial",
+        "coldC": -34,
+        "yearsToMature": 4,
+        "chillHours": 800,
+        "deciduous": true,
+        "maxRsr": 0.45,
+        "maxRsrTier": "C",
+        "harvestDays": 21,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "currant-black",
+      "acceptedName": "Ribes nigrum",
+      "family": "Grossulariaceae",
+      "commonNames": "blackcurrant",
+      "laubGroup": "berries",
+      "dliClass": "cane-bush-berries",
+      "habit": "bush",
+      "archetype": "cool-perennial",
+      "dliMin": 6,
+      "dliTargetLow": 12,
+      "dliTargetHigh": 18,
+      "tier": "C",
+      "shade": 2,
+      "daysToMaturity": 1095,
+      "spacingCm": 150,
+      "heightM": 1.5,
+      "widthM": 1.4,
+      "overrides": {
+        "life": "woody-perennial",
+        "coldC": -34,
+        "yearsToMature": 4,
+        "chillHours": 800,
+        "deciduous": true,
+        "maxRsr": 0.4,
+        "maxRsrTier": "C",
+        "harvestDays": 21,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "gooseberry",
+      "acceptedName": "Ribes uva-crispa",
+      "family": "Grossulariaceae",
+      "commonNames": "gooseberry",
+      "laubGroup": "berries",
+      "dliClass": "cane-bush-berries",
+      "habit": "bush",
+      "archetype": "cool-perennial",
+      "dliMin": 5,
+      "dliTargetLow": 10,
+      "dliTargetHigh": 16,
+      "tier": "C",
+      "shade": 2,
+      "daysToMaturity": 1095,
+      "spacingCm": 120,
+      "heightM": 1.2,
+      "widthM": 1.2,
+      "overrides": {
+        "life": "woody-perennial",
+        "coldC": -34,
+        "yearsToMature": 4,
+        "chillHours": 800,
+        "deciduous": true,
+        "maxRsr": 0.45,
+        "maxRsrTier": "C",
+        "harvestDays": 21,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "elderberry",
+      "acceptedName": "Sambucus canadensis",
+      "family": "Viburnaceae",
+      "commonNames": "elderberry",
+      "laubGroup": "berries",
+      "dliClass": "cane-bush-berries",
+      "habit": "bush",
+      "archetype": "cool-perennial",
+      "dliMin": 8,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 22,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 1095,
+      "spacingCm": 240,
+      "heightM": 3,
+      "widthM": 2.5,
+      "overrides": {
+        "life": "woody-perennial",
+        "coldC": -34,
+        "yearsToMature": 4,
+        "deciduous": true,
+        "harvestDays": 21,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "rhubarb",
+      "acceptedName": "Rheum rhabarbarum",
+      "family": "Polygonaceae",
+      "commonNames": "rhubarb",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "rosette",
+      "archetype": "cool-perennial",
+      "dliMin": 6,
+      "dliTargetLow": 12,
+      "dliTargetHigh": 18,
+      "tier": "C",
+      "shade": 2,
+      "daysToMaturity": 730,
+      "spacingCm": 90,
+      "heightM": 0.9,
+      "widthM": 1.1,
+      "overrides": {
+        "life": "perennial",
+        "coldC": -34,
+        "yearsToMature": 3,
+        "harvestDays": 45,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "asparagus",
+      "acceptedName": "Asparagus officinalis",
+      "family": "Asparagaceae",
+      "commonNames": "asparagus",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "upright-herb",
+      "archetype": "cool-perennial",
+      "dliMin": 14,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 28,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 1095,
+      "spacingCm": 40,
+      "heightM": 1.6,
+      "widthM": 0.6,
+      "overrides": {
+        "life": "perennial",
+        "coldC": -34,
+        "yearsToMature": 3,
+        "maxRsr": 0.1,
+        "maxRsrTier": "C",
+        "harvestDays": 45,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "globe-artichoke",
+      "acceptedName": "Cynara cardunculus",
+      "family": "Asteraceae",
+      "commonNames": "globe artichoke",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "rosette",
+      "archetype": "cool-perennial",
+      "dliMin": 14,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 28,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 730,
+      "spacingCm": 120,
+      "heightM": 1.4,
+      "widthM": 1.4,
+      "overrides": {
+        "life": "perennial",
+        "coldC": -12,
+        "yearsToMature": 2,
+        "harvestDays": 45,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "grape",
+      "acceptedName": "Vitis vinifera",
+      "family": "Vitaceae",
+      "commonNames": "grape|wine grape|table grape",
+      "laubGroup": "fruits",
+      "dliClass": "cane-bush-berries",
+      "habit": "vining-trellised",
+      "archetype": "temperate-tree",
+      "dliMin": 18,
+      "dliTargetLow": 25,
+      "dliTargetHigh": 35,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 1095,
+      "spacingCm": 200,
+      "heightM": 2.5,
+      "widthM": 2,
+      "overrides": {
+        "life": "woody-perennial",
+        "coldC": -18,
+        "yearsToMature": 4,
+        "chillHours": 200,
+        "deciduous": true,
+        "support": "trellis",
+        "maxRsr": 0.1,
+        "maxRsrTier": "C",
+        "harvestDays": 21,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "apple",
+      "acceptedName": "Malus domestica",
+      "family": "Rosaceae",
+      "commonNames": "apple",
+      "laubGroup": "fruits",
+      "dliClass": "cane-bush-berries",
+      "habit": "vase-tree",
+      "archetype": "temperate-tree",
+      "dliMin": 15,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 30,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 1825,
+      "spacingCm": 350,
+      "heightM": 3.5,
+      "widthM": 3,
+      "overrides": {
+        "life": "woody-perennial",
+        "coldC": -34,
+        "yearsToMature": 6,
+        "chillHours": 800,
+        "maxRsr": 0.1,
+        "maxRsrTier": "C",
+        "harvestDays": 30,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "pear",
+      "acceptedName": "Pyrus communis",
+      "family": "Rosaceae",
+      "commonNames": "pear",
+      "laubGroup": "fruits",
+      "dliClass": "cane-bush-berries",
+      "habit": "columnar-tree",
+      "archetype": "temperate-tree",
+      "dliMin": 15,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 30,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 1825,
+      "spacingCm": 350,
+      "heightM": 4,
+      "widthM": 2.8,
+      "overrides": {
+        "life": "woody-perennial",
+        "coldC": -29,
+        "yearsToMature": 6,
+        "chillHours": 700,
+        "maxRsr": 0.1,
+        "maxRsrTier": "C",
+        "harvestDays": 30,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "peach",
+      "acceptedName": "Prunus persica",
+      "family": "Rosaceae",
+      "commonNames": "peach|nectarine",
+      "laubGroup": "fruits",
+      "dliClass": "cane-bush-berries",
+      "habit": "vase-tree",
+      "archetype": "temperate-tree",
+      "dliMin": 18,
+      "dliTargetLow": 25,
+      "dliTargetHigh": 35,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 1460,
+      "spacingCm": 400,
+      "heightM": 3.5,
+      "widthM": 3.5,
+      "overrides": {
+        "life": "woody-perennial",
+        "coldC": -23,
+        "yearsToMature": 4,
+        "chillHours": 750,
+        "maxRsr": 0.1,
+        "maxRsrTier": "C",
+        "harvestDays": 21,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "plum",
+      "acceptedName": "Prunus domestica",
+      "family": "Rosaceae",
+      "commonNames": "plum|european plum",
+      "laubGroup": "fruits",
+      "dliClass": "cane-bush-berries",
+      "habit": "vase-tree",
+      "archetype": "temperate-tree",
+      "dliMin": 15,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 30,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 1460,
+      "spacingCm": 400,
+      "heightM": 4,
+      "widthM": 3.5,
+      "overrides": {
+        "life": "woody-perennial",
+        "coldC": -29,
+        "yearsToMature": 5,
+        "chillHours": 800,
+        "maxRsr": 0.1,
+        "maxRsrTier": "C",
+        "harvestDays": 21,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "cherry-sweet",
+      "acceptedName": "Prunus avium",
+      "family": "Rosaceae",
+      "commonNames": "sweet cherry",
+      "laubGroup": "fruits",
+      "dliClass": "cane-bush-berries",
+      "habit": "vase-tree",
+      "archetype": "temperate-tree",
+      "dliMin": 15,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 30,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 1825,
+      "spacingCm": 450,
+      "heightM": 5,
+      "widthM": 4,
+      "overrides": {
+        "life": "woody-perennial",
+        "coldC": -29,
+        "yearsToMature": 6,
+        "chillHours": 1000,
+        "maxRsr": 0.1,
+        "maxRsrTier": "C",
+        "harvestDays": 14,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "cherry-sour",
+      "acceptedName": "Prunus cerasus",
+      "family": "Rosaceae",
+      "commonNames": "sour cherry|tart cherry",
+      "laubGroup": "fruits",
+      "dliClass": "cane-bush-berries",
+      "habit": "vase-tree",
+      "archetype": "temperate-tree",
+      "dliMin": 15,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 30,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 1460,
+      "spacingCm": 400,
+      "heightM": 4,
+      "widthM": 3.5,
+      "overrides": {
+        "life": "woody-perennial",
+        "coldC": -34,
+        "yearsToMature": 5,
+        "chillHours": 1100,
+        "maxRsr": 0.1,
+        "maxRsrTier": "C",
+        "harvestDays": 14,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "apricot",
+      "acceptedName": "Prunus armeniaca",
+      "family": "Rosaceae",
+      "commonNames": "apricot",
+      "laubGroup": "fruits",
+      "dliClass": "cane-bush-berries",
+      "habit": "vase-tree",
+      "archetype": "temperate-tree",
+      "dliMin": 15,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 30,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 1460,
+      "spacingCm": 400,
+      "heightM": 4,
+      "widthM": 3.5,
+      "overrides": {
+        "life": "woody-perennial",
+        "coldC": -26,
+        "yearsToMature": 4,
+        "chillHours": 700,
+        "maxRsr": 0.1,
+        "maxRsrTier": "C",
+        "harvestDays": 14,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "fig",
+      "acceptedName": "Ficus carica",
+      "family": "Moraceae",
+      "commonNames": "fig",
+      "laubGroup": "fruits",
+      "dliClass": "cane-bush-berries",
+      "habit": "spreading-tree",
+      "archetype": "subtropical",
+      "dliMin": 15,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 30,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 1095,
+      "spacingCm": 400,
+      "heightM": 4,
+      "widthM": 4,
+      "overrides": {
+        "life": "woody-perennial",
+        "coldC": -12,
+        "yearsToMature": 4,
+        "deciduous": true,
+        "maxRsr": 0.1,
+        "maxRsrTier": "C",
+        "harvestDays": 45,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "hazelnut",
+      "acceptedName": "Corylus avellana",
+      "family": "Betulaceae",
+      "commonNames": "hazelnut|filbert",
+      "laubGroup": "fruits",
+      "dliClass": "cane-bush-berries",
+      "habit": "bush",
+      "archetype": "temperate-tree",
+      "dliMin": 10,
+      "dliTargetLow": 18,
+      "dliTargetHigh": 25,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 1825,
+      "spacingCm": 400,
+      "heightM": 4,
+      "widthM": 4,
+      "overrides": {
+        "life": "woody-perennial",
+        "coldC": -29,
+        "yearsToMature": 6,
+        "chillHours": 800,
+        "deciduous": true,
+        "maxRsr": 0.3,
+        "maxRsrTier": "C",
+        "harvestDays": 21,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "pawpaw",
+      "acceptedName": "Asimina triloba",
+      "family": "Annonaceae",
+      "commonNames": "pawpaw",
+      "laubGroup": "fruits",
+      "dliClass": "cane-bush-berries",
+      "habit": "columnar-tree",
+      "archetype": "temperate-tree",
+      "dliMin": 6,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 22,
+      "tier": "C",
+      "shade": 2,
+      "daysToMaturity": 2190,
+      "spacingCm": 300,
+      "heightM": 5,
+      "widthM": 3,
+      "overrides": {
+        "life": "woody-perennial",
+        "coldC": -26,
+        "yearsToMature": 7,
+        "deciduous": true,
+        "maxRsr": 0.45,
+        "maxRsrTier": "C",
+        "harvestDays": 21,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "serviceberry",
+      "acceptedName": "Amelanchier alnifolia",
+      "family": "Rosaceae",
+      "commonNames": "serviceberry|saskatoon|juneberry",
+      "laubGroup": "berries",
+      "dliClass": "cane-bush-berries",
+      "habit": "bush",
+      "archetype": "temperate-tree",
+      "dliMin": 8,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 22,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 1460,
+      "spacingCm": 250,
+      "heightM": 3.5,
+      "widthM": 2.5,
+      "overrides": {
+        "life": "woody-perennial",
+        "coldC": -40,
+        "yearsToMature": 4,
+        "chillHours": 800,
+        "deciduous": true,
+        "harvestDays": 21,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "aronia",
+      "acceptedName": "Aronia melanocarpa",
+      "family": "Rosaceae",
+      "commonNames": "aronia|black chokeberry",
+      "laubGroup": "berries",
+      "dliClass": "cane-bush-berries",
+      "habit": "bush",
+      "archetype": "cool-perennial",
+      "dliMin": 8,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 22,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 1095,
+      "spacingCm": 180,
+      "heightM": 2,
+      "widthM": 1.8,
+      "overrides": {
+        "life": "woody-perennial",
+        "coldC": -37,
+        "yearsToMature": 4,
+        "deciduous": true,
+        "harvestDays": 21,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "hardy-kiwi",
+      "acceptedName": "Actinidia arguta",
+      "family": "Actinidiaceae",
+      "commonNames": "hardy kiwi|kiwiberry",
+      "laubGroup": "fruits",
+      "dliClass": "cane-bush-berries",
+      "habit": "vining-trellised",
+      "archetype": "temperate-tree",
+      "dliMin": 10,
+      "dliTargetLow": 18,
+      "dliTargetHigh": 25,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 1825,
+      "spacingCm": 300,
+      "heightM": 5,
+      "widthM": 3,
+      "overrides": {
+        "life": "woody-perennial",
+        "coldC": -34,
+        "yearsToMature": 5,
+        "chillHours": 600,
+        "deciduous": true,
+        "support": "arbor",
+        "harvestDays": 21,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "hops",
+      "acceptedName": "Humulus lupulus",
+      "family": "Cannabaceae",
+      "commonNames": "hops",
+      "laubGroup": "fruits",
+      "dliClass": "cane-bush-berries",
+      "habit": "vining-trellised",
+      "archetype": "hardy-perennial",
+      "dliMin": 14,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 30,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 730,
+      "spacingCm": 100,
+      "heightM": 6,
+      "widthM": 1,
+      "overrides": {
+        "life": "perennial",
+        "coldC": -34,
+        "yearsToMature": 3,
+        "support": "trellis",
+        "harvestDays": 21,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "crabapple",
+      "acceptedName": "Malus fusca",
+      "family": "Rosaceae",
+      "commonNames": "pacific crabapple",
+      "laubGroup": "fruits",
+      "dliClass": "cane-bush-berries",
+      "habit": "spreading-tree",
+      "archetype": "temperate-tree",
+      "dliMin": 12,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 28,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 1825,
+      "spacingCm": 400,
+      "heightM": 6,
+      "widthM": 5,
+      "overrides": {
+        "life": "woody-perennial",
+        "coldC": -34,
+        "yearsToMature": 7,
+        "chillHours": 800,
+        "maxRsr": 0.2,
+        "maxRsrTier": "C",
+        "harvestDays": 30,
+        "dliCitations": [
+          "armstrong2021-forest-garden-traits"
+        ]
+      }
+    },
+    {
+      "id": "highbush-cranberry",
+      "acceptedName": "Viburnum edule",
+      "family": "Viburnaceae",
+      "commonNames": "highbush cranberry",
+      "laubGroup": "berries",
+      "dliClass": "cane-bush-berries",
+      "habit": "bush",
+      "archetype": "cool-perennial",
+      "dliMin": 6,
+      "dliTargetLow": 12,
+      "dliTargetHigh": 20,
+      "tier": "C",
+      "shade": 2,
+      "daysToMaturity": 1095,
+      "spacingCm": 200,
+      "heightM": 2.5,
+      "widthM": 2,
+      "overrides": {
+        "life": "woody-perennial",
+        "coldC": -40,
+        "yearsToMature": 4,
+        "deciduous": true,
+        "maxRsr": 0.45,
+        "maxRsrTier": "C",
+        "harvestDays": 21,
+        "dliCitations": [
+          "armstrong2021-forest-garden-traits"
+        ]
+      }
+    },
+    {
+      "id": "wild-ginger",
+      "acceptedName": "Asarum caudatum",
+      "family": "Aristolochiaceae",
+      "commonNames": "western wild ginger",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "understory-herbs",
+      "habit": "groundcover",
+      "archetype": "cool-perennial",
+      "dliMin": 3,
+      "dliTargetLow": 6,
+      "dliTargetHigh": 12,
+      "tier": "C",
+      "shade": 2,
+      "daysToMaturity": 730,
+      "spacingCm": 30,
+      "heightM": 0.15,
+      "widthM": 0.4,
+      "overrides": {
+        "life": "perennial",
+        "coldC": -29,
+        "maxRsr": 0.75,
+        "maxRsrTier": "C",
+        "dliCitations": [
+          "armstrong2021-forest-garden-traits"
+        ]
+      }
+    },
+    {
+      "id": "ramps",
+      "acceptedName": "Allium tricoccum",
+      "family": "Amaryllidaceae",
+      "commonNames": "ramps|wild leek",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "understory-herbs",
+      "habit": "rosette",
+      "archetype": "cool-perennial",
+      "dliMin": 3,
+      "dliTargetLow": 6,
+      "dliTargetHigh": 12,
+      "tier": "C",
+      "shade": 2,
+      "daysToMaturity": 1825,
+      "spacingCm": 15,
+      "heightM": 0.3,
+      "widthM": 0.15,
+      "overrides": {
+        "life": "perennial",
+        "coldC": -37,
+        "window": [
+          3,
+          5
+        ],
+        "maxRsr": 0.75,
+        "maxRsrTier": "C",
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "enset",
+      "acceptedName": "Ensete ventricosum",
+      "family": "Musaceae",
+      "commonNames": "enset|false banana",
+      "laubGroup": "fruits",
+      "dliClass": "leafy-greens",
+      "habit": "upright-herb",
+      "archetype": "subtropical",
+      "dliMin": 10,
+      "dliTargetLow": 18,
+      "dliTargetHigh": 26,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 1825,
+      "spacingCm": 300,
+      "heightM": 6,
+      "widthM": 4,
+      "overrides": {
+        "life": "perennial",
+        "coldC": 0,
+        "yearsToMature": 5,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "cassava",
+      "acceptedName": "Manihot esculenta",
+      "family": "Euphorbiaceae",
+      "commonNames": "cassava|manioc|yuca",
+      "laubGroup": "tubers-root-crops",
+      "dliClass": "root-tuber",
+      "habit": "bush",
+      "archetype": "hot",
+      "dliMin": 14,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 28,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 300,
+      "spacingCm": 100,
+      "heightM": 2,
+      "widthM": 1,
+      "overrides": {
+        "life": "perennial",
+        "yearsToMature": 1,
+        "coldC": 7,
+        "temp": [
+          10,
+          20,
+          29,
+          35
+        ],
+        "rain": [
+          500,
+          1000,
+          1500,
+          5000
+        ],
+        "ph": [
+          4,
+          5.5,
+          8,
+          9
+        ],
+        "cycle": [
+          180,
+          365
+        ],
+        "koppen": [
+          "Aw",
+          "Af",
+          "Am",
+          "BSh",
+          "BSk"
+        ],
+        "zr": 0.65,
+        "p": 0.35,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "taro",
+      "acceptedName": "Colocasia esculenta",
+      "family": "Araceae",
+      "commonNames": "taro|dasheen|eddo",
+      "laubGroup": "tubers-root-crops",
+      "dliClass": "root-tuber",
+      "habit": "upright-herb",
+      "archetype": "hot",
+      "dliMin": 8,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 20,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 240,
+      "spacingCm": 60,
+      "heightM": 1,
+      "widthM": 1,
+      "overrides": {
+        "life": "perennial",
+        "yearsToMature": 1,
+        "temp": [
+          10,
+          21,
+          28,
+          35
+        ],
+        "rain": [
+          1000,
+          1800,
+          2700,
+          4100
+        ],
+        "ph": [
+          4.3,
+          5.5,
+          6.5,
+          8.2
+        ],
+        "cycle": [
+          180,
+          300
+        ],
+        "koppen": [
+          "Aw",
+          "Af",
+          "Am",
+          "Cfa",
+          "Cfb"
+        ],
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "yam-greater",
+      "acceptedName": "Dioscorea alata",
+      "family": "Dioscoreaceae",
+      "commonNames": "greater yam|water yam|winged yam|ube",
+      "laubGroup": "tubers-root-crops",
+      "dliClass": "root-tuber",
+      "habit": "vining-trellised",
+      "archetype": "hot",
+      "dliMin": 14,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 28,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 260,
+      "spacingCm": 50,
+      "heightM": 2,
+      "widthM": 0.5,
+      "overrides": {
+        "life": "perennial",
+        "yearsToMature": 1,
+        "coldC": -2,
+        "deciduous": true,
+        "betweenCm": 100,
+        "temp": [
+          14,
+          20,
+          32,
+          40
+        ],
+        "rain": [
+          700,
+          1200,
+          4000,
+          8000
+        ],
+        "ph": [
+          4.8,
+          5.5,
+          6.5,
+          8.5
+        ],
+        "cycle": [
+          220,
+          300
+        ],
+        "koppen": [
+          "Aw",
+          "Af",
+          "Am",
+          "Cfa",
+          "Cfb",
+          "Csa",
+          "Csb"
+        ],
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "plantain",
+      "acceptedName": "Musa x paradisiaca",
+      "family": "Musaceae",
+      "commonNames": "plantain|cooking banana",
+      "laubGroup": "fruits",
+      "dliClass": "cucurbits",
+      "habit": "upright-herb",
+      "archetype": "subtropical",
+      "dliMin": 14,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 28,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 365,
+      "spacingCm": 360,
+      "heightM": 3,
+      "widthM": 2.4,
+      "overrides": {
+        "life": "perennial",
+        "yearsToMature": 1,
+        "coldC": 1,
+        "temp": [
+          15,
+          25,
+          35,
+          40
+        ],
+        "rain": [
+          1000,
+          1400,
+          2400,
+          5000
+        ],
+        "ph": [
+          4.5,
+          5.5,
+          6.5,
+          8
+        ],
+        "cycle": [
+          180,
+          365
+        ],
+        "koppen": [
+          "Aw",
+          "Af",
+          "Am",
+          "BSh",
+          "BSk",
+          "Cfa",
+          "Cfb",
+          "Csa",
+          "Csb",
+          "Cwa",
+          "Cwb"
+        ],
+        "zr": 0.7,
+        "p": 0.35,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "rice-upland",
+      "acceptedName": "Oryza sativa",
+      "family": "Poaceae",
+      "commonNames": "upland rice|rice",
+      "laubGroup": "c3-cereals",
+      "dliClass": "c3-cereals",
+      "habit": "clumping-grass",
+      "archetype": "hot",
+      "dliMin": 14,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 28,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 120,
+      "spacingCm": 20,
+      "heightM": 1,
+      "widthM": 0.2,
+      "overrides": {
+        "temp": [
+          10,
+          20,
+          30,
+          36
+        ],
+        "rain": [
+          1000,
+          1500,
+          2000,
+          4000
+        ],
+        "ph": [
+          4.5,
+          5.5,
+          7,
+          9
+        ],
+        "cycle": [
+          80,
+          180
+        ],
+        "koppen": [
+          "Aw",
+          "Af",
+          "Am",
+          "Cfa",
+          "Cfb",
+          "Csa",
+          "Csb",
+          "Cwa",
+          "Cwb"
+        ],
+        "zr": 0.75,
+        "p": 0.2,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "lemon",
+      "acceptedName": "Citrus x limon",
+      "family": "Rutaceae",
+      "commonNames": "lemon",
+      "laubGroup": "fruits",
+      "dliClass": "cane-bush-berries",
+      "habit": "spreading-tree",
+      "archetype": "subtropical",
+      "dliMin": 15,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 30,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 365,
+      "spacingCm": 460,
+      "heightM": 3,
+      "widthM": 3,
+      "overrides": {
+        "yearsToMature": 3,
+        "coldC": -6,
+        "deciduous": false,
+        "temp": [
+          12,
+          15,
+          28,
+          36
+        ],
+        "rain": [
+          300,
+          1000,
+          2300,
+          4000
+        ],
+        "ph": [
+          5.5,
+          6.5,
+          7,
+          8
+        ],
+        "cycle": [
+          210,
+          365
+        ],
+        "koppen": [
+          "Aw",
+          "BSh",
+          "BSk",
+          "Cfa",
+          "Cfb",
+          "Csa",
+          "Csb",
+          "Cwa",
+          "Cwb"
+        ],
+        "zr": 1.3,
+        "p": 0.5,
+        "maxRsr": 0.1,
+        "maxRsrTier": "C",
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "mango",
+      "acceptedName": "Mangifera indica",
+      "family": "Anacardiaceae",
+      "commonNames": "mango",
+      "laubGroup": "fruits",
+      "dliClass": "cane-bush-berries",
+      "habit": "spreading-tree",
+      "archetype": "subtropical",
+      "dliMin": 15,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 30,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 365,
+      "spacingCm": 370,
+      "heightM": 9,
+      "widthM": 4.6,
+      "overrides": {
+        "yearsToMature": 4,
+        "coldC": -1,
+        "deciduous": false,
+        "temp": [
+          8,
+          24,
+          30,
+          48
+        ],
+        "rain": [
+          300,
+          600,
+          1500,
+          2600
+        ],
+        "ph": [
+          4.3,
+          5.5,
+          7.5,
+          8.5
+        ],
+        "cycle": [
+          150,
+          365
+        ],
+        "koppen": [
+          "Aw",
+          "Af",
+          "Am",
+          "BWh",
+          "BWk",
+          "BSh",
+          "BSk",
+          "Csa",
+          "Csb"
+        ],
+        "maxRsr": 0.1,
+        "maxRsrTier": "C",
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "papaya",
+      "acceptedName": "Carica papaya",
+      "family": "Caricaceae",
+      "commonNames": "papaya|papaw",
+      "laubGroup": "fruits",
+      "dliClass": "cucurbits",
+      "habit": "upright-herb",
+      "archetype": "subtropical",
+      "dliMin": 14,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 28,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 330,
+      "spacingCm": 210,
+      "heightM": 3,
+      "widthM": 2.1,
+      "overrides": {
+        "life": "perennial",
+        "yearsToMature": 1,
+        "coldC": -1,
+        "temp": [
+          12,
+          21,
+          30,
+          44
+        ],
+        "rain": [
+          1000,
+          1500,
+          2500,
+          3000
+        ],
+        "ph": [
+          4.5,
+          5.5,
+          7,
+          8
+        ],
+        "cycle": [
+          330,
+          365
+        ],
+        "koppen": [
+          "Aw",
+          "Af",
+          "Am"
+        ],
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "pigeon-pea",
+      "acceptedName": "Cajanus cajan",
+      "family": "Fabaceae",
+      "commonNames": "pigeon pea|red gram|gandule",
+      "laubGroup": "grain-legumes",
+      "dliClass": "grain-legumes",
+      "habit": "bush",
+      "archetype": "hot",
+      "dliMin": 14,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 28,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 135,
+      "spacingCm": 60,
+      "heightM": 1.4,
+      "widthM": 0.6,
+      "overrides": {
+        "harvestDays": 30,
+        "nfix": true,
+        "temp": [
+          10,
+          18,
+          38,
+          45
+        ],
+        "rain": [
+          400,
+          600,
+          1500,
+          4000
+        ],
+        "ph": [
+          4.5,
+          5,
+          7,
+          8.4
+        ],
+        "cycle": [
+          90,
+          365
+        ],
+        "koppen": [
+          "Aw",
+          "Af",
+          "Am",
+          "BSh",
+          "BSk",
+          "Cfa",
+          "Cfb",
+          "Csa",
+          "Csb",
+          "Cwa",
+          "Cwb"
+        ],
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "sesame",
+      "acceptedName": "Sesamum indicum",
+      "family": "Pedaliaceae",
+      "commonNames": "sesame|benne",
+      "laubGroup": "c3-cereals",
+      "dliClass": "c3-cereals",
+      "habit": "upright-herb",
+      "archetype": "hot",
+      "dliMin": 14,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 28,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 120,
+      "spacingCm": 12,
+      "heightM": 1,
+      "widthM": 0.3,
+      "overrides": {
+        "betweenCm": 60,
+        "temp": [
+          10,
+          20,
+          30,
+          40
+        ],
+        "rain": [
+          300,
+          500,
+          1000,
+          1500
+        ],
+        "ph": [
+          4.5,
+          5.5,
+          7.5,
+          8
+        ],
+        "cycle": [
+          40,
+          180
+        ],
+        "koppen": [
+          "Aw",
+          "BSh",
+          "BSk",
+          "Cfa",
+          "Cfb",
+          "Csa",
+          "Csb",
+          "Cwa",
+          "Cwb"
+        ],
+        "zr": 1.25,
+        "p": 0.6,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "moringa",
+      "acceptedName": "Moringa oleifera",
+      "family": "Moringaceae",
+      "commonNames": "moringa|drumstick tree|horseradish tree",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "vase-tree",
+      "archetype": "subtropical",
+      "dliMin": 12,
+      "dliTargetLow": 18,
+      "dliTargetHigh": 25,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 210,
+      "spacingCm": 90,
+      "heightM": 3,
+      "widthM": 1.8,
+      "overrides": {
+        "yearsToMature": 1,
+        "temp": [
+          7,
+          20,
+          35,
+          48
+        ],
+        "rain": [
+          400,
+          700,
+          2200,
+          2600
+        ],
+        "ph": [
+          5,
+          5.5,
+          7,
+          8.5
+        ],
+        "cycle": [
+          210,
+          330
+        ],
+        "koppen": [
+          "Aw",
+          "BSh",
+          "BSk",
+          "Csa",
+          "Csb"
+        ],
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "marigold-french",
+      "acceptedName": "Tagetes patula",
+      "family": "Asteraceae",
+      "commonNames": "french marigold",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "bush",
+      "archetype": "warm",
+      "dliMin": 10,
+      "dliTargetLow": 16,
+      "dliTargetHigh": 24,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 60,
+      "spacingCm": 25,
+      "heightM": 0.4,
+      "widthM": 0.3,
+      "overrides": {
+        "role": "insectary",
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "marigold-african",
+      "acceptedName": "Tagetes erecta",
+      "family": "Asteraceae",
+      "commonNames": "african marigold|american marigold",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "upright-herb",
+      "archetype": "warm",
+      "dliMin": 10,
+      "dliTargetLow": 16,
+      "dliTargetHigh": 24,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 75,
+      "spacingCm": 35,
+      "heightM": 0.9,
+      "widthM": 0.4,
+      "overrides": {
+        "role": "insectary",
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "nasturtium",
+      "acceptedName": "Tropaeolum majus",
+      "family": "Tropaeolaceae",
+      "commonNames": "nasturtium",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "vining-ground",
+      "archetype": "warm",
+      "dliMin": 6,
+      "dliTargetLow": 12,
+      "dliTargetHigh": 20,
+      "tier": "C",
+      "shade": 2,
+      "daysToMaturity": 55,
+      "spacingCm": 35,
+      "heightM": 0.3,
+      "widthM": 0.9,
+      "overrides": {
+        "role": "trap",
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "borage",
+      "acceptedName": "Borago officinalis",
+      "family": "Boraginaceae",
+      "commonNames": "borage",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "upright-herb",
+      "archetype": "warm",
+      "dliMin": 10,
+      "dliTargetLow": 16,
+      "dliTargetHigh": 24,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 60,
+      "spacingCm": 45,
+      "heightM": 0.8,
+      "widthM": 0.6,
+      "overrides": {
+        "role": "insectary",
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "calendula",
+      "acceptedName": "Calendula officinalis",
+      "family": "Asteraceae",
+      "commonNames": "calendula|pot marigold",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "upright-herb",
+      "archetype": "cool",
+      "dliMin": 8,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 20,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 55,
+      "spacingCm": 30,
+      "heightM": 0.5,
+      "widthM": 0.4,
+      "overrides": {
+        "role": "insectary",
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "sunflower",
+      "acceptedName": "Helianthus annuus",
+      "family": "Asteraceae",
+      "commonNames": "sunflower",
+      "laubGroup": "c3-cereals",
+      "dliClass": "c3-cereals",
+      "habit": "upright-herb",
+      "archetype": "warm",
+      "dliMin": 18,
+      "dliTargetLow": 25,
+      "dliTargetHigh": 35,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 90,
+      "spacingCm": 45,
+      "heightM": 2.5,
+      "widthM": 0.6,
+      "overrides": {
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "buckwheat",
+      "acceptedName": "Fagopyrum esculentum",
+      "family": "Polygonaceae",
+      "commonNames": "buckwheat",
+      "laubGroup": "forages",
+      "dliClass": "forages-c3-pasture",
+      "habit": "upright-herb",
+      "archetype": "warm",
+      "dliMin": 10,
+      "dliTargetLow": 16,
+      "dliTargetHigh": 24,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 45,
+      "spacingCm": 10,
+      "heightM": 0.9,
+      "widthM": 0.3,
+      "overrides": {
+        "role": "cover",
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "clover-crimson",
+      "acceptedName": "Trifolium incarnatum",
+      "family": "Fabaceae",
+      "commonNames": "crimson clover",
+      "laubGroup": "forages",
+      "dliClass": "forages-c3-pasture",
+      "habit": "upright-herb",
+      "archetype": "cool",
+      "dliMin": 8,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 20,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 90,
+      "spacingCm": 8,
+      "heightM": 0.5,
+      "widthM": 0.2,
+      "overrides": {
+        "role": "cover",
+        "nfix": true,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "clover-white",
+      "acceptedName": "Trifolium repens",
+      "family": "Fabaceae",
+      "commonNames": "white clover|dutch clover",
+      "laubGroup": "forages",
+      "dliClass": "forages-c3-pasture",
+      "habit": "groundcover",
+      "archetype": "cool-perennial",
+      "dliMin": 6,
+      "dliTargetLow": 12,
+      "dliTargetHigh": 18,
+      "tier": "C",
+      "shade": 2,
+      "daysToMaturity": 365,
+      "spacingCm": 8,
+      "heightM": 0.2,
+      "widthM": 0.4,
+      "overrides": {
+        "role": "cover",
+        "life": "perennial",
+        "coldC": -34,
+        "nfix": true,
+        "dliCitations": [
+          "finch-collier2000-landings"
+        ]
+      }
+    },
+    {
+      "id": "clover-red",
+      "acceptedName": "Trifolium pratense",
+      "family": "Fabaceae",
+      "commonNames": "red clover",
+      "laubGroup": "forages",
+      "dliClass": "forages-c3-pasture",
+      "habit": "upright-herb",
+      "archetype": "cool-perennial",
+      "dliMin": 8,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 20,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 365,
+      "spacingCm": 15,
+      "heightM": 0.5,
+      "widthM": 0.3,
+      "overrides": {
+        "role": "cover",
+        "life": "perennial",
+        "coldC": -29,
+        "nfix": true,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "phacelia",
+      "acceptedName": "Phacelia tanacetifolia",
+      "family": "Boraginaceae",
+      "commonNames": "phacelia|lacy phacelia",
+      "laubGroup": "forages",
+      "dliClass": "forages-c3-pasture",
+      "habit": "upright-herb",
+      "archetype": "cool",
+      "dliMin": 10,
+      "dliTargetLow": 16,
+      "dliTargetHigh": 24,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 60,
+      "spacingCm": 15,
+      "heightM": 0.8,
+      "widthM": 0.3,
+      "overrides": {
+        "role": "insectary",
+        "dliCitations": [
+          "fiedler2007-insectary"
+        ]
+      }
+    },
+    {
+      "id": "sweet-alyssum",
+      "acceptedName": "Lobularia maritima",
+      "family": "Brassicaceae",
+      "commonNames": "sweet alyssum",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "groundcover",
+      "archetype": "cool",
+      "dliMin": 6,
+      "dliTargetLow": 12,
+      "dliTargetHigh": 18,
+      "tier": "C",
+      "shade": 2,
+      "daysToMaturity": 60,
+      "spacingCm": 20,
+      "heightM": 0.15,
+      "widthM": 0.3,
+      "overrides": {
+        "role": "insectary",
+        "dliCitations": [
+          "fiedler2007-insectary"
+        ]
+      }
+    },
+    {
+      "id": "yarrow",
+      "acceptedName": "Achillea millefolium",
+      "family": "Asteraceae",
+      "commonNames": "yarrow",
+      "laubGroup": "forages",
+      "dliClass": "forages-c3-pasture",
+      "habit": "upright-herb",
+      "archetype": "hardy-perennial",
+      "dliMin": 10,
+      "dliTargetLow": 16,
+      "dliTargetHigh": 24,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 365,
+      "spacingCm": 40,
+      "heightM": 0.7,
+      "widthM": 0.5,
+      "overrides": {
+        "role": "insectary",
+        "life": "perennial",
+        "coldC": -40,
+        "dliCitations": [
+          "fiedler2007-insectary"
+        ]
+      }
+    },
+    {
+      "id": "ryegrass-perennial",
+      "acceptedName": "Lolium perenne",
+      "family": "Poaceae",
+      "commonNames": "perennial ryegrass",
+      "laubGroup": "forages",
+      "dliClass": "forages-c3-pasture",
+      "habit": "clumping-grass",
+      "archetype": "cool-perennial",
+      "dliMin": 6,
+      "dliTargetLow": 12,
+      "dliTargetHigh": 20,
+      "tier": "C",
+      "shade": 2,
+      "daysToMaturity": 365,
+      "spacingCm": 5,
+      "heightM": 0.4,
+      "widthM": 0.15,
+      "overrides": {
+        "role": "cover",
+        "life": "perennial",
+        "coldC": -23,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "vetch-hairy",
+      "acceptedName": "Vicia villosa",
+      "family": "Fabaceae",
+      "commonNames": "hairy vetch",
+      "laubGroup": "forages",
+      "dliClass": "forages-c3-pasture",
+      "habit": "vining-ground",
+      "archetype": "cool",
+      "dliMin": 8,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 20,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 150,
+      "spacingCm": 10,
+      "heightM": 0.4,
+      "widthM": 1,
+      "overrides": {
+        "role": "cover",
+        "nfix": true,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "field-pea",
+      "acceptedName": "Pisum sativum",
+      "family": "Fabaceae",
+      "commonNames": "field pea|austrian winter pea",
+      "laubGroup": "forages",
+      "dliClass": "forages-c3-pasture",
+      "habit": "vining-ground",
+      "archetype": "cool",
+      "dliMin": 8,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 20,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 120,
+      "spacingCm": 10,
+      "heightM": 0.6,
+      "widthM": 0.4,
+      "overrides": {
+        "role": "cover",
+        "nfix": true,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "mustard-cover",
+      "acceptedName": "Sinapis alba",
+      "family": "Brassicaceae",
+      "commonNames": "white mustard",
+      "laubGroup": "forages",
+      "dliClass": "forages-c3-pasture",
+      "habit": "upright-herb",
+      "archetype": "cool",
+      "dliMin": 8,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 20,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 60,
+      "spacingCm": 15,
+      "heightM": 0.9,
+      "widthM": 0.3,
+      "overrides": {
+        "role": "cover",
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "sorghum-sudangrass",
+      "acceptedName": "Sorghum x drummondii",
+      "family": "Poaceae",
+      "commonNames": "sorghum-sudangrass",
+      "laubGroup": "forages",
+      "dliClass": "forages-c3-pasture",
+      "habit": "clumping-grass",
+      "archetype": "hot",
+      "dliMin": 12,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 30,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 75,
+      "spacingCm": 15,
+      "heightM": 2.5,
+      "widthM": 0.4,
+      "overrides": {
+        "role": "cover",
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "desmodium",
+      "acceptedName": "Desmodium intortum",
+      "family": "Fabaceae",
+      "commonNames": "greenleaf desmodium",
+      "laubGroup": "forages",
+      "dliClass": "forages-c3-pasture",
+      "habit": "groundcover",
+      "archetype": "subtropical",
+      "dliMin": 6,
+      "dliTargetLow": 12,
+      "dliTargetHigh": 20,
+      "tier": "C",
+      "shade": 2,
+      "daysToMaturity": 365,
+      "spacingCm": 40,
+      "heightM": 0.5,
+      "widthM": 1,
+      "overrides": {
+        "role": "cover",
+        "life": "perennial",
+        "coldC": 2,
+        "nfix": true,
+        "dliCitations": [
+          "khan2008-push-pull-onfarm"
+        ]
+      }
+    },
+    {
+      "id": "napier-grass",
+      "acceptedName": "Cenchrus purpureus",
+      "family": "Poaceae",
+      "commonNames": "napier grass|elephant grass",
+      "laubGroup": "forages",
+      "dliClass": "forages-c3-pasture",
+      "habit": "clumping-grass",
+      "archetype": "subtropical",
+      "dliMin": 14,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 30,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 365,
+      "spacingCm": 100,
+      "heightM": 3,
+      "widthM": 1,
+      "overrides": {
+        "role": "trap",
+        "life": "perennial",
+        "coldC": 4,
+        "dliCitations": [
+          "khan2008-push-pull-onfarm"
+        ]
+      }
+    },
+    {
+      "id": "comfrey",
+      "acceptedName": "Symphytum x uplandicum",
+      "family": "Boraginaceae",
+      "commonNames": "comfrey|russian comfrey",
+      "laubGroup": "forages",
+      "dliClass": "forages-c3-pasture",
+      "habit": "rosette",
+      "archetype": "cool-perennial",
+      "dliMin": 6,
+      "dliTargetLow": 12,
+      "dliTargetHigh": 18,
+      "tier": "C",
+      "shade": 2,
+      "daysToMaturity": 365,
+      "spacingCm": 90,
+      "heightM": 1,
+      "widthM": 1,
+      "overrides": {
+        "life": "perennial",
+        "coldC": -34,
+        "zr": 1.8,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "fenugreek",
+      "acceptedName": "Trigonella foenum-graecum",
+      "family": "Fabaceae",
+      "commonNames": "fenugreek",
+      "laubGroup": "grain-legumes",
+      "dliClass": "grain-legumes",
+      "habit": "upright-herb",
+      "archetype": "warm",
+      "dliMin": 12,
+      "dliTargetLow": 18,
+      "dliTargetHigh": 25,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 90,
+      "spacingCm": 15,
+      "heightM": 0.5,
+      "widthM": 0.25,
+      "overrides": {
+        "nfix": true,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "bergamot-wild",
+      "acceptedName": "Monarda fistulosa",
+      "family": "Lamiaceae",
+      "commonNames": "wild bergamot|bee balm",
+      "laubGroup": "forages",
+      "dliClass": "forages-c3-pasture",
+      "habit": "upright-herb",
+      "archetype": "hardy-perennial",
+      "dliMin": 10,
+      "dliTargetLow": 16,
+      "dliTargetHigh": 24,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 365,
+      "spacingCm": 45,
+      "heightM": 1.2,
+      "widthM": 0.6,
+      "overrides": {
+        "role": "insectary",
+        "life": "perennial",
+        "coldC": -37,
+        "dliCitations": [
+          "fiedler2007-insectary"
+        ]
+      }
+    },
+    {
+      "id": "cup-plant",
+      "acceptedName": "Silphium perfoliatum",
+      "family": "Asteraceae",
+      "commonNames": "cup plant",
+      "laubGroup": "forages",
+      "dliClass": "forages-c3-pasture",
+      "habit": "upright-herb",
+      "archetype": "hardy-perennial",
+      "dliMin": 10,
+      "dliTargetLow": 16,
+      "dliTargetHigh": 24,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 365,
+      "spacingCm": 90,
+      "heightM": 2.5,
+      "widthM": 1,
+      "overrides": {
+        "role": "insectary",
+        "life": "perennial",
+        "coldC": -40,
+        "dliCitations": [
+          "fiedler2007-insectary"
+        ]
+      }
+    },
+    {
+      "id": "boneset",
+      "acceptedName": "Eupatorium perfoliatum",
+      "family": "Asteraceae",
+      "commonNames": "boneset",
+      "laubGroup": "forages",
+      "dliClass": "forages-c3-pasture",
+      "habit": "upright-herb",
+      "archetype": "hardy-perennial",
+      "dliMin": 8,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 22,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 365,
+      "spacingCm": 60,
+      "heightM": 1.5,
+      "widthM": 0.8,
+      "overrides": {
+        "role": "insectary",
+        "life": "perennial",
+        "coldC": -37,
+        "dliCitations": [
+          "fiedler2007-insectary"
+        ]
+      }
+    },
+    {
+      "id": "lanceleaf-coreopsis",
+      "acceptedName": "Coreopsis lanceolata",
+      "family": "Asteraceae",
+      "commonNames": "lanceleaf coreopsis",
+      "laubGroup": "forages",
+      "dliClass": "forages-c3-pasture",
+      "habit": "upright-herb",
+      "archetype": "hardy-perennial",
+      "dliMin": 10,
+      "dliTargetLow": 16,
+      "dliTargetHigh": 24,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 365,
+      "spacingCm": 40,
+      "heightM": 0.6,
+      "widthM": 0.4,
+      "overrides": {
+        "role": "insectary",
+        "life": "perennial",
+        "coldC": -37,
+        "dliCitations": [
+          "fiedler2007-insectary"
+        ]
+      }
+    },
+    {
+      "id": "canada-anemone",
+      "acceptedName": "Anemonastrum canadense",
+      "family": "Ranunculaceae",
+      "commonNames": "canada anemone",
+      "laubGroup": "forages",
+      "dliClass": "forages-c3-pasture",
+      "habit": "groundcover",
+      "archetype": "hardy-perennial",
+      "dliMin": 6,
+      "dliTargetLow": 12,
+      "dliTargetHigh": 18,
+      "tier": "C",
+      "shade": 2,
+      "daysToMaturity": 365,
+      "spacingCm": 40,
+      "heightM": 0.4,
+      "widthM": 0.5,
+      "overrides": {
+        "role": "insectary",
+        "life": "perennial",
+        "coldC": -40,
+        "dliCitations": [
+          "fiedler2007-insectary"
+        ]
+      }
+    },
+    {
+      "id": "murnong",
+      "acceptedName": "Microseris walteri",
+      "family": "Asteraceae",
+      "commonNames": "murnong|yam daisy",
+      "laubGroup": "tubers-root-crops",
+      "dliClass": "root-tuber",
+      "habit": "rosette",
+      "archetype": "cool-perennial",
+      "dliMin": 8,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 20,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 365,
+      "spacingCm": 20,
+      "heightM": 0.3,
+      "widthM": 0.2,
+      "overrides": {
+        "life": "perennial",
+        "coldC": -7,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Agrivoltaic Garden Designer: plan a garden and the solar panels above it</title>
+    <meta
+      name="description"
+      content="Model the light a solar array leaves on the ground of a garden at a real address, and rank crops against what it measures there. Free, no sign-up, and every figure traces to a listed source."
+    />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:title"
+      content="Agrivoltaic Garden Designer: plan a garden and the solar panels above it"
+    />
+    <meta
+      property="og:description"
+      content="Model the light a solar array leaves on the ground of a garden at a real address, and rank crops against what it measures there. Free, no sign-up, and every figure traces to a listed source."
+    />
+    <meta property="og:image" content="https://garden.peterklingelhofer.com/og.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Ten planted beds under three rows of solar panels, with the daily light integral mapped on the ground between them"
+    />
+    <meta property="og:url" content="https://garden.peterklingelhofer.com/" />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <!--
+      The only content anything that does not run JavaScript will ever see, which is why it is
+      real prose and not "please enable JavaScript". A cold link gets read by crawlers, by link
+      previews and by whatever tooling a recipient triages their inbox with, and an empty shell
+      tells all of them nothing. What it says is also the honest short version: what the tool
+      does, at what scale, and what it is not.
+    -->
+    <noscript>
+      <main
+        style="
+          max-width: 42rem;
+          margin: 3rem auto;
+          padding: 0 1.25rem;
+          font: 16px/1.6 ui-serif, Georgia, serif;
+        "
+      >
+        <h1>Agrivoltaic Garden Designer</h1>
+        <p>
+          Plan a vegetable garden and the solar panels above it together, for a real address. The
+          tool models the light an array leaves on the ground through the year, then ranks crops
+          against the light it measured in each bed rather than against a rule of thumb.
+        </p>
+        <p>
+          It works at <strong>garden scale</strong>: beds a person reaches across, paths a
+          wheelbarrow fits down, arrays of a few rows. It is not a farm planning tool and models
+          no tractor or implement access.
+        </p>
+        <p>
+          Outputs are planning estimates from a model. They are not agronomic or engineering
+          recommendations, and the tool has not been validated against a real garden.
+        </p>
+        <p>
+          Where the numbers come from, including the ones this project cannot yet source and
+          therefore does not present as findings:
+          <a href="/docs/">the modelling documents and citation corpus</a>.
+        </p>
+        <p>
+          The tool itself needs JavaScript and WebGL2, because it renders and simulates a 3D scene
+          in the browser. Nothing is stored on a server and there is no sign-up.
+        </p>
+      </main>
+    </noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

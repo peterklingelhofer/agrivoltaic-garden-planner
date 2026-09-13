@@ -1,0 +1,454 @@
+{
+  "version": 4,
+  "savedAtUtcMillis": 1789183455642,
+  "sceneTimeUtcMillis": 1723491000000,
+  "example": {
+    "label": "Example agrivoltaic garden, Amherst, Massachusetts",
+    "generatedAtUtc": "2026-09-12T03:24:15.642Z",
+    "generator": "scripts/bake-example-garden.mjs",
+    "siteLabel": "Amherst, Massachusetts",
+    "weather": "open-meteo typical meteorological year, 8760 hours",
+    "backend": "tregenza-mf1",
+    "targetCellSizeM": 0.4,
+    "bakeElapsedMs": 1745,
+    "quantisationErrorMolM2Day": 0.004512786865234375,
+    "notes": [
+      "70 x 90 cells at 0.4 m, baked on the CPU reference backend",
+      "1255 binned sun directions, tregenza-mf1 sky, 2 sub-steps per hour",
+      "9 plantings, each ranked against this bake and derived through derivePlanting"
+    ]
+  },
+  "design": {
+    "location": {
+      "latitudeDeg": 42.3736,
+      "longitudeDeg": -72.5199
+    },
+    "locationLabel": "Amherst, Massachusetts",
+    "frostPercentile": 50,
+    "plot": {
+      "id": "plot-1",
+      "siteId": "site-1",
+      "label": "Example agrivoltaic garden",
+      "boundary": {
+        "exterior": [
+          {
+            "xM": -14,
+            "yM": -19.5
+          },
+          {
+            "xM": 14,
+            "yM": -19.5
+          },
+          {
+            "xM": 14,
+            "yM": 16.5
+          },
+          {
+            "xM": -14,
+            "yM": 16.5
+          }
+        ],
+        "holes": []
+      },
+      "northOffsetDeg": 0,
+      "originOffsetM": {
+        "xM": 0,
+        "yM": 0
+      },
+      "beds": [
+        {
+          "id": "bed-1",
+          "label": "Bed 1",
+          "footprint": {
+            "exterior": [
+              {
+                "xM": -3.5,
+                "yM": -14.25
+              },
+              {
+                "xM": 3.5,
+                "yM": -14.25
+              },
+              {
+                "xM": 3.5,
+                "yM": -12.75
+              },
+              {
+                "xM": -3.5,
+                "yM": -12.75
+              }
+            ],
+            "holes": []
+          },
+          "areaM2": 10.5,
+          "soil": {
+            "phUnits": 6.5,
+            "textureClass": "loam",
+            "drainage": "well",
+            "effectiveDepthM": 0.6,
+            "organicMatterFraction": 0.04,
+            "sourceId": "default"
+          },
+          "irrigation": {
+            "method": "drip",
+            "available": true,
+            "appliedMmPerYear": 180,
+            "harvestsPanelRunoff": false
+          },
+          "raisedHeightM": 0.35,
+          "modifiers": [],
+          "waterHarvesting": [],
+          "plantings": [
+            {
+              "id": "bed-1:tomato:88",
+              "bedId": "bed-1",
+              "cropId": "tomato",
+              "cultivarId": null,
+              "role": "target-crop",
+              "tier": "shrub",
+              "sowDay": 88,
+              "harvestStartDay": 249,
+              "harvestEndDay": 305,
+              "plantCount": 10
+            },
+            {
+              "id": "bed-1:bean-pole:130",
+              "bedId": "bed-1",
+              "cropId": "bean-pole",
+              "cultivarId": null,
+              "role": "target-crop",
+              "tier": "mid-canopy",
+              "sowDay": 130,
+              "harvestStartDay": 226,
+              "harvestEndDay": 271,
+              "plantCount": 84
+            },
+            {
+              "id": "bed-1:napa-cabbage:93",
+              "bedId": "bed-1",
+              "cropId": "napa-cabbage",
+              "cultivarId": null,
+              "role": "target-crop",
+              "tier": "herb-ground",
+              "sowDay": 93,
+              "harvestStartDay": 163,
+              "harvestEndDay": 177,
+              "plantCount": 28
+            }
+          ]
+        },
+        {
+          "id": "bed-2",
+          "label": "Bed 2",
+          "footprint": {
+            "exterior": [
+              {
+                "xM": -3.5,
+                "yM": -5.25
+              },
+              {
+                "xM": 3.5,
+                "yM": -5.25
+              },
+              {
+                "xM": 3.5,
+                "yM": -3.75
+              },
+              {
+                "xM": -3.5,
+                "yM": -3.75
+              }
+            ],
+            "holes": []
+          },
+          "areaM2": 10.5,
+          "soil": {
+            "phUnits": 6.5,
+            "textureClass": "loam",
+            "drainage": "well",
+            "effectiveDepthM": 0.6,
+            "organicMatterFraction": 0.04,
+            "sourceId": "default"
+          },
+          "irrigation": {
+            "method": "drip",
+            "available": true,
+            "appliedMmPerYear": 180,
+            "harvestsPanelRunoff": false
+          },
+          "raisedHeightM": 0.35,
+          "modifiers": [],
+          "waterHarvesting": [],
+          "plantings": [
+            {
+              "id": "bed-2:brussels-sprouts:132",
+              "bedId": "bed-2",
+              "cropId": "brussels-sprouts",
+              "cultivarId": null,
+              "role": "target-crop",
+              "tier": "shrub",
+              "sowDay": 132,
+              "harvestStartDay": 277,
+              "harvestEndDay": 291,
+              "plantCount": 15
+            },
+            {
+              "id": "bed-2:clover-crimson:93",
+              "bedId": "bed-2",
+              "cropId": "clover-crimson",
+              "cultivarId": null,
+              "role": "cover",
+              "tier": "herb-ground",
+              "sowDay": 93,
+              "harvestStartDay": 183,
+              "harvestEndDay": 197,
+              "plantCount": 792
+            }
+          ]
+        },
+        {
+          "id": "bed-3",
+          "label": "Bed 3",
+          "footprint": {
+            "exterior": [
+              {
+                "xM": -3.5,
+                "yM": 0.050000000000000044
+              },
+              {
+                "xM": 3.5,
+                "yM": 0.050000000000000044
+              },
+              {
+                "xM": 3.5,
+                "yM": 1.55
+              },
+              {
+                "xM": -3.5,
+                "yM": 1.55
+              }
+            ],
+            "holes": []
+          },
+          "areaM2": 10.5,
+          "soil": {
+            "phUnits": 6.5,
+            "textureClass": "loam",
+            "drainage": "well",
+            "effectiveDepthM": 0.6,
+            "organicMatterFraction": 0.04,
+            "sourceId": "default"
+          },
+          "irrigation": {
+            "method": "drip",
+            "available": true,
+            "appliedMmPerYear": 180,
+            "harvestsPanelRunoff": false
+          },
+          "raisedHeightM": 0.35,
+          "modifiers": [],
+          "waterHarvesting": [],
+          "plantings": [
+            {
+              "id": "bed-3:ramps:87",
+              "bedId": "bed-3",
+              "cropId": "ramps",
+              "cultivarId": null,
+              "role": "target-crop",
+              "tier": "herb-ground",
+              "sowDay": 87,
+              "harvestStartDay": 121,
+              "harvestEndDay": 151,
+              "plantCount": 231
+            },
+            {
+              "id": "bed-3:wild-ginger:91",
+              "bedId": "bed-3",
+              "cropId": "wild-ginger",
+              "cultivarId": null,
+              "role": "target-crop",
+              "tier": "herb-ground",
+              "sowDay": 91,
+              "harvestStartDay": 244,
+              "harvestEndDay": 274,
+              "plantCount": 58
+            }
+          ]
+        },
+        {
+          "id": "bed-4",
+          "label": "Bed 4",
+          "footprint": {
+            "exterior": [
+              {
+                "xM": -3.5,
+                "yM": 3.75
+              },
+              {
+                "xM": 3.5,
+                "yM": 3.75
+              },
+              {
+                "xM": 3.5,
+                "yM": 5.25
+              },
+              {
+                "xM": -3.5,
+                "yM": 5.25
+              }
+            ],
+            "holes": []
+          },
+          "areaM2": 10.5,
+          "soil": {
+            "phUnits": 6.5,
+            "textureClass": "loam",
+            "drainage": "well",
+            "effectiveDepthM": 0.6,
+            "organicMatterFraction": 0.04,
+            "sourceId": "default"
+          },
+          "irrigation": {
+            "method": "drip",
+            "available": true,
+            "appliedMmPerYear": 180,
+            "harvestsPanelRunoff": false
+          },
+          "raisedHeightM": 0.35,
+          "modifiers": [],
+          "waterHarvesting": [],
+          "plantings": [
+            {
+              "id": "bed-4:brussels-sprouts:132",
+              "bedId": "bed-4",
+              "cropId": "brussels-sprouts",
+              "cultivarId": null,
+              "role": "target-crop",
+              "tier": "shrub",
+              "sowDay": 132,
+              "harvestStartDay": 277,
+              "harvestEndDay": 291,
+              "plantCount": 15
+            },
+            {
+              "id": "bed-4:clover-crimson:93",
+              "bedId": "bed-4",
+              "cropId": "clover-crimson",
+              "cultivarId": null,
+              "role": "cover",
+              "tier": "herb-ground",
+              "sowDay": 93,
+              "harvestStartDay": 183,
+              "harvestEndDay": 197,
+              "plantCount": 792
+            }
+          ]
+        }
+      ],
+      "arrays": [
+        {
+          "id": "array-1",
+          "label": "Elevated south-facing rows",
+          "geometry": {
+            "collectorWidthM": 3.524,
+            "pitchM": 9,
+            "rowLengthM": 16,
+            "rowCount": 3,
+            "modulesPerRow": 14,
+            "clearanceHeightM": 2.6,
+            "rowAzimuthDeg": 90,
+            "originM": {
+              "xM": 0,
+              "yM": 0
+            }
+          },
+          "tracker": {
+            "mode": "fixed",
+            "tiltDeg": 25,
+            "surfaceAzimuthDeg": 180
+          },
+          "module": {
+            "widthM": 1.134,
+            "heightM": 1.762,
+            "nameplateWp": 430,
+            "bifacialityFactor": 0.7,
+            "transmittanceFraction": 0,
+            "rearReflectance": 0.05,
+            "backsheet": "glass-glass"
+          },
+          "derived": {
+            "groundCoverRatio": 0.39155555555555555,
+            "projectedGroundCoverRatio": 0.3548698490574616,
+            "maxHeightM": 4.089306754374225,
+            "nameplateDcKw": 36.12,
+            "nameplateAcKw": 30.099999999999998
+          }
+        }
+      ],
+      "groundCover": "grass"
+    },
+    "selectedBedId": null,
+    "selectedArrayId": null,
+    "preferences": {
+      "entries": [],
+      "influence": 0.2
+    },
+    "compatibilityWeights": {
+      "soil-ph": 0.3,
+      "water-regime": 0.1,
+      "root-stratification": 0.15,
+      "canopy-tier": 0.15,
+      "light-overtopping": 0.2,
+      "shared-pest-or-pathogen": 0.1,
+      "documented-companion": 0.25,
+      "allelopathy": 0
+    },
+    "maxCropsPerBed": 3,
+    "wildlife": {
+      "favourNative": false,
+      "favourPollinators": false
+    },
+    "overlay": {
+      "visible": true,
+      "slice": "annual",
+      "channel": "dli",
+      "opacity": 0.75
+    },
+    "imageryEnabled": false,
+    "lighting": "auto",
+    "effects": {
+      "ambientOcclusion": true
+    },
+    "plantYear": 3,
+    "simulation": {
+      "seed": 1,
+      "season": 0,
+      "yearChoice": "typical",
+      "history": [],
+      "reports": [],
+      "trials": [],
+      "revealed": []
+    },
+    "answers": {
+      "objective": {
+        "food": 0.35,
+        "energy": 0.35,
+        "water": 0.15,
+        "simplicity": 0.15
+      },
+      "ambition": "mixed-vegetables",
+      "exposure": "open",
+      "mounting": "any",
+      "maxHeightM": null,
+      "irrigationAvailable": true,
+      "experience": "novice",
+      "maxBeds": null
+    },
+    "sidebarStep": "place",
+    "economyInputs": {
+      "perKwh": null,
+      "currency": "USD",
+      "installedCost": null
+    }
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "target": "es2023",
+    "lib": ["ES2023", "DOM"],
+    "module": "esnext",
+    // `bun-types` is what makes `bun:test`, `Bun.Glob` and `import.meta.dir` type-check. It sits
+    // beside `vite/client` rather than replacing it: the app still builds through Vite, and the
+    // test files under `src` are part of this project
+    "types": ["vite/client", "bun-types"],
+    "allowArbitraryExtensions": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    /* Strictness */
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+
+    /* Path aliases */
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+
+    /* Linting */
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "erasableSyntaxOnly": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  // `test` holds the runner's own scaffolding: the DOM registrar, the preload and the `vi`
+  // shim. It sits outside `src` because `workers` imports the shim too, and the edge proxy is
+  // forbidden by biome from reaching into browser application code
+  "include": ["src", "test"]
+}

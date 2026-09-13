@@ -1,0 +1,3578 @@
+:root {
+  --bg: #f5f6f3;
+  --panel: #ffffff;
+  --text: #2b2f36;
+  --muted: #616a76;
+  --border: #d9ddd6;
+  /* WCAG 1.4.11 wants 3:1 for the boundary that IDENTIFIES a control, which `--border` at
+     1.38:1 on --panel and 1.27:1 on --bg does not carry. It is not a rule about every hairline:
+     a panel divider or a table rule states structure, not an affordance, and darkening those to
+     3:1 turns a quiet interface into a boxy one. So the contrast goes on a second token, spent
+     only where the outline is the whole reason the eye reads something as operable: a field, a
+     button, a chip, a choice card. 3.57:1 on --panel, 3.29:1 on --bg */
+  --control-border: #848983;
+  --accent: #2f6f4f;
+  --accent-text: #ffffff;
+  --warn: #8a5a12;
+  --warn-bg: #fdf3e0;
+  --error: #8c2f2f;
+  --error-bg: #fbeeee;
+  --ok: #245f45;
+  --accent-bg: #eaf3ee;
+  --sow-direct: #2f6f4f;
+  --sow-indoor: #6a4fa3;
+  --sow-transplant: #2b6ca3;
+  --harvest: #b5721f;
+  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --mono: ui-monospace, Consolas, monospace;
+
+  /* The only motion in this sheet. State changes here are instant on purpose, and this is the
+     one exception: a progress segment that fills with no travel at all reads as a repaint
+     rather than as progress. Reduced motion zeroes it in one place, below, so nothing built on
+     the token can forget to answer for itself */
+  --motion-quick: 160ms;
+
+  color-scheme: light dark;
+  font: 14px / 1.45 var(--sans);
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14171b;
+    --panel: #1c2027;
+    --text: #e6e9ee;
+    --muted: #9aa4b2;
+    --border: #2d333c;
+    /* 3.10:1 on --panel, 3.41:1 on --bg, in the same muted blue-grey family as `--border` */
+    --control-border: #656c7a;
+    --accent: #5fb98a;
+    --accent-text: #10241b;
+    --warn: #e2b25f;
+    --warn-bg: #33291a;
+    --error: #f08b8b;
+    --error-bg: #331d1d;
+    --ok: #7fd6a8;
+    --accent-bg: #1e3529;
+    --sow-direct: #5fb98a;
+    --sow-indoor: #b39ce6;
+    --sow-transplant: #7fb6e8;
+    --harvest: #e8b464;
+  }
+}
+
+/* one override, so every transition in the sheet is answered for by the token it is built on */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-quick: 0s;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+/*
+ * The page itself never scrolls: the plan column does, and on a phone so does the garden's
+ * own box. Opening a step scrolls its header to the top of the column with `scrollIntoView`,
+ * which also scrolls every scrollable ancestor, and a page that was a few pixels taller than
+ * the viewport let it take the top bar off the screen by 45px on a laptop and the whole toolbar
+ * away on the sources step
+ */
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Out of the picture, still in the accessibility tree. Not `display: none` and not zero-sized:
+   either of those takes the text out of the tree as well, and the whole point is a sentence
+   that survives a graphic taking its place on screen */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100svh;
+}
+
+/*
+ * `flex-wrap` is unconditional and it is a fix, not a preference. The toolbar's contents need
+ * 694px laid out on one line, so under about 700px they ran off the side and took the PAGE with
+ * them: `document.scrollWidth` measured 694 against a 390 client width, so the whole app panned
+ * sideways on a phone and the Ask button and the simulation status sat off-screen with
+ * nothing to say they were there. Above that width there is room and nothing wraps, so this
+ * costs the desktop layout nothing
+ */
+.toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--border);
+  background: var(--panel);
+}
+
+.toolbar h1 {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.toolbar-modes {
+  display: flex;
+  gap: 6px;
+}
+
+.toolbar-site {
+  color: var(--muted);
+  margin-left: auto;
+}
+
+.stage {
+  /* the scroller below 900px, for the same reason `.sidebar` is positioned */
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+  flex: 1;
+  min-height: 0;
+}
+
+@media (max-width: 900px) {
+  .stage {
+    grid-template-columns: 1fr;
+    grid-template-rows: 55svh 1fr;
+  }
+}
+
+.canvas-host {
+  position: relative;
+  min-height: 0;
+  background: linear-gradient(#93b6dd, #cfd9d0);
+
+  /* the one fact about the furniture over the canvas, stated once where everything stacked on
+     it can read it */
+  --banner-width: 340px;
+}
+
+.canvas-host canvas {
+  display: block;
+}
+
+/*
+ * What the pointer is for, said by the pointer.
+ *
+ * Without these rules the cursor reads `auto` over every bed, plant and panel row in the scene, and
+ * still reads `auto` once "Draw bed" is pressed: nothing on the canvas admits it is interactive.
+ * `data-mode` and `data-hovering` are written by `App` off store state that already exists, so this
+ * costs no render per pointer move.
+ *
+ * Both sit ABOVE `.carrying .canvas-host`, which is the same specificity and has to win: a crop
+ * held over the scene is a drop, whatever the mode underneath it was
+ */
+.canvas-host[data-mode='draw-plot'],
+.canvas-host[data-mode='draw-bed'] {
+  cursor: crosshair;
+}
+
+.canvas-host[data-mode='select'][data-hovering='true'] {
+  cursor: pointer;
+}
+
+.canvas-host[data-mode='move'] {
+  cursor: move;
+}
+
+.canvas-host[data-mode='move'][data-hovering='true'] {
+  cursor: grab;
+}
+
+/*
+ * The one line of instruction a drawing mode owes whoever is in it.
+ *
+ * Bottom left, which is the only corner of the canvas nothing else claims: the example banner
+ * takes the top left and the legend the top right. It never takes the pointer, because the
+ * ground under it is where the next corner goes
+ */
+.scene-hint {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  z-index: 2;
+  max-width: 320px;
+  padding: 8px 10px;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  pointer-events: none;
+  color: var(--text);
+  background: var(--panel);
+  /* the same lift the other cards floating over the canvas carry */
+  box-shadow: 0 2px 10px rgb(0 0 0 / 18%);
+}
+
+/* the card lets the pointer through to the ground; its two presses take it back */
+.scene-hint-actions {
+  margin-top: 6px;
+  pointer-events: auto;
+}
+
+.scene-hint-body {
+  margin: 0;
+  font-size: 12px;
+}
+
+.scene-hint-count {
+  margin: 4px 0 0;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/*
+ * Absent, not merely hidden, wherever the editor is already on screen beside the garden. Above
+ * the breakpoint selecting a bed fills the panel next to it, so a prompt saying where to go would
+ * be pointing at something already in view, and `display: none` keeps it out of the
+ * accessibility tree rather than announcing it to a reader who has nowhere to be sent
+ */
+.scene-hint-select {
+  display: none;
+}
+
+/* Names what the pointer is over in the 3D. Positioned by a direct transform write from
+   `SceneTooltip`, never from React state, so a pointer move does not re-render the scene.
+   `pointer-events: none` is load-bearing: it labels what is under the cursor, so taking the
+   cursor would make the thing it names unhoverable and the label would flicker against itself */
+.scene-tooltip {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 2;
+  pointer-events: none;
+  max-width: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 9px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--text);
+  background: var(--panel);
+}
+
+/* not dimmed with opacity, per the contrast rule: it is either there or it is not */
+.scene-tooltip[data-visible='false'] {
+  display: none;
+}
+
+.scene-tooltip strong {
+  color: var(--text);
+  background: var(--panel);
+}
+
+.scene-tooltip span {
+  color: var(--muted);
+  background: var(--panel);
+}
+
+/* Every bed at once: the overview the dropdown cannot be, and the surface a dragged planting
+   is dropped onto. Scrolls sideways rather than wrapping, so a plot with twenty beds does not
+   push the editor below the fold */
+.bed-strip-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bed-strip {
+  display: flex;
+  gap: 6px;
+  margin: 0;
+  padding: 0 0 4px;
+  list-style: none;
+  overflow-x: auto;
+}
+
+.bed-card {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: flex-start;
+  min-width: 116px;
+  /* the card names its plants now, so it wraps at a readable width instead of running a bed of
+     four crops the whole way across the strip */
+  max-width: 200px;
+  padding: 6px 9px;
+  font: inherit;
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+  border: 1px solid var(--control-border);
+  border-radius: 6px;
+  color: var(--text);
+  background: var(--panel);
+}
+
+.bed-card span {
+  color: var(--muted);
+  background: transparent;
+}
+
+.bed-card:hover,
+.bed-card:focus-visible {
+  color: var(--text);
+  background: var(--accent-bg);
+  border-color: var(--accent);
+}
+
+.bed-card[data-selected='true'] {
+  color: var(--accent-text);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.bed-card[data-selected='true'] span {
+  color: var(--accent-text);
+  background: transparent;
+}
+
+/* the bed the 3D pointer is over, so a grower moving the pointer there learns which card it is */
+.bed-card[data-hovered='true'] {
+  color: var(--text);
+  background: var(--accent-bg);
+  border-color: var(--accent);
+  outline: 2px solid var(--accent);
+}
+
+.bed-card[data-hovered='true'] span {
+  color: var(--muted);
+  background: transparent;
+}
+
+/* The sidebar's answer to the tooltip: the entry that describes what the pointer is over.
+   Colour and background are declared together, and the accent border carries the signal so the
+   text keeps the contrast it already passed the audit with */
+.panel-hovered,
+.rec-row[data-hovered='true'] {
+  border-color: var(--accent);
+  color: var(--text);
+  background: var(--accent-bg);
+}
+
+/* over the canvas, out of the sidebar: the example garden is the thing the questions are asked
+   about, and the banner sits over it. Colour and background are declared together here and on
+   every state of the button inside it, and nothing in it is dimmed with opacity */
+.example-banner {
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  z-index: 1;
+  max-width: var(--banner-width);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-start;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  background: var(--panel);
+}
+
+/* the name and the close on one line, so the close is where a thumb looks for it */
+.example-banner-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
+}
+
+.example-banner-close {
+  margin-left: auto;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  font: inherit;
+  font-size: 18px;
+  line-height: 1;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.example-banner-close:hover {
+  color: var(--text);
+  background: var(--accent-bg);
+}
+
+.example-banner-close:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.example-banner-body-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-start;
+}
+
+/* the fold, at every width. If the body were hidden only below 760px, a desktop first screen
+   would open on the card's whole paragraph over the garden it describes */
+.example-banner:not([data-expanded='true']) .example-banner-body-wrap {
+  display: none;
+}
+
+.example-banner-more {
+  display: block;
+  font: inherit;
+  font-size: 12px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--accent);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.example-banner-more:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.example-banner-title {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+  background: var(--accent);
+  border-radius: 999px;
+  padding: 2px 10px;
+}
+
+.example-banner-body {
+  margin: 0;
+  font-size: 12px;
+  color: var(--text);
+  background: var(--panel);
+}
+
+.example-banner-detail {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--muted);
+  background: var(--panel);
+}
+
+/* the provenance disclosure: see `ExampleBanner` for why it stays on this surface at all */
+.example-banner-provenance > summary {
+  font-size: 11px;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+/**
+ * The cold open: what the example garden is showing, said once, over the scene it is about.
+ *
+ * It has to find room between two things that were there first, so it is anchored to the one
+ * whose size is a stated constant rather than a function of its own text. `.example-banner` is
+ * top-left and `--banner-width` across, `.legend` is top-right. Sitting at the foot of the
+ * canvas, in the column to the right of the banner, clears both at every desktop size this app
+ * is usable at.
+ *
+ * `pointer-events: none` for the same reason `.scene-tooltip` has it: this talks about the
+ * ground, and taking the pointer would make the ground it is talking about unclickable.
+ *
+ * The background is fully OPAQUE: `.canvas-host` carries the pre-paint sky gradient under
+ * everything stacked on it, and the contrast audit reports text over a still-visible
+ * background-image as unresolvable rather than guessing a colour for it.
+ *
+ * It arrives on `--motion-quick`, which is 0s under `prefers-reduced-motion`, so whoever asked
+ * for less movement gets the whole sentence at once. What that preference suppresses here is the
+ * arrival and never the information
+ */
+.cold-open {
+  position: absolute;
+  left: calc(var(--banner-width) + 24px);
+  right: 12px;
+  bottom: 12px;
+  z-index: 1;
+  pointer-events: none;
+  max-width: 640px;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  background: var(--panel);
+  animation: cold-open-in var(--motion-quick) ease both;
+}
+
+@keyframes cold-open-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Leaving, on its own timer or because the visitor moved the pointer. It is not dimmed text at
+   rest, which the contrast rule forbids: this is the one frame between being there and being
+   gone, and a moment later the element is `.visually-hidden` and the sentence is a sentence */
+.cold-open[data-phase='leaving'] {
+  opacity: 0;
+  transition: opacity var(--motion-quick) ease;
+}
+
+.cold-open-title {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  background: var(--panel);
+}
+
+.cold-open-body {
+  margin: 0;
+  font-size: 12px;
+  color: var(--text);
+  background: var(--panel);
+}
+
+.cold-open-caveat {
+  margin: 0;
+  font-size: 11px;
+  color: var(--muted);
+  background: var(--panel);
+}
+
+.sidebar {
+  border-left: 1px solid var(--border);
+  overflow-y: auto;
+  /*
+   * The containing block for everything positioned inside it. Without it the yield bands'
+   * absolute intervals and the stepper's hidden sentences were positioned against the page,
+   * which grew to 2,679px under a 900px window; `scrollIntoView` on a step header then also
+   * scrolled the page, and the toolbar left the screen by 44px on the plants step and by the
+   * whole bar on the sources step. Measured on 2026-09-11 with a scroll probe
+   */
+  position: relative;
+  /**
+   * The gutter is reserved whether or not it is needed, and that is load-bearing rather than
+   * tidy. One open step at a time means the column's content height now lands wherever that
+   * step puts it, and a height that sits within a pixel or two of the viewport oscillates: the
+   * scrollbar appears, the narrower column reflows the text taller, the scrollbar is still
+   * needed, it disappears, and so on. It shows up as a sidebar that shivers, and it was found
+   * as two visual snapshots that could never be taken because the canvas beside it never held
+   * still long enough to be photographed
+   */
+  scrollbar-gutter: stable;
+  min-height: 0;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+}
+
+/* The sidebar is a numbered list of questions with one open at a time. The counter is CSS's
+   own rather than a number in the markup, so inserting a step cannot leave the list mis-numbered */
+.stepper {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  min-height: 0;
+}
+
+.step {
+  border-bottom: 1px solid var(--border);
+  background: var(--panel);
+}
+
+.step-head {
+  margin: 0;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.step-button {
+  font: inherit;
+  width: 100%;
+  display: grid;
+  /* a third track for the lock: the title and the summary both sit explicitly in column 2, so a
+     lock placed there would print over the end of the title on any step with a long label */
+  grid-template-columns: 26px 1fr auto;
+  align-items: baseline;
+  gap: 2px 10px;
+  padding: 11px 14px;
+  border: none;
+  background: none;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.step-button:hover {
+  background: var(--accent-bg);
+}
+
+.step-button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.step-number {
+  grid-row: 1;
+  grid-column: 1;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid var(--control-border);
+  color: var(--muted);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+/*
+ * A step that is waiting keeps its number and gets a lock beside the title.
+ *
+ * The lock used to REPLACE the number, so the list read 1, 2, 3, lock, lock, lock, lock, 8, 9:
+ * the count the design set up gives out exactly where a beginner most needs to know how far along
+ * they are. Column 2 with the title rather than over the circle, because a glyph on top of a
+ * numeral is two things in one 22px space and neither is readable
+ */
+/*
+ * Dashed, and nothing else.
+ *
+ * `opacity: 0.75` here would take `--muted` from a comfortable 5.9:1 on white down to an effective
+ * #898f98 at **3.25:1**, and the numeral on every waiting step would fail WCAG AA at 12px. Opacity
+ * is the one way of dimming that a token cannot be checked through, so it slips past a palette
+ * everything else here is measured against.
+ *
+ * Nothing is lost by dropping it. "Waiting" is already said twice over: by the dashed border here
+ * and by the lock glyph in column three, and the number itself is the thing the comment above
+ * fought to keep legible in the first place
+ */
+.step-number[data-locked='true'] {
+  border-style: dashed;
+}
+
+.step-lock {
+  grid-row: 1;
+  grid-column: 3;
+  justify-self: end;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.step[data-open='true'] .step-number {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-text);
+}
+
+.step-title {
+  grid-row: 1;
+  grid-column: 2;
+  font-weight: 600;
+}
+
+.step[data-open='true'] .step-title {
+  color: var(--accent);
+}
+
+/* what the step settled, under its own title. Never in the accent colour: it is a record, and
+   the accent is reserved for where the reader is now */
+.step-summary {
+  grid-row: 2;
+  grid-column: 2;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.step[data-locked='true'] .step-title {
+  color: var(--muted);
+}
+
+/* the step to look at next: a ring on its number and the word in the lock's column. Static,
+   because a mark that blinks pulls the eye for as long as it is on screen */
+.step[data-next='true'] .step-number {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-bg);
+  color: var(--accent);
+}
+
+/**
+ * The word on the closed row that says which step comes next, hidden on screen. The open step's
+ * foot says it in a button, and a visible tag would sit 60px under that button saying the same word
+ * twice. The row keeps its `data-next` for anything that reads it and the word stays for a screen
+ * reader
+ */
+.step-next {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+
+/* what a locked step is waiting for, one line of it: the open step prints the whole sentence */
+.step-waiting {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.steppanel {
+  min-height: 0;
+}
+
+.steppanel[hidden] {
+  display: none;
+}
+
+/* what is missing, and the press that settles it, as one block so the two cannot drift apart */
+.requirement {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 12px 14px;
+}
+
+/* The `i` beside a term, and the sentence it holds */
+.infotip {
+  display: inline-flex;
+  vertical-align: baseline;
+  margin-left: 5px;
+}
+
+.infotip-trigger {
+  font: inherit;
+  font-size: 11px;
+  font-style: italic;
+  font-weight: 700;
+  width: 16px;
+  height: 16px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--control-border);
+  border-radius: 50%;
+  background: var(--panel);
+  color: var(--muted);
+  cursor: help;
+}
+
+.infotip-trigger:hover,
+.infotip-trigger[aria-expanded='true'] {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-text);
+}
+
+.infotip-trigger:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* In the viewport, not in the panel: the sidebar is a scroll box and it clipped every bubble
+   opened near its top or its foot. `InfoTip` measures the trigger and writes top and left */
+.infotip-bubble {
+  position: fixed;
+  z-index: 4;
+  width: max-content;
+  max-width: 240px;
+  padding: 8px 10px;
+  border: 1px solid var(--control-border);
+  border-radius: 6px;
+  background: var(--panel);
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.4;
+  text-align: left;
+  box-shadow: 0 2px 10px rgb(0 0 0 / 18%);
+}
+
+.panel {
+  border-bottom: 1px solid var(--border);
+  padding: 12px 14px;
+  background: var(--panel);
+}
+
+.panel-failed {
+  background: var(--error-bg);
+}
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.panel-head h2 {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0;
+  color: var(--muted);
+}
+
+.panel-actions {
+  display: flex;
+  gap: 6px;
+  margin-left: auto;
+  flex-wrap: wrap;
+}
+
+.panel-sub {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.panel-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+/* the sub-heads of a step's face ("How big", "What shades it"): a line, not a heading block */
+.panel-body h3 {
+  margin: 8px 0 0;
+  font-size: 15px;
+}
+
+/* a read-back in the running text, proportional: "48.0 m² (517 sq ft)" on one line, where the
+   mono readout grid broke it after "sq" at phone width */
+.readout-line {
+  color: var(--text);
+  font-size: 13px;
+}
+
+.row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.row > * {
+  flex: 1 1 120px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 12px;
+}
+
+.field-toggle {
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+}
+
+.field-label {
+  color: var(--muted);
+}
+
+/* no opacity here: 0.7 would drop muted-on-panel from 5.6:1 to 3.89:1, under WCAG AA for 12px
+   text. Hierarchy comes from the label colour itself, not from fading it further */
+.field-label em {
+  font-style: normal;
+}
+
+/* the browser's default blue was the one colour on the page that was nobody's choice: a radio
+   card showed a blue dot beside its green tick */
+input[type='radio'],
+input[type='checkbox'] {
+  accent-color: var(--accent);
+}
+
+input,
+select {
+  font: inherit;
+  padding: 4px 6px;
+  border: 1px solid var(--control-border);
+  border-radius: 4px;
+  background: var(--bg);
+  color: var(--text);
+  min-width: 0;
+}
+
+input[type='range'] {
+  padding: 0;
+  border: none;
+  background: none;
+  /* the browser's default blue was the one colour on the light step that was nobody's choice */
+  accent-color: var(--accent);
+}
+
+/*
+ * A thumb a finger can find. The native thumb is about 16px, which under a thumb is a guess;
+ * these draw a 28px one on the same track wherever the main pointer is coarse. Prefixed rules
+ * one per block, because a selector list with an unknown pseudo-element is dropped whole
+ */
+@media (pointer: coarse) {
+  /* the unit switch at a thumb's size; on a pointer it stays compact */
+  .segmented > label {
+    min-height: 44px;
+  }
+
+  input[type='range'] {
+    appearance: none;
+    height: 44px;
+  }
+
+  input[type='range']::-webkit-slider-runnable-track {
+    height: 4px;
+    border-radius: 2px;
+    background: var(--control-border);
+  }
+
+  input[type='range']::-webkit-slider-thumb {
+    appearance: none;
+    width: 28px;
+    height: 28px;
+    margin-top: -12px;
+    border: 2px solid var(--panel);
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  input[type='range']::-moz-range-track {
+    height: 4px;
+    border-radius: 2px;
+    background: var(--control-border);
+  }
+
+  input[type='range']::-moz-range-thumb {
+    width: 28px;
+    height: 28px;
+    border: 2px solid var(--panel);
+    border-radius: 50%;
+    background: var(--accent);
+  }
+}
+
+/* m | ft, as one control with two halves: native radios under two labels that share one border,
+   so the pair reads as one switch and the arrow keys move between them */
+.segmented {
+  display: inline-flex;
+  align-self: flex-start;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--control-border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.segmented > label {
+  display: grid;
+  place-items: center;
+  min-width: 44px;
+  padding: 4px 12px;
+  font-size: 12px;
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.segmented > label + label {
+  border-left: 1px solid var(--control-border);
+}
+
+.segmented > label[data-checked='true'] {
+  background: var(--accent);
+  color: var(--accent-text);
+}
+
+/* the radio itself is the focus target and the label is the thing seen: the ring goes on the
+   label so a keyboard user can see which half has it */
+.segmented input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  opacity: 0;
+}
+
+.segmented > label:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.action {
+  font: inherit;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: 1px solid var(--control-border);
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.action-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-text);
+}
+
+/*
+ * The focus ring, stated rather than left to the browser.
+ *
+ * Without this `:focus-visible` rule `.action` takes Chrome's default ring. That default is not a
+ * fixed colour: on macOS it resolves to something visible and on Linux to `rgb(16, 16, 16)`, which
+ * against the dark theme's `rgb(20, 23, 27)` toolbar is **1.16:1** where WCAG needs 3:1. Every
+ * other focusable thing here sets `2px solid var(--accent)` too, and a contrast audit run only on a
+ * Mac never sees the Linux failure
+ */
+.action:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.action:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+/* the one press a step turns on: the width of its column and thumb-height at every width, so
+   the foot's Next and the layout search read as the same thing on a laptop and on a phone */
+.action-block {
+  width: 100%;
+  min-height: 48px;
+  font-size: 14px;
+}
+
+/*
+ * Next, in flow, as the last child of the open step.
+ *
+ * In flow and not sticky, which is the tempting mistake: a fixed action bar covers the last
+ * lines of whatever it floats over, stacks on the tab bar, and on iOS Safari sits under the
+ * browser's own chrome. 24px under it, and the column's own bottom padding (see the phone shell)
+ * keeps the press clear of the tab bar
+ */
+.step-foot {
+  padding: 12px 14px 24px;
+  background: var(--panel);
+}
+
+.link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--accent);
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+/*
+ * Every citation in the app is one of these, so it is a control a reader tabs through in every
+ * panel. It has no border and no background to carry a focus state, so without this it falls
+ * through to the browser's own ring, which is the one thing no other interactive class here is left
+ * to do
+ */
+.link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+}
+
+.picker {
+  gap: 2px;
+  border: 1px solid var(--control-border);
+  border-radius: 6px;
+  padding: 4px;
+  /* about six rows rather than four: at 220px a search that found three crops looked like a
+     list that had been cut off, and scrolling 163 rows four at a time is what sent a reader
+     past the plant she came for */
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.picker-option {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+/* hover must set colour as well as background: it outranks .picker-option-active on
+   specificity, so a background-only hover left the active row's --accent-text stranded
+   on the page background, near-black on near-black in dark and white on white in light */
+.picker-option:hover {
+  background: var(--bg);
+  color: var(--text);
+  border-color: var(--border);
+}
+
+/*
+ * The row the keyboard is on, and the crop a press staged: an outline in the accent, not a fill. A
+ * filled row would read as a third green button under "Find this place" and as an already chosen
+ * result, and the fill is reserved for the one primary press on a screen
+ */
+.picker-option-active,
+.picker-option-active:hover,
+.picker-option:focus-visible,
+.picker-option:focus-visible:hover {
+  background: var(--accent-bg);
+  color: var(--text);
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+  /* a ring as well as the tint: in the dark scheme the tint alone is 1.6:1 against the list */
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.picker-label {
+  font-weight: 600;
+}
+
+/*
+ * The picture beside a crop's name.
+ *
+ * `currentColor` and nothing else: it takes the colour of the row it is in, so it inverts with a
+ * selected option and needs no second version for the dark scheme, and there is no opacity on it,
+ * which is the one way of dimming this project has already been caught by. Aligned on the text
+ * baseline rather than the box, so a row with a glyph is exactly as tall as a row without one
+ */
+.crop-glyph {
+  flex: 0 0 auto;
+  vertical-align: -3px;
+  margin-right: 6px;
+}
+
+/* the ranking row is a flex line with its own gap, so the margin above would double it */
+.rec-head .crop-glyph {
+  margin-right: 0;
+}
+
+/*
+ * The same slot, for the drawn version of the same thing.
+ *
+ * 20px against the silhouette's 16, because this one is carrying colour and four or five distinct
+ * shapes in a 12 by 12 grid and the extra four pixels are what let a courgette read as a courgette
+ * rather than as a green smudge. `image-rendering` is the whole argument for pixels: a 12-wide
+ * grid drawn at 20 lands on fractional device pixels, and a smoothed sprite is a smear
+ */
+.crop-sprite {
+  flex: 0 0 auto;
+  vertical-align: -5px;
+  margin-right: 6px;
+  image-rendering: pixelated;
+}
+
+.rec-head .crop-sprite,
+.cal-head .crop-sprite,
+.pref-row .crop-sprite {
+  margin-right: 0;
+}
+
+/* mid-sentence rather than at the head of a row, so it takes a space either side: the agenda
+   line reads "First harvest <picture> elderberry in Bed 2" */
+.agenda-line .crop-sprite {
+  margin: 0 3px;
+}
+
+/* inherits the option's colour, and is separated by size alone: no opacity, which would put the
+   note under the AA floor. Under a place name the note is its region, in the same type */
+.picker-note {
+  font-size: 11px;
+}
+
+.readouts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px 10px;
+  font-size: 12px;
+}
+
+.readout {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  border-bottom: 1px dotted var(--border);
+  padding-bottom: 2px;
+}
+
+.readout-label {
+  color: var(--muted);
+}
+
+.readout-value {
+  font-family: var(--mono);
+}
+
+.readout-band {
+  flex-wrap: wrap;
+}
+
+.readout-note {
+  flex-basis: 100%;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.notice {
+  font-size: 12px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  margin: 0;
+}
+
+/*
+ * A sentence about the state of things is not a field. The idle and loading notices sat in the
+ * same 1px rounded box as the text fields above them, where six in a row on a phone read as
+ * inputs; a tinted ground with no border tells them apart while the warning and error notices
+ * keep their coloured borders, which are the whole of what they say
+ */
+.notice-idle,
+.notice-loading {
+  border-color: transparent;
+  background: var(--bg);
+}
+
+.notice-error {
+  background: var(--error-bg);
+  border-color: var(--error);
+  color: var(--error);
+}
+
+.notice-warn {
+  background: var(--warn-bg);
+  border-color: var(--warn);
+  color: var(--warn);
+}
+
+.notice-loading,
+.notice-idle {
+  color: var(--muted);
+}
+
+/*
+ * Something is happening, said with motion as well as words. "Looking up the weather..." sat
+ * still for several seconds and read as a screen that had stopped. One rule on the state class
+ * rather than markup in every notice, so a spinner cannot be forgotten by the next loading
+ * sentence; the site notice is a flex column, so its spinner rides the first line of text
+ */
+.notice-loading:not(.site-notice)::before,
+.site-notice.notice-loading > p:first-child::before {
+  content: '';
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 6px;
+  vertical-align: -1px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .notice-loading:not(.site-notice)::before,
+  .site-notice.notice-loading > p:first-child::before {
+    animation: none;
+    border-right-color: currentColor;
+    opacity: 0.4;
+  }
+}
+
+.notice-ready {
+  color: var(--ok);
+}
+
+/* the sentence, the countdown to the next attempt and the press, as one block: a failed lookup
+   has to be actionable where it is read */
+.site-notice {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.site-notice p {
+  margin: 0;
+}
+
+.notice-detail {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* where the garden would be, when the browser cannot draw one: see `preflight.ts` */
+.preflight-block {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.preflight-block .notice {
+  max-width: 36em;
+  font-size: 14px;
+}
+
+/* the one line about the slower light check, in the corner nothing else floats in */
+.preflight-note {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  z-index: 2;
+  max-width: 320px;
+  pointer-events: none;
+  background: var(--panel);
+}
+
+.badge {
+  display: inline-block;
+  /* a pill is one shape. Left to wrap, the border runs around two lines of text and reads as a
+     rendering fault rather than as a label: "Insect magnet / Ground layer" split mid-pill was the
+     report. Every badge in the app is this shape, so the rule belongs here and not at one site */
+  white-space: nowrap;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 1px 6px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+
+.badge-grade-a,
+.badge-grade-b,
+.badge-verdict-recommended {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.badge-grade-c,
+.badge-verdict-marginal,
+.badge-tier-c {
+  border-color: var(--warn);
+  color: var(--warn);
+}
+
+.badge-grade-d,
+.badge-grade-e,
+.badge-verdict-excluded {
+  border-color: var(--error);
+  color: var(--error);
+}
+
+/* a badge inside an option must not carry its own ink. The option repaints colour AND background
+   together in every state, so a pill that kept --error or --accent would be stranded the moment
+   the option turns --accent: the same cascade .picker-option:hover documents */
+.picker-option .badge {
+  color: inherit;
+  border-color: currentColor;
+}
+
+.pref-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 8px;
+}
+
+.pref-name {
+  font-weight: 600;
+}
+
+.pref-chips {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+  flex-wrap: wrap;
+}
+
+.pref-chip {
+  font: inherit;
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--control-border);
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+}
+
+/* colour AND background in every state, together, for the reason .picker-option:hover documents:
+   a state that repaints one and inherits the other is the exact cascade that puts --accent-text
+   on --bg at 1.1:1 */
+.pref-chip:hover,
+.pref-chip:focus-visible,
+.pref-chip:active {
+  background: var(--panel);
+  color: var(--text);
+  border-color: var(--accent);
+  outline: none;
+}
+
+.pref-chip:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* every selected state, including selected-and-hovered, the state both rules match. Equal
+   specificity to the hover rule above, so source order decides and this block is last */
+.pref-chip-active,
+.pref-chip-active:hover,
+.pref-chip-active:focus-visible,
+.pref-chip-active:active {
+  background: var(--accent);
+  color: var(--accent-text);
+  border-color: var(--accent);
+}
+
+/* --warn and --error invert with the scheme exactly as --accent does, so --accent-text is
+   the readable ink over all three in both */
+.pref-chip-active[data-kind='avoid'],
+.pref-chip-active[data-kind='avoid']:hover,
+.pref-chip-active[data-kind='avoid']:focus-visible,
+.pref-chip-active[data-kind='avoid']:active {
+  background: var(--warn);
+  color: var(--accent-text);
+  border-color: var(--warn);
+}
+
+.pref-chip-active[data-kind='exclude'],
+.pref-chip-active[data-kind='exclude']:hover,
+.pref-chip-active[data-kind='exclude']:focus-visible,
+.pref-chip-active[data-kind='exclude']:active {
+  background: var(--error);
+  color: var(--accent-text);
+  border-color: var(--error);
+}
+
+/* no opacity anywhere in this panel: the muted colour is the hierarchy */
+.pref-legend {
+  margin: 0;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.suggestion {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.suggestion-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.suggestion-headline {
+  margin: 0;
+  font-weight: 600;
+}
+
+.suggestion-note {
+  margin: 0;
+  color: var(--muted);
+}
+
+/* the plain case, in the text colour and a little larger than the evidence under it */
+.suggestion-why {
+  margin: 0 0 6px;
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.badge-confidence-high {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.badge-confidence-moderate,
+.badge-term-caution {
+  border-color: var(--warn);
+  color: var(--warn);
+}
+
+.badge-confidence-low,
+.badge-term-conflict {
+  border-color: var(--error);
+  color: var(--error);
+}
+
+.badge-term-benefit {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.term-row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  border-left: 2px solid var(--border);
+  padding-left: 6px;
+}
+
+.term-row[data-verdict='conflict'] {
+  border-left-color: var(--error);
+}
+
+.term-row[data-verdict='caution'] {
+  border-left-color: var(--warn);
+}
+
+.term-row[data-verdict='benefit'] {
+  border-left-color: var(--accent);
+}
+
+.term-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.term-scored {
+  color: var(--muted);
+}
+
+.term-unscored,
+.term-folklore {
+  color: var(--warn);
+}
+
+.term-folklore {
+  margin: 4px 0 0;
+  font-size: 11px;
+}
+
+.term-cites {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.refusal-cause {
+  font-size: 12px;
+  margin: 8px 0 4px;
+}
+
+.rec-row {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.rec-head {
+  display: flex;
+  align-items: center;
+  /* the badge above will not split, so when a long crop name and a long role leave no room the
+     row has to give somewhere. Wrapping puts the whole pill on the next line, which looks
+     deliberate; without this the pill overflows the row instead */
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.rec-limiting {
+  margin: 0;
+  color: var(--warn);
+}
+
+.rec-light {
+  margin: 0;
+  color: var(--muted);
+}
+
+.yield-band {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.yield-track {
+  position: relative;
+  height: 12px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  background: var(--bg);
+  overflow: hidden;
+}
+
+.yield-interval {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, #3b528b, #5ec962);
+  opacity: 0.85;
+}
+
+.yield-reference {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--text);
+  opacity: 0.6;
+}
+
+.yield-value {
+  margin: 0;
+  font-family: var(--mono);
+}
+
+.yield-attribution,
+.yield-absolute {
+  margin: 0;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.yield-contributions,
+.yield-caveats {
+  margin: 0;
+  padding-left: 16px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* Pinned in the canvas's top-right corner: the one spot the example banner (top-left) never
+   reaches, at either the desktop layout or the stacked one below 900px. `pointer-events: none`
+   for the same reason `.scene-tooltip` has it: this labels the ground, and taking the pointer
+   would make the ground under it unclickable. The background is fully OPAQUE: `.canvas-host`
+   carries the sky gradient under everything stacked on it, and the contrast auditor reports
+   text over a still-visible background-image as unresolved rather than guessing at a colour */
+.legend {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 1;
+  pointer-events: none;
+  width: min(300px, calc(100vw - 24px));
+  margin: 0;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 11px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  background: var(--panel);
+}
+
+/* "mol/m²/d" broke mid-unit ("mol/m" over "²/d") whenever the caption ran the legend's width
+   short; the unit is one token and never wraps, whatever the caption around it does */
+.legend-unit {
+  white-space: nowrap;
+}
+
+.legend-ramp {
+  height: 12px;
+  border-radius: 3px;
+  border: 1px solid var(--border);
+}
+
+.legend-scale {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--mono);
+}
+
+/* the iso-lines drawn on the ground, at the position on the ramp each one marks */
+.legend-contours {
+  position: relative;
+  height: 14px;
+  color: var(--text);
+  background: var(--panel);
+  font-family: var(--mono);
+  font-size: 10px;
+}
+
+.legend-tick {
+  position: absolute;
+  top: 3px;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.legend-tick::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  width: 1px;
+  height: 4px;
+  background: var(--text);
+}
+
+.legend-note {
+  margin: 0;
+  color: var(--muted);
+}
+
+/*
+ * There is no fold above the breakpoint. The legend is 124px in the corner of a canvas that is
+ * most of a laptop screen, and a control offering to save a fifth of a corner is a control that
+ * costs more attention than it returns. On a phone the same 88px is a fifth of the whole garden,
+ * which is why it appears there: see the 760px block
+ */
+.legend-fold {
+  display: none;
+}
+
+/* warn colouring rather than muted: this one is not a footnote about the ramp, it is the
+   reason not to trust the ramp, and it sits above it for the same reason */
+.carrying .picker-option {
+  cursor: grabbing;
+}
+
+/* while a crop is being carried, the canvas is a drop target rather than a camera: saying so
+   with the cursor is the only affordance the 3D can offer, since nothing in it can be outlined
+   until the pointer is actually over a bed */
+.carrying .canvas-host {
+  cursor: copy;
+}
+
+.legend-stale {
+  margin: 0 0 6px;
+  padding: 5px 7px;
+  border-radius: 5px;
+  border: 1px solid var(--warn);
+  background: var(--warn-bg);
+  color: var(--warn);
+  font-weight: 600;
+}
+
+.compliance-check h3 {
+  font-size: 13px;
+  margin: 8px 0 4px;
+}
+
+.remedy,
+.disclaimer {
+  color: var(--muted);
+}
+
+.attribution {
+  font-size: 11px;
+  color: var(--muted);
+  margin: 0;
+}
+
+details.experimental summary {
+  cursor: pointer;
+  color: var(--warn);
+  font-size: 12px;
+}
+
+progress {
+  width: 100%;
+}
+
+.calendar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cal-axis {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  position: sticky;
+  top: 0;
+  background: var(--panel);
+  padding-bottom: 2px;
+}
+
+.cal-bed {
+  font-size: 12px;
+  margin: 4px 0;
+  color: var(--muted);
+}
+
+.cal-row {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cal-row[data-plantable='false'] {
+  border-style: dashed;
+}
+
+.cal-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 12px;
+}
+
+.cal-percentile {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.cal-badge-fits {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.cal-badge-needs-indoor-start {
+  border-color: var(--sow-indoor);
+  color: var(--sow-indoor);
+}
+
+.cal-badge-light-limited {
+  border-color: var(--warn);
+  color: var(--warn);
+}
+
+.cal-badge-season-too-short {
+  border-color: var(--error);
+  color: var(--error);
+}
+
+.cal-badge-no-thermal-data {
+  border-style: dashed;
+}
+
+.cal-track {
+  position: relative;
+  height: 26px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg);
+  overflow: hidden;
+}
+
+.cal-gridline {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--border);
+}
+
+.cal-bar {
+  position: absolute;
+  height: 9px;
+  border-radius: 2px;
+  top: 3px;
+}
+
+.cal-bar-direct-sow {
+  background: var(--sow-direct);
+}
+
+.cal-bar-start-indoors {
+  background: repeating-linear-gradient(
+    45deg,
+    var(--sow-indoor),
+    var(--sow-indoor) 3px,
+    transparent 3px,
+    transparent 6px
+  );
+  border: 1px solid var(--sow-indoor);
+}
+
+.cal-bar-transplant-out {
+  background: var(--sow-transplant);
+}
+
+.cal-bar-harvest {
+  background: var(--harvest);
+  top: 14px;
+}
+
+.cal-bar-blocked {
+  opacity: 0.35;
+  filter: grayscale(1);
+}
+
+.cal-marker {
+  position: absolute;
+  top: 1px;
+  height: 12px;
+  width: 2px;
+  background: var(--text);
+}
+
+.cal-succession {
+  position: absolute;
+  bottom: 1px;
+  width: 5px;
+  height: 5px;
+  margin-left: -2px;
+  border-radius: 50%;
+  background: var(--muted);
+}
+
+.cal-detail {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 11px;
+}
+
+.cal-swatch {
+  display: inline-block;
+  width: 10px;
+  height: 8px;
+  border-radius: 2px;
+  margin-right: 5px;
+  vertical-align: baseline;
+}
+
+.cal-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin: 0;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.cal-swatch-marker {
+  width: 2px;
+  height: 10px;
+  background: var(--text);
+  border-radius: 0;
+}
+
+.cal-window,
+.cal-note {
+  color: var(--muted);
+}
+
+.cal-basis {
+  display: block;
+  color: var(--muted);
+  border-left: 2px solid var(--border);
+  padding-left: 6px;
+  margin-top: 2px;
+}
+
+.cal-cites {
+  display: block;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  padding-left: 8px;
+}
+
+.cal-note {
+  margin: 0;
+  font-size: 11px;
+}
+
+/* --------------------------------- agenda ---------------------------------- */
+
+.agenda-group {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 10px 0 4px;
+  font-size: 13px;
+  color: var(--text);
+}
+
+.agenda-group-count,
+.agenda-count,
+.agenda-window {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.agenda-supply-head {
+  margin: 8px 0 4px;
+  font-size: 12px;
+  color: var(--text);
+}
+
+.agenda-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  background: var(--panel);
+}
+
+/* colour AND background together in every state: a rule that moves only one of them strands
+   --accent-text on --bg */
+.agenda-item:hover,
+.agenda-item:focus-within,
+.agenda-item:active {
+  color: var(--text);
+  background: var(--bg);
+}
+
+.agenda-line,
+.agenda-count {
+  margin: 0;
+}
+
+/* ------------------------------- the questions ------------------------------- */
+
+/* How far the design search has got, on the same track a yield band is drawn on, so a filled
+   thing still looks like a filled thing. It is a second telling of the sentence beneath
+   it and never the only telling: the fill has no transition because the number behind it already
+   arrives several times a second, and easing it would only make the bar lag the truth */
+.search-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.search-progress-track {
+  height: 6px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg);
+  overflow: hidden;
+}
+
+.search-progress-fill {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+}
+
+.wizard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.wizard-title {
+  margin: 0;
+  font-size: 15px;
+  color: var(--text);
+  background: var(--panel);
+}
+
+.wizard-title:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.wizard-help {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+/*
+ * Anything that scrolls is focusable, and anything focusable is drawn when it has focus.
+ *
+ * These two are the only regions in the app that scroll without holding a control of their own,
+ * so they are the only ones that had to be given a tab stop; every other scroll box already has
+ * buttons in it for focus to land on. axe calls this `scrollable-region-focusable` and rates it
+ * serious: a scrollbar reachable only with a pointer is content a keyboard cannot read
+ */
+.wizard-help:focus-visible,
+.agent-log:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+details.wizard-advanced > summary {
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--text);
+  background: var(--panel);
+}
+
+/* colour and background together in every state, for the reason .picker-option:hover documents:
+   a state that repaints one and inherits the other puts --accent-text on --bg at 1.1:1 */
+details.wizard-advanced > summary:hover,
+details.wizard-advanced > summary:focus-visible,
+details.wizard-advanced > summary:active {
+  color: var(--text);
+  background: var(--bg);
+  outline: none;
+}
+
+details.wizard-advanced > summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.wizard-advanced .field {
+  margin-top: 6px;
+}
+
+.choices {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border: none;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.choices > legend {
+  padding: 0;
+  font-size: 12px;
+}
+
+.choice {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    'radio label tick'
+    'radio help tick';
+  align-items: center;
+  gap: 2px 8px;
+  padding: 7px 9px;
+  border: 1px solid var(--control-border);
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  color: var(--text);
+  background: var(--bg);
+}
+
+.choice input {
+  grid-area: radio;
+  margin: 0;
+}
+
+.choice input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.choice-label {
+  grid-area: label;
+  font-weight: 600;
+}
+
+/* separated by size, never by opacity: one opacity rule here would cause three AA failures */
+.choice-help {
+  grid-area: help;
+  font-size: 11px;
+}
+
+/*
+ * More than one help line on a single choice.
+ *
+ * `.choice` is a named-area grid, and every item assigned to one named area is stacked in it:
+ * `PlantingStep` renders a promise, an exchange and one line per bed, which would paint five runs
+ * of text on top of each other in one area. The area holds one child, and that child lays its own
+ * lines out in a column. `grid-area: auto` on the way in undoes the rule above, which is still
+ * correct for a choice carrying exactly one line and is written for it
+ */
+.choice-helps {
+  grid-area: help;
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.choice-helps > .choice-help {
+  grid-area: auto;
+}
+
+/* a badge on a choice belongs beside its label, not under the radio, which is where the grid's
+   own auto-placement puts an item no area was named for */
+.choice > .badge {
+  grid-column: 2;
+  justify-self: start;
+}
+
+.choice:hover,
+.choice:focus-within,
+.choice:active {
+  color: var(--text);
+  background: var(--panel);
+  border-color: var(--accent);
+}
+
+/*
+ * Every selected state, including selected-and-hovered, which is the intersection that broke
+ * before. Equal specificity to the block above, so source order decides and this block is last.
+ *
+ * An outline and a tick on the panel background. The fill is reserved for the one primary press on
+ * a step: a selected card in the same green as Next would read as two primaries on a phone, and a
+ * confidence word printed on the fill would be unreadable
+ */
+.choice-active,
+.choice-active:hover,
+.choice-active:focus-within,
+.choice-active:active {
+  color: var(--text);
+  background: var(--panel);
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+/* the tick, in the third column the grid keeps for it */
+.choice::after {
+  grid-area: tick;
+  content: '';
+  width: 1em;
+  text-align: right;
+}
+
+.choice-active::after {
+  content: '✓';
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* below the breakpoint the stage stacks and the scene is only 55svh tall */
+@media (max-width: 900px) {
+  /*
+   * Below the breakpoint the narration goes silent on screen, and keeps its sentence for anyone
+   * not reading the screen.
+   *
+   * At 800x900 the scene is 495px and the strip under the banner is small. Anything placed in it
+   * covers the ground it is describing, and a caption that says "on the darkest ground here" over
+   * ground nobody can see is worse than no caption: it spends the visitor's attention and gives
+   * back a claim they cannot check. Evicting the legend to make room is the same trade, since the
+   * legend is what makes the colours readable in the first place.
+   *
+   * `.visually-hidden` rather than `display: none`, because none of that reasoning is about the
+   * accessibility tree: a visitor on a screen reader is not looking at the scene at any width,
+   * and the sentence names both beds and quotes both measured figures, so it is worth as much
+   * here as it is at full size
+   */
+  .cold-open {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    clip-path: inset(50%);
+    animation: none;
+  }
+}
+
+.scenarios {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 12px;
+}
+
+.scenario {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px;
+  color: var(--text);
+  background: var(--panel);
+}
+
+.scenario-recommended {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.scenario[data-baseline='true'] {
+  border-style: dashed;
+}
+
+.scenario-title {
+  margin: 0;
+  font-size: 13px;
+}
+
+/* the three figures a layout is chosen on, side by side, each a number over its label */
+.scenario-figures {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.scenario-figures .readout {
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  gap: 0;
+  border-bottom: none;
+}
+
+.scenario-figures .readout-value {
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  /* "about 140,000" broke between the word and the number at 375px and the middle figure
+     landed a line below its neighbours */
+  white-space: nowrap;
+}
+
+.scenario-summary {
+  margin: 0;
+}
+
+.scenario-tradeoff,
+.scenario-light {
+  margin: 0;
+  color: var(--muted);
+}
+
+.scenario-flags {
+  margin: 0;
+  padding-left: 16px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.scenario-caveat {
+  color: var(--warn);
+}
+
+/*
+ * Stepping between the layouts on the face, above the one that is showing.
+ *
+ * The position sits between the two presses rather than beside them, so it reads as the label of
+ * the pair and lands under the thumb on a phone with a target either side of it
+ */
+/*
+ * Every layout by name, in one row, with the one showing marked. Static: the reader picks, and
+ * nothing here moves or blinks to point at itself
+ */
+.scenario-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.scenario-tab {
+  font: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  padding: 6px 10px;
+  border: 1px solid var(--control-border);
+  border-radius: 6px;
+  background: var(--panel);
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+}
+
+.scenario-tab:hover {
+  background: var(--accent-bg);
+}
+
+.scenario-tab:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.scenario-tab[aria-selected='true'] {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.scenario-tab[data-baseline='true'] {
+  border-style: dashed;
+}
+
+.scenario-tab-name {
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.scenario-tab-note {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.scenario-tab[data-recommended='true'] .scenario-tab-note {
+  color: var(--accent);
+}
+
+/*
+ * The two presses that decide the layout, in the card's own foot.
+ *
+ * Sticky to the bottom of the scrollport, they would cover the card's last lines on a phone. The
+ * card is short enough that the foot is in view when the card is, and a press in flow never covers
+ * anything. "See it in the garden" is absent above the breakpoint, where the garden is beside the
+ * card: `display: none` keeps a press with nothing to do out of a desktop reader's tab order
+ */
+.scenario-actions {
+  padding-top: 4px;
+  border-top: 1px solid var(--border);
+}
+
+[data-testid^='action-layouts-see-'] {
+  display: none;
+}
+
+/* the grower asked for a planting and this layout shades it harder than that planting takes */
+.scenario-over-budget {
+  color: var(--warn);
+  background: var(--warn-bg);
+}
+
+/**
+ * The phone tier.
+ *
+ * The 900px breakpoint above was reasoned about at 800x900, and every one of its trades still
+ * holds there. None of them survive 390x844. Two things break, both structural rather than
+ * cosmetic, and both measured rather than guessed:
+ *
+ * 1. `.example-banner` is `--banner-width` across and `.legend` is up to 260px. On a 390px
+ *    screen they are 600px of furniture competing for one row, so they overlapped: the banner's
+ *    own text was printed under the legend and neither could be read.
+ * 2. The canvas is only 55svh tall, and the banner alone is taller than what is left beside
+ *    the legend, so the panels were describing ground that was entirely covered.
+ *
+ * The answer to both is that at this width they stack instead of sharing a row
+ */
+@media (max-width: 560px) {
+  /*
+   * A finger is not a pointer.
+   *
+   * Every control in the app is 27px tall, which is comfortable under a mouse and small under a
+   * thumb: WCAG 2.5.8 asks 24px and 27px clears it, but the touch guidance everyone actually
+   * designs to is 44px, and this is a tool people will use standing in a garden
+   */
+  .action,
+  .field input,
+  .field select,
+  .step-button {
+    min-height: 44px;
+  }
+
+  /* a checkbox and a radio are drawn by the browser at 13px, so the LABEL is the target and it
+     is what has to be big enough: `.choice` already wraps its own radio for this reason */
+  .toggle,
+  .choice {
+    min-height: 44px;
+    align-content: center;
+  }
+
+  .canvas-host {
+    /* the banner runs the width of the screen here, so nothing is beside it to clear */
+    --banner-width: calc(100vw - 24px);
+  }
+
+  /*
+   * One column of everything.
+   *
+   * A two-column field grid whose labels wrap to different heights misaligns, a two-column
+   * readout grid breaks a mono value in the middle, and a row of chips wraps raggedly. Each
+   * thing takes the width, and a number reads in the same type as the sentence beside it
+   */
+  .row > * {
+    flex-basis: 100%;
+  }
+
+  .readouts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .readout {
+    flex-wrap: wrap;
+  }
+
+  .readout-value {
+    font-family: inherit;
+  }
+
+  .scenario-figures {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .scenario-tabs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .scenario-tab {
+    min-height: 44px;
+  }
+
+  .stage {
+    grid-template-rows: 62svh 1fr;
+  }
+
+  /* top and bottom of the same column rather than left and right of the same row */
+  .legend {
+    top: auto;
+    bottom: 12px;
+    left: 12px;
+    right: 12px;
+    width: auto;
+  }
+}
+
+/* Above the breakpoint the garden and the editor both fit, so there is nothing to switch between
+   and the bar is not merely hidden but absent from the accessibility tree */
+.tabbar {
+  display: none;
+}
+
+/* the way back from the garden to the plan, which only exists where the two take turns */
+.garden-plan {
+  display: none;
+}
+
+/* ============================ the phone shell ============================
+ *
+ * One surface at a time, and a bar to change which.
+ *
+ * The desktop layout squeezed onto a phone is a different product. Measured on a 360x640 phone with
+ *nothing saved: the toolbar took 124px for a title and four buttons, the example banner and the
+ *legend covered 88% of the canvas between them, and the sidebar was left 119px in which to show
+ *1,300px of editor. The garden got 47px.
+ *
+ * The breakpoint is 760px rather than the 900px the two-column split gives up at, because
+ * between those widths there is still room for a real sidebar beside a real canvas. Below it
+ * there is not, and squeezing both is what produced the numbers above. A phone held sideways is
+ * 667px wide and lands here too, which is right: 375px of height does not want a split either.
+ *
+ * The surfaces STACK rather than swap. Both children of `.stage` are given the same grid area,
+ * so the canvas keeps its full-size layout box whether or not it is the one on screen. That is
+ * deliberate and it is about WebGL: a canvas that is unmounted loses its GL context and one that
+ * is resized to nothing and back pays for a resize on every tab press. Here it is simply covered
+ */
+@media (max-width: 760px) {
+  .stage {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
+  }
+
+  /* the garden is a tab away here, so the press that goes to it has a job */
+  [data-testid^='action-layouts-see-'] {
+    display: inline-block;
+  }
+
+  .stage > * {
+    grid-area: 1 / 1;
+    min-width: 0;
+  }
+
+  /*
+   * Opaque, because it is standing in front of a lit 3D scene rather than beside it, and
+   * positioned, because otherwise it stands BEHIND one.
+   *
+   * The two surfaces share a grid cell, and `.canvas-host` is `position: relative` so that the
+   * banner and the legend can be placed inside it. A positioned element paints above a static one
+   * whatever the source order, so without `position: relative` the sidebar is laid out correctly
+   * and painted under the canvas: pressing Edit lights the tab and leaves the garden on screen
+   */
+  .sidebar {
+    position: relative;
+    z-index: 1;
+    border-left: none;
+    background: var(--bg);
+  }
+
+  /*
+   * `visibility` rather than `display`, for the same reason the canvas keeps its box: a sidebar
+   * removed from the layout is a sidebar whose scroll position is thrown away every time the
+   * garden is looked at. Hidden this way it also leaves the tab order and the accessibility
+   * tree, which `opacity: 0` would not have done
+   */
+  .app:not([data-surface='edit']) .sidebar {
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  /*
+   * On the plan nothing is fixed but the tab bar, and nothing of the scene shows through.
+   *
+   * The selected-bed strip and the drawing hint are positioned with a z-index above the
+   * sidebar's, so they painted over every step of the plan: "Bed 1 is selected / Plant it" on
+   * the address field, the corner hint over the form. Every overlay of the scene is inside the
+   * garden surface's box, and is simply not drawn while that surface is not the one showing
+   */
+  .app:not([data-surface='garden'])
+  :is(.garden-plan, .scene-tooltip, .scene-hint, .example-banner, .legend, .cold-open) {
+    display: none;
+  }
+
+  /* the tab bar's height and a little more, so the last press of a step is never under the
+     bar or the browser's own chrome */
+  .sidebar {
+    padding-bottom: calc(48px + 24px + env(safe-area-inset-bottom, 0px));
+  }
+
+  /*
+   * The one fixed thing on the garden: a 44px strip across its top that names the step the
+   * plan is open on and goes back to it. The drawing tools drop under it
+   */
+  .garden-plan {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 3;
+    min-height: 44px;
+    padding: 0 12px;
+    font: inherit;
+    font-size: 13px;
+    text-align: left;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    color: var(--accent);
+    background: var(--panel);
+    cursor: pointer;
+  }
+
+  .garden-plan:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+  }
+
+  /*
+   * The legend keeps what maps a colour to a number and gives up the paragraph about it.
+   *
+   * 124px measured, of which the caption, the ramp, the iso-line ticks and the range come to 58 and
+   * the rest is the note explaining that viridis is perceptually uniform and where the ground
+   * contours fall. That note is true and it is worth saying; it is not worth a quarter of the
+   * garden on a phone, and nothing on screen needs it the way the ramp needs the ticks.
+   *
+   * Hidden the same way the cold open is at 900px, and for the same reason: none of that
+   * reasoning is about the accessibility tree. A reader who is not looking at the scene loses
+   * nothing by the ramp being small, so the sentence stays for them
+   */
+  .legend {
+    gap: 4px;
+    padding: 8px 10px;
+  }
+
+  /*
+   * A dead end on a phone: a bed tapped in the garden, its move handles up, and nothing on screen
+   * saying that what to do with it is on another surface.
+   *
+   * Along the foot, because that is where the thumb that just tapped the bed already is, and one
+   * row so that it costs the garden as little as the folded notice does. It does not take the
+   * pointer, for the same reason the drawing hint does not: the ground under it is still the
+   * garden. Its one button does
+   */
+  .scene-hint-select {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    top: auto;
+    bottom: 12px;
+    left: 12px;
+    right: 12px;
+    max-width: none;
+    padding: 6px 8px 6px 10px;
+  }
+
+  .scene-hint-select .action {
+    pointer-events: auto;
+    flex: 0 0 auto;
+  }
+
+  /* the key steps up rather than being covered: both of these live along the same foot, and the
+     one that is answering a press the visitor has just made is the one that gets the edge */
+  .canvas-host:has(.scene-hint-select) .legend {
+    bottom: 74px;
+  }
+
+  /*
+   * And the way to put the rest of it away, which the legend had no version of at all.
+   *
+   * Positioned rather than placed in the column, so that folded the whole key is one line: the
+   * caption and this control share it, and the figure comes to about 34px against the 88 it was.
+   * A row of its own would have given back half as much. `pointer-events` is re-enabled because
+   * `.legend` turns them off for the whole figure, being something to read over a scene that is
+   * still draggable underneath it
+   */
+  .legend-fold {
+    display: block;
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    pointer-events: auto;
+    font: inherit;
+    padding: 0;
+    border: none;
+    background: none;
+    color: var(--accent);
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  /*
+   * The 44px the touch guidance asks for, without 44px of chrome over the garden.
+   *
+   * The word itself is 19x16, which is the size of a thing to read rather than the size of a
+   * thing to press, and every other control in this app meets the floor by being 44px tall. This
+   * one cannot: the point of the fold is that folded the legend is one line, and a 44px line is
+   * not one line. So the target is grown and the ink is not
+   */
+  .legend-fold::after {
+    content: '';
+    position: absolute;
+    inset: -14px -12px;
+  }
+
+  /* room for it, so a long channel name does not run under the control on a 320px screen */
+  .legend figcaption {
+    padding-right: 44px;
+  }
+
+  .legend[data-folded='true'] .legend-ramp,
+  .legend[data-folded='true'] .legend-contours,
+  .legend[data-folded='true'] .legend-scale {
+    display: none;
+  }
+
+  .legend-note {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    clip-path: inset(50%);
+  }
+
+  /*
+   * The banner runs the width of the phone and drops below the drawing tools. The fold itself is
+   * unconditional now and lives with the other banner rules above: folded it is about 46px
+   * against the 226px it was, which is the difference between a notice over a garden and a
+   * notice instead of one
+   */
+  .example-banner {
+    left: 8px;
+    right: 8px;
+    /*
+      Clear of the drawing tools, which take the top-left corner on a phone. Both are over the
+      canvas, so one of them has to be second and the notice is the one that can be read at a
+      glance. The pill is fixed at 100 from the top of the viewport, under the toolbar and the strip
+      back to the plan, and stands 54 tall, being a 44px control plus 4px of padding either side and
+      its border, so it ends at 154; `.canvas-host` starts under the 48px toolbar, so the notice
+      begins 8px under the pill
+    */
+    top: 114px;
+    max-width: none;
+    padding: 6px 8px 6px 10px;
+    gap: 4px;
+  }
+
+  /*
+   * The toolbar, from 124px to one row.
+   *
+   * It wrapped to three lines at 360px and to four at 320px, which is 19% and 27% of the screen
+   * spent on a title and four buttons. Nothing is deleted to fix it; two things move to where
+   * they belong and one becomes redundant.
+   *
+   * `flex-wrap: nowrap` is safe here only because the row that needs wrapping is fixed outside the
+   * toolbar's flow: see `.toolbar-modes` below. The unconditional `flex-wrap: wrap` above still
+   * covers every width between this breakpoint and the 700px the full toolbar needs
+   */
+  .toolbar {
+    flex-wrap: nowrap;
+    gap: 10px;
+    padding: 6px 12px;
+    min-height: 48px;
+  }
+
+  .toolbar h1 {
+    font-size: 13px;
+    flex: 0 0 auto;
+  }
+
+  /* it gives way first, because the name of the place is the one thing here that is also
+     written in full on the step below it */
+  .toolbar-site {
+    flex: 1 1 auto;
+    min-width: 0;
+    text-align: right;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 12px;
+  }
+
+  /*
+   * The drawing tools move onto the thing they draw on.
+   *
+   * `position: fixed` rather than a second copy in the markup: one set of buttons, one set of
+   * test ids, and the desktop toolbar is untouched. Taking them out of the flow is also what
+   * lets the row above collapse to a single line.
+   *
+   * They are only up while the garden is, because a crosshair floating over a panel of form
+   * fields is a control pointed at nothing
+   */
+  .toolbar-modes {
+    position: fixed;
+    /* under the 48px toolbar and the 44px strip that goes back to the plan */
+    top: 100px;
+    left: 8px;
+    z-index: 4;
+    gap: 4px;
+    padding: 4px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--panel) 88%, transparent);
+    backdrop-filter: blur(6px);
+  }
+
+  .app:not([data-surface='garden']) .toolbar-modes {
+    display: none;
+  }
+
+  /* rounded to match the pill they sit in: at 4px padding inside a 999px radius the container's
+     curve passes inside a 4px corner, so the outer corners of the first and last button stood
+     outside the background and read as clipped */
+  .toolbar-modes .action {
+    font-size: 12px;
+    padding: 0 12px;
+    border-radius: 999px;
+  }
+
+  .tabbar {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    border-top: 1px solid var(--border);
+    background: var(--panel);
+    /* the home indicator on a modern phone sits over the bottom of the viewport */
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  .tab {
+    font: inherit;
+    font-size: 13px;
+    /* the 44px the touch guidance asks for, plus room for the underline that marks the current
+       one: see the 560px block, which sets the same floor on every other control */
+    min-height: 48px;
+    padding: 6px 4px;
+    border: none;
+    border-top: 2px solid transparent;
+    background: none;
+    color: var(--muted);
+    cursor: pointer;
+  }
+
+  .tab[data-current='true'] {
+    color: var(--accent);
+    border-top-color: var(--accent);
+    font-weight: 600;
+  }
+
+  .tab:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+  }
+}
+
+/* ------------------------------- the agent ------------------------------------ */
+
+/*
+ * The conversational surface, which exists only in a build made with VITE_AGENT=on.
+ *
+ * `display: none` and not `visibility: hidden`, which is the opposite of the choice `.sidebar`
+ * makes in the phone shell above, and for the opposite reason. The sidebar hides a scroll position
+ * worth keeping and has to hold its box; this has a transcript in an `aria-live` region, and a live
+ * region that is merely invisible still announces every reply to a screen reader on a surface
+ * nobody is looking at.
+ *
+ * Off at every width by default, and turned on by the surface rather than by the width: the two
+ * rules below say where it goes once `data-surface="chat"` asks for it, and both widths have an
+ * answer. The paragraph that used to be here called this a phone surface and said the laptop had
+ * no use for one, which the rule immediately below it had already stopped being true
+ */
+.agent {
+  display: none;
+}
+
+/*
+ * On a laptop the conversation takes the editor's column rather than a third one of its own.
+ *
+ * A third column was the obvious move and is the wrong one: the stage is already a garden and a
+ * 380px editor, and a chat beside them would leave every one of the three too narrow to be worth
+ * having. The agent is mounted in the sidebar's grid cell for exactly this reason, so what is
+ * needed here is which of the two occupies it. `Ask` in the toolbar is the switch, and the editor
+ * comes back with every answer where the conversation put it
+ */
+@media (min-width: 901px) {
+  .app[data-surface='chat'] .agent {
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
+    min-height: 0;
+    background: var(--panel);
+    border-left: 1px solid var(--border);
+    min-width: 0;
+  }
+
+  .app[data-surface='chat'] .sidebar {
+    display: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .app[data-surface='chat'] .agent {
+    display: grid;
+    grid-row: 2;
+    grid-template-rows: minmax(0, 1fr) auto;
+    min-height: 0;
+    background: var(--bg);
+    /* over the canvas, which shares this cell and is `position: relative`. Same trap the
+       sidebar hit: correctly sized, correctly visible and painted underneath */
+    position: relative;
+    z-index: 1;
+  }
+
+  /* the garden keeps its half of the screen while the conversation is about it */
+  .app[data-surface='chat'] .canvas-host {
+    grid-row: 1;
+  }
+}
+
+.agent-log {
+  overflow-y: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  /* momentum scrolling, and a scroll container that does not chain to the page behind it */
+  overscroll-behavior: contain;
+}
+
+/*
+ * A short conversation sits at the BOTTOM of the column, against the box it is being typed into.
+ *
+ * On a phone the column is short and this changes nothing. On a laptop it was 789px holding
+ * 260px of conversation, so four exchanges floated at the top of an empty panel with 529px of
+ * nothing between the last reply and the input: the two halves of the same exchange, as far
+ * apart as the panel could put them.
+ *
+ * `margin-top: auto` on the first turn and not `justify-content: flex-end` on the column, which
+ * is the trap here: end-justifying a scroll container puts the overflow out of the top where no
+ * scrollbar will ever reach it. An auto margin resolves to zero the moment there is no free
+ * space left, so a long transcript is untouched by this
+ */
+.agent-log > :first-child {
+  margin-top: auto;
+}
+
+.agent-turn {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 88%;
+  padding: 8px 10px;
+  border-radius: 12px;
+}
+
+.agent-them {
+  align-self: flex-end;
+  background: var(--accent-bg);
+  border: 1px solid var(--border);
+}
+
+.agent-us {
+  align-self: flex-start;
+  background: var(--panel);
+  border: 1px solid var(--border);
+}
+
+.agent-line {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.agent-line.agent-note {
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+/*
+ * A caveat, drawn as a caveat and never as small print.
+ *
+ * `Cited` values in this app carry one, and the doctrine is that the only thing ever hidden is
+ * detail and a caveat is never detail. A chat bubble is exactly where a caveat gets read as a
+ * hedge and skipped, so it keeps the body size and takes a rule beside it instead of the grey
+ * treatment the supporting line gets
+ */
+.agent-line.agent-caveat {
+  font-size: 0.82rem;
+  border-left: 3px solid var(--warn);
+  padding-left: 8px;
+  margin-top: 2px;
+}
+
+/*
+ * The caveats of one answer, as one block.
+ *
+ * The design search reports six, and six full-width paragraphs each with its own warning rule is
+ * a wall that gets read as carefully as no caveat at all. Grouped and never folded: the doctrine
+ * is that the only thing hidden is detail and a caveat is never detail, so every word is on
+ * screen and none of it is behind a control
+ */
+.agent-block {
+  border-left: 3px solid var(--warn);
+  padding-left: 8px;
+  margin-top: 4px;
+}
+
+/*
+ * How a thing was computed is not a warning about it, and drawing it in warning colour said so
+ * seven times over on one answer. It keeps the rule, because it is still a block of qualification
+ * hanging off an answer, and takes the structural border rather than the alarming one
+ */
+.agent-provenances {
+  border-left-color: var(--border);
+}
+
+.agent-block-head {
+  margin: 0 0 2px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--warn);
+}
+
+.agent-provenances .agent-block-head {
+  color: var(--muted);
+}
+
+.agent-block ul {
+  margin: 0;
+  padding-left: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.agent-block li.agent-caveat,
+.agent-block li.agent-provenance {
+  /**
+   * the rule and the padding belong to the block, so each line inside it drops its own
+   */
+  border-left: none;
+  padding-left: 0;
+  margin-top: 0;
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+.agent-line.agent-provenance {
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.agent-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.agent-chip {
+  font: inherit;
+  font-size: 0.8rem;
+  padding: 6px 10px;
+  border-radius: 999px;
+  /* --control-border and not --border: a chip is the whole recovery path from a sentence the
+     router did not follow, so its outline is what identifies it as operable. See :root */
+  border: 1px solid var(--control-border);
+  background: var(--bg);
+  color: inherit;
+  /* the recovery path from a router that understood nothing has to be thumb-sized */
+  min-height: 36px;
+  cursor: pointer;
+}
+
+/* `aria-disabled` and not `:disabled`, so the chip keeps the focus of whoever just pressed it.
+   See `AgentPanel.tsx` for why the browser was the wrong thing to be enforcing this */
+.agent-chip[aria-disabled='true'] {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/*
+ * What the surface says about its own router. Muted and small, because it is chrome rather than
+ * an answer, but it sits above the input where it is read before the next sentence is typed
+ */
+.agent-status {
+  margin: 0;
+  padding: 8px 12px;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  background: var(--panel);
+}
+
+/*
+ * The works a line rests on, run in after it rather than stacked under it.
+ *
+ * A citation is part of the sentence it supports: putting them on their own row would turn a
+ * six-line provenance block into twelve. Each is the app's ordinary `.link`, so it is a real
+ * control with a real focus ring, and the separators are drawn rather than typed
+ */
+.agent-sources {
+  display: inline;
+}
+
+.agent-sources .link {
+  font-size: 0.75rem;
+  margin-left: 6px;
+}
+
+.agent-sources .link::before {
+  content: '[';
+  color: var(--muted);
+}
+
+.agent-sources .link::after {
+  content: ']';
+  color: var(--muted);
+}
+
+/* the offer sits in the same line that explains it, so it reads as one sentence and a press */
+.agent-status-action {
+  margin-left: 8px;
+  vertical-align: baseline;
+}
+
+.agent-ask {
+  display: flex;
+  gap: 8px;
+  padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--border);
+  background: var(--panel);
+  /* the box grows upwards from the bottom, and Send stays on the line it started on rather than
+     stretching to whatever height the sentence has reached */
+  align-items: flex-end;
+}
+
+/*
+ * The box, which is a textarea that starts one line high and grows with what is put in it.
+ *
+ * One line held 27% of a 137-character sentence, and a sentence somebody spoke rather than typed
+ * is the long kind: dictation mishears, and what it heard has to be readable before it is sent.
+ * `AgentPanel.tsx` sets the height from `scrollHeight` on every keystroke; the ceiling is here,
+ * because a box that can eat the whole transcript is its own problem. Roughly five lines
+ */
+.agent-input {
+  --agent-input-line: 1.35em;
+  --agent-input-pad: 10px;
+  --agent-input-border: 1px;
+  flex: 1 1 auto;
+  min-width: 0;
+  font: inherit;
+  /* 16px exactly: iOS Safari zooms the viewport on focus for anything smaller, and a zoomed
+     viewport on a surface with a fixed tab bar is a layout nobody can get back out of */
+  font-size: 16px;
+  line-height: var(--agent-input-line);
+  padding: var(--agent-input-pad);
+  border-radius: 8px;
+  border: var(--agent-input-border) solid var(--control-border);
+  background: var(--bg);
+  color: inherit;
+  /* Five whole lines, computed from the line height and the padding rather than guessed at in
+     rem: a round ceiling cut the fifth line through the middle, which reads as a rendering fault
+     rather than as a box that has stopped growing. The border is in here because the box sizes
+     border-box, and leaving it out left the fifth line two pixels short of whole */
+  max-height: calc(
+    5 *
+    var(--agent-input-line) +
+    2 *
+    var(--agent-input-pad) +
+    2 *
+    var(--agent-input-border)
+  );
+  /* the drag handle would resize a box that already sizes itself, and against the grain of the
+     panel it sits in */
+  resize: none;
+  /* only once it has hit the ceiling above; below that there is never anything to scroll */
+  overflow-y: auto;
+}
+
+.agent-send {
+  font: inherit;
+  padding: 10px 16px;
+  min-height: 44px;
+  border-radius: 8px;
+  border: 1px solid var(--control-border);
+  background: var(--accent);
+  color: var(--accent-text);
+  cursor: pointer;
+}
+
+/* `aria-disabled` for the reason the chips use it: the press is what makes it busy, so a real
+   `disabled` takes the focus of whoever pressed it. `say` refuses an empty or busy send */
+.agent-send[aria-disabled='true'] {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* ===== the plants step ===== */
+
+/*
+ * One card per bed. The card is a static box and its heading is the one control that selects
+ * the bed: the heading's hit area is stretched over the whole card below, so a press anywhere on
+ * the card that is not one of its two other presses selects it, while the accessible tree still
+ * holds exactly one button for that. Colour and background are declared together on every
+ * state, for the reason .picker-option:hover documents; the hovered state is `.panel-hovered`
+ */
+.plants-bed {
+  position: relative;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: var(--panel);
+  color: var(--text);
+}
+
+.plants-bed[data-selected='true'] {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+/* restated here because the card's own background above would otherwise outrank the shared
+   rule at the top of the sheet, which is earlier in source order at the same specificity */
+.plants-bed.panel-hovered {
+  border-color: var(--accent);
+  color: var(--text);
+  background: var(--accent-bg);
+}
+
+.plants-bed-head {
+  font: inherit;
+  font-weight: 600;
+  text-align: left;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.plants-bed-head::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 6px;
+}
+
+/* on the button itself and not on the stretched pseudo-element: a ring drawn by `::after` is
+   invisible to anything that reads the focused element's own style, the contrast audit included */
+.plants-bed-head:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* the two presses and anything else that must stay pressable sit above the stretched heading */
+.plants-bed-actions,
+.plants-bed .notice {
+  position: relative;
+  z-index: 1;
+}
+
+.plants-bed-mix,
+.plants-bed-why {
+  margin: 0;
+}
+
+.plants-bed-why {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.plants-bed .badge {
+  align-self: flex-start;
+}
+
+/* the chips wrap as a list, on a phone as much as on a laptop: nothing here scrolls sideways */
+.like-list {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.like-chip {
+  font-size: 12px;
+  padding: 5px 10px;
+  min-height: 32px;
+}
+
+/* the tick and the strike are the visual state; the accessible name says "Prefer" or "Avoid"
+   in words, so nothing rests on the glyph */
+.like-chip[data-kind='prefer']::before,
+.like-chip[data-kind='require']::before {
+  content: '✓ ';
+}
+
+.like-chip[data-kind='avoid'],
+.like-chip[data-kind='exclude'] {
+  text-decoration: line-through;
+}
+
+/* a must-have set in the fold reads as the tick and a never as the strike, in the fold's own
+   colours for those kinds */
+.like-chip.pref-chip-active[data-kind='require'],
+.like-chip.pref-chip-active[data-kind='require']:hover,
+.like-chip.pref-chip-active[data-kind='require']:focus-visible,
+.like-chip.pref-chip-active[data-kind='require']:active {
+  background: var(--accent);
+  color: var(--accent-text);
+  border-color: var(--accent);
+}
+
+/* the likes chips at a thumb's size, after the chip rules above so the size wins the cascade */
+@media (pointer: coarse) {
+  .like-chip {
+    min-height: 40px;
+    padding: 8px 14px;
+  }
+}
+
+/* the replant sentence's slot: one line tall whether or not there is a sentence in it, and
+   invisible while there is not, so the chips under it never move when it fills */
+.plants-replant {
+  min-height: 30px;
+}
+
+.plants-replant:empty {
+  visibility: hidden;
+}
+
+/* the chip groups: a small heading over each row of chips, in the muted colour of a label */
+.like-group + .like-group {
+  margin-top: 8px;
+}
+
+.like-group-title {
+  margin: 0 0 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+/*
+ * The plan column across the window. The garden is hidden rather than unmounted, so the GL
+ * context and the camera survive the round trip; the column is capped at a reading width and
+ * centred, since a 1440px line of calendar prose is no easier on the eyes than a 380px one.
+ * Below 900px the tabs already take turns and the press is not offered
+ */
+@media (max-width: 900px) {
+  [data-testid='action-toolbar-wide'] {
+    display: none;
+  }
+}
+
+@media (min-width: 901px) {
+  .app[data-wide='true'] .stage {
+    grid-template-columns: 0 minmax(0, 1fr);
+  }
+
+  /* hidden in place, since a grid item taken out of flow would put the sidebar in the 0 column */
+  .app[data-wide='true'] .canvas-host {
+    visibility: hidden;
+    overflow: hidden;
+  }
+
+  .app[data-wide='true'] .sidebar {
+    border-left: 0;
+  }
+
+  .app[data-wide='true'] .stepper {
+    width: 100%;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+}
+
+/*
+ * The design on paper. The sheet is in the document all the time and the screen never shows
+ * it; printing hides everything else and lets it be the page, in black on white at a reading
+ * size, so "save as PDF" in any browser is the export the author asked for
+ */
+.print-plan {
+  display: none;
+}
+
+@media print {
+  html,
+  body {
+    height: auto;
+    overflow: visible;
+    background: #fff;
+  }
+
+  .app {
+    display: block;
+    height: auto;
+  }
+
+  .app > :not(.print-plan) {
+    display: none;
+  }
+
+  .print-plan {
+    display: block;
+    padding: 0;
+    color: #000;
+    background: #fff;
+    font:
+      11pt / 1.4 system-ui,
+      -apple-system,
+      'Segoe UI',
+      sans-serif;
+  }
+
+  .print-plan h1 {
+    margin: 0 0 6pt;
+    font-size: 18pt;
+  }
+
+  .print-plan h2 {
+    margin: 14pt 0 4pt;
+    padding-bottom: 2pt;
+    border-bottom: 1px solid #000;
+    font-size: 13pt;
+  }
+
+  .print-plan h3 {
+    margin: 8pt 0 2pt;
+    font-size: 11pt;
+  }
+
+  .print-plan p,
+  .print-plan li {
+    margin: 0 0 3pt;
+  }
+
+  .print-plan ul {
+    margin: 0;
+    padding-left: 14pt;
+  }
+
+  .print-plan table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .print-plan th,
+  .print-plan td {
+    padding: 2pt 6pt 2pt 0;
+    border-bottom: 1px solid #999;
+    text-align: left;
+    vertical-align: top;
+    font-weight: 400;
+  }
+
+  .print-plan th {
+    width: 22%;
+    font-weight: 600;
+  }
+
+  .print-bed,
+  .print-jobs {
+    break-inside: avoid;
+  }
+}

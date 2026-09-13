@@ -1,0 +1,150 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '24'
+  BUN_VERSION: '1.4.2'
+  # The agent tests refuse to skip where this is set, and it is set here and in `build:deploy`.
+  # Deliberately not inferred from `CI`: a builder that sets `CI` without fetching the weights
+  # would fail on a file nobody asked it for. Cloudflare Workers Builds was the example until
+  # 2026-09-09, when it turned out to fetch them too. See src/agent/model-presence.ts
+  REQUIRE_AGENT_MODEL: '1'
+
+jobs:
+  checks:
+    name: typecheck, lint, format, unit, build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+      # node stays: the `scripts/*.mjs` tools run under it. The unit suite runs under `bun test`
+      # alone
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - run: bun install --frozen-lockfile
+
+      # The agent's sentence-embedding weights: 58 MB, gitignored, and not optional here. `bun
+      # run test` now hard-fails without them rather than skipping eight tests in silence (see
+      # `src/agent/model-presence.ts`), and the e2e webServer builds with `VITE_AGENT=on` on
+      # purpose, so an absent model is six failing specs and a suite that takes five times as
+      # long. Cached because the alternative is depending on huggingface.co on every run
+      - name: Cache the agent model
+        id: agent-model
+        uses: actions/cache@v4
+        with:
+          path: models
+          key: agent-model-${{ runner.os }}-${{ hashFiles('scripts/fetch-agent-model.mjs', 'bun.lock') }}
+      - if: steps.agent-model.outputs.cache-hit != 'true'
+        run: bun run fetch-agent-model
+
+      - name: Generated artifacts match their sources
+        run: |
+          bun run generate
+          # the whole crate source directory rather than each generated table by name: `bun run
+          # generate` is the only thing that has run, so anything it changed in there is its own
+          # output, and a table added later is covered without anyone remembering to come back
+          # here. `data/` is the neutral crop catalogue, which has the same drift risk
+          git diff --exit-code -- src/types/citation-ids.generated.ts docs/CITATIONS.md crates/agv-sim/src/ data/ || {
+            echo "::error::bun run generate changed committed output; run it locally and commit the result"
+            exit 1
+          }
+
+      - run: bun run typecheck
+      - run: bun run lint
+      - name: Format and import order
+        run: bunx biome check .
+      # The physics core is not optional any more: the TypeScript implementations were deleted, so
+      # `bun run test` and `bun run build` both fail without a built wasm rather than
+      # degrading. Both scripts run `bun run rust:wasm` themselves; the toolchain is what CI
+      # has to supply
+      - run: rustup target add wasm32-unknown-unknown
+      - run: bun run test
+        env:
+          REQUIRE_RUST_CORE: '1'
+      - run: bun run build
+
+  rust:
+    name: rust core (fmt, clippy, test, wasm)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - run: rustup target add wasm32-unknown-unknown
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            crates/agv-sim/target
+          key: cargo-${{ runner.os }}-${{ hashFiles('crates/agv-sim/Cargo.toml', 'crates/agv-sim/src/**') }}
+      # The crate has no dependencies on purpose (see its Cargo.toml), so there is nothing to
+      # install and these run straight off a checkout
+      - run: cargo fmt --manifest-path crates/agv-sim/Cargo.toml --check
+      - run: cargo clippy --manifest-path crates/agv-sim/Cargo.toml --all-targets -- -D warnings
+      - run: cargo test --manifest-path crates/agv-sim/Cargo.toml
+      - run: cargo build --release --manifest-path crates/agv-sim/Cargo.toml --target wasm32-unknown-unknown
+
+  e2e-functional:
+    # macOS, because this suite runs on ANGLE's Metal backend.
+    #
+    # This ran on ubuntu-latest and took 2h42m to fail 25 tests across 13 spec files. The cause
+    # was `--use-angle=metal` in playwright.config.ts naming a backend Linux does not have;
+    # pointing it at SwiftShader instead took the same suite to 25m and 9 failures, measured at
+    # --workers=2 to approximate a 4-core runner. Those last 9 all pass on Metal in 18 s. They
+    # are not broken: they wait on a camera move, a settled scene, or a legible frame, and
+    # software rasterisation cannot deliver one in time. Raising their timeouts would gate the
+    # render on a run whose stability is marginal by construction, which is what the `visual`
+    # project's note in playwright.config.ts already refuses to do.
+    #
+    # So give the suite the GPU it was written against. The Linux path in `functionalGlArgs`
+    # stays correct for anyone running there; it is simply not what CI should use.
+    name: e2e (functional, macos)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+      # node stays: the `scripts/*.mjs` tools run under it. The unit suite runs under `bun test`
+      # alone
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - run: bun install --frozen-lockfile
+
+      # No agent model here any more. The webServer stopped building with `VITE_AGENT=on` on
+      # 2026-09-07, so nothing in this job loads the weights: `agent.spec.ts` skips itself and
+      # the agent halves of `a11y` and `contrast` are guarded. Put this step back, with the
+      # cache, when the flag goes back on; `playwright.config.ts` says so at the flag
+      - id: playwright
+        run: echo "version=$(bunx playwright --version | cut -d' ' -f2)" >> "$GITHUB_OUTPUT"
+      - id: browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/Library/Caches/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}
+      # No `--with-deps` and no `install-deps`: those install Linux system packages and macOS
+      # needs none of it
+      - if: steps.browsers.outputs.cache-hit != 'true'
+        run: bunx playwright install chromium
+
+      - run: bunx playwright test --project=functional --forbid-only --trace=retain-on-failure
+
+      - if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-functional
+          path: |
+            playwright-report
+            test-results
+          retention-days: 14

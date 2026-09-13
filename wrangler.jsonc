@@ -1,0 +1,95 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "agrivoltaic-garden-designer",
+  "main": "workers/entry.ts",
+  "compatibility_date": "2026-07-30",
+
+  // one Worker serves the built SPA and the proxy, so `/api/proxy/*` is same-origin with
+  // the app and `WORKER_PROXY_BASE` in src/data/http.ts stays a relative path. One Worker replaces
+  // a separate Pages project plus a routed Worker
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    // without this the SPA fallback would answer /api/proxy/* with index.html
+    "run_worker_first": ["/api/proxy/*"]
+  },
+
+  "observability": { "enabled": true },
+
+  // Workers AI, which reads a typed sentence for the conversational agent at /api/proxy/helper.
+  // None of this, `ratelimits` or `kv_namespaces` is inherited by a named environment, which is
+  // why all three are repeated under env.production below
+  "ai": { "binding": "AI" },
+
+  // Two per-address limits. HELPER_LIMIT stops one caller spending the day's free Neurons in a
+  // minute: 20 helper turns. PROXY_LIMIT is the same guard on every proxied route: 120 upstream
+  // calls a minute, asked after both cache tiers have missed so a hit costs nothing (routes.ts).
+  // `namespace_id` is any string unique within the account, and `period` accepts only 10 or 60
+  "ratelimits": [
+    { "name": "HELPER_LIMIT", "namespace_id": "1001", "simple": { "limit": 20, "period": 60 } },
+    { "name": "PROXY_LIMIT", "namespace_id": "1002", "simple": { "limit": 120, "period": 60 } }
+  ],
+
+  // The global cache tier behind the per-data-centre Cache API: one KV namespace, keyed the same
+  // way, holding 2xx upstream answers for their route's TTL with the content type as metadata.
+  // Free tier: 1,000 writes and 100,000 reads a day, and a write happens only on a miss that
+  // reached the upstream. The code runs without the binding, on the Cache API alone, which is
+  // what the tests do
+  "kv_namespaces": [{ "binding": "WEATHER_CACHE", "id": "18b49ed5861647a3ba19cdef995ed9cb" }],
+
+  // Both were being defaulted, and wrangler warned about it on every deploy. Stated here so the
+  // deployment is what this file says it is: the app IS served from workers.dev, since no custom
+  // domain is configured, and per-version preview URLs are off because they would publish every
+  // deployed version at its own public address
+  "workers_dev": true,
+  "preview_urls": false,
+
+  "vars": {
+    "PVGIS_HOST": "re.jrc.ec.europa.eu",
+    // NREL became the National Laboratory of the Rockies and developer.nrel.gov was retired on
+    // 29 May 2026. A var and not a constant, which is what made this cutover a config change
+    // (Decision Record 9). The PATHS moved too, and those live in workers/proxy/routes.ts
+    "NSRDB_HOST": "developer.nlr.gov",
+    // local development only. `wrangler dev` serves app and proxy on one origin, so this
+    // matters solely when a vite dev server on another port calls the worker directly
+    "ALLOWED_ORIGINS": "http://localhost:5173,http://127.0.0.1:5173,http://localhost:4173"
+  },
+
+  "env": {
+    "production": {
+      // Stated rather than derived, for two reasons. Workers Builds matches the dashboard Worker
+      // against the NAME in this file, and `--env production` would otherwise derive
+      // `agrivoltaic-garden-designer-production` from the top-level name, which is the mismatch
+      // its docs warn will fail the build. And the suffix is not wanted: it is in the workers.dev
+      // hostname. The named environment stays, because it is what keeps ALLOWED_ORIGINS empty in
+      // production while local `wrangler dev` keeps its localhost origins from the top level
+      "name": "agrivoltaic-garden-designer",
+      // repeated rather than inherited: the config schema says none of these bindings is carried
+      // down into a named environment, so leaving them off here would deploy production without
+      // them and the helper's readiness probe would answer 404 forever
+      "ai": { "binding": "AI" },
+      "ratelimits": [
+        { "name": "HELPER_LIMIT", "namespace_id": "1001", "simple": { "limit": 20, "period": 60 } },
+        { "name": "PROXY_LIMIT", "namespace_id": "1002", "simple": { "limit": 120, "period": 60 } }
+      ],
+      "kv_namespaces": [{ "binding": "WEATHER_CACHE", "id": "18b49ed5861647a3ba19cdef995ed9cb" }],
+      "vars": {
+        "PVGIS_HOST": "re.jrc.ec.europa.eu",
+        "NSRDB_HOST": "developer.nlr.gov",
+        // deliberately empty: the deployed frontend is same-origin with the proxy and so
+        // sends no Origin header, meaning no cross-origin caller needs to be allowed.
+        // Add real origins here only if the frontend is ever hosted elsewhere
+        "ALLOWED_ORIGINS": ""
+      }
+      // to serve from a custom domain, add the zone here:
+      // "routes": [{ "pattern": "garden.example.org", "custom_domain": true }]
+    }
+  }
+
+  // NSRDB_API_KEY, NSRDB_EMAIL and EIA_API_KEY are secrets, never vars: `bun run secret:nsrdb`,
+  // `bun run secret:nsrdb-email` and `bun run secret:eia` (wrangler secret put). None may appear
+  // in this file, in .dev.vars committed to git, or in the client bundle. EIA_API_KEY is the only
+  // optional one: without it the retail electricity price is null, which is the answer every
+  // garden outside the United States gets anyway, and nothing else degrades
+}
