@@ -1,0 +1,12 @@
+{
+  // The worker's tests, and only the tests. Split out so `bun-types` can declare `bun:test` here
+  // without putting `Bun`, `process` and the rest of node's globals in scope for the worker code
+  // itself, which has to compile as a WebWorker
+  "extends": "./tsconfig.worker.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.worker-tests.tsbuildinfo",
+    "types": ["bun-types"]
+  },
+  "include": ["workers/**/*.test.ts"],
+  "exclude": []
+}

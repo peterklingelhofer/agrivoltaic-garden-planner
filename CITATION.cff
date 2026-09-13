@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: If you use this software, cite it with the metadata below.
+type: software
+title: Agrivoltaic garden designer
+authors:
+  - family-names: Klingelhofer
+    given-names: Peter
+version: 0.0.0
+date-released: '2026-09-12'
+repository-code: https://github.com/peterklingelhofer/agrivoltaic-garden-designer
+url: https://garden.peterklingelhofer.com
+license: Apache-2.0
+abstract: >-
+  A planning tool for a vegetable garden and the solar panels above it, together, for a real
+  address: it looks up the site's sun, weather and soil, simulates how much light reaches the
+  ground once panels are over it, and computes which crops still suit each bed and what to
+  plant when.
