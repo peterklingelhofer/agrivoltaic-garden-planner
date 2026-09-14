@@ -1647,6 +1647,66 @@ lookup slow enough to lose. A visitor who typed Mumbai quickly got Amherst's gro
 Mumbai's weather. The store's lookup carries a token now, and an answer that lands after a
 later lookup began is dropped.
 
-**Not done.** Drawing a house or a tree, which is what would replace the three-answer share;
-a chill figure for olive flowering, which the ECOCROP sheet does not carry; and the shipped
-examples, which are re-baked when the catalogue settles.
+**Not done.** Drawing a house or a tree, which is what would replace the three-answer share; its
+design is Record 26. The olive row now carries a chill figure, 150 hours, cited to De Melo-Abreu
+et al. 2004 and Sahli et al. 2012, and the three example gardens were re-baked against the 182-row
+catalogue: Amherst's beds 2 and 4 gained teff, and Bergen's bed 3 traded sorrel for good king
+henry.
+
+## 26. A house or a tree is drawn on the ground, and the bake shades with it
+
+**Decided 2026-09-13, for the next build.** The three-answer surroundings share of Record 25 dims
+every bed by the same fraction whatever stands where. It stands in for what the bake does not
+hold: the house next door, the shed, the tree at the fence. This record fixes what replaces it,
+so the build can be checked against a page.
+
+**What is drawn.** Two kinds of obstruction, each a box. A house is a rectangle on the ground with
+a wall height, opaque. A tree is a crown box between a canopy base height and a top, on a trunk
+the bake ignores, with one canopy transmittance. A box may stand anywhere on the 240 m ground the
+scene draws, inside the boundary or outside it, because the building that shades a garden is
+mostly next door. It is added from the ground step beside the surroundings question ("Add a
+house", "Add a tree"), then moved and turned in Move mode the way a row of panels is, a corner
+drag keeping the rectangle (Record 22). Defaults, this app's own and editable on the object: a
+house 8 by 10 m and 6 m to the eaves; a tree crown 5 by 5 m from 2 m up to 7 m.
+
+**How the bake sees it.** A box becomes five quads, the top and four walls, appended to the list
+the panels already travel in: the CPU reference kernel, the Rust kernel it is held to, and the
+WebGL2 shader's ray-quad loop. The sky-view factor and the diffuse term read the same visibility
+test as the beam, so a wall darkens all three at once. Both backends already treat a panel as
+opaque (the kernel's transmittance argument is passed 0 everywhere the app calls it), so a house
+needs no new physics, only more quads; the layout search sees its shadow because it reads the
+baked raster. The tree is the one new thing: every quad carries a transmittance, a blocked sample
+keeps the smallest transmittance among the quads that block it, and a ray through both faces of
+one crown counts once. Panels carry 0, so nothing already measured moves. The house ships first
+and the tree second, since the tree needs all three kernels changed and the house needs none.
+
+**What it replaces.** While a plot has no obstruction the share of Record 25 applies as before.
+Once one is drawn the share is not applied at all, the drawn geometry being the answer, and the
+light step says which of the two is in force. The question stays on the ground step until a
+round of scripted runs has drawn one. Then it goes, with its share table, the agent's words for
+it, and its unsourced claim on the sources step.
+
+**Where it lives.** `GardenPlot.obstructions`, schema 4 to 5 with an empty list for every saved
+garden, a decoder branch beside the arrays', and `lightGeometryKey` carrying it so a moved house
+re-bakes. The scene draws the same box the bake shades with, and a trunk under a crown, so the
+picture holds nothing the bake does not (Record 14.5); the box casts the scene's live shadow the
+way a panel does. The three example gardens ship none, so their rasters, `exampleGridMatches` and
+the overlay baseline stay where they are.
+
+**The figures and their sources.** A house has no figure. A tree's canopy transmittance is one
+cited number, read before the tree ships; the candidates are Heisler 1986 (irradiance under
+single trees, Urban Ecology 9) and Canham et al. 1994 (crown transmission by species, Canadian
+Journal of Forest Research 24). Until it is cited it is declared on the sources step the way the
+share table is. A leafless winter crown is a later step, and the site's frost dates give the
+window.
+
+**How it is checked.** One box fixture in `rust-geometry-parity.test.ts` and `webgl2.test.ts`, so
+the three kernels agree on a house before anything else is built. A crown at 0.3 over a panel at 0
+gives 0, and over open ground 0.3. The sky-view factor reads lower beside a wall than clear of it.
+`probe-bake-backends.mjs` runs after the shader changes. A functional spec drops a house south of
+bed 1 on the example and reads the bed's share of open sky falling and tomato leaving Recommended.
+A saved schema 4 garden round-trips with an empty list.
+
+**Cost.** Four to five days: the kernels, the shader and the Rust with their parity fixtures; the
+type, the decoder, the migration and the geometry key; the ground step's controls, the scene
+meshes and Move mode; the copy, the tests and the spec.

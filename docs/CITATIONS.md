@@ -1,6 +1,6 @@
 # Citation corpus
 
-212 sources (149 crossref-verified, 1 datacite-verified, 16 unverified, 46 url-verified). Machine-readable companion: [`CITATIONS.csl.json`](./CITATIONS.csl.json) (CSL-JSON).
+214 sources (151 crossref-verified, 1 datacite-verified, 16 unverified, 46 url-verified). Machine-readable companion: [`CITATIONS.csl.json`](./CITATIONS.csl.json) (CSL-JSON).
 Verification pass completed 2026-07-30 against the Crossref REST API, the DataCite REST API, and direct
 fetches of authoritative publisher, standards-body and government URLs.
 
@@ -44,24 +44,24 @@ Physics, geodata and software sources carry `null`: the scheme does not apply to
 
 | Verification | n |
 |---|---|
-| crossref-verified | 149 |
+| crossref-verified | 151 |
 | datacite-verified | 1 |
 | unverified | 16 |
 | url-verified | 46 |
-| **total** | **212** |
+| **total** | **214** |
 
 | Access level | n |
 |---|---|
 | open-access | 62 |
-| paywalled | 105 |
+| paywalled | 107 |
 | public-domain | 44 |
 | public-domain-with-conditions | 1 |
 
 | Evidence tier | n |
 |---|---|
-| A | 35 |
+| A | 36 |
 | B | 60 |
-| C | 29 |
+| C | 30 |
 | null (not applicable) | 88 |
 
 ---
@@ -810,7 +810,7 @@ Tregenza, P. R.. (1987). *Subdivision of the sky hemisphere for luminance measur
 
 ## Horticulture & crop physiology
 
-79 sources.
+81 sources.
 
 #### `adhikary2025-clubroot-review`
 
@@ -972,6 +972,16 @@ University of Hawaii Cooperative Extension Service. (1998). *Upland Taro*. Colle
   - verbatim: 'Upland taro is ready for harvest 8-10 months after planting'
   - verbatim: 'best results are obtained on deep, well drained, friable loams with pH 5.5-6.5'; 'It is best adapted to a warm, moist environment. Evenly distributed rainfall is ideal'
 - **Caveat:** Home-garden guidance for Hawaii; gives no temperature figures.
+
+#### `de-melo-abreu2004-olive-chilling`
+
+De Melo-Abreu, J. P.; Barranco, D.; Cordeiro, A. M.; Tous, J.; Rogado, B. M.; Villalobos, F. J.. (2004). *Modelling olive flowering date using chilling for dormancy release and thermal time*. Agricultural and Forest Meteorology 125: 117-127
+
+- DOI: [10.1016/j.agrformet.2004.02.009](https://doi.org/10.1016/j.agrformet.2004.02.009)
+- Verification: Crossref-verified | Access: paywalled, evidence tier **A**
+- Backs:
+  - the 150 to 300 hour chilling requirement below 7 C the study modelled for its olive cultivars
+- **Caveat:** Crossref records only one author, family 'DEMELOABREU' given 'J', with no spacing; the paper is cited everywhere as De Melo-Abreu, Barranco, Cordeiro, Tous, Rogado and Villalobos.
 
 #### `dou2018-basil-dli`
 
@@ -1460,6 +1470,15 @@ Runkle, Erik. (2011). *Lighting Greenhouse Vegetables*. GPN (Greenhouse Product 
   - the 1-percent rule, verbatim: 'As a general rule, a 1 percent increase in DLI increases production by 1 percent'
   - tomato develops chlorotic leaves under continuous light, so four to six hours of darkness is suggested each night
 - **Caveat:** THIS IS THE REPLACEMENT FOR THE FALSE TOMATO DLI CITATION, and it does not give 22. It is the only Extension-authored source located that states a tomato/vine-crop DLI minimum, and the number is 15 (preferably >20), not 22. The 'at least 22 mol/m2/d' figure in the horticulture document is verbatim ReduSystems vendor marketing and has no source in this corpus or in the literature; it must be deleted, not re-cited. SCOPE: greenhouse production of vine crops, lumped as a group; the column names tomato, pepper and cucumber together and does not resolve per-species numbers. It is a trade-magazine column, not peer reviewed, and it cites no primary source for the 15/20 figures. Tier C. Must not reach a hard filter.
+
+#### `sahli2012-chemlali-olive-chilling`
+
+Sahli, A.; Dakhlaoui, H.; Aïachi Mezghani, M.; Bornaz, S.; Aounallah, M. K.; Hellali, R.. (2012). *Estimation of chilling and heat requirement of 'Chemlali' olive cultivar and its use to predict flowering date*. Acta Horticulturae 155-164
+
+- DOI: [10.17660/ActaHortic.2012.949.21](https://doi.org/10.17660/ActaHortic.2012.949.21)
+- Verification: Crossref-verified | Access: paywalled, evidence tier **C**
+- Backs:
+  - the chilling and heat requirement estimated for the 'Chemlali' olive cultivar, cited here for its summary of De Melo-Abreu et al.'s 150 to 300 hour range
 
 #### `shelton2006-trap-cropping`
 

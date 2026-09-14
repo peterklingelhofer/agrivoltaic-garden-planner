@@ -1,21 +1,21 @@
 {
   "version": 4,
-  "savedAtUtcMillis": 1789183455642,
+  "savedAtUtcMillis": 1789350554160,
   "sceneTimeUtcMillis": 1723491000000,
   "example": {
     "label": "Example agrivoltaic garden, Amherst, Massachusetts",
-    "generatedAtUtc": "2026-09-12T03:24:15.642Z",
+    "generatedAtUtc": "2026-09-14T01:49:14.160Z",
     "generator": "scripts/bake-example-garden.mjs",
     "siteLabel": "Amherst, Massachusetts",
     "weather": "open-meteo typical meteorological year, 8760 hours",
     "backend": "tregenza-mf1",
     "targetCellSizeM": 0.4,
-    "bakeElapsedMs": 1745,
+    "bakeElapsedMs": 1651,
     "quantisationErrorMolM2Day": 0.004512786865234375,
     "notes": [
       "70 x 90 cells at 0.4 m, baked on the CPU reference backend",
       "1255 binned sun directions, tregenza-mf1 sky, 2 sub-steps per hour",
-      "9 plantings, each ranked against this bake and derived through derivePlanting"
+      "11 plantings, each ranked against this bake and derived through derivePlanting"
     ]
   },
   "design": {
@@ -190,7 +190,7 @@
               "sowDay": 132,
               "harvestStartDay": 277,
               "harvestEndDay": 291,
-              "plantCount": 15
+              "plantCount": 10
             },
             {
               "id": "bed-2:clover-crimson:93",
@@ -202,7 +202,19 @@
               "sowDay": 93,
               "harvestStartDay": 183,
               "harvestEndDay": 197,
-              "plantCount": 792
+              "plantCount": 527
+            },
+            {
+              "id": "bed-2:teff:130",
+              "bedId": "bed-2",
+              "cropId": "teff",
+              "cultivarId": null,
+              "role": "target-crop",
+              "tier": "mid-canopy",
+              "sowDay": 130,
+              "harvestStartDay": 263,
+              "harvestEndDay": 277,
+              "plantCount": 150
             }
           ]
         },
@@ -328,7 +340,7 @@
               "sowDay": 132,
               "harvestStartDay": 277,
               "harvestEndDay": 291,
-              "plantCount": 15
+              "plantCount": 10
             },
             {
               "id": "bed-4:clover-crimson:93",
@@ -340,7 +352,19 @@
               "sowDay": 93,
               "harvestStartDay": 183,
               "harvestEndDay": 197,
-              "plantCount": 792
+              "plantCount": 527
+            },
+            {
+              "id": "bed-4:teff:130",
+              "bedId": "bed-4",
+              "cropId": "teff",
+              "cultivarId": null,
+              "role": "target-crop",
+              "tier": "mid-canopy",
+              "sowDay": 130,
+              "harvestStartDay": 263,
+              "harvestEndDay": 277,
+              "plantCount": 150
             }
           ]
         }

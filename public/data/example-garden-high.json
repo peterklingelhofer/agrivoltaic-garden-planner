@@ -1,20 +1,20 @@
 {
   "version": 4,
-  "savedAtUtcMillis": 1789183505395,
+  "savedAtUtcMillis": 1789350646162,
   "sceneTimeUtcMillis": 1723491000000,
   "example": {
     "label": "Example agrivoltaic garden, Amherst, Massachusetts",
-    "generatedAtUtc": "2026-09-12T03:25:05.395Z",
+    "generatedAtUtc": "2026-09-14T01:50:46.162Z",
     "generator": "scripts/bake-example-garden.mjs",
     "siteLabel": "Bergen, Norway",
-    "weather": "nasa-power typical meteorological year, 8760 hours",
+    "weather": "open-meteo typical meteorological year, 8760 hours",
     "backend": "tregenza-mf1",
     "targetCellSizeM": 0.4,
-    "bakeElapsedMs": 1631,
-    "quantisationErrorMolM2Day": 0.003078460693359375,
+    "bakeElapsedMs": 1590,
+    "quantisationErrorMolM2Day": 0.0032958984375,
     "notes": [
       "70 x 90 cells at 0.4 m, baked on the CPU reference backend",
-      "1166 binned sun directions, tregenza-mf1 sky, 2 sub-steps per hour",
+      "1117 binned sun directions, tregenza-mf1 sky, 2 sub-steps per hour",
       "9 plantings, each ranked against this bake and derived through derivePlanting"
     ]
   },
@@ -100,37 +100,37 @@
           "waterHarvesting": [],
           "plantings": [
             {
-              "id": "bed-1:sorrel:108",
+              "id": "bed-1:sorrel:91",
               "bedId": "bed-1",
               "cropId": "sorrel",
               "cultivarId": null,
               "role": "target-crop",
               "tier": "herb-ground",
-              "sowDay": 108,
+              "sowDay": 91,
               "harvestStartDay": 244,
               "harvestEndDay": 364,
               "plantCount": 24
             },
             {
-              "id": "bed-1:aronia:108",
+              "id": "bed-1:aronia:91",
               "bedId": "bed-1",
               "cropId": "aronia",
               "cultivarId": null,
               "role": "target-crop",
               "tier": "mid-canopy",
-              "sowDay": 108,
+              "sowDay": 91,
               "harvestStartDay": 244,
               "harvestEndDay": 265,
               "plantCount": 1
             },
             {
-              "id": "bed-1:comfrey:108",
+              "id": "bed-1:comfrey:91",
               "bedId": "bed-1",
               "cropId": "comfrey",
               "cultivarId": null,
               "role": "target-crop",
               "tier": "shrub",
-              "sowDay": 108,
+              "sowDay": 91,
               "harvestStartDay": 244,
               "harvestEndDay": 274,
               "plantCount": 3
@@ -181,25 +181,25 @@
           "waterHarvesting": [],
           "plantings": [
             {
-              "id": "bed-2:currant-red:108",
+              "id": "bed-2:currant-red:91",
               "bedId": "bed-2",
               "cropId": "currant-red",
               "cultivarId": null,
               "role": "target-crop",
               "tier": "shrub",
-              "sowDay": 108,
+              "sowDay": 91,
               "harvestStartDay": 244,
               "harvestEndDay": 265,
               "plantCount": 4
             },
             {
-              "id": "bed-2:sorrel:108",
+              "id": "bed-2:sorrel:91",
               "bedId": "bed-2",
               "cropId": "sorrel",
               "cultivarId": null,
               "role": "target-crop",
               "tier": "herb-ground",
-              "sowDay": 108,
+              "sowDay": 91,
               "harvestStartDay": 244,
               "harvestEndDay": 364,
               "plantCount": 50
@@ -250,28 +250,28 @@
           "waterHarvesting": [],
           "plantings": [
             {
-              "id": "bed-3:sorrel:108",
+              "id": "bed-3:good-king-henry:91",
               "bedId": "bed-3",
-              "cropId": "sorrel",
+              "cropId": "good-king-henry",
               "cultivarId": null,
               "role": "target-crop",
               "tier": "herb-ground",
-              "sowDay": 108,
+              "sowDay": 91,
               "harvestStartDay": 244,
-              "harvestEndDay": 364,
-              "plantCount": 57
+              "harvestEndDay": 274,
+              "plantCount": 32
             },
             {
-              "id": "bed-3:lemon-balm:108",
+              "id": "bed-3:lemon-balm:91",
               "bedId": "bed-3",
               "cropId": "lemon-balm",
               "cultivarId": null,
               "role": "target-crop",
               "tier": "shrub",
-              "sowDay": 108,
+              "sowDay": 91,
               "harvestStartDay": 244,
               "harvestEndDay": 364,
-              "plantCount": 33
+              "plantCount": 32
             }
           ]
         },
@@ -319,25 +319,25 @@
           "waterHarvesting": [],
           "plantings": [
             {
-              "id": "bed-4:currant-red:108",
+              "id": "bed-4:currant-red:91",
               "bedId": "bed-4",
               "cropId": "currant-red",
               "cultivarId": null,
               "role": "target-crop",
               "tier": "shrub",
-              "sowDay": 108,
+              "sowDay": 91,
               "harvestStartDay": 244,
               "harvestEndDay": 265,
               "plantCount": 4
             },
             {
-              "id": "bed-4:sorrel:108",
+              "id": "bed-4:sorrel:91",
               "bedId": "bed-4",
               "cropId": "sorrel",
               "cultivarId": null,
               "role": "target-crop",
               "tier": "herb-ground",
-              "sowDay": 108,
+              "sowDay": 91,
               "harvestStartDay": 244,
               "harvestEndDay": 364,
               "plantCount": 50

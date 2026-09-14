@@ -89,6 +89,115 @@
     }
   },
   {
+    "id": "de-melo-abreu2004-olive-chilling",
+    "type": "article-journal",
+    "title": "Modelling olive flowering date using chilling for dormancy release and thermal time",
+    "author": [
+      {
+        "family": "De Melo-Abreu",
+        "given": "J. P."
+      },
+      {
+        "family": "Barranco",
+        "given": "D."
+      },
+      {
+        "family": "Cordeiro",
+        "given": "A. M."
+      },
+      {
+        "family": "Tous",
+        "given": "J."
+      },
+      {
+        "family": "Rogado",
+        "given": "B. M."
+      },
+      {
+        "family": "Villalobos",
+        "given": "F. J."
+      }
+    ],
+    "container-title": "Agricultural and Forest Meteorology",
+    "volume": "125",
+    "issue": "1-2",
+    "page": "117-127",
+    "publisher": "Elsevier",
+    "issued": {
+      "date-parts": [
+        [
+          2004
+        ]
+      ]
+    },
+    "DOI": "10.1016/j.agrformet.2004.02.009",
+    "URL": "https://doi.org/10.1016/j.agrformet.2004.02.009",
+    "custom": {
+      "group": "horticulture",
+      "verification": "crossref-verified",
+      "accessLevel": "paywalled",
+      "evidenceTier": "A",
+      "backsClaims": [
+        "the 150 to 300 hour chilling requirement below 7 C the study modelled for its olive cultivars"
+      ],
+      "caveat": "Crossref records only one author, family 'DEMELOABREU' given 'J', with no spacing; the paper is cited everywhere as De Melo-Abreu, Barranco, Cordeiro, Tous, Rogado and Villalobos."
+    }
+  },
+  {
+    "id": "sahli2012-chemlali-olive-chilling",
+    "type": "article-journal",
+    "title": "Estimation of chilling and heat requirement of 'Chemlali' olive cultivar and its use to predict flowering date",
+    "author": [
+      {
+        "family": "Sahli",
+        "given": "A."
+      },
+      {
+        "family": "Dakhlaoui",
+        "given": "H."
+      },
+      {
+        "family": "Aïachi Mezghani",
+        "given": "M."
+      },
+      {
+        "family": "Bornaz",
+        "given": "S."
+      },
+      {
+        "family": "Aounallah",
+        "given": "M. K."
+      },
+      {
+        "family": "Hellali",
+        "given": "R."
+      }
+    ],
+    "container-title": "Acta Horticulturae",
+    "issue": "949",
+    "page": "155-164",
+    "publisher": "International Society for Horticultural Science",
+    "issued": {
+      "date-parts": [
+        [
+          2012
+        ]
+      ]
+    },
+    "DOI": "10.17660/ActaHortic.2012.949.21",
+    "URL": "https://doi.org/10.17660/ActaHortic.2012.949.21",
+    "custom": {
+      "group": "horticulture",
+      "verification": "crossref-verified",
+      "accessLevel": "paywalled",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "the chilling and heat requirement estimated for the 'Chemlali' olive cultivar, cited here for its summary of De Melo-Abreu et al.'s 150 to 300 hour range"
+      ],
+      "caveat": null
+    }
+  },
+  {
     "id": "adhikary2025-clubroot-review",
     "type": "article-journal",
     "title": "Clubroot Disease: 145 Years Post-Discovery, Challenges, and Opportunities",
