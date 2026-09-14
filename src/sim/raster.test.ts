@@ -217,6 +217,7 @@ const plot = (clearanceM: number, nameplateKw: number): GardenPlot => ({
   boundary: square(0, 0, 8),
   northOffsetDeg: 0 as Degrees,
   originOffsetM: { xM: 0 as Meters, yM: 0 as Meters },
+  obstructions: [],
   beds: [
     {
       id: bedId('bed-1'),

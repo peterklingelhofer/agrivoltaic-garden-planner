@@ -269,6 +269,7 @@ fn a_sun_at_the_horizon_leaves_the_ground_dark() {
             z: 0.0,
         },
         0.0,
+        &[],
         2,
     );
     assert!(raster.iter().all(|v| *v == 0.0));
@@ -320,6 +321,7 @@ fn transmittance_sets_what_a_shadowed_cell_still_receives() {
             z: 1.0,
         },
         0.3,
+        &[],
         2,
     );
     // the center cell is wholly under the panel, a corner cell is wholly outside it
@@ -327,6 +329,84 @@ fn transmittance_sets_what_a_shadowed_cell_still_receives() {
     let corner = raster[0];
     assert!((f64::from(center) - 0.3).abs() < 1e-6, "center {center}");
     assert!((f64::from(corner) - 1.0).abs() < 1e-6, "corner {corner}");
+}
+
+/// Two faces of one crown stacked over the same ground cell: the smaller of their transmittances
+/// wins, so a ray through both is counted once
+#[test]
+fn per_quad_transmittance_keeps_the_smallest_that_blocks_a_sample() {
+    let lower = vec![
+        Vec3M {
+            x_m: -4.0,
+            y_m: -4.0,
+            z_m: 2.0,
+        },
+        Vec3M {
+            x_m: 4.0,
+            y_m: -4.0,
+            z_m: 2.0,
+        },
+        Vec3M {
+            x_m: 4.0,
+            y_m: 4.0,
+            z_m: 2.0,
+        },
+        Vec3M {
+            x_m: -4.0,
+            y_m: 4.0,
+            z_m: 2.0,
+        },
+    ];
+    let upper = vec![
+        Vec3M {
+            x_m: -4.0,
+            y_m: -4.0,
+            z_m: 3.0,
+        },
+        Vec3M {
+            x_m: 4.0,
+            y_m: -4.0,
+            z_m: 3.0,
+        },
+        Vec3M {
+            x_m: 4.0,
+            y_m: 4.0,
+            z_m: 3.0,
+        },
+        Vec3M {
+            x_m: -4.0,
+            y_m: 4.0,
+            z_m: 3.0,
+        },
+    ];
+    let corners = vec![lower, upper];
+    let grid = GridSpec {
+        extent: Extent2D {
+            min_x_m: -10.0,
+            min_y_m: -10.0,
+            max_x_m: 10.0,
+            max_y_m: 10.0,
+        },
+        cell_size_m: 1.0,
+        cols: 20,
+        rows: 20,
+    };
+    // sun overhead, so both quads' shadows land exactly on their shared footprint. The scalar is
+    // 1.0 so only the per-quad slice below can be the source of any shade
+    let raster = beam_visibility_raster(
+        &grid,
+        &corners,
+        UnitVec3 {
+            x: 0.0,
+            y: 0.0,
+            z: 1.0,
+        },
+        1.0,
+        &[0.6, 0.3],
+        2,
+    );
+    let center = raster[10 * 20 + 10];
+    assert!((f64::from(center) - 0.3).abs() < 1e-6, "center {center}");
 }
 
 /// With the sun in the plane of the rows and low enough, an infinite row shades the whole pitch.

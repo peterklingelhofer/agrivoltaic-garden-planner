@@ -1,7 +1,7 @@
 import type { GardenPlot } from '../types/garden'
 import { groundAlbedoOf } from '../types/ground'
 import type { BedLight, DliRaster, RasterQuality, TimeWindowSpec } from '../types/light'
-import type { PanelPolygon } from '../types/pv'
+import type { Occluder } from '../types/pv'
 import type { Site } from '../types/site'
 import type { Degrees, EpochMillis, Fraction, Meters } from '../types/units'
 import type { SkySubdivision, TmySeries } from '../types/weather'
@@ -15,6 +15,7 @@ import { decompose, selectDecompositionModel } from './decomposition'
 import { ensurePhysicsCore } from './rust-core-load'
 import { gridForExtent, panelSnapshot, sceneExtent } from './geometry'
 import { at, RAD_TO_DEG } from './math'
+import { leafOnMonthsFor, obstructionQuads } from './obstruction'
 import { applyInterreflection, dliRasterFromAccumulation } from './raster'
 import {
   annualFromMonthly,
@@ -163,25 +164,32 @@ export const runSimulation = async (
     at(hourlyPosition.geometricElevationDeg, peak) as Degrees,
     at(hourlyPosition.azimuthDeg, peak) as Degrees,
   )
+  // a drawn house or tree doesn't move with the sun, so its quads join every pose the panels take
+  const drawn = plot.obstructions.flatMap(obstructionQuads)
+  // null unless a deciduous tree is drawn, so a plot with none bakes with no leaf-season variant at
+  // all. Computed here, off the site, so the memo (worker/client.ts) stays keyed on it
+  const hasDeciduousTree = plot.obstructions.some((o) => o.kind === 'tree' && !o.evergreen)
+  const leafOnMonths = hasDeciduousTree ? leafOnMonthsFor(site, 50) : null
 
   // the beam half doesn't: a sun-direction bin fixes the sun position, hence the tracker
   // rotation, so each beam pass can be posed for its own bin at no extra pass cost
   const tracking = plot.arrays.some((array) => array.tracker.mode !== 'fixed')
-  const posed = new Map<number, readonly PanelPolygon[]>()
+  const posed = new Map<number, readonly Occluder[]>()
   const beamPanels = tracking
-    ? (index: number): readonly PanelPolygon[] => {
+    ? (index: number): readonly Occluder[] => {
         const cached = posed.get(index)
         if (cached !== undefined) return cached
         const bin = sky.sunDirections[index]
-        if (bin === undefined) return snapshot.panels
+        if (bin === undefined) return [...snapshot.panels, ...drawn]
         const panels = panelSnapshot(
           plot.arrays,
           peakMillis,
           (Math.asin(Math.max(-1, Math.min(1, bin.z))) * RAD_TO_DEG) as Degrees,
           (Math.atan2(bin.x, bin.y) * RAD_TO_DEG) as Degrees,
         ).panels
-        posed.set(index, panels)
-        return panels
+        const withDrawn = [...panels, ...drawn]
+        posed.set(index, withDrawn)
+        return withDrawn
       }
     : null
 
@@ -191,11 +199,15 @@ export const runSimulation = async (
     sky,
     monthlySkies,
     windowSkies: skies.windows,
+    leafOnMonths,
     passesPerFrame: options.passesPerFrame,
     frameBudgetMs: options.frameBudgetMs,
   }
+  // the reference stays the open sky (openSkyAccumulation below), so a house or tree's shade
+  // compounds with the panels' in the shade ratio the same way the surroundings' share does in
+  // `shadedBySurroundings` (Record 26)
   const underArray = await backend.accumulate(
-    { ...request, panels: snapshot.panels, beamPanels },
+    { ...request, panels: [...snapshot.panels, ...drawn], beamPanels },
     onProgress,
   )
   backend.dispose()

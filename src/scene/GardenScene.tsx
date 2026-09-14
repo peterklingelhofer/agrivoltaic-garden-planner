@@ -19,6 +19,7 @@ import { BedLabels } from './BedLabels'
 import { BedMesh } from './BedMesh'
 import { DliOverlay } from './DliOverlay'
 import { Ground } from './Ground'
+import { HouseMesh } from './HouseMesh'
 import { PlantInstances } from './PlantInstances'
 import { PlotBoundary } from './PlotBoundary'
 import { PvArrayMesh } from './PvArrayMesh'
@@ -27,6 +28,7 @@ import { RenderPipeline } from './RenderPipeline'
 import { gardenAge, occluderHeightM } from './sceneMath'
 import { SceneBoundary } from './SceneBoundary'
 import { SunRig } from './SunRig'
+import { TreeMesh } from './TreeMesh'
 import { useInvalidate } from './useInvalidate'
 
 export const GardenScene = (): ReactElement => {
@@ -78,6 +80,7 @@ export const GardenScene = (): ReactElement => {
   const plantYear = useAppStore((s) => s.plantYear)
   const seasonsRun = useAppStore((s) => s.simulation.season)
   const selectedBedId = useAppStore((s) => s.selectedBedId)
+  const selectedObstructionId = useAppStore((s) => s.selectedObstructionId)
   const effects = useAppStore((s) => s.effects)
   // Move mode holds the camera still, so a drag moves the thing under the pointer and nothing else
   const mode = useAppStore((s) => s.mode)
@@ -167,6 +170,23 @@ export const GardenScene = (): ReactElement => {
           <PvArrayMesh arrayId={array.id} showTrackerRotation />
         </SceneBoundary>
       ))}
+      {plot?.obstructions.map((obstruction) =>
+        obstruction.kind === 'house' ? (
+          <SceneBoundary key={obstruction.id} label={`house-${obstruction.id}`}>
+            <HouseMesh
+              obstructionId={obstruction.id}
+              selected={obstruction.id === selectedObstructionId}
+            />
+          </SceneBoundary>
+        ) : (
+          <SceneBoundary key={obstruction.id} label={`tree-${obstruction.id}`}>
+            <TreeMesh
+              obstructionId={obstruction.id}
+              selected={obstruction.id === selectedObstructionId}
+            />
+          </SceneBoundary>
+        ),
+      )}
       {plot?.beds.map((bed) => (
         <SceneBoundary key={bed.id} label={`bed-${bed.id}`}>
           <BedMesh bedId={bed.id} selected={bed.id === selectedBedId} />

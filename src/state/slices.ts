@@ -13,9 +13,9 @@ import type { PvEnergyReport } from '../types/energy'
 import type { DesignProgress } from '../recommend/design'
 import type { Derivation, PlanRefusal } from '../recommend/planting'
 import type { GroundCover } from '../types/ground'
-import type { Bed, GardenPlot, Planting } from '../types/garden'
+import type { Bed, GardenPlot, Obstruction, Planting } from '../types/garden'
 import type { LatLon, Polygon2D, Vec2M } from '../types/geo'
-import type { ArrayId, BedId, CropId, PlantingId, RuleId } from '../types/ids'
+import type { ArrayId, BedId, CropId, ObstructionId, PlantingId, RuleId } from '../types/ids'
 import type {
   BedLightSummary,
   CandidateArchetype,
@@ -103,6 +103,7 @@ export interface DesignSlice {
   readonly plot: GardenPlot | null
   readonly selectedBedId: BedId | null
   readonly selectedArrayId: ArrayId | null
+  readonly selectedObstructionId: ObstructionId | null
   setPlot(plot: GardenPlot): void
   setBoundary(boundary: Polygon2D): void
   /**
@@ -128,6 +129,18 @@ export interface DesignSlice {
   removeArray(id: ArrayId): void
   selectBed(id: BedId | null): void
   selectArray(id: ArrayId | null): void
+  /** Replaces any obstruction already carrying the same id, or appends it (Decision Record 26) */
+  upsertObstruction(house: Obstruction): void
+  removeObstruction(id: ObstructionId): void
+  selectObstruction(id: ObstructionId | null): void
+  /**
+   * Draws the default house outside the boundary and selects it. Null with no plot to draw one on
+   */
+  addHouse(): ObstructionId | null
+  /**
+   * Draws the default tree outside the boundary and selects it. Null with no plot to draw one on
+   */
+  addTree(): ObstructionId | null
 }
 
 export interface LightSlice {

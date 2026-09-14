@@ -35,6 +35,7 @@ export const Ground = (): ReactElement => {
   const commitDraft = useAppStore((s) => s.commitDraft)
   const selectBed = useAppStore((s) => s.selectBed)
   const selectArray = useAppStore((s) => s.selectArray)
+  const selectObstruction = useAppStore((s) => s.selectObstruction)
   const setHovered = useAppStore((s) => s.setHovered)
   const dragging = useAppStore((s) => s.dragging)
   const texture = useImageryTexture(location, imageryEnabled)
@@ -68,13 +69,14 @@ export const Ground = (): ReactElement => {
       if (mode === 'select' || mode === 'move') {
         selectBed(null)
         selectArray(null)
+        selectObstruction(null)
         return
       }
       event.stopPropagation()
       const [x, z] = groundPoint(event)
       pushDraftVertex(fromSceneXZ(x, z))
     },
-    [dragging, mode, pushDraftVertex, selectArray, selectBed],
+    [dragging, mode, pushDraftVertex, selectArray, selectBed, selectObstruction],
   )
 
   /**

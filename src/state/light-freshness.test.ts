@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from 'bun:test'
 import type { Bed, Planting } from '../types/garden'
-import { makeArray, makeBed } from './defaults'
+import { makeArray, makeBed, makeHouse } from './defaults'
 import { lightGeometryKey, lightIsStale } from './light-freshness'
 import { ready } from './slices'
 import { resetAppStore, useAppStore } from './store'
@@ -83,6 +83,20 @@ describe('the light geometry key', () => {
     expect(plot.groundCover).not.toBe('straw-mulch')
     const mulched = { ...plot, groundCover: 'straw-mulch' as const }
     expect(lightGeometryKey(mulched)).not.toBe(lightGeometryKey(plot))
+  })
+
+  /** A house shades the bake the way a panel does, so its footprint is part of the key too */
+  it('moves when a house is added', () => {
+    const plot = state().plot!
+    const withHouse = { ...plot, obstructions: [makeHouse(1, plot.boundary, 'south')] }
+    expect(lightGeometryKey(withHouse)).not.toBe(lightGeometryKey(plot))
+  })
+
+  it('moves when a house moves', () => {
+    const plot = state().plot!
+    const south = { ...plot, obstructions: [makeHouse(1, plot.boundary, 'south')] }
+    const north = { ...plot, obstructions: [makeHouse(1, plot.boundary, 'north')] }
+    expect(lightGeometryKey(north)).not.toBe(lightGeometryKey(south))
   })
 })
 

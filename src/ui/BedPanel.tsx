@@ -51,6 +51,7 @@ import {
   weakestScoreTerm,
 } from './format'
 import { SurroundingsStep, WaterStep } from './AnswerPanels'
+import { ObstructionsSection } from './ObstructionsSection'
 import { feetToMeters, formatAreaBothUnits, metersToFeet, roundTenth } from './onboarding'
 import { Panel, Readout } from './Panel'
 
@@ -1204,6 +1205,7 @@ export const GroundPanel = (): ReactElement => {
       {plot === null ? null : <PlotSizeSection boundary={plot.boundary} />}
       <h3>What shades it</h3>
       <SurroundingsStep />
+      <ObstructionsSection />
       <h3>Water</h3>
       <WaterStep />
       <h3>The beds</h3>

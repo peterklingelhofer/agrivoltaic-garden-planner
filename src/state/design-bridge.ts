@@ -1,5 +1,6 @@
 import type { DesignProgress, SimulationRunner } from '../recommend/design'
 import type { Crop } from '../types/crop'
+import type { Obstruction } from '../types/garden'
 import type { GroundCover } from '../types/ground'
 import type { OnboardingAnswers, ScenarioSet } from '../types/onboarding'
 import type { Site } from '../types/site'
@@ -26,6 +27,8 @@ export interface DesignInputs {
   readonly catalog?: readonly Crop[]
   /** The plot's ground cover, so the search's energy figures are about the grower's ground */
   readonly groundCover?: GroundCover
+  /** What already stands near the space, so a house the grower drew shades the search's own bakes too (Decision Record 26) */
+  readonly obstructions?: readonly Obstruction[]
   /**
    * The runner the search bakes each candidate with. One annual bake per candidate is measured
    * at about 4.5 s for the five, which is far too long to hold the thread at the one moment the

@@ -32,6 +32,9 @@ const percent = (value: number): string => `${String(Math.round(value * 100))}%`
 export const SurroundingsStep = (): ReactElement => {
   const exposure = useAppStore((s) => s.answers.exposure)
   const answer = useAppStore((s) => s.answerOnboarding)
+  // a drawn house answers this question itself (Decision Record 26), so the three-answer
+  // share is grayed out rather than read alongside a geometry that already says the same thing
+  const houses = useAppStore((s) => s.plot?.obstructions.length ?? 0)
   return (
     <>
       <ChoiceGroup
@@ -40,11 +43,19 @@ export const SurroundingsStep = (): ReactElement => {
         legend={ANSWER_QUESTIONS.exposure}
         options={EXPOSURE_OPTIONS}
         value={exposure}
+        disabled={houses > 0}
         onChange={(next) => answer({ exposure: next })}
       />
-      <p className="panel-sub" data-testid="readout-onboarding-exposure-help">
-        {EXPOSURE_HELP}
-      </p>
+      {houses > 0 ? (
+        <p className="panel-sub" data-testid="readout-onboarding-exposure-house">
+          These answers aren't used while a house or a tree is drawn. The light check shades with
+          what you drew.
+        </p>
+      ) : (
+        <p className="panel-sub" data-testid="readout-onboarding-exposure-help">
+          {EXPOSURE_HELP}
+        </p>
+      )}
     </>
   )
 }

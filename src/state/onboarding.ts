@@ -6,6 +6,7 @@ import {
   MAX_BEDS,
   PLOT_MARGIN_M,
 } from '../recommend/layout'
+import { exposureInForce } from '../recommend/surroundings'
 import type { Bed, GardenPlot, Irrigation } from '../types/garden'
 import type { LatLon } from '../types/geo'
 import type {
@@ -183,6 +184,9 @@ export const answersOf = (
     plotWidthM: size.widthM,
     plotDepthM: size.depthM,
     objective: normalizeObjective(answers.objective),
+    // a drawn house answers what is already around the space, so the search reads that over
+    // the three-answer share the moment one stands (Decision Record 26)
+    exposure: exposureInForce(plot?.obstructions ?? [], answers.exposure),
     location,
     locationLabel,
   }

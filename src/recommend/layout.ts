@@ -8,12 +8,14 @@ import {
 import { cosDeg, sinDeg } from '../sim/math'
 import { monthValue, relativeShadeRatio } from '../sim/units'
 import { polygonOf, rectangleRing, vec2 } from '../state/geom'
+import type { House } from '../types/garden'
 import type { Polygon2D } from '../types/geo'
 import { bedId as asBedId } from '../types/ids'
 import type { DliRaster, GrowingWindow } from '../types/light'
 import type { BedLayout, BedPlacement, LightZoneKind, SiteExposure } from '../types/onboarding'
 import type { PvArray } from '../types/pv'
 import type { Fraction, MolPerM2Day } from '../types/units'
+import { overlapsAHouse } from './overlap'
 import type { Derivation } from './planting'
 import { shadedBySurroundings } from './surroundings'
 
@@ -83,6 +85,8 @@ export interface LayoutRequest {
    * What already shades the space. Each placed bed's light carries its share (`surroundings.ts`)
    */
   readonly exposure?: SiteExposure
+  /** Drawn houses a bed may never be placed inside. A tree is never policed (Decision Record 26) */
+  readonly houses?: readonly House[]
 }
 
 /* ------------------------------- the cross-row axis ------------------------------ */
@@ -434,6 +438,24 @@ const placementsFor = (
   })
 
 /**
+ * A placement whose footprint stands inside a drawn house is dropped the way one with no room
+ * is, with nothing invented in its place. Each one dropped names the house it would have stood in
+ */
+const clearOfHouses = (
+  beds: readonly BedPlacement[],
+  houses: readonly House[],
+  refusals: string[],
+): readonly BedPlacement[] => {
+  if (houses.length === 0) return beds
+  return beds.filter((bed) => {
+    const house = overlapsAHouse(bed.footprint, houses)
+    if (house === null) return true
+    refusals.push(`${bed.label} would stand inside ${house.label}, so it wasn't placed`)
+    return false
+  })
+}
+
+/**
  * Deterministic and bounded: one pass over the grid to build the seasonal field, one pass
  * along the cross-row axis to profile it, one exact two-cluster split, then at most
  * `MAX_BEDS` polygon rasterizations. No search, no seed, no iteration limit
@@ -454,13 +476,17 @@ export const placeBeds = (request: LayoutRequest): Derivation<BedLayout> => {
   const refusals: string[] = []
 
   const even = (reason: string): Derivation<BedLayout> => {
-    const beds = placementsFor(
-      interleave(slotsIn('even-light', [-halfM, halfM]), limit),
-      axis,
-      lengthM,
-      request.raster,
-      field,
-      request.exposure ?? 'open',
+    const beds = clearOfHouses(
+      placementsFor(
+        interleave(slotsIn('even-light', [-halfM, halfM]), limit),
+        axis,
+        lengthM,
+        request.raster,
+        field,
+        request.exposure ?? 'open',
+      ),
+      request.houses ?? [],
+      refusals,
     )
     return {
       ok: true,
@@ -493,13 +519,19 @@ export const placeBeds = (request: LayoutRequest): Derivation<BedLayout> => {
     return even('no strip was wide enough to hold a bed clear of the array feet')
   }
 
-  const beds = placementsFor(
-    interleave(slots, limit),
-    axis,
-    lengthM,
-    request.raster,
-    field,
-    request.exposure ?? 'open',
+  // a band whose every bed overlaps a house still reports each drop by name. The mix sentence
+  // below isn't guarded for a band that empties out entirely, which no plot has shown yet
+  const beds = clearOfHouses(
+    placementsFor(
+      interleave(slots, limit),
+      axis,
+      lengthM,
+      request.raster,
+      field,
+      request.exposure ?? 'open',
+    ),
+    request.houses ?? [],
+    refusals,
   )
   const kinds = new Set(beds.map((bed) => bed.zone))
   if (kinds.size < 2) {

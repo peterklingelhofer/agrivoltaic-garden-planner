@@ -426,11 +426,12 @@ pub unsafe extern "C" fn agv_panel_snapshot(
 /// The beam visibility raster: per cell, the fraction of the direct beam that reaches the ground.
 ///
 /// Panels arrive as the same twelve-f64 records `agv_panel_snapshot` writes, so the two compose
-/// without a second format.
+/// without a second format. `transmittances` is a second, parallel record: one f64 per panel, or
+/// a null pointer or zero count, read as "every panel uses `module_transmittance`".
 ///
 /// # Safety
-/// `panels` must point at `panel_count * 12` readable f64s and `out` at `cols * rows` writable
-/// ones
+/// `panels` must point at `panel_count * 12` readable f64s, `transmittances` at
+/// `transmittance_count` readable f64s (or be null), and `out` at `cols * rows` writable ones
 #[no_mangle]
 #[allow(clippy::too_many_arguments)]
 pub unsafe extern "C" fn agv_beam_visibility(
@@ -441,6 +442,8 @@ pub unsafe extern "C" fn agv_beam_visibility(
     rows: usize,
     panels: *const f64,
     panel_count: usize,
+    transmittances: *const f64,
+    transmittance_count: usize,
     sun_x: f64,
     sun_y: f64,
     sun_z: f64,
@@ -479,6 +482,11 @@ pub unsafe extern "C" fn agv_beam_visibility(
             })
             .collect()
     };
+    let transmittances: &[f64] = if transmittances.is_null() || transmittance_count == 0 {
+        &[]
+    } else {
+        std::slice::from_raw_parts(transmittances, transmittance_count)
+    };
     let visibility = beam_visibility_raster(
         &grid,
         &corners,
@@ -488,6 +496,7 @@ pub unsafe extern "C" fn agv_beam_visibility(
             z: sun_z,
         },
         module_transmittance,
+        transmittances,
         sub_samples_per_cell,
     );
     let out = std::slice::from_raw_parts_mut(out, grid.cells());

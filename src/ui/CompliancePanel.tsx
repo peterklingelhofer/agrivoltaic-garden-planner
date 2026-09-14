@@ -1,5 +1,6 @@
 import type { ReactElement } from 'react'
 import { usStateOf } from '../data/retail-price'
+import { overlapNotices } from '../recommend/overlap'
 import { useAppStore } from '../state/store'
 import type { ComplianceCheck } from '../types/compliance'
 import { OUTCOME_LABEL, criterionSummary } from './format'
@@ -43,6 +44,10 @@ const CheckBlock = ({ check }: { readonly check: ComplianceCheck }): ReactElemen
 export const CompliancePanel = (): ReactElement => {
   const compliance = useAppStore((s) => s.compliance)
   const raster = useAppStore((s) => s.raster)
+  const plot = useAppStore((s) => s.plot)
+  // an overlap isn't a regulatory regime, so it stands apart from the checks below, outside
+  // their blocks
+  const overlaps = plot === null ? [] : overlapNotices(plot)
   /**
    * Where the garden is, so that outside Massachusetts the one rule this app can check is
    * introduced as another state's rule. Without it, a grower in New Jersey reads "Measured against
@@ -61,6 +66,11 @@ export const CompliancePanel = (): ReactElement => {
       title="Dual-use solar rules"
       subtitle="Massachusetts SMART is the only rule the app can check from the layout alone"
     >
+      {overlaps.map((text, index) => (
+        <p key={text} className="notice" data-testid={`readout-check-overlap-${String(index)}`}>
+          {text}
+        </p>
+      ))}
       <p className="notice notice-warn" data-testid="readout-compliance-determination">
         This is an estimate. Massachusetts' Department of Energy Resources (DOER) decides whether a
         design qualifies, using its own shading tool.

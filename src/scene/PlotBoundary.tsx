@@ -25,7 +25,7 @@ interface HandlesProps {
   onMove(index: number, point: Vec2M): void
 }
 
-const VertexHandles = ({ ring, color, onMove }: HandlesProps): ReactElement => {
+export const VertexHandles = ({ ring, color, onMove }: HandlesProps): ReactElement => {
   const setDragging = useAppStore((s) => s.setDragging)
   const dragging = useRef<number | null>(null)
 

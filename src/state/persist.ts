@@ -225,6 +225,15 @@ export const MIGRATIONS: Readonly<Record<number, Migration>> = {
           sidebarStep: design.sidebarStep === undefined ? 'place' : design.sidebarStep,
         }
       : design,
+  /**
+   * 4 to 5: a house could now be drawn on the ground, and a design saved before that has
+   * nothing drawn. A payload with no plot at all is left alone: there's nothing to draw a
+   * house on
+   */
+  4: (design) =>
+    isRecord(design) && isRecord(design.plot) && design.plot.obstructions === undefined
+      ? { ...design, plot: { ...design.plot, obstructions: [] } }
+      : design,
 }
 
 export type Migrated =
@@ -349,6 +358,40 @@ const isArray = (value: unknown): boolean =>
   isTracker(value.tracker) &&
   isModule(value.module)
 
+/**
+ * A tree's crown: a base at or above the ground, a top above that, in leaf and bare both
+ * fractions of light (Decision Record 26)
+ */
+const isTree = (value: Record<string, unknown>): boolean =>
+  num(value.crownBaseM) &&
+  value.crownBaseM >= 0 &&
+  num(value.heightM) &&
+  value.heightM > value.crownBaseM &&
+  bool(value.evergreen) &&
+  num(value.transmittance) &&
+  value.transmittance >= 0 &&
+  value.transmittance <= 1 &&
+  num(value.leaflessTransmittance) &&
+  value.leaflessTransmittance >= 0 &&
+  value.leaflessTransmittance <= 1
+
+/**
+ * A house or a tree: a box the bake shades with, four corners or it is not the box the bake would
+ * shade with. A house needs only a height greater than zero, and anything else must be a tree with
+ * a sound crown, or the whole obstruction is dropped like a malformed bed (Decision Record 26)
+ */
+const isObstruction = (value: unknown): boolean =>
+  isRecord(value) &&
+  str(value.id) &&
+  str(value.label) &&
+  isPolygon(value.footprint) &&
+  isRecord(value.footprint) &&
+  list(value.footprint.exterior) &&
+  value.footprint.exterior.length === 4 &&
+  (value.kind === 'house'
+    ? num(value.heightM) && value.heightM > 0
+    : value.kind === 'tree' && isTree(value))
+
 const isPlot = (value: unknown): boolean =>
   isRecord(value) &&
   str(value.id) &&
@@ -361,6 +404,8 @@ const isPlot = (value: unknown): boolean =>
   value.beds.every(isBed) &&
   list(value.arrays) &&
   value.arrays.every(isArray) &&
+  list(value.obstructions) &&
+  value.obstructions.every(isObstruction) &&
   // either spelling: a design saved before ground cover existed carries the albedo instead
   (isGroundCover(value.groundCover) || num(value.groundAlbedo))
 

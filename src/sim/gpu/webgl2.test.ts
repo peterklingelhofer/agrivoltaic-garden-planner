@@ -1,13 +1,15 @@
 import { describe, expect, it } from 'bun:test'
 import type { AccumulationRequest } from '../backend'
 import { createCpuReferenceBackend } from '../cpu'
+import { houseQuads, treeQuads } from '../obstruction'
 import { sunUnitVector } from '../solar'
 import { createWebgl2Backend, isWebgl2Available } from './webgl2'
 import type { Extent2D, GridSpec, Vec3M } from '../../types/geo'
+import type { Obstruction } from '../../types/garden'
 import type { PanelPolygon } from '../../types/pv'
 import type { CumulativeSky, SkyPatch, SunDirectionBin } from '../../types/weather'
-import { arrayId, panelId } from '../../types/ids'
-import { degrees, epochMillis, meters } from '../../types/units'
+import { arrayId, obstructionId, panelId } from '../../types/ids'
+import { degrees, epochMillis, fraction, meters } from '../../types/units'
 
 const GRID: GridSpec = {
   extent: {
@@ -62,6 +64,44 @@ const PANELS: readonly PanelPolygon[] = [
   }
 })
 
+// a wall for the closure test to cover, standing clear of the panels above
+const HOUSE: Obstruction = {
+  id: obstructionId('house-1'),
+  kind: 'house',
+  label: 'Test house',
+  footprint: {
+    exterior: [
+      { xM: meters(1.5), yM: meters(-4) },
+      { xM: meters(3.5), yM: meters(-4) },
+      { xM: meters(3.5), yM: meters(-2) },
+      { xM: meters(1.5), yM: meters(-2) },
+    ],
+    holes: [],
+  },
+  heightM: meters(3),
+}
+
+// a crown for the closure test's seasonal path, standing clear of the house and the panels
+const CROWN: Obstruction = {
+  id: obstructionId('tree-1'),
+  kind: 'tree',
+  label: 'Test crown',
+  footprint: {
+    exterior: [
+      { xM: meters(-4.5), yM: meters(2) },
+      { xM: meters(-2.5), yM: meters(2) },
+      { xM: meters(-2.5), yM: meters(4) },
+      { xM: meters(-4.5), yM: meters(4) },
+    ],
+    holes: [],
+  },
+  crownBaseM: meters(2),
+  heightM: meters(4),
+  evergreen: false,
+  transmittance: fraction(0.2),
+  leaflessTransmittance: fraction(0.6),
+}
+
 const SUN_DIRECTIONS: readonly SunDirectionBin[] = [15, 30, 45, 60, 75].map((altitude, i) => {
   const azimuth = [150, 165, 180, 195, 210][i] ?? 180
   const dir = sunUnitVector(degrees(altitude), degrees(azimuth))
@@ -92,10 +132,13 @@ const buildSky = (monthScale: number): CumulativeSky => ({
 
 const REQUEST: AccumulationRequest = {
   grid: GRID,
-  panels: PANELS,
+  panels: [...PANELS, ...houseQuads(HOUSE), ...treeQuads(CROWN)],
   sky: buildSky(1),
   monthlySkies: Array.from({ length: 12 }, (_unused, month) => buildSky(0.5 + month / 24)),
   windowSkies: [],
+  // half the months leafless, so the closure test exercises the seasonal path (uSeasonal = 1) where
+  // a browser runs it
+  leafOnMonths: Array.from({ length: 12 }, (_unused, month) => month % 2 === 0),
   beamPanels: null,
   passesPerFrame: 4,
   frameBudgetMs: 8,
