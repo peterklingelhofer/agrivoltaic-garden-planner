@@ -37,10 +37,10 @@ export const TOUCH_DRAW_HINT: Readonly<Record<DrawMode, string>> = {
  * arrow keys are named because they are the move a keyboard has: see `useNudgeKeys`
  */
 export const MOVE_HINT =
-  'Drag a bed, a row of panels or a plot corner to move it. Arrow keys move the selected one 0.1 m, or 1 m with Shift. Scroll to zoom. Press Select to look around again.'
+  'Drag a bed, a row of panels, a house or a plot corner to move it. Arrow keys move the selected one 0.1 m, or 1 m with Shift. Scroll to zoom. Press Select to look around again.'
 
 export const TOUCH_MOVE_HINT =
-  'Drag a bed, a row of panels or a plot corner to move it. With a keyboard, arrow keys move the selected one 0.1 m, or 1 m with Shift. Pinch to zoom. Press Select to look around again.'
+  'Drag a bed, a row of panels, a house or a plot corner to move it. With a keyboard, arrow keys move the selected one 0.1 m, or 1 m with Shift. Pinch to zoom. Press Select to look around again.'
 
 /**
  * How far along the shape is, in corners.

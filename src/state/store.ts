@@ -27,7 +27,7 @@ import {
   suggestPolycultures,
   withAmbition,
 } from '../recommend/suggest'
-import { shadedBySurroundings } from '../recommend/surroundings'
+import { exposureInForce, shadedBySurroundings } from '../recommend/surroundings'
 import { bedLight as bedLightOf } from '../sim/aggregate'
 import { checkAllRegimes } from '../sim/compliance'
 import { equatorFacingAzimuth } from '../sim/geometry'
@@ -47,7 +47,7 @@ import { createSimClient, type SimClient } from '../sim/worker/client'
 import type { CompanionRule, PartitionedCompanionRules } from '../types/companion'
 import type { Bed, GardenPlot } from '../types/garden'
 import { albedoUnderSnow, DEFAULT_GROUND_COVER, groundAlbedoOf } from '../types/ground'
-import type { ArrayId, BedId, CropId, PlantingId } from '../types/ids'
+import type { ArrayId, BedId, CropId, ObstructionId, PlantingId } from '../types/ids'
 import type { Banded } from '../types/band'
 import type { BedLight, DliRaster } from '../types/light'
 import type {
@@ -70,6 +70,8 @@ import {
   defaultSimulation,
   facesStartingDirection,
   makeBed,
+  makeHouse,
+  makeTree,
   nextBedIndex,
 } from './defaults'
 import { growingWindowOf } from './growing-window'
@@ -225,6 +227,9 @@ const restored = loadDesign(storage)
 
 const initialData = (): DataOnly<AppState> => ({
   ...defaultDesign(),
+  // not carried in the saved design, unlike the bed and array selection beside it: see
+  // PERSISTED_KEYS in persist.ts
+  selectedObstructionId: null as ObstructionId | null,
   site: idle(),
   weather: idle(),
   years: [],
@@ -309,8 +314,9 @@ const rederiveBedLight = (s: MutableState): void => {
   if (s.raster.status !== 'ready' || s.plot === null) return
   if (s.lightGeometry !== lightGeometryKey(s.plot)) return
   const raster = s.raster.value
+  const exposure = exposureInForce(s.plot.obstructions, s.answers.exposure)
   s.bedLight = s.plot.beds.map((bed) =>
-    shadedBySurroundings(bedLightOf(raster, bed.id, bed.footprint), s.answers.exposure),
+    shadedBySurroundings(bedLightOf(raster, bed.id, bed.footprint), exposure),
   )
 }
 
@@ -428,8 +434,10 @@ const runBake = async (
     s.progress = null
     s.raster = ready(raster)
     // the surroundings answer as it stands when the bake lands, not as it stood when it began:
-    // the raster is the panels' shade alone, and every bed figure carries the answer on top
-    s.bedLight = bedLight.map((light) => shadedBySurroundings(light, s.answers.exposure))
+    // the raster is the panels' shade alone, and every bed figure carries the answer on top,
+    // unless the plot this run was handed already carries a house, which answers it instead
+    const exposure = exposureInForce(plot.obstructions, s.answers.exposure)
+    s.bedLight = bedLight.map((light) => shadedBySurroundings(light, exposure))
     s.compliance = compliance
     // stamped from the plot this run was handed, not from `s.plot`, which an edit made while the
     // bake was in flight would already have moved on: the answer belongs to the geometry it was
@@ -1337,14 +1345,86 @@ export const useAppStore = create<AppState>()(
       selectBed: (id) =>
         set((s) => {
           s.selectedBedId = id
-          if (id) s.selectedArrayId = null
+          if (id) {
+            s.selectedArrayId = null
+            s.selectedObstructionId = null
+          }
         }),
 
       selectArray: (id) =>
         set((s) => {
           s.selectedArrayId = id
-          if (id) s.selectedBedId = null
+          if (id) {
+            s.selectedBedId = null
+            s.selectedObstructionId = null
+          }
         }),
+
+      upsertObstruction: (house) =>
+        set((s) => {
+          patchPlot(s, (plot) => ({
+            ...plot,
+            obstructions: plot.obstructions.some((o) => o.id === house.id)
+              ? plot.obstructions.map((o) => (o.id === house.id ? house : o))
+              : [...plot.obstructions, house],
+          }))
+        }),
+
+      removeObstruction: (id) =>
+        set((s) => {
+          patchPlot(s, (plot) => ({
+            ...plot,
+            obstructions: plot.obstructions.filter((o) => o.id !== id),
+          }))
+          if (s.selectedObstructionId === id) s.selectedObstructionId = null
+        }),
+
+      selectObstruction: (id) =>
+        set((s) => {
+          s.selectedObstructionId = id
+          if (id) {
+            s.selectedBedId = null
+            s.selectedArrayId = null
+          }
+        }),
+
+      /**
+       * The default house, outside the boundary on the side that faces the equator so its
+       * shadow reaches the plot when the sun is low (Decision Record 26). Null with no plot to
+       * draw one on
+       */
+      addHouse: () => {
+        const plot = get().plot
+        if (plot === null) return null
+        const side = get().location.latitudeDeg >= 0 ? 'south' : 'north'
+        const house = makeHouse(plot.obstructions.length + 1, plot.boundary, side)
+        set((s) => {
+          patchPlot(s, (p) => ({ ...p, obstructions: [...p.obstructions, house] }))
+          s.selectedObstructionId = house.id
+          s.selectedBedId = null
+          s.selectedArrayId = null
+        })
+        return house.id
+      },
+
+      /**
+       * The default tree, outside the boundary on the equator side like the default house, 8 m
+       * further east so the two do not share ground (Decision Record 26). Null with no plot to
+       * draw one on
+       */
+      addTree: () => {
+        const plot = get().plot
+        if (plot === null) return null
+        const side = get().location.latitudeDeg >= 0 ? 'south' : 'north'
+        const tree = makeTree(plot.obstructions.length + 1, plot.boundary, side)
+        set((s) => {
+          patchPlot(s, (p) => ({ ...p, obstructions: [...p.obstructions, tree] }))
+          s.selectedObstructionId = tree.id
+          s.selectedBedId = null
+          s.selectedArrayId = null
+        })
+        return tree.id
+      },
 
       setOptions: (options) =>
         set((s) => {
@@ -2027,6 +2107,8 @@ export const useAppStore = create<AppState>()(
             // the cover the grower already chose, so a suggested layout's kWh and the editor's
             // kWh for the same layout are computed against the same ground
             groundCover: state.plot?.groundCover,
+            // a house the grower drew shades the search's own candidate bakes too
+            obstructions: state.plot?.obstructions,
             run: active === null ? undefined : active.run.bind(active),
             onProgress: (progress) => {
               if (token !== designToken) return

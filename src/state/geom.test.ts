@@ -4,6 +4,9 @@ import {
   isRectangle,
   metresBetween,
   movedCorner,
+  pointInPolygon,
+  polygonOf,
+  polygonsOverlap,
   rectangleRing,
   resizedRectangle,
   ringAreaM2,
@@ -63,6 +66,47 @@ describe('a rectangle resized by its width and length', () => {
   it('leaves a shape drawn by hand alone', () => {
     const drawn = [vec2(0, 0), vec2(8, 0), vec2(9, 5), vec2(2, 6), vec2(-1, 3)]
     expect(resizedRectangle(drawn, 3, 3)).toBe(drawn)
+  })
+})
+
+describe('polygonsOverlap', () => {
+  it('is false for two rectangles that share no ground', () => {
+    const a = polygonOf(rectangleRing(vec2(0, 0), 4, 4))
+    const b = polygonOf(rectangleRing(vec2(10, 10), 4, 4))
+    expect(polygonsOverlap(a, b)).toBe(false)
+    expect(polygonsOverlap(b, a)).toBe(false)
+  })
+
+  it('is true when one rectangle stands wholly inside the other', () => {
+    const outer = polygonOf(rectangleRing(vec2(0, 0), 10, 6))
+    const inner = polygonOf(rectangleRing(vec2(0, 0), 2, 2))
+    expect(polygonsOverlap(outer, inner)).toBe(true)
+    expect(polygonsOverlap(inner, outer)).toBe(true)
+  })
+
+  it('is true for a plus sign of two thin rectangles, with neither vertex inside the other', () => {
+    const horizontal = polygonOf(rectangleRing(vec2(0, 0), 10, 2))
+    const vertical = polygonOf(rectangleRing(vec2(0, 0), 2, 10))
+    for (const point of horizontal.exterior) {
+      expect(pointInPolygon(vertical, point.xM, point.yM)).toBe(false)
+    }
+    for (const point of vertical.exterior) {
+      expect(pointInPolygon(horizontal, point.xM, point.yM)).toBe(false)
+    }
+    expect(polygonsOverlap(horizontal, vertical)).toBe(true)
+  })
+
+  /**
+   * Two rectangles flush against each other share a whole edge and no ground: pinned false,
+   * because neither ring's vertex sits strictly inside the other and the shared edge is
+   * collinear rather than a transversal crossing. That is the rule: touching alone, at a
+   * corner or along a whole edge, is never overlap on its own
+   */
+  it('is false for two rectangles that only touch along a shared edge', () => {
+    const left = polygonOf(rectangleRing(vec2(-2, 0), 4, 4))
+    const right = polygonOf(rectangleRing(vec2(2, 0), 4, 4))
+    expect(polygonsOverlap(left, right)).toBe(false)
+    expect(polygonsOverlap(right, left)).toBe(false)
   })
 })
 

@@ -1,4 +1,5 @@
 import { unsourcedClaim } from '../types/cited'
+import type { Obstruction } from '../types/garden'
 import type { BedLight } from '../types/light'
 import type { SiteExposure } from '../types/onboarding'
 import type { ByMonth, Fraction, MolPerM2Day } from '../types/units'
@@ -43,6 +44,16 @@ const scaled = (values: ByMonth<MolPerM2Day>, keep: number): ByMonth<MolPerM2Day
  * loses a third reads as shaded by 1 - 0.8 x 0.7, which is the shade the plant stands in. The
  * open answer returns the same object, so a bake in open sky is not copied for nothing
  */
+/**
+ * Which answer the three-answer share actually reads: the grower's own, unless a house is
+ * drawn. A drawn house is the answer to what is already around the space, so the share stands
+ * only while nothing is drawn (Decision Record 26)
+ */
+export const exposureInForce = (
+  obstructions: readonly Obstruction[],
+  exposure: SiteExposure,
+): SiteExposure => (obstructions.length > 0 ? 'open' : exposure)
+
 export const shadedBySurroundings = (light: BedLight, exposure: SiteExposure): BedLight => {
   const share = SURROUNDINGS_SHADE[exposure]
   if (share === 0) return light
@@ -58,8 +69,41 @@ export const shadedBySurroundings = (light: BedLight, exposure: SiteExposure): B
   }
 }
 
-/** The sentence the light step prints beside the figures when the answer dims them */
-export const surroundingsNote = (exposure: SiteExposure): string | null => {
+const countWord = (count: number, singular: string, plural: string): string =>
+  count === 1 ? `a ${singular}` : `${String(count)} ${plural}`
+
+/**
+ * What is drawn, read out: a house, a tree, or both, however many of each. "A house", "a tree",
+ * "a house and a tree", "2 houses", "2 houses and a tree" (Decision Record 26)
+ */
+export const drawnPhrase = (obstructions: readonly Obstruction[]): string => {
+  const houses = obstructions.filter((o) => o.kind === 'house').length
+  const trees = obstructions.filter((o) => o.kind === 'tree').length
+  const parts: string[] = []
+  if (houses > 0) parts.push(countWord(houses, 'house', 'houses'))
+  if (trees > 0) parts.push(countWord(trees, 'tree', 'trees'))
+  return parts.join(' and ')
+}
+
+/**
+ * The sentence the light step prints beside the figures. When something is drawn it names what is
+ * drawn, since the drawing answers the surroundings question then. Otherwise it says what the
+ * three-answer share (`SURROUNDINGS_SHADE`) took off the figures, when it took anything.
+ *
+ * Leads with `drawnPhrase` capitalised rather than "The" plus the phrase: `drawnPhrase` already
+ * carries its own article or count ("a house", "2 houses"), and "The" in front of that doubles
+ * the determiner ("The a house you drew")
+ */
+export const surroundingsNote = (
+  exposure: SiteExposure,
+  obstructions: readonly Obstruction[],
+): string | null => {
+  if (obstructions.length > 0) {
+    const phrase = drawnPhrase(obstructions)
+    const capitalised = phrase.charAt(0).toUpperCase() + phrase.slice(1)
+    const shades = obstructions.length === 1 ? 'shades' : 'shade'
+    return `${capitalised} you drew ${shades} every figure here and the map on the ground. Your answer to what is around the space isn't applied while a house or a tree is drawn.`
+  }
   const share = SURROUNDINGS_SHADE[exposure]
   if (share === 0) return null
   const percent = String(Math.round(share * 100))

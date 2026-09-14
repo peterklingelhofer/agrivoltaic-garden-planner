@@ -180,6 +180,8 @@ export interface ChoiceGroupProps<T extends string> {
   readonly legend: string
   readonly options: readonly ChoiceOption<T>[]
   readonly value: T
+  /** Greyed and unchangeable, for a choice something else is answering for now */
+  readonly disabled?: boolean
   onChange(value: T): void
 }
 
@@ -193,9 +195,10 @@ export const ChoiceGroup = <T extends string>({
   legend,
   options,
   value,
+  disabled,
   onChange,
 }: ChoiceGroupProps<T>): ReactElement => (
-  <fieldset className="choices" data-testid={testId}>
+  <fieldset className="choices" data-testid={testId} disabled={disabled}>
     <legend className="field-label">{legend}</legend>
     {options.map((option) => (
       <label

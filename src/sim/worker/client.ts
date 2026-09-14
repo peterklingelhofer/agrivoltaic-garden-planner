@@ -55,6 +55,19 @@ export const simCacheKey = (
     bed.id,
     bed.footprint.exterior.map((point) => `${point.xM},${point.yM}`).join(';'),
   ])
+  // a drawn house or tree shades the bake the way a row of panels does, so it keys the memo the
+  // same way: without it an obstruction added after a bake at the same arrangement would read the
+  // cached, unshaded field back as fresh. A tree adds its own fields, since its transmittance and
+  // its evergreen flag change what the bake shades with as well as where
+  const obstructions = plot.obstructions.map((o) => [
+    o.id,
+    o.kind,
+    o.heightM,
+    o.footprint.exterior.map((point) => `${point.xM},${point.yM}`).join(';'),
+    ...(o.kind === 'tree'
+      ? [o.crownBaseM, o.evergreen, o.transmittance, o.leaflessTransmittance]
+      : []),
+  ])
   return hash(
     JSON.stringify([
       site.location.latitudeDeg,
@@ -64,6 +77,7 @@ export const simCacheKey = (
       plot.northOffsetDeg,
       arrays,
       beds,
+      obstructions,
       weather.source,
       weather.decomposition,
       weather.provenance.datasetLabel,

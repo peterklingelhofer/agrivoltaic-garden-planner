@@ -26,7 +26,7 @@ import type { Banded } from '../types/band'
 import type { CompanionRule, RotationConstraint } from '../types/companion'
 import type { ComplianceCheck } from '../types/compliance'
 import type { Crop } from '../types/crop'
-import type { Bed, GardenPlot } from '../types/garden'
+import type { Bed, GardenPlot, House, Obstruction } from '../types/garden'
 import type { Polygon2D } from '../types/geo'
 import { arrayId, bedId, plotId } from '../types/ids'
 import type { CropId } from '../types/ids'
@@ -53,6 +53,7 @@ import type { Degrees, Fraction, KilowattHours, Meters } from '../types/units'
 import { degrees, fraction, meters, squareMeters, wattsPeak } from '../types/units'
 import type { SolarPositionSeries, TmySeries } from '../types/weather'
 import { placeBeds } from './layout'
+import { houseFootprints, housesOf, overlapsAHouse, rowsFootprint } from './overlap'
 import { runRecommendationPipeline } from './pipeline'
 import { DEFAULT_WEIGHTS, scoreOf } from './stages/rank'
 import { SURROUNDINGS_SHADE, shadedBySurroundings } from './surroundings'
@@ -88,6 +89,12 @@ export interface DesignDependencies {
   readonly backend: BackendKind
   /** The ground under the rows, which is a term in every energy figure the search reports */
   readonly groundCover: GroundCover
+  /**
+   * What already stands near the space. Every candidate plot the search bakes carries it, so a
+   * house the grower drew shades the search's own bakes the same way it shades the editor's
+   * (Decision Record 26)
+   */
+  readonly obstructions: readonly Obstruction[]
   readonly targetCellSizeM: Meters
   /**
    * The two bake settings that separate a preview from a final run, injectable for the same
@@ -684,10 +691,18 @@ export const groundLightPlan = (answers: OnboardingAnswers, site: Site): EnergyP
   return best
 }
 
+/** The house a candidate's rows run through, or null when it stands clear or carries no rows */
+const houseUnderRows = (candidate: ArrayCandidate, houses: readonly House[]): House | null =>
+  candidate.geometry.rowCount === 0 || houses.length === 0
+    ? null
+    : overlapsAHouse(rowsFootprint(candidate.geometry), houses)
+
 export const candidatesFor = (
   answers: OnboardingAnswers,
   site: Site,
   tiltPlans: Partial<Record<TiltedArchetype, EnergyPlan>> = {},
+  /** Drawn houses no candidate's rows may run through; a tree is never policed (Record 26) */
+  houses: readonly House[] = [],
 ): readonly ArrayCandidate[] => {
   // `food-first` needs no weather to settle its tilt, so it defaults here; `energy-first` does,
   // so `suggestDesigns` passes it in. An injected plan wins over either
@@ -696,7 +711,7 @@ export const candidatesFor = (
     ...tiltPlans,
   }
   const offered = new Set(MOUNTING_ARCHETYPES[answers.mounting])
-  return ARCHETYPE_ORDER.filter((archetype) => offered.has(archetype)).map((archetype) =>
+  const built = ARCHETYPE_ORDER.filter((archetype) => offered.has(archetype)).map((archetype) =>
     archetype === 'no-array-control'
       ? controlCandidate()
       : archetype === 'vertical-east-west'
@@ -708,6 +723,27 @@ export const candidatesFor = (
             plans[archetype as TiltedArchetype] ?? null,
           ),
   )
+  return built.filter((candidate) => houseUnderRows(candidate, houses) === null)
+}
+
+/**
+ * Why a candidate the mounting choice offers is missing from `candidatesFor`'s own list: its rows
+ * run through a house. Read separately from the filtered list itself, on the same inputs, so naming
+ * what was dropped costs one more build of the geometry, which is cheap
+ */
+export const houseOverlapNotes = (
+  answers: OnboardingAnswers,
+  site: Site,
+  houses: readonly House[],
+  tiltPlans: Partial<Record<TiltedArchetype, EnergyPlan>> = {},
+): readonly string[] => {
+  if (houses.length === 0) return []
+  return candidatesFor(answers, site, tiltPlans).flatMap((candidate) => {
+    const house = houseUnderRows(candidate, houses)
+    return house === null
+      ? []
+      : [`${candidate.label} was not offered, because its rows run through ${house.label}`]
+  })
 }
 
 const plotFor = (
@@ -715,6 +751,7 @@ const plotFor = (
   site: Site,
   candidate: ArrayCandidate,
   groundCover: GroundCover,
+  obstructions: readonly Obstruction[],
 ): GardenPlot => {
   const footprint = rectangle(answers.plotWidthM, answers.plotDepthM)
   const bed: Bed = {
@@ -748,6 +785,7 @@ const plotFor = (
       candidate.archetype === 'no-array-control'
         ? []
         : [arrayWithDerived(candidate.label, candidate.geometry, candidate.tracker)],
+    obstructions,
     groundCover,
   }
 }
@@ -976,6 +1014,7 @@ const evaluate = (
     window,
     maxBeds: answers.maxBeds ?? undefined,
     exposure: answers.exposure,
+    houses: houseFootprints(plot),
   })
 
   return {
@@ -1241,6 +1280,7 @@ export const suggestDesigns = async (
     rotationConstraints,
     backend: overrides.backend ?? detectBackendKind(),
     groundCover: overrides.groundCover ?? DEFAULT_GROUND_COVER,
+    obstructions: overrides.obstructions ?? [],
     targetCellSizeM: overrides.targetCellSizeM ?? PREVIEW_OPTIONS.targetCellSizeM,
     subdivision: overrides.subdivision ?? PREVIEW_OPTIONS.subdivision,
     substepsPerHour: overrides.substepsPerHour ?? PREVIEW_OPTIONS.substepsPerHour,
@@ -1265,13 +1305,15 @@ export const suggestDesigns = async (
   await new Promise((resolve) => setTimeout(resolve, 0))
 
   const shared = sharedFor(deps)
-  const candidates = candidatesFor(answers, deps.site, {
+  const tiltPlans: Partial<Record<TiltedArchetype, EnergyPlan>> = {
     ...(MOUNTING_ARCHETYPES[answers.mounting].includes('energy-first')
       ? { 'energy-first': measuredEnergyPlan(answers, deps.site, shared) }
       : {}),
     // an injected plan wins, so a test can hold one archetype's tilt still and read the light
     ...deps.tiltPlans,
-  })
+  }
+  const houses = housesOf(deps.obstructions)
+  const candidates = candidatesFor(answers, deps.site, tiltPlans, houses)
   // the control is baked first so every other scenario can subtract the crops the open sky
   // already refuses, and report only the ones the panels actually cost
   const ordered = [
@@ -1282,7 +1324,7 @@ export const suggestDesigns = async (
   const evaluated: Evaluated[] = []
   let controlExclusions: ReadonlySet<string> | null = null
   for (const [index, candidate] of ordered.entries()) {
-    const plot = plotFor(answers, deps.site, candidate, deps.groundCover)
+    const plot = plotFor(answers, deps.site, candidate, deps.groundCover, deps.obstructions)
     const progressOf = (bake: AccumulationProgress | null): DesignProgress => ({
       candidatesDone: index,
       candidatesTotal: ordered.length,
@@ -1386,6 +1428,7 @@ export const suggestDesigns = async (
     `Exactly ${String(candidates.length)} geometries were evaluated, one per design idea, and almost nothing was swept around them. No other clearance or row count was tried. No other pitch or tilt was tried either, except on the design meant to generate the most, because each full candidate costs a year of light simulation. That design had its tilt picked by trying every angle from ${String(REFERENCE_MIN_TILT_DEG)} to ${String(REFERENCE_MAX_TILT_DEG)} degrees against a year of electricity, which is cheap because it needs no light simulation at all`,
     ...(exclusion === null ? [] : [exclusion]),
     `Every number here comes from a preview-quality bake: a 145-patch sky, one sun sample per hour and ${deps.targetCellSizeM.toFixed(2)} m ground cells. The full bake uses a 577-patch sky, four samples per hour and 0.12 m cells and will move these figures`,
+    ...houseOverlapNotes(answers, deps.site, houses, tiltPlans),
     ...NOT_CONSIDERED_BASE,
   ]
 

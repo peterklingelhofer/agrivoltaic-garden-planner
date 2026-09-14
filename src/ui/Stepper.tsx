@@ -7,6 +7,7 @@ import {
   type ReactNode,
 } from 'react'
 import { CANCEL_EVENTS } from '../state/motion'
+import { registerLanding } from './landing'
 import { Action } from './controls'
 import { RequirementNotice } from './RequirementNotice'
 import type { Requirement } from './requirement'
@@ -197,7 +198,13 @@ export const Stepper = <T extends string>({
   const landing = useMemo(() => createLanding(), [])
 
   // a press whose step was still arriving when the component went away
-  useEffect(() => landing.stop, [landing])
+  useEffect(() => {
+    const forget = registerLanding(landing)
+    return () => {
+      landing.stop()
+      forget()
+    }
+  }, [landing])
 
   /** The step the last press opened, so the effect below can tell a press from the app */
   const pressed = useRef<T | null>(null)

@@ -3,6 +3,9 @@ import { loadCompanionRules, loadRotationConstraints } from '../data/companions'
 import { loadCropCatalog } from '../data/crops'
 import { cosDeg } from '../sim/math'
 import { REFERENCE_MAX_TILT_DEG, REFERENCE_MIN_TILT_DEG } from '../sim/pv/ler'
+import { polygonOf, rectangleRing, vec2 } from '../state/geom'
+import type { House } from '../types/garden'
+import { obstructionId } from '../types/ids'
 import type {
   ArrayCandidate,
   CandidateArchetype,
@@ -842,5 +845,50 @@ describe('the archetype names have to match the figures beside them', () => {
       /this site's own weather|out-generated every fixed tilt/,
     )
     expect(energyFirst.candidate.rationale).not.toContain('of the site latitude')
+  }, 600_000)
+})
+
+/**
+ * A house is drawn on the plot before the search ever runs (Decision Record 26), and the search
+ * never lays a candidate's rows through it: the layout search never places a row of panels or a
+ * bed inside a drawn house's footprint
+ */
+describe('a house on the plot keeps the search off its footprint', () => {
+  const houseAt = (widthM: number, depthM: number): House => ({
+    id: obstructionId('house-1'),
+    kind: 'house',
+    label: 'House 1',
+    footprint: polygonOf(rectangleRing(vec2(0, 0), widthM, depthM)),
+    heightM: meters(6),
+  })
+
+  it('drops a candidate whose rows run through the house', () => {
+    const site = siteAt(42.37)
+    const answers = answersFor({ location: site.location, mounting: 'ground-rows' })
+    const clear = candidatesFor(answers, site)
+    expect(clear.map((entry) => entry.archetype)).toContain('balanced')
+    // wide enough to sit under every fixed candidate's rows on this 16 by 12 m plot
+    const house = houseAt(40, 40)
+    const blocked = candidatesFor(answers, site, {}, [house])
+    const archetypes = blocked.map((entry) => entry.archetype)
+    expect(archetypes).not.toContain('balanced')
+    expect(archetypes).not.toContain('food-first')
+    // the control carries no rows, so a house never takes it away
+    expect(archetypes).toContain('no-array-control')
+  })
+
+  it("names the house in the search's own notes when every offered layout is blocked", async () => {
+    const site = siteAt(42.37)
+    const answers = answersFor({ location: site.location, mounting: 'ground-rows' })
+    const house = houseAt(40, 40)
+    const set = await suggestDesigns(answers, {
+      site,
+      weather: tmyFixture(),
+      backend: 'cpu-reference',
+      obstructions: [house],
+    })
+    expect(set.scenarios.map((entry) => entry.candidate.archetype)).toEqual(['no-array-control'])
+    expect(set.notConsidered.join(' ')).toContain('House 1')
+    expect(set.notConsidered.join(' ')).toContain('rows run through')
   }, 600_000)
 })

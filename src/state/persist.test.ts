@@ -7,7 +7,7 @@ import type { Bed, GardenPlot, Planting } from '../types/garden'
 import { bedId, cropId, plantingId } from '../types/ids'
 import { SCHEMA_VERSION } from '../types/persist'
 import { dayOfYear, epochMillis, fraction, meters, type Fraction } from '../types/units'
-import { makeArray, makeBed, makePlot } from './defaults'
+import { makeArray, makeBed, makeHouse, makePlot, makeTree } from './defaults'
 import { DEFAULT_WIZARD_ANSWERS } from './onboarding'
 import {
   debounce,
@@ -154,6 +154,24 @@ describe('what is persisted', () => {
     expect(back.plot?.arrays.length).toBe(2)
     expect(back.plot?.beds.map((bed) => bed.plantings.length)).toEqual([2, 2, 2, 2])
     expect(back.plot).toEqual(design.plot)
+  })
+
+  it('restores a house drawn on the ground unchanged', () => {
+    const design = realisticDesign()
+    const plot = design.plot as GardenPlot
+    const house = makeHouse(1, plot.boundary, 'south')
+    const withHouse = { ...design, plot: { ...plot, obstructions: [house] } }
+    const back = roundTrip(withHouse)
+    expect(back.plot?.obstructions).toEqual([house])
+  })
+
+  it('restores a tree drawn on the ground unchanged', () => {
+    const design = realisticDesign()
+    const plot = design.plot as GardenPlot
+    const tree = makeTree(1, plot.boundary, 'south')
+    const withTree = { ...design, plot: { ...plot, obstructions: [tree] } }
+    const back = roundTrip(withTree)
+    expect(back.plot?.obstructions).toEqual([tree])
   })
 
   it('restores the location, preferences, weights and durable UI choices', () => {
@@ -358,6 +376,26 @@ describe('schema version', () => {
     expect(loaded.design?.plot).toEqual(older.plot)
   })
 
+  /** A design saved before a house could be drawn had nothing drawn, which is an empty list */
+  it('restores a whole design saved at schema 4 with an empty obstruction list', () => {
+    const design = realisticDesign()
+    const plot = design.plot as GardenPlot
+    const { obstructions: _obstructions, ...olderPlot } = plot
+    const storage = memoryStorage()
+    storage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({
+        version: 4,
+        savedAtUtcMillis: AT,
+        design: { ...design, plot: olderPlot },
+      }),
+    )
+    const loaded = loadDesign(storage)
+    expect(loaded.status.outcome).toBe('restored')
+    expect(loaded.design?.plot?.obstructions).toEqual([])
+    expect(loaded.design?.plot?.beds.length).toBe(plot.beds.length)
+  })
+
   it('leaves the seasons a visitor actually ran alone', () => {
     const ran = {
       seed: 9,
@@ -441,6 +479,37 @@ describe('corrupt and partial payloads', () => {
     }
     const array = raw.design.plot.arrays[0]
     if (array) array.geometry.pitchM = 0
+    const loaded = loadedFrom(JSON.stringify(raw))
+    expect(loaded.status.outcome).toBe('repaired')
+    expect(loaded.design?.plot).toEqual(defaultDesign().plot)
+  })
+
+  /** Four corners or it isn't the box the bake would shade with, so the whole plot is unreadable */
+  it('drops a plot whose house has three corners rather than rendering it', () => {
+    const design = realisticDesign()
+    const plot = design.plot as GardenPlot
+    const house = makeHouse(1, plot.boundary, 'south')
+    const withHouse = { ...design, plot: { ...plot, obstructions: [house] } }
+    const raw = JSON.parse(encodeDesign(withHouse, AT)) as {
+      design: { plot: { obstructions: { footprint: { exterior: unknown[] } }[] } }
+    }
+    raw.design.plot.obstructions[0]?.footprint.exterior.pop()
+    const loaded = loadedFrom(JSON.stringify(raw))
+    expect(loaded.status.outcome).toBe('repaired')
+    expect(loaded.design?.plot).toEqual(defaultDesign().plot)
+  })
+
+  /** A crown whose top sits below its own base is not a box the bake could shade with */
+  it('drops a plot whose tree top is below its crown base rather than rendering it', () => {
+    const design = realisticDesign()
+    const plot = design.plot as GardenPlot
+    const tree = makeTree(1, plot.boundary, 'south')
+    const withTree = { ...design, plot: { ...plot, obstructions: [tree] } }
+    const raw = JSON.parse(encodeDesign(withTree, AT)) as {
+      design: { plot: { obstructions: { heightM: number; crownBaseM: number }[] } }
+    }
+    const obstruction = raw.design.plot.obstructions[0]
+    if (obstruction) obstruction.heightM = obstruction.crownBaseM - 1
     const loaded = loadedFrom(JSON.stringify(raw))
     expect(loaded.status.outcome).toBe('repaired')
     expect(loaded.design?.plot).toEqual(defaultDesign().plot)

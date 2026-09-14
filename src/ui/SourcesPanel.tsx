@@ -1,4 +1,5 @@
 import { useEffect, useState, type ReactElement } from 'react'
+import { settleLanding } from './landing'
 import { provenanceLedger, type ProvenanceGap } from '../data/gaps'
 import { prefersReducedMotion } from '../state/motion'
 import { useAppStore } from '../state/store'
@@ -136,11 +137,29 @@ export const SourcesPanel = (): ReactElement => {
     if (jump === null || records.length === 0) return undefined
     const row = document.getElementById(sourceRowId(jump.id))
     if (row === null) return undefined
-    // jsdom implements neither, and the sidebar's own scroll takes the same line: a browser
-    // missing one is a browser that does not scroll, not one that throws inside an effect
-    if (typeof row.scrollIntoView === 'function') {
-      row.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'center' })
-    }
+    // on the next frame, after the stepper has started holding the step's header at the top: the
+    // jump ends that hold and then scrolls, so the row stays where it lands (`landing.ts`). jsdom
+    // implements neither scroll call, and a browser missing one simply does not scroll. The frame
+    // functions are called through `window`, since a browser refuses them detached from it
+    const schedule =
+      typeof requestAnimationFrame === 'function'
+        ? {
+            set: (fn: () => void): number => window.requestAnimationFrame(fn),
+            clear: (id: number): void => window.cancelAnimationFrame(id),
+          }
+        : {
+            set: (fn: () => void): number => window.setTimeout(fn, 0),
+            clear: (id: number): void => window.clearTimeout(id),
+          }
+    const frame = schedule.set(() => {
+      settleLanding()
+      if (typeof row.scrollIntoView === 'function') {
+        row.scrollIntoView({
+          behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+          block: 'center',
+        })
+      }
+    })
     // the control that asked for this lived on another tab and the tab change unmounted it, so
     // focus is sitting on nothing; taking it here restores it rather than steals it, and a reader
     // who asked from a control still on screen keeps the focus they already had
@@ -149,6 +168,7 @@ export const SourcesPanel = (): ReactElement => {
     }
     const timer = window.setTimeout(() => setFadedNonce(jump.nonce), HIGHLIGHT_MS)
     return () => {
+      schedule.clear(frame)
       window.clearTimeout(timer)
     }
   }, [jump, records.length])

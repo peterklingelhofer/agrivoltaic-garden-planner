@@ -1,12 +1,14 @@
 import { describe, expect, it } from 'bun:test'
 import { banded, interval } from '../types/band'
-import type { GardenPlot } from '../types/garden'
-import { arrayId, bedId, plotId, siteId } from '../types/ids'
+import type { GardenPlot, Obstruction, Tree } from '../types/garden'
+import { arrayId, bedId, obstructionId, plotId, siteId } from '../types/ids'
 import { DEFAULT_GROUND_COVER } from '../types/ground'
 import type { PvArray } from '../types/pv'
-import type { Site } from '../types/site'
+import type { ExceedancePercentile, FrostExceedanceCurve, Site } from '../types/site'
 import type {
   Celsius,
+  Days,
+  DayOfYear,
   Degrees,
   DegreesLatitude,
   DegreesLongitude,
@@ -21,11 +23,14 @@ import type {
   WattsPeak,
 } from '../types/units'
 import type { TmySeries } from '../types/weather'
+import { cellIndicesInPolygon } from './aggregate'
 import { checkMassachusettsSmart } from './compliance'
 import { at } from './math'
+import { leafOnMonthsFor } from './obstruction'
 import { FINAL_OPTIONS, PREVIEW_OPTIONS, runSimulation } from './pipeline'
 import { monthlyRsrRaster } from './raster'
 import { observerFor, solarPositionSeries } from './solar'
+import { monthValue } from './units'
 import { simCacheKey } from './worker/client'
 
 const HOURS = 8760
@@ -172,6 +177,7 @@ const plot: GardenPlot = {
   },
   northOffsetDeg: 0 as Degrees,
   originOffsetM: { xM: 0 as Meters, yM: 0 as Meters },
+  obstructions: [],
   beds: [
     {
       id: bedId('bed-1'),
@@ -258,6 +264,133 @@ describe('annual simulation pipeline', () => {
     expect(elapsed).toBeLessThan(120_000)
   }, 180_000)
 
+  it('shades with a drawn house: same open sky, less light under the array beside it (Record 26)', async () => {
+    const series = weather()
+    const options = {
+      ...PREVIEW_OPTIONS,
+      targetCellSizeM: 1.5 as Meters,
+      backend: 'cpu-reference' as const,
+    }
+    const bare = await runSimulation(site, plot, series, options, () => {})
+
+    // 6 m to the eaves, 10 x 8 m footprint, its near wall a metre south of the bed's near
+    // edge at y = 1 m: this latitude's low sun comes from the south, so that is the side its
+    // shadow reaches the bed from
+    const house: Obstruction = {
+      id: obstructionId('house-1'),
+      kind: 'house',
+      label: 'Test house',
+      footprint: {
+        exterior: [
+          { xM: -5 as Meters, yM: -8 as Meters },
+          { xM: 5 as Meters, yM: -8 as Meters },
+          { xM: 5 as Meters, yM: 0 as Meters },
+          { xM: -5 as Meters, yM: 0 as Meters },
+        ],
+        holes: [],
+      },
+      heightM: 6 as Meters,
+    }
+    const plotWithHouse: GardenPlot = { ...plot, obstructions: [house] }
+    const shaded = await runSimulation(site, plotWithHouse, series, options, () => {})
+
+    // the reference stays the open sky whether or not a house is drawn
+    for (let m = 0; m < 12; m += 1) {
+      const bareMonth = bare.raster.monthlyOpenSkyMolM2Day[m]
+      const shadedMonth = shaded.raster.monthlyOpenSkyMolM2Day[m]
+      if (bareMonth === undefined || shadedMonth === undefined) throw new Error('missing month')
+      for (let i = 0; i < bareMonth.length; i += 1)
+        expect(at(shadedMonth, i)).toBe(at(bareMonth, i))
+    }
+
+    // the bed sits a metre from the house's near wall, so its darkest cell should darken further
+    const bedFootprint = plot.beds[0]?.footprint ?? { exterior: [], holes: [] }
+    const bedIndices = cellIndicesInPolygon(bare.raster, bedFootprint)
+    let bareMin = Infinity
+    let shadedMin = Infinity
+    for (let k = 0; k < bedIndices.length; k += 1) {
+      const cell = at(bedIndices, k)
+      bareMin = Math.min(bareMin, at(bare.raster.annualUnderArrayMolM2Day, cell))
+      shadedMin = Math.min(shadedMin, at(shaded.raster.annualUnderArrayMolM2Day, cell))
+    }
+    expect(shadedMin).toBeLessThan(bareMin)
+  }, 30_000)
+
+  it('shades a leaf-on month more than a leafless one, under a deciduous crown (Record 26)', async () => {
+    const series = weather()
+    const options = {
+      ...PREVIEW_OPTIONS,
+      targetCellSizeM: 1.5 as Meters,
+      backend: 'cpu-reference' as const,
+    }
+    // a real frost record, unlike the site fixture above (whose empty one reads as frost-free
+    // and so a growing window of the whole year, leaving no leafless month to compare against):
+    // last spring freeze day 120, first fall freeze day 270, April through September
+    const sameForAllPercentiles = <T>(value: T): Record<ExceedancePercentile, T> => ({
+      10: value,
+      20: value,
+      30: value,
+      40: value,
+      50: value,
+    })
+    const frostCurve: FrostExceedanceCurve = {
+      thresholdC: 0 as Celsius,
+      lastSpringFreeze: sameForAllPercentiles(120 as DayOfYear),
+      firstFallFreeze: sameForAllPercentiles(270 as DayOfYear),
+      frostFreeDays: sameForAllPercentiles(150 as Days),
+      frostFree: sameForAllPercentiles(false),
+      frostYears: 20,
+    }
+    const growingSeasonSite: Site = { ...site, frost: [frostCurve] }
+
+    // self-check: July inside the window, January outside it, or the assertions below would
+    // compare two leaf-on (or two leafless) months and prove nothing
+    const inLeaf = leafOnMonthsFor(growingSeasonSite, 50)
+    expect(inLeaf[6]).toBe(true)
+    expect(inLeaf[0]).toBe(false)
+
+    const tree: Tree = {
+      id: obstructionId('tree-1'),
+      kind: 'tree',
+      label: 'Test tree',
+      footprint: {
+        exterior: [
+          { xM: -2.5 as Meters, yM: -6 as Meters },
+          { xM: 2.5 as Meters, yM: -6 as Meters },
+          { xM: 2.5 as Meters, yM: -1 as Meters },
+          { xM: -2.5 as Meters, yM: -1 as Meters },
+        ],
+        holes: [],
+      },
+      crownBaseM: 2 as Meters,
+      heightM: 7 as Meters,
+      evergreen: false,
+      transmittance: 0.15 as Fraction,
+      leaflessTransmittance: 0.55 as Fraction,
+    }
+    const plotWithTree: GardenPlot = { ...plot, obstructions: [tree] }
+    const result = await runSimulation(growingSeasonSite, plotWithTree, series, options, () => {})
+
+    const crownIndices = cellIndicesInPolygon(result.raster, tree.footprint)
+    expect(crownIndices.length).toBeGreaterThan(0)
+
+    const underOverOpenRatio = (month: number): number => {
+      const under = monthValue(result.raster.monthlyUnderArrayMolM2Day, month)
+      const open = monthValue(result.raster.monthlyOpenSkyMolM2Day, month)
+      let underSum = 0
+      let openSum = 0
+      for (let k = 0; k < crownIndices.length; k += 1) {
+        const cell = at(crownIndices, k)
+        underSum += at(under, cell)
+        openSum += at(open, cell)
+      }
+      return openSum > 0 ? underSum / openSum : 0
+    }
+
+    // July (leaf-on, transmittance 0.15) lets less light through than January (leafless, 0.55)
+    expect(underOverOpenRatio(6)).toBeLessThan(underOverOpenRatio(0))
+  }, 30_000)
+
   it('bakes 8760 h x 4 sub-steps of solar position inside the 8 ms class budget', () => {
     const series = weather()
     const substepped = new Float64Array(HOURS * 4)
@@ -298,5 +431,76 @@ describe('annual simulation pipeline', () => {
     expect(
       simCacheKey(site, plot, series, { ...options, targetCellSizeM: 0.25 as Meters }),
     ).not.toBe(base)
+
+    // a house drawn after a bake at this arrangement must miss the memo, and so must the same
+    // house moved or raised: the probe of 2026-09-14 read a houseless field back as the house's
+    const house: Obstruction = {
+      id: obstructionId('house-1'),
+      kind: 'house',
+      label: 'House 1',
+      footprint: {
+        exterior: [
+          { xM: -5 as Meters, yM: -8 as Meters },
+          { xM: 5 as Meters, yM: -8 as Meters },
+          { xM: 5 as Meters, yM: 0 as Meters },
+          { xM: -5 as Meters, yM: 0 as Meters },
+        ],
+        holes: [],
+      },
+      heightM: 6 as Meters,
+    }
+    const housed = simCacheKey(site, { ...plot, obstructions: [house] }, series, options)
+    expect(housed).not.toBe(base)
+    const moved = {
+      ...house,
+      footprint: {
+        ...house.footprint,
+        exterior: house.footprint.exterior.map((p) => ({ ...p, yM: (p.yM - 1) as Meters })),
+      },
+    }
+    expect(simCacheKey(site, { ...plot, obstructions: [moved] }, series, options)).not.toBe(housed)
+    expect(
+      simCacheKey(
+        site,
+        { ...plot, obstructions: [{ ...house, heightM: 8 as Meters }] },
+        series,
+        options,
+      ),
+    ).not.toBe(housed)
+
+    // a tree changes what the bake shades with the same way: adding one, changing what it lets
+    // through, or flipping whether it drops its leaves must each miss the memo too
+    const tree: Tree = {
+      id: obstructionId('tree-1'),
+      kind: 'tree',
+      label: 'Tree 1',
+      footprint: {
+        exterior: [
+          { xM: -2.5 as Meters, yM: -6 as Meters },
+          { xM: 2.5 as Meters, yM: -6 as Meters },
+          { xM: 2.5 as Meters, yM: -1 as Meters },
+          { xM: -2.5 as Meters, yM: -1 as Meters },
+        ],
+        holes: [],
+      },
+      crownBaseM: 2 as Meters,
+      heightM: 7 as Meters,
+      evergreen: false,
+      transmittance: 0.15 as Fraction,
+      leaflessTransmittance: 0.55 as Fraction,
+    }
+    const treed = simCacheKey(site, { ...plot, obstructions: [tree] }, series, options)
+    expect(treed).not.toBe(base)
+    expect(
+      simCacheKey(
+        site,
+        { ...plot, obstructions: [{ ...tree, transmittance: 0.3 as Fraction }] },
+        series,
+        options,
+      ),
+    ).not.toBe(treed)
+    expect(
+      simCacheKey(site, { ...plot, obstructions: [{ ...tree, evergreen: true }] }, series, options),
+    ).not.toBe(treed)
   })
 })

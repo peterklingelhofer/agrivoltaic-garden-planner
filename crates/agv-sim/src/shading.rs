@@ -65,9 +65,10 @@ struct GroundShadow {
     max_x: f64,
     min_y: f64,
     max_y: f64,
+    transmittance: f64,
 }
 
-fn ring_bounds(polygon: Polygon2D) -> GroundShadow {
+fn ring_bounds(polygon: Polygon2D, transmittance: f64) -> GroundShadow {
     let mut min_x = f64::INFINITY;
     let mut max_x = f64::NEG_INFINITY;
     let mut min_y = f64::INFINITY;
@@ -84,6 +85,7 @@ fn ring_bounds(polygon: Polygon2D) -> GroundShadow {
         max_x,
         min_y,
         max_y,
+        transmittance,
     }
 }
 
@@ -91,13 +93,17 @@ fn ring_bounds(polygon: Polygon2D) -> GroundShadow {
 ///
 /// Sub-sampled inside each cell, because a cell either side of a shadow edge is genuinely part
 /// shaded and a single centre sample would quantise the edge to the cell size. A blocked sample
-/// still passes `module_transmittance`, which is what makes a semi-transparent module a shade
-/// level rather than a switch.
+/// still passes a transmittance, which is what makes a semi-transparent quad a shade level rather
+/// than a switch: `transmittances[i]` for panel `i` where the slice reaches that far, else
+/// `module_transmittance` for every panel, an empty slice being the common case. A sample under
+/// more than one quad keeps the smallest of their transmittances, so a ray through two faces of
+/// one crown counts once.
 pub fn beam_visibility_raster(
     grid: &GridSpec,
     panels: &[Vec<Vec3M>],
     sun: UnitVec3,
     module_transmittance: f64,
+    transmittances: &[f64],
     sub_samples_per_cell: usize,
 ) -> Vec<f32> {
     let mut result = vec![0.0f32; grid.cells()];
@@ -107,9 +113,18 @@ pub fn beam_visibility_raster(
 
     let shadows: Vec<GroundShadow> = panels
         .iter()
-        .map(|corners| project_panel_to_ground(corners, sun))
-        .filter(|polygon| !polygon.exterior.is_empty())
-        .map(ring_bounds)
+        .enumerate()
+        .filter_map(|(index, corners)| {
+            let polygon = project_panel_to_ground(corners, sun);
+            if polygon.exterior.is_empty() {
+                return None;
+            }
+            let transmittance = transmittances
+                .get(index)
+                .copied()
+                .unwrap_or(module_transmittance);
+            Some(ring_bounds(polygon, transmittance))
+        })
         .collect();
 
     let sub_samples = sub_samples_per_cell.max(1);
@@ -120,7 +135,7 @@ pub fn beam_visibility_raster(
         let cell_min_y = grid.extent.min_y_m + row as f64 * grid.cell_size_m;
         for col in 0..grid.cols {
             let cell_min_x = grid.extent.min_x_m + col as f64 * grid.cell_size_m;
-            let mut blocked = 0usize;
+            let mut total = 0.0f64;
             for si in 0..sub_samples {
                 let sample_x = cell_min_x + (si as f64 + 0.5) * step;
                 for sj in 0..sub_samples {
@@ -129,21 +144,29 @@ pub fn beam_visibility_raster(
                         x_m: sample_x,
                         y_m: sample_y,
                     };
-                    // the bounding box first, because it rejects almost every panel almost always
-                    let is_blocked = shadows.iter().any(|shadow| {
-                        sample_x >= shadow.min_x
+                    // the open figure is 1; a sample under one or more shadows keeps the
+                    // smallest of their transmittances, the bounding box first because it
+                    // rejects almost every quad almost always
+                    let mut sample_transmittance = 1.0f64;
+                    for shadow in &shadows {
+                        if sample_x >= shadow.min_x
                             && sample_x <= shadow.max_x
                             && sample_y >= shadow.min_y
                             && sample_y <= shadow.max_y
                             && point_in_polygon(point, &shadow.polygon)
-                    });
-                    if is_blocked {
-                        blocked += 1;
+                        {
+                            if shadow.transmittance < sample_transmittance {
+                                sample_transmittance = shadow.transmittance;
+                            }
+                            if sample_transmittance <= 0.0 {
+                                break;
+                            }
+                        }
                     }
+                    total += sample_transmittance;
                 }
             }
-            let lit = (total_samples - blocked) as f64 + blocked as f64 * module_transmittance;
-            result[row * grid.cols + col] = (lit / total_samples as f64) as f32;
+            result[row * grid.cols + col] = (total / total_samples as f64) as f32;
         }
     }
     result

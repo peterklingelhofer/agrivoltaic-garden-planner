@@ -1,9 +1,16 @@
 import type { Polygon2D, Vec2M } from './geo'
-import type { BedId, CropId, CultivarId, PlantingId, PlotId, SiteId } from './ids'
+import type { BedId, CropId, CultivarId, ObstructionId, PlantingId, PlotId, SiteId } from './ids'
 import type { GroundCover } from './ground'
 import type { PvArray } from './pv'
 import type { SoilProfile } from './site'
-import type { DayOfYear, Degrees, Meters, MillimetersPerYear, SquareMeters } from './units'
+import type {
+  DayOfYear,
+  Degrees,
+  Fraction,
+  Meters,
+  MillimetersPerYear,
+  SquareMeters,
+} from './units'
 
 export type IrrigationMethod = 'none' | 'hand' | 'sprinkler' | 'drip' | 'subsurface-drip' | 'flood'
 
@@ -65,6 +72,49 @@ export interface Bed {
   readonly plantings: readonly Planting[]
 }
 
+/**
+ * A house, drawn as a box opaque from the ground to its eaves. The light bake shades with its
+ * five faces the way it shades with a panel (Decision Record 26)
+ */
+export interface House {
+  readonly id: ObstructionId
+  readonly kind: 'house'
+  readonly label: string
+  /** Four corners in plot metres; the walls stand on its edges and the top lies at `heightM` */
+  readonly footprint: Polygon2D
+  /** Ground to eaves */
+  readonly heightM: Meters
+}
+
+/**
+ * A tree, as the box its crown fills: the footprint is the crown seen from above, the crown runs
+ * from `crownBaseM` up to `heightM` on a trunk the bake ignores, and light through the crown is
+ * scaled by one transmittance in leaf and another leafless (Decision Record 26). The leafless
+ * months are the ones outside the site's growing window; an evergreen keeps the in-leaf figure
+ * all year
+ */
+export interface Tree {
+  readonly id: ObstructionId
+  readonly kind: 'tree'
+  readonly label: string
+  /** Four corners in plot metres, the crown seen from above */
+  readonly footprint: Polygon2D
+  /** Ground to the underside of the crown */
+  readonly crownBaseM: Meters
+  /** Ground to the top of the crown */
+  readonly heightM: Meters
+  readonly evergreen: boolean
+  /** The share of light that passes the crown in leaf */
+  readonly transmittance: Fraction
+  /** The share that passes the bare crown; unused while `evergreen` */
+  readonly leaflessTransmittance: Fraction
+}
+
+/** Something standing near the space that shades it, inside the boundary or outside it */
+export type Obstruction = House | Tree
+
+export type ObstructionKind = Obstruction['kind']
+
 export interface GardenPlot {
   readonly id: PlotId
   readonly siteId: SiteId
@@ -74,6 +124,8 @@ export interface GardenPlot {
   readonly originOffsetM: Vec2M
   readonly beds: readonly Bed[]
   readonly arrays: readonly PvArray[]
+  /** What stands near the space and shades it; inside the boundary or outside it */
+  readonly obstructions: readonly Obstruction[]
   /** What is lying on the ground, which sets its albedo. See `src/types/ground.ts` */
   readonly groundCover: GroundCover
 }

@@ -215,6 +215,8 @@ interface CoreExports {
     rows: number,
     panels: number,
     panelCount: number,
+    transmittances: number,
+    transmittanceCount: number,
     sunX: number,
     sunY: number,
     sunZ: number,
@@ -260,6 +262,8 @@ export interface RustCore {
     sun: { readonly x: number; readonly y: number; readonly z: number },
     moduleTransmittance: number,
     subSamplesPerCell: number,
+    /** One f64 per panel; omitted or empty means every panel uses `moduleTransmittance` */
+    transmittances?: Float64Array,
   ) => Float32Array
 }
 
@@ -637,14 +641,21 @@ export const rustCore = (instance: WebAssembly.Instance): RustCore => {
     sun: { readonly x: number; readonly y: number; readonly z: number },
     moduleTransmittance: number,
     subSamplesPerCell: number,
+    transmittances: Float64Array = new Float64Array(0),
   ): Float32Array => {
     const cells = grid.cols * grid.rows
     const panelCount = Math.floor(panelCorners.length / PANEL_CORNER_FIELDS)
     const panelsCount = Math.max(1, panelCorners.length)
     const panelsPointer = exports.agv_alloc_f64(panelsCount)
+    const transmittanceCount = transmittances.length
+    const transmittancesCount = Math.max(1, transmittanceCount)
+    const transmittancesPointer = exports.agv_alloc_f64(transmittancesCount)
     const outPointer = exports.agv_alloc_f64(Math.max(1, cells))
     try {
       view(exports).set(panelCorners, panelsPointer / BYTES_PER_F64)
+      if (transmittanceCount > 0) {
+        view(exports).set(transmittances, transmittancesPointer / BYTES_PER_F64)
+      }
       exports.agv_beam_visibility(
         grid.minXM,
         grid.minYM,
@@ -653,6 +664,8 @@ export const rustCore = (instance: WebAssembly.Instance): RustCore => {
         grid.rows,
         panelsPointer,
         panelCount,
+        transmittancesPointer,
+        transmittanceCount,
         sun.x,
         sun.y,
         sun.z,
@@ -667,6 +680,7 @@ export const rustCore = (instance: WebAssembly.Instance): RustCore => {
       return Float32Array.from(flat)
     } finally {
       exports.agv_free_f64(panelsPointer, panelsCount)
+      exports.agv_free_f64(transmittancesPointer, transmittancesCount)
       exports.agv_free_f64(outPointer, Math.max(1, cells))
     }
   }

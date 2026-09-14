@@ -1,5 +1,6 @@
 import type { ReactElement } from 'react'
 import { usStateOf } from '../data/retail-price'
+import { overlapNotices } from '../recommend/overlap'
 import { useAppStore } from '../state/store'
 import type { ComplianceCheck } from '../types/compliance'
 import { OUTCOME_LABEL, criterionSummary } from './format'
@@ -49,6 +50,10 @@ const CheckBlock = ({ check }: { readonly check: ComplianceCheck }): ReactElemen
 export const CompliancePanel = (): ReactElement => {
   const compliance = useAppStore((s) => s.compliance)
   const raster = useAppStore((s) => s.raster)
+  const plot = useAppStore((s) => s.plot)
+  // an overlap is not a regulatory regime, so it stands apart from the checks below rather
+  // than inside one of their blocks
+  const overlaps = plot === null ? [] : overlapNotices(plot)
   /**
    * Where the garden is, so that outside Massachusetts the one rule this app can check is
    * introduced as another state's rule. Without it, a grower in New Jersey reads "Measured against
@@ -68,6 +73,11 @@ export const CompliancePanel = (): ReactElement => {
       title="Rules this design has to meet"
       subtitle="Massachusetts SMART is the only regime this app can check from geometry alone"
     >
+      {overlaps.map((text, index) => (
+        <p key={text} className="notice" data-testid={`readout-check-overlap-${String(index)}`}>
+          {text}
+        </p>
+      ))}
       <p className="notice notice-warn" data-testid="readout-compliance-determination">
         Not a determination. These checks are informational and carry no regulatory weight.
       </p>

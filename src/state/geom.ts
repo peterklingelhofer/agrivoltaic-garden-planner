@@ -70,6 +70,58 @@ export const pointInRing = (ring: Ring2D, x: number, y: number): boolean => {
 export const pointInPolygon = (polygon: Polygon2D, x: number, y: number): boolean =>
   pointInRing(polygon.exterior, x, y) && !polygon.holes.some((hole) => pointInRing(hole, x, y))
 
+/**
+ * True where two segments cross transversally: each one's endpoints land on opposite sides of
+ * the other. Touching at a shared endpoint or lying collinear zeroes one of the two products,
+ * which reads as no crossing rather than a false positive; the same rule `untangledRing` pins
+ * for a ring crossing itself
+ */
+const segmentsCross = (a1: Vec2M, a2: Vec2M, b1: Vec2M, b2: Vec2M): boolean => {
+  const orient = (a: Vec2M, b: Vec2M, c: Vec2M): number =>
+    (b.xM - a.xM) * (c.yM - a.yM) - (b.yM - a.yM) * (c.xM - a.xM)
+  return orient(a1, a2, b1) * orient(a1, a2, b2) < 0 && orient(b1, b2, a1) * orient(b1, b2, a2) < 0
+}
+
+const edgesOf = (ring: Ring2D): readonly (readonly [Vec2M, Vec2M])[] =>
+  ring.map((point, index) => [point, ring[(index + 1) % ring.length] as Vec2M] as const)
+
+/**
+ * True where `(x, y)` sits on one of the ring's own edges, corners included. `pointInRing`'s
+ * ray cast alone is not enough here: it is a half-open test so a point exactly on a shared
+ * corner reads inside through one neighbour's edge and outside through the other's, which is
+ * fine for hit-testing but not for a rule that has to treat every touching corner alike
+ */
+const onRingEdge = (ring: Ring2D, x: number, y: number): boolean =>
+  edgesOf(ring).some(([a, b]) => {
+    const bx = b.xM - a.xM
+    const by = b.yM - a.yM
+    const lengthSq = bx * bx + by * by
+    if (lengthSq < 1e-12) return false
+    const cross = bx * (y - a.yM) - by * (x - a.xM)
+    if ((cross * cross) / lengthSq > 1e-9) return false
+    const dot = (x - a.xM) * bx + (y - a.yM) * by
+    return dot >= -1e-9 && dot <= lengthSq + 1e-9
+  })
+
+/** A point inside the polygon by the crossing count and not sitting on its own boundary */
+const strictlyInside = (polygon: Polygon2D, x: number, y: number): boolean =>
+  pointInPolygon(polygon, x, y) && !onRingEdge(polygon.exterior, x, y)
+
+/**
+ * True where two footprints share any ground: a vertex of either exterior ring strictly inside
+ * the other, or a pair of their exterior edges crossing. Two shapes that only touch, an edge
+ * flush against an edge or one corner against another with neither ring's vertex strictly
+ * inside the other, read as clear rather than overlapping: the pinned rule is that touching
+ * alone is not overlap, only a vertex actually inside or an edge actually crossing is
+ */
+export const polygonsOverlap = (a: Polygon2D, b: Polygon2D): boolean => {
+  if (a.exterior.some((point) => strictlyInside(b, point.xM, point.yM))) return true
+  if (b.exterior.some((point) => strictlyInside(a, point.xM, point.yM))) return true
+  const edgesA = edgesOf(a.exterior)
+  const edgesB = edgesOf(b.exterior)
+  return edgesA.some(([a1, a2]) => edgesB.some(([b1, b2]) => segmentsCross(a1, a2, b1, b2)))
+}
+
 export const rectangleRing = (
   centre: Vec2M,
   widthM: number,

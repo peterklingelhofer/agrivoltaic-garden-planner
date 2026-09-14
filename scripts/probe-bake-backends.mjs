@@ -12,7 +12,8 @@
 // the array moved both to 100. The cause was in `src/sim/gpu/webgl2.ts`: the direction texture
 // was uploaded onto the texture unit the panels had just been bound to, so the shader read its
 // panel corners out of the sky directions. With that fixed the two backends agree to the digit
-// on both geometries, which is what this script now checks
+// on both geometries, and the script now checks two more too, with a house drawn and with a
+// tree (Decision Record 26)
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { chromium } from '@playwright/test'
@@ -47,7 +48,7 @@ await context.addInitScript(() => {
     const geometry = message?.plot?.arrays?.[0]?.geometry
     if (message?.type === 'run') {
       console.log(
-        `PROBE run arrays=${message.plot?.arrays?.length} clearance=${geometry?.clearanceHeightM} pitch=${geometry?.pitchM} backend=${message.options?.backend}`,
+        `PROBE run arrays=${message.plot?.arrays?.length} clearance=${geometry?.clearanceHeightM} pitch=${geometry?.pitchM} backend=${message.options?.backend} obstructions=${JSON.stringify(message.plot?.obstructions)}`,
       )
     }
     return original.call(this, message, ...rest)
@@ -97,5 +98,33 @@ for (const backend of ['webgl2-shadowmap', 'cpu-reference']) {
   // the fold closes with the step; open it again before putting the height back
   await page.getByText('Adjust the panels by hand').click()
   await page.getByTestId('control-array-clearance').fill('2.5')
+
+  // a third geometry: a house standing over bed 1, the same box the ground step draws and the
+  // scene shows, shading through the kernels this time
+  await page.getByTestId('action-step-ground').click()
+  await page.getByTestId('action-house-add').click()
+  await page.getByTestId('control-house-height-house-1').fill('12')
+  await page.getByTestId('control-house-north-house-1').fill('-8')
+  await bakeByHand()
+  console.log(backend, 'with a house', await rows())
+  // bakeByHand leaves the light step open; back to ground for the button that clears the house
+  await page.getByTestId('action-step-ground').click()
+  // clears it so the next backend starts from the same bare plot this one did
+  await page.getByTestId('action-house-remove-house-1').click()
+
+  // a fourth geometry: a tree standing over bed 1, its crown transmitting some light rather
+  // than blocking it outright the way the house's walls do
+  await page.getByTestId('action-tree-add').click()
+  await page.getByTestId('control-tree-width-tree-1').fill('10')
+  await page.getByTestId('control-tree-depth-tree-1').fill('10')
+  await page.getByTestId('control-tree-top-tree-1').fill('12')
+  await page.getByTestId('control-tree-base-tree-1').fill('2')
+  await page.getByTestId('control-tree-north-tree-1').fill('-6')
+  await bakeByHand()
+  console.log(backend, 'with a tree', await rows())
+  // bakeByHand leaves the light step open; back to ground for the button that clears the tree
+  await page.getByTestId('action-step-ground').click()
+  // clears it so the next backend starts from the same bare plot this one did
+  await page.getByTestId('action-tree-remove-tree-1').click()
 }
 await browser.close()

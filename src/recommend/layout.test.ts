@@ -1,7 +1,10 @@
 import { describe, expect, it } from 'bun:test'
 import { byMonth } from '../sim/units'
 import { makeArray } from '../state/defaults'
+import { polygonOf, polygonsOverlap, rectangleOf, rectangleRing } from '../state/geom'
+import type { House } from '../types/garden'
 import type { Polygon2D } from '../types/geo'
+import { obstructionId } from '../types/ids'
 import type { DliRaster, GrowingWindow } from '../types/light'
 import type { BedLayout, BedPlacement } from '../types/onboarding'
 import type { PvArray } from '../types/pv'
@@ -344,6 +347,35 @@ describe('the bed count for a plot', () => {
     expect(placed.value.beds.length).toBeGreaterThan(MAX_BEDS)
     // every one still has its own light, so a bigger plot is not a coarser answer
     expect(new Set(placed.value.beds.map((bed) => bed.bedId)).size).toBe(placed.value.beds.length)
+  })
+})
+
+describe('a house on the plot keeps a bed off its footprint', () => {
+  it('skips a placement that would stand inside a house, and names it in the refusal', () => {
+    const clear = banded()
+    const first = clear.beds[0]
+    if (first === undefined) throw new Error('the fixture places no bed')
+    const size = rectangleOf(first.footprint.exterior)
+    if (size === null) throw new Error('a placed bed is always a rectangle')
+    const house: House = {
+      id: obstructionId('house-1'),
+      kind: 'house',
+      label: 'House 1',
+      // a little larger than the first bed's own footprint, centred the same: certain to hold it
+      footprint: polygonOf(rectangleRing(size.centre, size.widthM + 1, size.depthM + 1)),
+      heightM: meters(6),
+    }
+    const placed = banded({ houses: [house] })
+    expect(placed.beds.length).toBeLessThan(clear.beds.length)
+    for (const bed of placed.beds) {
+      expect(polygonsOverlap(bed.footprint, house.footprint), bed.label).toBe(false)
+    }
+    expect(placed.refusals.join(' ')).toContain('House 1')
+  })
+
+  it('leaves the beds untouched when no house is on the plot', () => {
+    const withEmptyHouses = banded({ houses: [] })
+    expect(withEmptyHouses.beds).toEqual(banded().beds)
   })
 })
 

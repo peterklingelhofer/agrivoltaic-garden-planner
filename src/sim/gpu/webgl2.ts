@@ -1,5 +1,5 @@
 import type { Extent2D } from '../../types/geo'
-import type { PanelPolygon } from '../../types/pv'
+import type { Occluder } from '../../types/pv'
 import type { CumulativeSky } from '../../types/weather'
 import type {
   AccumulationProgress,
@@ -41,6 +41,10 @@ void main() {
 // (0,1) (2,3) (4,5) (6,7) (8,9) (10,11), each channel-pair (beam, diffuse). The spare alpha of
 // attachment 0 carries one time window, which is why MAX_GPU_WINDOWS is 1: it needs no extra
 // draw buffer, no extra pass and no extra bandwidth
+//
+// the panel texture gains a 5th row, one texel per quad: (transmittance, leaflessTransmittance,
+// 0, 0). Absent from a panel or a house face it reads 0 (opaque), the scalar every call already
+// passed; a tree's two figures land there instead (Decision Record 26)
 const FRAGMENT_SRC = `#version 300 es
 precision highp float;
 
@@ -51,6 +55,11 @@ uniform int uDirCount;
 uniform float uMinX;
 uniform float uMinY;
 uniform float uCellSize;
+// 0 = every panel and house face is opaque, the path proven before trees existed; 1 = a quad may
+// carry its own transmittance, chosen in-leaf or leafless by uLeafOnMask
+uniform int uSeasonal;
+// bit m set means calendar month m (0 = January) is in leaf
+uniform int uLeafOnMask;
 
 layout(location = 0) out vec4 outAnnual;
 layout(location = 1) out vec4 outMonth01;
@@ -62,6 +71,10 @@ layout(location = 6) out vec4 outMonth1011;
 
 vec3 panelCorner(int panelIndex, int corner) {
   return texelFetch(uPanels, ivec2(panelIndex, corner), 0).xyz;
+}
+
+vec2 panelTransmittance(int panelIndex) {
+  return texelFetch(uPanels, ivec2(panelIndex, 4), 0).xy;
 }
 
 bool inTriangle(vec3 x, vec3 a, vec3 b, vec3 c, vec3 n) {
@@ -85,15 +98,38 @@ float panelBlocks(vec3 p, vec3 d, int panelIndex) {
   return (inTriangle(x, q0, q1, q2, n) || inTriangle(x, q0, q2, q3, n)) ? 1.0 : 0.0;
 }
 
-float visibility(vec3 p, vec3 d) {
+// the running min over every blocking quad's (in-leaf, leafless) figure, on in x and off in y;
+// with uSeasonal off every figure is 0 or absent-as-0, so x collapses to the old binary visibility
+vec2 visibility(vec3 p, vec3 d) {
+  vec2 vis = vec2(1.0, 1.0);
   for (int i = 0; i < uPanelCount; i += 1) {
-    if (panelBlocks(p, d, i) > 0.5) return 0.0;
+    if (panelBlocks(p, d, i) > 0.5) {
+      vis = min(vis, panelTransmittance(i));
+      if (vis.x <= 0.0 && vis.y <= 0.0) return vis;
+    }
   }
-  return 1.0;
+  return vis;
 }
 
 vec4 monthPair(float beamVis, float diffuseVis, float weightA, float weightB) {
   return vec4(beamVis * weightA, diffuseVis * weightA, beamVis * weightB, diffuseVis * weightB);
+}
+
+bool leafOn(int month) {
+  return ((uLeafOnMask >> month) & 1) == 1;
+}
+
+// one month's beam/diffuse pair, on or off figure chosen per the mask, weightA for month a and
+// weightB for month a + 1: the same shape monthPair returns, so it folds into month01..month1011
+vec4 seasonalMonthPair(vec2 vis, float isBeam, float weightA, bool onA, float weightB, bool onB) {
+  float visA = onA ? vis.x : vis.y;
+  float visB = onB ? vis.x : vis.y;
+  return vec4(
+    visA * isBeam * weightA,
+    visA * (1.0 - isBeam) * weightA,
+    visB * isBeam * weightB,
+    visB * (1.0 - isBeam) * weightB
+  );
 }
 
 void main() {
@@ -117,21 +153,45 @@ void main() {
     vec4 row4 = texelFetch(uDirs, ivec2(j, 4), 0);
 
     float isBeam = row0.w;
-    float vis = visibility(p, row0.xyz);
-    float beamVis = vis * isBeam;
-    float diffuseVis = vis * (1.0 - isBeam);
+    vec2 vis = visibility(p, row0.xyz);
 
-    annual.x += beamVis * row1.x;
-    annual.y += diffuseVis * row1.x;
-    annual.z += diffuseVis * row1.y;
-    annual.w += vis * row1.z;
+    if (uSeasonal == 1) {
+      vec4 mp01 = seasonalMonthPair(vis, isBeam, row2.x, leafOn(0), row2.y, leafOn(1));
+      vec4 mp23 = seasonalMonthPair(vis, isBeam, row2.z, leafOn(2), row2.w, leafOn(3));
+      vec4 mp45 = seasonalMonthPair(vis, isBeam, row3.x, leafOn(4), row3.y, leafOn(5));
+      vec4 mp67 = seasonalMonthPair(vis, isBeam, row3.z, leafOn(6), row3.w, leafOn(7));
+      vec4 mp89 = seasonalMonthPair(vis, isBeam, row4.x, leafOn(8), row4.y, leafOn(9));
+      vec4 mp1011 = seasonalMonthPair(vis, isBeam, row4.z, leafOn(10), row4.w, leafOn(11));
 
-    month01 += monthPair(beamVis, diffuseVis, row2.x, row2.y);
-    month23 += monthPair(beamVis, diffuseVis, row2.z, row2.w);
-    month45 += monthPair(beamVis, diffuseVis, row3.x, row3.y);
-    month67 += monthPair(beamVis, diffuseVis, row3.z, row3.w);
-    month89 += monthPair(beamVis, diffuseVis, row4.x, row4.y);
-    month1011 += monthPair(beamVis, diffuseVis, row4.z, row4.w);
+      month01 += mp01;
+      month23 += mp23;
+      month45 += mp45;
+      month67 += mp67;
+      month89 += mp89;
+      month1011 += mp1011;
+
+      // annual is the sum of the months just computed, each shaded by the crown it had that
+      // month, so the annual weight in row 1 goes unread on this path (Decision Record 26)
+      annual.xy += mp01.xy + mp01.zw + mp23.xy + mp23.zw + mp45.xy + mp45.zw
+        + mp67.xy + mp67.zw + mp89.xy + mp89.zw + mp1011.xy + mp1011.zw;
+      annual.z += vis.x * (1.0 - isBeam) * row1.y;
+      annual.w += vis.x * row1.z;
+    } else {
+      float beamVis = vis.x * isBeam;
+      float diffuseVis = vis.x * (1.0 - isBeam);
+
+      annual.x += beamVis * row1.x;
+      annual.y += diffuseVis * row1.x;
+      annual.z += diffuseVis * row1.y;
+      annual.w += vis.x * row1.z;
+
+      month01 += monthPair(beamVis, diffuseVis, row2.x, row2.y);
+      month23 += monthPair(beamVis, diffuseVis, row2.z, row2.w);
+      month45 += monthPair(beamVis, diffuseVis, row3.x, row3.y);
+      month67 += monthPair(beamVis, diffuseVis, row3.z, row3.w);
+      month89 += monthPair(beamVis, diffuseVis, row4.x, row4.y);
+      month1011 += monthPair(beamVis, diffuseVis, row4.z, row4.w);
+    }
   }
 
   outAnnual = annual;
@@ -251,6 +311,8 @@ interface Session {
   readonly uMinX: WebGLUniformLocation
   readonly uMinY: WebGLUniformLocation
   readonly uCellSize: WebGLUniformLocation
+  readonly uSeasonal: WebGLUniformLocation
+  readonly uLeafOnMask: WebGLUniformLocation
 }
 
 const setupSession = (canvas: OffscreenCanvas, cols: number, rows: number): Session => {
@@ -265,7 +327,7 @@ const setupSession = (canvas: OffscreenCanvas, cols: number, rows: number): Sess
   }
 
   const program = linkProgram(gl)
-  const panelTexture = createFloatTexture(gl, 1, 4)
+  const panelTexture = createFloatTexture(gl, 1, 5)
   const dirTexture = createFloatTexture(gl, 1, 5)
   const accumTextures = ATTACHMENTS.map(() => createFloatTexture(gl, cols, rows))
 
@@ -295,14 +357,16 @@ const setupSession = (canvas: OffscreenCanvas, cols: number, rows: number): Sess
     uMinX: uniformLocation(gl, program, 'uMinX'),
     uMinY: uniformLocation(gl, program, 'uMinY'),
     uCellSize: uniformLocation(gl, program, 'uCellSize'),
+    uSeasonal: uniformLocation(gl, program, 'uSeasonal'),
+    uLeafOnMask: uniformLocation(gl, program, 'uLeafOnMask'),
   }
 }
 
 const buildPanelTextureData = (
-  panels: readonly PanelPolygon[],
+  panels: readonly Occluder[],
 ): { width: number; data: Float32Array } => {
   const width = Math.max(1, panels.length)
-  const data = new Float32Array(width * 4 * 4)
+  const data = new Float32Array(width * 5 * 4)
   panels.forEach((panel, col) => {
     for (let corner = 0; corner < 4; corner += 1) {
       const v = panel.corners.vertices[corner]
@@ -311,8 +375,22 @@ const buildPanelTextureData = (
       data[idx + 1] = v?.yM ?? 0
       data[idx + 2] = v?.zM ?? 0
     }
+    // row 4: the quad's own (transmittance, leaflessTransmittance), 0 where absent, which is opaque
+    // and matches the scalar every panel and house face is shaded with
+    const rowIdx = (4 * width + col) * 4
+    data[rowIdx] = panel.transmittance ?? 0
+    data[rowIdx + 1] = panel.leaflessTransmittance ?? 0
   })
   return { width, data }
+}
+
+const leafOnMask = (leafOnMonths: readonly boolean[] | null): number => {
+  if (leafOnMonths === null) return 0
+  let mask = 0
+  for (let month = 0; month < leafOnMonths.length; month += 1) {
+    if (leafOnMonths[month] === true) mask |= 1 << month
+  }
+  return mask
 }
 
 export const MAX_GPU_WINDOWS = 1
@@ -328,7 +406,7 @@ interface GpuDirection {
   readonly monthly: readonly number[]
   // non-null only for a tracking array's beam directions, which is why the posed directions
   // form a prefix of the list: the draw loop relies on that to batch the static tail
-  readonly panels: readonly PanelPolygon[] | null
+  readonly panels: readonly Occluder[] | null
 }
 
 export const buildDirections = (request: AccumulationRequest): readonly GpuDirection[] => {
@@ -481,18 +559,20 @@ export const createWebgl2Backend = (canvas: OffscreenCanvas): SkyMatrixBackend =
       if (request.windowSkies.length > MAX_GPU_WINDOWS) {
         throw new Error(`webgl2 backend accumulates at most ${MAX_GPU_WINDOWS} time window`)
       }
-      let boundPanels: readonly PanelPolygon[] | null = null
-      const bindPanels = (posed: readonly PanelPolygon[]): void => {
+      let boundPanels: readonly Occluder[] | null = null
+      const bindPanels = (posed: readonly Occluder[]): void => {
         if (posed === boundPanels) return
         boundPanels = posed
         const panelData = buildPanelTextureData(posed)
-        uploadTexture(gl, 0, session.panelTexture, panelData.width, 4, panelData.data)
+        uploadTexture(gl, 0, session.panelTexture, panelData.width, 5, panelData.data)
         gl.uniform1i(session.uPanels, 0)
         gl.uniform1i(session.uPanelCount, posed.length)
       }
       gl.uniform1f(session.uMinX, extent.minXM)
       gl.uniform1f(session.uMinY, extent.minYM)
       gl.uniform1f(session.uCellSize, grid.cellSizeM)
+      gl.uniform1i(session.uSeasonal, request.leafOnMonths === null ? 0 : 1)
+      gl.uniform1i(session.uLeafOnMask, leafOnMask(request.leafOnMonths))
 
       const directions = buildDirections(request)
       const passesTotal = request.sky.sunDirections.length + request.sky.patches.length

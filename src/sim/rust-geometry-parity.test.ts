@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { describe, expect, it } from 'bun:test'
-import { arrayId } from '../types/ids'
+import type { Obstruction } from '../types/garden'
+import { arrayId, obstructionId } from '../types/ids'
 import type { PvArray } from '../types/pv'
 import type {
   Degrees,
@@ -12,6 +13,7 @@ import type {
   KilowattsAc,
 } from '../types/units'
 import { derivedArrayMetrics, panelSnapshot } from './geometry'
+import { houseQuads, treeQuads } from './obstruction'
 import { rustCore, type RustCore } from './rust-core'
 import { beamVisibilityRaster } from './shading'
 import { sunUnitVector } from './solar'
@@ -184,8 +186,67 @@ describe('the kernels that are still implemented twice', () => {
       rows: grid.rows,
     }
 
+    // tucked in the grid's far corner, clear of the panel array at the origin
+    const house: Obstruction = {
+      id: obstructionId('house-1'),
+      kind: 'house',
+      label: 'Parity house',
+      footprint: {
+        exterior: [
+          { xM: -10 as Meters, yM: -10 as Meters },
+          { xM: -2 as Meters, yM: -10 as Meters },
+          { xM: -2 as Meters, yM: -2 as Meters },
+          { xM: -10 as Meters, yM: -2 as Meters },
+        ],
+        holes: [],
+      },
+      heightM: 6 as Meters,
+    }
+    const houseOccluders = houseQuads(house)
+    const houseFloats = new Float64Array(houseOccluders.length * 12)
+    houseOccluders.forEach((quad, q) => {
+      quad.corners.vertices.forEach((v, c) => {
+        houseFloats[q * 12 + c * 3] = v.xM
+        houseFloats[q * 12 + c * 3 + 1] = v.yM
+        houseFloats[q * 12 + c * 3 + 2] = v.zM
+      })
+    })
+
+    // a crown east of the house and south of the panel array, clear of both, its 0.3 distinct
+    // from the house's opacity and the panels' 0.05
+    const crown: Obstruction = {
+      id: obstructionId('tree-1'),
+      kind: 'tree',
+      label: 'Parity crown',
+      footprint: {
+        exterior: [
+          { xM: 4 as Meters, yM: -10 as Meters },
+          { xM: 9 as Meters, yM: -10 as Meters },
+          { xM: 9 as Meters, yM: -5 as Meters },
+          { xM: 4 as Meters, yM: -5 as Meters },
+        ],
+        holes: [],
+      },
+      crownBaseM: 2 as Meters,
+      heightM: 5 as Meters,
+      evergreen: true,
+      transmittance: 0.3 as Fraction,
+      leaflessTransmittance: 0.3 as Fraction,
+    }
+    const crownOccluders = treeQuads(crown)
+    const crownFloats = new Float64Array(crownOccluders.length * 12)
+    crownOccluders.forEach((quad, q) => {
+      quad.corners.vertices.forEach((v, c) => {
+        crownFloats[q * 12 + c * 3] = v.xM
+        crownFloats[q * 12 + c * 3 + 1] = v.yM
+        crownFloats[q * 12 + c * 3 + 2] = v.zM
+      })
+    })
+
     let compared = 0
     let anyShaded = false
+    let houseChangedACell = false
+    let crownOnlyCellFound = false
     for (const [elevation, azimuth] of [
       [12, 110],
       [35, 150],
@@ -204,8 +265,19 @@ describe('the kernels that are still implemented twice', () => {
         },
       }))
       const sun = sunUnitVector(elevation as Degrees, azimuth as Degrees)
-      const ts = beamVisibilityRaster(gridSpec, panels as never, sun, 0.05 as Fraction, 3)
-      const rs = core.beamVisibility(grid, corners, sun, 0.05, 3)
+      const allCorners = new Float64Array(corners.length + houseFloats.length + crownFloats.length)
+      allCorners.set(corners)
+      allCorners.set(houseFloats, corners.length)
+      allCorners.set(crownFloats, corners.length + houseFloats.length)
+      const occluders = [...panels, ...houseOccluders, ...crownOccluders]
+      // the panels and the house are explicitly 0.05, matching the scalar the TypeScript side
+      // falls back to for them; the crown's tail is its own 0.3. Read off each quad's own
+      // `transmittance` on the TypeScript side and off this parallel, per-quad array on the
+      // Rust side, so the same figures reach both kernels by two different routes
+      const transmittances = new Float64Array(occluders.length).fill(0.05)
+      transmittances.fill(0.3, panels.length + houseOccluders.length)
+      const ts = beamVisibilityRaster(gridSpec, occluders, sun, 0.05 as Fraction, 3)
+      const rs = core.beamVisibility(grid, allCorners, sun, 0.05, 3, transmittances)
       expect(rs.length).toBe(ts.length)
       for (let cell = 0; cell < ts.length; cell += 1) {
         const a = ts[cell] ?? 0
@@ -213,9 +285,35 @@ describe('the kernels that are still implemented twice', () => {
         compared += 1
         if (a < 0.999) anyShaded = true
       }
+
+      // a cell only the crown shades reads its 0.3: the house and the panels both read 0.05, so
+      // 0.3 (loose enough for the raster's float32) can only come from the crown alone
+      const crownOnly = ts.findIndex((v) => Math.abs(v - 0.3) < 1e-5)
+      if (crownOnly >= 0) {
+        crownOnlyCellFound = true
+        expect(rs[crownOnly], `crown-only cell at elevation ${String(elevation)}`).toBeCloseTo(
+          0.3,
+          5,
+        )
+      }
+
+      if (elevation === 35) {
+        // the house has to change something, or leaving it out would pass too; the crown stays
+        // in both sides of this comparison so it isolates the house alone
+        const withoutHouse = beamVisibilityRaster(
+          gridSpec,
+          [...panels, ...crownOccluders],
+          sun,
+          0.05 as Fraction,
+          3,
+        )
+        houseChangedACell = withoutHouse.some((value, cell) => value !== (ts[cell] ?? value))
+      }
     }
     expect(compared).toBe(4 * 48 * 48)
     // a raster of all ones would compare equal and mean nothing
     expect(anyShaded, 'no cell was shaded, so the comparison proved nothing').toBe(true)
+    expect(houseChangedACell, 'the house never changed a single cell').toBe(true)
+    expect(crownOnlyCellFound, 'no cell was shaded by the crown alone').toBe(true)
   })
 })

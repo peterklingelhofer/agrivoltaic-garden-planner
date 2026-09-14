@@ -1,5 +1,5 @@
 import type { GridSpec } from '../types/geo'
-import type { PanelPolygon } from '../types/pv'
+import type { Occluder } from '../types/pv'
 import type { CumulativeSky } from '../types/weather'
 import { createCpuReferenceBackend } from './cpu'
 import { createWebgl2Backend, isWebgl2Available } from './gpu/webgl2'
@@ -9,15 +9,20 @@ export type BackendKind = 'webgpu-raycast' | 'webgl2-shadowmap' | 'cpu-reference
 
 export interface AccumulationRequest {
   readonly grid: GridSpec
-  readonly panels: readonly PanelPolygon[]
+  // every quad the bake shades with: the panels, and the faces of any drawn house or tree
+  readonly panels: readonly Occluder[]
   readonly sky: CumulativeSky
   readonly monthlySkies: readonly CumulativeSky[]
   // index-aligned with sky.sunDirections and sky.patches, same as monthlySkies; each window is
   // one extra weight vector, so it adds accumulator writes but never a visibility pass
   readonly windowSkies: readonly CumulativeSky[]
+  // null while no deciduous tree is drawn, so every path below bakes with no leaf-season variant.
+  // Otherwise 12 entries, index 0 = January, true where that month is in leaf by the site's Growing
+  // Season Index (Decision Record 26)
+  readonly leafOnMonths: readonly boolean[] | null
   // a tracking array's pose is a function of the sun direction, so the beam term can be posed
   // per bin at no extra pass cost; omit it and every direction sees request.panels
-  readonly beamPanels: ((directionIndex: number) => readonly PanelPolygon[]) | null
+  readonly beamPanels: ((directionIndex: number) => readonly Occluder[]) | null
   readonly passesPerFrame: number
   readonly frameBudgetMs: number
 }

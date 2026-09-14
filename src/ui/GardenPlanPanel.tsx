@@ -2,12 +2,14 @@ import type { ReactElement } from 'react'
 import { OBJECTIVE_KEYS, OBJECTIVE_PRESETS, presetMatching } from '../state/onboarding'
 import { bedLightSummary } from '../state/bed-light'
 import { growingWindowOf } from '../state/growing-window'
-import type { GeneratedBed } from '../state/slices'
+import { EMPTY_LIST, type GeneratedBed } from '../state/slices'
 import { useAppStore } from '../state/store'
 import type { Crop } from '../types/crop'
+import type { Obstruction } from '../types/garden'
 import type { BedId, CropId } from '../types/ids'
 import type { BedLight } from '../types/light'
 import { ARCHETYPE_LABEL } from '../recommend/design'
+import { drawnPhrase } from '../recommend/surroundings'
 import type { BedLightSummary, CandidateArchetype, DesignObjective } from '../types/onboarding'
 import { Action, type ChoiceOption } from './controls'
 import { cropName, formatDli } from './format'
@@ -86,6 +88,14 @@ const shadeCostNote = (
 const labelOf = <T extends string>(options: readonly ChoiceOption<T>[], value: T): string =>
   options.find((option) => option.value === value)?.label ?? value
 
+/**
+ * The label that replaces the exposure answer once anything is drawn (Decision Record 26)
+ */
+const drawnLabel = (obstructions: readonly Obstruction[]): string => {
+  const phrase = drawnPhrase(obstructions)
+  return `${phrase.charAt(0).toUpperCase()}${phrase.slice(1)}, drawn on the ground`
+}
+
 const objectiveName = (objective: DesignObjective): string =>
   OBJECTIVE_PRESETS.find((preset) => preset.id === presetMatching(objective))?.label ??
   'A mix you set yourself'
@@ -109,6 +119,7 @@ const objectiveMix = (objective: DesignObjective): string =>
  */
 const OptimisedFor = (): ReactElement => {
   const answers = useAppStore((s) => s.answers)
+  const obstructions = useAppStore((s) => s.plot?.obstructions ?? EMPTY_LIST)
   const setSidebarStep = useAppStore((s) => s.setSidebarStep)
   const named = presetMatching(answers.objective) !== null
 
@@ -129,7 +140,11 @@ const OptimisedFor = (): ReactElement => {
         <Readout
           id="plan-exposure"
           label="What already stands around it"
-          value={labelOf(EXPOSURE_OPTIONS, answers.exposure)}
+          value={
+            obstructions.length > 0
+              ? drawnLabel(obstructions)
+              : labelOf(EXPOSURE_OPTIONS, answers.exposure)
+          }
         />
       </div>
       {named ? null : (

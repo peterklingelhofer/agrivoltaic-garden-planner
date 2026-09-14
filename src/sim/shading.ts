@@ -1,12 +1,9 @@
 import type { GridSpec, Polygon2D, Ring2D, UnitVec3, Vec2M } from '../types/geo'
-import type { PanelPolygon } from '../types/pv'
+import type { Occluder } from '../types/pv'
 import type { Degrees, Fraction, Meters, Radians } from '../types/units'
 import { cosDeg, sinDeg } from './math'
 
-export const projectPanelToGround: (panel: PanelPolygon, sun: UnitVec3) => Polygon2D = (
-  panel,
-  sun,
-) => {
+export const projectPanelToGround: (panel: Occluder, sun: UnitVec3) => Polygon2D = (panel, sun) => {
   if (sun.z <= 1e-6) return { exterior: [], holes: [] }
   const exterior: Vec2M[] = panel.corners.vertices.map((corner) => {
     const t = corner.zM / sun.z
@@ -37,9 +34,10 @@ interface GroundShadow {
   readonly maxX: number
   readonly minY: number
   readonly maxY: number
+  readonly transmittance: Fraction
 }
 
-const ringBounds = (ring: Ring2D): Omit<GroundShadow, 'polygon'> => {
+const ringBounds = (ring: Ring2D): Omit<GroundShadow, 'polygon' | 'transmittance'> => {
   let minX = Infinity
   let maxX = -Infinity
   let minY = Infinity
@@ -55,7 +53,7 @@ const ringBounds = (ring: Ring2D): Omit<GroundShadow, 'polygon'> => {
 
 export const beamVisibilityRaster: (
   grid: GridSpec,
-  panels: readonly PanelPolygon[],
+  panels: readonly Occluder[],
   sun: UnitVec3,
   moduleTransmittance: Fraction,
   subSamplesPerCell: number,
@@ -67,7 +65,11 @@ export const beamVisibilityRaster: (
   for (const panel of panels) {
     const polygon = projectPanelToGround(panel, sun)
     if (polygon.exterior.length === 0) continue
-    shadows.push({ polygon, ...ringBounds(polygon.exterior) })
+    shadows.push({
+      polygon,
+      ...ringBounds(polygon.exterior),
+      transmittance: panel.transmittance ?? moduleTransmittance,
+    })
   }
 
   const subSamples = Math.max(1, subSamplesPerCell)
@@ -78,25 +80,32 @@ export const beamVisibilityRaster: (
     const cellMinY = grid.extent.minYM + row * grid.cellSizeM
     for (let col = 0; col < grid.cols; col += 1) {
       const cellMinX = grid.extent.minXM + col * grid.cellSizeM
-      let blocked = 0
+      let total = 0
       for (let si = 0; si < subSamples; si += 1) {
         const sampleX = cellMinX + (si + 0.5) * step
         for (let sj = 0; sj < subSamples; sj += 1) {
           const sampleY = cellMinY + (sj + 0.5) * step
           const point: Vec2M = { xM: sampleX as Meters, yM: sampleY as Meters }
-          const isBlocked = shadows.some(
-            (shadow) =>
+          // the open figure is 1; a sample under one or more shadows keeps the smallest of their
+          // transmittances, so a ray through two faces of one crown counts once
+          let sampleTransmittance = 1
+          for (const shadow of shadows) {
+            if (
               sampleX >= shadow.minX &&
               sampleX <= shadow.maxX &&
               sampleY >= shadow.minY &&
               sampleY <= shadow.maxY &&
-              pointInPolygon(point, shadow.polygon),
-          )
-          if (isBlocked) blocked += 1
+              pointInPolygon(point, shadow.polygon)
+            ) {
+              if (shadow.transmittance < sampleTransmittance)
+                sampleTransmittance = shadow.transmittance
+              if (sampleTransmittance === 0) break
+            }
+          }
+          total += sampleTransmittance
         }
       }
-      result[row * grid.cols + col] =
-        (totalSamples - blocked + blocked * moduleTransmittance) / totalSamples
+      result[row * grid.cols + col] = total / totalSamples
     }
   }
   return result

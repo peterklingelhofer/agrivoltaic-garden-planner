@@ -1,8 +1,9 @@
-import type { Bed, GardenPlot } from '../types/garden'
-import type { LatLon } from '../types/geo'
+import { CROWN_TRANSMITTANCE_IN_LEAF, CROWN_TRANSMITTANCE_LEAFLESS } from '../data/canopy'
+import type { Bed, GardenPlot, Obstruction } from '../types/garden'
+import type { LatLon, Polygon2D } from '../types/geo'
 import { DEFAULT_GROUND_COVER } from '../types/ground'
 import type { GrowingWindow } from '../types/light'
-import { arrayId, bedId, plotId, siteId } from '../types/ids'
+import { arrayId, bedId, obstructionId, plotId, siteId } from '../types/ids'
 import type { ModuleSpec, PvArray, RowGeometry, TrackerConfig } from '../types/pv'
 import type { SimulationState } from '../types/simulation'
 import type { SoilProfile } from '../types/site'
@@ -16,7 +17,7 @@ import {
   wattsPeak,
 } from '../types/units'
 import { withDerived } from './derive'
-import { polygonAreaM2, polygonOf, rectangleRing, vec2 } from './geom'
+import { extentOf, polygonAreaM2, polygonOf, rectangleRing, vec2 } from './geom'
 import type { EffectSettings, OverlaySettings, WildlifeChoices } from './slices'
 
 export const DEFAULT_LOCATION: LatLon = {
@@ -172,6 +173,74 @@ export const makeBed = (index: number, patch: Partial<Bed> = {}): Bed => {
   }
 }
 
+/** Ground to eaves, and the two sides in plot metres, for the house `addHouse` draws */
+const HOUSE_WIDTH_M = 10
+const HOUSE_DEPTH_M = 8
+const HOUSE_HEIGHT_M = 6
+/** Clear of the boundary, so the house's own shadow reaches the plot when the sun is low */
+const HOUSE_SETBACK_M = 2
+
+/**
+ * The house `addHouse` draws: 10 by 8 m, 6 m to the eaves, centred on the boundary's east-west
+ * centre and standing just outside it on the side the sun crosses at midday, so its shadow falls
+ * across the plot rather than away from it (Decision Record 26)
+ */
+export const makeHouse = (
+  index: number,
+  boundary: Polygon2D,
+  side: 'south' | 'north',
+): Obstruction => {
+  const extent = extentOf([boundary.exterior])
+  const centreXM = (extent.minXM + extent.maxXM) / 2
+  const setbackM = HOUSE_SETBACK_M + HOUSE_DEPTH_M / 2
+  const centreYM = side === 'south' ? extent.minYM - setbackM : extent.maxYM + setbackM
+  return {
+    id: obstructionId(`house-${index}`),
+    kind: 'house',
+    label: `House ${index}`,
+    footprint: polygonOf(rectangleRing(vec2(centreXM, centreYM), HOUSE_WIDTH_M, HOUSE_DEPTH_M)),
+    heightM: meters(HOUSE_HEIGHT_M),
+  }
+}
+
+/** A crown 5 by 5 m, 2 m up to 7 m, for the tree `addTree` draws */
+const TREE_WIDTH_M = 5
+const TREE_DEPTH_M = 5
+const TREE_CROWN_BASE_M = 2
+const TREE_HEIGHT_M = 7
+/** Clear of the boundary on the equator side, the same setback the default house stands at */
+const TREE_SETBACK_M = 2
+/** East of the boundary's centre, so a house and a tree added together do not share ground */
+const TREE_EAST_OFFSET_M = 8
+
+/**
+ * The tree `addTree` draws: a 5 by 5 m crown from 2 up to 7 m, deciduous, its transmittance the
+ * two cited Konarska et al. 2014 figures, standing 8 m east of the boundary's centre and just
+ * outside it on the equator side like the default house, so the two do not share ground
+ * (Decision Record 26)
+ */
+export const makeTree = (
+  index: number,
+  boundary: Polygon2D,
+  side: 'south' | 'north',
+): Obstruction => {
+  const extent = extentOf([boundary.exterior])
+  const centreXM = (extent.minXM + extent.maxXM) / 2 + TREE_EAST_OFFSET_M
+  const setbackM = TREE_SETBACK_M + TREE_DEPTH_M / 2
+  const centreYM = side === 'south' ? extent.minYM - setbackM : extent.maxYM + setbackM
+  return {
+    id: obstructionId(`tree-${index}`),
+    kind: 'tree',
+    label: `Tree ${index}`,
+    footprint: polygonOf(rectangleRing(vec2(centreXM, centreYM), TREE_WIDTH_M, TREE_DEPTH_M)),
+    crownBaseM: meters(TREE_CROWN_BASE_M),
+    heightM: meters(TREE_HEIGHT_M),
+    evergreen: false,
+    transmittance: CROWN_TRANSMITTANCE_IN_LEAF.value,
+    leaflessTransmittance: CROWN_TRANSMITTANCE_LEAFLESS.value,
+  }
+}
+
 export const makePlot = (): GardenPlot => ({
   id: plotId('plot-1'),
   siteId: siteId('site-1'),
@@ -181,6 +250,7 @@ export const makePlot = (): GardenPlot => ({
   originOffsetM: vec2(0, 0),
   beds: [makeBed(1), makeBed(2), makeBed(3)],
   arrays: [makeArray(1)],
+  obstructions: [],
   groundCover: DEFAULT_GROUND_COVER,
 })
 

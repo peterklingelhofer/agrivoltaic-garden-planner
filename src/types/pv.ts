@@ -88,12 +88,20 @@ export interface PvArray {
   readonly derived: DerivedArrayMetrics
 }
 
-export interface PanelPolygon {
+/** A quad the light bake ray-tests: a panel, or a face of a drawn house or tree */
+export interface Occluder {
+  readonly corners: Polygon3D
+  /** The share of light that passes this quad; absent means the kernel's own scalar */
+  readonly transmittance?: Fraction
+  /** The share that passes leafless; absent means the same as `transmittance` */
+  readonly leaflessTransmittance?: Fraction
+}
+
+export interface PanelPolygon extends Occluder {
   readonly id: PanelId
   readonly arrayId: ArrayId
   readonly rowIndex: number
   readonly columnIndex: number
-  readonly corners: Polygon3D
   readonly normal: UnitVec3
   readonly tiltDeg: Degrees
   readonly surfaceAzimuthDeg: Degrees

@@ -1,12 +1,13 @@
 import { beforeEach, describe, expect, it, mock } from 'bun:test'
 import { vi } from '../../test/vi'
+import { CROWN_TRANSMITTANCE_IN_LEAF, CROWN_TRANSMITTANCE_LEAFLESS } from '../data/canopy'
 import type { DesignProgress, SimulationRunner } from '../recommend/design'
 import { siteFixture, tmyFixture } from '../recommend/testkit'
 import type { GardenPlot } from '../types/garden'
 import { epochMillis, meters } from '../types/units'
-import { DEFAULT_LOCATION, DEFAULT_LOCATION_LABEL, makePlot } from './defaults'
+import { DEFAULT_LOCATION, DEFAULT_LOCATION_LABEL, makeHouse, makePlot } from './defaults'
 import { DESIGN_UNAVAILABLE, normaliseSet, type DesignInputs } from './design-bridge'
-import { polygonAreaM2, polygonOf, rectangleRing, vec2 } from './geom'
+import { extentOf, polygonAreaM2, polygonOf, rectangleOf, rectangleRing, vec2 } from './geom'
 import {
   answersOf,
   arrayFromCandidate,
@@ -119,6 +120,14 @@ describe('the answers reach the engine contract', () => {
       boundary: polygonOf([vec2(0, 0), vec2(7, 0), vec2(7, 3), vec2(2, 5), vec2(0, 5)]),
     }
     expect(plotSizeOf(drawn)).toEqual({ widthM: 7, depthM: 5 })
+  })
+
+  /** A drawn house answers what is already around the space, so the search reads that instead */
+  it('hands the search the exposure in force: open with a house drawn, the answer otherwise', () => {
+    const plot = plotOf(10, 8)
+    expect(full({ exposure: 'overshadowed' }, plot).exposure).toBe('overshadowed')
+    const withHouse = { ...plot, obstructions: [makeHouse(1, plot.boundary, 'south')] }
+    expect(full({ exposure: 'overshadowed' }, withHouse).exposure).toBe('open')
   })
 
   it('normalises the objective on the way out, whatever the sliders left behind', () => {
@@ -251,6 +260,110 @@ describe('applying a scenario goes through the actions the editor already has', 
     expect(existing).not.toBeNull()
     const next = arrayFromCandidate(candidateFor('balanced'), existing)
     expect(next.id).toBe(existing?.id)
+  })
+})
+
+describe('a house drawn on the ground', () => {
+  it('adds a 10 by 8 m house outside the boundary on the equator-facing side, and selects it', () => {
+    const bed = getAppState().plot?.beds[0]
+    expect(bed).toBeDefined()
+    getAppState().selectBed(bed!.id)
+
+    const id = getAppState().addHouse()
+    expect(id).not.toBeNull()
+
+    const plot = getAppState().plot!
+    expect(plot.obstructions.length).toBe(1)
+    const house = plot.obstructions[0]!
+    expect(house.id).toBe(id)
+    expect(house.heightM).toBe(6)
+
+    const size = rectangleOf(house.footprint.exterior)
+    expect(size?.widthM).toBeCloseTo(10, 6)
+    expect(size?.depthM).toBeCloseTo(8, 6)
+
+    // the default location is north of the equator, so the house stands on its south side
+    const boundary = extentOf([plot.boundary.exterior])
+    expect(size?.centre.yM).toBeLessThan(boundary.minYM)
+
+    expect(getAppState().selectedObstructionId).toBe(id)
+    expect(getAppState().selectedBedId).toBeNull()
+  })
+
+  it('is null with no plot to draw one on', () => {
+    useAppStore.setState({ plot: null })
+    expect(getAppState().addHouse()).toBeNull()
+  })
+
+  it('removes a house and clears its selection', () => {
+    const id = getAppState().addHouse()
+    getAppState().removeObstruction(id!)
+    expect(getAppState().plot?.obstructions.length).toBe(0)
+    expect(getAppState().selectedObstructionId).toBeNull()
+  })
+
+  it('gives up the house selection the moment a bed is selected', () => {
+    const id = getAppState().addHouse()
+    expect(getAppState().selectedObstructionId).toBe(id)
+    const bed = getAppState().plot!.beds[0]!
+    getAppState().selectBed(bed.id)
+    expect(getAppState().selectedObstructionId).toBeNull()
+    expect(getAppState().selectedBedId).toBe(bed.id)
+  })
+})
+
+describe('a tree drawn on the ground', () => {
+  it('adds a 5 by 5 m tree from 2 up to 7 m, east of the boundary on the equator-facing side, and selects it', () => {
+    const bed = getAppState().plot?.beds[0]
+    expect(bed).toBeDefined()
+    getAppState().selectBed(bed!.id)
+
+    const id = getAppState().addTree()
+    expect(id).not.toBeNull()
+
+    const plot = getAppState().plot!
+    expect(plot.obstructions.length).toBe(1)
+    const tree = plot.obstructions[0]!
+    expect(tree.id).toBe(id)
+    expect(tree.kind).toBe('tree')
+    if (tree.kind !== 'tree') throw new Error('not a tree')
+    expect(tree.crownBaseM).toBe(2)
+    expect(tree.heightM).toBe(7)
+
+    const size = rectangleOf(tree.footprint.exterior)
+    expect(size?.widthM).toBeCloseTo(5, 6)
+    expect(size?.depthM).toBeCloseTo(5, 6)
+
+    // 8 m east of the boundary's centre; the default location is north of the equator, so the
+    // tree stands on its south side, like the default house
+    const boundary = extentOf([plot.boundary.exterior])
+    const boundaryCentreXM = (boundary.minXM + boundary.maxXM) / 2
+    expect(size?.centre.xM).toBeCloseTo(boundaryCentreXM + 8, 6)
+    expect(size?.centre.yM).toBeLessThan(boundary.minYM)
+
+    expect(getAppState().selectedObstructionId).toBe(id)
+    expect(getAppState().selectedBedId).toBeNull()
+  })
+
+  it('is deciduous by default, with the two cited crown-transmittance figures', () => {
+    getAppState().addTree()
+    const tree = getAppState().plot?.obstructions[0]
+    if (tree === undefined || tree.kind !== 'tree') throw new Error('no tree drawn')
+    expect(tree.evergreen).toBe(false)
+    expect(tree.transmittance).toBeCloseTo(CROWN_TRANSMITTANCE_IN_LEAF.value, 6)
+    expect(tree.leaflessTransmittance).toBeCloseTo(CROWN_TRANSMITTANCE_LEAFLESS.value, 6)
+  })
+
+  it('is null with no plot to draw one on', () => {
+    useAppStore.setState({ plot: null })
+    expect(getAppState().addTree()).toBeNull()
+  })
+
+  it('removes a tree and clears its selection', () => {
+    const id = getAppState().addTree()
+    getAppState().removeObstruction(id!)
+    expect(getAppState().plot?.obstructions.length).toBe(0)
+    expect(getAppState().selectedObstructionId).toBeNull()
   })
 })
 

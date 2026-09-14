@@ -8,6 +8,7 @@ import type {
   SkyMatrixBackend,
 } from './backend'
 import { at, sinDeg } from './math'
+import { isSeasonal, leaflessQuads } from './obstruction'
 import { beamVisibilityRaster } from './shading'
 import { sunUnitVector } from './solar'
 
@@ -43,7 +44,7 @@ export const createCpuReferenceBackend = (): SkyMatrixBackend => ({
     const monthlyBeamWhPerM2 = Array.from({ length: 12 }, () => new Float32Array(cells))
     const monthlyDiffuseWhPerM2 = Array.from({ length: 12 }, () => new Float32Array(cells))
 
-    const { sky, monthlySkies, windowSkies, panels, grid } = request
+    const { sky, monthlySkies, windowSkies, panels, grid, leafOnMonths } = request
     const alignedTo = (skies: readonly CumulativeSky[]): readonly CumulativeSky[] =>
       skies.filter(
         (other) =>
@@ -56,26 +57,58 @@ export const createCpuReferenceBackend = (): SkyMatrixBackend => ({
     const passesTotal = sky.sunDirections.length + sky.patches.length
     const chunk = Math.max(1, request.passesPerFrame)
     let passesDone = 0
+    // a leafless pass that would just repeat the in-leaf one is skipped: no tree drawn, or an
+    // all-evergreen one, both leave every quad's two figures equal
+    const seasonQuadsDiffer = leafOnMonths !== null && isSeasonal(panels)
 
     for (let j = 0; j < sky.sunDirections.length; j += 1) {
       const bin = sky.sunDirections[j]
       if (bin !== undefined && bin.z > 0) {
         const posed = request.beamPanels === null ? panels : request.beamPanels(j)
-        const visibility = beamVisibilityRaster(grid, posed, bin, 0 as Fraction, 1)
-        // the bin weight is DNI Wh/m2, so project onto the horizontal ground with dir.z
-        addScaled(beamWhPerM2, visibility, bin.beamWeightWhPerM2 * bin.z)
-        for (let m = 0; m < aligned.length; m += 1) {
-          const monthBin = aligned[m]?.sunDirections[j]
-          const target = monthlyBeamWhPerM2[m]
-          if (monthBin !== undefined && target !== undefined) {
-            addScaled(target, visibility, monthBin.beamWeightWhPerM2 * bin.z)
+        if (leafOnMonths === null) {
+          const visibility = beamVisibilityRaster(grid, posed, bin, 0 as Fraction, 1)
+          // the bin weight is DNI Wh/m2, so project onto the horizontal ground with dir.z
+          addScaled(beamWhPerM2, visibility, bin.beamWeightWhPerM2 * bin.z)
+          for (let m = 0; m < aligned.length; m += 1) {
+            const monthBin = aligned[m]?.sunDirections[j]
+            const target = monthlyBeamWhPerM2[m]
+            if (monthBin !== undefined && target !== undefined) {
+              addScaled(target, visibility, monthBin.beamWeightWhPerM2 * bin.z)
+            }
           }
-        }
-        for (let w = 0; w < windows.length; w += 1) {
-          const windowBin = windows[w]?.sunDirections[j]
-          const target = windowWhPerM2[w]
-          if (windowBin !== undefined && target !== undefined) {
-            addScaled(target, visibility, windowBin.beamWeightWhPerM2 * bin.z)
+          for (let w = 0; w < windows.length; w += 1) {
+            const windowBin = windows[w]?.sunDirections[j]
+            const target = windowWhPerM2[w]
+            if (windowBin !== undefined && target !== undefined) {
+              addScaled(target, visibility, windowBin.beamWeightWhPerM2 * bin.z)
+            }
+          }
+        } else {
+          const visOn = beamVisibilityRaster(grid, posed, bin, 0 as Fraction, 1)
+          const visOff = seasonQuadsDiffer
+            ? beamVisibilityRaster(grid, leaflessQuads(posed), bin, 0 as Fraction, 1)
+            : visOn
+          // annual has no weight of its own here: it is the sum of the months below, each shaded
+          // by the crown it actually had that month, the way annualFromMonthly sums the sky itself
+          for (let m = 0; m < aligned.length; m += 1) {
+            const monthBin = aligned[m]?.sunDirections[j]
+            const target = monthlyBeamWhPerM2[m]
+            if (monthBin !== undefined && target !== undefined) {
+              const variant = leafOnMonths[m] === true ? visOn : visOff
+              const weight = monthBin.beamWeightWhPerM2 * bin.z
+              addScaled(target, variant, weight)
+              addScaled(beamWhPerM2, variant, weight)
+            }
+          }
+          // a time window reads the in-leaf figure whatever its months: the one window shipped is
+          // the growing season, which the leaf-on months follow closely, and a window's weights
+          // carry no month to pick a variant by. A documented approximation (Record 26)
+          for (let w = 0; w < windows.length; w += 1) {
+            const windowBin = windows[w]?.sunDirections[j]
+            const target = windowWhPerM2[w]
+            if (windowBin !== undefined && target !== undefined) {
+              addScaled(target, visOn, windowBin.beamWeightWhPerM2 * bin.z)
+            }
           }
         }
       }
@@ -89,27 +122,49 @@ export const createCpuReferenceBackend = (): SkyMatrixBackend => ({
     for (let i = 0; i < sky.patches.length; i += 1) {
       const patch = sky.patches[i]
       if (patch !== undefined && patch.altitudeDeg > 0) {
-        const visibility = beamVisibilityRaster(
-          grid,
-          panels,
-          patchDirection(patch),
-          0 as Fraction,
-          1,
-        )
-        addScaled(diffuseWhPerM2, visibility, patch.cumulativeRadianceWhPerM2)
-        addScaled(skyViewFactor, visibility, patchSvfWeight(patch))
-        for (let m = 0; m < aligned.length; m += 1) {
-          const monthPatch = aligned[m]?.patches[i]
-          const target = monthlyDiffuseWhPerM2[m]
-          if (monthPatch !== undefined && target !== undefined) {
-            addScaled(target, visibility, monthPatch.cumulativeRadianceWhPerM2)
+        const dir = patchDirection(patch)
+        if (leafOnMonths === null) {
+          const visibility = beamVisibilityRaster(grid, panels, dir, 0 as Fraction, 1)
+          addScaled(diffuseWhPerM2, visibility, patch.cumulativeRadianceWhPerM2)
+          addScaled(skyViewFactor, visibility, patchSvfWeight(patch))
+          for (let m = 0; m < aligned.length; m += 1) {
+            const monthPatch = aligned[m]?.patches[i]
+            const target = monthlyDiffuseWhPerM2[m]
+            if (monthPatch !== undefined && target !== undefined) {
+              addScaled(target, visibility, monthPatch.cumulativeRadianceWhPerM2)
+            }
           }
-        }
-        for (let w = 0; w < windows.length; w += 1) {
-          const windowPatch = windows[w]?.patches[i]
-          const target = windowWhPerM2[w]
-          if (windowPatch !== undefined && target !== undefined) {
-            addScaled(target, visibility, windowPatch.cumulativeRadianceWhPerM2)
+          for (let w = 0; w < windows.length; w += 1) {
+            const windowPatch = windows[w]?.patches[i]
+            const target = windowWhPerM2[w]
+            if (windowPatch !== undefined && target !== undefined) {
+              addScaled(target, visibility, windowPatch.cumulativeRadianceWhPerM2)
+            }
+          }
+        } else {
+          const visOn = beamVisibilityRaster(grid, panels, dir, 0 as Fraction, 1)
+          const visOff = seasonQuadsDiffer
+            ? beamVisibilityRaster(grid, leaflessQuads(panels), dir, 0 as Fraction, 1)
+            : visOn
+          // the sky-view factor reads the in-leaf figure too, the growing season being what the
+          // beds are judged over: the same documented approximation as the windows above
+          addScaled(skyViewFactor, visOn, patchSvfWeight(patch))
+          for (let m = 0; m < aligned.length; m += 1) {
+            const monthPatch = aligned[m]?.patches[i]
+            const target = monthlyDiffuseWhPerM2[m]
+            if (monthPatch !== undefined && target !== undefined) {
+              const variant = leafOnMonths[m] === true ? visOn : visOff
+              const weight = monthPatch.cumulativeRadianceWhPerM2
+              addScaled(target, variant, weight)
+              addScaled(diffuseWhPerM2, variant, weight)
+            }
+          }
+          for (let w = 0; w < windows.length; w += 1) {
+            const windowPatch = windows[w]?.patches[i]
+            const target = windowWhPerM2[w]
+            if (windowPatch !== undefined && target !== undefined) {
+              addScaled(target, visOn, windowPatch.cumulativeRadianceWhPerM2)
+            }
           }
         }
       }

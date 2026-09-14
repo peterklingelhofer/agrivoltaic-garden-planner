@@ -1647,66 +1647,153 @@ lookup slow enough to lose. A visitor who typed Mumbai quickly got Amherst's gro
 Mumbai's weather. The store's lookup carries a token now, and an answer that lands after a
 later lookup began is dropped.
 
-**Not done.** Drawing a house or a tree, which is what would replace the three-answer share; its
-design is Record 26. The olive row now carries a chill figure, 150 hours, cited to De Melo-Abreu
+**Not done.** Nothing of this list any more: the house and the tree that replace the
+three-answer share are Record 26, built. The olive row now carries a chill figure, 150 hours, cited to De Melo-Abreu
 et al. 2004 and Sahli et al. 2012, and the three example gardens were re-baked against the 182-row
 catalogue: Amherst's beds 2 and 4 gained teff, and Bergen's bed 3 traded sorrel for good king
 henry.
 
 ## 26. A house or a tree is drawn on the ground, and the bake shades with it
 
-**Decided 2026-09-13, for the next build.** The three-answer surroundings share of Record 25 dims
-every bed by the same fraction whatever stands where. It stands in for what the bake does not
-hold: the house next door, the shed, the tree at the fence. This record fixes what replaces it,
-so the build can be checked against a page.
+**Decided 2026-09-13; the house and the tree built 2026-09-14.** The three-answer surroundings
+share of Record 25 dims every bed by the same fraction whatever stands where. It stood in for
+what the bake did not hold: the house next door, the shed, the tree at the fence. A flat share is
+wrong in sign and in season. A house north of the beds shades nothing in the northern hemisphere
+and still cost them a third of their light; a house south of them shades in winter and hardly at
+all while crops are in the ground (at Amherst a 6 m eave throws 13 m at noon in December and 2 m
+in June), and the share took 30% off June instead. This record fixes what replaces it.
 
 **What is drawn.** Two kinds of obstruction, each a box. A house is a rectangle on the ground with
 a wall height, opaque. A tree is a crown box between a canopy base height and a top, on a trunk
-the bake ignores, with one canopy transmittance. A box may stand anywhere on the 240 m ground the
-scene draws, inside the boundary or outside it, because the building that shades a garden is
-mostly next door. It is added from the ground step beside the surroundings question ("Add a
-house", "Add a tree"), then moved and turned in Move mode the way a row of panels is, a corner
-drag keeping the rectangle (Record 22). Defaults, this app's own and editable on the object: a
-house 8 by 10 m and 6 m to the eaves; a tree crown 5 by 5 m from 2 m up to 7 m.
+the bake ignores, with one transmittance in leaf and another leafless, and a switch for a tree
+that keeps its leaves. A box may stand anywhere on the 240 m ground the scene draws, inside the
+boundary or outside it, because the building that shades a garden is mostly next door. Both are
+added from the ground step beside the surroundings question ("Add a house", "Add a tree"), then
+moved in Move mode the way a bed is, a corner drag keeping the rectangle (Record 22), nudged
+with the arrow keys, or placed by typing the centre, the two sides, the heights and the turn on
+the same step. The defaults, this app's own: a house 10 by 8 m and 6 m to the eaves, drawn 2 m
+outside the boundary on the side that faces the equator so its shadow crosses the plot when the
+sun is low; a tree with a crown 5 by 5 m from 2 m up to 7 m, deciduous, 8 m east of the house's
+spot, its two figures the cited defaults below and editable on the card with the source beside
+them.
 
-**How the bake sees it.** A box becomes five quads, the top and four walls, appended to the list
-the panels already travel in: the CPU reference kernel, the Rust kernel it is held to, and the
-WebGL2 shader's ray-quad loop. The sky-view factor and the diffuse term read the same visibility
-test as the beam, so a wall darkens all three at once. Both backends already treat a panel as
-opaque (the kernel's transmittance argument is passed 0 everywhere the app calls it), so a house
-needs no new physics, only more quads; the layout search sees its shadow because it reads the
-baked raster. The tree is the one new thing: every quad carries a transmittance, a blocked sample
+**How the bake sees it.** A house becomes five quads, the top and four walls (`houseQuads` in
+`src/sim/obstruction.ts`), appended to the list the panels already travel in, which is typed as
+what a kernel reads off a panel: four corners and nothing else (`Occluder`). The CPU reference
+kernel, the Rust kernel it is held to and the WebGL2 shader's ray-quad loop shade with it
+unchanged: both backends already treat a panel as opaque (the kernel's transmittance argument is
+passed 0 everywhere the app calls it), so a house needed no new physics and no shader change.
+The sky-view factor and the diffuse term read the same visibility test as the beam, so a wall
+darkens all three at once. The open-sky reference stays the closed form over no occluders: the
+house's shade lands in the under-array layer only, the shade ratio compounds house and panels
+the way Record 25's share compounded, and the shade budget then checks the crop's total shade
+against its tolerance, which is the accounting Record 25's scaled budget approximated with a
+table. A reference baked over the house alone was considered and refused: it would have made the
+bed bands and the yield curve blind to the house's shade. The layout search sees the house
+because it reads the baked raster, and every candidate plot the search bakes carries it. The
+tree is the one new thing in the kernels: every quad may carry a transmittance, a blocked sample
 keeps the smallest transmittance among the quads that block it, and a ray through both faces of
-one crown counts once. Panels carry 0, so nothing already measured moves. The house ships first
-and the tree second, since the tree needs all three kernels changed and the house needs none.
+one crown counts once. A crown is six faces with the tree's pair on each, and the trunk is
+ignored. Panels and house faces carry 0, so nothing already measured moves: the min rule
+collapses to the old test wherever every quad is opaque. The leafless season is a set of months,
+because the bake accumulates by month: a deciduous crown is in leaf during the site's growing
+window at the median frost percentile (the growing-window rule now lives in the sim layer,
+`src/sim/growing-window.ts`, and the data layer re-exports it), and each month's light is
+accumulated from the crown's in-leaf figure or its bare one, the annual being the sum of the
+months. The sky-view factor and the time windows read the in-leaf figure whatever the month, a
+declared approximation: the one window shipped is the growing season, which the leaf-on months
+follow closely. The CPU backend runs a second visibility pass with the bare figures only when a
+deciduous tree is drawn; the WebGL2 shader carries both figures in a fifth texture row, keeps
+two running minima in one loop, picks the month's variant by a bitmask, and leaves the path
+without a season byte for byte as it was; the Rust kernel takes a per-quad transmittance slice
+beside its scalar.
 
-**What it replaces.** While a plot has no obstruction the share of Record 25 applies as before.
-Once one is drawn the share is not applied at all, the drawn geometry being the answer, and the
-light step says which of the two is in force. The question stays on the ground step until a
-round of scripted runs has drawn one. Then it goes, with its share table, the agent's words for
-it, and its unsourced claim on the sources step.
+**What it replaces.** While a plot has no house and no tree the share of Record 25 applies as
+before. Once one is drawn the share is not applied anywhere, the drawn geometry being the
+answer: every reader of the answer goes through `exposureInForce`, which returns the open answer
+while anything stands, so the bed light, the layout search and the shade budget agree. The
+question is disabled on the ground step with a sentence saying why, the light step's note names
+what was drawn, and the plan card says so. The question stays: it is the answer for anyone who
+won't draw, and the share table with its unsourced claim stays declared on the sources step. A
+house keeps beds and rows out: the layout search never places a bed or a candidate row inside
+one, and a hand placement that overlaps gets a sentence on the check step; drags are never
+blocked. A tree polices nothing, since a bed under a crown is a garden.
 
 **Where it lives.** `GardenPlot.obstructions`, schema 4 to 5 with an empty list for every saved
-garden, a decoder branch beside the arrays', and `lightGeometryKey` carrying it so a moved house
-re-bakes. The scene draws the same box the bake shades with, and a trunk under a crown, so the
-picture holds nothing the bake does not (Record 14.5); the box casts the scene's live shadow the
-way a panel does. The three example gardens ship none, so their rasters, `exampleGridMatches` and
-the overlay baseline stay where they are.
+garden and for the three shipped examples, a decoder that admits a four-corner house with a
+positive height or a tree with a crown above its base and two figures between 0 and 1 (a tree
+is a second kind inside the same list, so it needed no schema step), and `lightGeometryKey` and
+the worker's memo key carrying the list so a moved or altered obstruction re-bakes by itself.
+The ground step's controls are `ObstructionsSection`; the scene's `HouseMesh` and `TreeMesh`
+draw the same boxes the bake shades with, so the picture holds nothing the bake does not (Record
+14.5). The house casts the scene's live shadow the way a panel does; the crown's opacity is one
+minus the transmittance the bake applies in the month the scene clock shows, and its shadow is
+dithered to the same density, since a shadow map casts all or nothing. The three example gardens
+ship none, so their rasters, `exampleGridMatches` and the overlay baseline stay where they are.
 
-**The figures and their sources.** A house has no figure. A tree's canopy transmittance is one
-cited number, read before the tree ships; the candidates are Heisler 1986 (irradiance under
-single trees, Urban Ecology 9) and Canham et al. 1994 (crown transmission by species, Canadian
-Journal of Forest Research 24). Until it is cited it is declared on the sources step the way the
-share table is. A leafless winter crown is a later step, and the site's frost dates give the
-window.
+**The figures and their sources.** A house has no figure. A tree's two defaults are 0.033 in
+leaf and 0.46 leafless, the midpoints of what Konarska et al. 2014 measured under five street
+trees in Göteborg (Theoretical and Applied Climatology 117:363-376): "Average transmissivity of
+direct solar radiation through the foliated and defoliated tree crowns ranged from 1.3 to 5.3 %
+and from 40.2 to 51.9 %, respectively." Heisler 1986 (Urban Ecology 9:337-359) is the
+cross-check: a mid-sized sugar maple cut the irradiance on a wall in its shade by about 80% in
+leaf and nearly 40% leafless, a wall figure that also counts sky and reflected light and so
+reads higher than a crown's own transmittance. Canham et al. 1994 (Canadian Journal of Forest
+Research 24:337-349) is the closed-canopy comparison, under 2% of full sun beneath beech and
+hemlock and over 5% beneath red oak and ash, lower than a lone tree as expected. The figures are
+direct-beam transmissivity applied here to beam, diffuse and sky view alike through a solid box,
+which the entries' caveats say. The months a crown is in leaf, the site's growing window at the
+median frost percentile, are this app's own reading and are declared on the sources step the
+way the share table is.
 
-**How it is checked.** One box fixture in `rust-geometry-parity.test.ts` and `webgl2.test.ts`, so
-the three kernels agree on a house before anything else is built. A crown at 0.3 over a panel at 0
-gives 0, and over open ground 0.3. The sky-view factor reads lower beside a wall than clear of it.
-`probe-bake-backends.mjs` runs after the shader changes. A functional spec drops a house south of
-bed 1 on the example and reads the bed's share of open sky falling and tomato leaving Recommended.
-A saved schema 4 garden round-trips with an empty list.
+**How it is checked.** A house fixture in `rust-geometry-parity.test.ts` holds the TypeScript and
+Rust kernels to the same shadow cell for cell with a wall in the grid, and `webgl2.test.ts`
+carries the same house for the shader where a browser runs it. `obstruction.test.ts` reads a
+6 m house's shadow on the side away from the sun out to the height-over-tangent throw and clear
+past it, and its sky-view factor lower a metre from a wall than clear of the house, where it
+equals having none. A pipeline case bakes the same plot with and without a house: the open-sky
+layer is identical and the bed beside the wall darker. The memo the worker answers repeat bakes
+from is keyed on the house too: `probe-bake-backends.mjs`, run against a preview build with a
+12 m house a metre south of the first bed, first read the houseless field back on both backends
+because that key lacked the house while the staleness key had it; with the key fixed, the
+WebGL2 and CPU backends agree to the digit on all three geometries (87, 42 and 54% of open sky
+bare; 29, 24 and 52% with the house). `house.spec.ts` draws a 10 m house a metre south of the
+example's bed 1: its light falls from 99% of open sky and 32.9 mol/m²/d to 38% and 17.4, tomato
+leaves Recommended for Not suited, the house survives a reload at schema 5, and removing it
+gives the surroundings question back. Persisted gardens at schema 4 round-trip with an empty
+list. The tree's checks: a crown at 0.3 directly over a panel reads 0 on the ground beneath
+both and 0.3 where only the crown shades, and a ray through two faces of one crown reads 0.3
+once; with July in leaf and January bare, the CPU backend's July beam under the crown is the
+in-leaf figure times the open one and January's the bare figure times it, and the annual beam
+equals the sum of the twelve months; the parity fixture carries the crown at 0.3 through both
+kernels with the per-quad slice, and the WebGL2 fixture carries it with half the months bare;
+the pipeline case pins a leaf-on month's ratio under the crown below a bare month's; the Rust
+crate has its own min-rule test; the memo key changes when a tree is added, its figure edited or
+its evergreen switch flipped; a tree round-trips through storage and one whose top is below its
+base is refused; the crown's opacity in the scene reads the in-leaf figure in a July hour and
+the bare one in a January hour; `tree.spec.ts` draws a 12 m crown over the ground south of the
+example's bed 1 and reads its light falling, the note naming the tree, the tree surviving a
+reload and Remove giving the question back. The probe's fourth geometry, a 12 m crown over the
+default plot's first bed, reads 58, 33 and 51% of open sky on both backends, eight real bakes
+posted. The overlap rule has its own cases: two rectangles that touch along an edge do not
+overlap, a plus sign of two thin rectangles does, a placement inside a house is skipped and
+named, a candidate whose rows run through a house is dropped and the search says so, and the
+check step prints the sentence for a bed inside a house. Four scripted runs drove a preview
+build on stubbed Amherst weather (a laptop and a phone, a garden with an old maple in it, and
+a run that checked every figure against the sources): all four found "Add a house" and "Add a
+tree" under "What shades it" unaided, read the disabled question's sentence as clear, and got
+figures that hold up. The run against the sources matched the tree's 3% and 46% to the paper's own
+range. What the runs found and what changed: the disabled radios still looked bright and checked,
+so a disabled group now fades; a selected house or tree in the 3D view showed only a tint, so
+its card on the ground step lights up; and "show this work in Sources" from a card on another
+step left the reader at the top of the list, because the stepper holds the opened step's header
+in place for a moment and undid the jump's scroll, so the jump now settles that landing before
+it scrolls (`landing.ts`). The measured figures and the assumed leaf calendar sat side by side
+on the tree's card with a citation on the figures alone, so the card now says the calendar is
+this app's own reading.
 
-**Cost.** Four to five days: the kernels, the shader and the Rust with their parity fixtures; the
-type, the decoder, the migration and the geometry key; the ground step's controls, the scene
-meshes and Move mode; the copy, the tests and the spec.
+**Cost.** One day for both, against the four to five estimated: the house needed a type and five
+quads, a schema step, one function every reader of the answer goes through, a card of six fields
+and one mesh on the bed's pattern; the tree needed the per-quad figure in three kernels, the
+seasonal split in two backends, the citation pull, a second card and a translucent mesh; the
+overlap rule needed one polygon test and two filters.
