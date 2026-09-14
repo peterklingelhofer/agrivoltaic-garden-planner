@@ -23,6 +23,7 @@ export const occluderHeightM = (plot: GardenPlot | null): number =>
   Math.max(
     DEFAULT_OCCLUDER_HEIGHT_M,
     ...(plot?.arrays.map((array) => array.derived.maxHeightM) ?? []),
+    ...(plot?.obstructions.map((obstruction) => obstruction.heightM) ?? []),
   )
 
 export const groundPoint = (event: ThreeEvent<PointerEvent>): readonly [number, number] => [

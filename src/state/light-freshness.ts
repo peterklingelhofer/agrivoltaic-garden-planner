@@ -37,6 +37,7 @@ export const lightGeometryKey = (plot: GardenPlot): string =>
     originOffsetM: plot.originOffsetM,
     groundCover: plot.groundCover,
     arrays: plot.arrays,
+    obstructions: plot.obstructions,
     beds: plot.beds.map(({ plantings: _plantings, ...rest }) => rest),
   })
 

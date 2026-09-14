@@ -1,9 +1,11 @@
 import { useThree, type ThreeEvent } from '@react-three/fiber'
 import { useCallback, useEffect, useRef } from 'react'
 import type { Object3D } from 'three'
-import { translateRing } from '../state/geom'
+import { movedCorner, translateRing } from '../state/geom'
 import { scenePlot, useAppStore } from '../state/store'
-import type { ArrayId, BedId } from '../types/ids'
+import type { Vec2M } from '../types/geo'
+import type { ObstructionKind } from '../types/garden'
+import type { ArrayId, BedId, ObstructionId } from '../types/ids'
 import { rayGroundHit } from './sceneMath'
 
 export interface GroundDragHandlers {
@@ -120,6 +122,31 @@ export const moveArray = (arrayId: ArrayId, dxM: number, dyM: number): void => {
   state.upsertArray({ ...array, geometry: { ...array.geometry, originM: origin } })
 }
 
+/** An obstruction moved east and north by plot meters, written back as one footprint */
+export const moveObstruction = (id: ObstructionId, dxM: number, dyM: number): void => {
+  const state = useAppStore.getState()
+  const house = scenePlot(state)?.obstructions.find((entry) => entry.id === id)
+  if (house === undefined) return
+  state.upsertObstruction({
+    ...house,
+    footprint: {
+      exterior: translateRing(house.footprint.exterior, dxM, dyM),
+      holes: house.footprint.holes.map((hole) => translateRing(hole, dxM, dyM)),
+    },
+  })
+}
+
+/** One corner of an obstruction dragged: the rectangle stays a rectangle, as a plot corner does */
+export const moveObstructionCorner = (id: ObstructionId, index: number, to: Vec2M): void => {
+  const state = useAppStore.getState()
+  const house = scenePlot(state)?.obstructions.find((entry) => entry.id === id)
+  if (house === undefined) return
+  state.upsertObstruction({
+    ...house,
+    footprint: { ...house.footprint, exterior: movedCorner(house.footprint.exterior, index, to) },
+  })
+}
+
 /** A bed and its plants, moved together */
 export const useBedDrag = (bedId: BedId): GroundDragHandlers => {
   const enabled = useAppStore((s) => s.mode === 'move')
@@ -137,6 +164,18 @@ export const useArrayDrag = (arrayId: ArrayId): GroundDragHandlers => {
   return useGroundDrag(enabled, [`array-${arrayId as string}`], onMoved)
 }
 
+/** A house or a tree, moved by the ground the pointer crosses, the same way a bed or a row of
+ *  panels is. `kind` picks the object name the drag looks for, `house-<id>` or `tree-<id>` */
+export const useObstructionDrag = (
+  id: ObstructionId,
+  kind: ObstructionKind,
+): GroundDragHandlers => {
+  const enabled = useAppStore((s) => s.mode === 'move')
+  // scene z runs south, plot y runs north
+  const onMoved = useCallback((dxM: number, dzM: number) => moveObstruction(id, dxM, -dzM), [id])
+  return useGroundDrag(enabled, [`${kind}-${id as string}`], onMoved)
+}
+
 /** How far one arrow press moves the selected thing, in meters, without and with Shift */
 export const NUDGE_M = 0.1
 export const SHIFT_NUDGE_M = 1
@@ -150,11 +189,11 @@ const ARROWS: Readonly<Record<string, readonly [number, number]>> = {
 }
 
 /**
- * Move mode from the keyboard: the arrows carry the selected bed or row of panels, so moving is
- * open to a switch, a screen reader or anyone whose mouse hand isn't steady, and the drag above
- * stops being the only way. Gated on the mode the way `SceneHint` gates Enter and Escape, and
- * listening on `window` for the same reason: the canvas can't hold focus after a click on a
- * sidebar field. A press inside a field is the field's own, where an arrow steps a number
+ * Move mode from the keyboard: the arrows carry the selected bed, row of panels, house or tree, so
+ * moving is open to a switch, a screen reader or anyone whose mouse hand isn't steady, and the
+ * drag above stops being the only way. Gated on the mode the way `SceneHint` gates Enter and
+ * Escape, and listening on `window` for the same reason: the canvas can't hold focus after a click
+ * on a sidebar field. A press inside a field is the field's own, where an arrow steps a number
  */
 export const useNudgeKeys = (): void => {
   const enabled = useAppStore((s) => s.mode === 'move')
@@ -166,13 +205,16 @@ export const useNudgeKeys = (): void => {
       const target = event.target
       if (target instanceof HTMLElement && target.closest('input, textarea, select') !== null)
         return
-      const { selectedBedId, selectedArrayId } = useAppStore.getState()
-      if (selectedBedId === null && selectedArrayId === null) return
+      const { selectedBedId, selectedArrayId, selectedObstructionId } = useAppStore.getState()
+      if (selectedBedId === null && selectedArrayId === null && selectedObstructionId === null)
+        return
       event.preventDefault()
       const step = event.shiftKey ? SHIFT_NUDGE_M : NUDGE_M
       if (selectedBedId !== null) moveBed(selectedBedId, arrow[0] * step, arrow[1] * step)
       else if (selectedArrayId !== null)
         moveArray(selectedArrayId, arrow[0] * step, arrow[1] * step)
+      else if (selectedObstructionId !== null)
+        moveObstruction(selectedObstructionId, arrow[0] * step, arrow[1] * step)
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)

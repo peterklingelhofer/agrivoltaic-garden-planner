@@ -1,6 +1,6 @@
 # Citation corpus
 
-214 sources (151 crossref-verified, 1 datacite-verified, 16 unverified, 46 url-verified). Machine-readable companion: [`CITATIONS.csl.json`](./CITATIONS.csl.json) (CSL-JSON).
+217 sources (154 crossref-verified, 1 datacite-verified, 16 unverified, 46 url-verified). Machine-readable companion: [`CITATIONS.csl.json`](./CITATIONS.csl.json) (CSL-JSON).
 Verification pass completed 2026-07-30 against the Crossref REST API, the DataCite REST API, and direct
 fetches of authoritative publisher, standards-body and government URLs.
 
@@ -44,23 +44,23 @@ Physics, geodata and software sources carry `null`: the scheme does not apply to
 
 | Verification | n |
 |---|---|
-| crossref-verified | 151 |
+| crossref-verified | 154 |
 | datacite-verified | 1 |
 | unverified | 16 |
 | url-verified | 46 |
-| **total** | **214** |
+| **total** | **217** |
 
 | Access level | n |
 |---|---|
 | open-access | 62 |
-| paywalled | 107 |
-| public-domain | 44 |
+| paywalled | 109 |
+| public-domain | 45 |
 | public-domain-with-conditions | 1 |
 
 | Evidence tier | n |
 |---|---|
 | A | 36 |
-| B | 60 |
+| B | 63 |
 | C | 30 |
 | null (not applicable) | 88 |
 
@@ -1712,7 +1712,7 @@ Zimmerman, Cynthia. (2020). *Helpline Hot Topic for June 2020: Moringa Oleifera*
 
 ## Climate & geodata
 
-15 sources.
+18 sources.
 
 #### `beck2018-koppen`
 
@@ -1722,6 +1722,16 @@ Beck, Hylke E.; Zimmermann, Niklaus E.; McVicar, Tim R.; Vergopolan, Noemi; Berg
 - Verification: Crossref-verified | Access: open-access
 - Backs:
   - decision 9: the bundled 1 km Köppen-Geiger raster used for climate context
+
+#### `canham1994-canopy-light-transmission`
+
+Canham, Charles D.; Finzi, Adrien C.; Pacala, Stephen W.; Burbank, Diane H.. (1994). *Causes and consequences of resource heterogeneity in forests: interspecific variation in light transmission by canopy trees*. Canadian Journal of Forest Research 24: 337-349
+
+- DOI: [10.1139/x94-046](https://doi.org/10.1139/x94-046)
+- Verification: Crossref-verified | Access: paywalled, evidence tier **B**
+- Backs:
+  - the forest-canopy comparison named in Decision Record 26, verbatim: 'The most shade-tolerant species (Fagus grandifolia Ehrh. and Tsuga canadensis (L.) Carr.) cast the deepest shade (<2% of full sun), while earlier successional species such as Quercus rubra L. and Fraxinus americana L. allowed greater light penetration (>5% full sun)'
+- **Caveat:** Closed-canopy interior light measured by fisheye photography and quantum sensors under overlapping crowns in a southern New England oak-northern hardwood forest, not a single isolated urban tree's crown transmittance. Kept only as the closed-canopy comparison Decision Record 26 names, lower than a lone tree's transmittance as expected; not a source for the app's shipped default. Read via OCR of the scanned PDF the Canham lab self-archives at sortie-nd.org, since the journal version of record is paywalled and the copy carries no text layer.
 
 #### `erez1990-dynamic-model`
 
@@ -1750,6 +1760,27 @@ Fishman, Svetlana; Erez, Amos; Couvillon, G. A.. (1987). *The temperature depend
 - Verification: Crossref-verified | Access: paywalled, evidence tier **A**
 - Backs:
   - the simulation companion to the Dynamic chill model
+
+#### `heisler1986-single-tree-irradiance`
+
+Heisler, Gordon M.. (1986). *Effects of individual trees on the solar radiation climate of small buildings*. Urban Ecology 9: 337-359
+
+- DOI: [10.1016/0304-4009(86)90008-2](https://doi.org/10.1016/0304-4009(86)90008-2)
+- Verification: Crossref-verified | Access: public-domain, evidence tier **B**
+- Backs:
+  - a corroborating figure for the tree-crown transmittance default, verbatim: 'a mid-sized sugar maple tree (Acer saccharum Marsh.) reduced irradiance in its shade on a south-facing wall by about 80% when in leaf, and by nearly 40% when leafless', implying roughly 0.20 in-leaf and 0.60 leafless transmittance, read here as a cross-check on the Konarska et al. 2014 crown-transmittance range rather than as the shipped default
+- **Caveat:** A USDA Forest Service work, public domain by 17 U.S.C. 105; read from the agency's own reprint rather than the Elsevier version of record. It measures irradiance reduction on a vertical wall inside a tree's shadow, beam plus diffuse sky and crown-reflected radiation reaching a receiver, not transmittance straight through the crown, so its reductions read smaller than Konarska's direct-under-crown method: the paper's own Table II clear-day wall average across four sample trees is a 30-34% reduction leafless and 65-85% in-leaf. Backs a cross-check figure only, not the shipped default.
+
+#### `konarska2014-urban-tree-transmissivity`
+
+Konarska, Janina; Lindberg, Fredrik; Larsson, Annika; Thorsson, Sofia; Holmer, Björn. (2014). *Transmissivity of solar radiation through crowns of single urban trees - application for outdoor thermal comfort modelling*. Theoretical and Applied Climatology 117: 363-376
+
+- DOI: [10.1007/s00704-013-1000-3](https://doi.org/10.1007/s00704-013-1000-3)
+- Verification: Crossref-verified | Access: paywalled, evidence tier **B**
+- Backs:
+  - the in-leaf crown transmittance of 0.033 used as the default for a drawn tree's crown, the midpoint of the paper's own range, verbatim: 'Average transmissivity of direct solar radiation through the foliated and defoliated tree crowns ranged from 1.3 to 5.3 % and from 40.2 to 51.9 %, respectively'
+  - the leafless crown transmittance of 0.46 used as the default for a drawn tree's crown, the midpoint of the defoliated range in the same sentence
+- **Caveat:** Measured with a pyranometer beneath the live crown against a rooftop reference, on five street trees (one conifer, four deciduous) in Göteborg, Sweden, over nine clear days. The figure is direct-beam transmissivity only; the app applies one transmittance to beam, diffuse and sky-view alike through a solid box crown rather than a real crown's gaps. The shipped default is the midpoint of the paper's own range, not a single measured mean; the underlying species are far north of most of this app's users.
 
 #### `luedeling2010-chill-comparability`
 

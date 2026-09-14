@@ -132,6 +132,7 @@ const bake = async (
       sky,
       monthlySkies: [],
       windowSkies: [],
+      leafOnMonths: null,
       passesPerFrame: 40,
       frameBudgetMs: 8,
       panels: snapshot.panels,

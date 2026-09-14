@@ -57,6 +57,7 @@ pub fn patch_visibility_raster(
             z: direction.2,
         },
         0.0,
+        &[],
         1,
     )
 }

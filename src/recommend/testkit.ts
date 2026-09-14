@@ -449,5 +449,6 @@ export const plotFixture = (beds: readonly Bed[]): GardenPlot => ({
   originOffsetM: { xM: 0 as Meters, yM: 0 as Meters },
   beds,
   arrays: [],
+  obstructions: [],
   groundCover: DEFAULT_GROUND_COVER,
 })

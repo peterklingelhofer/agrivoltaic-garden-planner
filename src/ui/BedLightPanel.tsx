@@ -3,6 +3,7 @@ import { MONTH_NAMES } from '../data/util'
 import { surroundingsNote } from '../recommend/surroundings'
 import { bedLightSummary } from '../state/bed-light'
 import { growingWindowOf } from '../state/growing-window'
+import { EMPTY_LIST } from '../state/slices'
 import { useAppStore } from '../state/store'
 import { formatDli } from './format'
 import { Panel } from './Panel'
@@ -29,7 +30,10 @@ export const BedLightPanel = (): ReactElement => {
   const bedLight = useAppStore((s) => s.bedLight)
   const beds = useAppStore((s) => s.plot?.beds ?? null)
   const rasterReady = useAppStore((s) => s.raster.status === 'ready')
-  const surroundings = surroundingsNote(useAppStore((s) => s.answers.exposure))
+  const surroundings = surroundingsNote(
+    useAppStore((s) => s.answers.exposure),
+    useAppStore((s) => s.plot?.obstructions ?? EMPTY_LIST),
+  )
   // the site's own frost window once the place is resolved, so the months printed are its own
   const window = useAppStore(growingWindowOf)
   const season = `${monthName(window.startMonth)} to ${monthName(window.endMonth)}`

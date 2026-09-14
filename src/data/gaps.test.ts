@@ -27,7 +27,9 @@ for (const path of new Glob('**/*.ts').scanSync(ROOT)) {
 // measures for a garden bed
 // recommend/surroundings.ts declares one: the share of the sky's light the things already
 // around a space take, per answer to the surroundings question
+// canopy.ts declares one: which months a drawn deciduous tree counts as in leaf
 const ALLOWED_UNSOURCED_SITES: readonly string[] = [
+  './canopy.ts',
   './catalog/schema.ts',
   './water.ts',
   '../recommend/stages/rank.ts',
