@@ -1,6 +1,7 @@
 import type { LatLon } from '../types/geo'
 import type { DegreesLatitude, DegreesLongitude, Meters } from '../types/units'
 import { DEFAULT_FETCH_OPTIONS, fetchJson } from './http'
+import { nearestTimezone } from './timezone-bands'
 
 export interface GeocodeHit {
   readonly label: string
@@ -198,14 +199,20 @@ export const elevation = async (
 }
 
 /**
- * The fallback clock, whole hours from the longitude: wrong by half an hour in India, by a zone
- * across Spain, France and western China, and blind to daylight saving. `resolveSite` replaces
+ * The fallback clock. `timezoneFor` reads the nearest zone.tab city to this point
+ * (`nearestTimezone`, in `./timezone-bands`), a real IANA zone with daylight saving. Where a
+ * geocoder named the country, the search stays within it: zone.tab records one point for all of
+ * India, so without the country the nearest point to Mumbai is Karachi's. `utcOffsetHoursFor` gives
+ * whole hours from the longitude, with no zone name and no daylight saving, and is kept only as the
+ * last resort below and for the callers that read a fixed offset directly. `resolveSite` replaces
  * both with the IANA zone the daily normals name. These stand only where no zone is known
  */
 export const utcOffsetHoursFor = (location: LatLon): number =>
   Math.round(location.longitudeDeg / 15)
 
-export const timezoneFor = (location: LatLon): string => {
+export const timezoneFor = (location: LatLon, countryCode: string | null = null): string => {
+  const nearest = nearestTimezone(location.latitudeDeg, location.longitudeDeg, countryCode)
+  if (nearest !== null) return nearest
   const offset = utcOffsetHoursFor(location)
   if (offset === 0) return 'Etc/GMT'
   return `Etc/GMT${offset > 0 ? '-' : '+'}${String(Math.abs(offset))}`

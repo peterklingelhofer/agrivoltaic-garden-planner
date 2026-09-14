@@ -13,7 +13,7 @@ import {
   MA_TRACKING_CLEARANCE_M,
 } from '../sim/compliance'
 import { decompose, selectDecompositionModel } from '../sim/decomposition'
-import { derivedArrayMetrics } from '../sim/geometry'
+import { derivedArrayMetrics, equatorFacingAzimuth } from '../sim/geometry'
 import { cosDeg, radiansToDegrees, sinDeg } from '../sim/math'
 import type { SimulationOptions } from '../sim/pipeline'
 import { PREVIEW_OPTIONS, runSimulation } from '../sim/pipeline'
@@ -45,7 +45,6 @@ import type {
   ScenarioSet,
   ScenarioYield,
   ShadeBudgetCheck,
-  SiteExposure,
 } from '../types/onboarding'
 import type { ModuleSpec, PvArray, RowGeometry, TrackerConfig } from '../types/pv'
 import type { CropRecommendation } from '../types/recommend'
@@ -56,6 +55,7 @@ import type { SolarPositionSeries, TmySeries } from '../types/weather'
 import { placeBeds } from './layout'
 import { runRecommendationPipeline } from './pipeline'
 import { DEFAULT_WEIGHTS, scoreOf } from './stages/rank'
+import { SURROUNDINGS_SHADE, shadedBySurroundings } from './surroundings'
 import { landEquivalentRatio } from './yield'
 
 /**
@@ -204,15 +204,13 @@ export const AMBITION_SHADE_BUDGET: Readonly<Record<GrowingAmbition, number>> = 
   'fruiting-and-berries': 0.18,
 }
 
-/** A site that is already shaded by something else has less shade left to spend on panels */
-const EXPOSURE_SHADE_SCALE: Readonly<Record<SiteExposure, number>> = {
-  open: 1,
-  'partly-sheltered': 0.7,
-  overshadowed: 0.4,
-}
-
+/**
+ * A site that is already shaded by something else has less shade left to spend on panels. The
+ * share the surroundings take is the one table the bed light is dimmed by (`surroundings.ts`),
+ * so the search and the ranking read the same answer
+ */
 export const shadeBudgetFor = (answers: OnboardingAnswers): Fraction =>
-  fraction(AMBITION_SHADE_BUDGET[answers.ambition] * EXPOSURE_SHADE_SCALE[answers.exposure])
+  fraction(AMBITION_SHADE_BUDGET[answers.ambition] * (1 - SURROUNDINGS_SHADE[answers.exposure]))
 
 // the solar geometry document section 3.4: the energy optimum is about 0.85 of the latitude, and agrivoltaic designs
 // run below it to shorten the shadow and lower the structure. `energy-first` no longer takes
@@ -287,7 +285,7 @@ const growingWindowFor = (site: Site): GrowingWindow =>
   siteGrowingWindow(site, DEFAULT_FROST_PERCENTILE)
 
 const equatorFacingAzimuthDeg = (site: Site): Degrees =>
-  degrees(site.location.latitudeDeg >= 0 ? 180 : 0)
+  equatorFacingAzimuth(site.location.latitudeDeg)
 
 interface HeightPlan {
   readonly clearanceM: number
@@ -929,6 +927,8 @@ const evaluate = (
   controlLightExclusions: ReadonlySet<string> | null,
 ): Evaluated => {
   const bed = plot.beds[0] as Bed
+  // the panels' own shade, which is what the shade budget and the daylight figures are
+  // written in. The crops are judged on it with the surroundings' share taken off as well
   const light = bedLightOf(raster, bed.id, bed.footprint)
   const window = growingWindowFor(deps.site)
   const season = seasonLight(light, window, null)
@@ -936,7 +936,7 @@ const evaluate = (
   const sets = runRecommendationPipeline({
     site: deps.site,
     plot,
-    bedLight: [light],
+    bedLight: [shadedBySurroundings(light, answers.exposure)],
     catalog: deps.catalog,
     companionRules: deps.companionRules,
     rotationConstraints: deps.rotationConstraints,
@@ -975,6 +975,7 @@ const evaluate = (
     raster,
     window,
     maxBeds: answers.maxBeds ?? undefined,
+    exposure: answers.exposure,
   })
 
   return {

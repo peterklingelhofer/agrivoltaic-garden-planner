@@ -3,6 +3,7 @@ import {
   at,
   DAYS_PER_YEAR,
   lerp,
+  mean,
   MONTH_LENGTH_DAYS,
   MONTH_NAMES,
   MONTH_START_DAY,
@@ -156,37 +157,56 @@ export const FROST_FREE_NOTE =
 export const SOIL_PROXY_NOTE =
   'The soil-temperature date uses the monthly mean air temperature as a proxy for soil temperature at seeding depth, so the date can come too early in a cold, wet spring'
 
-/** The share of the year's rain a run of months has to hold to be the wet season it is named by */
-const WET_SEASON_SHARE = 0.75
+/** The share of the year's rain the months above the mean must hold to be named as the wet season */
+const WET_SEASON_SHARE = 0.7
+
+interface MonthRun {
+  readonly start: number
+  readonly length: number
+}
+
+/** Runs of consecutive entries in `months` (each a 0-based month index), wrapping past December */
+const monthRuns = (months: readonly number[]): readonly MonthRun[] => {
+  const wet = new Set(months)
+  let first = 0
+  while (wet.has(first)) first += 1
+  const runs: MonthRun[] = []
+  let start: number | null = null
+  for (let step = 1; step <= 12; step += 1) {
+    const month = (first + step) % 12
+    if (wet.has(month)) {
+      start ??= month
+    } else if (start !== null) {
+      runs.push({ start, length: (month - start + 12) % 12 || 12 })
+      start = null
+    }
+  }
+  return runs.sort((a, b) => a.start - b.start)
+}
+
+const runLabel = (run: MonthRun): string => {
+  const first = MONTH_NAMES[run.start] ?? ''
+  if (run.length === 1) return first
+  const last = MONTH_NAMES[(run.start + run.length - 1) % 12] ?? ''
+  return `${first} to ${last}`
+}
 
 /**
- * One sentence where the wettest three months hold more than half the year's rain: the calendar
- * has no sowing model for a wet season, and says so. The months named are the fewest consecutive
- * ones holding three quarters of the rain
+ * One sentence naming the wet season, where the calendar has no sowing model for it: a wet
+ * month is one whose rain is above the year's monthly mean. Every run of consecutive wet
+ * months is named, wrapping past December, where those months together hold at least
+ * WET_SEASON_SHARE of the year's rain and number six or fewer; a place with two rainy seasons,
+ * such as Nairobi's long and short rains, gets both named rather than only the wetter one
  */
 export const wetSeasonNote = (monthlyPrecipMm: readonly number[]): string | null => {
   const total = sum(monthlyPrecipMm)
-  const over = (start: number, length: number): number => {
-    let rain = 0
-    for (let step = 0; step < length; step += 1) rain += at(monthlyPrecipMm, (start + step) % 12)
-    return rain
-  }
-  let wettestQuarter = 0
-  for (let start = 0; start < 12; start += 1)
-    wettestQuarter = Math.max(wettestQuarter, over(start, 3))
-  if (total <= 0 || wettestQuarter <= total / 2) return null
-  let season = { start: 0, length: 12 }
-  for (let start = 0; start < 12; start += 1) {
-    for (let length = 1; length < season.length; length += 1) {
-      if (over(start, length) >= WET_SEASON_SHARE * total) {
-        season = { start, length }
-        break
-      }
-    }
-  }
-  const first = MONTH_NAMES[season.start] ?? ''
-  const last = MONTH_NAMES[(season.start + season.length - 1) % 12] ?? ''
-  return `The rains here fall mostly in ${first} to ${last}; this calendar doesn't model them, so sow with the rains as local practice says`
+  const threshold = mean(monthlyPrecipMm)
+  const wetMonths = monthlyPrecipMm.flatMap((value, month) => (value > threshold ? [month] : []))
+  if (total <= 0 || wetMonths.length === 0 || wetMonths.length > 6) return null
+  const wetTotal = sum(wetMonths.map((month) => at(monthlyPrecipMm, month)))
+  if (wetTotal < WET_SEASON_SHARE * total) return null
+  const rains = monthRuns(wetMonths).map(runLabel).join(' and ')
+  return `The rains here fall mostly in ${rains}; this calendar doesn't model them, so sow with the rains as local practice says`
 }
 
 const withWetSeason = (site: Site, first: string): string[] => {

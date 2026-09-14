@@ -1,3 +1,4 @@
+import { SURROUNDINGS_SHADE } from '../recommend/surroundings'
 import type { OnboardingStep } from '../state/slices'
 import type {
   DesignScenario,
@@ -122,6 +123,16 @@ export const AMBITION_OPTIONS: readonly ChoiceOption<GrowingAmbition>[] = [
     help: 'Crops that have to set fruit, and need the brightest spot you have',
   },
 ]
+
+const shadePercent = (exposure: SiteExposure): string =>
+  String(Math.round(SURROUNDINGS_SHADE[exposure] * 100))
+
+/**
+ * Why the surroundings question is asked before any panel exists, and what the answer does: it
+ * dims the light every bed is judged by, from the one table the layout search spends its shade
+ * budget from
+ */
+export const EXPOSURE_HELP = `Buildings, fences and trees shade a space before any panel does. Shaded for part of the day takes about ${shadePercent('partly-sheltered')}% off the light every bed is judged by; in shade most of the day takes ${shadePercent('overshadowed')}%`
 
 export const EXPOSURE_OPTIONS: readonly ChoiceOption<SiteExposure>[] = [
   {

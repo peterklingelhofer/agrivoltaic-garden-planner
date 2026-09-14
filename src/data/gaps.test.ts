@@ -25,11 +25,14 @@ for (const path of new Glob('**/*.ts').scanSync(ROOT)) {
 // recommend/stages/rank.ts declares one: the ranking weights, a design choice no study calibrates
 // recommend/stages/space.ts declares one: the most crowding may cost a crop, which no source
 // measures for a garden bed
+// recommend/surroundings.ts declares one: the share of the sky's light the things already
+// around a space take, per answer to the surroundings question
 const ALLOWED_UNSOURCED_SITES: readonly string[] = [
   './catalog/schema.ts',
   './water.ts',
   '../recommend/stages/rank.ts',
   '../recommend/stages/space.ts',
+  '../recommend/surroundings.ts',
   '../simulation/pests.ts',
 ]
 

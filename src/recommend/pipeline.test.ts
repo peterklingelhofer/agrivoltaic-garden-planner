@@ -393,3 +393,79 @@ describe('stages 0 to 6 end to end', () => {
     )
   })
 })
+
+/**
+ * A weighted sum would let a crop through on a climate fit next to nothing. Western wild ginger at
+ * Mumbai: the hottest month a fraction inside its envelope, the gate passes on 0.05, and the light
+ * and the soil would outvote it to "recommended". The same law that decides the gate decides the
+ * verdict, and it names the limb of the envelope that bites
+ */
+describe('a climate fit under the marginal line', () => {
+  it('holds a crop back on its own, whatever the light and the soil add up to', async () => {
+    const catalog = await catalogPromise
+    const rules = await loadCompanionRules()
+    const rotation = await loadRotationConstraints()
+    // a cold winter, so the cold-winter gate passes, and a July on the very edge of the
+    // cool-perennial envelope's 30 C ceiling
+    const edge = siteFixture({
+      normals: {
+        ...siteFixture().normals,
+        monthlyMeanTempC: [-3, -1, 4, 10, 16, 22, 29.5, 28, 22, 14, 7, 0].map((v) => v as never),
+      },
+    })
+    const sets = runRecommendationPipeline({
+      site: edge,
+      plot: plotFixture([bedFixture('bed-a')]),
+      bedLight: [bedLightFixture('bed-a', 0.3)],
+      catalog,
+      companionRules: rules,
+      rotationConstraints: rotation,
+      frostPercentile: 20,
+      weights: DEFAULT_WEIGHTS,
+      preferredCropIds: [],
+    })
+    const ramps = sets[0]?.ranked.find((entry) => entry.cropId === ('ramps' as CropId))
+    if (ramps === undefined || ramps.outcome.verdict === 'excluded') {
+      throw new Error(`ramps should pass the gates here: ${JSON.stringify(ramps?.outcome)}`)
+    }
+    expect(ramps.outcome.score.climateFit).toBeLessThan(0.45)
+    expect(ramps.outcome.verdict).toBe('marginal')
+    expect(ramps.outcome.verdict === 'marginal' ? ramps.outcome.limiting.cause : null).toEqual({
+      kind: 'fao-ecocrop',
+      parameter: 'temperature',
+    })
+  })
+
+  it('orders equal scores by the evidence behind the light threshold, measured first', async () => {
+    const catalog = await catalogPromise
+    const rules = await loadCompanionRules()
+    const rotation = await loadRotationConstraints()
+    const sets = runRecommendationPipeline({
+      site: siteFixture(),
+      plot: plotFixture([bedFixture('bed-a')]),
+      bedLight: [bedLightFixture('bed-a', 0.1)],
+      catalog,
+      companionRules: rules,
+      rotationConstraints: rotation,
+      frostPercentile: 20,
+      weights: DEFAULT_WEIGHTS,
+      preferredCropIds: [],
+    })
+    const order = { A: 0, B: 1, C: 2 } as const
+    const tierOf = (id: CropId): 'A' | 'B' | 'C' =>
+      need(catalog, id as string).light.dliMinMolM2Day.tier
+    const ranked = sets[0]?.ranked ?? []
+    let ties = 0
+    for (let index = 1; index < ranked.length; index += 1) {
+      const above = ranked[index - 1]
+      const below = ranked[index]
+      if (above === undefined || below === undefined) continue
+      if (above.outcome.verdict !== 'recommended' || below.outcome.verdict !== 'recommended')
+        continue
+      if (Math.abs(above.outcome.score.total - below.outcome.score.total) > 1e-9) continue
+      ties += 1
+      expect(order[tierOf(above.cropId)]).toBeLessThanOrEqual(order[tierOf(below.cropId)])
+    }
+    expect(ties).toBeGreaterThan(0)
+  })
+})

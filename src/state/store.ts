@@ -27,7 +27,10 @@ import {
   suggestPolycultures,
   withAmbition,
 } from '../recommend/suggest'
+import { shadedBySurroundings } from '../recommend/surroundings'
+import { bedLight as bedLightOf } from '../sim/aggregate'
 import { checkAllRegimes } from '../sim/compliance'
+import { equatorFacingAzimuth } from '../sim/geometry'
 import {
   FINAL_OPTIONS,
   PREVIEW_OPTIONS,
@@ -55,13 +58,20 @@ import type {
   ScenarioSet,
 } from '../types/onboarding'
 import type { CropPreference, PolycultureSuggestion } from '../types/polyculture'
+import type { PvArray } from '../types/pv'
 import type { RecommendationSet } from '../types/recommend'
 import { epochMillis, type DayOfYear, type EpochMillis, type Fraction } from '../types/units'
 
 import { atCalendarYear, dayOfYearUtc } from './sun'
 import { bedLightSummary } from './bed-light'
 import { historyBeforeSeason, seasonYearOf, withoutPanels } from './counterfactual'
-import { DEFAULT_SOIL, defaultSimulation, makeBed, nextBedIndex } from './defaults'
+import {
+  DEFAULT_SOIL,
+  defaultSimulation,
+  facesStartingDirection,
+  makeBed,
+  nextBedIndex,
+} from './defaults'
 import { growingWindowOf } from './growing-window'
 import { codeOf, unit } from '../simulation/evidence'
 import { simulateSeason } from '../simulation/season'
@@ -159,6 +169,8 @@ let designToken = 0
 let noPanelsToken = 0
 /** The place a retail price was asked for, so a slow answer never lands on the place after it */
 let priceToken = 0
+/** The lookup in flight. An earlier one that lands after a later one is dropped */
+let siteToken = 0
 
 const simClient = (): SimClient | null => {
   if (client || clientFailure) return client
@@ -288,6 +300,20 @@ const patchPlot = (s: MutableState, patch: (plot: GardenPlot) => GardenPlot): vo
 }
 
 /**
+ * Each bed's light read off the raster on screen again, dimmed by the surroundings answer as it
+ * now stands. Only for the arrangement that raster was baked over: a bed moved since then is
+ * the next bake's to read, and that bake applies the same answer when it lands
+ */
+const rederiveBedLight = (s: MutableState): void => {
+  if (s.raster.status !== 'ready' || s.plot === null) return
+  if (s.lightGeometry !== lightGeometryKey(s.plot)) return
+  const raster = s.raster.value
+  s.bedLight = s.plot.beds.map((bed) =>
+    shadedBySurroundings(bedLightOf(raster, bed.id, bed.footprint), s.answers.exposure),
+  )
+}
+
+/**
  * A boundary edit, which is a plot size edit: the search laid its candidates out in the old
  * extent, so a finished search is dropped rather than kept, exactly as `answerOnboarding` drops
  * one when an answer the search reads moves
@@ -400,7 +426,9 @@ const runBake = async (
   set((s) => {
     s.progress = null
     s.raster = ready(raster)
-    s.bedLight = bedLight
+    // the surroundings answer as it stands when the bake lands, after any change made mid-bake:
+    // the raster is the panels' shade alone, and every bed figure carries the answer on top
+    s.bedLight = bedLight.map((light) => shadedBySurroundings(light, s.answers.exposure))
     s.compliance = compliance
     // stamped from the plot this run was handed, since an edit made while the bake was in flight
     // would already have moved `s.plot` on: the answer belongs to the geometry it was computed
@@ -426,6 +454,7 @@ let siteRetries = 0
 const scheduleSiteRetry = (
   location: LatLon,
   label: string,
+  countryCode: string | null,
   set: Setter,
   get: () => AppState,
   afterMs: number | null,
@@ -441,7 +470,7 @@ const scheduleSiteRetry = (
     const state = get()
     // a later lookup, manual or scheduled, took over, or the place resolved another way
     if (state.siteRetryAt !== at || state.site.status !== 'error') return
-    void state.resolveSite(location, label)
+    void state.resolveSite(location, label, countryCode)
   }, delay)
 }
 
@@ -905,9 +934,11 @@ export const useAppStore = create<AppState>()(
         })
       },
 
-      resolveSite: async (location, label) => {
+      resolveSite: async (location, label, countryCode = null) => {
         priceToken += 1
         const token = priceToken
+        siteToken += 1
+        const lookup = siteToken
         /*
           A new town typed over the shipped example is a grower starting their own garden, which is
           what the banner's own press does. Left showing, the example's beds, plantings and "This is
@@ -953,10 +984,18 @@ export const useAppStore = create<AppState>()(
         })
         // the error itself and not only its sentence, because an upstream that refused for the
         // hour says so on the error and the retry below is scheduled off that
-        const result = await resolveSite(location, label, null).then(
+        const result = await resolveSite(location, label, null, countryCode).then(
           (value) => ({ ok: true as const, value }),
           (error: unknown) => ({ ok: false as const, error }),
         )
+        /*
+          A later lookup took over while this one was in flight, so its answer is the place on
+          screen and this one is dropped rather than written over it. The boot lookup of the
+          example's town and a search typed within seconds of opening can overlap this way, and if
+          whichever finished last won, a visitor who typed Mumbai quickly would get Amherst's ground
+          under Mumbai's weather, with a clock and a hardiness zone from the wrong hemisphere
+        */
+        if (lookup !== siteToken) return
         /*
           The pH copied onto untouched beds below is the store's own edit, and the writer can't
           tell it from the visitor's: left alone it would save the design 600 ms after the lookup
@@ -1013,6 +1052,29 @@ export const useAppStore = create<AppState>()(
                 ),
               }))
             }
+            /*
+              The starting array faces south, which is away from the sun south of the equator, and
+              a place that resolves there turns it to face the equator. Only an array still on
+              one of the two starting directions is turned, so a direction somebody set by hand
+              is never overwritten. The example's baked plot is left alone, for the reason given
+              above. An array turns only when a direction actually changes, so a northern site
+              rebuilds nothing
+            */
+            const facing = equatorFacingAzimuth(result.value.site.location.latitudeDeg)
+            const turns = (array: PvArray): boolean =>
+              array.tracker.mode === 'fixed' &&
+              facesStartingDirection(array) &&
+              array.tracker.surfaceAzimuthDeg !== facing
+            if (!showingExample(get()) && (s.plot?.arrays.some(turns) ?? false)) {
+              patchPlot(s, (plot) => ({
+                ...plot,
+                arrays: plot.arrays.map((array) =>
+                  turns(array)
+                    ? { ...array, tracker: { ...array.tracker, surfaceAzimuthDeg: facing } }
+                    : array,
+                ),
+              }))
+            }
           } else {
             /*
              * The upstream's own sentence, with no subsystem name added. `UpstreamError` carries
@@ -1033,6 +1095,7 @@ export const useAppStore = create<AppState>()(
           scheduleSiteRetry(
             location,
             label,
+            countryCode,
             set,
             get,
             result.error instanceof UpstreamError ? result.error.retryAfterMs : null,
@@ -1907,7 +1970,12 @@ export const useAppStore = create<AppState>()(
           // an answer the SEARCH reads makes a finished run stale, so it's dropped rather than
           // kept. One the search never reads doesn't: see `SEARCH_ANSWER_FIELDS`
           const stale = staleSearchAfter(patch)
+          const exposureMoved =
+            patch.exposure !== undefined && patch.exposure !== s.answers.exposure
           s.answers = { ...s.answers, ...patch }
+          // the surroundings dim every bed's light before the ranking reads it, so a new answer
+          // re-reads the beds off the raster already baked rather than baking it again
+          if (exposureMoved) rederiveBedLight(s)
           if (stale && s.onboarding.designs.status === 'ready') {
             s.onboarding = { ...s.onboarding, designs: idle() }
           }

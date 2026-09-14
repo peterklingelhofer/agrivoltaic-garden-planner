@@ -1,5 +1,6 @@
 import type { ReactElement } from 'react'
 import { MONTH_NAMES } from '../data/util'
+import { surroundingsNote } from '../recommend/surroundings'
 import { bedLightSummary } from '../state/bed-light'
 import { growingWindowOf } from '../state/growing-window'
 import { useAppStore } from '../state/store'
@@ -28,6 +29,7 @@ export const BedLightPanel = (): ReactElement => {
   const bedLight = useAppStore((s) => s.bedLight)
   const beds = useAppStore((s) => s.plot?.beds ?? null)
   const rasterReady = useAppStore((s) => s.raster.status === 'ready')
+  const surroundings = surroundingsNote(useAppStore((s) => s.answers.exposure))
   // the site's own frost window once the place is resolved, so the months printed are its own
   const window = useAppStore(growingWindowOf)
   const season = `${monthName(window.startMonth)} to ${monthName(window.endMonth)}`
@@ -59,6 +61,13 @@ export const BedLightPanel = (): ReactElement => {
             to 85%, shady under 60%. The whole-year map on the garden runs lower than these
             growing-season figures.
           </p>
+          {/* the surroundings answer dims every figure below before the panels do, and the map on
+              the ground doesn't follow it, so the difference is said where the figures are */}
+          {surroundings === null ? null : (
+            <p className="panel-sub" data-testid="readout-bed-light-surroundings">
+              {surroundings}
+            </p>
+          )}
           <ul className="list" data-testid="list-bed-light">
             {beds.map((bed) => {
               const light = bedLight.find((entry) => entry.bedId === bed.id)

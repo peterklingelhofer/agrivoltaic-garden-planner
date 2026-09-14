@@ -1,8 +1,18 @@
-import { describe, expect, it } from 'bun:test'
+import { beforeEach, describe, expect, it, mock } from 'bun:test'
+import { vi } from '../../test/vi'
 import { siteFixture } from '../recommend/testkit'
+import type { LatLon } from '../types/geo'
 import type { Site } from '../types/site'
-import { DEFAULT_FROST_PERCENTILE, siteForYear } from './site'
 import { measuredYearFixture } from './testkit'
+
+const fetchJson = vi.fn()
+
+/* captured before the mock is installed, so the spread carries the real module */
+const actualHttp = await import('./http')
+mock.module('./http', () => ({ ...actualHttp, fetchJson }))
+
+const { DEFAULT_FROST_PERCENTILE, resolveSite, siteForYear } = await import('./site')
+const { resetStaticLayerCache } = await import('./static-layers')
 
 const spring = (site: Site): number =>
   site.frost[0]?.lastSpringFreeze[DEFAULT_FROST_PERCENTILE] ?? Number.NaN
@@ -62,5 +72,98 @@ describe('the site as it was in one measured year', () => {
     expect(year.hardiness).toBe(base.hardiness)
     expect(year.location).toBe(base.location)
     expect(year.botanicalArea).toBe(base.botanicalArea)
+  })
+})
+
+const LOCATION = { latitudeDeg: 42.37, longitudeDeg: -72.52 } as LatLon
+
+const DAYS_PER_YEAR = 365
+const NORMALS_YEARS = 30
+
+const stamps = (): readonly string[] => {
+  const out: string[] = []
+  for (let year = 1991; year <= 2020; year += 1) {
+    for (let day = 1; day <= DAYS_PER_YEAR; day += 1) {
+      out.push(`${String(year)}-01-${String(day).padStart(2, '0')}`)
+    }
+  }
+  return out
+}
+
+/** The exact shape Open-Meteo returns for the daily normals, with or without a named zone */
+const dailyBody = (fill: number): unknown => {
+  const time = stamps()
+  const series = Array.from({ length: NORMALS_YEARS * DAYS_PER_YEAR }, () => fill)
+  return {
+    daily: {
+      time,
+      temperature_2m_min: series,
+      temperature_2m_max: series,
+      temperature_2m_mean: series,
+      precipitation_sum: series,
+      shortwave_radiation_sum: series,
+    },
+  }
+}
+
+const HOURS_PER_TMY = 8760
+
+const hourlyBody = (fill: number, shortwave: number): unknown => ({
+  hourly: {
+    time: Array.from(
+      { length: HOURS_PER_TMY },
+      (_, i) => `2024-01-01T${String(i % 24).padStart(2, '0')}:00`,
+    ),
+    shortwave_radiation: Array.from({ length: HOURS_PER_TMY }, () => shortwave),
+    temperature_2m: Array.from({ length: HOURS_PER_TMY }, () => fill),
+  },
+})
+
+beforeEach(() => {
+  fetchJson.mockReset()
+  resetStaticLayerCache()
+  // the bundled rasters are absent in the test environment, so the loader derives
+  globalThis.fetch = vi.fn().mockResolvedValue({ ok: false }) as unknown as typeof fetch
+})
+
+/**
+ * `resolveSite` marks which zone it got and how it got there: `timezoneBasis` reads 'upstream'
+ * where the daily normals named one and 'nearest-zone' where nothing did and the nearest
+ * zone.tab city stood in. Amherst MA answers to `America/New_York` either way, so the two tests
+ * below share a result and differ only in how it was reached
+ */
+describe('resolveSite marks whether the zone came from the weather service or the nearest zone.tab city', () => {
+  it('marks upstream when the daily normals name a zone', async () => {
+    fetchJson.mockImplementation((upstream: unknown, _path: unknown, params: URLSearchParams) => {
+      if (upstream === 'open-meteo') {
+        return Promise.resolve(
+          params.has('daily')
+            ? {
+                ...(dailyBody(12) as object),
+                timezone: 'America/New_York',
+                utc_offset_seconds: -18000,
+              }
+            : hourlyBody(12, 200),
+        )
+      }
+      if (upstream === 'open-elevation') return Promise.resolve({ results: [{ elevation: 50 }] })
+      return Promise.reject(new Error(`${String(upstream)} isn't answered here`))
+    })
+    const { site } = await resolveSite(LOCATION, 'Amherst', null)
+    expect(site.timezone).toBe('America/New_York')
+    expect(site.timezoneBasis).toBe('upstream')
+  })
+
+  it('marks nearest-zone when no upstream names one', async () => {
+    fetchJson.mockImplementation((upstream: unknown, _path: unknown, params: URLSearchParams) => {
+      if (upstream === 'open-meteo') {
+        return Promise.resolve(params.has('daily') ? dailyBody(12) : hourlyBody(12, 200))
+      }
+      if (upstream === 'open-elevation') return Promise.resolve({ results: [{ elevation: 50 }] })
+      return Promise.reject(new Error(`${String(upstream)} isn't answered here`))
+    })
+    const { site } = await resolveSite(LOCATION, 'Amherst', null)
+    expect(site.timezone).toBe('America/New_York')
+    expect(site.timezoneBasis).toBe('nearest-zone')
   })
 })

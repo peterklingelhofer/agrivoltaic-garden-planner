@@ -18,6 +18,7 @@ import {
   recurrenceLabel,
   SUPPLY_LABEL,
   supplyUnit,
+  windowSpansYear,
 } from './agenda'
 import { basisKindLabel, basisLabel, dayLabel, feasibilitySummary, NOTICE_CLASS } from './calendar'
 import { CropPictureFor } from './CropSprite'
@@ -35,6 +36,9 @@ const Item = ({
 }): ReactElement => {
   const feasibility = agendaFeasibility(item.feasibility)
   const recurrence = recurrenceLabel(item)
+  // a window that covers the whole year reads as a date range otherwise, which misreads a
+  // frost-free "any day works" as a deadline
+  const spansYear = item.through !== null && windowSpansYear(item.day, item.through)
   return (
     <li
       className="agenda-item"
@@ -58,7 +62,9 @@ const Item = ({
         {actionLabel(item.action)} <CropPictureFor catalog={catalog} cropId={item.cropId} />
         <strong>{cropName(catalog, item.cropId)}</strong> in {bedName(beds, item.bedId)}
         {item.through === null ? null : (
-          <span className="agenda-window"> (through {dayLabel(item.through)})</span>
+          <span className="agenda-window">
+            {spansYear ? ' (any time of year)' : ` (through ${dayLabel(item.through)})`}
+          </span>
         )}
       </p>
       {PLANTING_ACTIONS.has(item.action) ? (

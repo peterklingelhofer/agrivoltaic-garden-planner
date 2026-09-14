@@ -1,3 +1,4 @@
+import { CHILL_CEILING_C } from '../../data/agronomy'
 import { growingWindowFor } from '../../data/crops'
 import { monthsInWindow } from '../../data/util'
 import type { Crop } from '../../types/crop'
@@ -96,6 +97,27 @@ export const chillGate = (crop: Crop, site: Site): GateOutcome => {
   })
 }
 
+/**
+ * A plant recorded wild only where winters are cold needs one. The hardiness gate asks whether
+ * winter is too cold for a perennial. This asks the opposite, whether it's cold enough, of the few
+ * rows whose envelope can't: ramps, western wild ginger and eastern teaberry carry a cool-perennial
+ * envelope whose growing-season temperatures a highland tropical site meets in every month, so
+ * without this gate Nairobi would rank all three above every vegetable in a shaded bed. The line is
+ * the top of the chilling band: a coldest month averaging above it accumulates little chill, and
+ * none of these grows there
+ */
+export const coldWinterGate = (crop: Crop, site: Site): GateOutcome => {
+  if (!crop.coldWinterOnly) return PASSED
+  const coldest = Math.min(...site.normals.monthlyMeanTempC)
+  if (coldest <= CHILL_CEILING_C) return PASSED
+  return fail({
+    stage: 'climate-gate',
+    cause: { kind: 'cold-winter' },
+    membership: 0 as Fraction,
+    explanation: `The coldest month here averages ${coldest.toFixed(1)} C, above ${String(CHILL_CEILING_C)} C, the warmest an hour can be and still count toward winter chill. This plant is recorded wild only where winters are cold`,
+  })
+}
+
 export const seasonGddAvailable = (crop: Crop, site: Site): number => {
   const base = crop.thermal?.gddBaseC ?? 10
   return Math.abs(base - 10) <= Math.abs(base - 4.4)
@@ -153,7 +175,7 @@ export const growingSeasonMeanTempC = (crop: Crop, site: Site): number => {
  * out every dormant temperate perennial, an apple in Minnesota included. A whole-year mean would
  * be worse than either limb: averaging a lethal July with a mild January hides both
  */
-const ecocropScore = (
+export const ecocropScore = (
   crop: Crop,
   site: Site,
   frostPercentile: ExceedancePercentile,
@@ -198,11 +220,15 @@ export const climateGate = (
   site: Site,
   frostPercentile: ExceedancePercentile,
 ): GateOutcome => {
+  // the cold-winter gate goes last: where the envelope itself refuses a plant, as a desert July
+  // refuses ramps, that is the reason a gardener is given, and the winter is named only for a
+  // site the envelope would otherwise admit
   for (const outcome of [
     hardinessGate(crop, site),
     chillGate(crop, site),
     seasonGddGate(crop, site, frostPercentile),
     ecocropGate(crop, site, frostPercentile, true),
+    coldWinterGate(crop, site),
   ]) {
     if (!outcome.passed) return outcome
   }
