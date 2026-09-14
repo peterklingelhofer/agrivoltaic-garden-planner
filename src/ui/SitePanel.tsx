@@ -13,7 +13,8 @@ import { Panel, Readout } from './Panel'
 import { Picker, type PickerHandle } from './Picker'
 import { SeasonSummary } from './SeasonSummary'
 import { SiteNotice } from './SiteNotice'
-import { siteNoticeText } from './site-notice'
+import { SiteVerdict } from './SiteVerdict'
+import { siteNoticeText, soilSampledNote } from './site-notice'
 import { timezoneWords } from './timezone-words'
 import { useAddressSearch } from './useAddressSearch'
 
@@ -101,7 +102,7 @@ export const SitePanel = (): ReactElement => {
     (hit: GeocodeHit): void => {
       setChosen(hit)
       clear()
-      void resolveSite(hit.location, hit.label)
+      void resolveSite(hit.location, hit.label, hit.countryCode || null)
     },
     [clear, resolveSite],
   )
@@ -229,14 +230,21 @@ export const SitePanel = (): ReactElement => {
         <SiteNotice state={weather} testId="status-weather" idleLabel={WEATHER_IDLE} />
       ) : null}
       <SeasonSummary />
+      <SiteVerdict />
       {/* said here, where the lookup happened, and again on each bed: an assumed pH surfaced
           only inside a bed would leave the place step saying nothing about it */}
       {resolved?.soil.sourceId === 'default' ? (
         <p className="notice notice-idle" data-testid="status-site-soil">
-          The soil map has no reading for this spot; it leaves out built-up ground and water. Every
-          bed assumes pH 6.5 loam until you type your own soil.
+          The soil map has no reading for this spot or within 6 km of it; it leaves out built-up
+          ground and water. Every bed assumes pH 6.5 loam until you type your own soil.
         </p>
       ) : null}
+      {/* a reading from a few kilometres out is the area's soil: said, with the distance */}
+      {resolved === null || soilSampledNote(resolved.soil) === null ? null : (
+        <p className="notice notice-idle" data-testid="status-site-soil-sampled">
+          {soilSampledNote(resolved.soil)}
+        </p>
+      )}
       {/*
         Everything a grower reads once and a specialist reads often, behind one press.
         The step was measured at reading grade 20, the highest in the app, on the first panel a
@@ -305,7 +313,11 @@ export const SitePanel = (): ReactElement => {
                 resolved.elevationM === null ? ELEVATION_UNKNOWN : formatMeters(resolved.elevationM)
               }
             />
-            <Readout id="site-timezone" label="Timezone" value={timezoneWords(resolved.timezone)} />
+            <Readout
+              id="site-timezone"
+              label="Timezone"
+              value={timezoneWords(resolved.timezone, resolved.timezoneBasis)}
+            />
             <Readout id="site-koppen" label="Climate type (Köppen)" value={resolved.koppenCode} />
             {/* in plain words: "usda-2023 6a" reads here as a
                 dataset id, which it is */}

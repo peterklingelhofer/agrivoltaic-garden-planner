@@ -7,7 +7,14 @@ import type {
   SoilProfile,
   TemperatureHardinessRating,
 } from '../types/site'
-import type { Celsius, Fraction, Meters, Millimeters } from '../types/units'
+import {
+  type Celsius,
+  degreesLatitude,
+  degreesLongitude,
+  type Fraction,
+  type Meters,
+  type Millimeters,
+} from '../types/units'
 import type { ClimateNormals, WeatherSourceId } from '../types/weather'
 import { frostExceedanceCurve, FROST_THRESHOLDS_C } from './agronomy'
 import { cacheKeyFor, DEFAULT_FETCH_OPTIONS, fetchJson } from './http'
@@ -730,42 +737,78 @@ const textureFor = (clayPct: number, sandPct: number): SoilProfile['textureClass
   return 'loam'
 }
 
+/** One SoilGrids request, parsed into a profile; null where the pH is missing or implausible */
+const fetchSoilProfile = async (location: LatLon): Promise<SoilProfile | null> => {
+  const body = await fetchJson<SoilGridsBody>(
+    'soilgrids',
+    '/soilgrids/v2.0/properties/query',
+    new URLSearchParams([
+      ['lat', String(location.latitudeDeg)],
+      ['lon', String(location.longitudeDeg)],
+      ['property', 'phh2o'],
+      ['property', 'clay'],
+      ['property', 'sand'],
+      ['property', 'soc'],
+      ['depth', '0-5cm'],
+      ['value', 'mean'],
+    ]),
+    DEFAULT_FETCH_OPTIONS,
+  )
+  const layers = body.properties?.layers ?? []
+  // SoilGrids returns mean: null where a depth has no data, and null/scale is 0, not null,
+  // which silently defeats every `?? fallback` below and zeroes the pH envelope
+  const read = (name: string, scale: number): number | null => {
+    const mean0 = layers.find((layer) => layer.name === name)?.depths?.[0]?.values?.mean
+    return typeof mean0 === 'number' && Number.isFinite(mean0) ? mean0 / scale : null
+  }
+  const ph = read('phh2o', 10)
+  if (ph === null || ph < MIN_PLAUSIBLE_PH || ph > MAX_PLAUSIBLE_PH) return null
+  return {
+    phUnits: ph,
+    textureClass: textureFor(read('clay', 10) ?? 20, read('sand', 10) ?? 40),
+    drainage: 'well',
+    effectiveDepthM: 1 as Meters,
+    // soc arrives in dg/kg and is read in g/kg, where 20 is the default; dividing by 580 turns
+    // carbon into organic matter at the van Bemmelen factor of 1.724
+    organicMatterFraction: ((read('soc', 10) ?? 20) / 580) as Fraction,
+    sourceId: 'soilgrids',
+  }
+}
+
+const KM_PER_DEGREE_LAT = 111.32
+
+/** Rings tried in order when the point itself has no plausible reading: 3 km, then 6 km */
+const SOIL_RING_KM: readonly number[] = [3, 6]
+
+/** The points `km` north, east, south and west of `location`, in that order */
+const ringPoints = (location: LatLon, km: number): readonly LatLon[] => {
+  const { latitudeDeg, longitudeDeg } = location
+  const latOffset = km / KM_PER_DEGREE_LAT
+  const lonOffset = km / (KM_PER_DEGREE_LAT * Math.cos((latitudeDeg * Math.PI) / 180))
+  return [
+    { latitudeDeg: degreesLatitude(latitudeDeg + latOffset), longitudeDeg },
+    { latitudeDeg, longitudeDeg: degreesLongitude(longitudeDeg + lonOffset) },
+    { latitudeDeg: degreesLatitude(latitudeDeg - latOffset), longitudeDeg },
+    { latitudeDeg, longitudeDeg: degreesLongitude(longitudeDeg - lonOffset) },
+  ]
+}
+
+/**
+ * SoilGrids masks built-up ground, so the pH layer is null at the centre of nearly every town.
+ * Where the point itself has no plausible reading, a ring of four points around it is queried
+ * instead, nearest ring first, and the first plausible answer going north, east, south, west
+ * stands in for the point
+ */
 export const soilAt = async (location: LatLon): Promise<SoilProfile> => {
   try {
-    const body = await fetchJson<SoilGridsBody>(
-      'soilgrids',
-      '/soilgrids/v2.0/properties/query',
-      new URLSearchParams([
-        ['lat', String(location.latitudeDeg)],
-        ['lon', String(location.longitudeDeg)],
-        ['property', 'phh2o'],
-        ['property', 'clay'],
-        ['property', 'sand'],
-        ['property', 'soc'],
-        ['depth', '0-5cm'],
-        ['value', 'mean'],
-      ]),
-      DEFAULT_FETCH_OPTIONS,
-    )
-    const layers = body.properties?.layers ?? []
-    // SoilGrids returns mean: null where a depth has no data, and null/scale is 0, not null,
-    // which silently defeats every `?? fallback` below and zeroes the pH envelope
-    const read = (name: string, scale: number): number | null => {
-      const mean0 = layers.find((layer) => layer.name === name)?.depths?.[0]?.values?.mean
-      return typeof mean0 === 'number' && Number.isFinite(mean0) ? mean0 / scale : null
+    const own = await fetchSoilProfile(location)
+    if (own !== null) return own
+    for (const km of SOIL_RING_KM) {
+      const readings = await Promise.all(ringPoints(location, km).map(fetchSoilProfile))
+      const hit = readings.find((reading): reading is SoilProfile => reading !== null)
+      if (hit !== undefined) return { ...hit, sampledKm: km }
     }
-    const ph = read('phh2o', 10)
-    if (ph === null || ph < MIN_PLAUSIBLE_PH || ph > MAX_PLAUSIBLE_PH) return DEFAULT_SOIL
-    return {
-      phUnits: ph,
-      textureClass: textureFor(read('clay', 10) ?? 20, read('sand', 10) ?? 40),
-      drainage: 'well',
-      effectiveDepthM: 1 as Meters,
-      // soc arrives in dg/kg and is read in g/kg, where 20 is the default; dividing by 580 turns
-      // carbon into organic matter at the van Bemmelen factor of 1.724
-      organicMatterFraction: ((read('soc', 10) ?? 20) / 580) as Fraction,
-      sourceId: 'soilgrids',
-    }
+    return DEFAULT_SOIL
   } catch {
     return DEFAULT_SOIL
   }

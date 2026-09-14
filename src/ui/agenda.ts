@@ -60,6 +60,10 @@ export const SUPPLY_LABEL: Readonly<Record<SupplyKind, string>> = {
 
 export const supplyUnit = (kind: SupplyKind): string => (kind === 'seed' ? 'seeds' : 'plants')
 
+/** True when a planting or harvest window covers the whole year rather than a date range within it */
+export const windowSpansYear = (day: number, through: number): boolean =>
+  (through - day + 365) % 365 >= 364
+
 /** "every 14 days, 5 more sowings to 12 Aug", never five near-identical rows */
 export const recurrenceLabel = (item: AgendaItem): string | null => {
   if (item.repeats.length === 0 || item.intervalDays === null) return null

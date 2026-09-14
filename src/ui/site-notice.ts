@@ -41,3 +41,14 @@ export const waitLabel = (seconds: number): string => {
   const rest = minutes - hours * 60
   return rest === 0 ? `${String(hours)} h` : `${String(hours)} h ${String(rest)} min`
 }
+
+/**
+ * What the soil map answered, where it answered anything other than the point itself. SoilGrids
+ * masks built-up ground, so the centre of nearly every town has no reading and the nearest one
+ * a few kilometres out stands in; the sentence says how far, so a reader knows it is the area's
+ * soil and not the garden's. Null where the reading is the point's own or there is none
+ */
+export const soilSampledNote = (soil: { readonly sampledKm?: number }): string | null =>
+  soil.sampledKm === undefined
+    ? null
+    : `The soil map has no reading at this exact spot, so the pH comes from the nearest reading, about ${String(soil.sampledKm)} km away. Every bed starts from it until you type your own soil.`

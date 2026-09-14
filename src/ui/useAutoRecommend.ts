@@ -47,6 +47,9 @@ export const autoRunKey = (s: AppState): string =>
     // ranking it had: the toggle would have looked broken rather than slow
     s.wildlife.favourNative,
     s.wildlife.favourPollinators,
+    // the surroundings answer dims every bed's light before the ranking reads it, and the store
+    // re-reads the beds off the raster when the answer moves, so the ranking has to follow
+    s.answers.exposure,
     /*
       The rooting depth is in here for the same reason the wildlife switches are: `stages/space.ts`
       excludes a crop whose roots want more than `soil.effectiveDepthM + raisedHeightM`, and the

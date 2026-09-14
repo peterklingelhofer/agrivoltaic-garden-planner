@@ -9,6 +9,7 @@ import { regionNote } from './region'
 import {
   ANSWER_QUESTIONS,
   EXPERIENCE_OPTIONS,
+  EXPOSURE_HELP,
   EXPOSURE_OPTIONS,
   feetToMetres,
   metresToFeet,
@@ -27,9 +28,6 @@ import {
 const DEFAULT_HEIGHT_LIMIT_M = 3
 
 const percent = (value: number): string => `${String(Math.round(value * 100))}%`
-
-/** Why the question is asked before any panel exists, in the words the guided dock used */
-export const EXPOSURE_HELP = 'Buildings, fences and trees shade a space before any panel does'
 
 export const SurroundingsStep = (): ReactElement => {
   const exposure = useAppStore((s) => s.answers.exposure)

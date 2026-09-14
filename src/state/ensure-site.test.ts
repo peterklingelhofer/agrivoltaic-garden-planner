@@ -79,7 +79,8 @@ describe('the place the app is already showing gets looked up', () => {
     expect(state().site.status).toBe('idle')
     await state().ensureSite()
     expect(resolveSite).toHaveBeenCalledTimes(1)
-    expect(resolveSite).toHaveBeenCalledWith(DEFAULT_LOCATION, DEFAULT_LOCATION_LABEL, null)
+    // no signal, and no country: the boot lookup has no geocoder answer to take one from
+    expect(resolveSite).toHaveBeenCalledWith(DEFAULT_LOCATION, DEFAULT_LOCATION_LABEL, null, null)
     expect(state().site.status).toBe('ready')
     expect(state().weather.status).toBe('ready')
   })
@@ -409,5 +410,96 @@ describe('the shipped example through its own lookup', () => {
     } finally {
       globalThis.fetch = realFetch
     }
+  })
+})
+
+/**
+ * The starting array faces south, which is away from the sun south of the equator. A place that
+ * resolves south of the equator turns an array still on a starting direction, and nothing somebody
+ * pointed by hand. Without that turn, Melbourne on the coordinates path would bake the example's
+ * south-facing rows and read a bed as sunny
+ */
+describe('which way the starting array faces', () => {
+  const sydney = {
+    latitudeDeg: degreesLatitude(-33.87),
+    longitudeDeg: degreesLongitude(151.21),
+  }
+  const resolvesAt = (location: LatLon): void => {
+    resolveSite.mockResolvedValue({
+      site: siteFixture({ location }),
+      weather: tmyFixture(),
+      years: [],
+    })
+  }
+  /** Which way the first array faces, or null where it is not a fixed array */
+  const facing = (): number | null => {
+    const tracker = state().plot?.arrays[0]?.tracker
+    return tracker !== undefined && tracker.mode === 'fixed' ? tracker.surfaceAzimuthDeg : null
+  }
+
+  it('turns the starting array to face the equator south of it', async () => {
+    resolvesAt(sydney)
+    expect(facing()).toBe(180)
+    await state().resolveSite(sydney, 'Sydney')
+    expect(facing()).toBe(0)
+  })
+
+  it('leaves an array somebody pointed by hand alone', async () => {
+    const plot = state().plot
+    if (plot === null) throw new Error('no plot')
+    useAppStore.setState({
+      plot: {
+        ...plot,
+        arrays: plot.arrays.map((array) => ({
+          ...array,
+          tracker: { ...array.tracker, surfaceAzimuthDeg: 135 as never },
+        })),
+      },
+    })
+    resolvesAt(sydney)
+    await state().resolveSite(sydney, 'Sydney')
+    expect(facing()).toBe(135)
+  })
+
+  it('changes nothing north of the equator', async () => {
+    const before = state().plot
+    await state().resolveSite(DEFAULT_LOCATION, DEFAULT_LOCATION_LABEL)
+    expect(facing()).toBe(180)
+    expect(state().plot?.arrays).toBe(before?.arrays)
+  })
+})
+
+/**
+ * Two lookups in flight at once: the boot lookup of the example's town and a search typed within
+ * seconds of opening. If whichever finished last won, a quick visitor could get the example town's
+ * ground under their own town's weather. The later lookup is the place on screen
+ */
+describe('a lookup that lands after a later one', () => {
+  it('is dropped rather than written over the later one', async () => {
+    const sydney = {
+      latitudeDeg: degreesLatitude(-33.87),
+      longitudeDeg: degreesLongitude(151.21),
+    }
+    let finishFirst: (value: unknown) => void = () => undefined
+    const first = new Promise((resolve) => {
+      finishFirst = resolve
+    })
+    resolveSite.mockImplementationOnce(() => first)
+    resolveSite.mockResolvedValueOnce({
+      site: siteFixture({ location: sydney, label: 'Sydney' }),
+      weather: tmyFixture(),
+      years: [],
+    })
+    const slow = state().resolveSite(DEFAULT_LOCATION, DEFAULT_LOCATION_LABEL)
+    await state().resolveSite(sydney, 'Sydney')
+    const labelOf = (): string | null => {
+      const site = state().site
+      return site.status === 'ready' ? site.value.label : null
+    }
+    expect(labelOf()).toBe('Sydney')
+    finishFirst({ site: siteFixture({ label: 'Amherst' }), weather: tmyFixture(), years: [] })
+    await slow
+    expect(labelOf()).toBe('Sydney')
+    expect(state().location).toEqual(sydney)
   })
 })

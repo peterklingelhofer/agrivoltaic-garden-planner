@@ -1568,3 +1568,85 @@ carry the economy block anywhere, stamped `'user'` like a typed pH.
 **Not done.** Translation into other languages; a field validation against a real garden,
 which the README still says has not happened; and the shipped examples, which are re-baked when
 the catalogue settles.
+
+## 25. What is around the space reaches the light, a plant of cold winters is refused one that has none, and a place says how it grows
+
+Three cold visitors on real weather (Nairobi, Mumbai, Sydney) each got a ranked
+crop list in five presses and about fifteen seconds, and the list they got was temperate in
+judgment: eastern teaberry and western wild ginger, North American woodland perennials, headed
+the shaded bed in Nairobi and in Mumbai as Recommended; the answer to "What is already around
+the space?" changed nothing in the ranking; the starting array faced south in Sydney; and no
+sentence anywhere said whether a place as a whole was one most of the catalogue could live in.
+Each was fixed the same day, with the measurement that found it.
+
+**The surroundings answer dims the light every bed is judged by.** The answer reached only the
+layout search, which spent less of the shade budget on panels for a shaded space; the bake holds
+no house, fence or tree, and the ranking read the bake. One table now serves both readers
+(`src/recommend/surroundings.ts`): a space shaded part of the day loses three tenths of the
+open-sky light before any panel does, one in shade most of the day six tenths, both this app's
+own reading of a three-answer question and declared unsourced on the sources step. Every bed's
+under-array figures are dimmed by that share when a bake lands and when the answer moves, the
+open-sky reference is left alone so the relative shade ratio compounds by itself, the layout
+search judges its candidates' crops on the same dimmed light, and the ranking re-runs when the
+answer changes. The light step says what was taken off and that the map on the ground shows the
+panels' shade alone. The shade budget the search spends is unchanged in number: it is now
+written as one minus the same share.
+
+**A plant recorded wild only where winters are cold needs one.** Ramps, western wild ginger and
+eastern teaberry carry a cool-perennial envelope whose growing-season temperatures a highland
+tropical site meets in every month, and nothing in the envelope says they need the winter they
+come from: the hardiness gate asks only whether winter is too cold. The three rows carry
+`coldWinterOnly`, on their recorded ranges (Chamberlain 2014, FEIS, WCVP), and a gate refuses
+them where the coldest month averages above the top of the chilling band, 7.2 C, the same
+figure the chilling-hours metric counts under. The gate runs last, so a desert July still
+refuses ramps on the envelope, as before, and the winter is named only where the envelope would
+have admitted the plant. The place step's verdict counts these under "colder winters".
+
+**A climate fit under the marginal line holds a crop back on its own.** The total is a weighted
+sum, so a bed that lit and drained western wild ginger well carried it to Recommended at Mumbai
+on a climate fit of 0.05: the hottest month sat a fraction inside the envelope, the gate passed,
+and light and soil outvoted the climate. Liebig's law already decides the gate; it now decides
+the verdict too, and the row reads Limited with the limb of the envelope that bites.
+
+**Equal scores are ordered by their evidence.** At a frost-free site twenty-odd crops of the
+kind a grower asked for fit the light, the climate and the soil and tie on score. The tie note
+already said so; among equals the crops whose light threshold was measured now come before the
+class-level inferences, and the note says that too.
+
+**The starting array faces the equator.** Only the layout search set an array equator-facing;
+the starting array faced south everywhere, which in Sydney is away from the sun. A place that
+resolves south of the equator turns an array still on one of the two starting directions, and
+never one somebody pointed by hand.
+
+**A place says how it grows.** Under the frost sentence on the place step, two sentences from
+figures the app already had: how much of the catalogue passes the climate gate (graded most,
+about half, few, with the count and what the rest would need), and rain against what a garden
+would use, from the FAO-56 balance. Light is not in it, because light is a fact about a bed.
+
+**Eight staples the catalogue lacked.** Pearl millet, grain sorghum, mung bean, teff, olive,
+avocado, arabica coffee and dessert banana, transcribed from their FAO ECOCROP sheets at Tier C
+like the other tropical rows. A verified public copy of the ECOCROP table stood in for the FAO
+service, whose data sheets answered with a server error that day; the catalogue's own cassava
+row matched that copy figure for figure.
+
+**The fallback clock, the soil map's edge, two rainy seasons, and a window that is the whole
+year.** Where the weather service names no zone, the clock is the nearest tzdb zone to the
+point, within the country the geocoder named where it named one, rather than the longitude
+rounded to whole hours, which put Nairobi an hour out; tzdb records one point for all of India,
+so without the country the nearest point to Mumbai is Karachi's. The place step says which
+basis the clock has. Where SoilGrids answers nothing at the point, which is the
+centre of nearly every town, a ring of four points three kilometres out is asked, then six,
+and the reading says how far away it was taken. The rainy-season sentence names every run of
+wet months, so Nairobi's two rains are both named. A sowing window that spans the year reads
+"any time of year" rather than a pair of dates.
+
+**A later lookup wins.** Found while photographing the fixes: two place lookups in flight at
+once (the boot lookup of the example's town and a search typed within seconds of opening) had
+no guard, so whichever finished last was the place on screen, and the soil ring made the boot
+lookup slow enough to lose. A visitor who typed Mumbai quickly got Amherst's ground under
+Mumbai's weather. The store's lookup carries a token now, and an answer that lands after a
+later lookup began is dropped.
+
+**Not done.** Drawing a house or a tree, which is what would replace the three-answer share;
+a chill figure for olive flowering, which the ECOCROP sheet does not carry; and the shipped
+examples, which are re-baked when the catalogue settles.

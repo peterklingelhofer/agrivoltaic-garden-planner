@@ -386,6 +386,8 @@ export interface CropOverrides {
   readonly p?: number
   readonly coldC?: number
   readonly chillHours?: number
+  /** Recorded wild only where winters are cold; see `Crop.coldWinterOnly` */
+  readonly coldWinterOnly?: true
   readonly window?: readonly [number, number]
   readonly gddBase?: number
   readonly gddUpper?: number | null
@@ -639,6 +641,7 @@ export const expandRow = (row: CropRow): Crop => {
       overrides.coldC === undefined
         ? null
         : sourced(overrides.coldC as Celsius, 'C', ['fao-ecocrop'], COLD_FLOOR_BASIS),
+    coldWinterOnly: overrides.coldWinterOnly ?? false,
     footprint: {
       habit,
       canopyShape: overrides.shape ?? habitSpec.canopyShape,

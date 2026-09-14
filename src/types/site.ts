@@ -112,6 +112,8 @@ export interface SoilProfile {
   readonly organicMatterFraction: Fraction
   /** 'default' is the loam this app assumes where no map answered and nobody typed a value */
   readonly sourceId: 'soilgrids' | 'ssurgo' | 'user' | 'default'
+  /** Distance in km to the reading when the point itself had none; absent when the reading is the point's own */
+  readonly sampledKm?: number
 }
 
 export type SoilTexture =
@@ -136,6 +138,8 @@ export interface Site {
   /** null when the elevation lookup returned nothing: 0 m is a measurement, not an absence */
   readonly elevationM: Meters | null
   readonly timezone: string
+  /** 'upstream' when the weather service named the zone, 'nearest-zone' when it was read off the nearest time-zone city on record */
+  readonly timezoneBasis: 'upstream' | 'nearest-zone'
   readonly utcOffsetHours: number
   readonly koppenCode: string
   /**

@@ -2,15 +2,28 @@ import { beforeEach, describe, expect, it } from 'bun:test'
 import { cropById, loadCropCatalog } from '../data/crops'
 import { bedCalendar } from '../recommend/calendar'
 import { calendarFor, derivePlanting } from '../recommend/planting'
-import { bedFixture, bedLightFixture, plotFixture, siteFixture } from '../recommend/testkit'
+import {
+  bedFixture,
+  bedLightFixture,
+  frostFreeSiteFixture,
+  plotFixture,
+  siteFixture,
+} from '../recommend/testkit'
 import { idle, ready } from '../state/slices'
 import { resetAppStore, useAppStore } from '../state/store'
 import type { Crop } from '../types/crop'
 import type { Bed } from '../types/garden'
 import { plantingId } from '../types/ids'
+import type { Site } from '../types/site'
 import { epochMillis, type DayOfYear, type SquareMeters } from '../types/units'
 import { dayOfYearUtc } from '../state/sun'
-import { actionLabel, groupLabel, NO_THERMAL_AGENDA_NOTE, supplyUnit } from './agenda'
+import {
+  actionLabel,
+  groupLabel,
+  NO_THERMAL_AGENDA_NOTE,
+  supplyUnit,
+  windowSpansYear,
+} from './agenda'
 import { AgendaPanel } from './AgendaPanel'
 import { mount } from './testkit'
 
@@ -25,11 +38,13 @@ const need = async (id: string): Promise<Crop> => {
 /** June 21 2024, the clock the store boots with, so the reference day is the app's own */
 const JUNE_21 = Date.UTC(2024, 5, 21, 16, 0, 0)
 
-const seed = async (ids: readonly string[]): Promise<void> => {
+const seed = async (ids: readonly string[], site: Site = siteFixture()): Promise<void> => {
   const crops = await Promise.all(ids.map(need))
-  const site = siteFixture()
   const bed: Bed = bedFixture('bed-a', { areaM2: 200 as SquareMeters })
-  const calendars = [bedCalendar(site, bedLightFixture('bed-a', 0), crops, 20)]
+  // matches the site's own light rather than Amherst's, so a site override (Pune, say) gets
+  // dates computed against its own DLI rather than a mismatched default
+  const light = bedLightFixture('bed-a', 0, 36, site.normals.monthlyMeanDliMolM2Day)
+  const calendars = [bedCalendar(site, light, crops, 20)]
   const plantings = crops.flatMap((crop) => {
     const derived = derivePlanting({
       id: plantingId(`bed-a:${crop.id as string}`),
@@ -84,6 +99,13 @@ describe('agenda labels', () => {
   it('reads the app clock as a day of year', () => {
     expect(dayOfYearUtc(Date.UTC(2024, 0, 1))).toBe(1 as DayOfYear)
     expect(dayOfYearUtc(JUNE_21)).toBe(173 as DayOfYear)
+  })
+
+  it('reads a window as spanning the year only when it wraps almost all the way round', () => {
+    expect(windowSpansYear(1, 365)).toBe(true)
+    expect(windowSpansYear(335, 334)).toBe(true)
+    expect(windowSpansYear(100, 200)).toBe(false)
+    expect(windowSpansYear(1, 364)).toBe(false)
   })
 })
 
@@ -161,6 +183,18 @@ describe('agenda panel', () => {
     )
     expect(notice?.getAttribute('data-feasibility')).toBe('no-thermal-data')
     expect(notice?.textContent).toContain(NO_THERMAL_AGENDA_NOTE)
+    await harness.unmount()
+  })
+
+  /**
+   * Pune has no frost in the record, so a crop the whole year suits (lettuce, sown at the start
+   * of the coolest month) gets a window that runs the full 365 days. Printing that as "(through
+   * 30 Nov)" reads as a deadline; it means any day at all
+   */
+  it('prints "any time of year" rather than a date for a window that spans the whole year', async () => {
+    await seed(['lettuce-leaf'], frostFreeSiteFixture())
+    const harness = await mount(<AgendaPanel />)
+    expect(harness.container.textContent).toContain('any time of year')
     await harness.unmount()
   })
 })

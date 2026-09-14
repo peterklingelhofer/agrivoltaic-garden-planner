@@ -462,8 +462,9 @@ describe('a site with no frost in the record', () => {
     const calendar = at(need(await catalogPromise, 'tomato'))
     expect(calendar.notes).toContain(FROST_FREE_NOTE)
     expect(calendar.notes).not.toContain(CALENDAR_PROVENANCE_NOTE)
+    // Pune's October also sits above its monthly mean, so the named run runs through it
     expect(calendar.notes).toContain(
-      "The rains here fall mostly in June to September; this calendar doesn't model them, so sow with the rains as local practice says",
+      "The rains here fall mostly in June to October; this calendar doesn't model them, so sow with the rains as local practice says",
     )
     // Amherst's rain is even through the year, so it gets no such sentence
     expect(wetSeasonNote(siteFixture().normals.monthlyPrecipMm)).toBeNull()
@@ -472,6 +473,23 @@ describe('a site with no frost in the record', () => {
   it('gives every crop in the catalogue a window in a bright bed', async () => {
     const barren = (await catalogPromise).filter((crop) => at(crop).plantings.length === 0)
     expect(barren.map((crop) => crop.id)).toEqual([])
+  })
+})
+
+/**
+ * Nairobi has two rainy seasons, long rains March to May and short rains October/November to
+ * December, and a rule keyed to the single wettest run of months would never name the second one
+ */
+describe('wetSeasonNote', () => {
+  it("names both of a bimodal climate's rainy seasons, in calendar order", () => {
+    expect(wetSeasonNote([50, 40, 90, 200, 150, 30, 15, 20, 25, 50, 150, 90])).toBe(
+      "The rains here fall mostly in March to May and November to December; this calendar doesn't model them, so sow with the rains as local practice says",
+    )
+  })
+
+  it('names no season where the months above the mean hold under 70% of the rain', () => {
+    // seven months above the mean, holding 68% of the year's rain: too diffuse to call a season
+    expect(wetSeasonNote([90, 90, 90, 90, 90, 90, 90, 60, 60, 60, 60, 60])).toBeNull()
   })
 })
 

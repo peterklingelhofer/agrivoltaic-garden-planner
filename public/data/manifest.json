@@ -376,9 +376,9 @@
     },
     {
       "generator": "scripts/fetch-plant-traits.mjs",
-      "generatedAt": "2026-08-15",
+      "generatedAt": "2026-09-14",
       "format": "AGDG v2, see docs/STATIC-LAYERS.md",
-      "validated": true,
+      "validated": false,
       "path": "public/data/wgsrpd-level3.grid",
       "citekey": "govaerts2021-wcvp",
       "licence": "CC BY 4.0",
@@ -387,7 +387,7 @@
         "landing": "https://github.com/tdwg/wgsrpd",
         "download": "https://raw.githubusercontent.com/tdwg/wgsrpd/master/geojson/level3.geojson",
         "entry": "level3.geojson",
-        "retrieved": "2026-08-15",
+        "retrieved": "2026-09-14",
         "sha256": "c172bcf6aba20e19477adc60aebf0023068f0175dca8480f0760b090dcf64840"
       },
       "processing": [
@@ -481,13 +481,7 @@
           "shipped": null
         }
       ],
-      "sourceAgreement": {
-        "comparedPoints": 21447,
-        "exactPercent": 93.67,
-        "adjacentCellPercent": 6.26,
-        "otherPercent": 0.07,
-        "note": "sampled at cell centres, half a cell off the lattice the raster is built on, so this measures the cost of the half-degree cell and not the scan converter reading back its own input"
-      }
+      "sourceAgreement": null
     }
   ],
   "notShipped": [

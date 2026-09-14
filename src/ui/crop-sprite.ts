@@ -265,6 +265,18 @@ export const CROP_SPRITE: Readonly<Record<string, readonly [FormKey, PaletteKey]
   'pigeon-pea': ['pod', 'pod-tan'],
   sesame: ['pod', 'pod-pale'],
   moringa: ['pod', 'pod-green'],
+  // the eight staples added on 2026-09-13, drawn with the forms and palettes of their nearest
+  // neighbours in the table: the millets and grain sorghum as the ears the cover-crop sorghum
+  // and upland rice carry, teff as a grass, the bean as a pod, the two trees as the fruit shapes
+  // avocado and olive have, coffee as the red berry cluster its cherries are, banana as plantain
+  'pearl-millet': ['ear', 'grain-pale'],
+  'sorghum-grain': ['ear', 'grain-red'],
+  'mung-bean': ['pod', 'pod-green'],
+  teff: ['grass', 'grain-gold'],
+  olive: ['teardrop-fruit', 'leaf-grey'],
+  avocado: ['teardrop-fruit', 'leaf-deep'],
+  coffee: ['berry-cluster', 'berry-red'],
+  banana: ['leafy-bunch', 'leaf-bright'],
   'marigold-french': ['flower', 'flower-orange'],
   'marigold-african': ['flower', 'flower-yellow'],
   nasturtium: ['flower', 'flower-orange'],

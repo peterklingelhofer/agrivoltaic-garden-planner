@@ -54,7 +54,9 @@ const BASIL_CAVEAT =
  * ECOCROP names its climate zones in Trewartha's letters. Read onto the Köppen codes
  * `static-layers.ts` produces: Ar (tropical wet) is Af and Am, Aw is Aw, Bs is BSh and BSk, Bw is
  * BWh and BWk, Cf is Cfa and Cfb, Cs is Csa and Csb, Cw is Cwa and Cwb. Each tropical row below
- * lists exactly the zones its ECOCROP sheet gives, so `koppen` transcribes the sheet
+ * lists exactly the zones its ECOCROP sheet gives, so `koppen` transcribes the sheet. Trewartha's
+ * temperate letters are read the same way: Do (oceanic) is Cfb, Dc (continental) is Dfb, Df is
+ * Dfa and Dfb, Dw is Dwa and Dwb
  */
 const AR = ['Af', 'Am']
 const AW = ['Aw']
@@ -63,6 +65,10 @@ const BW = ['BWh', 'BWk']
 const CF = ['Cfa', 'Cfb']
 const CS = ['Csa', 'Csb']
 const CW = ['Cwa', 'Cwb']
+const DO = ['Cfb']
+const DC = ['Dfb']
+const DF = ['Dfa', 'Dfb']
+const DW = ['Dwa', 'Dwb']
 
 /**
  * The hot half of the `subtropical` envelope laid over the cold half `hardy-perennial` already
@@ -2467,6 +2473,9 @@ export const CROP_ROWS: readonly CropRow[] = [
     {
       life: 'perennial',
       coldC: -40,
+      // FEIS: a boreal and cool-temperate understory shrub of eastern North America, so it
+      // grows only where winters are cold; the envelope alone admitted it to Nairobi and Mumbai
+      coldWinterOnly: true,
       // FEIS: found from pH 3.5 to 6.9 at the surface, "a pH of 4.5 to 6.0 has been reported
       // as optimum for growth, with 7.0 the maximum eastern teaberry tolerates"
       ph: [3.5, 4.5, 6, 7],
@@ -3209,6 +3218,10 @@ export const CROP_ROWS: readonly CropRow[] = [
     {
       life: 'perennial',
       coldC: -29,
+      // WCVP records it wild in British Columbia, Washington, Oregon, California, Idaho and
+      // Montana only, all cold-winter conifer forest; the envelope alone admitted it to Nairobi
+      // and, on the hottest month's edge, to Mumbai
+      coldWinterOnly: true,
       maxRsr: 0.75,
       maxRsrTier: 'C',
       dliCitations: ['armstrong2021-forest-garden-traits'],
@@ -3235,6 +3248,11 @@ export const CROP_ROWS: readonly CropRow[] = [
     {
       life: 'perennial',
       coldC: -37,
+      // A spring ephemeral of eastern North American hardwood forests (Chamberlain 2014), so it
+      // grows only where winters are cold. The cool-perennial envelope says nothing about that
+      // winter: a highland tropical site sits inside it in every month, and without the cold-winter
+      // gate Nairobi would rank ramps first in a shaded bed
+      coldWinterOnly: true,
       window: [3, 5],
       maxRsr: 0.75,
       maxRsrTier: 'C',
@@ -3749,6 +3767,319 @@ export const CROP_ROWS: readonly CropRow[] = [
       cycle: [210, 330],
       // ECOCROP sheet 2348 climate zones: Aw, Bs, Cs
       koppen: [...AW, ...BS, ...CS],
+      dliCitations: C,
+    },
+  ],
+  [
+    'pearl-millet',
+    'Pennisetum glaucum',
+    'Poaceae',
+    'pearl millet|bajra|bulrush millet',
+    // laubGroup, dliClass, habit and DLI figures as sorghum-sudangrass; grown here for grain,
+    // so no cover role
+    'forages',
+    'forages-c3-pasture',
+    'clumping-grass',
+    'hot',
+    12,
+    20,
+    30,
+    'C',
+    // ECOCROP sheet 8418 light 'very bright' to clear skies
+    0,
+    // ECOCROP sheet 8418 cycle 60 to 120 days; 90 sits inside it
+    90,
+    // spacing, height and width as sorghum-sudangrass: a sheet-independent convention, not from
+    // the ECOCROP sheet
+    15,
+    2.5,
+    0.4,
+    {
+      // ECOCROP sheet 8418: temperature 12 / 25-35 / 40 C, rainfall 200 / 400-900 / 1700 mm,
+      // pH 4.5 / 5-6.5 / 8.3, cycle 60 to 120 days
+      temp: [12, 25, 35, 40],
+      rain: [200, 400, 900, 1700],
+      ph: [4.5, 5, 6.5, 8.3],
+      cycle: [60, 120],
+      // ECOCROP sheet 8418 climate zones: Aw, Ar, Bw, Bs, Cf, Cs, Cw
+      koppen: [...AW, ...AR, ...BW, ...BS, ...CF, ...CS, ...CW],
+      dliCitations: C,
+    },
+  ],
+  [
+    'sorghum-grain',
+    'Sorghum bicolor',
+    'Poaceae',
+    'grain sorghum|milo|jowar|durra|great millet',
+    // laubGroup, dliClass, habit, DLI figures, spacing, height and width as pearl-millet above
+    // (from sorghum-sudangrass); sorghum-sudangrass itself is the Sorghum x drummondii
+    // cover-crop hybrid, and this row is the grain species
+    'forages',
+    'forages-c3-pasture',
+    'clumping-grass',
+    'hot',
+    12,
+    20,
+    30,
+    'C',
+    // ECOCROP sheet 48747 light 'clear skies' to 'very bright'
+    0,
+    // ECOCROP sheet 48747 cycle 90 to 300 days; 110 sits inside it
+    110,
+    15,
+    2.5,
+    0.4,
+    {
+      // ECOCROP sheet 48747: temperature 8 / 22-35 / 40 C, rainfall 300 / 400-600 / 700 mm,
+      // pH 5 / 5.5-7.5 / 8, cycle 90 to 300 days
+      temp: [8, 22, 35, 40],
+      rain: [300, 400, 600, 700],
+      ph: [5, 5.5, 7.5, 8],
+      cycle: [90, 300],
+      // ECOCROP sheet 48747 climate zones: Aw, Bs, Cs
+      koppen: [...AW, ...BS, ...CS],
+      dliCitations: C,
+    },
+  ],
+  [
+    'mung-bean',
+    'Vigna radiata',
+    'Fabaceae',
+    'mung bean|green gram|moong',
+    // ECOCROP sheet 2150 lists the species life span as perennial, but mung bean is grown as a
+    // seed-to-seed annual everywhere it is cultivated, so life stays 'annual' through the 'hot'
+    // archetype default: no yearsToMature, no coldC. laubGroup, dliClass, habit, DLI figures,
+    // harvestDays, spacing, height and width as cowpea
+    'grain-legumes',
+    'grain-legumes',
+    'bush',
+    'hot',
+    14,
+    20,
+    28,
+    'C',
+    // ECOCROP sheet 2150 light 'very bright' to 'cloudy skies'
+    0,
+    // ECOCROP sheet 2150 cycle 50 to 120 days; 75 sits inside it
+    75,
+    20,
+    0.6,
+    0.4,
+    {
+      // ECOCROP sheet 2150: temperature 8 / 21-36 / 40 C, rainfall 500 / 650-900 / 1250 mm,
+      // pH 4.3 / 5.5-6.2 / 8.3, cycle 50 to 120 days
+      temp: [8, 21, 36, 40],
+      rain: [500, 650, 900, 1250],
+      ph: [4.3, 5.5, 6.2, 8.3],
+      cycle: [50, 120],
+      // ECOCROP sheet 2150 climate zones: Aw, Cf
+      koppen: [...AW, ...CF],
+      harvestDays: 30,
+      nfix: true,
+      dliCitations: C,
+    },
+  ],
+  [
+    'teff',
+    'Eragrostis tef',
+    'Poaceae',
+    'teff|tef',
+    // laubGroup, dliClass, habit, DLI figures, spacing, height and width as pearl-millet and
+    // sorghum-grain above (from sorghum-sudangrass)
+    'forages',
+    'forages-c3-pasture',
+    'clumping-grass',
+    // ECOCROP sheet 5746's 2 C floor and 30 C ceiling sit in the temp override below; 'warm' is
+    // the nearest archetype, not a claim that teff shares its defaults
+    'warm',
+    12,
+    20,
+    30,
+    'C',
+    // ECOCROP sheet 5746 light 'very bright' to clear skies
+    0,
+    // ECOCROP sheet 5746 cycle 65 to 150 days; 90 sits inside it
+    90,
+    15,
+    2.5,
+    0.4,
+    {
+      // ECOCROP sheet 5746: temperature 2 / 22-28 / 30 C, rainfall 300 / 600-1200 / 2500 mm,
+      // pH 5 / 5.5-6.5 / 8.2, cycle 65 to 150 days
+      temp: [2, 22, 28, 30],
+      rain: [300, 600, 1200, 2500],
+      ph: [5, 5.5, 6.5, 8.2],
+      cycle: [65, 150],
+      // ECOCROP sheet 5746 climate zones: Aw, Bs, Cf, Cs, Cw, Do, Dc, Df, Dw. Do and Cf both
+      // read onto Cfb, and Dc and Df both read onto Dfb, so the list is deduped
+      koppen: [...new Set([...AW, ...BS, ...CF, ...CS, ...CW, ...DO, ...DC, ...DF, ...DW])],
+      dliCitations: C,
+    },
+  ],
+  [
+    'olive',
+    'Olea europaea',
+    'Oleaceae',
+    'olive',
+    // laubGroup, dliClass, habit and DLI figures as the fig row
+    'fruits',
+    'cane-bush-berries',
+    'spreading-tree',
+    'subtropical',
+    15,
+    20,
+    30,
+    'C',
+    // ECOCROP sheet 1553 light 'clear skies' to 'very bright'
+    0,
+    // ECOCROP sheet 1553 cycle 365 days; a fruit cycle of the full year, as lemon and mango
+    365,
+    // spacing, height and width as the fig row's garden-pruned tree: this app's own garden-scale
+    // figures, not from the ECOCROP sheet
+    400,
+    4,
+    4,
+    {
+      life: 'woody-perennial',
+      yearsToMature: 4,
+      // ECOCROP sheet 1553 killing temperature during rest
+      coldC: -10,
+      // the spreading-tree habit defaults to deciduous; ECOCROP sheet 1553 gives an evergreen
+      // tree, so this row sets it false, as lemon and mango do for their own citrus and mango
+      // sheets. The sheet carries no chill-hours figure, so this app does not gate olive
+      // flowering on winter chilling
+      deciduous: false,
+      // ECOCROP sheet 1553: temperature 5 / 20-34 / 40 C, rainfall 200 / 400-700 / 1200 mm,
+      // pH 5.3 / 6-7 / 8.5, cycle a fixed 365 days
+      temp: [5, 20, 34, 40],
+      rain: [200, 400, 700, 1200],
+      ph: [5.3, 6, 7, 8.5],
+      cycle: [365, 365],
+      // ECOCROP sheet 1553 climate zones: Ar, Bs, Cs
+      koppen: [...AR, ...BS, ...CS],
+      dliCitations: C,
+    },
+  ],
+  [
+    'avocado',
+    'Persea americana',
+    'Lauraceae',
+    'avocado',
+    // tree conventions (laubGroup, dliClass, habit, DLI figures, deciduous, maxRsr, spacing,
+    // height, width, daysToMaturity) as the mango row, an evergreen subtropical fruit tree
+    'fruits',
+    'cane-bush-berries',
+    'spreading-tree',
+    'subtropical',
+    15,
+    20,
+    30,
+    'C',
+    // ECOCROP sheet 1659 (the species sheet) light 'clear skies' to 'very bright'
+    0,
+    365,
+    370,
+    9,
+    4.6,
+    {
+      life: 'woody-perennial',
+      yearsToMature: 4,
+      // ECOCROP sheet 1659 killing temperature during rest
+      coldC: -4,
+      deciduous: false,
+      // ECOCROP sheet 1659: temperature 10 / 14-40 / 45 C, rainfall 300 / 500-2000 / 2500 mm,
+      // pH 4.5 / 5-5.8 / 7
+      temp: [10, 14, 40, 45],
+      rain: [300, 500, 2000, 2500],
+      ph: [4.5, 5, 5.8, 7],
+      // the species sheet gives no cycle (0 to 0); 300 to 365 days is transcribed from the
+      // Guatemalan race instead, ECOCROP sheet 17645
+      cycle: [300, 365],
+      // ECOCROP sheet 1659 climate zones: Aw, Ar
+      koppen: [...AW, ...AR],
+      maxRsr: 0.1,
+      maxRsrTier: 'C',
+      dliCitations: C,
+    },
+  ],
+  [
+    'coffee',
+    'Coffea arabica',
+    'Rubiaceae',
+    'arabica coffee|coffee',
+    'berries',
+    'cane-bush-berries',
+    'bush',
+    'subtropical',
+    // DLI figures as currant-black: a class-level figure taken directly, with no per-crop trial
+    6,
+    12,
+    18,
+    'C',
+    // ECOCROP sheet 749 light 'very bright' to 'light shade': light shade is tolerated
+    1,
+    // ECOCROP sheet 749 cycle 210 to 330 days; 270 is this app's own midpoint, with no
+    // secondary source dating first harvest more precisely
+    270,
+    // spacing, height and width as a garden-pruned shrub: this app's own garden-scale figures,
+    // not from the ECOCROP sheet
+    150,
+    2,
+    1.5,
+    {
+      life: 'woody-perennial',
+      yearsToMature: 3,
+      // ECOCROP sheet 749 carries no killing temperature; frost kills arabica, so this app sets
+      // its own freezing-point floor rather than leaving the crop with none
+      coldC: 0,
+      // ECOCROP sheet 749: temperature 10 / 14-28 / 34 C, rainfall 750 / 1400-2300 / 4200 mm,
+      // pH 4.3 / 5.5-7 / 8.4, cycle 210 to 330 days
+      temp: [10, 14, 28, 34],
+      rain: [750, 1400, 2300, 4200],
+      ph: [4.3, 5.5, 7, 8.4],
+      cycle: [210, 330],
+      // ECOCROP sheet 749 climate zones: Aw, Cf, Cw
+      koppen: [...AW, ...CF, ...CW],
+      dliCitations: C,
+    },
+  ],
+  [
+    'banana',
+    'Musa acuminata',
+    'Musaceae',
+    'banana|dessert banana|Cavendish',
+    // every other column and override (laubGroup, dliClass, habit, DLI figures, daysToMaturity,
+    // spacing, height, width, zr, p, life, yearsToMature) copied from the plantain row above,
+    // the same genus
+    'fruits',
+    'cucurbits',
+    'upright-herb',
+    'subtropical',
+    14,
+    20,
+    28,
+    'C',
+    // ECOCROP sheet 7848 light 'very bright' to 'light shade': light shade is tolerated
+    1,
+    365,
+    360,
+    3,
+    2.4,
+    {
+      life: 'perennial',
+      yearsToMature: 1,
+      // ECOCROP sheet 7848 killing temperature during rest
+      coldC: 1,
+      // ECOCROP sheet 7848: temperature 12 / 23-33 / 42 C, rainfall 650 / 1200-3600 / 5000 mm,
+      // pH 4 / 5.5-7.5 / 8.4, cycle 180 to 365 days
+      temp: [12, 23, 33, 42],
+      rain: [650, 1200, 3600, 5000],
+      ph: [4, 5.5, 7.5, 8.4],
+      cycle: [180, 365],
+      // ECOCROP sheet 7848 climate zones: Aw, Ar, Bs, Cf, Cs, Cw
+      koppen: [...AW, ...AR, ...BS, ...CF, ...CS, ...CW],
+      zr: 0.7,
+      p: 0.35,
       dliCitations: C,
     },
   ],

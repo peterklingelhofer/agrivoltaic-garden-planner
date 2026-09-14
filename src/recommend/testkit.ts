@@ -158,6 +158,7 @@ export const siteFixture = (overrides: Partial<Site> = {}): Site => ({
   location: { latitudeDeg: 42.37 as DegreesLatitude, longitudeDeg: -71.11 as DegreesLongitude },
   elevationM: 20 as Meters,
   timezone: 'Etc/GMT+5',
+  timezoneBasis: 'upstream',
   utcOffsetHours: -5,
   koppenCode: 'Dfa',
   botanicalArea: null,

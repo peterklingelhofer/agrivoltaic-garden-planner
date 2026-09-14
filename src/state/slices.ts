@@ -82,7 +82,11 @@ export interface SiteSlice {
    * this is what lets a panel print the countdown
    */
   readonly siteRetryAt: number | null
-  resolveSite(location: LatLon, label: string): Promise<void>
+  /**
+   * The country, when a geocoder named one, narrows the fallback clock to that country's zones:
+   * tzdb records one point for all of India, so the nearest point to Mumbai is Karachi's
+   */
+  resolveSite(location: LatLon, label: string, countryCode?: string | null): Promise<void>
   /** Resolves `location` if nothing has yet, so no surface is blocked on a place already on screen */
   ensureSite(): Promise<void>
   setLocation(location: LatLon, label: string): void

@@ -11,10 +11,11 @@ import { polygonOf, rectangleRing, vec2 } from '../state/geom'
 import type { Polygon2D } from '../types/geo'
 import { bedId as asBedId } from '../types/ids'
 import type { DliRaster, GrowingWindow } from '../types/light'
-import type { BedLayout, BedPlacement, LightZoneKind } from '../types/onboarding'
+import type { BedLayout, BedPlacement, LightZoneKind, SiteExposure } from '../types/onboarding'
 import type { PvArray } from '../types/pv'
 import type { Fraction, MolPerM2Day } from '../types/units'
 import type { Derivation } from './planting'
+import { shadedBySurroundings } from './surroundings'
 
 /**
  * Where the beds go.
@@ -78,6 +79,8 @@ export interface LayoutRequest {
   readonly raster: DliRaster
   readonly window: GrowingWindow
   readonly maxBeds?: number
+  /** What already shades the space; each placed bed's light carries its share (`surroundings.ts`) */
+  readonly exposure?: SiteExposure
 }
 
 /* ------------------------------- the cross-row axis ------------------------------ */
@@ -403,6 +406,7 @@ const placementsFor = (
   lengthM: number,
   raster: DliRaster,
   field: SeasonField,
+  exposure: SiteExposure,
 ): readonly BedPlacement[] =>
   slots.map((slot, index) => {
     const bedId = asBedId(`bed-${String(index + 1)}`)
@@ -418,7 +422,9 @@ const placementsFor = (
         worstCellGrowingSeasonDli: measured.worstMolM2Day as MolPerM2Day,
         shadeRatio: measured.shadeRatio as Fraction,
       },
-      light: bedLightOf(raster, bedId, footprint),
+      // the panels' shade places the bed and names its zone; the crops it is then ranked for
+      // are judged on that light with the surroundings' share taken off as well
+      light: shadedBySurroundings(bedLightOf(raster, bedId, footprint), exposure),
       reason: zoneReason(slot.kind, measured.shadeRatio),
     }
   })
@@ -450,6 +456,7 @@ export const placeBeds = (request: LayoutRequest): Derivation<BedLayout> => {
       lengthM,
       request.raster,
       field,
+      request.exposure ?? 'open',
     )
     return {
       ok: true,
@@ -485,7 +492,14 @@ export const placeBeds = (request: LayoutRequest): Derivation<BedLayout> => {
     return even('no strip was wide enough to hold a bed clear of the array feet')
   }
 
-  const beds = placementsFor(interleave(slots, limit), axis, lengthM, request.raster, field)
+  const beds = placementsFor(
+    interleave(slots, limit),
+    axis,
+    lengthM,
+    request.raster,
+    field,
+    request.exposure ?? 'open',
+  )
   const kinds = new Set(beds.map((bed) => bed.zone))
   if (kinds.size < 2) {
     refusals.push(

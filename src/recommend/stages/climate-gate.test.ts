@@ -3,10 +3,12 @@ import { cropById, loadCropCatalog } from '../../data/crops'
 import type { Crop } from '../../types/crop'
 import type { CropId } from '../../types/ids'
 import { ecocropMembership } from '../membership'
-import { hotDesertSiteFixture, siteFixture } from '../testkit'
+import { CHILL_CEILING_C } from '../../data/agronomy'
+import { frostFreeSiteFixture, hotDesertSiteFixture, siteFixture } from '../testkit'
 import {
   climateFit,
   climateGate,
+  coldWinterGate,
   growingSeasonMeanTempC,
   isPerennial,
   seasonLengthDays,
@@ -137,5 +139,58 @@ describe('the temperatures a crop actually stands in', () => {
         )
         expect(climateFit(crop, site, 20, true)).toBe(windowOnly.overall)
       }
+  })
+})
+
+/**
+ * Nairobi, as the site model reads it: Cfb, no frost, every month between 15 and 20 C. Inside the
+ * cool-perennial envelope in every month, so on temperature alone ramps, western wild ginger and
+ * eastern teaberry would head a shaded bed there
+ */
+const highlandTropics = (): ReturnType<typeof siteFixture> =>
+  siteFixture({
+    koppenCode: 'Cfb',
+    hardiness: [{ scheme: 'usda-2023', extremeMinTempC: 5 as never, zoneLabel: '11b' }],
+    normals: {
+      ...siteFixture().normals,
+      monthlyMeanTempC: [19, 20, 20, 19, 18, 16, 15, 15, 17, 18, 18, 18].map((v) => v as never),
+    },
+  })
+
+describe('a plant recorded wild only where winters are cold', () => {
+  it('is refused a winter that never reaches the chilling band, and told why', async () => {
+    const catalog = await catalogPromise
+    for (const site of [highlandTropics(), frostFreeSiteFixture()])
+      for (const id of ['ramps', 'wild-ginger', 'teaberry']) {
+        const crop = need(catalog, id)
+        expect(crop.coldWinterOnly).toBe(true)
+        const outcome = coldWinterGate(crop, site)
+        expect(outcome.passed).toBe(false)
+        expect(outcome.limiting?.cause).toEqual({ kind: 'cold-winter' })
+        expect(outcome.limiting?.explanation).toContain(`${String(CHILL_CEILING_C)} C`)
+      }
+    // the highland is inside the envelope in every month, so the winter is the reason given. At
+    // Pune the envelope refuses the 30 C summer first, and that is the reason a gardener reads
+    // there
+    for (const id of ['ramps', 'wild-ginger', 'teaberry'])
+      expect(climateGate(need(catalog, id), highlandTropics(), 20).limiting?.cause).toEqual({
+        kind: 'cold-winter',
+      })
+  })
+
+  it('keeps its own home, where the coldest month sits under the band', async () => {
+    const catalog = await catalogPromise
+    const home = siteFixture()
+    expect(Math.min(...home.normals.monthlyMeanTempC)).toBeLessThanOrEqual(CHILL_CEILING_C)
+    for (const id of ['ramps', 'wild-ginger', 'teaberry'])
+      expect(coldWinterGate(need(catalog, id), home).passed).toBe(true)
+  })
+
+  it('asks nothing of a crop that does not carry the flag, whatever the winter', async () => {
+    const catalog = await catalogPromise
+    const flagged = catalog.filter((crop) => crop.coldWinterOnly).map((crop) => crop.id)
+    expect(flagged.sort()).toEqual(['ramps', 'teaberry', 'wild-ginger'])
+    for (const crop of catalog)
+      if (!crop.coldWinterOnly) expect(coldWinterGate(crop, highlandTropics()).passed).toBe(true)
   })
 })
