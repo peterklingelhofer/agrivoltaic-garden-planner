@@ -3945,9 +3945,14 @@ export const CROP_ROWS: readonly CropRow[] = [
       coldC: -10,
       // the spreading-tree habit defaults to deciduous. ECOCROP sheet 1553 gives an evergreen
       // tree, so this row sets it false, as lemon and mango do for their own citrus and mango
-      // sheets. The sheet carries no chill-hours figure, so this app doesn't gate olive
-      // flowering on winter chilling
+      // sheets. The sheet carries no chill figure. De Melo-Abreu et al. 2004
+      // (de-melo-abreu2004-olive-chilling) put the cultivars they modeled at 150 to 300 hours
+      // below 7 C, as summarized by Sahli et al. 2012 (sahli2012-chemlali-olive-chilling). This
+      // app counts hours at 0 to 7.2 C, close enough to compare like with like, and the row
+      // carries the least demanding cultivar's 150 so only a site with almost no winter chill
+      // refuses it
       deciduous: false,
+      chillHours: 150,
       // ECOCROP sheet 1553: temperature 5 / 20-34 / 40 C, rainfall 200 / 400-700 / 1200 mm,
       // pH 5.3 / 6-7 / 8.5, cycle a fixed 365 days
       temp: [5, 20, 34, 40],
