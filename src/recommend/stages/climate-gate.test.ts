@@ -6,6 +6,7 @@ import { ecocropMembership } from '../membership'
 import { CHILL_CEILING_C } from '../../data/agronomy'
 import { frostFreeSiteFixture, hotDesertSiteFixture, siteFixture } from '../testkit'
 import {
+  chillGate,
   climateFit,
   climateGate,
   coldWinterGate,
@@ -192,5 +193,16 @@ describe('a plant recorded wild only where winters are cold', () => {
     expect(flagged.sort()).toEqual(['ramps', 'teaberry', 'wild-ginger'])
     for (const crop of catalog)
       if (!crop.coldWinterOnly) expect(coldWinterGate(crop, highlandTropics()).passed).toBe(true)
+  })
+})
+
+// olive carries the catalog's 150-hour chill figure (De Melo-Abreu et al. 2004, Sahli et al.
+// 2012). Pune never reaches it and Phoenix's 180 clears it
+describe('olive is gated on its catalog chill figure', () => {
+  it('is refused where the site accumulates no chill and passes where it clears 150 hours', async () => {
+    const catalog = await catalogPromise
+    const olive = need(catalog, 'olive')
+    expect(chillGate(olive, frostFreeSiteFixture()).passed).toBe(false)
+    expect(chillGate(olive, hotDesertSiteFixture()).passed).toBe(true)
   })
 })

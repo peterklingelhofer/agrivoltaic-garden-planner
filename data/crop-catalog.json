@@ -4852,6 +4852,7 @@
         "yearsToMature": 4,
         "coldC": -10,
         "deciduous": false,
+        "chillHours": 150,
         "temp": [
           5,
           20,
