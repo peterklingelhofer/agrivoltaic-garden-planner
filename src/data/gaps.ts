@@ -1,4 +1,5 @@
 import { WEIGHTS_CLAIM } from '../recommend/stages/rank'
+import { SURROUNDINGS_CLAIM } from '../recommend/surroundings'
 import { MAX_CROWDING_YIELD_PENALTY } from '../recommend/stages/space'
 import { PEST_YIELD_LOSS_AT_FULL_PRESSURE } from '../simulation/pests'
 import { isUnsourced } from '../types/cited'
@@ -112,6 +113,12 @@ export const provenanceLedger = async (): Promise<readonly ProvenanceGap[]> => {
       subject: 'crop ranking',
       field: 'weights',
       reason: WEIGHTS_CLAIM.justification,
+    },
+    {
+      area: 'model-constant',
+      subject: 'surroundings',
+      field: 'shade share per answer',
+      reason: SURROUNDINGS_CLAIM.justification,
     },
     {
       area: 'model-constant',

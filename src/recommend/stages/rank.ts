@@ -1,5 +1,6 @@
 import { unsourcedClaim } from '../../types/cited'
-import type { BedId } from '../../types/ids'
+import type { DataTier } from '../../types/evidence'
+import type { BedId, CropId } from '../../types/ids'
 import type { CropRecommendation, RecommendationSet, ScoreBreakdown } from '../../types/recommend'
 import type { Fraction } from '../../types/units'
 
@@ -69,16 +70,28 @@ export const scoreOf = (recommendation: CropRecommendation): number =>
 
 export const VERDICT_ORDER = { recommended: 0, marginal: 1, excluded: 2 } as const
 
+const TIER_ORDER: Readonly<Record<DataTier, number>> = { A: 0, B: 1, C: 2 }
+
 /**
- * Deterministic ordering: verdict, then score, then crop id as the tie-break so
- * two runs over the same input always produce the same list
+ * Deterministic ordering: verdict, then score, then the evidence behind the crop's light
+ * threshold (a measured figure before a class-level inference), then crop id, so two runs over
+ * the same input always produce the same list.
+ *
+ * The evidence tie-break is the answer to a frost-free site, where twenty-odd crops of the kind
+ * a grower asked for all fit the light, the climate and the soil and tie on score: among equals,
+ * the ones whose light needs were measured are listed first, and the list says so
  */
-export const rank = (candidates: readonly CropRecommendation[]): RecommendationSet => {
+export const rank = (
+  candidates: readonly CropRecommendation[],
+  tierOf: (cropId: CropId) => DataTier = () => 'C',
+): RecommendationSet => {
   const ranked = [...candidates].sort((a, b) => {
     const verdict = VERDICT_ORDER[a.outcome.verdict] - VERDICT_ORDER[b.outcome.verdict]
     if (verdict !== 0) return verdict
     const delta = scoreOf(b) - scoreOf(a)
     if (Math.abs(delta) > 1e-9) return delta
+    const tier = TIER_ORDER[tierOf(a.cropId)] - TIER_ORDER[tierOf(b.cropId)]
+    if (tier !== 0) return tier
     return (a.cropId as string).localeCompare(b.cropId as string)
   })
   return {

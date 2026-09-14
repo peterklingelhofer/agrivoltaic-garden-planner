@@ -85,6 +85,7 @@ const site: Site = {
   location: { latitudeDeg: 42.37 as DegreesLatitude, longitudeDeg: -72.52 as DegreesLongitude },
   elevationM: 90 as Meters,
   timezone: 'America/New_York',
+  timezoneBasis: 'upstream',
   utcOffsetHours: -5,
   koppenCode: 'Dfb',
   botanicalArea: null,

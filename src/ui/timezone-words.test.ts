@@ -18,4 +18,10 @@ describe('the timezone readout', () => {
       'UTC, computed from the longitude; daylight saving not known',
     )
   })
+
+  it('says a nearest-zone name came off the nearest city on record, not the weather service', () => {
+    expect(timezoneWords('Africa/Nairobi', 'nearest-zone')).toBe(
+      'Africa/Nairobi, the nearest time zone on record to this point; the weather service named none',
+    )
+  })
 })

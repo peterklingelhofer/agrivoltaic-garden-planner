@@ -94,6 +94,16 @@ export const DEFAULT_TRACKER: TrackerConfig = {
   surfaceAzimuthDeg: degrees(180),
 }
 
+/**
+ * True for an array still facing one of the two starting directions, whichever hemisphere. The
+ * starting array faces south, which is away from the sun south of the equator, so a place that
+ * resolves there turns such an array to face the equator (`resolveSite` in the store) and never
+ * one somebody has pointed by hand
+ */
+export const facesStartingDirection = (array: PvArray): boolean =>
+  array.tracker.mode === 'fixed' &&
+  (array.tracker.surfaceAzimuthDeg === 0 || array.tracker.surfaceAzimuthDeg === 180)
+
 export const DEFAULT_SOIL: SoilProfile = {
   phUnits: 6.5,
   textureClass: 'loam',

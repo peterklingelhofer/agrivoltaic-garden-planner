@@ -10,7 +10,7 @@ import { getAppState, resetAppStore, useAppStore } from '../state/store'
 import { SiteNotice } from './SiteNotice'
 import { SitePanel } from './SitePanel'
 import { mount } from './testkit'
-import { capitalizeSentence, waitLabel } from './site-notice'
+import { capitalizeSentence, soilSampledNote, waitLabel } from './site-notice'
 
 /**
  * The failure path had no door.
@@ -195,5 +195,12 @@ describe('the same failure on the shipped example', () => {
     } finally {
       vi.unstubAllGlobals()
     }
+  })
+})
+
+describe('the soil map sentence', () => {
+  it('says how far away the nearest reading was taken, and nothing for the point itself', () => {
+    expect(soilSampledNote({ sampledKm: 3 })).toContain('about 3 km away')
+    expect(soilSampledNote({})).toBeNull()
   })
 })

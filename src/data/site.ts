@@ -68,6 +68,8 @@ export const resolveSite = async (
   location: LatLon,
   label: string,
   signal: AbortSignal | null,
+  // the country a geocoder named, which narrows the fallback clock to that country's zones
+  countryCode: string | null = null,
 ): Promise<ResolvedSite> => {
   const [elevationM, koppenCode, botanicalArea, hardiness, frost, normals, soil, record, daily] =
     await Promise.all([
@@ -88,10 +90,9 @@ export const resolveSite = async (
   // UTC (an older cached body, or a stub), so `timezoneFor` is the better guess there
   const answered = daily.timezone ?? null
   const plainGmt = answered === 'GMT' || answered === 'UTC' || answered === 'Etc/UTC'
-  const timezone =
-    answered === null || (plainGmt && Math.abs(utcOffsetHoursFor(location)) >= 1)
-      ? timezoneFor(location)
-      : answered
+  const noAnswer = answered === null || (plainGmt && Math.abs(utcOffsetHoursFor(location)) >= 1)
+  const timezone = noAnswer ? timezoneFor(location, countryCode) : answered
+  const timezoneBasis: Site['timezoneBasis'] = noAnswer ? 'nearest-zone' : 'upstream'
   const utcOffsetHours = standardOffsetHours(
     timezone,
     daily.utcOffsetSeconds === null ? utcOffsetHoursFor(location) : daily.utcOffsetSeconds / 3600,
@@ -109,6 +110,7 @@ export const resolveSite = async (
     location,
     elevationM,
     timezone,
+    timezoneBasis,
     utcOffsetHours,
     koppenCode,
     botanicalArea,

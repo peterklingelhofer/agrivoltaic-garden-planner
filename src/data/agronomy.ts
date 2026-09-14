@@ -110,11 +110,18 @@ export const dayGddCrosses = (
   return null
 }
 
+/**
+ * The top of the chilling band: an hour counts as chilling when the air is between freezing and
+ * this. The same figure marks a winter for `coldWinterGate`, so a place whose coldest month
+ * averages above it accumulates little chill and is no home for a plant of cold-winter forests
+ */
+export const CHILL_CEILING_C = 7.2
+
 export const chillingHours = (hourlyTempC: Float32Array): number => {
   let total = 0
   for (let index = 0; index < hourlyTempC.length; index += 1) {
     const temperature = at(hourlyTempC, index)
-    if (temperature >= 0 && temperature <= 7.2) total += 1
+    if (temperature >= 0 && temperature <= CHILL_CEILING_C) total += 1
   }
   return total
 }

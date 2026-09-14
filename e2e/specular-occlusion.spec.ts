@@ -104,8 +104,11 @@ test('a wetted surface loses more to the sky occlusion than the same surface dry
   await resolveSite(page)
   await step(page, 'light')
   // a fixed sun, because every ratio here is a statement about one geometry
+  // 13:00 on the clock: the stubbed weather names no zone, so the site's clock is the nearest
+  // zone on record, America/New_York, which keeps summer time. 13:00 EDT is the 12:00 EST this
+  // pose was chosen at, with the sun at 71 degrees
   await page.getByTestId('control-time-day').fill('172')
-  await page.getByTestId('control-time-minutes').fill('720')
+  await page.getByTestId('control-time-minutes').fill('780')
   await expect(page.getByTestId('readout-sun-elevation')).toContainText('71')
   // the ground itself, with no model readout drawn over it
   await page.getByTestId('control-overlay-visible').setChecked(false)

@@ -322,29 +322,31 @@ export const explainLimitingFactor = (
         ? 'winters here are too cold for it to survive'
         : cause.kind === 'chill'
           ? "winters here aren't cold enough for it to break dormancy"
-          : cause.kind === 'season-gdd'
-            ? 'the growing season here is too short for it to reach maturity'
-            : cause.kind === 'dli-minimum'
-              ? `not enough light in ${monthLabel(cause.month)}`
-              : cause.kind === 'dli-disorder-ceiling'
-                ? `too much light in ${monthLabel(cause.month)}`
-                : cause.kind === 'max-design-rsr'
-                  ? 'more shade here than it can take'
-                  : cause.kind === 'soil-ph'
-                    ? "the soil pH here doesn't suit it"
-                    : cause.kind === 'water'
-                      ? 'not enough water for it here'
-                      : cause.kind === 'footprint'
-                        ? "no room for it once it's fully grown"
-                        : cause.kind === 'root-depth'
-                          ? crop === undefined || bed === undefined
-                            ? ROOT_DEPTH_LIMITED
-                            : rootDepthDetail(rootDepthRemedy(crop, bed))
-                          : cause.kind === 'rotation'
-                            ? `grown here too recently to keep ${cause.pathogen} from building up`
-                            : cause.kind === 'shared-pest-or-pathogen'
-                              ? `shares a pest or disease with ${cropName(catalog, cause.withCropId)}`
-                              : "nothing on its own rules it out, and altogether it's a weak match"
+          : cause.kind === 'cold-winter'
+            ? "winters here aren't cold enough for it; it grows only where they are"
+            : cause.kind === 'season-gdd'
+              ? 'the growing season here is too short for it to reach maturity'
+              : cause.kind === 'dli-minimum'
+                ? `not enough light in ${monthLabel(cause.month)}`
+                : cause.kind === 'dli-disorder-ceiling'
+                  ? `too much light in ${monthLabel(cause.month)}`
+                  : cause.kind === 'max-design-rsr'
+                    ? 'more shade here than it can take'
+                    : cause.kind === 'soil-ph'
+                      ? "the soil pH here doesn't suit it"
+                      : cause.kind === 'water'
+                        ? 'not enough water for it here'
+                        : cause.kind === 'footprint'
+                          ? "no room for it once it's fully grown"
+                          : cause.kind === 'root-depth'
+                            ? crop === undefined || bed === undefined
+                              ? ROOT_DEPTH_LIMITED
+                              : rootDepthDetail(rootDepthRemedy(crop, bed))
+                            : cause.kind === 'rotation'
+                              ? `grown here too recently to keep ${cause.pathogen} from building up`
+                              : cause.kind === 'shared-pest-or-pathogen'
+                                ? `shares a pest or disease with ${cropName(catalog, cause.withCropId)}`
+                                : "nothing on its own rules it out, and altogether it's a weak match"
   return showsFigures(experience)
     ? `${detail} (${factor.stage}, membership ${factor.membership.toFixed(2)})`
     : detail
@@ -447,7 +449,7 @@ export const rankedHiddenNote = (hidden: number): string =>
   `${String(hidden)} more ${hidden === 1 ? 'crop was' : 'crops were'} ranked below these. They scored lower for this bed, and the switch above shows them.`
 
 export const cropTieNote = (tiedCount: number): string =>
-  `The top ${String(tiedCount)} crops here score too close together to rank one above another. Any of them suits this bed about equally well, so pick whichever you would most like to grow`
+  `The top ${String(tiedCount)} crops here score too close together to rank one above another. Any of them suits this bed about equally well, so pick whichever you would most like to grow. Among them, the crops whose light needs were measured are listed first`
 
 /**
  * How many of the leading polyculture combinations are too close on score to tell apart.

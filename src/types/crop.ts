@@ -190,6 +190,13 @@ export interface Crop {
   readonly thermal: ThermalRequirement | null
   readonly chill: ChillRequirement | null
   readonly coldHardinessMinC: MaybeCited<Celsius>
+  /**
+   * Recorded wild only where winters are cold, so a site whose coldest month stays above the
+   * chilling ceiling refuses it (`coldWinterGate`). Set on the woodland and heath perennials
+   * whose envelope is an archetype inference: their growing-season temperatures fit a highland
+   * tropical site, and nothing else in the envelope says they need the winter they come from
+   */
+  readonly coldWinterOnly: boolean
   readonly footprint: MatureFootprint
   readonly roots: RootProfile
   readonly spacing: Spacing

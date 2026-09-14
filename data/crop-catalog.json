@@ -3030,6 +3030,7 @@
       "overrides": {
         "life": "perennial",
         "coldC": -40,
+        "coldWinterOnly": true,
         "ph": [
           3.5,
           4.5,
@@ -3864,6 +3865,7 @@
       "overrides": {
         "life": "perennial",
         "coldC": -29,
+        "coldWinterOnly": true,
         "maxRsr": 0.75,
         "maxRsrTier": "C",
         "dliCitations": [
@@ -3892,6 +3894,7 @@
       "overrides": {
         "life": "perennial",
         "coldC": -37,
+        "coldWinterOnly": true,
         "window": [
           3,
           5
@@ -4588,6 +4591,477 @@
           "Csa",
           "Csb"
         ],
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "pearl-millet",
+      "acceptedName": "Pennisetum glaucum",
+      "family": "Poaceae",
+      "commonNames": "pearl millet|bajra|bulrush millet",
+      "laubGroup": "forages",
+      "dliClass": "forages-c3-pasture",
+      "habit": "clumping-grass",
+      "archetype": "hot",
+      "dliMin": 12,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 30,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 90,
+      "spacingCm": 15,
+      "heightM": 2.5,
+      "widthM": 0.4,
+      "overrides": {
+        "temp": [
+          12,
+          25,
+          35,
+          40
+        ],
+        "rain": [
+          200,
+          400,
+          900,
+          1700
+        ],
+        "ph": [
+          4.5,
+          5,
+          6.5,
+          8.3
+        ],
+        "cycle": [
+          60,
+          120
+        ],
+        "koppen": [
+          "Aw",
+          "Af",
+          "Am",
+          "BWh",
+          "BWk",
+          "BSh",
+          "BSk",
+          "Cfa",
+          "Cfb",
+          "Csa",
+          "Csb",
+          "Cwa",
+          "Cwb"
+        ],
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "sorghum-grain",
+      "acceptedName": "Sorghum bicolor",
+      "family": "Poaceae",
+      "commonNames": "grain sorghum|milo|jowar|durra|great millet",
+      "laubGroup": "forages",
+      "dliClass": "forages-c3-pasture",
+      "habit": "clumping-grass",
+      "archetype": "hot",
+      "dliMin": 12,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 30,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 110,
+      "spacingCm": 15,
+      "heightM": 2.5,
+      "widthM": 0.4,
+      "overrides": {
+        "temp": [
+          8,
+          22,
+          35,
+          40
+        ],
+        "rain": [
+          300,
+          400,
+          600,
+          700
+        ],
+        "ph": [
+          5,
+          5.5,
+          7.5,
+          8
+        ],
+        "cycle": [
+          90,
+          300
+        ],
+        "koppen": [
+          "Aw",
+          "BSh",
+          "BSk",
+          "Csa",
+          "Csb"
+        ],
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "mung-bean",
+      "acceptedName": "Vigna radiata",
+      "family": "Fabaceae",
+      "commonNames": "mung bean|green gram|moong",
+      "laubGroup": "grain-legumes",
+      "dliClass": "grain-legumes",
+      "habit": "bush",
+      "archetype": "hot",
+      "dliMin": 14,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 28,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 75,
+      "spacingCm": 20,
+      "heightM": 0.6,
+      "widthM": 0.4,
+      "overrides": {
+        "temp": [
+          8,
+          21,
+          36,
+          40
+        ],
+        "rain": [
+          500,
+          650,
+          900,
+          1250
+        ],
+        "ph": [
+          4.3,
+          5.5,
+          6.2,
+          8.3
+        ],
+        "cycle": [
+          50,
+          120
+        ],
+        "koppen": [
+          "Aw",
+          "Cfa",
+          "Cfb"
+        ],
+        "harvestDays": 30,
+        "nfix": true,
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "teff",
+      "acceptedName": "Eragrostis tef",
+      "family": "Poaceae",
+      "commonNames": "teff|tef",
+      "laubGroup": "forages",
+      "dliClass": "forages-c3-pasture",
+      "habit": "clumping-grass",
+      "archetype": "warm",
+      "dliMin": 12,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 30,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 90,
+      "spacingCm": 15,
+      "heightM": 2.5,
+      "widthM": 0.4,
+      "overrides": {
+        "temp": [
+          2,
+          22,
+          28,
+          30
+        ],
+        "rain": [
+          300,
+          600,
+          1200,
+          2500
+        ],
+        "ph": [
+          5,
+          5.5,
+          6.5,
+          8.2
+        ],
+        "cycle": [
+          65,
+          150
+        ],
+        "koppen": [
+          "Aw",
+          "BSh",
+          "BSk",
+          "Cfa",
+          "Cfb",
+          "Csa",
+          "Csb",
+          "Cwa",
+          "Cwb",
+          "Dfb",
+          "Dfa",
+          "Dwa",
+          "Dwb"
+        ],
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "olive",
+      "acceptedName": "Olea europaea",
+      "family": "Oleaceae",
+      "commonNames": "olive",
+      "laubGroup": "fruits",
+      "dliClass": "cane-bush-berries",
+      "habit": "spreading-tree",
+      "archetype": "subtropical",
+      "dliMin": 15,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 30,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 365,
+      "spacingCm": 400,
+      "heightM": 4,
+      "widthM": 4,
+      "overrides": {
+        "life": "woody-perennial",
+        "yearsToMature": 4,
+        "coldC": -10,
+        "deciduous": false,
+        "temp": [
+          5,
+          20,
+          34,
+          40
+        ],
+        "rain": [
+          200,
+          400,
+          700,
+          1200
+        ],
+        "ph": [
+          5.3,
+          6,
+          7,
+          8.5
+        ],
+        "cycle": [
+          365,
+          365
+        ],
+        "koppen": [
+          "Af",
+          "Am",
+          "BSh",
+          "BSk",
+          "Csa",
+          "Csb"
+        ],
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "avocado",
+      "acceptedName": "Persea americana",
+      "family": "Lauraceae",
+      "commonNames": "avocado",
+      "laubGroup": "fruits",
+      "dliClass": "cane-bush-berries",
+      "habit": "spreading-tree",
+      "archetype": "subtropical",
+      "dliMin": 15,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 30,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 365,
+      "spacingCm": 370,
+      "heightM": 9,
+      "widthM": 4.6,
+      "overrides": {
+        "life": "woody-perennial",
+        "yearsToMature": 4,
+        "coldC": -4,
+        "deciduous": false,
+        "temp": [
+          10,
+          14,
+          40,
+          45
+        ],
+        "rain": [
+          300,
+          500,
+          2000,
+          2500
+        ],
+        "ph": [
+          4.5,
+          5,
+          5.8,
+          7
+        ],
+        "cycle": [
+          300,
+          365
+        ],
+        "koppen": [
+          "Aw",
+          "Af",
+          "Am"
+        ],
+        "maxRsr": 0.1,
+        "maxRsrTier": "C",
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "coffee",
+      "acceptedName": "Coffea arabica",
+      "family": "Rubiaceae",
+      "commonNames": "arabica coffee|coffee",
+      "laubGroup": "berries",
+      "dliClass": "cane-bush-berries",
+      "habit": "bush",
+      "archetype": "subtropical",
+      "dliMin": 6,
+      "dliTargetLow": 12,
+      "dliTargetHigh": 18,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 270,
+      "spacingCm": 150,
+      "heightM": 2,
+      "widthM": 1.5,
+      "overrides": {
+        "life": "woody-perennial",
+        "yearsToMature": 3,
+        "coldC": 0,
+        "temp": [
+          10,
+          14,
+          28,
+          34
+        ],
+        "rain": [
+          750,
+          1400,
+          2300,
+          4200
+        ],
+        "ph": [
+          4.3,
+          5.5,
+          7,
+          8.4
+        ],
+        "cycle": [
+          210,
+          330
+        ],
+        "koppen": [
+          "Aw",
+          "Cfa",
+          "Cfb",
+          "Cwa",
+          "Cwb"
+        ],
+        "dliCitations": [
+          "torres-purdue-dli-b",
+          "stallknecht2025-vce-dli"
+        ]
+      }
+    },
+    {
+      "id": "banana",
+      "acceptedName": "Musa acuminata",
+      "family": "Musaceae",
+      "commonNames": "banana|dessert banana|Cavendish",
+      "laubGroup": "fruits",
+      "dliClass": "cucurbits",
+      "habit": "upright-herb",
+      "archetype": "subtropical",
+      "dliMin": 14,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 28,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 365,
+      "spacingCm": 360,
+      "heightM": 3,
+      "widthM": 2.4,
+      "overrides": {
+        "life": "perennial",
+        "yearsToMature": 1,
+        "coldC": 1,
+        "temp": [
+          12,
+          23,
+          33,
+          42
+        ],
+        "rain": [
+          650,
+          1200,
+          3600,
+          5000
+        ],
+        "ph": [
+          4,
+          5.5,
+          7.5,
+          8.4
+        ],
+        "cycle": [
+          180,
+          365
+        ],
+        "koppen": [
+          "Aw",
+          "Af",
+          "Am",
+          "BSh",
+          "BSk",
+          "Cfa",
+          "Cfb",
+          "Csa",
+          "Csb",
+          "Cwa",
+          "Cwb"
+        ],
+        "zr": 0.7,
+        "p": 0.35,
         "dliCitations": [
           "torres-purdue-dli-b",
           "stallknecht2025-vce-dli"

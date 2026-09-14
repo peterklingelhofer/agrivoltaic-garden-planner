@@ -18,6 +18,7 @@ export type LimitingFactorKind =
   | { readonly kind: 'fao-ecocrop'; readonly parameter: EcocropParameter }
   | { readonly kind: 'hardiness' }
   | { readonly kind: 'chill' }
+  | { readonly kind: 'cold-winter' }
   | { readonly kind: 'season-gdd' }
   | { readonly kind: 'dli-minimum'; readonly month: MonthIndex }
   | { readonly kind: 'dli-disorder-ceiling'; readonly month: MonthIndex }

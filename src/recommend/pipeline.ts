@@ -2,6 +2,7 @@ import { partitionCompanionRules } from '../data/companions'
 import { laubCurve } from '../data/crops'
 import type { CompanionRule, RotationConstraint } from '../types/companion'
 import type { Crop } from '../types/crop'
+import type { DataTier } from '../types/evidence'
 import type { Bed, GardenPlot } from '../types/garden'
 import type { BedId, CropId } from '../types/ids'
 import type { BedLight } from '../types/light'
@@ -13,7 +14,7 @@ import type {
 } from '../types/recommend'
 import type { ExceedancePercentile, Site } from '../types/site'
 import type { Fraction } from '../types/units'
-import { climateFit, climateGate } from './stages/climate-gate'
+import { climateGate, ecocropScore } from './stages/climate-gate'
 import { interactionsStage } from './stages/interactions'
 import { lightGate } from './stages/light-gate'
 import { DEFAULT_WEIGHTS, rank, score } from './stages/rank'
@@ -81,6 +82,9 @@ export const runRecommendationPipeline = (input: PipelineInput): readonly Recomm
   const weights = (input.weights as ScoreWeights | undefined) ?? DEFAULT_WEIGHTS
   const preferred = new Set(input.preferredCropIds.map((id) => id as string))
   const familyOf = familyLookup(input.catalog)
+  // the evidence behind each crop's light threshold, the tie-break among equal scores
+  const tiers = new Map(input.catalog.map((crop) => [crop.id, crop.light.dliMinMolM2Day.tier]))
+  const tierOf = (id: CropId): DataTier => tiers.get(id) ?? 'C'
   const sets: RecommendationSet[] = []
 
   for (const light of input.bedLight) {
@@ -143,10 +147,16 @@ export const runRecommendationPipeline = (input: PipelineInput): readonly Recomm
         continue
       }
 
+      const climateScore = ecocropScore(
+        crop,
+        input.site,
+        input.frostPercentile,
+        bed.irrigation.available,
+      )
       const breakdown = score(
         lightOutcome.fit,
         lightOutcome.shadeBenefitBonus,
-        climateFit(crop, input.site, input.frostPercentile, bed.irrigation.available),
+        climateScore.overall,
         soil.fit,
         interactions.bonus,
         interactions.penalty + soil.droughtPenalty,
@@ -185,10 +195,31 @@ export const runRecommendationPipeline = (input: PipelineInput): readonly Recomm
           : [],
       )
 
+      /*
+        A climate fit under the marginal line holds a crop back on its own, whatever the light and
+        the soil add up to. The total is a weighted sum, so without this a bed that lit and drained
+        a woodland herb well would carry it to "recommended" at Mumbai on a climate fit of 0.05: the
+        hottest month sits a fraction inside its envelope, the gate passes, and the other terms
+        outvote it. Liebig's law decides the gate. This is the same law at the verdict, and it names
+        the limb of the envelope that bites
+      */
+      const climateLimit: LimitingFactor | null =
+        climateScore.overall < MARGINAL_SCORE
+          ? {
+              stage: 'climate-gate',
+              cause: { kind: 'fao-ecocrop', parameter: climateScore.limitingParameter },
+              membership: climateScore.overall,
+              explanation: `The site sits at the edge of this crop's ECOCROP ${climateScore.limitingParameter} envelope`,
+            }
+          : null
       // a shallow bed limits a crop rather than excluding it (see `ROOT_DEPTH_FLOOR_M`), so it
       // joins the chain of what holds a passing crop back
       const limiting =
-        lightOutcome.limiting ?? soil.limiting ?? space.limiting ?? interactions.limiting
+        lightOutcome.limiting ??
+        climateLimit ??
+        soil.limiting ??
+        space.limiting ??
+        interactions.limiting
       candidates.push({
         ...base,
         supportingRules: interactions.applied,
@@ -213,7 +244,7 @@ export const runRecommendationPipeline = (input: PipelineInput): readonly Recomm
       })
     }
 
-    const set = rank(candidates)
+    const set = rank(candidates, tierOf)
     sets.push({ ...set, bedId: light.bedId })
   }
 
