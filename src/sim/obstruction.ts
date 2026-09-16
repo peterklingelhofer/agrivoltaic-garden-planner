@@ -1,10 +1,7 @@
 import type { Vec2M, Vec3M } from '../types/geo'
 import type { House, Obstruction, Tree } from '../types/garden'
 import type { Occluder } from '../types/pv'
-import type { ExceedancePercentile, Site } from '../types/site'
 import type { Meters } from '../types/units'
-import { monthsInWindow } from './aggregate'
-import { growingWindowFor } from './growing-window'
 
 /**
  * A house or a tree the bake shades with, as the quads the panels already travel in: four
@@ -78,14 +75,9 @@ export const isSeasonal = (quads: readonly Occluder[]): boolean =>
   quads.some((quad) => quad.transmittance !== quad.leaflessTransmittance)
 
 /**
- * Which calendar months a deciduous tree is in leaf: the site's growing window at the given
- * risk, built on the one `growingWindowFor` in `src/sim/growing-window.ts`, the same function
- * `src/data/growing-window.ts` re-exports for the rest of the app (Decision Record 26)
+ * Which calendar months a deciduous tree is in leaf, the Growing Season Index read off the
+ * site's typical year: re-exported from `src/sim/phenology.ts` so `src/sim/pipeline.ts` and the
+ * scene layer, already importing quads from here, need no second import line for it (Decision
+ * Record 26)
  */
-export const leafOnMonthsFor = (
-  site: Site,
-  percentile: ExceedancePercentile,
-): readonly boolean[] => {
-  const inLeaf = new Set(monthsInWindow(growingWindowFor(site, percentile)))
-  return Array.from({ length: 12 }, (_unused, month) => inLeaf.has(month))
-}
+export { leafOnMonthsFor } from './phenology'

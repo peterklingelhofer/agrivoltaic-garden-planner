@@ -68,6 +68,9 @@ export const SourceLink = ({
 /** Long enough to find the row with the eye, short enough that it never reads as a stored state */
 const HIGHLIGHT_MS = 2500
 
+/** Beyond this many screens away, the jump is instant: see the scroll below */
+const FAR_JUMP_SCREENS = 3
+
 const Reference = ({
   record,
   arrived,
@@ -154,8 +157,13 @@ export const SourcesPanel = (): ReactElement => {
     const frame = schedule.set(() => {
       settleLanding()
       if (typeof row.scrollIntoView === 'function') {
+        // smooth only over a short hop: two hundred sources are some 30,000 px on a phone, and a
+        // smooth scroll across them takes over a second, shows nothing but a blur of other rows,
+        // and eats most of the highlight's time before the row is even on screen
+        const farOff =
+          Math.abs(row.getBoundingClientRect().top) > FAR_JUMP_SCREENS * window.innerHeight
         row.scrollIntoView({
-          behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+          behavior: prefersReducedMotion() || farOff ? 'auto' : 'smooth',
           block: 'center',
         })
       }

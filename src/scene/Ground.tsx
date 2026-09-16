@@ -1,8 +1,9 @@
-import type { ThreeEvent } from '@react-three/fiber'
+import { useThree, type ThreeEvent } from '@react-three/fiber'
 import { useCallback, useMemo, type ReactElement } from 'react'
-import { Vector2 } from 'three'
-import { fromSceneXZ } from '../state/geom'
+import { Vector2, Vector3 } from 'three'
+import { distanceToPolygonM, fromSceneXZ, polygonOf, vec2 } from '../state/geom'
 import { sceneGroundAlbedo, scenePlot, sceneSnowCover, useAppStore } from '../state/store'
+import type { Bed } from '../types/garden'
 import { DEFAULT_GROUND_COVER } from '../types/ground'
 import { useImageryTexture } from './imagery'
 import { groundSurface, surfaceGain } from './materials'
@@ -11,6 +12,15 @@ import { useRenderQuality } from './useRenderQuality'
 
 /** Edge of one tile in meters. Small enough to hold a blade of grass, large enough not to moire */
 const TILE_M = 2.5
+
+/** Half the 48px touch target mobile guidelines ask for: the radius a finger's tap forgives */
+const FINGER_PX = 24
+
+/**
+ * Reused for every bed-corner projection in a touch press, so the search allocates nothing
+ * per vertex
+ */
+const scratchProjection = new Vector3()
 
 /**
  * The cover the grower chose, drawn as that cover: turf, stone, straw, chips or bare soil, from
@@ -30,6 +40,8 @@ export const Ground = (): ReactElement => {
   const snowCover = useAppStore(sceneSnowCover)
   const groundAlbedo = useAppStore(sceneGroundAlbedo)
   const cover = useAppStore((s) => scenePlot(s)?.groundCover ?? DEFAULT_GROUND_COVER)
+  // the beds a touch's near-miss can land on. See `onPointerDown`
+  const plot = useAppStore(scenePlot)
   const pushDraftVertex = useAppStore((s) => s.pushDraftVertex)
   const undoDraftVertex = useAppStore((s) => s.undoDraftVertex)
   const commitDraft = useAppStore((s) => s.commitDraft)
@@ -40,6 +52,8 @@ export const Ground = (): ReactElement => {
   const dragging = useAppStore((s) => s.dragging)
   const texture = useImageryTexture(location, imageryEnabled)
   const quality = useRenderQuality()
+  // the canvas's own pixel size, so a tap and each bed's projected corners share one pixel space
+  const size = useThree((s) => s.size)
 
   const surface = useMemo(
     () => groundSurface(quality.surfaceTextureSize * 2, cover),
@@ -67,6 +81,54 @@ export const Ground = (): ReactElement => {
       */
       if (dragging) return
       if (mode === 'select' || mode === 'move') {
+        /*
+          A tap aimed at a bed on a small touch screen lands on the ground beside it as often
+          as on the bed itself, so a miss this close still means the bed. The pointer that
+          pressed decides this rather than the `pointer: coarse` media query `coarsePointer`
+          reads, because it's this finger's tap that missed and a mouse plugged into a tablet
+          aims as exactly as any mouse
+        */
+        if (event.nativeEvent?.pointerType === 'touch') {
+          /*
+            A finger's miss is measured on the screen because a tap's ray can travel well
+            past its target before it hits anything: a bed's own label floats above it with
+            no raycast surface, so a tap aimed at the label reaches the ground behind the
+            bed, where only the screen distance still reads as a near miss
+          */
+          const px = ((event.pointer.x + 1) / 2) * size.width
+          const py = ((1 - event.pointer.y) / 2) * size.height
+          const camera = event.camera
+          let nearest: Bed | null = null
+          let nearestDistancePx = Infinity
+          for (const bed of plot?.beds ?? []) {
+            const topY = Math.max(0.02, bed.raisedHeightM)
+            const exterior = bed.footprint.exterior
+            // a corner behind the camera projects to a false position in front of it, so a
+            // bed the camera has turned away from is left out of the search entirely
+            const behindCamera = exterior.some((p) => {
+              scratchProjection.set(p.xM, topY, -p.yM).applyMatrix4(camera.matrixWorldInverse)
+              return scratchProjection.z > 0
+            })
+            if (behindCamera) continue
+            const screenRing = exterior.map((p) => {
+              scratchProjection.set(p.xM, topY, -p.yM).project(camera)
+              return vec2(
+                ((scratchProjection.x + 1) / 2) * size.width,
+                ((1 - scratchProjection.y) / 2) * size.height,
+              )
+            })
+            // distanceToPolygonM is unit-free: pixels stand in for the plot meters it usually gets
+            const distancePx = distanceToPolygonM(polygonOf(screenRing), px, py)
+            if (distancePx < nearestDistancePx) {
+              nearest = bed
+              nearestDistancePx = distancePx
+            }
+          }
+          if (nearest !== null && nearestDistancePx <= FINGER_PX) {
+            selectBed(nearest.id)
+            return
+          }
+        }
         selectBed(null)
         selectArray(null)
         selectObstruction(null)
@@ -76,7 +138,7 @@ export const Ground = (): ReactElement => {
       const [x, z] = groundPoint(event)
       pushDraftVertex(fromSceneXZ(x, z))
     },
-    [dragging, mode, pushDraftVertex, selectArray, selectBed, selectObstruction],
+    [dragging, mode, plot, pushDraftVertex, selectArray, selectBed, selectObstruction, size],
   )
 
   /**

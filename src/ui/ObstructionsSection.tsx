@@ -265,7 +265,11 @@ const TreeCard = ({
       <p className="readout-note" data-testid={`readout-tree-source-${tree.id}`}>
         Defaults 3% in leaf and 46% bare, the midpoints of what{' '}
         <SourceLink id="konarska2014-urban-tree-transmissivity" short /> measured under five street
-        trees. Which months it's in leaf follows the site's frost dates, this app's own reading.
+        trees. Which months it's in leaf comes from the site's typical year, by the Growing Season
+        Index (<SourceLink id="jolly2005-growing-season-index" />
+        ). The index reads each day's lowest temperature and day length. Its third input, how dry
+        the air is, is set to moist, since a garden tree stands where the beds are watered. A month
+        counts as in leaf when the index, averaged over 21 days, passes 0.5 at mid-month.
       </p>
       <Action testId={`action-tree-remove-${tree.id}`} onClick={() => removeObstruction(tree.id)}>
         Remove

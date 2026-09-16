@@ -17,6 +17,7 @@ import { useRenderQuality } from './useRenderQuality'
 import { SkyLight } from './SkyLight'
 import { BedLabels } from './BedLabels'
 import { BedMesh } from './BedMesh'
+import { CompassBridge } from './Compass'
 import { DliOverlay } from './DliOverlay'
 import { Ground } from './Ground'
 import { HouseMesh } from './HouseMesh'
@@ -212,6 +213,7 @@ export const GardenScene = (): ReactElement => {
         </SceneBoundary>
       ) : null}
       <BedLabels />
+      <CompassBridge />
       {/*
         No `target` prop on purpose: the orbit point belongs to the guided tour, and it changes with
         the step. Passed declaratively, drei re-applies it through `applyProps` whenever the target
