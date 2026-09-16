@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'bun:test'
 import {
   centroidOf,
+  distanceToPolygonM,
   isRectangle,
   metresBetween,
   movedCorner,
@@ -107,6 +108,27 @@ describe('polygonsOverlap', () => {
     const right = polygonOf(rectangleRing(vec2(2, 0), 4, 4))
     expect(polygonsOverlap(left, right)).toBe(false)
     expect(polygonsOverlap(right, left)).toBe(false)
+  })
+})
+
+describe('distanceToPolygonM', () => {
+  const square = polygonOf(rectangleRing(vec2(0, 0), 4, 4))
+
+  it('is zero for a point inside the polygon', () => {
+    expect(distanceToPolygonM(square, 0, 0)).toBe(0)
+  })
+
+  it('is the distance to the nearest edge for a point just outside it', () => {
+    expect(distanceToPolygonM(square, 2.5, 0)).toBeCloseTo(0.5, 9)
+  })
+
+  it('is the diagonal distance for a point off a corner', () => {
+    expect(distanceToPolygonM(square, 3, 3)).toBeCloseTo(Math.hypot(1, 1), 9)
+  })
+
+  it('is the distance to a hole edge for a point sitting inside the hole', () => {
+    const withHole = { ...square, holes: [rectangleRing(vec2(0, 0), 2, 2)] }
+    expect(distanceToPolygonM(withHole, 0, 0)).toBeCloseTo(1, 9)
   })
 })
 

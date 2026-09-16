@@ -10,6 +10,7 @@ import { resetAppStore, useAppStore } from '../state/store'
 import type { Obstruction, Tree } from '../types/garden'
 import { obstructionId } from '../types/ids'
 import { epochMillis, fraction, meters, type EpochMillis } from '../types/units'
+import { HOURS_PER_TMY, type TmySeries } from '../types/weather'
 import { TreeMesh } from './TreeMesh'
 
 ;(globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true
@@ -25,6 +26,53 @@ const namedAll = (root: { instance: Object3D }, prefix: string): Object3D[] => {
     if (object.name.startsWith(prefix)) hits.push(object)
   })
   return hits
+}
+
+/**
+ * A synthetic typical year with a real annual and diurnal temperature cycle at the site
+ * fixture's latitude (42.37), warm enough in summer and cold enough in winter that the Growing
+ * Season Index (`src/sim/phenology.ts`) puts July in leaf and January bare, the same shape
+ * `src/sim/phenology.test.ts` builds its temperate-north case from
+ */
+const weatherFixture = (): TmySeries => {
+  const hours = HOURS_PER_TMY
+  const start = Date.UTC(2024, 0, 1)
+  const utcMillis = new Float64Array(hours)
+  const dryBulbC = new Float32Array(hours)
+  const dewPointC = new Float32Array(hours)
+  for (let i = 0; i < hours; i += 1) {
+    utcMillis[i] = start + i * 3_600_000
+    const dayOfYear = Math.floor(i / 24)
+    const hourOfDay = i % 24
+    // the warmest day lags the solstice by about a month, as it does over land
+    const annual = 8.5 + 13.5 * Math.cos((2 * Math.PI * (dayOfYear - 202)) / 365)
+    const diurnal = 2.5 * Math.sin((2 * Math.PI * (hourOfDay - 6)) / 24)
+    const temperature = annual + diurnal
+    dryBulbC[i] = temperature
+    dewPointC[i] = temperature - 3
+  }
+  return {
+    source: 'open-meteo',
+    decomposition: 'passthrough',
+    utcOffsetHours: -5,
+    startUtcMillis: start as EpochMillis,
+    utcMillis,
+    ghiWM2: new Float32Array(hours),
+    dniWM2: new Float32Array(hours),
+    dhiWM2: new Float32Array(hours),
+    dryBulbC,
+    dewPointC,
+    windSpeedMS: new Float32Array(hours),
+    pressureMb: new Float32Array(hours).fill(1013.25),
+    provenance: {
+      datasetLabel: 'synthetic-tmy',
+      yearsCovered: [2024],
+      licence: 'CC0',
+      attribution: 'test',
+      retrievedUtcMillis: start as EpochMillis,
+      isTypicalMeteorologicalYear: true,
+    },
+  }
 }
 
 const treeFixture = (overrides: Partial<Tree> = {}): Tree => ({
@@ -93,14 +141,15 @@ describe('TreeMesh', () => {
 
   /**
    * A deciduous crown's opacity is not fixed: it follows whichever months `leafOnMonthsFor` puts
-   * in leaf for the site standing, the same rule the bake applies (Decision Record 26). The
-   * expected months are computed from that function rather than assumed, so this stays true
-   * whatever the fixture's frost curve happens to say
+   * in leaf for the standing site and weather, the same rule the bake applies (Decision Record
+   * 26). The expected months are computed from that function rather than assumed, so this stays
+   * true whatever the fixture's weather happens to say
    */
   it('takes the in-leaf transmittance in a month the site is in leaf, and the leafless one otherwise', async () => {
     const site = siteFixture()
-    const months = leafOnMonthsFor(site, 50)
-    useAppStore.setState({ site: ready(site) })
+    const weather = weatherFixture()
+    const months = leafOnMonthsFor(site, weather)
+    useAppStore.setState({ site: ready(site), weather: ready(weather) })
     const tree = treeFixture({
       evergreen: false,
       transmittance: fraction(0.2),

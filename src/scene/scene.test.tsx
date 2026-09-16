@@ -1,7 +1,7 @@
 import ReactThreeTestRenderer from '@react-three/test-renderer'
 import { StrictMode } from 'react'
 import { beforeEach, describe, expect, it } from 'bun:test'
-import { BackSide, FrontSide, Matrix4, Ray, Vector3 } from 'three'
+import { BackSide, FrontSide, Matrix4, PerspectiveCamera, Ray, Vector2, Vector3 } from 'three'
 import type {
   AmbientLight,
   DirectionalLight,
@@ -344,6 +344,100 @@ describe('a press that belongs to a handle is not a press on the scene', () => {
       press,
     )
     expect(useAppStore.getState().selectedBedId).toBe(moving.id)
+    await renderer.unmount()
+  })
+})
+
+describe('a touch tap that misses a bed by a finger width still selects it', () => {
+  // straight over the plot at 50 m, so a plan-metre miss becomes a screen-pixel one
+  const planCamera = new PerspectiveCamera(45, 375 / 812, 0.1, 1000)
+  planCamera.position.set(0, 50, 0)
+  planCamera.lookAt(0, 0, 0)
+  planCamera.updateMatrixWorld()
+  planCamera.updateProjectionMatrix()
+
+  const press = (x: number, z: number, pointerType: string): Record<string, unknown> => {
+    const ndc = new Vector3(x, 0, z).project(planCamera)
+    return {
+      point: new Vector3(x, 0, z),
+      pointer: new Vector2(ndc.x, ndc.y),
+      camera: planCamera,
+      nativeEvent: { pointerType },
+      stopPropagation: () => {},
+    }
+  }
+
+  // `resetAppStore` seeds the cold-open example garden, so the nearest-bed search needs the
+  // beds under test standing alone, or a bed from the example could be the closer one
+  const withBeds = (beds: readonly Bed[]): void => {
+    useAppStore.setState((s) => (s.plot === null ? {} : { plot: { ...s.plot, beds } }))
+  }
+
+  it('selects the bed for a finger tap 0.3 m outside its edge', async () => {
+    resetAppStore()
+    const bed = makeBed(1, { footprint: polygonOf(rectangleRing(vec2(0, 0), 4, 2)) })
+    withBeds([bed])
+    const renderer = await ReactThreeTestRenderer.create(<Ground />, { width: 375, height: 812 })
+    const ground = renderer.scene.findByProps({ name: 'ground' })
+    // looking straight down from 50 m, a metre is about 19.6 px; 0.3 m past the east edge is
+    // about 6 px, well inside the 24 px tolerance
+    await renderer.fireEvent(ground, 'pointerDown', press(2.3, 0, 'touch'))
+    expect(useAppStore.getState().selectedBedId).toBe(bed.id)
+    await renderer.unmount()
+  })
+
+  it('leaves a mouse press at the same spot clearing the selection', async () => {
+    resetAppStore()
+    const bed = makeBed(1, { footprint: polygonOf(rectangleRing(vec2(0, 0), 4, 2)) })
+    withBeds([bed])
+    useAppStore.getState().selectBed(bed.id)
+    const renderer = await ReactThreeTestRenderer.create(<Ground />, { width: 375, height: 812 })
+    const ground = renderer.scene.findByProps({ name: 'ground' })
+    await renderer.fireEvent(ground, 'pointerDown', press(2.3, 0, 'mouse'))
+    expect(useAppStore.getState().selectedBedId).toBeNull()
+    await renderer.unmount()
+  })
+
+  it('leaves a touch press 5 m from any bed clearing the selection', async () => {
+    resetAppStore()
+    const bed = makeBed(1, { footprint: polygonOf(rectangleRing(vec2(0, 0), 4, 2)) })
+    withBeds([bed])
+    useAppStore.getState().selectBed(bed.id)
+    const renderer = await ReactThreeTestRenderer.create(<Ground />, { width: 375, height: 812 })
+    const ground = renderer.scene.findByProps({ name: 'ground' })
+    // 5 m away is about 98 px on screen, well past the 24 px tolerance
+    await renderer.fireEvent(ground, 'pointerDown', press(7, 0, 'touch'))
+    expect(useAppStore.getState().selectedBedId).toBeNull()
+    await renderer.unmount()
+  })
+
+  it('selects the bed under a tap aimed at its own floating label', async () => {
+    resetAppStore()
+    const near = makeBed(1, {
+      footprint: polygonOf(rectangleRing(vec2(0, 0), 4, 2)),
+      raisedHeightM: meters(0.3),
+    })
+    const beyond = makeBed(2, { footprint: polygonOf(rectangleRing(vec2(0, 3), 4, 2)) })
+    withBeds([near, beyond])
+    const camera = new PerspectiveCamera(45, 375 / 812, 0.1, 1000)
+    camera.position.set(0, 12, 14)
+    camera.lookAt(0, 0, 0)
+    camera.updateMatrixWorld()
+    camera.updateProjectionMatrix()
+    // the tap is aimed at the label floating 0.9 m over the near bed's 0.3 m top; the label
+    // takes no press of its own, so the same ray measured in plot metres would land on the
+    // ground beyond the near bed, inside the second bed's own footprint
+    const ndc = new Vector3(0, 0.9 + 0.3, 0).project(camera)
+    const renderer = await ReactThreeTestRenderer.create(<Ground />, { width: 375, height: 812 })
+    const ground = renderer.scene.findByProps({ name: 'ground' })
+    await renderer.fireEvent(ground, 'pointerDown', {
+      point: new Vector3(0, 0, -1.3),
+      pointer: new Vector2(ndc.x, ndc.y),
+      camera,
+      nativeEvent: { pointerType: 'touch' },
+      stopPropagation: () => {},
+    })
+    expect(useAppStore.getState().selectedBedId).toBe(near.id)
     await renderer.unmount()
   })
 })

@@ -5,7 +5,6 @@ import { PEST_YIELD_LOSS_AT_FULL_PRESSURE } from '../simulation/pests'
 import { isUnsourced } from '../types/cited'
 import type { Cited } from '../types/cited'
 import { HABIT_CANOPY_CLAIM } from './catalog/schema'
-import { LEAF_SEASON_CLAIM } from './canopy'
 import { loadCompanionRules } from './companions'
 import { loadCropCatalog } from './crops'
 import { dehesaGradient, loadTekRules } from './tek'
@@ -132,12 +131,6 @@ export const provenanceLedger = async (): Promise<readonly ProvenanceGap[]> => {
       subject: 'season pests',
       field: 'pestYieldLossAtFullPressure',
       reason: PEST_YIELD_LOSS_AT_FULL_PRESSURE.justification,
-    },
-    {
-      area: 'model-constant',
-      subject: 'tree',
-      field: 'months in leaf',
-      reason: LEAF_SEASON_CLAIM.justification,
     },
   )
 

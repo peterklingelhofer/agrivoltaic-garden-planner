@@ -1696,17 +1696,25 @@ keeps the smallest transmittance among the quads that block it, and a ray throug
 one crown counts once. A crown is six faces with the tree's pair on each, and the trunk is
 ignored. Panels and house faces carry 0, so nothing already measured moves: the min rule
 collapses to the old test wherever every quad is opaque. The leafless season is a set of months,
-because the bake accumulates by month: a deciduous crown is in leaf during the site's growing
-window at the median frost percentile (the growing-window rule now lives in the sim layer,
-`src/sim/growing-window.ts`, and the data layer re-exports it), and each month's light is
-accumulated from the crown's in-leaf figure or its bare one, the annual being the sum of the
-months. The sky-view factor and the time windows read the in-leaf figure whatever the month, a
-declared approximation: the one window shipped is the growing season, which the leaf-on months
-follow closely. The CPU backend runs a second visibility pass with the bare figures only when a
-deciduous tree is drawn; the WebGL2 shader carries both figures in a fifth texture row, keeps
-two running minima in one loop, picks the month's variant by a bitmask, and leaves the path
-without a season byte for byte as it was; the Rust kernel takes a per-quad transmittance slice
-beside its scalar.
+because the bake accumulates by month: a deciduous crown is in leaf where the Growing Season
+Index of Jolly, Nemani and Running 2005 (`src/sim/phenology.ts`) averages above 0.5. The index is
+the product of three daily indicators, each running 0 to 1: the day's minimum temperature, 0 at
+-2 C and 1 at 5 C; its vapour pressure deficit, 1 at 900 Pa and 0 at 4100 Pa; and its day length,
+0 at 10 hours and 1 at 11, from the same declination the solar geometry already carries. A drawn
+tree reads the index with the deficit term held at 1: the paper takes dry air as a surrogate for
+soil water natural vegetation cannot reach, and a garden tree stands where the beds are watered.
+On one real year at Seville the full index read a tree bare in July and August, the months its
+shade decides a bed's summer, and held at 1 the same year reads in leaf from February to October;
+at Amherst the two readings agree, April to October, and at Melbourne, September to April. A month
+counts as in leaf where the index's 21-day mean, centred on each day so the paper's rule gains no
+added lag, passes 0.5 on the month's 15th, and each month's light is accumulated from the crown's
+in-leaf figure or its bare one, the annual being the sum of the months. The sky-view factor and
+the time windows read the in-leaf figure whatever the month, a declared approximation: the one
+window shipped is the growing season, which the leaf-on months follow closely. The CPU backend
+runs a second visibility pass with the bare figures only when a deciduous tree is drawn; the
+WebGL2 shader carries both figures in a fifth texture row, keeps two running minima in one loop,
+picks the month's variant by a bitmask, and leaves the path without a season byte for byte as it
+was; the Rust kernel takes a per-quad transmittance slice beside its scalar.
 
 **What it replaces.** While a plot has no house and no tree the share of Record 25 applies as
 before. Once one is drawn the share is not applied anywhere, the drawn geometry being the
@@ -1742,9 +1750,12 @@ reads higher than a crown's own transmittance. Canham et al. 1994 (Canadian Jour
 Research 24:337-349) is the closed-canopy comparison, under 2% of full sun beneath beech and
 hemlock and over 5% beneath red oak and ash, lower than a lone tree as expected. The figures are
 direct-beam transmissivity applied here to beam, diffuse and sky view alike through a solid box,
-which the entries' caveats say. The months a crown is in leaf, the site's growing window at the
-median frost percentile, are this app's own reading and are declared on the sources step the
-way the share table is.
+which the entries' caveats say. The months a crown is in leaf now come from the Growing Season
+Index itself, Jolly, Nemani and Running 2005, cited on the tree's card; three choices in reading
+it are this app's own, that the 15th of the month stands for the whole month, that the 21-day
+mean centres on each day rather than lagging behind it, and that the deficit term is held at its
+moist value for a watered garden tree, which the card says. The months-in-leaf gap has left the
+sources step.
 
 **How it is checked.** A house fixture in `rust-geometry-parity.test.ts` holds the TypeScript and
 Rust kernels to the same shadow cell for cell with a wall in the grid, and `webgl2.test.ts`
@@ -1761,12 +1772,18 @@ bare; 29, 24 and 52% with the house). `house.spec.ts` draws a 10 m house a metre
 example's bed 1: its light falls from 99% of open sky and 32.9 mol/m²/d to 38% and 17.4, tomato
 leaves Recommended for Not suited, the house survives a reload at schema 5, and removing it
 gives the surroundings question back. Persisted gardens at schema 4 round-trip with an empty
-list. The tree's checks: a crown at 0.3 directly over a panel reads 0 on the ground beneath
-both and 0.3 where only the crown shades, and a ray through two faces of one crown reads 0.3
-once; with July in leaf and January bare, the CPU backend's July beam under the crown is the
-in-leaf figure times the open one and January's the bare figure times it, and the annual beam
-equals the sum of the twelve months; the parity fixture carries the crown at 0.3 through both
-kernels with the per-quad slice, and the WebGL2 fixture carries it with half the months bare;
+list. The tree's checks: `phenology.test.ts` holds the Growing Season Index itself to five
+synthetic years, a temperate north site in leaf a contiguous stretch that holds July and excludes
+January, its southern mirror six months over, a humid tropical site in leaf all twelve, a
+tropical site whose dew point sits 30 C below the temperature for five months bare in those
+months on the paper's full index and in leaf all year as a watered garden tree, and a site whose
+minimum never clears -2 C never in leaf; a crown at 0.3 directly over a panel reads 0 on
+the ground beneath both and 0.3 where only the crown shades, and a ray through two faces of one
+crown reads 0.3 once; with July in leaf and January bare, the CPU backend's July beam under the
+crown is the in-leaf figure times the open one and January's the bare figure times it, and the
+annual beam equals the sum of the twelve months; the parity fixture carries the crown at 0.3
+through both kernels with the per-quad slice, and the WebGL2 fixture carries it with half the
+months bare;
 the pipeline case pins a leaf-on month's ratio under the crown below a bare month's; the Rust
 crate has its own min-rule test; the memo key changes when a tree is added, its figure edited or
 its evergreen switch flipped; a tree round-trips through storage and one whose top is below its
@@ -1774,11 +1791,13 @@ base is refused; the crown's opacity in the scene reads the in-leaf figure in a 
 the bare one in a January hour; `tree.spec.ts` draws a 12 m crown over the ground south of the
 example's bed 1 and reads its light falling, the note naming the tree, the tree surviving a
 reload and Remove giving the question back. The probe's fourth geometry, a 12 m crown over the
-default plot's first bed, reads 58, 33 and 51% of open sky on both backends, eight real bakes
-posted. The overlap rule has its own cases: two rectangles that touch along an edge do not
-overlap, a plus sign of two thin rectangles does, a placement inside a house is skipped and
-named, a candidate whose rows run through a house is dropped and the search says so, and the
-check step prints the sentence for a bed inside a house. Four scripted runs drove a preview
+default plot's first bed, reads 59, 33 and 51% of open sky on both backends (58 on the first bed
+while the calendar was the frost window; the index puts April in leaf at Amherst and that month
+moved it one point), eight real bakes posted. The overlap rule has its own cases: two rectangles
+that touch along an edge do not overlap, a plus sign of two thin rectangles does, a placement
+inside a house is skipped and named, a candidate whose rows run through a house is dropped and
+the search says so, and the check step prints the sentence for a bed inside a house. Four
+scripted runs drove a preview
 build on stubbed Amherst weather (a laptop and a phone, a garden with an old maple in it, and
 a run that checked every figure against the sources): all four found "Add a house" and "Add a
 tree" under "What shades it" unaided, read the disabled question's sentence as clear, and got
@@ -1789,11 +1808,42 @@ its card on the ground step lights up; and "show this work in Sources" from a ca
 step left the reader at the top of the list, because the stepper holds the opened step's header
 in place for a moment and undid the jump's scroll, so the jump now settles that landing before
 it scrolls (`landing.ts`). The measured figures and the assumed leaf calendar sat side by side
-on the tree's card with a citation on the figures alone, so the card now says the calendar is
-this app's own reading.
+on the tree's card with a citation on the figures alone, so the card said the calendar was this
+app's own reading; it now cites the Growing Season Index instead. Two of the four guessed which
+way north ran in the 3D view while typing where a house stood, so a compass at the view's right
+edge now turns with the camera (`Compass.tsx` writes the heading straight to the element the way
+the tooltip writes its position, and `compass.spec.ts` sees the heading change through an orbit
+drag; halfway down the edge because every corner is taken at some width or moment, the cold open
+included). The phone visitor's taps at a bed landed on the ground beside it two times in three, so
+on a touch screen a tap within a finger's half-width of a bed selects the nearest one
+(`Ground.tsx`). The distance is measured on the screen, each bed's footprint projected to pixels
+and the finger's 24 px read against that outline: a first version measured it on the ground, and
+a phone visitor who tapped the label floating over bed 1 got bed 2, because the tap's ray passed
+the label, met the ground behind the bed, and the nearest bed in plan metres to that point was
+the next one north. A mouse click and a finger 5 m from any bed still clear the selection, and
+the label tap on a two-bed plot selects the bed under the label, pinned in `scene.test.tsx`.
+Measured with `scripts/tap-grid.mjs` on a 375 by 812 screen at the garden's opening framing,
+forty taps scattered within 20 px of each bed's centre: bed 1 went from 18 selecting it to 21, bed
+2 from 7 to 22, and bed 3, which no tap on a 15 by 24 grid had reached, to 19. The taps still
+missing land on the panel rows standing over the beds, which keep their own press. A source jump
+from a card on a phone is a smooth scroll across some 30,000 px of the Sources list, over a second
+of other rows going past before the highlighted one arrives, so a jump further than three screens is
+instant and the highlight has its whole time on the row (`SourcesPanel.tsx`).
 
 **Cost.** One day for both, against the four to five estimated: the house needed a type and five
 quads, a schema step, one function every reader of the answer goes through, a card of six fields
 and one mesh on the bed's pattern; the tree needed the per-quad figure in three kernels, the
 seasonal split in two backends, the citation pull, a second card and a translucent mesh; the
 overlap rule needed one polygon test and two filters.
+
+## 27. The interface is set in Ubuntu Sans, served from the origin
+
+The interface and its figures are set in Ubuntu Sans and Ubuntu Sans Mono, the
+faces Ubuntu 24.04 ships, in place of each platform's own stack, so a screenshot from a Mac, a
+Windows laptop and a phone read as one product. The files are served from this origin under the
+Ubuntu Font Licence (`public/fonts/`), the same stance the rendered docs already take on
+third-party requests. The latin subset is preloaded and latin-ext loads only where a source's
+author needs it. The bed names in the view are drawn onto their textures once the face has
+loaded (`BedLabel.tsx`). The classic Ubuntu face was passed over for its missing 600 weight.
+
+**Cost.** An hour, four files and a licence.

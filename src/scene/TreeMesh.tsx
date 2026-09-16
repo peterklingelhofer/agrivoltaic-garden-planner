@@ -13,11 +13,9 @@ import {
 } from 'three'
 import { leafOnMonthsFor } from '../sim/obstruction'
 import { centroidOf } from '../state/geom'
-import type { AsyncState } from '../state/slices'
 import { scenePlot, useAppStore } from '../state/store'
 import type { Tree } from '../types/garden'
 import type { ObstructionId } from '../types/ids'
-import type { Site } from '../types/site'
 import type { EpochMillis, Fraction } from '../types/units'
 import { tintedBy } from './materials'
 import { VertexHandles } from './PlotBoundary'
@@ -83,15 +81,19 @@ const ditherTexture = (coveredShare: number): DataTexture => {
   return texture
 }
 
-/** The transmittance the bake applies to this crown this month (Decision Record 26) */
+/**
+ * The transmittance the bake applies to this crown this month (Decision Record 26). `months` is
+ * null until the site and weather are both ready, and every month then reads as in leaf: the
+ * bake cannot run before both have loaded, so nothing it draws can disagree with this
+ */
 const transmittanceInForceFor = (
   tree: Tree,
-  site: AsyncState<Site>,
+  months: readonly boolean[] | null,
   timeUtcMillis: EpochMillis,
 ): Fraction => {
-  if (tree.evergreen || site.status !== 'ready') return tree.transmittance
+  if (tree.evergreen || months === null) return tree.transmittance
   const month = new Date(timeUtcMillis).getUTCMonth()
-  const inLeaf = leafOnMonthsFor(site.value, 50)[month] ?? true
+  const inLeaf = months[month] ?? true
   return inLeaf ? tree.transmittance : tree.leaflessTransmittance
 }
 
@@ -112,11 +114,20 @@ export const TreeMesh = ({ obstructionId, selected }: TreeMeshProps): ReactEleme
   const selectObstruction = useAppStore((s) => s.selectObstruction)
   const dragging = useAppStore((s) => s.dragging)
   const site = useAppStore((s) => s.site)
+  const weather = useAppStore((s) => s.weather)
   const timeUtcMillis = useAppStore((s) => s.timeUtcMillis)
   // in Move mode a press on the tree picks it up; every other mode leaves the press to the camera
   const drag = useObstructionDrag(obstructionId, 'tree')
 
-  const transmittanceInForce = tree ? transmittanceInForceFor(tree, site, timeUtcMillis) : 1
+  // the 8760-hour Growing Season Index pass runs once per site/weather pair, never per frame
+  const months = useMemo(
+    () =>
+      site.status === 'ready' && weather.status === 'ready'
+        ? leafOnMonthsFor(site.value, weather.value)
+        : null,
+    [site, weather],
+  )
+  const transmittanceInForce = tree ? transmittanceInForceFor(tree, months, timeUtcMillis) : 1
 
   const trunkGeometry = useMemo(() => {
     if (!tree) return null

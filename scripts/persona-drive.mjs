@@ -16,7 +16,7 @@
 //   press <key>                keyboard key (Enter, Tab, Escape, ArrowDown...)
 //   hover <testid>
 //   scroll <dy>                scroll the sidebar column by dy px (negative = up)
-//   canvas <fx> <fy>           click the 3D view at a fraction of its width/height
+//   canvas <fx> <fy>           click the 3D view at a fraction of its width/height, a finger's tap on a phone
 //   read <testid>              the text of one element
 //   wait <ms>
 //   quit
@@ -336,7 +336,11 @@ const run = async (cmd) => {
       const box = await page.getByTestId('canvas-root').boundingBox()
       const fx = Number(args[0] ?? 0.5)
       const fy = Number(args[1] ?? 0.5)
-      await page.mouse.click(box.x + box.width * fx, box.y + box.height * fy)
+      const x = box.x + box.width * fx
+      const y = box.y + box.height * fy
+      // a phone visit's press has to reach the app as a touch, the way a real finger would
+      if (phone) await page.touchscreen.tap(x, y)
+      else await page.mouse.click(x, y)
       await sleep(900)
       break
     }

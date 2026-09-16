@@ -1,4 +1,4 @@
-import { useEffect, useMemo, type ReactElement } from 'react'
+import { useEffect, useMemo, useReducer, type ReactElement } from 'react'
 import { CanvasTexture, SRGBColorSpace, type Sprite } from 'three'
 import { OVERLAY_LAYER } from './layers'
 
@@ -9,8 +9,9 @@ import { OVERLAY_LAYER } from './layers'
  * and the garden did not, so a class, a couple or a parent and child talking across the two
  * had nothing to point at, in every round through the build. A sprite with the text
  * drawn on a canvas, rather than a DOM label projected over the scene or an SDF font, because
- * it needs no font file, no portal and no layout pass: it is one texture per bed, made once
- * per name, and it draws through the panels so a bed under a row keeps its name.
+ * it needs no portal and no layout pass: it is one texture per bed, made once per name in the
+ * interface face once that has loaded, and it draws through the panels so a bed under a row
+ * keeps its name.
  *
  * On the overlay layer, because a label is a readout and not geometry: on the scene layer the
  * occlusion pass integrated each quad into its depth buffer and shaded the bed under it
@@ -28,19 +29,30 @@ const DENSITY = 2
 /** Above the soil and the sides, below the tallest plant: over, and not inside, the bed */
 const HEIGHT_ABOVE_BED_M = 0.9
 
+/** The interface face first, the platform stack behind it if a face never loads */
+const FONT = `600 ${String(40 * DENSITY)}px 'Ubuntu Sans', system-ui, -apple-system, 'Segoe UI', sans-serif`
+
+/**
+ * True once the browser can draw `text` in `FONT` with no fallback, or where there is no font
+ * loading API to ask: the scene's test renderer and the DOM test runner alike
+ */
+const faceLoaded = (text: string): boolean =>
+  typeof document === 'undefined' ||
+  typeof document.fonts === 'undefined' ||
+  document.fonts.check(FONT, text)
+
 const labelTexture = (text: string): CanvasTexture | null => {
   if (typeof document === 'undefined') return null
   const canvas = document.createElement('canvas')
   const context = canvas.getContext('2d')
   if (context === null) return null
-  const font = `600 ${String(40 * DENSITY)}px system-ui, -apple-system, 'Segoe UI', sans-serif`
-  context.font = font
+  context.font = FONT
   const width = Math.ceil(context.measureText(text).width) + 32 * DENSITY
   const height = 56 * DENSITY
   canvas.width = width
   canvas.height = height
   // sizing the canvas resets its state, so the font is set twice on purpose
-  context.font = font
+  context.font = FONT
   context.textAlign = 'center'
   context.textBaseline = 'middle'
   context.lineJoin = 'round'
@@ -66,7 +78,25 @@ export const BedLabel = ({
   /** The sprite itself, for `BedLabels` to hide and move without a render */
   readonly onSprite?: (sprite: Sprite | null) => void
 }): ReactElement | null => {
-  const texture = useMemo(() => labelTexture(text), [text])
+  const [settled, settle] = useReducer((n: number) => n + 1, 0)
+  const loaded = faceLoaded(text)
+  useEffect(() => {
+    if (loaded) return
+    let live = true
+    document.fonts
+      .load(FONT, text)
+      .catch(() => undefined)
+      .then(() => {
+        if (live) settle()
+      })
+    return () => {
+      live = false
+    }
+  }, [text, loaded])
+  const texture = useMemo(
+    () => (loaded || settled > 0 ? labelTexture(text) : null),
+    [text, loaded, settled],
+  )
   useEffect(() => () => texture?.dispose(), [texture])
   if (texture === null) return null
   const aspect = texture.image.width / texture.image.height

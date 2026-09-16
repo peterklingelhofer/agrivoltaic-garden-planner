@@ -4,11 +4,9 @@ import type { GardenPlot, Obstruction, Tree } from '../types/garden'
 import { arrayId, bedId, obstructionId, plotId, siteId } from '../types/ids'
 import { DEFAULT_GROUND_COVER } from '../types/ground'
 import type { PvArray } from '../types/pv'
-import type { ExceedancePercentile, FrostExceedanceCurve, Site } from '../types/site'
+import type { Site } from '../types/site'
 import type {
   Celsius,
-  Days,
-  DayOfYear,
   Degrees,
   DegreesLatitude,
   DegreesLongitude,
@@ -317,35 +315,32 @@ describe('annual simulation pipeline', () => {
   }, 30_000)
 
   it('shades a leaf-on month more than a leafless one, under a deciduous crown (Record 26)', async () => {
-    const series = weather()
+    // dryBulbC and dewPointC carry a real annual and diurnal cycle here, unlike the flat
+    // `weather()` fixture above: the Growing Season Index (Decision Record 26) reads its leaf
+    // calendar off temperature and humidity as well as day length, and a flat year would leave
+    // day length alone to carry every assertion below
+    const seasonalDryBulbC = Float32Array.from({ length: HOURS }, (_unused, i) => {
+      const dayOfYear = Math.floor(i / 24)
+      const hourOfDay = i % 24
+      // the warmest day lags the solstice by about a month, as it does over land
+      const annual = 8.5 + 13.5 * Math.cos((2 * Math.PI * (dayOfYear - 202)) / 365)
+      const diurnal = 2.5 * Math.sin((2 * Math.PI * (hourOfDay - 6)) / 24)
+      return annual + diurnal
+    })
+    const series: TmySeries = {
+      ...weather(),
+      dryBulbC: seasonalDryBulbC,
+      dewPointC: Float32Array.from(seasonalDryBulbC, (t) => t - 3),
+    }
     const options = {
       ...PREVIEW_OPTIONS,
       targetCellSizeM: 1.5 as Meters,
       backend: 'cpu-reference' as const,
     }
-    // a real frost record, unlike the site fixture above (whose empty one reads as frost-free
-    // and so a growing window of the whole year, leaving no leafless month to compare against):
-    // last spring freeze day 120, first fall freeze day 270, April through September
-    const sameForAllPercentiles = <T>(value: T): Record<ExceedancePercentile, T> => ({
-      10: value,
-      20: value,
-      30: value,
-      40: value,
-      50: value,
-    })
-    const frostCurve: FrostExceedanceCurve = {
-      thresholdC: 0 as Celsius,
-      lastSpringFreeze: sameForAllPercentiles(120 as DayOfYear),
-      firstFallFreeze: sameForAllPercentiles(270 as DayOfYear),
-      frostFreeDays: sameForAllPercentiles(150 as Days),
-      frostFree: sameForAllPercentiles(false),
-      frostYears: 20,
-    }
-    const growingSeasonSite: Site = { ...site, frost: [frostCurve] }
 
-    // self-check: July inside the window, January outside it, or the assertions below would
-    // compare two leaf-on (or two leafless) months and prove nothing
-    const inLeaf = leafOnMonthsFor(growingSeasonSite, 50)
+    // self-check: July inside the leaf-on window, January outside it, or the assertions below
+    // would compare two leaf-on (or two leafless) months and prove nothing
+    const inLeaf = leafOnMonthsFor(site, series)
     expect(inLeaf[6]).toBe(true)
     expect(inLeaf[0]).toBe(false)
 
@@ -369,7 +364,7 @@ describe('annual simulation pipeline', () => {
       leaflessTransmittance: 0.55 as Fraction,
     }
     const plotWithTree: GardenPlot = { ...plot, obstructions: [tree] }
-    const result = await runSimulation(growingSeasonSite, plotWithTree, series, options, () => {})
+    const result = await runSimulation(site, plotWithTree, series, options, () => {})
 
     const crownIndices = cellIndicesInPolygon(result.raster, tree.footprint)
     expect(crownIndices.length).toBeGreaterThan(0)

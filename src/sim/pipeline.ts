@@ -169,7 +169,7 @@ export const runSimulation = async (
   // null unless a deciduous tree is drawn, so a plot with none bakes with no leaf-season variant at
   // all; computed here, off the site, so the memo (worker/client.ts) stays keyed on it
   const hasDeciduousTree = plot.obstructions.some((o) => o.kind === 'tree' && !o.evergreen)
-  const leafOnMonths = hasDeciduousTree ? leafOnMonthsFor(site, 50) : null
+  const leafOnMonths = hasDeciduousTree ? leafOnMonthsFor(site, weather) : null
 
   // the beam half does not: a sun-direction bin fixes the sun position, hence the tracker
   // rotation, so each beam pass can be posed for its own bin at no extra pass cost

@@ -1,6 +1,15 @@
-import { citedDerived, unsourcedClaim } from '../types/cited'
-import type { DerivedCited, UnsourcedCited } from '../types/cited'
-import type { ExceedancePercentile } from '../types/site'
+import {
+  GSI_LEAF_ON,
+  GSI_PHOTOPERIOD_MAX_H,
+  GSI_PHOTOPERIOD_MIN_H,
+  GSI_TMIN_MAX_C,
+  GSI_TMIN_MIN_C,
+  GSI_VPD_MAX_PA,
+  GSI_VPD_MIN_PA,
+  GSI_WINDOW_DAYS,
+} from '../sim/phenology'
+import { citedDerived, citedVerbatim } from '../types/cited'
+import type { DerivedCited, VerbatimCited } from '../types/cited'
 import type { Fraction } from '../types/units'
 
 const KONARSKA_CAVEAT =
@@ -33,20 +42,32 @@ export const CROWN_TRANSMITTANCE_LEAFLESS: DerivedCited<Fraction> = citedDerived
 )
 
 /**
- * The risk this app reads a drawn deciduous tree's leaf-on months at: `growingWindowFor` in
- * `src/sim/growing-window.ts`, called with this percentile from `src/sim/pipeline.ts`. Fixed
- * rather than the grower's own chosen frost risk (`state.frostPercentile`), because `src/sim`
- * cannot read the store; 50 is the median date, neither the cautious nor the bold end of the
- * band the wants step offers for everything else a frost date gates
+ * Which months count as in leaf: the eight thresholds of the Growing Season Index (Jolly, Nemani
+ * and Running 2005), the same constants `src/sim/phenology.ts#growingSeasonIndex` computes from.
+ * Declared here too, cited, so the rule's provenance stands beside the two transmittance
+ * figures above rather than only in the sim layer (Decision Record 26)
  */
-export const LEAF_SEASON_PERCENTILE: ExceedancePercentile = 50
-
-/**
- * Which months count as in leaf is this app's own reading, not a phenology date any source
- * publishes for a drawn tree of unknown species: the site's growing window at the median frost
- * risk. It decides which of the two figures above a given month's light uses (Decision Record 26)
- */
-export const LEAF_SEASON_CLAIM: UnsourcedCited<ExceedancePercentile> = unsourcedClaim(
-  LEAF_SEASON_PERCENTILE,
-  "A deciduous tree's leaf-on months are read as the site's growing window at the 50th-percentile, median frost risk: this app's own reading, not a measured phenology date for a tree of unknown species. It decides which of the in-leaf and leafless crown-transmittance figures a given month's light uses",
+export const LEAF_SEASON_INDEX: VerbatimCited<{
+  readonly GSI_TMIN_MIN_C: number
+  readonly GSI_TMIN_MAX_C: number
+  readonly GSI_VPD_MIN_PA: number
+  readonly GSI_VPD_MAX_PA: number
+  readonly GSI_PHOTOPERIOD_MIN_H: number
+  readonly GSI_PHOTOPERIOD_MAX_H: number
+  readonly GSI_WINDOW_DAYS: number
+  readonly GSI_LEAF_ON: number
+}> = citedVerbatim(
+  {
+    GSI_TMIN_MIN_C,
+    GSI_TMIN_MAX_C,
+    GSI_VPD_MIN_PA,
+    GSI_VPD_MAX_PA,
+    GSI_PHOTOPERIOD_MIN_H,
+    GSI_PHOTOPERIOD_MAX_H,
+    GSI_WINDOW_DAYS,
+    GSI_LEAF_ON,
+  },
+  'B',
+  ['jolly2005-growing-season-index'],
+  "Fitted to satellite greenness at nine sites and to leaf flush and colouring at Harvard Forest. A drawn tree of unknown species takes the same limits, read by calendar month from the site's typical year, with the vapour-pressure-deficit term held at its moist value: the paper uses dry air as a surrogate for soil water natural vegetation cannot reach, and a garden tree stands where the beds are watered",
 )

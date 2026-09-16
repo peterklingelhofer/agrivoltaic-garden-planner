@@ -78,8 +78,9 @@ const warmMonths = (monthlyMeanTempC: readonly number[]): GrowingWindow => {
  * frost-free case, where this function already takes the `warmMonths` branch instead.
  *
  * The one definition: `src/data/growing-window.ts` re-exports this unchanged for the recommender
- * and the state layer, and `src/sim/obstruction.ts#leafOnMonthsFor` calls it directly for a
- * drawn deciduous tree's season, so the two never drift apart (Decision Record 26)
+ * and the state layer. A drawn deciduous tree's leaf-on months no longer read this: they follow
+ * the Growing Season Index instead, off the site's own weather rather than its frost record
+ * (`src/sim/phenology.ts`, Decision Record 26)
  */
 export const growingWindowFor = (site: Site, percentile: ExceedancePercentile): GrowingWindow => {
   const curve = site.frost[0]

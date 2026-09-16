@@ -26,7 +26,12 @@ import type {
 } from '../types/water'
 import type { TmySeries } from '../types/weather'
 import { seriesOffsetMinutesAt } from '../sim/timezone'
+import { saturationVapourPressureKpa } from '../sim/vapour'
 import { at, clamp, DAYS_PER_YEAR, HOURS_PER_DAY, MONTH_LENGTH_DAYS, monthOfDay } from './util'
+
+// re-exported unchanged: src/sim/vapour.ts holds the one definition so src/sim/phenology.ts
+// (the Growing Season Index) and this file's own FAO-56 balance read the same figure
+export { saturationVapourPressureKpa }
 
 const MINUTES_PER_HOUR = 60
 const MINUTES_PER_DAY = MINUTES_PER_HOUR * HOURS_PER_DAY
@@ -39,9 +44,6 @@ export const KELVIN_OFFSET = 273.16
 
 /** Open-Meteo, PVGIS and NSRDB all report wind at 10 m; FAO-56 needs it at 2 m */
 export const TMY_WIND_HEIGHT_M = 10
-
-export const saturationVapourPressureKpa = (tempC: number): number =>
-  0.6108 * Math.exp((17.27 * tempC) / (tempC + 237.3))
 
 export const slopeSaturationVapourPressureKpaPerC = (tempC: number): number =>
   (4098 * saturationVapourPressureKpa(tempC)) / (tempC + 237.3) ** 2

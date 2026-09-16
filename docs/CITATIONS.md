@@ -1,6 +1,6 @@
 # Citation corpus
 
-217 sources (154 crossref-verified, 1 datacite-verified, 16 unverified, 46 url-verified). Machine-readable companion: [`CITATIONS.csl.json`](./CITATIONS.csl.json) (CSL-JSON).
+218 sources (155 crossref-verified, 1 datacite-verified, 16 unverified, 46 url-verified). Machine-readable companion: [`CITATIONS.csl.json`](./CITATIONS.csl.json) (CSL-JSON).
 Verification pass completed 2026-07-30 against the Crossref REST API, the DataCite REST API, and direct
 fetches of authoritative publisher, standards-body and government URLs.
 
@@ -44,23 +44,23 @@ Physics, geodata and software sources carry `null`: the scheme does not apply to
 
 | Verification | n |
 |---|---|
-| crossref-verified | 154 |
+| crossref-verified | 155 |
 | datacite-verified | 1 |
 | unverified | 16 |
 | url-verified | 46 |
-| **total** | **217** |
+| **total** | **218** |
 
 | Access level | n |
 |---|---|
 | open-access | 62 |
-| paywalled | 109 |
+| paywalled | 110 |
 | public-domain | 45 |
 | public-domain-with-conditions | 1 |
 
 | Evidence tier | n |
 |---|---|
 | A | 36 |
-| B | 63 |
+| B | 64 |
 | C | 30 |
 | null (not applicable) | 88 |
 
@@ -1712,7 +1712,7 @@ Zimmerman, Cynthia. (2020). *Helpline Hot Topic for June 2020: Moringa Oleifera*
 
 ## Climate & geodata
 
-18 sources.
+19 sources.
 
 #### `beck2018-koppen`
 
@@ -1770,6 +1770,16 @@ Heisler, Gordon M.. (1986). *Effects of individual trees on the solar radiation 
 - Backs:
   - a corroborating figure for the tree-crown transmittance default, verbatim: 'a mid-sized sugar maple tree (Acer saccharum Marsh.) reduced irradiance in its shade on a south-facing wall by about 80% when in leaf, and by nearly 40% when leafless', implying roughly 0.20 in-leaf and 0.60 leafless transmittance, read here as a cross-check on the Konarska et al. 2014 crown-transmittance range rather than as the shipped default
 - **Caveat:** A USDA Forest Service work, public domain by 17 U.S.C. 105; read from the agency's own reprint rather than the Elsevier version of record. It measures irradiance reduction on a vertical wall inside a tree's shadow, beam plus diffuse sky and crown-reflected radiation reaching a receiver, not transmittance straight through the crown, so its reductions read smaller than Konarska's direct-under-crown method: the paper's own Table II clear-day wall average across four sample trees is a 30-34% reduction leafless and 65-85% in-leaf. Backs a cross-check figure only, not the shipped default.
+
+#### `jolly2005-growing-season-index`
+
+Jolly, William M.; Nemani, Ramakrishna; Running, Steven W.. (2005). *A generalized, bioclimatic index to predict foliar phenology in response to climate*. Global Change Biology 11: 619-632
+
+- DOI: [10.1111/j.1365-2486.2005.00930.x](https://doi.org/10.1111/j.1365-2486.2005.00930.x)
+- Verification: Crossref-verified | Access: paywalled, evidence tier **B**
+- Backs:
+  - the three daily indicators, minimum temperature, vapour pressure deficit and day length, and their combination as a product, that a drawn deciduous tree's leaf-on months are read against, verbatim: 'We selected as variables: daylength (photoperiod), evaporative demand (vapor pressure deficit), and suboptimal (minimum) temperatures... A combined Growing Season Index (GSI) was derived as the product of the three indices'
+- **Caveat:** Ten-day mean GSI values agreed with satellite greenness at nine sites, r>0.8 at eight of them, and matched field-observed leaf flush and coloration at Harvard Forest within 3 and 2 days. The app reads a drawn tree of unknown species against the same three thresholds, by calendar month from the site's typical year rather than the paper's own ten-day means.
 
 #### `konarska2014-urban-tree-transmissivity`
 

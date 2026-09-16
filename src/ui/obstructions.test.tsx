@@ -87,6 +87,9 @@ describe('a tree drawn on the ground', () => {
     expect((harness.get('control-tree-bare-tree-1') as HTMLInputElement).value).toBe('46')
     expect((harness.get('control-tree-evergreen-tree-1') as HTMLInputElement).checked).toBe(false)
     expect(harness.get('readout-tree-source-tree-1').textContent).toContain('Konarska et al. 2014')
+    expect(harness.get('readout-tree-source-tree-1').textContent).toContain(
+      'Jolly, William M. et al. 2005',
+    )
 
     await harness.click('action-tree-remove-tree-1')
     expect(getAppState().plot?.obstructions.length ?? 0).toBe(0)

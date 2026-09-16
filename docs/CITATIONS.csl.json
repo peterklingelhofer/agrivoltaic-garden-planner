@@ -9518,5 +9518,48 @@
       ],
       "caveat": "Closed-canopy interior light measured by fisheye photography and quantum sensors under overlapping crowns in a southern New England oak-northern hardwood forest, not a single isolated urban tree's crown transmittance. Kept only as the closed-canopy comparison Decision Record 26 names, lower than a lone tree's transmittance as expected; not a source for the app's shipped default. Read via OCR of the scanned PDF the Canham lab self-archives at sortie-nd.org, since the journal version of record is paywalled and the copy carries no text layer."
     }
+  },
+  {
+    "id": "jolly2005-growing-season-index",
+    "type": "article-journal",
+    "title": "A generalized, bioclimatic index to predict foliar phenology in response to climate",
+    "author": [
+      {
+        "family": "Jolly",
+        "given": "William M."
+      },
+      {
+        "family": "Nemani",
+        "given": "Ramakrishna"
+      },
+      {
+        "family": "Running",
+        "given": "Steven W."
+      }
+    ],
+    "container-title": "Global Change Biology",
+    "volume": "11",
+    "issue": "4",
+    "page": "619-632",
+    "publisher": "Wiley",
+    "issued": {
+      "date-parts": [
+        [
+          2005
+        ]
+      ]
+    },
+    "DOI": "10.1111/j.1365-2486.2005.00930.x",
+    "URL": "https://doi.org/10.1111/j.1365-2486.2005.00930.x",
+    "custom": {
+      "group": "climate",
+      "verification": "crossref-verified",
+      "accessLevel": "paywalled",
+      "evidenceTier": "B",
+      "backsClaims": [
+        "the three daily indicators, minimum temperature, vapour pressure deficit and day length, and their combination as a product, that a drawn deciduous tree's leaf-on months are read against, verbatim: 'We selected as variables: daylength (photoperiod), evaporative demand (vapor pressure deficit), and suboptimal (minimum) temperatures... A combined Growing Season Index (GSI) was derived as the product of the three indices'"
+      ],
+      "caveat": "Ten-day mean GSI values agreed with satellite greenness at nine sites, r>0.8 at eight of them, and matched field-observed leaf flush and coloration at Harvard Forest within 3 and 2 days. The app reads a drawn tree of unknown species against the same three thresholds, by calendar month from the site's typical year rather than the paper's own ten-day means."
+    }
   }
 ]

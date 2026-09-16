@@ -122,6 +122,30 @@ export const polygonsOverlap = (a: Polygon2D, b: Polygon2D): boolean => {
   return edgesA.some(([a1, a2]) => edgesB.some(([b1, b2]) => segmentsCross(a1, a2, b1, b2)))
 }
 
+/** The shortest distance from `(x, y)` to the segment `a`-`b` */
+const distanceToSegment = (x: number, y: number, a: Vec2M, b: Vec2M): number => {
+  const bx = b.xM - a.xM
+  const by = b.yM - a.yM
+  const lengthSq = bx * bx + by * by
+  if (lengthSq < 1e-12) return Math.hypot(x - a.xM, y - a.yM)
+  const t = Math.max(0, Math.min(1, ((x - a.xM) * bx + (y - a.yM) * by) / lengthSq))
+  return Math.hypot(x - (a.xM + bx * t), y - (a.yM + by * t))
+}
+
+/**
+ * How far `(x, y)` sits from the polygon: zero inside it, the distance to the nearest edge of
+ * the exterior ring or of any hole otherwise, so a point inside a hole reads by the hole's own
+ * edge rather than the exterior's
+ */
+export const distanceToPolygonM = (polygon: Polygon2D, x: number, y: number): number => {
+  if (pointInPolygon(polygon, x, y)) return 0
+  let closest = Infinity
+  for (const ring of [polygon.exterior, ...polygon.holes]) {
+    for (const [a, b] of edgesOf(ring)) closest = Math.min(closest, distanceToSegment(x, y, a, b))
+  }
+  return closest
+}
+
 export const rectangleRing = (
   centre: Vec2M,
   widthM: number,
