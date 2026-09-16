@@ -1,3 +1,56 @@
+/* These are the faces Ubuntu 24.04 ships, served from this origin under the Ubuntu Font Licence
+   in public/fonts/LICENSE.txt, so the app makes no third-party request and reads the same on
+   every platform. The files are split by script: the latin file loads on every visit, latin-ext
+   only where a source's author has a letter outside Latin-1, and a Japanese title in the sources
+   falls back to the system face. The classic Ubuntu face was passed over: it has no 600 weight,
+   and this sheet sets sixteen rules at 600 */
+
+@font-face {
+  font-family: 'Ubuntu Sans';
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
+  src: url(/fonts/ubuntu-sans-latin.woff2) format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
+    U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Ubuntu Sans';
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
+  src: url(/fonts/ubuntu-sans-latin-ext.woff2) format('woff2');
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308,
+    U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113,
+    U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Ubuntu Sans Mono';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url(/fonts/ubuntu-sans-mono-latin.woff2) format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
+    U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Ubuntu Sans Mono';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url(/fonts/ubuntu-sans-mono-latin-ext.woff2) format('woff2');
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308,
+    U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113,
+    U+2C60-2C7F, U+A720-A7FF;
+}
+
 :root {
   --bg: #f5f6f3;
   --panel: #ffffff;
@@ -23,8 +76,8 @@
   --sow-indoor: #6a4fa3;
   --sow-transplant: #2b6ca3;
   --harvest: #b5721f;
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+  --sans: 'Ubuntu Sans', system-ui, 'Segoe UI', Roboto, sans-serif;
+  --mono: 'Ubuntu Sans Mono', ui-monospace, Consolas, monospace;
 
   /* The only motion in this sheet. State changes here are instant on purpose, and this is the
      one exception: a progress segment that fills with no travel at all reads as a repaint
@@ -243,6 +296,40 @@ body {
   margin: 4px 0 0;
   font-size: 11px;
   color: var(--muted);
+}
+
+/*
+ * A small N arrow at the right edge, halfway down, rotated to the camera's heading every drawn
+ * frame by `CompassBridge`. Every corner of the canvas is spoken for at some width or moment:
+ * the legend top right, the example banner top left, the hint and the selected-bed prompt along
+ * the foot, the cold open and the preflight note bottom right. The middle of the right edge is
+ * the one place nothing else stands, on a laptop or a phone. Never takes the pointer, for the
+ * same reason none of them do
+ */
+.scene-compass {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  z-index: 2;
+  width: 40px;
+  height: 40px;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.scene-compass-needle {
+  width: 100%;
+  height: 100%;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--panel);
+  transform-origin: 50% 50%;
+}
+
+.scene-compass-needle svg {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 /*
@@ -2706,7 +2793,15 @@ details.wizard-advanced > summary:focus-visible {
    * garden surface's box, and is simply not drawn while that surface isn't the one showing
    */
   .app:not([data-surface='garden'])
-  :is(.garden-plan, .scene-tooltip, .scene-hint, .example-banner, .legend, .cold-open) {
+  :is(
+    .garden-plan,
+    .scene-tooltip,
+    .scene-hint,
+    .example-banner,
+    .legend,
+    .cold-open,
+    .scene-compass
+  ) {
     display: none;
   }
 
@@ -2876,6 +2971,11 @@ details.wizard-advanced > summary:focus-visible {
     max-width: none;
     padding: 6px 8px 6px 10px;
     gap: 4px;
+  }
+
+  /* the same edge, a little closer to it, as the rest of the furniture is on a phone */
+  .scene-compass {
+    right: 8px;
   }
 
   /*

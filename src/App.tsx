@@ -5,6 +5,7 @@ import { overlayField, overlayOffOnSeasons } from './state/overlay'
 import { overlaySlice, useAppStore } from './state/store'
 import { DliLegend } from './ui/DliLegend'
 import { ErrorBoundary } from './ui/ErrorBoundary'
+import { SceneCompass } from './ui/SceneCompass'
 import { SceneHint } from './ui/SceneHint'
 import { SceneTooltip } from './ui/SceneTooltip'
 import { ColdOpen } from './ui/ColdOpen'
@@ -261,6 +262,7 @@ const App = (): ReactElement => {
           <GardenPlanStrip />
           <SceneTooltip />
           <SceneHint />
+          <SceneCompass />
           <ExampleBanner />
           <CanvasLegend />
           {/* the banner says whose garden this is and the legend says what the colors are.

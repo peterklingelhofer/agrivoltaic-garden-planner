@@ -83,6 +83,7 @@ export const CITATION_IDS = [
   'jacovides2003-par-mediterranean',
   'jacovides2004-par-cyprus',
   'japan-maff-solar-sharing',
+  'jolly2005-growing-season-index',
   'jose-juglone',
   'kasten1989-airmass',
   'kattge2020-try',
