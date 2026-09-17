@@ -180,7 +180,6 @@ describe('compareWithoutPanels', () => {
     const comparison = after.noPanels.status === 'ready' ? after.noPanels.value : null
     expect(typeof comparison?.harvestIndex).toBe('number')
     expect(comparison?.season).toBe(1)
-    expect(comparison?.evaluatedAt).toBe('preview')
 
     // the real report, history, plot and bed light are exactly what they were
     expect(after.simulation.reports[0]).toBe(realReport)

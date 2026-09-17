@@ -428,7 +428,7 @@ test.describe('the two things that make it worth having', () => {
     */
     const caveats = lastReply(page).locator('[data-tone="caveat"]')
     await expect(caveats.first()).toBeVisible()
-    await expect(lastReply(page)).toContainText(/preview-quality/i)
+    await expect(lastReply(page)).toContainText(/geometries were evaluated/i)
   })
 })
 
@@ -660,8 +660,8 @@ test.describe('answering why', () => {
     await say(page, 'Amherst, Massachusetts')
     await say(page, 'design it for me')
     // named rather than "use that one", because this test needs a design WITH PANELS and which
-    // of the five wins is often a coin toss the search itself admits to, in `scoreResolution` and
-    // `tooCloseToCall`. It began landing on `no-array-control` on 2026-09-01, when the array
+    // of the five wins turns on scores a hair apart. It began landing on `no-array-control` on
+    // 2026-09-01, when the array
     // geometry was fixed and every score shifted; a garden with no panels has no PV chain to
     // show, which is the right answer to the wrong question for a test about provenance
     await say(page, 'use the balanced one')
@@ -699,8 +699,8 @@ test.describe('answering why', () => {
     await say(page, 'Amherst, Massachusetts')
     await say(page, 'design it for me')
     // named rather than "use that one", because this test needs a design WITH PANELS and which
-    // of the five wins is often a coin toss the search itself admits to, in `scoreResolution` and
-    // `tooCloseToCall`. It began landing on `no-array-control` on 2026-09-01, when the array
+    // of the five wins turns on scores a hair apart. It began landing on `no-array-control` on
+    // 2026-09-01, when the array
     // geometry was fixed and every score shifted; a garden with no panels has no PV chain to
     // show, which is the right answer to the wrong question for a test about provenance
     await say(page, 'use the balanced one')
@@ -751,7 +751,7 @@ test.describe('answering why', () => {
     await expect(caveats).toBeVisible()
     // nothing behind a control, and the one that qualifies every number is among them
     await expect(caveats.locator('details')).toHaveCount(0)
-    await expect(caveats).toContainText(/preview-quality/i)
+    await expect(caveats).toContainText(/geometries were evaluated/i)
     expect(await caveats.locator('li').count()).toBeGreaterThan(3)
   })
 })

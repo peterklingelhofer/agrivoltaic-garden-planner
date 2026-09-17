@@ -174,10 +174,6 @@ test('applying a layout lands on the plants step with beds, plants, the reasonin
   // the reasoning, one fold away: every bed says which light it was put in and why, in words
   await openFold(page, 'details-plants-plan')
   await expect(page.getByTestId('readout-plan-explanation')).not.toBeEmpty()
-  await expect(page.getByTestId('status-plan-quality')).toHaveAttribute(
-    'data-quality',
-    /preview|final/,
-  )
   const beds = page.locator('[data-testid^="item-plan-bed-"]')
   await expect(beds).toHaveCount(bedCount)
   for (const bed of await beds.all()) {
@@ -272,11 +268,8 @@ test('a preview result says it is a preview and never presents itself as final',
   await openIn(page, 'light')
   await answerEveryQuestion(page)
 
-  const quality = page.getByTestId('status-onboarding-quality')
-  await expect(quality).toHaveAttribute('data-quality', /preview|final/)
-  if ((await quality.getAttribute('data-quality')) === 'preview') {
-    await expect(quality).toContainText(/quick run/i)
-  }
+  // the one-line note is gone, and the full ceiling is read in the fold below
+  await expect(page.getByTestId('status-onboarding-quality')).toHaveCount(0)
   // and no confidence badge claims more than the engine can support
   const badges = page.locator('[data-testid^="badge-onboarding-confidence-"]')
   expect(await badges.count()).toBeGreaterThan(0)

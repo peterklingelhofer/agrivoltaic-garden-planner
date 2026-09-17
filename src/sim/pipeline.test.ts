@@ -25,7 +25,7 @@ import { cellIndicesInPolygon } from './aggregate'
 import { checkMassachusettsSmart } from './compliance'
 import { at } from './math'
 import { leafOnMonthsFor } from './obstruction'
-import { FINAL_OPTIONS, PREVIEW_OPTIONS, runSimulation } from './pipeline'
+import { FINAL_OPTIONS, runSimulation } from './pipeline'
 import { monthlyRsrRaster } from './raster'
 import { observerFor, solarPositionSeries } from './solar'
 import { monthValue } from './units'
@@ -214,7 +214,14 @@ describe('annual simulation pipeline', () => {
       site,
       plot,
       series,
-      { ...PREVIEW_OPTIONS, targetCellSizeM: 1.5 as Meters, backend: 'cpu-reference' },
+      {
+        ...FINAL_OPTIONS,
+        subdivision: 'tregenza-mf1',
+        substepsPerHour: 1,
+        windows: [],
+        targetCellSizeM: 1.5 as Meters,
+        backend: 'cpu-reference',
+      },
       () => {},
     )
     const elapsed = Date.now() - started
@@ -265,7 +272,10 @@ describe('annual simulation pipeline', () => {
   it('shades with a drawn house: same open sky, less light under the array beside it (Record 26)', async () => {
     const series = weather()
     const options = {
-      ...PREVIEW_OPTIONS,
+      ...FINAL_OPTIONS,
+      subdivision: 'tregenza-mf1' as const,
+      substepsPerHour: 1,
+      windows: [],
       targetCellSizeM: 1.5 as Meters,
       backend: 'cpu-reference' as const,
     }
@@ -333,7 +343,10 @@ describe('annual simulation pipeline', () => {
       dewPointC: Float32Array.from(seasonalDryBulbC, (t) => t - 3),
     }
     const options = {
-      ...PREVIEW_OPTIONS,
+      ...FINAL_OPTIONS,
+      subdivision: 'tregenza-mf1' as const,
+      substepsPerHour: 1,
+      windows: [],
       targetCellSizeM: 1.5 as Meters,
       backend: 'cpu-reference' as const,
     }

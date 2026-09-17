@@ -219,11 +219,6 @@ describe('nothing is dropped quietly', () => {
     await generate()
     expect(getAppState().generated?.explanation).toBe(scenarioFor('balanced').layout.explanation)
   })
-
-  it('never claims a preview run is a final one', async () => {
-    await generate()
-    expect(getAppState().generated?.evaluatedAt).toBe('preview')
-  })
 })
 
 describe('the answers the grower gave are the ones it works to', () => {

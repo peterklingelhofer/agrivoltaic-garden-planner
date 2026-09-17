@@ -6,7 +6,6 @@ import type {
   MountingPreference,
   OnboardingAnswers,
   ScenarioFlags,
-  ScenarioSet,
   SiteExposure,
 } from '../types/onboarding'
 import type { Fraction } from '../types/units'
@@ -229,19 +228,6 @@ export const showsFigures = (experience: Experience): boolean => experience === 
 
 /* ---------------------------------- the results -------------------------------- */
 
-export type EvaluationQuality = ScenarioSet['evaluatedAt']
-
-export const QUALITY_LABEL: Readonly<Record<EvaluationQuality, string>> = {
-  preview: 'Preview quality',
-  final: 'Full run',
-}
-
-export const QUALITY_HELP: Readonly<Record<EvaluationQuality, string>> = {
-  preview:
-    'A quick, coarse run of each option, enough to tell them apart. Run the full light simulation in the editor before you build from it',
-  final: 'The full light run stands behind every figure here',
-}
-
 /** How much of today's light is left on the ground, which is the comparison that matters */
 export const lightLeftSentence = (meanShadeRatio: Fraction): string =>
   `Lets roughly ${String(Math.round((1 - meanShadeRatio) * 100))}% of the light this plot gets hit the ground`
@@ -256,7 +242,7 @@ export const cropSentence = (available: number, lost: number, baseline: boolean)
     ? `${String(available)} ${available === 1 ? 'crop' : 'crops'} in the catalog suit this space as it stands today, with nothing over it. This is the base option that every other option, which has more shade, is compared against.`
     : `${String(available)} ${available === 1 ? 'crop' : 'crops'} in the catalog would still suit this space, and ${String(lost)} that grow here with no panels would drop out`
 
-/** A daylight point, and a twentieth of the electricity: past the quick bake's own noise */
+/** A daylight point, and a twentieth of the electricity: a difference a grower can see */
 const DAYLIGHT_CLEAR_POINTS = 1
 const ENERGY_CLEAR_SHARE = 0.05
 
@@ -290,7 +276,6 @@ export const beatenBy = (
 export const beatenSentence = (
   beaten: readonly DesignScenario[],
   suggested: boolean,
-  ties: readonly string[],
 ): string | null => {
   const first = beaten[0]
   if (first === undefined) return null
@@ -299,9 +284,7 @@ export const beatenSentence = (
   const make = beaten.length === 1 ? 'makes' : 'make'
   const lead = `${names.join(' and ')} ${verb} as much daylight and ${make} as much electricity as this layout on this plot, or more`
   if (!suggested) return lead
-  return ties.includes(first.candidate.archetype)
-    ? `${lead}. The scores were too close to call, so the layout named for what you asked for won`
-    : `${lead}. This one is suggested because the score also counts shade, which keeps the ground damp, and a simpler build`
+  return `${lead}. This one is suggested because the score also counts shade (which keeps the ground damp) and a simpler build`
 }
 
 /**
@@ -317,10 +300,10 @@ export const PORTFOLIO_NOTE =
 
 /**
  * Nothing here reaches high confidence, because every option rests on provisional crop
- * light thresholds and a preview-quality run, so the scale isn't presented as if it could
+ * light thresholds, so the scale isn't presented as if it could
  */
 export const CONFIDENCE_CEILING =
-  'Confidence goes no higher than moderate anywhere in this comparison: the crop light thresholds behind it are provisional and every option was run at preview quality. It drops to low where a layout tracks the sun, casts deeper shade than the published crop studies cover, or sits on a site short of water'
+  'Confidence goes no higher than moderate anywhere in this comparison: the crop light thresholds behind it are provisional. It drops to low where a layout tracks the sun, casts deeper shade than the published crop studies cover, or sits on a site short of water'
 
 /**
  * Estimate language only. No regime is self-verifiable, so neither of these reads as a

@@ -292,10 +292,7 @@ describe('the sky view factor, arbitrated', () => {
       `Reinhart mf2 ${reinhart.toFixed(4)} against Monte Carlo ${mc.svf.toFixed(4)}`,
     ).toBeLessThan(4 * mc.standardError + 0.005)
 
-    // mf1 lands there too, so `PREVIEW_OPTIONS` isn't paying for its coarser dome here. It was
-    // worth checking: on the incoherent array this same comparison put mf1 2.6% above the Monte
-    // Carlo, because a row seen edge on is exactly the case one ray per twelve-degree patch
-    // resolves worst. That reading was an artifact of the geometry and not a finding about mf1
+    // mf1 lands there too, so the coarse settings aren't paying for a coarser dome here
     expect(Math.abs(tregenza - mc.svf)).toBeLessThan(4 * mc.standardError + 0.005)
 
     // the closed form is the same number, at the same place, from completely different

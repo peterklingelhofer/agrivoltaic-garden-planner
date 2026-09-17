@@ -25,9 +25,9 @@ const BACKENDS: readonly (readonly [BackendKind, string])[] = [
  * gone. It saved about 540 ms on a real GPU (260 against 799, `the port document` section 5) and
  * cost a different answer: `src/recommend/design.ts` measures the crop share moving by 0.0702 at
  * Bergen between preview and final settings, which is a whole crop appearing or vanishing from a
- * plan. The preview settings stay and are still what the layout search and `useAutoLight` use;
- * what is gone is asking a grower to choose between two answers when only one of them is the one
- * to trust.
+ * plan. The preview settings were retired everywhere they still ran, including the layout search
+ * and `useAutoLight`; what is gone is asking a grower to choose between two answers when only one
+ * of them is the one to trust.
  *
  * Since 2026-09-10 `useAutoLight` runs that full check by itself, the first time as well as after
  * every change, so the press below is for a run that failed or an automatic run switched off. The
