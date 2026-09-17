@@ -7547,7 +7547,7 @@
       "accessLevel": "paywalled",
       "evidenceTier": null,
       "backsClaims": [
-        "decision 5: Tregenza 145-patch sky discretisation for the interactive preview"
+        "decision 5: Tregenza 145-patch sky discretisation, retained in `skydome.ts` for coarse tests"
       ],
       "caveat": null
     }
