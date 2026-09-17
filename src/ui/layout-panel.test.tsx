@@ -82,8 +82,8 @@ describe('the comparison', () => {
     await harness.unmount()
   })
 
-  it('keeps every layout a tab whatever the tie note says', async () => {
-    const harness = await showResults(scenarioSetFixture('balanced', ['food-first']))
+  it('keeps every layout a tab', async () => {
+    const harness = await showResults(scenarioSetFixture('balanced'))
     expect(tabbed(harness)).toContain('food-first')
     expect(tabbed(harness)).toContain('energy-first')
     await harness.unmount()
@@ -129,29 +129,15 @@ describe('the comparison', () => {
   })
 
   /**
-   * The two caveat paragraphs are one line under the tabs: how rough the run was, and which
-   * layouts it could not separate, named in the words on their own cards. The full sentences
-   * are one press away in the reading fold
+   * The confidence line under the tabs, one sentence, with the full explanation one press away
+   * in the reading fold
    */
-  it('says in one line how rough the comparison is and which layouts tie', async () => {
-    const clear = await showResults()
-    const line = clear.get('status-onboarding-quality')
-    expect(line.getAttribute('data-quality')).toBe('preview')
-    expect(line.textContent).toMatch(/^Rough comparison/)
-    expect(line.textContent).not.toMatch(/tie/)
-    expect(clear.get('readout-onboarding-confidence-ceiling').closest('details')).not.toBeNull()
-    await clear.unmount()
-
-    const tied = await showResults(scenarioSetFixture('balanced', ['food-first', 'energy-first']))
-    const note = tied.get('status-onboarding-quality')
-    expect(note.getAttribute('data-tied')).toBe('food-first,energy-first')
-    // named to the grower in the words on their own cards, not as archetype keys
-    expect(note.textContent).toMatch(
-      /, A layout: food-first and A layout: energy-first tie with the suggested one$/,
-    )
-    // and the suggestion still stands: the grower is handed a choice, not an empty comparison
-    expect(tied.find('badge-onboarding-recommended-balanced')).not.toBeNull()
-    await tied.unmount()
+  it('says in one line that confidence is capped', async () => {
+    const harness = await showResults()
+    const line = harness.get('status-onboarding-quality')
+    expect(line.textContent).toBe('Confidence no higher than moderate')
+    expect(harness.get('readout-onboarding-confidence-ceiling').closest('details')).not.toBeNull()
+    await harness.unmount()
   })
 
   /**

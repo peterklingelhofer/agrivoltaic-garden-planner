@@ -394,13 +394,12 @@ export const verdictLabel = (outcome: RecommendationVerdict): string =>
  * is small next to how far apart THIS list's own top few otherwise land is inside that same
  * noise, not a finding worth reporting as one. Dividing by the spread being displayed means a
  * bed that clearly favours one crop over the rest gets a tighter margin than one where the
- * whole top of the list scores about the same, the same shape `scoreResolution` in
- * `recommend/design.ts` uses for the design comparison one screen earlier.
+ * whole top of the list scores about the same.
  *
- * Unlike `scoreResolution`, this is not measured against a paired preview/final bake: nothing
- * here reruns the ranking at a second bake quality to see how far its score actually moves. It
- * is a presentation threshold picked for this screen and says a gap this small is not worth
- * presenting as a ranking; it makes no claim about how precise `rank.ts` or `suggest.ts` are
+ * This is not measured against anything: nothing here reruns the ranking to see how far its
+ * score actually moves. It is a presentation threshold picked for this screen and says a gap
+ * this small is not worth presenting as a ranking; it makes no claim about how precise
+ * `rank.ts` or `suggest.ts` are
  */
 const TIE_MARGIN_SPREAD_FRACTION = 0.05
 

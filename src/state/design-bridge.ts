@@ -106,7 +106,6 @@ export const normaliseSet = (value: unknown): ScenarioSet | null => {
   const set = asRecord(value)
   if (set === null || !Array.isArray(set.scenarios) || set.scenarios.length === 0) return null
   if (typeof set.recommendedArchetype !== 'string') return null
-  if (set.evaluatedAt !== 'preview' && set.evaluatedAt !== 'final') return null
   if (!Array.isArray(set.notConsidered) || typeof set.plotAreaM2 !== 'number') return null
   return (set.scenarios as readonly unknown[]).every(isScenario)
     ? (set as unknown as ScenarioSet)

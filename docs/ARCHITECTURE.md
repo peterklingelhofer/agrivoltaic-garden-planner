@@ -121,7 +121,7 @@ Each hop names the module that owns it. No hop is owned by two modules.
 | 20b | preferences + ranked set -> ranked polyculture combinations | `src/recommend/suggest.ts` | `suggestPolycultures`, `allocateSpace` |
 | 20c | plot + a measured year + what grew before -> per-planting season outcomes | `src/simulation/season.ts` | `simulateSeason` |
 | 20d | ten measured years -> the site as it was in one | `src/data/site.ts` | `siteForYear` |
-| 21 | answers + site -> five candidate geometries, each baked at preview quality and ranked by the grower's objective | `src/recommend/design.ts` | `suggestDesigns`, `candidatesFor` |
+| 21 | answers + site -> five candidate geometries, each baked at full quality and ranked by the grower's objective | `src/recommend/design.ts` | `suggestDesigns`, `candidatesFor` |
 | 21b | shipped example asset -> `PersistedDesign` + `DliRaster` | `src/state/example.ts`, `src/data/example-raster.ts` | `loadExampleGarden`, `decodeExampleRaster` |
 | 22 | everything -> store slices | `src/state/slices.ts`, `src/state/store.ts` | `useAppStore` |
 | 23 | store -> scene graph | `src/scene/*` | `GardenScene` |
@@ -461,16 +461,17 @@ Separate budgets, not part of the 550 ms:
 
 | Path | Budget | Note |
 |---|---|---|
-| Preview bake | 120 ms | Tregenza 145 patches, no sub-stepping, ~250 passes |
 | Interactive sun scrub | 16.6 ms/frame | one shadow map per frame, `src/scene/SunRig.tsx` |
 | Recommendation pipeline, 200 crops x 20 beds | 120 ms | main thread, if exceeded, move `src/recommend/pipeline.ts` into the same worker |
-| Layout search | five candidate bakes at preview quality, a full run measured ~4.5 s on the CPU reference backend (Decision Record 10c) | reports progress per candidate through `DesignProgress` |
+| Layout search | five candidate bakes at full quality, 1.4 to 3.4 s on an M-series GPU for plots from 10 x 7 m to 30 x 20 m (Decision Record 10c), the site's sky computed once for all five | reports progress per candidate through `DesignProgress` |
 | Site resolution | network-bound | show partial `Site` as fields land, never block the canvas |
 | Crop catalog | 600 KB gzipped | columnar JSON, lazy-loaded after first paint |
 
 Hard invariant: the UI never drops below 50 fps during a bake. `AccumulationRequest.passesPerFrame`
 is a starting hint, not a promise, the backend must reduce it when the frame-time EMA exceeds
-`frameBudgetMs`.
+`frameBudgetMs`. A draw is also capped at `MAX_RAY_TESTS_PER_DRAW` cell-direction-panel tests
+(`src/sim/gpu/webgl2.ts`): the EMA times submission, which returns before the GPU starts, and the
+GPU's watchdog judges command buffers, so the cap is what keeps one draw short whatever the grid.
 
 WebGPU (`src/sim/gpu/webgpu.ts`) reduces the accumulation term to ~30 ms where available. It is a
 detected optimisation via `detectBackendKind()`, never a requirement. WebGL2 shadow maps are the
@@ -486,8 +487,8 @@ Fixed by the Decision Record, encoded as constants so nobody re-litigates them i
 - `src/sim/units.ts`: `PAR_FRACTION_DEFAULT = 0.45` (user-adjustable 0.42-0.50),
   `PHOTON_CONVERSION_UMOL_PER_J = 4.57`, `BROADBAND_UMOL_PER_J = 2.06`,
   `SOLAR_CONSTANT_W_M2 = 1361.1`.
-- `src/sim/pipeline.ts`: `FINAL_OPTIONS.targetCellSizeM = 0.12`,
-  `PREVIEW_OPTIONS.targetCellSizeM = 0.25`.
+- `src/sim/pipeline.ts`: `FINAL_OPTIONS.targetCellSizeM = 0.12`, the one quality every bake runs
+  at.
 - Ground shading is explicit per-panel polygon projection
   (`src/sim/shading.ts#projectPanelToGround`). `vfGroundSky2dOracle` in
   `src/sim/viewfactor.ts` exists solely as a unit-test oracle for the degenerate infinite-row case

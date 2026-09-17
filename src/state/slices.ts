@@ -151,7 +151,6 @@ export interface LightSlice {
   /** Annual PV energy for the plot as designed. Idle until run: there is no default figure */
   readonly energy: AsyncState<PvEnergyReport>
   setOptions(options: Partial<SimulationOptions>): void
-  runPreview(): Promise<void>
   runFinal(): Promise<void>
   runEnergy(): void
   cancel(): void
@@ -559,8 +558,6 @@ export interface GeneratedBed {
 export interface GardenGeneration {
   /** The layout the search applied, or null when the plot was planted as it stood */
   readonly archetype: CandidateArchetype | null
-  /** The light the planting rested on: the search's preview field, or the full check */
-  readonly evaluatedAt: ScenarioSet['evaluatedAt']
   readonly explanation: string
   readonly beds: readonly GeneratedBed[]
   readonly plantingCount: number
@@ -713,7 +710,7 @@ export interface SimulationSlice {
   readonly sweeping: boolean
   /**
    * The same year with no panels, for the LAST season that ran: the plot with every array
-   * pulled, baked at preview quality and run through that season's own science again. Never
+   * pulled, baked again and run through that season's own science. Never
    * persisted and never written into `simulation`: it carries its own season number, and a
    * later season run clears it rather than leaving it to describe a season that has moved on
    */

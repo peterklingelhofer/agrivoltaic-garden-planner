@@ -257,7 +257,8 @@ process.stdout.write(`resolving ${SITE_LABEL}\n`)
 const { site, weather } = await siteData.resolveSite(SITE, SITE_LABEL, null)
 
 const options = {
-  ...simPipeline.PREVIEW_OPTIONS,
+  ...simPipeline.FINAL_OPTIONS,
+  windows: [],
   backend: 'cpu-reference',
   subdivision: SUBDIVISION,
   substepsPerHour: SUBSTEPS_PER_HOUR,

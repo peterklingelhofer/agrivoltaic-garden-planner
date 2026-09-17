@@ -395,6 +395,22 @@ const leafOnMask = (leafOnMonths: readonly boolean[] | null): number => {
 
 export const MAX_GPU_WINDOWS = 1
 
+/**
+ * How much of the ray casting one draw may carry, in cell-direction-panel tests.
+ *
+ * A draw is one command buffer's worth of work, and the GPU's watchdog judges command buffers:
+ * a draw that runs long under contention is killed, and every other context on the GPU loses
+ * its work with it (the functional suite at eight workers saw one "Caused GPU Hang Error" and
+ * seven "victim of GPU error/recovery" in the same second, and the pages never came back).
+ * `chunkMs` in `accumulate` measures submission, which returns before the GPU starts, so the
+ * chunk doubled without bound: measured on a 16 x 11 m plot, a bake went out as draws of 40, 40,
+ * 80, 160, 320, 640 and 1280 directions, the last one 875 million tests, and the example garden's
+ * 121 thousand cells and 40 panels would put six billion in one draw. At this cap a draw is about
+ * 20 ms on an M-series GPU (a 1.9 billion-test bake ran in 300 ms), whatever the grid and the
+ * panel count
+ */
+export const MAX_RAY_TESTS_PER_DRAW = 1 << 27
+
 interface GpuDirection {
   readonly x: number
   readonly y: number
@@ -577,7 +593,14 @@ export const createWebgl2Backend = (canvas: OffscreenCanvas): SkyMatrixBackend =
       const directions = buildDirections(request)
       const passesTotal = request.sky.sunDirections.length + request.sky.patches.length
       const total = directions.length
-      let chunkSize = Math.max(1, Math.min(total || 1, Math.floor(request.passesPerFrame) || 40))
+      const maxChunk = Math.max(
+        1,
+        Math.floor(MAX_RAY_TESTS_PER_DRAW / (cells * Math.max(1, panels.length))),
+      )
+      let chunkSize = Math.max(
+        1,
+        Math.min(total || 1, Math.floor(request.passesPerFrame) || 40, maxChunk),
+      )
       let emaMs = request.frameBudgetMs
       let offset = 0
       let passesDone = 0
@@ -603,7 +626,7 @@ export const createWebgl2Backend = (canvas: OffscreenCanvas): SkyMatrixBackend =
         offset += n
         passesDone += n
         emaMs = emaMs * 0.7 + chunkMs * 0.3
-        chunkSize = adaptChunk(chunkSize, emaMs, request.frameBudgetMs)
+        chunkSize = Math.min(maxChunk, adaptChunk(chunkSize, emaMs, request.frameBudgetMs))
         // yield on the budget rather than per draw, so a per-pose chunk of one direction does
         // not cost a whole frame each
         frameMs += chunkMs

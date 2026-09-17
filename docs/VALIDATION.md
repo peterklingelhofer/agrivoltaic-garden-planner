@@ -141,8 +141,8 @@ regression tests, and nowhere else:
 - **The crop ranking and scoring weights** in `src/recommend/stages/rank.ts` and the design-search
   scoring in `src/recommend/design.ts` (`DEFAULT_WEIGHTS`, the min-max normalised score terms).
   Nothing in the literature ranks agrivoltaic garden layouts, these are this app's own trade-off
-  choices, tested for internal properties (determinism, `scoreResolution`) rather than against a
-  published ranking.
+  choices, tested for internal properties (determinism, the order holding when the bake gets
+  finer) rather than against a published ranking.
 - **The polyculture and companion-planting rules**, graded A through E in `docs/00-DECISIONS.md`
   section 11. Grades A and B carry a real citation and a measured effect size. C is a single study
   or lab-only result, rendered as "experimental". D and E are folklore, rendered only in a labelled

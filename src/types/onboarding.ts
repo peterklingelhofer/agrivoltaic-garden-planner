@@ -152,18 +152,6 @@ export interface ScenarioSet {
   readonly plotAreaM2: SquareMeters
   readonly scenarios: readonly DesignScenario[]
   readonly recommendedArchetype: CandidateArchetype
-  /**
-   * How far apart two scores have to be before the difference is the design rather than the
-   * bake, derived for THIS run from how far apart the candidates actually are. See
-   * `scoreResolution` in `recommend/design.ts`
-   */
-  readonly scoreResolution: number
-  /**
-   * The other designs that scored within `scoreResolution` of the winner, so that putting one
-   * of them second is not a finding. Empty when the winner is clear
-   */
-  readonly tooCloseToCall: readonly CandidateArchetype[]
   /** Named so the wizard can say what it did not consider */
   readonly notConsidered: readonly string[]
-  readonly evaluatedAt: 'preview' | 'final'
 }

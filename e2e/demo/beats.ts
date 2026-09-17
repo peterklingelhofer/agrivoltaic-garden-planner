@@ -185,11 +185,10 @@ const pointIfPresent = async (d: Director, testId: string): Promise<boolean> => 
  * The light, computed and ready, which is a step of the product and not a detail of the
  * recording.
  *
- * The layout search bakes at preview quality, and says so in its own words: enough to tell five
- * layouts apart, not enough to build from. The full check runs by itself once a layout is
- * applied, and nothing downstream of the light unlocks until it has: a film that raced ahead
- * would reach the crop picker and find the step still waiting on the light. The camera orbits
- * while it works, and the one press left on the light step is for a run that failed
+ * The layout search bakes every layout at full quality. The light check runs again by itself
+ * once a layout is applied, and nothing downstream of the light unlocks until it has: a film
+ * that raced ahead would reach the crop picker and find the step still waiting on the light. The
+ * camera orbits while it works, and the one press left on the light step is for a run that failed
  */
 const waitForLight = async (d: Director): Promise<void> => {
   const status = d.page.getByTestId('status-simulation')
@@ -558,7 +557,7 @@ export const BEATS: readonly Beat[] = [
   },
   {
     caption:
-      'The layouts were compared on a quick check, and the app says so: enough to tell five apart. The finer run to build from happens by itself, once the layout is chosen and again whenever the garden changes.',
+      'Every layout was compared on the full light run. It runs again by itself once the layout is chosen, and again whenever the garden changes.',
     at: 'bottom',
     cuts: BOTH,
     run: async (d) => {

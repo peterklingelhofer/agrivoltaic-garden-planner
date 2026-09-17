@@ -4,7 +4,12 @@ import type { BedLight, DliRaster, RasterQuality, TimeWindowSpec } from '../type
 import type { Occluder } from '../types/pv'
 import type { Site } from '../types/site'
 import type { Degrees, EpochMillis, Fraction, Meters } from '../types/units'
-import type { SkySubdivision, TmySeries } from '../types/weather'
+import type {
+  CumulativeSky,
+  SkySubdivision,
+  SolarPositionSeries,
+  TmySeries,
+} from '../types/weather'
 import { bedLight } from './aggregate'
 import type { AccumulationProgress, BackendKind } from './backend'
 import { createBackendAsync, openSkyAccumulation } from './backend'
@@ -19,6 +24,7 @@ import { leafOnMonthsFor, obstructionQuads } from './obstruction'
 import { applyInterreflection, dliRasterFromAccumulation } from './raster'
 import {
   annualFromMonthly,
+  type CumulativeSkySet,
   cumulativeSkySet,
   DEFAULT_SUN_BINNING_DEG,
   sampleTimeWindows,
@@ -35,18 +41,8 @@ export interface SimulationOptions {
   readonly frameBudgetMs: number
   readonly passesPerFrame: number
   // extra accumulation targets on the shared direction set; each one costs accumulator writes
-  // and zero extra visibility passes, but it is still opt-in so the preview pays nothing
+  // and zero extra visibility passes, but it is still opt-in so a bake that needs none pays nothing
   readonly windows: readonly TimeWindowSpec[]
-}
-
-export const PREVIEW_OPTIONS: Omit<SimulationOptions, 'backend'> = {
-  subdivision: 'tregenza-mf1',
-  substepsPerHour: 1,
-  targetCellSizeM: 0.25 as Meters,
-  parFraction: 0.45 as Fraction,
-  frameBudgetMs: 8,
-  passesPerFrame: 40,
-  windows: [],
 }
 
 export const FINAL_OPTIONS: Omit<SimulationOptions, 'backend'> = {
@@ -94,22 +90,41 @@ const substeppedTimestamps = (utcMillis: Float64Array, substeps: number): Float6
   return out
 }
 
-export const runSimulation = async (
-  site: Site,
-  plot: GardenPlot,
-  weather: TmySeries,
-  options: SimulationOptions,
-  onProgress: (progress: AccumulationProgress) => void,
-): Promise<SimulationResult> => {
-  const started = Date.now()
-  /*
-    Installed here and not only at the page's entry point because the bake runs in a Worker, which
-    has its own copy of every module and so its own empty `core.ts`. Awaited rather than fired off
-    because until a core is installed there is no implementation of the physics at all, and
-    `requirePhysicsCore` would refuse the solar geometry below
-  */
-  await ensurePhysicsCore(import.meta.env)
+/**
+ * The site's own half of a bake, kept between bakes.
+ *
+ * Solar positions, the decomposition and the cumulative sky set depend on the place, the weather
+ * record and the quality, and on nothing the grower draws. They are nearly half of a full bake (250
+ * ms of 550 on an M-series GPU), and the layout search asks for five bakes at one site in a row, so
+ * the last set is kept and handed to the next bake that matches it. One entry, because a session is
+ * at one site at a time
+ */
+interface SiteSky {
+  readonly key: string
+  readonly hourlyPosition: SolarPositionSeries
+  readonly skies: CumulativeSkySet
+  readonly sky: CumulativeSky
+}
+
+let lastSiteSky: SiteSky | null = null
+
+const siteSkyFor = (site: Site, weather: TmySeries, options: SimulationOptions): SiteSky => {
   const observer = observerFor(site)
+  // the weather's identity is the same set of fields worker/client.ts keys its memo on
+  const key = JSON.stringify([
+    observer,
+    weather.source,
+    weather.decomposition,
+    weather.provenance.datasetLabel,
+    weather.provenance.retrievedUtcMillis,
+    weather.startUtcMillis,
+    weather.utcOffsetHours,
+    weather.utcMillis.length,
+    options.subdivision,
+    options.substepsPerHour,
+    options.windows,
+  ])
+  if (lastSiteSky?.key === key) return lastSiteSky
 
   const hourlyPosition = solarPositionSeries(weather.utcMillis, observer, 'nrel-spa')
   const hasComponents = weather.decomposition !== 'passthrough' || weather.dniWM2.some((v) => v > 0)
@@ -137,8 +152,28 @@ export const runSimulation = async (
     binning,
     windowSampling,
   )
+  const sky = annualFromMonthly(skies.monthly)
+  lastSiteSky = { key, hourlyPosition, skies, sky }
+  return lastSiteSky
+}
+
+export const runSimulation = async (
+  site: Site,
+  plot: GardenPlot,
+  weather: TmySeries,
+  options: SimulationOptions,
+  onProgress: (progress: AccumulationProgress) => void,
+): Promise<SimulationResult> => {
+  const started = Date.now()
+  /*
+    Installed here and not only at the page's entry point because the bake runs in a Worker, which
+    has its own copy of every module and so its own empty `core.ts`. Awaited rather than fired off
+    because until a core is installed there is no implementation of the physics at all, and
+    `requirePhysicsCore` would refuse the solar geometry below
+  */
+  await ensurePhysicsCore(import.meta.env)
+  const { hourlyPosition, skies, sky } = siteSkyFor(site, weather, options)
   const monthlySkies = skies.monthly
-  const sky = annualFromMonthly(monthlySkies)
 
   const extent = sceneExtent(
     plot.arrays,

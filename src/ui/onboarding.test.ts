@@ -19,8 +19,6 @@ import {
   OBJECTIVE_LABELS,
   CONFIDENCE_CEILING,
   PORTFOLIO_NOTE,
-  QUALITY_HELP,
-  QUALITY_LABEL,
   roundTenth,
   SCOPE_STATEMENT,
   showsFigures,
@@ -185,14 +183,11 @@ describe('a layout beaten on both figures says so', () => {
   })
 
   it('says why the suggested one is still marked', () => {
-    expect(beatenSentence([], false, [])).toBeNull()
-    expect(beatenSentence([energy], false, [])).toMatch(
+    expect(beatenSentence([], false)).toBeNull()
+    expect(beatenSentence([energy], false)).toMatch(
       /^A layout: energy-first keeps as much daylight/,
     )
-    expect(beatenSentence([energy], true, ['energy-first'])).toMatch(
-      /too close to call, so the layout named for what you asked for won/,
-    )
-    expect(beatenSentence([energy], true, [])).toMatch(/counts shade/)
+    expect(beatenSentence([energy], true)).toMatch(/counts shade/)
   })
 })
 
@@ -221,12 +216,6 @@ describe('progressive disclosure hides detail and never a caveat', () => {
 
   it('never presents a confidence scale that implies high is reachable', () => {
     expect(CONFIDENCE_CEILING).toMatch(/no higher than moderate/i)
-  })
-
-  it('labels a preview as a preview and never as the final word', () => {
-    expect(QUALITY_LABEL.preview).toMatch(/preview/i)
-    expect(QUALITY_HELP.preview).toMatch(/before you build from it/i)
-    expect(QUALITY_LABEL.final).not.toMatch(/preview/i)
   })
 })
 

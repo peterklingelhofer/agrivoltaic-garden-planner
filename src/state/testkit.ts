@@ -156,10 +156,7 @@ export const designScenarioFixture = (archetype: CandidateArchetype): DesignScen
   confidence: 'moderate',
 })
 
-export const scenarioSetFixture = (
-  recommended: CandidateArchetype = 'balanced',
-  tooCloseToCall: readonly CandidateArchetype[] = [],
-): ScenarioSet => ({
+export const scenarioSetFixture = (recommended: CandidateArchetype = 'balanced'): ScenarioSet => ({
   answers: answersOf(DEFAULT_WIZARD_ANSWERS, DEFAULT_LOCATION, DEFAULT_LOCATION_LABEL, null),
   plotAreaM2: squareMeters(48),
   scenarios: [
@@ -169,10 +166,7 @@ export const scenarioSetFixture = (
     designScenarioFixture('energy-first'),
   ],
   recommendedArchetype: recommended,
-  scoreResolution: 0.02,
-  tooCloseToCall,
   notConsidered: ['cost, planning permission and the grid connection'],
-  evaluatedAt: 'preview',
 })
 
 /**

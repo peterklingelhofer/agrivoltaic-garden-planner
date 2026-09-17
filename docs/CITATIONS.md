@@ -806,7 +806,7 @@ Tregenza, P. R.. (1987). *Subdivision of the sky hemisphere for luminance measur
 - DOI: [10.1177/096032718701900103](https://doi.org/10.1177/096032718701900103)
 - Verification: Crossref-verified | Access: paywalled
 - Backs:
-  - decision 5: Tregenza 145-patch sky discretisation for the interactive preview
+  - decision 5: Tregenza 145-patch sky discretisation, retained in `skydome.ts` for coarse tests
 
 ## Horticulture & crop physiology
 

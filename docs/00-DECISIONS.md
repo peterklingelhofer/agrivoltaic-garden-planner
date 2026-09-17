@@ -152,7 +152,8 @@ chill are untouched.
 Cumulative-sky daylight coefficients (Radiance/Ladybug method): factorise time-invariant
 visibility from space-invariant weather.
 
-- Reinhart MF:2 = 577 sky patches (Tregenza 145 for interactive preview).
+- Reinhart MF:2 = 577 sky patches. The Tregenza 145-patch dome stays in `skydome.ts` for tests
+  that run coarse.
 - Separate sun direction set. **Never bin the beam into 6 deg patches.**
 - Dedupe 8760 h x 4 sub-steps onto a 2 deg grid -> ~600-900 unique directions.
 - MEASURED, superseding the 0.55 s estimate: at 0.12 m cells (284x299 = 84,916 cells, 40 panels,
@@ -564,7 +565,7 @@ wrong too: there, steepening costs 19 crops AND 189 kWh, both falling together e
 What survives at every latitude measured is the half that matters to a grower: flat is the food
 end. What does not survive is the idea that the grower is trading anything for it below 44 N.
 
-**Re-measured 2026-09-07, preview quality (tregenza-mf1, one sun sample an hour, 0.5 m cells),
+**Re-measured 2026-09-07, coarse settings (tregenza-mf1, one sun sample an hour, 0.5 m cells),
 `balanced`, one row held fixed at both ends:** at 20 N, 141 crops clear the light gate at 10
 degrees against 128 at 35, and annual AC runs 9 050 kWh at 10 degrees against 8 315 at 35
 (`src/recommend/sweep.bench.test.ts`, block 1). RSR at the same two points is 0.0397 and 0.1223,
@@ -642,7 +643,7 @@ still inside the budget.
 count is non-decreasing in tilt, because pitch is `collectorWidth * cos(tilt) / projected` and a
 steeper panel closes up until another row fits.
 
-**Re-measured 2026-09-07, preview quality (tregenza-mf1, one sun sample an hour, 0.5 m cells),
+**Re-measured 2026-09-07, coarse settings (tregenza-mf1, one sun sample an hour, 0.5 m cells),
 `food-first`, 16 x 12 m plot:** the step sits at 28 degrees, where `fillPlot` admits a second
 row. At 27 degrees, one row, RSR is 0.0522, 140 crops clear the light gate and annual AC is
 5 033 kWh. At 28 degrees, two rows, RSR is 0.1041, 121 crops clear and annual AC is 10 042 kWh
@@ -662,7 +663,7 @@ This is the change with the largest user-facing consequence of the whole correct
 had been recommending the STEEPEST tilt its row count allowed, which is the shadiest end of its
 own band, under a name that promises the most light on the ground.
 
-**Rebuilt 2026-09-07, preview quality (tregenza-mf1, one sun sample an hour, 0.5 m cells),
+**Rebuilt 2026-09-07, coarse settings (tregenza-mf1, one sun sample an hour, 0.5 m cells),
 `food-first`, 16 x 12 m plot, four latitudes:**
 
 | Latitude | Rule tilt | Rule rows | Rule crops | Rule kWh | Derived crops | Derived kWh |
@@ -716,11 +717,15 @@ candidate costs a full annual bake, and `ScenarioSet.notConsidered` says so in t
 `mounting` filters the offered set and the dropped archetypes are named. `no-array-control` is
 always offered.
 
-Evaluation is `PREVIEW_OPTIONS` plus the Growing Season Hours window (one extra weight vector on the
-shared direction set, so the MA figure measures the regulated quantity instead of the March-October
-month approximation). `evaluatedAt` is therefore always `'preview'`. Measured wall clock for a full
-five-scenario run: **~4.5 s** on the `cpu-reference` backend in node at 0.25 m cells over a 16 x 12
-m plot, the browser runs the same bake on WebGL2 or WebGPU.
+Evaluation is `FINAL_OPTIONS`, the same bake the editor runs, Growing Season Hours window included
+(one extra weight vector on the shared direction set, so the MA figure measures the regulated
+quantity instead of the March-October month approximation). The site's solar positions,
+decomposition and sky set are computed once and shared by the five bakes (`siteSkyFor` in
+`src/sim/pipeline.ts`), and each draw of the WebGL2 bake is capped at `MAX_RAY_TESTS_PER_DRAW`
+cell-direction-panel tests so no command buffer runs long enough for the GPU's watchdog to kill
+it. Measured wall clock for a five-scenario run on an M-series GPU: 1.4 s on a 10 x 7 m plot,
+1.4 s on 16 x 11 m, 3.4 s on 30 x 20 m with 51 to 68 panels (the first bake about 450 ms, the
+rest 100 to 650 ms). About 4.5 s a candidate on the CPU rasteriser.
 
 The land equivalent ratio is `landEquivalentRatio`'s PORTFOLIO sum, the same convention as
 `OptimizerResult.portfolio` and TEK rule 7, taken over a fixed six-crop basket
@@ -745,78 +750,18 @@ or a basket in which every light threshold is a class inference).
 
 Ranking is deterministic: four raw terms (crop retention and light kept, annual AC kWh,
 mean shade as an evapotranspiration proxy, and structural simplicity) min-max normalised across
-the set and combined with the user's own `DesignObjective` weights, ties broken by archetype
-order. No band is collapsed anywhere, so `design.ts` is NOT on the `unsafeBandMidpoint` allowlist.
+the set and combined with the user's own `DesignObjective` weights, an exactly equal score going
+to the archetype named for the answers (`namesakeOf`), then archetype order. No band is collapsed
+anywhere, so `design.ts` is NOT on the `unsafeBandMidpoint` allowlist.
 
-The ordering being deterministic was never the question worth asking. The question is whether a GAP
-is real, and `SCORE_RESOLUTION` answers it by running the same search twice, once at preview
-settings and once at `FINAL_OPTIONS`, and reading how far a score moves when the approximation is
-lifted. On a 16 x 12 m plot at 42.4 N that is 0.0385, and an allotment run separated its top two by
-**0.0024**, a tenth of what the bake was moving scores by on that very set. A search that looks
-unstable across runs is this, not non-determinism: an order resting on a difference finer than the
-numbers under it. Scenarios within `SCORE_RESOLUTION` of the winner are listed in
-`ScenarioSet.tooCloseToCall` and named to the grower as equals to choose between. The winner is
-still picked and still shown, what is no longer implied is that being second means anything.
-
-**The margin is DERIVED per run, not a constant, and two attempts to make it one were both
-wrong.** The score is a weighted sum of min-max normalised terms, so each term is divided by its
-own spread across the candidate set and a raw error of `d` arrives in the score as `d / spread`.
-Where an array is marginal that spread collapses and the same bake error lands magnified. Measured:
-Bergen's 3.5 x 2.4 m courtyard moves 0.1541 where the same city's 16 x 11 m plot moves 0.0115, on
-bake errors that are nearly identical. No single number covers both, and each of 0.0385, 0.12 and
-0.02 failed at one end or the other.
-
-What makes it tractable is that only TWO of the four terms can move at all. `energyRaw` comes from
-`runAnnualChain`, which reads weather, solar position and geometry and never touches the raster,
-and `simplicityRaw` is pure geometry. So the bake's error need only be measured on the light
-terms, in raw units, where it is a physical quantity rather than an artefact of normalisation.
-Eight paired real-weather runs, preview against `FINAL_OPTIONS`:
-
-| site | plot | season RSR moved | crop share moved | score moved | was, RSR / share |
-|---|---|---|---|---|---|
-| Tromso NO | 3.5 x 2.4 m | 0.0023 | 0.0000 | 0.0090 | 0.0022 / 0.0000 |
-| Bergen NO | 3.5 x 2.4 m | 0.0013 | **0.0702** | **0.1543** | 0.0015 / 0.0702 |
-| Bergen NO | 16 x 11 m | 0.0015 | 0.0244 | 0.0115 | 0.0016 / 0.0244 |
-| Edinburgh GB | 3.5 x 2.4 m | 0.0017 | 0.0000 | 0.0039 | 0.0024 / 0.0000 |
-| Amherst MA | 3.5 x 2.4 m | 0.0043 | 0.0000 | 0.0013 | 0.0048 / 0.0000 |
-| Amherst MA | 16 x 11 m | 0.0032 | 0.0000 | 0.0001 | 0.0032 / 0.0000 |
-| Phoenix AZ | 3.5 x 2.4 m | **0.0134** | 0.0227 | 0.0130 | 0.0056 / 0.0194 |
-| Singapore | 3.5 x 2.4 m | 0.0094 | 0.0000 | 0.0022 | 0.0093 / 0.0000 |
-
-The crop share is a STEP: a crop either clears the light gate or it does not, so a hair of DLI moves
-the share by a whole crop. Five of eight runs move it by nothing, one moves it by seven percent.
-`BAKE_RSR_RESOLUTION` and `BAKE_CROP_SHARE_RESOLUTION` are the worst measured value of each, and
-`scoreResolution` carries them through the same normalisation the score uses, weighted the way the
-score weights them, each term capped at 1 because a normalised term cannot move further than its own
-range.
-
-The right-hand column is the original 2025 measurement, kept beside the current one because the
-re-measurement moved something the earlier text had ruled out. It said the shade ratio was well
-behaved, under one percentage point everywhere, Phoenix now moves 0.0134, past the 0.01 that
-shipped, and `BAKE_RSR_RESOLUTION` is 0.014. The cause is not the bake. Two crop-side changes on
-2026-08-09 (a perennial judged on the heat it cannot leave, and the Mediterranean herbs given
-rosemary's heat ceiling) changed which crops clear the light gate at a hot site, `candidatesFor`
-derives row pitch from the shade the planting can afford, and so a different geometry is being
-scored. **A crop-side change therefore invalidates the LIGHT constants too**, which is a coupling
-neither this record nor the code comment had named. The harness is
-`scripts/measure-bake-resolution.mjs`, checked in for exactly that reason: it records the wizard
-answers and the two quality settings it used, so the next re-measurement is comparable to this one
-instead of to a script nobody kept.
-
-Checked against all eight runs: the margin covers every one, including the Bergen courtyard that
-defeated the constant, and by a wider hand than before (0.1794 against a measured 0.1543, where
-the old constants gave 0.1640 against 0.1541). One claim that stood here is WITHDRAWN as
-arithmetically impossible rather than merely stale: that the margin is tighter than the 0.02 it
-replaces wherever the set is well separated, at 0.0112 on Amherst's 16 x 11 m plot. Both raw terms
-are min-max normalised into [0, 1], so a spread can never exceed 1, and the floor of the margin at
-balanced weights was `0.35 * 0.04 + 0.15 * 0.01`, which is 0.0155. That plot actually returns
-0.0553. The adaptive margin is WIDER than the constant it replaced everywhere these eight sites
-reach, and its case is not tightness: it is that one constant was wrong at both ends at once.
-
-The figure ships on `ScenarioSet.scoreResolution`. Note for anyone revisiting: the synthetic
-weather fixture's season diffuse fraction never leaves 0.68-0.79 where real skies run 0.24-0.45,
-and both discarded constants came from calibrating on it. Do not calibrate this on that fixture
-again.
+Until 2026-09-17 the search baked at a coarser preview quality and carried a per-run margin,
+measured from how far the preview's light terms moved against the full bake, listing every
+scenario inside it as too close to call: on a 10 x 7 m plot that declared three of the five
+layouts tied with the pick. The search now runs the full bake, the only quality the app has, so
+there is nothing finer to measure a margin against, and the margin, its two constants and its
+measurement harness are gone. The full bake's own discretisation (577 patches, 2 degree sun bins,
+0.12 m cells) is the same everywhere the app reads light, so a gap the search reports is the gap
+the editor shows.
 
 ### 10d. An applied plan shares the bed, and the block that stops it carries its own press
 

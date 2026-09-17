@@ -21,7 +21,6 @@ import {
   candidatesFor,
   type DesignDependencies,
   groundLightPlan,
-  scoreResolution,
   shadeBudgetFor,
   suggestDesigns,
 } from './design'
@@ -325,11 +324,6 @@ describe('a full five-scenario run', () => {
     expect(elapsedMs).toBeLessThan(60_000)
   })
 
-  it('never presents a preview number as a final one', () => {
-    expect(result.evaluatedAt).toBe('preview')
-    expect(result.notConsidered.join(' ')).toContain('preview-quality')
-  })
-
   it('says how far the search went rather than truncating it silently', () => {
     expect(result.notConsidered.join(' ')).toContain('Exactly 5 geometries were evaluated')
     expect(result.notConsidered.join(' ')).toContain('almost nothing was swept around them')
@@ -551,46 +545,6 @@ describe('the archetype names have to match the figures beside them', () => {
       expect(candidate).toBeDefined()
       expect(projectedCoverage(candidate as ArrayCandidate)).toBeLessThanOrEqual(budget + 1e-9)
     }
-  })
-
-  /**
-   * The ordering is total and deterministic, and it was never the problem. The problem is that
-   * a gap can be narrower than what the preview bake moves a score by, and the wizard used to
-   * present that as a recommendation with nothing said about it. See `SCORE_RESOLUTION`
-   */
-  it('names every design that scored within the resolution of the numbers behind it', async () => {
-    const set = await suggestDesigns(answersFor(), deps)
-    const top = set.scenarios[0] as DesignScenario
-    expect(set.scoreResolution).toBeGreaterThan(0)
-    const inside = set.scenarios
-      .slice(1)
-      .filter((entry) => top.score - entry.score < set.scoreResolution)
-      .map((entry) => entry.candidate.archetype)
-    expect(set.tooCloseToCall).toEqual(inside)
-    expect(set.tooCloseToCall).not.toContain(set.recommendedArchetype)
-    for (const archetype of set.tooCloseToCall) {
-      const found = set.scenarios.find((entry) => entry.candidate.archetype === archetype)
-      expect(top.score - (found as DesignScenario).score).toBeLessThan(set.scoreResolution)
-    }
-  }, 600_000)
-
-  /**
-   * The margin has to widen exactly where the candidates crowd together, because the score
-   * divides each term by its own spread and a collapsed spread magnifies the bake's own error.
-   * Checked against the eight paired real-weather runs in `scoreResolution`
-   */
-  it('widens the margin as the candidates crowd together, and caps it at the weight', () => {
-    const weights = { food: 0.35, energy: 0.35, water: 0.15, simplicity: 0.15 }
-    // the candidate spreads those two runs actually produced, off the re-measurement
-    const wide = scoreResolution(0.3087, 0.2736, weights)
-    const tight = scoreResolution(0.0975, 0.0734, weights)
-    expect(tight).toBeGreaterThan(wide)
-    // Amherst 16 x 11 m moved 0.0001 and Bergen's courtyard moved 0.1543; both are covered
-    expect(wide).toBeGreaterThan(0.0001)
-    expect(tight).toBeGreaterThan(0.1543)
-    // a term whose spread has collapsed contributes its weight and never more
-    const collapsed = scoreResolution(0, 0, weights)
-    expect(collapsed).toBeCloseTo(weights.food + weights.water, 9)
   })
 
   it('does not move the winner when the bake gets finer', async () => {

@@ -248,10 +248,10 @@ interface Group {
 /**
  * Consecutive lines of the same tone, as one group.
  *
- * It exists for the caveats. The design search reports six of them and every word is worth
- * keeping -- what it did not sweep, that the numbers are preview-quality, that slope and
- * buildings were not modelled -- but six full-width paragraphs each carrying its own warning rule
- * is a wall, and a wall is read exactly as carefully as no caveat at all.
+ * It exists for the caveats. The design search reports five of them and every word is worth
+ * keeping (what it did not sweep, that slope and buildings were not modelled) but five
+ * full-width paragraphs each carrying its own warning rule is a wall, and a wall is read exactly
+ * as carefully as no caveat at all.
  *
  * Grouped and NOT folded. `Cited` values in this app carry a caveat and the doctrine is that the
  * only thing ever hidden is detail and a caveat is never detail, so putting these behind a
