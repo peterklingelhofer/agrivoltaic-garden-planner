@@ -52,7 +52,7 @@ export const MA_GROWING_SEASON_HOURS: TimeWindowSpec = {
 const MA_GROWING_SEASON_MONTHS = [2, 3, 4, 5, 6, 7, 8, 9] as const
 
 const MA_GSH_DISCLAIMER =
-  'Measured over Growing Season Hours as defined in 225 CMR 28.02, accumulated at a 15-minute timestep on the local clock, daylight saving included where the site timezone is known. What remains approximate: DOER mandates its own Shading Analysis Tool, so this figure has no standing whatever its accuracy; every parameter is waivable under 225 CMR 28.07(5)(b)3.b.iv; the regulation does not say whether the 50% test is cumulative over the window or worst-instantaneous, and the worst cell of the cumulative window is reported here; the clock-versus-solar-time reading of "9 AM" is unresolved in the text, and daylight saving is in force across the whole window'
+  "Measured over the rule's Growing Season Hours, every 15 minutes on the local clock, with daylight saving where the site's time zone is known. The figure is for the darkest point, with its light totaled over the whole window. The rule doesn't say whether \"9 AM\" means clock time or solar time, and daylight saving is in force for all of those hours"
 
 const MA_MONTH_FALLBACK_DISCLAIMER =
   "Measured over March-October with no hour-of-day restriction, because this light map was computed without the Growing Season Hours window. The rule's hours are April-September 09:00-18:00 and March/October 10:00-17:00, so this over-counts early and late daylight. Compute the light again to measure over the rule's hours"
@@ -361,7 +361,7 @@ const estimateRegime = (input: ComplianceInput, regime: ComplianceRegimeId): Com
       {
         source: 'crop-response',
         halfWidthFraction: 0.45 as Fraction,
-        note: 'Laub et al. 2022 95% confidence intervals dominate; light transmission is only a proxy for yield',
+        note: 'Laub et al. 2022 95% confidence intervals dominate, light transmission is only a proxy for yield',
       },
       {
         source: 'seasonal-par',

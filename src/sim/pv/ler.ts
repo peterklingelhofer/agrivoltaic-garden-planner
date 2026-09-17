@@ -49,7 +49,7 @@ const gcrHalfWidth = (): number => {
 export const REFERENCE_DEFINITION_CONTRIBUTION: UncertaintyContribution = {
   source: 'optical-geometry',
   halfWidthFraction: gcrHalfWidth() as Fraction,
-  note: `The reference is defined at ground cover ratio ${String(REFERENCE_GROUND_COVER_RATIO)}; sole-use plants are built between ${String(REFERENCE_GCR_BOUNDS[0])} and ${String(REFERENCE_GCR_BOUNDS[1])} and the electricity part of the ratio scales inversely with that choice`,
+  note: `The reference is defined at ground cover ratio ${String(REFERENCE_GROUND_COVER_RATIO)}. Sole-use solar plants are built between ${String(REFERENCE_GCR_BOUNDS[0])} and ${String(REFERENCE_GCR_BOUNDS[1])}, and the electricity part of the ratio scales inversely with that choice`,
 }
 
 export const ROW_SHADING_CONTRIBUTION: UncertaintyContribution = {

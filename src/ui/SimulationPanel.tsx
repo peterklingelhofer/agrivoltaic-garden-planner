@@ -136,7 +136,7 @@ const thirstLine = (year: YearSummary, subject: string): string =>
 
 const describeYear = (year: YearSummary, typical: YearSummary | null): string => {
   const usual = year.year === null ? null : typical
-  const rain = `${formatRainMm(year.rainfallMm)} of rain${year.rainMeasured ? '' : " (the typical-year figure; this source didn't measure rainfall)"}`
+  const rain = `${formatRainMm(year.rainfallMm)} of rain${year.rainMeasured ? '' : " (the typical-year figure, this source didn't measure rainfall)"}`
   const water = `Reference evapotranspiration ${formatRainMm(year.referenceEtMm)}: the season's water demand, defined for a short grass crop.${year.waterLimited ? ' The beds ran short of water.' : ''}`
   /*
     Which record these dates came from, because they differ from the ones on the site step and could
@@ -284,7 +284,7 @@ const Outcome = ({
           ? ''
           : ` That range is the ${bandBasisLabel(outcome.band)}. Most of its uncertainty comes from ${attributionLabel(outcome.band.dominantSource)}.`}
         {outcome.kind === 'harvested'
-          ? ' The pest and water-shortage figures are estimates this app makes; no published figure exists.'
+          ? " The pest and water-shortage figures are this app's own estimates, since no published figure exists."
           : ''}
       </p>
     </details>

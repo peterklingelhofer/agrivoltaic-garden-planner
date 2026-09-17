@@ -566,7 +566,7 @@ const tiltedCandidate = (
         ? `Panels are fixed at ${finalTiltDeg.toFixed(0)} degrees, the angle between ${String(REFERENCE_MIN_TILT_DEG)} and ${String(REFERENCE_MAX_TILT_DEG)} that puts the least panel over this plot as seen from overhead: a steeper row covers less ground, a flatter row sits further from the next so fewer rows fit, and this is where the two come out lowest for a plot this size. The light figure beside this design is measured from that arrangement`
         : measured !== null
           ? `Panels are fixed at ${finalTiltDeg.toFixed(0)} degrees, which is the tilt that generated the most over a year of this site's own weather. It was measured a degree at a time from ${String(REFERENCE_MIN_TILT_DEG)} to ${String(REFERENCE_MAX_TILT_DEG)} degrees, because this is the design that is meant to generate the most and a rule of thumb that puts it below the balanced one would make the name wrong`
-          : `Panels are fixed at ${finalTiltDeg.toFixed(0)} degrees, which is ${TILT_LATITUDE_FACTOR[archetype].toFixed(2)} of the site latitude of ${latitude.toFixed(0)} degrees, a published rule of thumb anchored on the energy optimum near 0.85 of latitude. Nothing on this plot was measured to arrive at it. Tilting steeper from here shrinks each row's footprint on the ground and brings the rows closer together; how much light that leaves the beds is the measured figure beside this design`,
+          : `Panels are fixed at ${finalTiltDeg.toFixed(0)} degrees, which is ${TILT_LATITUDE_FACTOR[archetype].toFixed(2)} of the site latitude of ${latitude.toFixed(0)} degrees, a published rule of thumb anchored on the energy optimum near 0.85 of latitude. Nothing on this plot was measured to arrive at it. Tilting steeper from here shrinks each row's footprint on the ground and brings the rows closer together, how much light that leaves the beds is the measured figure beside this design`,
     `Rows sit ${pitchM.toFixed(1)} m apart, which puts about ${(projected * 100).toFixed(0)} percent of the ground under panel as seen from overhead. That's the footprint the shade budget for this planting allows. The light the plot loses is a separate figure, measured over the whole year and reported with this design. It comes out lower than the footprint where light reaches in from the sides, and higher where ${geometry.rowCount === 1 ? 'the rows are close enough for their shadows to sweep most of the ground' : `all ${String(geometry.rowCount)} rows put a moving shadow over most of the plot`}`,
     `Headroom under the lowest panel edge is ${plan.clearanceM.toFixed(2)} m`,
     ...compromises,
@@ -620,7 +620,7 @@ const verticalCandidate = (answers: OnboardingAnswers): ArrayCandidate => {
     groundCoverRatio: fraction(collectorWidthM / pitchM),
     rationale: [
       'Panels stand upright in north-south walls, catching the morning sun on one face and the evening sun on the other',
-      `The shadow is a narrow band that sweeps across the ground, and at solar noon there is almost none of it. Rows are ${pitchM.toFixed(1)} m apart; the literature puts crops at 8 m spacing above 75 percent of open-field light`,
+      `The shadow is a narrow band that sweeps across the ground, and at solar noon there is almost none of it. Rows are ${pitchM.toFixed(1)} m apart, the literature puts crops at 8 m spacing above 75 percent of open-field light`,
       `The bottom edge sits ${plan.clearanceM.toFixed(2)} m off the ground, at or above the 1 m the published work asks for even ground brightness`,
       ...compromises,
     ].join('. '),
@@ -1142,7 +1142,7 @@ export const roughKwh = (value: number): string => {
 const tradeoffOf = (evaluated: Evaluated, catalog: readonly Crop[]): string => {
   const { candidate, light, production } = evaluated
   if (candidate.archetype === 'no-array-control') {
-    return 'No electricity at all, and no shelter from heat or heavy rain. Every other design on this list trades some daylight for power; this one trades none'
+    return 'No electricity at all, and no shelter from heat or heavy rain. Every other design on this list trades some daylight for power, this one trades none'
   }
   const given = (100 * light.meanShadeRatio).toFixed(0)
   const kwh = roughKwh(production.annualAcKwh)

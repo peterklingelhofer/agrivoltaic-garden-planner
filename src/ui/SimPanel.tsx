@@ -45,7 +45,7 @@ const SUN_DIRECTION_HELP =
  * the numbers mean anything. The fuller gloss stays on the overlay's channel tip
  */
 const DLI_SENTENCE =
-  'DLI counts the light that lands on a square meter in one day; a woodland floor is about 5, an open field in midsummer about 40.'
+  'Daily light integral (DLI) counts the light that lands on a square meter in one day. A woodland floor gets about 5, an open field in midsummer about 40.'
 
 export const SimPanel = (): ReactElement => {
   const raster = useAppStore((s) => s.raster)

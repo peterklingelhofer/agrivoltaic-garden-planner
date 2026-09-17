@@ -235,8 +235,8 @@ export const SitePanel = (): ReactElement => {
           only inside a bed would leave the place step saying nothing about it */}
       {resolved?.soil.sourceId === 'default' ? (
         <p className="notice notice-idle" data-testid="status-site-soil">
-          The soil map has no reading for this spot or within 6 km of it; it leaves out built-up
-          ground and water. Every bed assumes pH 6.5 loam until you type your own soil.
+          The soil map has no reading for this spot or within 6 km of it. The map leaves out
+          built-up ground and water. Every bed assumes pH 6.5 loam until you type your own soil.
         </p>
       ) : null}
       {/* a reading from a few kilometers out is the area's soil: said, with the distance */}
@@ -291,7 +291,7 @@ export const SitePanel = (): ReactElement => {
           Look up these coordinates
         </Action>
         <p className="panel-sub" data-testid="readout-site-resolve-help">
-          Only needed for coordinates typed in by hand; choosing a search result looks the place up
+          Only needed for coordinates typed in by hand. Choosing a search result looks the place up
           on its own.
         </p>
         <SelectField

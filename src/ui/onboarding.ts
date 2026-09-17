@@ -48,23 +48,23 @@ export interface StepCopy {
 export const STEP_COPY: Readonly<Record<OnboardingStep, StepCopy>> = {
   location: {
     title: 'Where is the space?',
-    help: 'The place decides how much sun reaches it and how long things can grow. Search for a town or address here. Exact coordinates can be set later, in the Site panel of the editor.',
+    help: 'The site location informs how much sun reaches it and how long things can grow. Search for a town or address here. Exact coordinates can be set later, in the Site panel of the editor.',
   },
   space: {
     title: 'How big is it?',
-    help: 'A rough rectangle is enough. Pace it out or measure the widest and the deepest points, in whichever unit you have to hand.',
+    help: 'A rough rectangle is enough. Pace it out or measure the widest and the deepest points.',
   },
   surroundings: {
     title: 'What is already around it?',
-    help: 'Buildings, fences and trees shade a space before any panel does, so this says how much sun the ground starts with.',
+    help: 'Buildings, fences and trees shade a space before any panel does, so this impacts how much sun the ground starts with.',
   },
   growing: {
     title: 'What would you like to grow?',
-    help: 'Some crops do well in shade and others do badly, so this sets how much shade the layout may cast.',
+    help: 'Some crops do well in shade and others perform poorly, so this sets how much shade the layout may cast.',
   },
   objective: {
     title: 'What do you want most from it?',
-    help: 'This decides how much of the sunlight goes to the plants and how much goes to the panels. It comes after the growing question because what you want to grow makes this one answerable.',
+    help: 'This decides the balance of how much of the sunlight goes to the plants and how much goes to the panels. It comes after the growing question because what you want to grow makes this one answerable.',
   },
   mounting: {
     title: 'How should the panels sit?',
@@ -76,23 +76,23 @@ export const STEP_COPY: Readonly<Record<OnboardingStep, StepCopy>> = {
   },
   water: {
     title: 'Can you water it in a dry spell?',
-    help: 'Shade keeps the ground damper for longer, so whether you can water changes which layout suits you.',
+    help: 'Shade keeps the ground damper for longer, so whether you can water changes which layout suits your situation.',
   },
   natives: {
-    title: 'Favor plants that grow wild near you?',
-    help: 'A plant that grows wild where you live feeds the local insects. Saying yes moves those plants up the list and takes nothing off it.',
+    title: 'Favor plants that grow wild near you (native plants)?',
+    help: 'A plant that grows wild where you live feeds the local insects. Saying yes moves those plants up the list in priority.',
   },
   pollinators: {
     title: 'Favor plants that feed bees and other pollinators?',
-    help: 'Saying yes moves plants whose flowers feed bees, hoverflies and other pollinators up the list. Every crop also says whether its own harvest needs an insect visit.',
+    help: 'Saying yes moves plants whose flowers feed bees, hoverflies and other pollinators up the list in priority. Every crop also indicates whether its own harvest needs an insect visit.',
   },
   results: {
     title: 'Layouts to compare',
-    help: 'A few layouts side by side, including the space with no panels at all so you can see what the panels cost you.',
+    help: 'A few layouts side by side, including the space with no panels at all so you can see the impacts of having panels on site.',
   },
   planting: {
     title: 'What would you like in the beds?',
-    help: "Each of these plants every bed at once. Each is a mix your beds can carry in the light they now get. Pick what you'd most like to eat, and change any of it later.",
+    help: "Each of these fills every bed at once. Each is a mix your beds can carry in the light they now get. Pick what you'd most like to eat or plant (this can be changed later).",
   },
 }
 
@@ -102,7 +102,7 @@ export const STEP_COPY: Readonly<Record<OnboardingStep, StepCopy>> = {
  * naming here is where the combinations came from rather than what they were scored against
  */
 export const PLANTING_SOURCE_NOTE =
-  'These are the combinations the setup computed for your beds, in the order it ranked them. One of them is in each bed already, and picking any of these replaces what is in the beds'
+  'These are the combinations the setup computed for your beds, ranked best first'
 
 /* ---------------------------------- the answers -------------------------------- */
 
@@ -132,23 +132,23 @@ const shadePercent = (exposure: SiteExposure): string =>
  * dims the light every bed is judged by, from the one table the layout search spends its shade
  * budget from
  */
-export const EXPOSURE_HELP = `Buildings, fences and trees shade a space before any panel does. Shaded for part of the day takes about ${shadePercent('partly-sheltered')}% off the light every bed is judged by; in shade most of the day takes ${shadePercent('overshadowed')}%`
+export const EXPOSURE_HELP = `Buildings, fences and trees shade a space before any panel does. Shaded for part of the day takes about ${shadePercent('partly-sheltered')}% off the light every bed gets, in shade most of the day takes ${shadePercent('overshadowed')}%`
 
 export const EXPOSURE_OPTIONS: readonly ChoiceOption<SiteExposure>[] = [
   {
     value: 'open',
     label: 'Open sky all day',
-    help: 'Nothing tall close by: sun on it from morning to evening',
+    help: 'Nothing tall is close by: full sun from morning to evening',
   },
   {
     value: 'partly-sheltered',
     label: 'Shaded for part of the day',
-    help: 'A house, a fence or trees shade it for the morning or the evening',
+    help: 'A house, a fence, or trees shade it for the morning or the evening',
   },
   {
     value: 'overshadowed',
-    label: 'In shade most of the day',
-    help: 'Something tall stands over it for most of the day',
+    label: 'Shaded most of the day',
+    help: 'Tall structures or trees block sun for most of the day',
   },
 ]
 
@@ -156,7 +156,7 @@ export const MOUNTING_OPTIONS: readonly ChoiceOption<MountingPreference>[] = [
   {
     value: 'any',
     label: 'No preference, suggest something',
-    help: 'Every arrangement is offered and you pick from what comes back',
+    help: 'Display every possible arrangement to select from',
   },
   {
     value: 'overhead-canopy',
@@ -244,7 +244,7 @@ export const QUALITY_HELP: Readonly<Record<EvaluationQuality, string>> = {
 
 /** How much of today's light is left on the ground, which is the comparison that matters */
 export const lightLeftSentence = (meanShadeRatio: Fraction): string =>
-  `Leaves roughly ${String(Math.round((1 - meanShadeRatio) * 100))}% of the light this space gets today on the ground`
+  `Lets roughly ${String(Math.round((1 - meanShadeRatio) * 100))}% of the light this plot gets hit the ground`
 
 /**
  * The crops lost are measured against the open sky, which is baked first, so the number is
@@ -253,7 +253,7 @@ export const lightLeftSentence = (meanShadeRatio: Fraction): string =>
  */
 export const cropSentence = (available: number, lost: number, baseline: boolean): string =>
   baseline
-    ? `${String(available)} ${available === 1 ? 'crop' : 'crops'} in the catalog suit this space as it stands today, with nothing over it. Every other option is counted against this one`
+    ? `${String(available)} ${available === 1 ? 'crop' : 'crops'} in the catalog suit this space as it stands today, with nothing over it. This is the base option that every other option, which has more shade, is compared against.`
     : `${String(available)} ${available === 1 ? 'crop' : 'crops'} in the catalog would still suit this space, and ${String(lost)} that grow here with no panels would drop out`
 
 /** A daylight point, and a twentieth of the electricity: past the quick bake's own noise */
@@ -297,10 +297,10 @@ export const beatenSentence = (
   const names = beaten.map((entry) => entry.candidate.label)
   const verb = beaten.length === 1 ? 'keeps' : 'keep'
   const make = beaten.length === 1 ? 'makes' : 'make'
-  const lead = `${names.join(' and ')} ${verb} as much daylight and ${make} as much electricity as this layout on this plot, or more. The names say what each design tries for; the figures say what it got here`
+  const lead = `${names.join(' and ')} ${verb} as much daylight and ${make} as much electricity as this layout on this plot, or more`
   if (!suggested) return lead
   return ties.includes(first.candidate.archetype)
-    ? `${lead}. The two tie in the score, and the tie went to the layout named for what you asked for`
+    ? `${lead}. The scores were too close to call, so the layout named for what you asked for won`
     : `${lead}. This one is suggested because the score also counts shade, which keeps the ground damp, and a simpler build`
 }
 
@@ -313,7 +313,7 @@ export const beatenSentence = (
 export const PORTFOLIO_LABEL = 'Portfolio ratio, whole basket plus electricity'
 
 export const PORTFOLIO_NOTE =
-  "The portfolio ratio adds up every crop in the basket and the electricity, each against the land it would need on its own. A figure of 4 doesn't mean four times the food: it means the basket and the panels together would otherwise need about four times this much land"
+  "The portfolio ratio adds up every crop in the basket and the electricity, and compares the total with the land required to support it. A figure of 4 doesn't mean four times the food: it means the basket and the panels together would otherwise need about four times this much land"
 
 /**
  * Nothing here reaches high confidence, because every option rests on provisional crop
@@ -330,21 +330,24 @@ export const CONFIDENCE_CEILING =
  * from the Massachusetts SMART dual-use program, and it appeared on the card being chosen
  * between with no owner and no gloss: a first-time grower can't tell whether that is a law, a
  * grant scheme or this tool's own opinion, and a grower outside Massachusetts was being measured
- * against a Massachusetts yardstick without being told. The exact phrase is kept, because it's
- * the term that would be looked up or quoted; what is added is whose rules they are and, in plain
- * words, what kind of rules they are
+ * against a Massachusetts yardstick without being told. The term of art itself came out on
+ * 2026-09-17 (the author's rewrite): what stays is whose rules they are and, in plain words, what
+ * kind of rules they are. `CompliancePanel` and `format.ts` still carry the program's own words
+ * for anyone who needs to quote them
  */
 export const clearanceNote = (flags: ScenarioFlags): string =>
   flags.meetsExpeditedClearance
-    ? 'Height and spacing meet the Massachusetts fast-track rules for growing under panels, its expedited design parameters'
-    : 'Height or spacing would need an exception request under the Massachusetts fast-track rules for growing under panels, its expedited design parameters'
+    ? 'Panel height meets the Massachusetts fast-track rules for growing under panels'
+    : 'Panel height would need an exception request under the Massachusetts fast-track rules for growing under panels'
 
 // the second half of a pair, so it names the regime by reference rather than repeating fifteen
-// words of it directly under the line that has just said them
+// words of it directly under the line that has just said them. The miss spells out what an
+// exception request is, in the words that made it make sense to the author, who had read the bare
+// term and couldn't tell what it meant
 export const groundLightNote = (flags: ScenarioFlags): string =>
   flags.fiftyPercentEverywhere
-    ? 'Ground light meets those same fast-track rules everywhere in the plot'
-    : 'Ground light would need an exception request somewhere in the plot'
+    ? 'Ground light meets the same fast-track rules everywhere in the plot'
+    : 'Part of the plot gets less than half its daylight. Under the same fast-track rules, a layout that misses one limit (height, spacing, or half the sunlight on every part of the ground) can still qualify through an exception request.'
 
 const percent = (ratio: number): string => `${String(Math.round(ratio * 100))}%`
 
@@ -368,11 +371,11 @@ export const shadeBudgetNote = (flags: ScenarioFlags): string => {
  * "Estimated from the geometry alone and not a determination: only the program itself
  * determines anything" is exact and was opaque twice over: "the geometry" is the shapes and the
  * sun, and "the program" reads as this software rather than as the scheme whose rules are being
- * quoted. "Not a determination" survives verbatim, because that is the phrase that matters if it's
- * ever quoted back
+ * quoted. The determination clause came out on 2026-09-17 (the author's rewrite); the sentence
+ * that still says it, once, for the whole app is `SCOPE_STATEMENT` below, and
+ * `compliance-language.test.ts` reads it there
  */
-export const NOT_A_DETERMINATION =
-  'An estimate from the shapes and the sun alone. Only the program that runs those rules can make a determination'
+export const NOT_A_DETERMINATION = 'An estimate from the shapes and the sun alone'
 
 /**
  * The one caveat that covers the whole app rather than a single claim in it. Everything else in
@@ -384,4 +387,4 @@ export const NOT_A_DETERMINATION =
 export const SCOPE_HEADLINE = 'Everything here is a planning estimate'
 
 export const SCOPE_STATEMENT =
-  'Every figure here comes out of a model of sun, shade and crop demand, run over the shapes you drew. No professional has stood in your garden, and no real garden has been built from one of these layouts and measured. Nothing on any panel is a determination of what a regulation permits, the compliance checks included: only the authority itself can make that call. Before you spend money on any of this, take the plan to your local extension service, agriculture department or a qualified professional, and let them look at the site itself.'
+  'Every figure here comes out of a model of sun, shade and crop demand, run over the shapes you drew. Nothing on any panel is a determination of what a regulation permits, the compliance checks included. Before you spend money on any of this, take the plan to your local extension service, agriculture department or a qualified professional, and let them look at the site itself.'

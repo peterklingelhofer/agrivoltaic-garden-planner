@@ -98,7 +98,6 @@ export const ColdOpen = (): ReactElement | null => {
     >
       <p className="cold-open-title">{reading.title}</p>
       <p className="cold-open-body">{reading.body}</p>
-      <p className="cold-open-caveat">{reading.caveat}</p>
     </aside>
   )
 }
