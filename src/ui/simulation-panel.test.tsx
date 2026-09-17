@@ -173,7 +173,7 @@ describe('simulation panel', () => {
     })
     const soaked = await mount(<SimulationPanel />)
     expect(soaked.get('control-seasons-year').textContent).toMatch(
-      /Even this year wasn't dry enough for shade to raise yield\. Rain left about \d+% of the season's water demand unmet. Shade raises yield only past 35%/,
+      /Even this year wasn't dry enough for shade to raise yield\. Rain left about \d+% of the season's water demand unmet\. Shade raises yield only past 35%/,
     )
     await soaked.click('control-seasons-run')
     expect(soaked.get('readout-seasons-year').textContent).toMatch(

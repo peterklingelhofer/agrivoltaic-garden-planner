@@ -135,7 +135,7 @@ const TermRow = ({
       <span className={term.scores ? 'term-scored' : 'term-unscored'}>
         {term.scores
           ? `scored, moves this pair by ${term.contribution >= 0 ? '+' : ''}${term.contribution.toFixed(2)}`
-          : 'shown for information; it has no effect on the score'}
+          : 'shown for information, it has no effect on the score'}
       </span>
     </span>
     <span>{term.explanation}</span>
@@ -385,9 +385,10 @@ const SuggestionCard = ({
             {lerWords(ler)}
           </span>
           <span className="readout-note" data-testid={`readout-polyculture-ler-basis-${index}`}>
-            Land equivalent ratio {lerWords(ler)}: a solar farm and a garden side by side would need {lerWords(ler)} times this
-            bed's land to give what this bed gives under its panels. Above 1, the two share the ground
-            well. The range is the {bandBasisLabel(ler)}, for crops and electricity together
+            Land equivalent ratio {lerWords(ler)}: a solar farm and a garden side by side would need{' '}
+            {lerWords(ler)} times this bed's land to give what this bed gives under its panels.
+            Above 1, the two share the ground well. The range is the {bandBasisLabel(ler)}, for
+            crops and electricity together
           </span>
         </div>
         <ul className="list" data-testid={`list-polyculture-confidence-${index}`}>

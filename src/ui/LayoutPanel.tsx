@@ -95,7 +95,7 @@ export const LayoutPanel = (): ReactElement => {
       id="layout"
       title="Where should the panels go?"
       titleVisible={false}
-      subtitle="Try a few panel layouts on this plot, against a year of local weather, and see what each one costs the beds in light"
+      subtitle="Try a few panel layouts on this plot, and see what each one costs the beds in light"
     >
       {/* filled until there are layouts to look at, plain once there are: the card's own apply
           press is the primary then, and a filled search above five cards would read as the

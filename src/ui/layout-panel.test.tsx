@@ -151,7 +151,7 @@ describe('the comparison', () => {
     expect(note.getAttribute('data-tied')).toBe('food-first,energy-first')
     // named to the grower in the words on their own cards, not as archetype keys
     expect(note.textContent).toMatch(
-      /; A layout: food-first and A layout: energy-first tie with the suggested one$/,
+      /, A layout: food-first and A layout: energy-first tie with the suggested one$/,
     )
     // and the suggestion still stands: the grower is handed a choice, not an empty comparison
     expect(tied.find('badge-onboarding-recommended-balanced')).not.toBeNull()
@@ -191,7 +191,9 @@ describe('the comparison', () => {
     ]) {
       expect(harness.get(testId).closest('details'), testId).toBe(disclosure)
     }
-    expect(harness.get('list-onboarding-flags-balanced').textContent).toMatch(/determination/i)
+    expect(harness.get('list-onboarding-flags-balanced').textContent).toMatch(
+      /an estimate from the shapes and the sun alone/i,
+    )
 
     // the foot is a direct child of the card, after the fold, and holds both presses
     const actions = card.querySelector('.scenario-actions')

@@ -50,7 +50,7 @@ const withRows = (help: string | undefined, rows: number | null): string | undef
  * four shares appear together, sliders and readouts, only when the fold is opened
  */
 const OBJECTIVE_HELP =
-  'Mostly food gives the plants more of the sunlight; mostly electricity gives the panels more.'
+  'Mostly food gives the plants more of the sunlight, mostly electricity gives the panels more.'
 
 export const GrowingStep = (): ReactElement => {
   const ambition = useAppStore((s) => s.answers.ambition)

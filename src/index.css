@@ -668,13 +668,6 @@ body {
   background: var(--panel);
 }
 
-.cold-open-caveat {
-  margin: 0;
-  font-size: 11px;
-  color: var(--muted);
-  background: var(--panel);
-}
-
 .sidebar {
   border-left: 1px solid var(--border);
   overflow-y: auto;

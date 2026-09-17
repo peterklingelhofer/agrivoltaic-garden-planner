@@ -206,7 +206,7 @@ export const PERCENTILE_OPTIONS: readonly (readonly [string, string])[] = [
 ]
 
 export const PERCENTILE_HELP =
-  'The planting dates come from thirty years of records. Playing it safe waits longer in spring and stops earlier in autumn, so the season is shorter but a late freeze rarely catches the beds; taking a chance stretches the season and loses a crop to frost more often. Where the record holds no frost at a setting, the dates come from soil temperature instead.'
+  'The planting dates come from thirty years of records. Playing it safe waits longer in spring and stops earlier in autumn, so the season is shorter but a late freeze rarely catches the beds. Taking a chance stretches the season and loses a crop to frost more often. Where the record holds no frost at a setting, the dates come from soil temperature instead.'
 
 /**
  * The place-step sentence where the record holds no frost at this percentile, shared with the

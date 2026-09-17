@@ -30,7 +30,7 @@ export const SURROUNDINGS_SHADE: Readonly<Record<SiteExposure, Fraction>> = {
 export const SURROUNDINGS_CLAIM = unsourcedClaim(
   SURROUNDINGS_SHADE,
   'The share of open-sky light taken by what already surrounds a space (0 for open sky, 0.3 for a space shaded part of the day, 0.6 for one in shade most of the day) is a design choice of this app: the question offers three answers and no source tabulates a light share for any of them',
-  'It dims every bed’s light before the crop ranking reads it and shrinks the shade budget the layout search spends on panels; the light map on the ground shows the panels’ shade alone',
+  'It dims every bed’s light before the crop ranking reads it and shrinks the shade budget the layout search spends on panels, the light map on the ground shows the panels’ shade alone',
 )
 
 const scaled = (values: ByMonth<MolPerM2Day>, keep: number): ByMonth<MolPerM2Day> =>

@@ -63,7 +63,7 @@ export const soilWaterStage = (crop: Crop, bed: Bed, site: Site): SoilWaterOutco
         stage: 'soil-water',
         cause: { kind: 'soil-ph' },
         membership: phFit,
-        explanation: `This crop needs soil between pH ${crop.envelope.soilPh.absoluteMin.toFixed(1)} and ${crop.envelope.soilPh.absoluteMax.toFixed(1)}; this bed measures ${bed.soil.phUnits.toFixed(1)}`,
+        explanation: `This crop needs soil between pH ${crop.envelope.soilPh.absoluteMin.toFixed(1)} and ${crop.envelope.soilPh.absoluteMax.toFixed(1)}. This bed measures ${bed.soil.phUnits.toFixed(1)}`,
       },
     }
   }

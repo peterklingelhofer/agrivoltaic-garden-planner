@@ -206,7 +206,7 @@ export const wetSeasonNote = (monthlyPrecipMm: readonly number[]): string | null
   const wetTotal = sum(wetMonths.map((month) => at(monthlyPrecipMm, month)))
   if (wetTotal < WET_SEASON_SHARE * total) return null
   const rains = monthRuns(wetMonths).map(runLabel).join(' and ')
-  return `The rains here fall mostly in ${rains}; this calendar doesn't model them, so sow with the rains as local practice says`
+  return `The rains here fall mostly in ${rains}. This calendar doesn't model them, so sow with the rains as local practice says`
 }
 
 const withWetSeason = (site: Site, first: string): string[] => {

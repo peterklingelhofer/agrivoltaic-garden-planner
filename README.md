@@ -27,22 +27,22 @@ are published and the internal engineering notes aren't.
 
 ## Running it
 
-Requires bun 1.2+ and Node 20+. Bun is enforced; npm, yarn and pnpm are refused by a preinstall
-check. Node is still needed for the `scripts/*.mjs` tools; the unit suite runs under bun.
+Requires bun 1.2+ and Node 20+. Bun is enforced: npm, yarn and pnpm are refused by a preinstall
+check. Node runs the `scripts/*.mjs` tools, and bun runs the unit suite.
 
 ```sh
 bun install
 bun run dev          # app on :5173, without the conversational panel
 ```
 
-The chat panel is off in `bun run dev` and in a deployed build. `VITE_AGENT=on bun run dev` turns
-it on; `src/agent/flag.ts` has the rule and the reason.
+The chat panel is off in `bun run dev` and in a deployed build. `VITE_AGENT=on bun run dev` turns it
+on. `src/agent/flag.ts` has the rule and the reason it's off.
 
 Under plain `bun run dev` the dev server proxies weather (Open-Meteo), elevation (Open-Elevation)
-and place-name lookups (Nominatim, Photon) straight to their upstreams, so a site resolves with
-nothing else running; `dev-proxy.ts` holds the table. PVGIS, NSRDB and the EIA retail price route
-through the Cloudflare Worker, and with no worker listening those requests fail and the app uses
-its fallbacks. To exercise them run the worker too:
+and place-name lookups (Nominatim, Photon) straight to their upstreams, so a site resolves with nothing else running.
+`dev-proxy.ts` holds the proxy table. PVGIS, NSRDB and the EIA retail price route through the
+Cloudflare Worker, and with no worker listening those requests fail and the app uses its fallbacks.
+To exercise them run the worker too:
 
 ```sh
 bun run dev:worker   # worker on :8787, proxied from the dev server
@@ -86,14 +86,14 @@ citekey that is not in the corpus is a compile error rather than a broken link.
 
 ## Status
 
-CI runs on every push to `main` and every pull request: typecheck, lint, format, the unit
-suite, the Rust crate checks, the production build, and the functional Playwright project.
-Two tests skip on the runner because it has no real GPU, one each in `e2e/example.spec.ts` and
+CI runs on every push to `main` and every pull request: typecheck, lint, format, the unit suite, the
+Rust crate checks, the production build, and the functional Playwright project. Two tests skip on
+the runner because it has no real GPU, one each in `e2e/example.spec.ts` and
 `e2e/specular-occlusion.spec.ts`.
 
 ## License
 
 The code is under the Apache License 2.0 (`LICENSE`). The documents in `docs/` and the data in
-`data/` and `public/data/` are under CC BY 4.0 (`LICENSE-DOCS`); third-party datasets keep their
-own terms, listed in `public/data/manifest.json`. Third-party code transcribed into the repository
-is credited in `NOTICE`. To cite the project, use `CITATION.cff`.
+`data/` and `public/data/` are under CC BY 4.0 (`LICENSE-DOCS`). Third-party datasets keep their own
+terms, listed in `public/data/manifest.json`. Third-party code transcribed into the repository is
+credited in `NOTICE`. To cite the project, use `CITATION.cff`.
