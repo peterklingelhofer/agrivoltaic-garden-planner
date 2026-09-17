@@ -55,7 +55,7 @@ export const shelterOf = (skyViewFactor: number): FrostShelter =>
 const percent = (value: number): string => `${Math.round(value * 100).toString()}%`
 
 const BASIS =
-  'Oke 1981 establishes the sky view factor as the geometric control on nocturnal longwave loss, for street canyons; Snyder and de Melo-Abreu separate radiative frost, which a cover between the ground and the sky reduces, from advective frost, which it does not. Neither is about panel rows, and neither supports a quantity here: a systematic search for a frost-margin figure under an agrivoltaic array found none in any accessible source. So this states the measured geometry and names the direction'
+  'Oke 1981 establishes the sky view factor as the geometric control on nocturnal longwave loss, for street canyons, Snyder and de Melo-Abreu separate radiative frost, which a cover between the ground and the sky reduces, from advective frost, which it does not. Neither is about panel rows, and neither supports a quantity here: a systematic search for a frost-margin figure under an agrivoltaic array found none in any accessible source. So this states the measured geometry and names the direction'
 
 const CAVEAT =
   'No temperature and no shifted frost date is derived from this. The planting dates on this bed still come from the site frost curve, measured in the open, and the winter chill this app checks fruit and berries against is the site figure too: milder nights under a panel would reduce chill accumulation, and that is not modelled either'

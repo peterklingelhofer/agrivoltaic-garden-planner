@@ -94,7 +94,7 @@ export const untreatedPressure = (crowding: Fraction, ratio: number): Fraction =
 export const PEST_YIELD_LOSS_AT_FULL_PRESSURE = unsourcedClaim(
   0.4 as Fraction,
   'The companion rules measure pest density, and no source in the corpus converts a density into a share of harvest lost. Four tenths of a crop at full pressure is a scale chosen so that a bed hemmed in by its own family still brings something in',
-  'Dose-response varies by pest and by crop; this is one figure for all of them',
+  'Dose-response varies by pest and by crop, this is one figure for all of them',
 )
 
 export const pestYieldLoss = (pressure: Fraction): Fraction =>

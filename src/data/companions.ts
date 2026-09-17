@@ -294,7 +294,7 @@ const RULES: readonly CompanionRule[] = [
       requiresManagement: [
         'Grow a dense near-monoculture stand occupying the whole bed',
         'Hold the stand for a full 60 to 90 day season before the susceptible crop',
-        'Use a cultivar selected for alpha-terthienyl content; some Tagetes cultivars are hosts',
+        'Use a cultivar selected for alpha-terthienyl content, some Tagetes cultivars are hosts',
       ],
       minAreaFraction: 0.9 as Fraction,
       minDurationDays: 60 as Days,
@@ -302,7 +302,7 @@ const RULES: readonly CompanionRule[] = [
     },
     citations: [],
     notes:
-      'Only living root systems are nematicidal; incorporated tissue is not. The competition penalty is total because the bed grows no food crop that season',
+      'Only living root systems are nematicidal, incorporated tissue is not. The competition penalty is total because the bed grows no food crop that season',
   }),
   scoreable({
     id: 'trap-crop-managed',
@@ -365,7 +365,7 @@ const RULES: readonly CompanionRule[] = [
     object: group('any-crop'),
     kind: 'biofumigation',
     mechanism:
-      'Glucosinolates are hydrolysed by myrosinase on cell rupture to isothiocyanates. Simple incorporation converts under 1 %; cell-level disruption raises release efficiency to 14 to 26 %',
+      'Glucosinolates are hydrolysed by myrosinase on cell rupture to isothiocyanates. Simple incorporation converts under 1 %, cell-level disruption raises release efficiency to 14 to 26 %',
     scope: {
       requiresManagement: [
         'Use a high-glucosinolate species, Brassica juncea for preference',

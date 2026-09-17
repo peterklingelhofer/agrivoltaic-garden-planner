@@ -131,7 +131,7 @@ test('a cold visit opens on the place step, and Next at the foot walks the quest
   ).toBeVisible()
   await openFold(page, `details-onboarding-flags-${suggested}`)
   await expect(page.getByTestId(`list-onboarding-flags-${suggested}`)).toContainText(
-    /determination/i,
+    /an estimate from the shapes and the sun alone/i,
   )
 
   // the two answers travelled: the closed rows above the open step record them

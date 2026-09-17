@@ -8,7 +8,7 @@ which have only ever been compared against the app's own earlier decisions.** Wh
 overlap, this file links to `the verification document` rather than repeating it.
 
 Four bands, from most to least externally checked. A number moves between bands only by being
-checked against something new; nothing here is upgraded on the strength of an argument.
+checked against something new, nothing here is upgraded on the strength of an argument.
 
 ## 1. Externally arbitrated: checked against a named physics oracle
 
@@ -17,12 +17,12 @@ in a test file a reader can run.
 
 | Step | Oracle | Test |
 |---|---|---|
-| Solar position | NREL/TP-560-34302 worked example; `pvlib.solarposition.spa_python` | `src/sim/solar.test.ts` (`< 0.001 deg` on every angle); `crates/agv-sim/tests/nrel_spa.rs` |
-| Irradiance decomposition (Erbs, DISC, DIRINT, Engerer2) | Erbs 1982's published polynomial; `pvlib`'s published DIRINT and DISC output | `crates/agv-sim/tests/pvlib_decomposition.rs` |
+| Solar position | NREL/TP-560-34302 worked example, `pvlib.solarposition.spa_python` | `src/sim/solar.test.ts` (`< 0.001 deg` on every angle), `crates/agv-sim/tests/nrel_spa.rs` |
+| Irradiance decomposition (Erbs, DISC, DIRINT, Engerer2) | Erbs 1982's published polynomial, `pvlib`'s published DIRINT and DISC output | `crates/agv-sim/tests/pvlib_decomposition.rs` |
 | Plane-of-array transposition (Perez 1990) | `pvlib.irradiance.perez`, all eight sky-clearness bins | `crates/agv-sim/tests/pvlib_transposition.rs` (`< 0.1 W/m2`) |
 | Ground/module view factor (degenerate infinite-row case) | `pvlib.bifacial.utils.vf_ground_sky_2d` | `src/sim/shading.test.ts` (`vfGroundSky2dOracle`, `0.002` absolute) |
 | PV chain loss stack | PVWatts v5's own documented default combined loss (14.08%) | `src/sim/pv/chain.test.ts` (`combinedLossFraction(PVWATTS_DEFAULT_LOSSES)`) |
-| Module temperature, inverter clipping | Faiman 2008; King et al. 2007 (Sandia inverter model), by formula | `src/sim/pv/*.ts`, cited inline and in `PV_CHAIN_PROVENANCE` |
+| Module temperature, inverter clipping | Faiman 2008, King et al. 2007 (Sandia inverter model), by formula | `crates/agv-sim/tests/geometry_spec.rs` (both thermal models reduce to air temperature in the dark, and the inverter clips at its rating), cited in `PV_CHAIN_PROVENANCE` |
 
 Two things worth stating plainly rather than leaving implicit:
 
@@ -40,13 +40,13 @@ Two things worth stating plainly rather than leaving implicit:
   run to 360 W/m2. The cases are chosen so every one of the eight coefficient rows is exercised,
   and `bins_are_all_covered` fails if a later edit thins them out.
 
-  **Writing that test found a bug, and it is the reason this band is worth filling in rather than
-  arguing about.** Perez 1990 is fitted against the sea-level air mass; DISC and DIRINT want the
-  pressure-corrected one. `the solar geometry document` said in one line that Kasten-Young was
-  "needed by Perez and DIRINT", the chain read both off the same field, and the transposition had
-  been getting the pressure-corrected value since the model was written. Measured against pvlib
-  over a clear-sky year, what that cost, as annual plane-of-array global on a fixed 30-degree
-  south array and on a vertical east-west one:
+**Writing that test found a bug, and it is the reason this band is worth filling in rather than
+arguing about.** Perez 1990 is fitted against the sea-level air mass, DISC and DIRINT want the
+pressure-corrected one. `the solar geometry document` said in one line that Kasten-Young was
+"needed by Perez and DIRINT", the chain read both off the same field, and the transposition had been
+getting the pressure-corrected value since the model was written. Measured against pvlib over a
+clear-sky year, what that cost, as annual plane-of-array global on a fixed 30-degree south array and
+on a vertical east-west one:
 
   | Site | Elevation | Fixed 30 south | Vertical east |
   |---|---|---|---|
@@ -86,15 +86,15 @@ derivation rather than a claim of fresh verification.
 |---|---|---|---|---|---|---|
 | Marrou et al. 2013a (`marrou2013-lettuce-rue`) | Lettuce | Montpellier FR, irrigated, **not** water-limited by design | RSR 30% and 50% | Relative yield >= relative available radiation at both levels (paper's own headline finding) | 94% at 30% RSR, 76% at 50% RSR (leafy-vegetables curve) | **Agrees**, with room to spare: the app predicts a smaller loss than the paper's own floor at both levels |
 | Barron-Gafford et al. 2019 (`barron-gafford2019-arizona`) | Chiltepin pepper, jalapeno, cherry tomato | Biosphere 2, Tucson AZ, irrigated desert, water-limited | Not stated numerically in the paper (Fig. 2A shows PAR roughly halved, graphically only) | Chiltepin 3x control, cherry tomato 2x control (both P<0.01), jalapeno statistically unchanged | At most 108% central, 161% at the very top of its own 95% band, at any RSR the app defines, water-limited gate open | **Agrees on direction** (shade can help), **disagrees on magnitude by roughly 2 to 3x**. Laub's meta-analysis pools mostly non-desert sites, so it can't see the size of relief a semi-arid, high-VPD, irrigated site gets, which the agrivoltaics document section 2.2 already flags as this trial's least generalisable feature |
-| Weselek et al. 2021 (`weselek2021-potato`) | Potato | Heggelbach DE, ~30% RSR, 2018 drought year read as water-limited | RSR ~30% | Potato +11% (2018 drought), roughly -7% (2017 normal) | 72% central regardless of the water-limitation flag; 103% at the very top of the water-limited 95% band | **Disagrees**, in a specific, structural way: see finding 1 below |
-| Weselek et al. 2021 (`weselek2021-potato`) | Winter wheat (catalogue stand-in: spring wheat, same species) | Heggelbach DE, ~30% RSR, 2018 drought year read as water-limited | RSR ~30% | Wheat +2.7% (2018 drought), roughly -8% (2017 normal) | 73% central regardless of the water-limitation flag; 88% at the top of the water-limited 95% band | **Disagrees**, same structural reason |
+| Weselek et al. 2021 (`weselek2021-potato`) | Potato | Heggelbach DE, ~30% RSR, 2018 drought year read as water-limited | RSR ~30% | Potato +11% (2018 drought), roughly -7% (2017 normal) | 72% central regardless of the water-limitation flag, 103% at the very top of the water-limited 95% band | **Disagrees**, in a specific, structural way: see finding 1 below |
+| Weselek et al. 2021 (`weselek2021-potato`) | Winter wheat (catalogue stand-in: spring wheat, same species) | Heggelbach DE, ~30% RSR, 2018 drought year read as water-limited | RSR ~30% | Wheat +2.7% (2018 drought), roughly -8% (2017 normal) | 73% central regardless of the water-limitation flag, 88% at the top of the water-limited 95% band | **Disagrees**, same structural reason |
 
 **Looked for, and couldn't use.** Marrou et al. 2013b (`marrou2013-microclimate`), the companion
 cucumber trial, reports growth-rate differences confined to the juvenile
 phase rather than a final per-area yield ratio, so it can't be reduced to the yield-ratio comparison
 this file makes for the other trials. Amaducci et al. 2018 (`amaducci2018-maize`), the rainfed-maize
 paper Decision Record 6 itself cites, reports that shaded maize yield was "higher and more stable"
-under drought stress, without a comparison yield ratio a test could pin; it appears below as a
+under drought stress, without a comparison yield ratio a test could pin, it appears below as a
 qualitative check rather than a numeric one.
 
 ## 3. What the water-limitation gate can and cannot do
@@ -102,8 +102,8 @@ qualitative check rather than a numeric one.
 Decision Record 6 gates the shade-benefit pathway on water limitation, citing Barron-Gafford's
 Arizona gains as the reason it exists at all, and citing the Amaducci-vs-Laub tension over maize as
 part of the motivation. `laubRelativeYield` implements the gate as a single ceiling: at a
-non-water-limited site the predicted band is clipped so it can never exceed 100%; at a
-water-limited site the clip lifts and the raw Laub curve passes through unchanged.
+non-water-limited site the predicted band is clipped so it can never exceed 100%, at a water-limited
+site the clip lifts and the raw Laub curve passes through unchanged.
 
 That's the whole mechanism, and it has a consequence the decision record doesn't state: **the clip
 can only matter for a crop group whose raw curve rises above 100% somewhere in its own range.**
@@ -140,18 +140,18 @@ regression tests, and nowhere else:
 
 - **The crop ranking and scoring weights** in `src/recommend/stages/rank.ts` and the design-search
   scoring in `src/recommend/design.ts` (`DEFAULT_WEIGHTS`, the min-max normalised score terms).
-  Nothing in the literature ranks agrivoltaic garden layouts; these are this app's own trade-off
+  Nothing in the literature ranks agrivoltaic garden layouts, these are this app's own trade-off
   choices, tested for internal properties (determinism, `scoreResolution`) rather than against a
   published ranking.
 - **The polyculture and companion-planting rules**, graded A through E in `docs/00-DECISIONS.md`
-  section 11. Grades A and B carry a real citation and a measured effect size; C is a single study
-  or lab-only result, rendered as "experimental"; D and E are folklore, rendered only in a labelled
+  section 11. Grades A and B carry a real citation and a measured effect size. C is a single study
+  or lab-only result, rendered as "experimental". D and E are folklore, rendered only in a labelled
   panel and never scored. The grading itself, and which claim gets which grade, comes from this
-  project's own literature reading; no external body has audited the classification.
+  project's own literature reading, no external body has audited the classification.
 - **Pest pressure and suppression** in `src/simulation/pests.ts`. Decision Record 14.2 says this
   plainly: "the share of a harvest lost at full pressure is the one unsourced number in the mode,"
   carried through `unsourcedClaim` so it stays visible in the provenance ledger rather than reading
-  as measured. The spatial dilution mechanism has a named source (`undersown-cover-host-finding`);
+  as measured. The spatial dilution mechanism has a named source (`undersown-cover-host-finding`),
   the magnitude doesn't.
 - **The drought penalty inside a season** (`soilWaterStage`, `droughtPenalty`) is this app's own
   FAO-56 water-balance implementation, a real, cited method, but the specific yield penalty it
@@ -167,10 +167,10 @@ regression tests, and nowhere else:
   `the verification document`'s "Searched and not found" section already states it: 167 of the 174
   per-crop DLI rows are Tier C, inferred from the crop's garden sun label through the app's own
   conversion and citing only the class methodology, and the three Tier A rows (leaf and head
-  lettuce, basil) are read from per-crop trials that place no failure point and say so on the
-  record (Decision Record 23). This file's new test doesn't touch the DLI gate; a crop that
-  clears it can still have its realised yield checked here, but whether it clears the gate at
-  all is a separate, thinner claim.
+  lettuce, basil) are read from per-crop trials that place no failure point and say so on the record
+  (Decision Record 23). This file's new test doesn't touch the DLI gate, a crop that clears it can
+  still have its realised yield checked here, but whether it clears the gate at all is a separate,
+  thinner claim.
 
 ## 5. Not validated at all: measured in no garden
 
@@ -183,9 +183,9 @@ would be doing something this project has never done for them.
 ## The one-line answer
 
 Solar position, irradiance decomposition and the plane-of-array energy chain are checked against
-named physics oracles (pvlib, NREL, PVWatts v5) in the test suite; the shade-to-yield curve is now
+named physics oracles (pvlib, NREL, PVWatts v5) in the test suite, the shade-to-yield curve is now
 checked against three published field trials, agreeing with one, agreeing on direction but not
 magnitude with a second, and disagreeing with a third for a specific, now-documented structural
-reason; the crop ranking, polyculture rules, pest and drought terms, and the DLI gate that decides
-whether a crop grows at all rest on this project's own literature reading with no external check;
+reason, the crop ranking, polyculture rules, pest and drought terms, and the DLI gate that decides
+whether a crop grows at all rest on this project's own literature reading with no external check,
 and nothing anywhere in the app has been compared against a real garden's harvest.

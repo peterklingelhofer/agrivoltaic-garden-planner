@@ -212,10 +212,10 @@ export const GardenPlanPanel = (): ReactElement | null => {
   }
   const lightSource = (bed: GeneratedBed): string =>
     lightNow(bed) === undefined
-      ? 'Light as the layout search measured it; the last light run did not cover this bed'
+      ? 'Light as the layout search measured it, the last light run did not cover this bed'
       : rasterReady
-        ? 'Light from the light check; it moves when the panels or the beds do'
-        : "Light from the layout search's quick run; the full check on the light step refines it"
+        ? 'Light from the light check, it moves when the panels or the beds do'
+        : "Light from the layout search's quick run, the full check on the light step refines it"
 
   return (
     <details className="wizard-advanced" data-testid="details-plants-plan">

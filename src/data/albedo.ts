@@ -103,6 +103,6 @@ export const groundCoverAlbedoClaim = (cover: GroundCover): Cited<Fraction> => A
 export const SNOW_ALBEDO_CLAIM: Cited<Fraction> = citedInferred(
   SNOW_ALBEDO,
   ['thevenard2006-ground-reflectivity', 'oke1987-boundary-layer-climates'],
-  'Settled snowpack, days after a storm. Oke separates fresh snow, near 0.80-0.90, from old and melting snow, which is far darker and spans roughly 0.40-0.70; a smooth seasonal weighting off monthly normals is describing the lying pack across whole months, so it takes the upper part of the old-snow band',
+  'Settled snowpack, days after a storm. Oke separates fresh snow, near 0.80-0.90, from old and melting snow, which is far darker and spans roughly 0.40-0.70, a smooth seasonal weighting off monthly normals is describing the lying pack across whole months, so it takes the upper part of the old-snow band',
   'Neither source states 0.70 for this. It is a point inside the old-snow band, chosen so that a modelled winter is not flattered: the fresh-snow figure would have raised the modelled year further still, and the same number is what the renderer draws, so the picture cannot disagree with it',
 )

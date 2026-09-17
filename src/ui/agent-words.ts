@@ -534,7 +534,7 @@ export const wordsFor = (utterance: Utterance, catalog: readonly Crop[]): readon
     case 'panel-cost-run':
       return [
         {
-          text: "I can work that out by running the same year again with every panel row taken off the plot. I've opened the seasons step; press Compare with no panels there and I'll have both figures.",
+          text: "I can work that out by running the same year again with every panel row taken off the plot. I've opened the seasons step, press Compare with no panels there and I'll have both figures.",
           tone: 'say',
         },
       ]
@@ -778,7 +778,7 @@ export const wordsFor = (utterance: Utterance, catalog: readonly Crop[]): readon
               tone: 'say',
             },
             {
-              text: "This app computes light there and ranks crops for it; that's what it knows about growing here.",
+              text: "This app computes light there and ranks crops for it, that's what it knows about growing here.",
               tone: 'note',
             },
           ]

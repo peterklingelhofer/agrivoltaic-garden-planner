@@ -29,7 +29,7 @@ const CHANNEL_HELP: Readonly<Record<OverlayChannel, string>> = {
   dli: 'Daily light integral (DLI), counted in mol/m²/d: all the usable light that lands on a patch of ground over one day, added up. The bigger the number, the more a plant there has to work with. Salad leaves get by on far less of it than a tomato does.',
   rsr: 'Relative shade ratio (RSR): the share of the light under an open sky that the panels take away, over the growing season. At 30%, about seven tenths of that light still reaches the soil.',
   'sky-view-factor':
-    "Sky view factor: how much of the whole sky a patch of ground can still see. 1 is nothing at all overhead; 0 is completely covered. It's pure geometry: what stands over the ground, before any weather comes into it.",
+    "Sky view factor: how much of the whole sky a patch of ground can still see. 1 is nothing at all overhead, 0 is completely covered. It's pure geometry: what stands over the ground, before any weather comes into it.",
 }
 
 const LIGHTING: readonly (readonly [LightingQuality, string])[] = [

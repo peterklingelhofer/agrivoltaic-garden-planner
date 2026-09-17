@@ -129,7 +129,7 @@ export const PollinatorsStep = (): ReactElement => {
         <p className="panel-sub" data-testid="readout-onboarding-pollinators-help">
           A plant OFFERS the nectar and pollen its flowers put out, and that is what moves it up the
           list. A crop NEEDS an insect when its own harvest depends on a visit. A courgette sets
-          almost nothing without one; a lettuce is picked long before it flowers. Both are said
+          almost nothing without one, a lettuce is picked long before it flowers. Both are said
           beside every crop in the ranking, in their own words.
         </p>
       </details>

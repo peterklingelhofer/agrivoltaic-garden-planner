@@ -180,7 +180,7 @@ export const advise = (
     const first = dark[0]
     return {
       id: 'too-dark',
-      text: `${String(dark.length)} planting${dark.length === 1 ? '' : 's'} under the panels fell below the crop's light minimum. The plants step ranks crops by shade tolerance; the panels step can widen the rows.`,
+      text: `${String(dark.length)} planting${dark.length === 1 ? '' : 's'} under the panels fell below the crop's light minimum. The plants step ranks crops by shade tolerance, the panels step can widen the rows.`,
       bedId: first?.bedId ?? null,
     }
   }

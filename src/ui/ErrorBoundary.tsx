@@ -37,7 +37,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
           <h2>{this.props.label}</h2>
         </header>
         <p className="notice notice-error">
-          Something in the app broke. Reload the page; your garden is saved in this browser.
+          Something in the app broke. Reload the page, your garden is saved in this browser.
         </p>
         <Action testId="action-app-reload" onClick={() => location.reload()}>
           Reload

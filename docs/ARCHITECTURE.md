@@ -1,6 +1,6 @@
 # Architecture
 
-Binding on all four build streams. Subordinate to `docs/00-DECISIONS.md`; where this file and the
+Binding on all four build streams. Subordinate to `docs/00-DECISIONS.md`, where this file and the
 Decision Record disagree, the Decision Record wins and this file is wrong and must be fixed.
 
 `src/types/**` is the shared contract. A change there is a change to every module at once, so it is
@@ -56,8 +56,8 @@ types  ->  sim  ->  data  ->  recommend  ->  simulation  ->  state  ->  agent  -
   one of a closed list of intents and drives the store's own actions with the result. The
   restriction exists so the router stays provable without a DOM, a GL context or a mounted
   component, which is what makes the accuracy corpus in `src/agent/lexical.test.ts` runnable.
-- `src/scene/` and `src/ui/` may import everything, but must not import each other's internals;
-  they meet through `src/state/`.
+- `src/scene/` and `src/ui/` may import everything, but must not import each other's internals, they
+  meet through `src/state/`.
 - `workers/proxy/` is a separate TypeScript project (`tsconfig.worker.json`) and shares no code
   with the browser bundle. Duplicating the cache-key helper there is deliberate.
 
@@ -65,8 +65,8 @@ types  ->  sim  ->  data  ->  recommend  ->  simulation  ->  state  ->  agent  -
 
 Physics must be unit-testable with no GL context and no renderer. That includes the GPU backends:
 `src/sim/gpu/webgl2.ts` talks to a raw `WebGL2RenderingContext` on an `OffscreenCanvas`, and
-`src/sim/gpu/webgpu.ts` talks to raw WebGPU. Neither goes through three.js. `src/scene/` renders;
-it never computes.
+`src/sim/gpu/webgpu.ts` talks to raw WebGPU. Neither goes through three.js. `src/scene/` renders, it
+never computes.
 
 Enforcement is doubled, because a lint rule alone is silenceable.
 
@@ -81,7 +81,7 @@ Enforcement is doubled, because a lint rule alone is silenceable.
 
 Biome's rule has no `allowTypeImports` escape, so `import type { Vector3 } from 'three'` is also an
 error. This replaced the identical eslint `no-restricted-imports` configuration when the repo moved
-to Biome; `biome.jsonc` is where a rule is added.
+to Biome, `biome.jsonc` is where a rule is added.
 
 **Mechanism 2: a source-scanning unit test.** `src/sim/boundary.test.ts` globs every
 non-test file under `src/sim/` with Bun's `Glob`, reads each one with `node:fs`, and asserts the
@@ -130,10 +130,10 @@ Each hop names the module that owns it. No hop is owned by two modules.
 Two Perez models exist and must not be collapsed: `perezTransposition1990` in
 `src/sim/transposition.ts` (48-coefficient `allsitescomposite1990` POA transposition) and
 `perezSkyRadianceDistribution1993` in `src/sim/skydome.ts` (the sky radiance dome feeding the 577
-patches). Decision Record 2.3 requires PV yield and ground DLI to read one sky; that shared object
+patches). Decision Record 2.3 requires PV yield and ground DLI to read one sky, that shared object
 is `CumulativeSky`.
 
-RSR and "shade fraction" are the same quantity. The canonical name is RSR;
+RSR and "shade fraction" are the same quantity. The canonical name is RSR,
 `src/sim/units.ts#relativeShadeRatio` is the single definition.
 
 ### Hop 23: what owns the pointer in Move mode, and why `dragging` exists
@@ -154,7 +154,7 @@ drags moved a bed zero times. The vertex handles had the same bug.
 `AppState.dragging` carries the rule. Three things about it are load-bearing:
 
 - It means a direct-manipulation handle owns the pointer, for as long as it does.
-- The handle raises it on the press and lowers it on release; `useGroundDrag` also captures the
+- The handle raises it on the press and lowers it on release, `useGroundDrag` also captures the
   pointer, so a drag survives leaving the object it started on.
 - `Ground`, `BedMesh` and `PlantInstances` all consult it before treating a press as a click. A
   fourth click target added to the scene must do the same, or a drag over it clears the
@@ -170,8 +170,8 @@ and the editor went on reporting `Simulation: ready`.
 
 `src/state/light-freshness.ts` is the answer, and its shape is the part worth preserving.
 `lightGeometryKey(plot)` serialises everything hop 13 reads, **excluding plantings only** (light
-falls on a bed; what grows in it is downstream of the answer, so planting a bed must not send a
-grower back to the simulation). A bake stamps that key onto `lightGeometry`; `lightIsStale(state)`
+falls on a bed, what grows in it is downstream of the answer, so planting a bed must not send a
+grower back to the simulation). A bake stamps that key onto `lightGeometry`, `lightIsStale(state)`
 compares it against the plot as it stands.
 
 Derived, deliberately, and not a `lightStale` flag set by each editing action. Every field on an
@@ -338,8 +338,8 @@ Every numeric field either names its unit in the property (`clearanceHeightM`, `
 `monthlyPrecipMm`) or carries a branded type from `src/types/units.ts`. Angles and irradiance are
 always branded, because those are the mixing bugs that actually happen:
 
-`Degrees`, `Radians`, `DegreesLatitude`, `DegreesLongitude`; `WattsPerM2`, `WattsPerM2Sr`,
-`MegajoulesPerM2Day`, `KwhPerM2Day`, `MicromolPerM2Sec`, `MolPerM2Day`; plus `Meters`, `Celsius`,
+`Degrees`, `Radians`, `DegreesLatitude`, `DegreesLongitude`, `WattsPerM2`, `WattsPerM2Sr`,
+`MegajoulesPerM2Day`, `KwhPerM2Day`, `MicromolPerM2Sec`, `MolPerM2Day`, plus `Meters`, `Celsius`,
 `Millibars`, `Fraction`, `Ratio`, `ChillHours`, `UtahChillUnits`, `ChillPortions`, `DegreeDaysC`,
 `KgPerM2Season`, and the rest.
 
@@ -367,13 +367,13 @@ Responsibilities, and nothing else:
 4. Cache all four aggressively at the edge.
 5. Emit CORS headers scoped to the configured origins.
 
-**Two different reasons, and they must not blur.** PVGIS and NSRDB are here because a browser
-cannot hold the credential or the policy exemption. Open-Meteo and Open-Elevation are here because
-they are free, unauthenticated, rate limited per IP, and called on **every** site resolve: one
-developer reloading a handful of times in a minute earned a 429, and a lecture hall opening the app
-at once is thirty identical requests from thirty addresses for a town. Behind the cache that is one
-upstream request per town per year. When adding a fifth upstream, decide which reason applies;
-routing something through for neither burns the free tier for nothing.
+**Two different reasons, and they must not blur.** PVGIS and NSRDB are here because a browser cannot
+hold the credential or the policy exemption. Open-Meteo and Open-Elevation are here because they are
+free, unauthenticated, rate limited per IP, and called on **every** site resolve: one developer
+reloading a handful of times in a minute earned a 429, and a lecture hall opening the app at once is
+thirty identical requests from thirty addresses for a town. Behind the cache that is one upstream
+request per town per year. When adding a fifth upstream, decide which reason applies, routing
+something through for neither burns the free tier for nothing.
 
 It does **not** proxy NASA POWER, Nominatim, Photon or Overpass. Those stay browser-direct (CORS
 verified). Geocoding in particular is a text search rather than a coordinate lookup and does not
@@ -391,7 +391,7 @@ v{schemaVersion}/{upstream}/{lat}/{lon}/{dataset}/{variant}
 - `lat`/`lon` quantised to 0.01 deg (Decision Record 9) and rendered with `toFixed(2)`, so
   `42.3736` and `42.3701` collapse to the same key. At mid-latitudes 0.01 deg is ~1.1 km, well
   inside TMY spatial resolution.
-- `dataset` distinguishes e.g. `tmy` from `seriescalc`; `upstream` is one of the four above.
+- `dataset` distinguishes e.g. `tmy` from `seriescalc`, `upstream` is one of the four above.
 - `variant` is what tells two answers from one dataset apart. It held a year range, which is all
   PVGIS and NSRDB vary by. **Open-Meteo serves the 1991-2020 climate normals and the 2015-2024
   hourly record from one path**, `/v1/archive`, distinguished only by `daily=` versus `hourly=`, so
@@ -407,35 +407,35 @@ v{schemaVersion}/{upstream}/{lat}/{lon}/{dataset}/{variant}
 - Key is materialised as a synthetic `https://cache.invalid/{key}` request for the Cache API.
 
 TTLs: `TTL_TMY_SECONDS` and `TTL_ELEVATION_SECONDS` are one year (a TMY for a fixed point does not
-change, and neither does the height of the ground); `TTL_ERROR_SECONDS` is 60, so an upstream
-outage does not get pinned for a year. A 429 is forwarded rather than swallowed and is held for
-that same 60 s, which turns a stampede into one upstream request a minute; `withRetry` in
-`src/data/http.ts` correspondingly does **not** retry a 429, because the backoff there is a quarter
-of a second and a retry spends two more of the requests the limit is counting.
+change, and neither does the height of the ground), `TTL_ERROR_SECONDS` is 60, so an upstream outage
+does not get pinned for a year. A 429 is forwarded rather than swallowed and is held for that same
+60 s, which turns a stampede into one upstream request a minute, `withRetry` in `src/data/http.ts`
+correspondingly does **not** retry a 429, because the backoff there is a quarter of a second and a
+retry spends two more of the requests the limit is counting.
 
 `bun run dev` has no Worker behind it, so `vite.config.ts` sends `/api/proxy/open-meteo/*` and
 `/api/proxy/open-elevation/*` straight to their upstreams. PVGIS and NSRDB can fall back silently
-when nothing is on `:8787` because both have fallbacks; the weather has none. `wrangler dev`
-fetches from the developer's own IP, so the property this exists for cannot be shown locally.
+when nothing is on `:8787` because both have fallbacks, the weather has none. `wrangler dev` fetches
+from the developer's own IP, so the property this exists for cannot be shown locally.
 
 ### 4.2 Simulation web worker (`src/sim/worker/`)
 
-The 0.55 s bake must not block the main thread. `createSimClient()` owns a dedicated worker;
+The 0.55 s bake must not block the main thread. `createSimClient()` owns a dedicated worker,
 `handleSimRequest` runs `runSimulation` inside it.
 
-- Protocol is `SimRequest` / `SimResponse` in `src/sim/worker/protocol.ts`, a discriminated union
-  on `type`. `run` carries a `cacheKey`; `cancel` carries the request id.
+- Protocol is `SimRequest` / `SimResponse` in `src/sim/worker/protocol.ts`, a discriminated union on
+  `type`. `run` carries a `cacheKey`, `cancel` carries the request id.
 - Results come back with `Float32Array` buffers in the `transfer` list
   (`src/sim/raster.ts#rasterTransferables`), not cloned.
 - Client-side memo key is `src/sim/worker/client.ts#simCacheKey(site, plot, weather, options)`,
   hashing site coordinates, array geometry, bed footprints, TMY provenance and simulation options.
-  Moving the camera, changing the month overlay or reranking crops must not invalidate it; changing
+  Moving the camera, changing the month overlay or reranking crops must not invalidate it, changing
   tilt, pitch, clearance height, tracking mode or cell size must.
 - A superseded `run` cancels the in-flight one. Progress is reported per chunk so the UI can show a
   progressive raster.
 
 If `OffscreenCanvas` is unavailable, `createBackend` falls back to `'cpu-reference'` and the same
-protocol is used; only the wall clock changes.
+protocol is used, only the wall clock changes.
 
 ## 5. Performance budget
 
@@ -445,7 +445,7 @@ that 550 ms, plus the surrounding one-off costs:
 
 | Subsystem | Owner | Budget | Note |
 |---|---|---|---|
-| SPA, 8760 h + 4 sub-steps | `src/sim/solar.ts` | 8 ms | Decision Record 2.4 quotes 3-8 ms; bake to `Float32Array` once per site |
+| SPA, 8760 h + 4 sub-steps | `src/sim/solar.ts` | 8 ms | Decision Record 2.4 quotes 3-8 ms, bake to `Float32Array` once per site |
 | Decomposition adapter | `src/sim/decomposition.ts` | 5 ms | 0 ms on Open-Meteo/PVGIS/NSRDB, which ship all three components |
 | Perez transposition, 8760 h | `src/sim/transposition.ts` | 3 ms | ~40 flops per timestep |
 | Sky patch build + cumulative weights + sun binning | `src/sim/skydome.ts` | 25 ms | 577 patches, dedupe to 600-900 directions on a 2 deg grid |
@@ -463,13 +463,13 @@ Separate budgets, not part of the 550 ms:
 |---|---|---|
 | Preview bake | 120 ms | Tregenza 145 patches, no sub-stepping, ~250 passes |
 | Interactive sun scrub | 16.6 ms/frame | one shadow map per frame, `src/scene/SunRig.tsx` |
-| Recommendation pipeline, 200 crops x 20 beds | 120 ms | main thread; if exceeded, move `src/recommend/pipeline.ts` into the same worker |
-| Layout search | five candidate bakes at preview quality; a full run measured ~4.5 s on the CPU reference backend (Decision Record 10c) | reports progress per candidate through `DesignProgress` |
-| Site resolution | network-bound | show partial `Site` as fields land; never block the canvas |
+| Recommendation pipeline, 200 crops x 20 beds | 120 ms | main thread, if exceeded, move `src/recommend/pipeline.ts` into the same worker |
+| Layout search | five candidate bakes at preview quality, a full run measured ~4.5 s on the CPU reference backend (Decision Record 10c) | reports progress per candidate through `DesignProgress` |
+| Site resolution | network-bound | show partial `Site` as fields land, never block the canvas |
 | Crop catalog | 600 KB gzipped | columnar JSON, lazy-loaded after first paint |
 
 Hard invariant: the UI never drops below 50 fps during a bake. `AccumulationRequest.passesPerFrame`
-is a starting hint, not a promise; the backend must reduce it when the frame-time EMA exceeds
+is a starting hint, not a promise, the backend must reduce it when the frame-time EMA exceeds
 `frameBudgetMs`.
 
 WebGPU (`src/sim/gpu/webgpu.ts`) reduces the accumulation term to ~30 ms where available. It is a

@@ -93,7 +93,7 @@ export const TDWG_LEVEL3_TO_USPS: DerivedCited<Readonly<Record<string, string>>>
   },
   'B',
   ['govaerts2021-wcvp'],
-  `Each TDWG level 3 area name in ${WGSRPD_ATTRIBUTION} was read off the published level 3 table and paired with the USPS code of the state it names; the codes themselves are published nowhere in that table`,
+  `Each TDWG level 3 area name in ${WGSRPD_ATTRIBUTION} was read off the published level 3 table and paired with the USPS code of the state it names, the codes themselves are published nowhere in that table`,
   'A geographical crosswalk between two code systems. It covers the fifty states and the District of Columbia only, and it says nothing about whether a botanical region and a state share a boundary: ASK and ALU are two regions of one state, and HAW is a chain whose outlying islands lie outside Hawaii',
 )
 

@@ -22,6 +22,7 @@ import {
   QUALITY_HELP,
   QUALITY_LABEL,
   roundTenth,
+  SCOPE_STATEMENT,
   showsFigures,
   STEP_COPY,
   clearanceNote,
@@ -188,7 +189,9 @@ describe('a layout beaten on both figures says so', () => {
     expect(beatenSentence([energy], false, [])).toMatch(
       /^A layout: energy-first keeps as much daylight/,
     )
-    expect(beatenSentence([energy], true, ['energy-first'])).toMatch(/tie went to the layout named/)
+    expect(beatenSentence([energy], true, ['energy-first'])).toMatch(
+      /too close to call, so the layout named for what you asked for won/,
+    )
     expect(beatenSentence([energy], true, [])).toMatch(/counts shade/)
   })
 })
@@ -247,7 +250,7 @@ describe('nothing the results render reads as a determination', () => {
       expect(clearanceNote(flags(meets))).not.toMatch(FORBIDDEN)
       expect(groundLightNote(flags(meets))).not.toMatch(FORBIDDEN)
     }
-    expect(clearanceNote(flags(true))).toMatch(/expedited design parameters/i)
+    expect(clearanceNote(flags(true))).toMatch(/fast-track rules for growing under panels/i)
     expect(groundLightNote(flags(false))).toMatch(/exception request/i)
   })
 
@@ -263,20 +266,21 @@ describe('nothing the results render reads as a determination', () => {
       const note = clearanceNote(flags(meets))
       expect(note).toMatch(/massachusetts/i)
       expect(note).toMatch(/fast-track/i)
-      // and the exact term survives, because that is the half that would be quoted or looked up
-      expect(note).toMatch(/expedited design parameters/i)
+      // and the regime's own name survives, because that is the half that would be quoted or looked up
+      expect(note).toMatch(/fast-track rules for growing under panels/i)
     }
   })
 
   /**
-   * The blanket caveat, which was exact and opaque: "the geometry" is the shapes and the sun, and
+   * The per-card caveat, which was exact and opaque: "the geometry" is the shapes and the sun, and
    * "the programme" read as this software rather than as the scheme whose rules are quoted above
-   * it. The phrase that matters if it is ever quoted back has to survive that rewrite
+   * it. The phrase that matters if it is ever quoted back lives in the app-wide caveat instead, so
+   * it has to survive there
    */
   it('keeps the words that matter in the caveat while saying it in plain ones', () => {
-    expect(NOT_A_DETERMINATION).toMatch(/determination/i)
     expect(NOT_A_DETERMINATION).not.toMatch(FORBIDDEN)
     expect(NOT_A_DETERMINATION).not.toMatch(/geometry/i)
+    expect(SCOPE_STATEMENT).toMatch(/determination/i)
   })
 
   /**

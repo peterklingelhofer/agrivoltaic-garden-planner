@@ -53,7 +53,7 @@ export const PV_CHAIN_PROVENANCE: readonly Cited<string>[] = [
     'B',
     ['dobos2014-pvwatts-v5', 'king2007-sandia-inverter', 'pvlib-python'],
     'pvwatts-v5-inverter',
-    'Clipping is modelled, because agrivoltaic layouts run high DC:AC ratios. The Sandia/CEC inverter model is cited here as the alternative that was left unused; it would need per-inverter coefficients this app lacks',
+    'Clipping is modelled, because agrivoltaic layouts run high DC:AC ratios. The Sandia/CEC inverter model is cited here as the alternative that was left unused, it would need per-inverter coefficients this app lacks',
   ),
   citedComputed(
     'System losses, PVWatts v5 default stack combining multiplicatively to 14.08%, each component individually overridable',

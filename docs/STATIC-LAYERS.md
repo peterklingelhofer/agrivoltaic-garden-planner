@@ -36,11 +36,11 @@ authors.
 | NRCan zones rasterised at 0.05° | 1.5 MB (1 769 × 830) | 181 kB | **75 kB** |
 | NRCan zones rasterised at 0.06° | 1.0 MB | 136 kB | — |
 
-Vectorising either raster is the wrong move. OPHZ's national TopoJSON is 14.1 MB, and it is
-already quantised with shared arcs; the boundaries are 450 m raster staircases, so almost every
-byte is describing pixel corners. Douglas-Peucker would have to move boundaries kilometres to
-reach the budget, and the app never draws these layers. It only asks what class covers a point,
-and for a point query a grid is both smaller and exact to the cell.
+Vectorising either raster is the wrong move. OPHZ's national TopoJSON is 14.1 MB, and it is already
+quantised with shared arcs. Its boundaries are 450 m raster staircases, so almost every byte is
+describing pixel corners. Douglas-Peucker would have to move boundaries kilometres to reach the
+budget, and the app never draws these layers. It only asks what class covers a point, and for a
+point query a grid is both smaller and exact to the cell.
 
 ## 2. The encoding
 
@@ -122,8 +122,8 @@ finer bins would have tripled the asset to carry precision nothing reads.
 label defines, and it round-trips: `usdaZoneLabel(usdaZoneLowerC(label)) === label` for every
 zone the grid can return. Reporting a band midpoint would claim precision the label does not have.
 
-Coverage is CONUS only. Alaska, Hawaii and Puerto Rico are separate PRISM grids and are not
-bundled; those sites fall through to the derivation, which is the intended behaviour, not a bug.
+Coverage is CONUS only. Alaska, Hawaii and Puerto Rico are separate PRISM grids and are not bundled,
+those sites fall through to the derivation, which is the intended behaviour, not a bug.
 
 ## 5. NRCan ships, and is still never crosswalked
 
@@ -140,22 +140,22 @@ type HardinessRating = TemperatureHardinessRating | CompositeHardinessRating
 //   zoneLabel                       zoneLabel, indexTerms
 ```
 
-`extremeMinTempC?: never` is the whole mechanism. A crosswalked NRCan rating does not fail a
-review, it fails `tsc`; `src/types/contract.test.ts` pins that with a `@ts-expect-error`. The
-seven variables the index actually combines are named as `HardinessIndexVariable`, and
-`indexTerms` is empty because the published layer carries the zone label alone.
+`extremeMinTempC?: never` is the whole mechanism. A crosswalked NRCan rating does not fail a review,
+it fails `tsc`, `src/types/contract.test.ts` pins that with a `@ts-expect-error`. The seven
+variables the index actually combines are named as `HardinessIndexVariable`, and `indexTerms` is
+empty because the published layer carries the zone label alone.
 
 ### Why the crosswalk stays forbidden
 
-NRCan zones come from the Ouellet and Sherk (1967) index, reinterpolated by McKenney et al.
-(2001, 2025). The 4th edition combines **seven** climate variables: coldest-month mean daily
-minimum, frost-free days above 0 °C, June-to-November rainfall, warmest-month mean daily
-maximum, a January-rainfall winter-harshness term, maximum snow depth, and maximum 30-year wind
-gust. USDA zones are **one** variable, the mean annual extreme minimum temperature. Snow depth
-alone can move a Canadian zone two steps against no change in winter minimum whatsoever, and the
-disagreement runs in both directions depending on which term dominates locally. Toronto is NRCan
-7a; nothing about that number is a claim that Toronto reaches −17.8 °C. Any table mapping one
-system onto the other is fiction, and the union makes writing one impossible.
+NRCan zones come from the Ouellet and Sherk (1967) index, reinterpolated by McKenney et al. (2001,
+2025). The 4th edition combines **seven** climate variables: coldest-month mean daily minimum,
+frost-free days above 0 °C, June-to-November rainfall, warmest-month mean daily maximum, a
+January-rainfall winter-harshness term, maximum snow depth, and maximum 30-year wind gust. USDA
+zones are **one** variable, the mean annual extreme minimum temperature. Snow depth alone can move a
+Canadian zone two steps against no change in winter minimum whatsoever, and the disagreement runs in
+both directions depending on which term dominates locally. Toronto is NRCan 7a, nothing about that
+number is a claim that Toronto reaches −17.8 °C. Any table mapping one system onto the other is
+fiction, and the union makes writing one impossible.
 
 ### What a Canadian site carries instead
 
@@ -228,11 +228,10 @@ resolution the World Checklist of Vascular Plants (WCVP) itself is indexed at, w
 aggregation step exists to be wrong.
 
 **Why this forced a v2 of the encoding.** Level 3 has 369 areas and `AGDG v1` stores one byte per
-cell, which tops out at 254 classes. `v2` is the identical layout with 16-bit cells and a
-16-bit sentinel pair; `decodeClassGrid` reads both and picks the branch off the header. Every
-climate layer above stays v1 and is untouched. At 0.5 degrees the whole world costs 35 kB, which
-is smaller than any of the climate grids: the regions are large and the run-length coding likes
-that.
+cell, which tops out at 254 classes. `v2` is the identical layout with 16-bit cells and a 16-bit
+sentinel pair, `decodeClassGrid` reads both and picks the branch off the header. Every climate layer
+above stays v1 and is untouched. At 0.5 degrees the whole world costs 35 kB, which is smaller than
+any of the climate grids: the regions are large and the run-length coding likes that.
 
 **Why 0.5 degrees.** The regions are whole botanical countries. A finer cell would resolve
 coastlines to a precision the checklist behind it does not claim, and would cost four times the
@@ -249,13 +248,13 @@ sentinel as well as the 16-bit one regardless of the width it had decoded, and 2
 every garden in TDWG Palestine read as "region unknown", permanently and indistinguishably from
 being at sea. It now carries the same two checks the climate layers do.
 
-Ten probes, in `public/data/manifest.json`, each recording `source` and `shipped`. `source` is
-exact point-in-polygon on the published polygons with no raster in it; `shipped` is what the grid
-answers. All ten agree, and `src/data/static-layers.test.ts` re-asks the question at each probe's
-coordinate through the app's own `botanicalAreaAt`, so the decoder is in the loop and not just
-the rasteriser. The suite is required to keep containing Jerusalem, which is inside `PAL` and is
-the 255 case, and a point in the mid-Atlantic, which is on no land at all: without the second,
-a probe set that could only ever answer "an area" would pass.
+Ten probes, in `public/data/manifest.json`, each recording `source` and `shipped`. `source` is exact
+point-in-polygon on the published polygons with no raster in it, `shipped` is what the grid answers.
+All ten agree, and `src/data/static-layers.test.ts` re-asks the question at each probe's coordinate
+through the app's own `botanicalAreaAt`, so the decoder is in the loop and not just the rasteriser.
+The suite is required to keep containing Jerusalem, which is inside `PAL` and is the 255 case, and a
+point in the mid-Atlantic, which is on no land at all: without the second, a probe set that could
+only ever answer "an area" would pass.
 
 `--validate` measures the cost of the half-degree cell, sampling at cell centres so the scan
 converter is not compared against its own input:
@@ -281,12 +280,12 @@ one side of it rounds the wrong way. The 0.07 % is small islands.
 | `public/data/manifest.json` | 17 kB | 5 kB | 5 kB |
 | **Total** | **1 314 kB** | **542 kB** | **556 kB** |
 
-**NRCan added 88 kB to the repository**, 86 kB of grid and 2 kB of manifest, taking the bundled
-data from 461 kB packed to 549 kB, up 19 %. The packed column is measured, not estimated:
-`git hash-object -w` then `git cat-file --batch-check '%(objectsize:disk)'`, which reproduces
-the two figures a previous `git gc` gave. All three grids are immutable and regenerable; a
-rebuild that changes a byte adds a second copy to history, so they should be rebuilt only when
-an upstream actually revises.
+**NRCan added 88 kB to the repository**, 86 kB of grid and 2 kB of manifest, taking the bundled data
+from 461 kB packed to 549 kB, up 19 %. The packed column is measured, not estimated: `git
+hash-object -w` then `git cat-file --batch-check '%(objectsize:disk)'`, which reproduces the two
+figures a previous `git gc` gave. All three grids are immutable and regenerable, a rebuild that
+changes a byte adds a second copy to history, so they should be rebuilt only when an upstream
+actually revises.
 
 All three are fetched once per session on the site-resolution path and cached, so a user pays
 about 525 kB over the wire on a cold visit in an app whose main bundle is already 481 kB
@@ -352,7 +351,7 @@ not a synonym for easy to grow.
 `USDA_PHZM_DISCLAIMER` in `src/data/static-layers.ts` carries the PRISM text and
 `staticLayerLicences()` returns it as part of the USDA attribution. `src/ui/AttributionPanel.tsx`
 now renders `staticLayerLicences()` rather than a hardcoded credit list, so every shipped layer
-reaches the screen with its own licence text and the redistribution condition is met. One
-follow-up remains: `docs/CITATIONS.csl.json` records `usda-phzm-2023` as
-`accessLevel: "public-domain"`. The terms of use above contradict that; the librarian should
-reclassify it and add the OPHZ 2012 vintage to the `ophz-hardiness-geojson` caveat.
+reaches the screen with its own licence text and the redistribution condition is met. One follow-up
+remains: `docs/CITATIONS.csl.json` records `usda-phzm-2023` as `accessLevel: "public-domain"`. The
+terms of use above contradict that, the librarian should reclassify it and add the OPHZ 2012 vintage
+to the `ophz-hardiness-geojson` caveat.

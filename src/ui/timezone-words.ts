@@ -10,13 +10,12 @@ export const timezoneWords = (
   zone: string,
   basis: 'upstream' | 'nearest-zone' = 'upstream',
 ): string => {
-  if (zone === 'Etc/GMT') return 'UTC, computed from the longitude; daylight saving not known'
+  if (zone === 'Etc/GMT') return 'UTC, computed from the longitude, daylight saving not known'
   const match = /^Etc\/GMT([+-])(\d+)$/.exec(zone)
   if (match !== null) {
     const sign = match[1] === '-' ? '+' : '-'
-    return `UTC${sign}${String(Number(match[2]))}, computed from the longitude; daylight saving not known`
+    return `UTC${sign}${String(Number(match[2]))}, computed from the longitude, daylight saving not known`
   }
-  if (basis === 'nearest-zone')
-    return `${zone}, the nearest time zone on record to this point; the weather service named none`
+  if (basis === 'nearest-zone') return `${zone}, the nearest time zone on record to this point`
   return zone
 }

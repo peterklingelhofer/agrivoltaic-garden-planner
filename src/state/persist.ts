@@ -153,7 +153,7 @@ export const STORAGE_IDLE =
   'Kept in this browser only, and never uploaded. Edits save automatically a moment after you stop'
 
 export const STORAGE_RESTORED =
-  'Restored the design saved in this browser. The light and energy runs start from idle; no result was stored with it'
+  'Restored the design saved in this browser. The light and energy runs start from idle, no result was stored with it'
 
 export const STORAGE_SAVED = 'Saved in this browser. Nothing left the browser'
 

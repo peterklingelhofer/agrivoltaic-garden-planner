@@ -63,7 +63,7 @@ const SCENE_MARGIN_M = 5 as Meters
 export const EXAMPLE_BANNER_TITLE = 'Example garden'
 
 export const EXAMPLE_BANNER_BODY =
-  'This garden is a worked example for Amherst, Massachusetts. The colours on the ground are the sunlight each spot gets over a year with these panels up, already computed. Change anything and it becomes your own; clearing it gives you an empty plot to draw on'
+  'This garden is a worked example for Amherst, Massachusetts. The colours on the ground are the sunlight each spot gets over a year with these panels up, already computed. Change anything and it becomes your own. Clearing it gives you an empty plot to draw on'
 
 /**
  * What the shipped asset says about itself. Every field is a record of how the raster beside it

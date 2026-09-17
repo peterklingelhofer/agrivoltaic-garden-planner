@@ -132,11 +132,11 @@ const versusTypical = (value: number, typical: number | null): string => {
 const thirstLine = (year: YearSummary, subject: string): string =>
   shadeBenefitScale({ index: year.waterIndex }) > 0
     ? 'Dry enough here for panel shade to raise yield.'
-    : `${subject} wasn't dry enough for shade to raise yield. Rain left about ${percent(year.waterIndex)} of the season's evaporative demand unmet; shade raises yield only past ${percent(WATER_LIMITED_INDEX)}.`
+    : `${subject} wasn't dry enough for shade to raise yield. Rain left about ${percent(year.waterIndex)} of the season's evaporative demand unmet, shade raises yield only past ${percent(WATER_LIMITED_INDEX)}.`
 
 const describeYear = (year: YearSummary, typical: YearSummary | null): string => {
   const usual = year.year === null ? null : typical
-  const rain = `${formatRainMm(year.rainfallMm)} of rain${year.rainMeasured ? '' : " (the typical-year figure; this source didn't measure rainfall)"}`
+  const rain = `${formatRainMm(year.rainfallMm)} of rain${year.rainMeasured ? '' : " (the typical-year figure, this source didn't measure rainfall)"}`
   const water = `Reference evapotranspiration ${formatRainMm(year.referenceEtMm)}: the season's evaporative demand, defined for a short grass crop.${year.waterLimited ? ' The beds ran short of water.' : ''}`
   /*
     Which record these dates came from, because they differ from the ones on the site step and could
@@ -284,7 +284,7 @@ const Outcome = ({
           ? ''
           : ` That range is a ${bandBasisLabel(outcome.band)} dominated by ${attributionLabel(outcome.band.dominantSource)}.`}
         {outcome.kind === 'harvested'
-          ? ' The pest and water-shortage figures are estimates this app makes; no published figure exists.'
+          ? 'The pest and water-shortage figures are estimates this app makes, no published figure exists.'
           : ''}
       </p>
     </details>
@@ -847,7 +847,7 @@ export const SimulationPanel = (): ReactElement => {
                   bed's shade, and the electricity partial is added to both ends of it */}
               <p className="readout-note">
                 The beds and panels together give what {lerWords(standing.ler)} times this land
-                would give as a separate farm beside a separate garden; above 1 they share the
+                would give as a separate solar farm beside a separate garden, above 1 they share the
                 ground well (Dupraz et al. 2011). The range is a {bandBasisLabel(standing.ler)}{' '}
                 dominated by {attributionLabel(standing.ler.dominantSource)}.
               </p>

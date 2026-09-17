@@ -44,7 +44,6 @@ export interface ColdOpenReading {
   readonly bright: ColdOpenBed
   readonly title: string
   readonly body: string
-  readonly caveat: string
 }
 
 /**
@@ -121,15 +120,7 @@ const bedReading = (plot: GardenPlot, light: BedLight): ColdOpenBed | null => {
       }
 }
 
-/**
- * "The ordering is the reliable part" is the whole of `DLI_DISCLOSURE`'s first point, said in
- * one line. It is a caveat and not a detail, so it renders at every window size and for every
- * experience level, exactly as `showsFigures` in `ui/onboarding.ts` says a caveat must
- */
-export const COLD_OPEN_CAVEAT =
-  "The ordering is the reliable part; each crop's own threshold is provisional."
-
-export const COLD_OPEN_TITLE = 'Where a bed sits in this range decides what will grow'
+export const COLD_OPEN_TITLE = 'Where a bed is placed in this range impacts what will grow'
 
 /**
  * What the example garden is showing, in three sentences, or null.
@@ -171,7 +162,6 @@ export const coldOpenReading = (
     title: COLD_OPEN_TITLE,
     // Short on purpose: it sits over the foot of the scene it describes, and every clause in it is
     // load-bearing
-    body: `${dim.label}, on the darkest ground here, gets ${dim.dli} over the year; ${bright.label}, out in the open, gets ${bright.dli}. Both figures come out of the light simulation. ${clause}`,
-    caveat: COLD_OPEN_CAVEAT,
+    body: `${dim.label}, on the darkest ground here, gets ${dim.dli} over the year, ${bright.label}, out in the open, gets ${bright.dli}. Both figures come out of the light simulation. ${clause}`,
   }
 }

@@ -59,14 +59,14 @@ const ordered = (
 const caveatLine = (evaluatedAt: 'preview' | 'final', tied: readonly string[]): string => {
   const rough =
     evaluatedAt === 'final'
-      ? 'Full light run; confidence no higher than moderate'
-      : 'Rough comparison from a quick run; confidence no higher than moderate'
+      ? 'Full light run, confidence no higher than moderate'
+      : 'Rough comparison from a quick run, confidence no higher than moderate'
   if (tied.length === 0) return rough
   const names =
     tied.length === 1
       ? (tied[0] as string)
       : `${tied.slice(0, -1).join(', ')} and ${tied[tied.length - 1] as string}`
-  return `${rough}; ${names} ${tied.length === 1 ? 'ties' : 'tie'} with the suggested one`
+  return `${rough}, ${names} ${tied.length === 1 ? 'ties' : 'tie'} with the suggested one`
 }
 
 interface CardProps {
@@ -487,7 +487,7 @@ export const ScenarioComparison = (): ReactElement | null => {
       {recommended?.candidate.archetype === CONTROL && shown?.candidate.archetype !== CONTROL ? (
         <p className="notice notice-warn" data-testid="readout-onboarding-pick-is-open-sky">
           For this space and what you asked of it, the search suggests no panels at all. The layout
-          below is the best one that has panels, so you can see what they would cost; the "No panels
+          below is the best one that has panels, so you can see what they would cost. The "No panels
           at all" tab is the pick.
         </p>
       ) : null}
@@ -517,13 +517,13 @@ export const ScenarioComparison = (): ReactElement | null => {
             ? 'Nothing that came back matched those answers, so nothing is marked as suggested'
             : `${recommended.candidate.label} is marked because ${recommended.candidate.rationale}`}
           {recommended?.candidate.archetype === CONTROL && shown?.candidate.archetype !== CONTROL
-            ? ` It's the space with no panels, so the layout showing is the best one that has some; the comparison is one press away.`
+            ? `. It's the space with no panels, so the layout showing is the best one that has some. The comparison is one press away.`
             : ''}
         </p>
         <p className="panel-sub" data-testid="readout-onboarding-baseline-help">
           The row above names every layout the search tried. "No panels at all" is this space with
-          nothing on it, and every other layout is what its panels would cost you against that one.
-          Press a name to read its card; any of them can be used.
+          nothing on it, and every other layout shows what its panels would cost you against that
+          one. Press a name to read its card, any of them can be used.
         </p>
         <p className="panel-sub" data-testid="readout-onboarding-apply-help">
           Using one of these writes the outline you measured, the panels, beds placed where that

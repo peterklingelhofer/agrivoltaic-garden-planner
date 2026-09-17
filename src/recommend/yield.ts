@@ -33,7 +33,7 @@ export const CROP_RESPONSE_CONTRIBUTION: UncertaintyContribution = {
 export const CROWDING_CONTRIBUTION: UncertaintyContribution = {
   source: 'crowding',
   halfWidthFraction: 0 as Fraction,
-  note: 'The share of the crop-response yield that crowding at catalogue spacing takes off both ends of the band. A figure of this app’s own with no source; the sources step lists it as a gap',
+  note: 'The share of the crop-response yield that crowding at catalogue spacing takes off both ends of the band. A figure of this app’s own with no source, the sources step lists it as a gap',
 }
 
 const LOG_FLOOR = 1e-4

@@ -817,7 +817,7 @@ export const soilAt = async (location: LatLon): Promise<SoilProfile> => {
 export const staticLayerLicences = (): readonly Licensed[] => [
   {
     sourceId: 'usda-phzm-2023',
-    licence: 'OSU-owned, freely redistributable; altered data must carry the disclaimer',
+    licence: 'OSU-owned, freely redistributable, altered data must carry the disclaimer',
     attribution: `${USDA_PHZM_ATTRIBUTION}. ${USDA_PHZM_DISCLAIMER}`,
     viralLicence: false,
   },

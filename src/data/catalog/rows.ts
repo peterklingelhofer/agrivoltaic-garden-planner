@@ -46,9 +46,9 @@ const BASIL: NonEmpty<CitationId> = [
  * where each number comes from
  */
 const LETTUCE_CAVEAT =
-  '5.8 mol/m2/d is the lowest level Pennisi et al. 2020 grew lettuce at (100 µmol/m2/s for 16 h), where it still produced a crop with the least biomass; Kelly et al. 2020 grew two cultivars from 6.9. No trial in the corpus places a failure point below that, so the floor is where measurement stops. The target runs from Pennisi et al.’s optimum, 14.4, past which yield stopped rising, to the Cornell CEA programme’s 17'
+  '5.8 mol/m2/d is the lowest level Pennisi et al. 2020 grew lettuce at (100 µmol/m2/s for 16 h), where it still produced a crop with the least biomass, Kelly et al. 2020 grew two cultivars from 6.9. No trial in the corpus places a failure point below that, so the floor is where measurement stops. The target runs from Pennisi et al.’s optimum, 14.4, past which yield stopped rising, to the Cornell CEA programme’s 17'
 const BASIL_CAVEAT =
-  '12.9 mol/m2/d is the level Dou et al. 2018 suggest for commercial production, the lowest of their five at which yield and nutritional quality were both high; their plants still grew at 9.3 with 54 to 79 percent less shoot mass, and Walters and Currey 2018 found 59 percent less at 7 or below than at about 15. The target runs from Pennisi et al. 2020’s optimum, 14.4, to 17.8, the top of Dou et al.’s range, where shoot mass was highest'
+  '12.9 mol/m2/d is the level Dou et al. 2018 suggest for commercial production, the lowest of their five at which yield and nutritional quality were both high, their plants still grew at 9.3 with 54 to 79 percent less shoot mass, and Walters and Currey 2018 found 59 percent less at 7 or below than at about 15. The target runs from Pennisi et al. 2020’s optimum, 14.4, to 17.8, the top of Dou et al.’s range, where shoot mass was highest'
 
 /**
  * ECOCROP names its climate zones in Trewartha's letters. Read onto the Köppen codes

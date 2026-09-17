@@ -232,10 +232,9 @@ describe('what the cold open is allowed to say', () => {
     expect(reading?.body).toContain('Crops differ in how much light they want')
   })
 
-  it('makes no promise about any one crop, and says so in its own last line', () => {
+  it('makes no promise about any one crop', () => {
     const plot = plotFixture([planted('bed-dim', ['ramps']), planted('bed-bright', ['bean-pole'])])
     const reading = coldOpenReading(plot, [atDli('bed-dim', 11), atDli('bed-bright', 29)], catalog)
-    expect(reading?.caveat).toContain('provisional')
     // `src/ui/dli.ts` is explicit that the absolutes are the weak claim, so no sentence here may
     // say a named crop will do well anywhere
     expect(reading?.body).not.toMatch(/\b(will thrive|does well|guaranteed|best crop)\b/i)

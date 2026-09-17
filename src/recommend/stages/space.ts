@@ -25,7 +25,7 @@ export const PANEL_SHADING_HEIGHT_FRACTION = 0.85
 export const MAX_CROWDING_YIELD_PENALTY = unsourcedClaim(
   0.45 as Fraction,
   'The most that crowding may cost a crop, 45 percent at a crowding index of 2, is this app’s own figure: no source in the corpus measures a garden bed’s yield against its planting density, and the index it scales, the overlap of catalogue spacings plus the bed’s own area limit, is this app’s own as well',
-  'One curve for every crop; density responses differ by crop and none is tabulated here',
+  'One curve for every crop, density responses differ by crop and none is tabulated here',
 )
 
 /**

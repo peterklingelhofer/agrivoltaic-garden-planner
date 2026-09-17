@@ -16,7 +16,7 @@ describe('what a part of the app that threw is replaced with', () => {
     const panel = harness.get('panel-overlay-failed')
     expect(panel.dataset.state).toBe('error')
     expect(panel.textContent).toContain(
-      'Something in the app broke. Reload the page; your garden is saved in this browser.',
+      'Something in the app broke. Reload the page, your garden is saved in this browser.',
     )
     expect(harness.get('action-app-reload').textContent).toBe('Reload')
   })

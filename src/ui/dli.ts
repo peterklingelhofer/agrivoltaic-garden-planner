@@ -58,7 +58,7 @@ const reasonOf = (cited: Cited<number>): string =>
  */
 const summaryOf = (label: string, value: string, cited: Cited<number>): string =>
   cited.provenance === 'inferred'
-    ? `${label} ${value} is a class-level inference this app makes from the crop's sun label. The class ranges follow Purdue HO-238-B-W and VCE SPES-720NP; no cited work measured it for this crop`
+    ? `${label} ${value} is a class-level inference this app makes from the crop's sun label. The class ranges follow Purdue HO-238-B-W and VCE SPES-720NP, no cited work measured it for this crop`
     : cited.provenance === 'unsourced'
       ? `${label} ${value} has no source in the verified corpus`
       : `${label} ${value} is read from a Tier ${cited.tier} source`
@@ -125,13 +125,13 @@ export interface DisclosurePoint {
 export const DLI_DISCLOSURE: readonly DisclosurePoint[] = [
   {
     id: 'ordinal-holds',
-    heading: 'The ranking is reliable; the absolutes are provisional',
+    heading: 'The ranking is reliable, the absolutes are provisional',
     body: "Crops are ordered by light demand from one consistent class table, and that ordering is the output worth trusting: lettuce wants less light than a tomato, which wants less than a strawberry. The mol/m²/d numbers attached to individual crops are a weaker claim. Most are Tier C figures inferred from the crop's class, and few were measured on the crop itself, so a threshold is a soft boundary.",
   },
   {
     id: 'no-source',
     heading: 'Twelve of eighteen crops checked have no published figure at all',
-    body: 'A systematic source hunt found no mol/m²/d figure anywhere in accessible peer-reviewed or Extension literature for seven temperate tree fruits (apple, pear, plum, sweet cherry, sour cherry, apricot and fig), nor for melon, watermelon, tomatillo, winter squash, pumpkin and hot pepper. Okra has an experimental treatment level and no target. Orchard work reports light as a percentage of full sun or as instantaneous PPFD. No orchard source gives a daily integral. Those rows now carry class-level inferences marked Tier C and cite DLI measurement methodology, because no per-crop value exists. Several previously cited FAO ECOCROP, which holds no DLI values at all; that attribution was wrong and has been removed.',
+    body: 'A systematic source hunt found no mol/m²/d figure anywhere in accessible peer-reviewed or Extension literature for seven temperate tree fruits (apple, pear, plum, sweet cherry, sour cherry, apricot and fig), nor for melon, watermelon, tomatillo, winter squash and pumpkin. Okra has an experimental treatment level and no target. Orchard work reports light as a percentage of full sun or as instantaneous PPFD. No orchard source gives a daily integral. Those rows carry class-level inferences marked Tier C and cite nothing for them, because no per-crop value exists.',
   },
   {
     id: 'transplant-scope',

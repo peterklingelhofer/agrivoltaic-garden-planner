@@ -224,10 +224,10 @@ const PlantingRow = ({
         {ROLE_LABEL[planting.role]} · {TIER_LABEL[planting.tier]}
       </span>
       <InfoTip label="role and layer" testId={`info-bed-planting-role-${planting.id}`}>
-        The first word is the job this plant does in the bed. A main crop is what you're growing the
+        The first part is the job this plant does in the bed. A main crop is what you're growing the
         bed for. A nurse plant shelters or feeds another plant. An insect magnet draws in
         pollinators and the insects that eat pests. A cover crop feeds and protects the soil and
-        isn't harvested. A trap crop draws pests away from the main crop. The second word is the
+        isn't harvested. A trap crop draws pests away from the main crop. The second part is the
         height layer it occupies. Tall layer is whatever grows highest here, then mid layer, then
         shrub layer. Ground layer stays low, close to the soil.
       </InfoTip>
@@ -612,7 +612,7 @@ const PlantingSection = ({
       : derived?.ok === false
         ? `Refused: ${derived.reason}${derived.cause === 'room' ? '. Use "Put it in place of" below' : ''}`
         : excludedBy !== null
-          ? `Not suited: ${explainLimitingFactor(excludedBy, experience, catalog, chosenCrop, bed)}. It can still go in; the seasons will treat it as the ranking says${replaceNote}${joinNote}`
+          ? `Not suited: ${explainLimitingFactor(excludedBy, experience, catalog, chosenCrop, bed)}. It can still go in, and the simulated seasons will treat it as the ranking says${replaceNote}${joinNote}`
           : `${cropName(catalog, chosen.cropId)}: ${chosenSow.toLowerCase()} ${dayLabel(chosen.sowDay)}, harvest ${derived?.ok ? `${dayLabel(derived.value.harvestStartDay)} to ${dayLabel(derived.value.harvestEndDay)}` : 'undated'}${replaceNote}${joinNote}`
 
   return (
@@ -1042,11 +1042,10 @@ const PlotSizeSection = ({ boundary }: { readonly boundary: Polygon2D }): ReactE
       {rectangle === null ? (
         <>
           <p className="notice notice-warn" data-testid="status-plot-shape" data-shape="drawn">
-            This boundary is not a plain rectangle, so a width and a depth can't describe it.
-            Nothing you type above has changed it. The two figures start at the widest and the
-            deepest points of the shape that's there. Press the button below to replace that shape
-            with a rectangle of the size you typed, over the same middle. Your beds and panels stay
-            where they are
+            This boundary is not a plain rectangle, so a width and a depth can't describe it. The
+            two figures start at the widest and the deepest points of the shape that's there. Press
+            the button below to replace that shape with a rectangle of the size you typed, over the
+            same middle. Your beds and panels stay where they are
           </p>
           <Action testId="action-plot-rectangle" onClick={() => write(size)}>
             Replace the shape with this rectangle
@@ -1089,10 +1088,11 @@ const GroundCoverSection = (): ReactElement => {
       </p>
       <InfoTip label="why the ground matters to the panels" testId="info-plot-ground-cover">
         Panels with cells on both faces pick up whatever the ground reflects. A bright surface
-        underneath is worth real generation; a dark one is worth little. Across the choices above,
-        the modelled year moves by about a tenth. The soil works the other way. A bright cover sends
-        the day's warmth back at the sky, so the bed under it runs cooler and starts later. A dark
-        cover holds that warmth. No option here is best at both, so the choice is yours.
+        underneath is worth real generation (via albedo), a dark one is worth little. Across the
+        choices above, the modelled year moves by about a tenth. The soil works the other way. A
+        bright cover sends the day's warmth back at the sky, so the bed under it runs cooler and
+        starts later. A dark cover holds that warmth. No option here is best at both, so the choice
+        is yours.
       </InfoTip>
     </>
   )
@@ -1323,7 +1323,7 @@ export const GroundPanel = (): ReactElement => {
               <p className="readout-note" data-testid="readout-bed-ph-source">
                 {bed.soil.sourceId === 'default'
                   ? `Assumed pH ${String(bed.soil.phUnits)} ${bed.soil.textureClass.replace('-', ' ')}: the soil map has no answer for this place yet. Change it if you know your soil.`
-                  : "From the soil map for this place; change it if you've tested your soil"}
+                  : "From the soil map for this place, change it if you've tested your soil"}
               </p>
             )}
             <InfoTip label="soil pH" testId="info-bed-soil-ph">

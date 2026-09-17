@@ -204,7 +204,7 @@ const CULTIVARS: readonly Cultivar[] = [
     null,
     720,
     60,
-    'Selected for alpha-terthienyl content. Effective only as a dense full-season stand; some Tagetes cultivars are hosts',
+    'Selected for alpha-terthienyl content. Effective only as a dense full-season stand, some Tagetes cultivars are hosts',
   ),
   cultivar(
     'marigold-single-gold',
@@ -214,7 +214,7 @@ const CULTIVARS: readonly Cultivar[] = [
     null,
     720,
     60,
-    'Selected for alpha-terthienyl content. Effective only as a dense full-season stand; some Tagetes cultivars are hosts',
+    'Selected for alpha-terthienyl content. Effective only as a dense full-season stand, some Tagetes cultivars are hosts',
   ),
 ]
 

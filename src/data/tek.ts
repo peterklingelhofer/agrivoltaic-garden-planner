@@ -39,7 +39,7 @@ const RULES: readonly TekDesignRule[] = [
     key: 'vertical-stratification',
     title: 'Declare two to four canopy tiers, keyed to the light level of each tier',
     guidance:
-      'Assign every planting to an explicit tier and size the tier to the modelled DLI at that height under the array. Chagga home gardens on Mt Kilimanjaro stack overstory trees, banana, coffee and an herb understory; Javanese pekarangan gardens run three to four strata. Both select the mid and shrub layers for measured shade tolerance under a real canopy.',
+      'Assign every planting to an explicit tier and size the tier to the modelled DLI at that height under the array. Chagga home gardens on Mt Kilimanjaro stack overstory trees, banana, coffee and an herb understory. Javanese pekarangan gardens run three to four strata. Both select the mid and shrub layers for measured shade tolerance under a real canopy.',
     attribution: attribution(
       ['Chagga (Mt Kilimanjaro, Tanzania)', 'Javanese communities (Indonesia)'],
       [],
@@ -81,7 +81,7 @@ const RULES: readonly TekDesignRule[] = [
     key: 'water-harvesting-geometry',
     title: 'Harvest water at two scales, tied to the array drip line and runoff shadow',
     guidance:
-      'Work at the micro scale, a sunken basin plus an inert mulch per plant, and at the macro scale, siting beds to intercept runoff from a catchment larger than the planted area. Zuni waffle gardens combine berm-walled cells with a sand mineral mulch that breaks capillary rise; Mossi zai pits concentrate rainfall and wind-blown organic debris at the planting point. A panel array redistributes rainfall into concentrated drip lines, which is exactly the resource these geometries capture.',
+      'Work at the micro scale, a sunken basin plus an inert mulch per plant, and at the macro scale, siting beds to intercept runoff from a catchment larger than the planted area. Zuni waffle gardens combine berm-walled cells with a sand mineral mulch that breaks capillary rise. Mossi zai pits concentrate rainfall and wind-blown organic debris at the planting point. A panel array redistributes rainfall into concentrated drip lines, which is exactly the resource these geometries capture.',
     attribution: attribution(
       ['Zuni (A:shiwi) of the US Southwest', 'Mossi farmers of Burkina Faso'],
       ['Yacouba Sawadogo, for the modern zai revival'],
@@ -189,11 +189,11 @@ export const dehesaGradient = (): DistanceGradientTemplate => ({
     }),
     'B',
     ['moreno2009-dehesa', 'simionesei2018-montado-water', 'montero2008-dehesa-light'],
-    'Endpoint magnitudes are taken from the dehesa and montado field studies; the ten intermediate samples are linearly interpolated between them',
+    'Endpoint magnitudes are taken from the dehesa and montado field studies, the ten intermediate samples are linearly interpolated between them',
   ),
   validRangeM: { min: DEHESA_MIN_M as Meters, max: DEHESA_MAX_M as Meters },
   caveat:
-    'Provisional magnitudes. Only the trunk-edge and beyond-canopy endpoints are measured; the shape between them is assumed linear, with no curve fitted to data',
+    'Provisional magnitudes. Only the trunk-edge and beyond-canopy endpoints are measured, the shape between them is assumed linear, with no curve fitted to data',
   attribution: attribution(
     [
       'Iberian smallholders and estate managers of Extremadura, Andalusia and the Alentejo, who created and maintain the dehesa and montado',

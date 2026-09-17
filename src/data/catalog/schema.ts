@@ -266,7 +266,7 @@ export const HABITS: Readonly<Record<PlantHabit, HabitSpec>> = {
 export const HABIT_CANOPY_CLAIM = unsourcedClaim(
   HABITS,
   'Leaf area index and light extinction coefficient per plant habit are this app’s own figures: FAO-56 chapter 9 derives the basal crop coefficient from leaf area with a single 0.7 extinction coefficient, and no source in the corpus tabulates either value by habit',
-  'They shape the canopy-cover curve of every planting’s water demand and the shade one crop casts on another; the annual water total is set elsewhere',
+  'They shape the canopy-cover curve of every planting’s water demand and the shade one crop casts on another, the annual water total is set elsewhere',
 )
 
 export interface DliClassSpec {
@@ -499,13 +499,13 @@ const stratumFor = (depthM: number): 'shallow' | 'medium' | 'deep' =>
  * no ECOCROP entry is cited for a DLI figure
  */
 const DLI_CLASS_BASIS =
-  'a class-level inference: the class comes from the crop’s garden sun label through this app’s own conversion, and the figure is that class’s range from the cited measurement methodology; no cited work measured it for this crop'
+  'a class-level inference: the class comes from the crop’s garden sun label through this app’s own conversion, and the figure is that class’s range from the cited measurement methodology, no cited work measured it for this crop'
 
 const RSR_CLASS_BASIS =
-  'a class-level inference: the shade ceiling is the conservative end of the class’s range in this app’s design record, drawn from the cited meta-analysis and strawberry trial; no shade trial was run on this crop'
+  'a class-level inference: the shade ceiling is the conservative end of the class’s range in this app’s design record, drawn from the cited meta-analysis and strawberry trial, no shade trial was run on this crop'
 
 const COLD_FLOOR_BASIS =
-  'a curated cold-hardiness floor with ECOCROP’s killing-temperature and envelope fields as the cited basis; no per-crop trial'
+  'a curated cold-hardiness floor with ECOCROP’s killing-temperature and envelope fields as the cited basis, no per-crop trial'
 
 /**
  * Decision Record 7: most per-crop DLI values are Tier C class-level

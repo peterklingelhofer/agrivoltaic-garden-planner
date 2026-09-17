@@ -173,7 +173,7 @@ describe('simulation panel', () => {
     })
     const soaked = await mount(<SimulationPanel />)
     expect(soaked.get('control-seasons-year').textContent).toMatch(
-      /Even this year wasn't dry enough for shade to raise yield\. Rain left about \d+% of the season's evaporative demand unmet; shade raises yield only past 35%/,
+      /Even this year wasn't dry enough for shade to raise yield\. Rain left about \d+% of the season's evaporative demand unmet, shade raises yield only past 35%/,
     )
     await soaked.click('control-seasons-run')
     expect(soaked.get('readout-seasons-year').textContent).toMatch(
@@ -333,7 +333,7 @@ describe('simulation panel', () => {
     expect(harness.get('readout-seasons-ler').textContent).toBe(figure)
     const note = harness.get('readout-seasons-ler').parentElement?.parentElement?.nextElementSibling
     expect(note?.textContent).toBe(
-      `The beds and panels together give what ${figure} times this land would give as a separate farm beside a separate garden; above 1 they share the ground well (Dupraz et al. 2011). The range is a 95% confidence interval dominated by crop response (Laub et al. 2022).`,
+      `The beds and panels together give what ${figure} times this land would give as a separate solar farm beside a separate garden, above 1 they share the ground well (Dupraz et al. 2011). The range is a 95% confidence interval dominated by crop response (Laub et al. 2022).`,
     )
     expect(harness.get('panel-seasons').textContent).not.toMatch(/ratio \d\.\d\d/)
     await harness.unmount()

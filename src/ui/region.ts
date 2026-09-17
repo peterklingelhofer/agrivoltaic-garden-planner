@@ -19,7 +19,7 @@ export const regionNote = (site: AsyncState<Site>, locationLabel: string): strin
       : null
   }
   if (site.status === 'error') {
-    return `The place lookup failed, so the region isn't known yet. Try the lookup again on the first question or the site panel; until it works, favouring natives changes nothing in the order below`
+    return `The place lookup failed, so the region isn't known yet. Try the lookup again on the first question or the site panel. Until it works, favouring natives changes nothing in the order below`
   }
   return NATIVE_REGION_UNKNOWN
 }
