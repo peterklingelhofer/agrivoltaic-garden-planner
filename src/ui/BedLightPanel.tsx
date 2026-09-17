@@ -57,7 +57,7 @@ export const BedLightPanel = (): ReactElement => {
           <p className="panel-sub" data-testid="readout-bed-light-source">
             {rasterReady
               ? 'From the light check. Change the panels or the beds and it runs again, and these move with it'
-              : "From the layout search's quick run. The full check runs by itself and replaces these"}
+              : 'From the layout search. The light check runs by itself and replaces these'}
           </p>
           {/* what decides the word beside each bed */}
           <p className="panel-sub" data-testid="readout-bed-light-zones">

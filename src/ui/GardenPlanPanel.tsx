@@ -14,14 +14,7 @@ import type { BedLightSummary, CandidateArchetype, DesignObjective } from '../ty
 import { Action, type ChoiceOption } from './controls'
 import { cropName, formatDli } from './format'
 import { Readout } from './Panel'
-import {
-  AMBITION_OPTIONS,
-  EXPOSURE_OPTIONS,
-  OBJECTIVE_LABELS,
-  QUALITY_HELP,
-  QUALITY_LABEL,
-  showsFigures,
-} from './onboarding'
+import { AMBITION_OPTIONS, EXPOSURE_OPTIONS, OBJECTIVE_LABELS, showsFigures } from './onboarding'
 
 const ZONE_LABEL: Readonly<Record<GeneratedBed['zone'], string>> = {
   'bright-gap': 'Sunny bed',
@@ -214,7 +207,7 @@ export const GardenPlanPanel = (): ReactElement | null => {
       ? "Light as the layout search measured it, the last light run didn't cover this bed"
       : rasterReady
         ? 'Light from the light check, it moves when the panels or the beds do'
-        : "Light from the layout search's quick run, the full check on the light step refines it"
+        : 'Light from the layout search, until the light check on the light step replaces it'
 
   return (
     <details className="wizard-advanced" data-testid="details-plants-plan">
@@ -237,14 +230,6 @@ export const GardenPlanPanel = (): ReactElement | null => {
           light and planted from the same ranking this step uses
         </span>
       </div>
-      <p
-        className={`notice ${generated.evaluatedAt === 'final' ? 'notice-ready' : 'notice-warn'}`}
-        data-testid="status-plan-quality"
-        data-quality={generated.evaluatedAt}
-      >
-        {QUALITY_LABEL[generated.evaluatedAt]}: {QUALITY_HELP[generated.evaluatedAt]}
-      </p>
-
       <div className="readouts">
         <Readout id="plan-beds" label="Beds placed" value={String(generated.beds.length)} />
         <Readout id="plan-plantings" label="Plantings" value={String(plantingCount)} />

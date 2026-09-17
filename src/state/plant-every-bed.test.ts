@@ -64,9 +64,6 @@ describe('planting every bed as the plot stands', () => {
     expect(state.generated?.plantingCount).toBe(
       (state.plot?.beds ?? []).reduce((total, bed) => total + bed.plantings.length, 0),
     )
-    // no bake ran: with no weather there is no light to compute, and the field on screen is
-    // what the planting rested on
-    expect(state.generated?.evaluatedAt).toBe('preview')
   })
 
   /**

@@ -27,7 +27,7 @@ describe('light in each bed', () => {
     const shade = harness.get(`readout-bed-light-shade-${String(bed?.id)}`).textContent ?? ''
     expect(shade).toMatch(/^\d+%$/)
     // the seeded light is the layout search's, and the source line says so
-    expect(harness.get('readout-bed-light-source').textContent).toMatch(/quick run/)
+    expect(harness.get('readout-bed-light-source').textContent).toMatch(/From the layout search/)
     await harness.unmount()
   })
 

@@ -19,8 +19,6 @@ import {
   NOT_A_DETERMINATION,
   PORTFOLIO_LABEL,
   PORTFOLIO_NOTE,
-  QUALITY_HELP,
-  QUALITY_LABEL,
   shadeBudgetNote,
   showsFigures,
   type Experience,
@@ -50,23 +48,6 @@ const ordered = (
     ...scenarios.filter((scenario) => !is(scenario, CONTROL) && !is(scenario, recommended)),
     ...scenarios.filter((scenario) => is(scenario, CONTROL)),
   ]
-}
-
-/**
- * The two caveat paragraphs as one line under the tabs: how rough the comparison is, and which
- * layouts it couldn't separate. The full sentences stay in the "How to read these" fold
- */
-const caveatLine = (evaluatedAt: 'preview' | 'final', tied: readonly string[]): string => {
-  const rough =
-    evaluatedAt === 'final'
-      ? 'Full light run, confidence no higher than moderate'
-      : 'Rough comparison from a quick run, confidence no higher than moderate'
-  if (tied.length === 0) return rough
-  const names =
-    tied.length === 1
-      ? (tied[0] as string)
-      : `${tied.slice(0, -1).join(', ')} and ${tied[tied.length - 1] as string}`
-  return `${rough}, ${names} ${tied.length === 1 ? 'ties' : 'tie'} with the suggested one`
 }
 
 interface CardProps {
@@ -147,7 +128,7 @@ const ScenarioCard = ({
         <Readout
           id={`onboarding-energy-${archetype}`}
           label="kWh a year"
-          // two figures, from a run the card itself calls quick and coarse
+          // two figures: more would read as more precise than the bake really is
           value={`about ${roughKwh(scenario.production.annualAcKwh)}`}
         />
         <Readout
@@ -388,11 +369,6 @@ export const ScenarioComparison = (): ReactElement | null => {
   const recommended = cards.find(
     (scenario) => scenario.candidate.archetype === set.recommendedArchetype,
   )
-  // labels rather than archetype keys, because the sentence names them to the grower
-  const tied = set.tooCloseToCall.flatMap((archetype) => {
-    const found = cards.find((scenario) => scenario.candidate.archetype === archetype)
-    return found === undefined ? [] : [found.candidate.label]
-  })
   const preset = presetMatching(answers.objective)
   const presetLabel =
     OBJECTIVE_PRESETS.find((entry) => entry.id === preset)?.label ?? 'your own mix'
@@ -467,19 +443,6 @@ export const ScenarioComparison = (): ReactElement | null => {
           })}
         </div>
       ) : null}
-      {/*
-        A note, not a warning: the search has found layouts it can't separate and is handing
-        the choice back, which is information. Two amber boxes stood here before the first card
-        on a phone, about 160px of what read as an error report
-      */}
-      <p
-        className={`notice ${set.evaluatedAt === 'final' ? 'notice-ready' : 'notice-idle'}`}
-        data-testid="status-onboarding-quality"
-        data-quality={set.evaluatedAt}
-        data-tied={set.tooCloseToCall.join(',')}
-      >
-        {caveatLine(set.evaluatedAt, tied)}
-      </p>
       {/* said on the face when it's the answer a grower came for: a grower weighing
           whether panels are worth it could click through all five tabs before finding that the
           search's own pick for their plot was no panels at all */}
@@ -499,7 +462,6 @@ export const ScenarioComparison = (): ReactElement | null => {
           beaten={beatenSentence(
             beatenBy(shown, set.scenarios),
             shown.candidate.archetype === set.recommendedArchetype,
-            set.tooCloseToCall,
           )}
           onApply={(chosen) => void applyDesign(chosen)}
           onSee={() => setSurface('garden')}
@@ -525,9 +487,6 @@ export const ScenarioComparison = (): ReactElement | null => {
           panels, beds placed where that option's own light falls, and a first planting in each bed.
           The app then says what it put where, and one button puts it all back. Everything stays
           editable afterward.
-        </p>
-        <p className="panel-sub" data-testid="readout-onboarding-quality-help">
-          {QUALITY_LABEL[set.evaluatedAt]}: {QUALITY_HELP[set.evaluatedAt]}
         </p>
         <p className="panel-sub" data-testid="readout-onboarding-confidence-ceiling">
           {CONFIDENCE_CEILING}

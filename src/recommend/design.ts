@@ -9,14 +9,13 @@ import { detectBackendKind } from '../sim/backend'
 import {
   checkMassachusettsSmart,
   MA_FIXED_CLEARANCE_M,
-  MA_GROWING_SEASON_HOURS,
   MA_TRACKING_CLEARANCE_M,
 } from '../sim/compliance'
 import { decompose, selectDecompositionModel } from '../sim/decomposition'
 import { derivedArrayMetrics, equatorFacingAzimuth } from '../sim/geometry'
 import { cosDeg, radiansToDegrees, sinDeg } from '../sim/math'
 import type { SimulationOptions } from '../sim/pipeline'
-import { PREVIEW_OPTIONS, runSimulation } from '../sim/pipeline'
+import { FINAL_OPTIONS, runSimulation } from '../sim/pipeline'
 import type { PvChainOptions } from '../types/energy'
 import { chainOptionsFor, runAnnualChain } from '../sim/pv/chain'
 import { DEFAULT_GROUND_COVER, type GroundCover } from '../types/ground'
@@ -97,9 +96,8 @@ export interface DesignDependencies {
   readonly obstructions: readonly Obstruction[]
   readonly targetCellSizeM: Meters
   /**
-   * The two bake settings that separate a preview from a final run, injectable for the same
-   * reason the cell size is: the only way to know what the preview's own approximation is worth
-   * is to run the search both ways and read the difference. See `SCORE_RESOLUTION`
+   * The two other bake settings a test can override to run the search coarse and fast, for the
+   * same reason `targetCellSizeM` is injectable
    */
   readonly subdivision: SimulationOptions['subdivision']
   readonly substepsPerHour: number
@@ -151,24 +149,6 @@ export const namesakeOf = (weights: {
     : weights.energy > weights.food * NAMESAKE_MARGIN
       ? 'energy-first'
       : 'balanced'
-
-/**
- * The namesake first, when the search can't tell it from the winner. Scores closer than
- * `resolution` are a tie the search is honest about, and a tie is broken toward the answer the
- * visitor gave rather than toward the order the candidates were listed in
- */
-export const preferNamesake = (
-  scenarios: readonly DesignScenario[],
-  namesake: CandidateArchetype,
-  resolution: number,
-): DesignScenario[] => {
-  const top = scenarios[0]
-  const index = scenarios.findIndex((entry) => entry.candidate.archetype === namesake)
-  if (top === undefined || index <= 0) return [...scenarios]
-  const chosen = scenarios[index] as DesignScenario
-  if (top.score - chosen.score >= resolution) return [...scenarios]
-  return [chosen, ...scenarios.filter((_, at) => at !== index)]
-}
 
 export const ARCHETYPE_ORDER: readonly CandidateArchetype[] = [
   'food-first',
@@ -1089,8 +1069,8 @@ const LAUB_TABULATED_ANCHOR_RSR = 0.4
 
 /**
  * Never `high`. Every scenario here rests on per-crop DLI absolutes that Decision Record 7
- * grades Tier C, and on a preview-quality bake, so `moderate` is the ceiling this evidence
- * supports and claiming the top of the scale would be the false precision that record forbids.
+ * grades Tier C, so `moderate` is the ceiling this evidence supports and claiming the top of
+ * the scale would be the false precision that record forbids.
  * A scenario falls to `low` when it adds an approximation of its own: a tracked array (whose
  * sky-patch pose is baked at peak elevation), shade past the 40 percent level where the crop
  * anchors are tabulated, a water-limited site (where the shade-benefit pathway is in play) or
@@ -1159,90 +1139,6 @@ const tradeoffOf = (evaluated: Evaluated, catalog: readonly Crop[]): string => {
   return `You give up about ${given} percent of your daylight for roughly ${kwh} kWh of electricity a year. ${bedsText}. ${lostText}. ${patchy ? 'The darkest part of the plot gets less than half the light of the average, so keep the shade-tolerant plants for it' : 'The light is spread evenly enough that you can plant the whole plot much the same way'}`
 }
 
-/**
- * The preview bake's own error, in the raw units the ranking is built from.
- *
- * Only TWO of the four ranking terms can move when bake quality changes, and that is what makes
- * this tractable: `energyRaw` comes from `runAnnualChain`, which reads weather, solar position
- * and geometry and never touches the raster, and `simplicityRaw` is pure geometry. So the whole
- * question is how far the light terms move, measured by running the same search at preview
- * settings and again at `FINAL_OPTIONS`. Eight paired runs on real Open-Meteo years, re-measured
- * by `scripts/measure-bake-resolution.mjs`, which is checked in precisely so that the next
- * re-measurement is comparable to this one rather than to a throwaway nobody kept:
- *
- * | site | plot | season RSR moved | crop share moved | was, RSR / share |
- * |---|---|---|---|---|
- * | Tromso NO | 3.5 x 2.4 m | 0.0023 | 0.0000 | 0.0022 / 0.0000 |
- * | Bergen NO | 3.5 x 2.4 m | 0.0013 | **0.0702** | 0.0015 / 0.0702 |
- * | Bergen NO | 16 x 11 m | 0.0015 | 0.0244 | 0.0016 / 0.0244 |
- * | Edinburgh GB | 3.5 x 2.4 m | 0.0017 | 0.0000 | 0.0024 / 0.0000 |
- * | Amherst MA | 3.5 x 2.4 m | 0.0043 | 0.0000 | 0.0048 / 0.0000 |
- * | Amherst MA | 16 x 11 m | 0.0032 | 0.0000 | 0.0032 / 0.0000 |
- * | Phoenix AZ | 3.5 x 2.4 m | **0.0134** | 0.0227 | 0.0056 / 0.0194 |
- * | Singapore | 3.5 x 2.4 m | 0.0094 | 0.0000 | 0.0093 / 0.0000 |
- *
- * The crop share is the one that was expected to move, because it's a STEP: a crop either clears
- * the light gate or it doesn't, so a bake that shifts a bed's DLI by a hair moves the share by a
- * whole crop. It did move at Phoenix, from 0.0194 to 0.0227, which is the two crop-side
- * changes of 2026-08-09 arriving; it did NOT move the worst case, still Bergen's courtyard at 0.0702, so
- * `BAKE_CROP_SHARE_RESOLUTION` is unchanged.
- *
- * **The shade ratio is what moved, and the old figure no longer covered it.** It was described
- * here as well behaved, under one percentage point everywhere; Phoenix is now 0.0134, past the
- * 0.01 that shipped. The cause isn't the bake: the same two commits changed which crops clear
- * the gate at a hot site, `candidatesFor` derives pitch from the shade the planting can afford,
- * and so a different geometry is being scored. That's the coupling this entry didn't previously
- * name, and it's why a crop-side change invalidates the LIGHT constants too.
- *
- * Both are the worst measured value of each, to the precision they are written at: 0.0134 rounds
- * up to 0.014, and 0.07 is a whisker under the measured 0.0702 rather than over it, which is the
- * value that shipped and was validated and is left alone at three parts in a thousand
- */
-export const BAKE_RSR_RESOLUTION = 0.014
-export const BAKE_CROP_SHARE_RESOLUTION = 0.07
-
-/**
- * How much of a score gap means nothing, derived per run rather than fixed.
- *
- * A constant can't express this, and two attempts to make it one were both wrong. The score is a
- * weighted sum of MIN-MAX NORMALIZED terms, so each term is divided by its own spread across the
- * candidate set, and a raw error of `d` lands in the score as `d / spread`. Where an array is
- * marginal that spread collapses and the same bake error arrives magnified: Bergen's 3.5 x 2.4 m
- * courtyard moves 0.1543 while the same city's 16 x 11 m plot moves 0.0115, on bake errors that
- * are nearly identical (crop share 0.0702 against 0.0244). Spread is the whole difference, and it's
- * known from the preview run itself, for free.
- *
- * So the margin is the raw resolution above, carried through the same normalization the score
- * uses, and weighted the way the score weights it. Each term is capped at 1 because a normalized
- * term can't move further than its own range: without the cap a plot where the food spread has
- * collapsed entirely would report a margin larger than the score scale.
- *
- * Checked against all eight paired runs, at the re-measured figures: it covers every one,
- * including the Bergen courtyard that defeated the constant, and by a wider hand than before
- * (0.1794 against a measured 0.1543, where the old constants gave 0.1640 against 0.1541).
- *
- * One claim that stood here is WITHDRAWN, and it was arithmetically impossible rather than merely
- * stale. It read that the margin is tighter than the 0.02 it replaces wherever the set is well
- * separated, at 0.0112 on Amherst's 16 x 11 m plot. This formula can't return 0.0112: both raw
- * terms are normalized into [0, 1], so a spread can never exceed 1, and the floor of the margin at
- * balanced weights was `0.35 * 0.04 + 0.15 * 0.01`, which is 0.0155, and is 0.0168 now. The
- * best-separated of the eight, that same Amherst plot, actually returns 0.0553. So the adaptive
- * margin is WIDER than the constant it replaced everywhere these eight sites reach, and its case
- * isn't tightness: it's that a single constant was wrong at both ends at once, 0.02 being far
- * too small for Bergen's courtyard at 0.1543 and arbitrary everywhere else
- */
-export const scoreResolution = (
-  foodSpread: number,
-  waterSpread: number,
-  weights: DesignObjective,
-): number => {
-  const carried = (raw: number, spread: number): number =>
-    spread <= 1e-9 ? 1 : Math.min(1, raw / spread)
-  // the food term is half crop share and half kept light, exactly as `foodRaw` builds it
-  const food = carried(0.5 * BAKE_CROP_SHARE_RESOLUTION + 0.5 * BAKE_RSR_RESOLUTION, foodSpread)
-  return weights.food * food + weights.water * carried(BAKE_RSR_RESOLUTION, waterSpread)
-}
-
 const NOT_CONSIDERED_BASE: readonly string[] = [
   "Semi-transparent, checkerboard and spaced-module layouts weren't tried. They buy a more even ground light for a linear loss of electricity and are a real option this search doesn't cover",
   "The plot is treated as a level rectangle with a clear horizon. Slope, buildings, trees and fences on the site weren't modeled",
@@ -1250,8 +1146,8 @@ const NOT_CONSIDERED_BASE: readonly string[] = [
 ]
 
 /**
- * Five candidate geometries, one per archetype, each scored on a full annual light bake at
- * preview quality and ranked by the grower's own objective weights.
+ * Five candidate geometries, one per archetype, each scored on a full annual light bake
+ * and ranked by the grower's own objective weights.
  *
  * The search is deliberately not a sweep. Each candidate costs one annual bake, so the
  * cap is the five archetypes and `notConsidered` says so rather than hiding it. Geometry
@@ -1281,9 +1177,9 @@ export const suggestDesigns = async (
     backend: overrides.backend ?? detectBackendKind(),
     groundCover: overrides.groundCover ?? DEFAULT_GROUND_COVER,
     obstructions: overrides.obstructions ?? [],
-    targetCellSizeM: overrides.targetCellSizeM ?? PREVIEW_OPTIONS.targetCellSizeM,
-    subdivision: overrides.subdivision ?? PREVIEW_OPTIONS.subdivision,
-    substepsPerHour: overrides.substepsPerHour ?? PREVIEW_OPTIONS.substepsPerHour,
+    targetCellSizeM: overrides.targetCellSizeM ?? FINAL_OPTIONS.targetCellSizeM,
+    subdivision: overrides.subdivision ?? FINAL_OPTIONS.subdivision,
+    substepsPerHour: overrides.substepsPerHour ?? FINAL_OPTIONS.substepsPerHour,
     tiltPlans: overrides.tiltPlans ?? {},
     run: overrides.run ?? runSimulation,
     onProgress: overrides.onProgress ?? (() => {}),
@@ -1339,13 +1235,10 @@ export const suggestDesigns = async (
       plot,
       deps.weather,
       {
-        ...PREVIEW_OPTIONS,
+        ...FINAL_OPTIONS,
         targetCellSizeM: deps.targetCellSizeM,
         subdivision: deps.subdivision,
         substepsPerHour: deps.substepsPerHour,
-        // one extra weight vector on the shared direction set, so the Massachusetts figure is
-        // measured over Growing Season Hours instead of the month approximation
-        windows: [MA_GROWING_SEASON_HOURS],
         backend: deps.backend,
       },
       (bake) => {
@@ -1383,13 +1276,12 @@ export const suggestDesigns = async (
   const energyRaw = evaluated.map((entry) => entry.production.annualAcKwh as number)
   const waterRaw = evaluated.map((entry) => entry.light.meanShadeRatio as number)
   const simplicityRaw = evaluated.map(simplicityOf)
-  const spreadOf = (values: readonly number[]): number => Math.max(...values) - Math.min(...values)
-  const resolution = scoreResolution(spreadOf(foodRaw), spreadOf(waterRaw), weights)
   const food = normalize(foodRaw)
   const energy = normalize(energyRaw)
   const water = normalize(waterRaw)
   const simplicity = normalize(simplicityRaw)
 
+  const namesake = namesakeOf(weights)
   const scenarios: DesignScenario[] = evaluated
     .map((entry, index) => ({
       candidate: entry.candidate,
@@ -1407,44 +1299,29 @@ export const suggestDesigns = async (
       tradeoff: tradeoffOf(entry, catalog),
       confidence: confidenceOf(entry, deps.site),
     }))
+    // strict by score. Only an exactly equal score, two ideas that produced the same geometry,
+    // goes to the layout named for what the answers asked for most
     .sort(
       (a, b) =>
         b.score - a.score ||
+        Number(b.candidate.archetype === namesake) - Number(a.candidate.archetype === namesake) ||
         ARCHETYPE_ORDER.indexOf(a.candidate.archetype) -
           ARCHETYPE_ORDER.indexOf(b.candidate.archetype),
     )
-  /*
-    Inside the band the search can't resolve, the layout named for what the answers asked for
-    most goes first. `scoreResolution` says how far apart two scores have to be before the
-    difference means anything, and inside that band the sort above was settling the tie by
-    `ARCHETYPE_ORDER`, which put "Energy first" over "Food first" for a visitor who had just
-    answered "mostly food": three of four personas read that as the app ignoring them. A tie
-    broken toward the answer is still a tie, and `tooCloseToCall` goes on saying so
-  */
-  const ranked = preferNamesake(scenarios, namesakeOf(weights), resolution)
 
   const exclusion = MOUNTING_EXCLUSION[answers.mounting]
   const notConsidered = [
     `Exactly ${String(candidates.length)} geometries were evaluated, one per design idea, and almost nothing was swept around them. No other clearance or row count was tried. No other pitch or tilt was tried either, except on the design meant to generate the most, because each full candidate costs a year of light simulation. That design had its tilt picked by trying every angle from ${String(REFERENCE_MIN_TILT_DEG)} to ${String(REFERENCE_MAX_TILT_DEG)} degrees against a year of electricity, which is cheap because it needs no light simulation at all`,
     ...(exclusion === null ? [] : [exclusion]),
-    `Every number here comes from a preview-quality bake: a 145-patch sky, one sun sample per hour and ${deps.targetCellSizeM.toFixed(2)} m ground cells. The full bake uses a 577-patch sky, four samples per hour and 0.12 m cells and will move these figures`,
     ...houseOverlapNotes(answers, deps.site, houses, tiltPlans),
     ...NOT_CONSIDERED_BASE,
   ]
 
-  const top = ranked[0]?.score ?? 0
   return {
     answers,
     plotAreaM2: squareMeters(answers.plotWidthM * answers.plotDepthM),
-    scenarios: ranked,
-    recommendedArchetype: ranked[0]?.candidate.archetype ?? 'no-array-control',
-    scoreResolution: resolution,
-    // measured from the best score there is, which after the namesake tie-break may sit second
-    tooCloseToCall: ranked
-      .slice(1)
-      .filter((entry) => Math.abs(top - entry.score) < resolution)
-      .map((entry) => entry.candidate.archetype),
+    scenarios,
+    recommendedArchetype: scenarios[0]?.candidate.archetype ?? 'no-array-control',
     notConsidered,
-    evaluatedAt: 'preview',
   }
 }

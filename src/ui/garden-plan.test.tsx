@@ -144,15 +144,6 @@ describe('what the guided setup planted', () => {
     await harness.unmount()
   })
 
-  it('says the run behind it was a preview and never presents it as final', async () => {
-    await generate()
-    const harness = await mount(<GardenPlanPanel />)
-    const quality = harness.get('status-plan-quality')
-    expect(quality.dataset.quality).toBe('preview')
-    expect(quality.textContent).toMatch(/before you build from it/i)
-    await harness.unmount()
-  })
-
   it('keeps the light figures for the reader who asked for figures, and not otherwise', async () => {
     await generate()
     const bed = getAppState().generated?.beds[0]
@@ -215,7 +206,6 @@ describe('the plan card follows the beds', () => {
     expect(fold.hasAttribute('open')).toBe(false)
     for (const id of [
       'badge-plan-archetype',
-      'status-plan-quality',
       'readout-plan-plantings',
       'readout-plan-explanation',
       'list-plan-beds',

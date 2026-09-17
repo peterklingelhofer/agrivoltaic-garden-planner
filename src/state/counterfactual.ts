@@ -28,7 +28,6 @@ export interface NoPanelsComparison {
   readonly season: number
   readonly harvestIndex: Fraction | null
   readonly outcomes: readonly NoPanelsOutcome[]
-  readonly evaluatedAt: 'preview'
 }
 
 /** The plot as it would stand with every panel row pulled: same beds, same plantings, no arrays */

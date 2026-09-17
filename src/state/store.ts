@@ -31,12 +31,7 @@ import { exposureInForce, shadedBySurroundings } from '../recommend/surroundings
 import { bedLight as bedLightOf } from '../sim/aggregate'
 import { checkAllRegimes } from '../sim/compliance'
 import { equatorFacingAzimuth } from '../sim/geometry'
-import {
-  FINAL_OPTIONS,
-  PREVIEW_OPTIONS,
-  runSimulation,
-  type SimulationOptions,
-} from '../sim/pipeline'
+import { FINAL_OPTIONS, runSimulation, type SimulationOptions } from '../sim/pipeline'
 import { chainOptionsFor } from '../sim/pv/chain'
 import { NO_ARRAY_ENERGY_RATIO } from '../sim/pv/ler'
 import { pvEnergyReport } from '../sim/pv/report'
@@ -55,7 +50,6 @@ import type {
   CandidateArchetype,
   DesignScenario,
   LightZoneKind,
-  ScenarioSet,
 } from '../types/onboarding'
 import type { CropPreference, PolycultureSuggestion } from '../types/polyculture'
 import type { PvArray } from '../types/pv'
@@ -143,7 +137,7 @@ export const DEFAULT_TIME = epochMillis(Date.UTC(2024, 6, 23, 16, 0, 0))
  */
 export const todayMillis = (): EpochMillis => epochMillis(Date.now())
 
-const DEFAULT_SIM_OPTIONS: SimulationOptions = { ...PREVIEW_OPTIONS, backend: 'webgl2-shadowmap' }
+const DEFAULT_SIM_OPTIONS: SimulationOptions = { ...FINAL_OPTIONS, backend: 'webgl2-shadowmap' }
 
 export const ENERGY_NEEDS_SITE =
   'No site or weather yet. Look up the place first: the electricity is computed against a typical weather year for it'
@@ -501,7 +495,6 @@ interface PlantingRun {
    * where there are panels and no energy figure yet, which leaves every bed empty with the reason
    */
   readonly energyRatio: Banded<Fraction> | null
-  readonly evaluatedAt: ScenarioSet['evaluatedAt']
   readonly archetype: CandidateArchetype | null
   readonly explanation: string
   /** What carrying panels cost the plot against the open sky, where a search measured it */
@@ -518,32 +511,14 @@ const NOTHING_FITS = (label: string): string =>
   `Nothing in the catalog suits ${label} at the light and soil it has, so it was left empty`
 
 /**
- * Whether a planting can rest on the light on screen, or has to wait for the full check first.
- *
- * A guided apply carries the search's preview light across and the full bake lands a second
- * later; planting against the preview and re-ranking against the bake read as the garden
- * changing its mind (one session kept 90% of a bed's crops on the preview and 23% on the bake).
- * So the planting waits for the bake wherever the light is missing or stale, and `evaluatedAt`
- * says which light it rested on. `runFinal` memoizes on the plot, so a bake already landed for
- * this arrangement costs nothing to ask for again
+ * A planting waits for the bake wherever the light is missing or stale, so it never rests on a
+ * raster the garden has since outgrown. `runFinal` memoizes on the plot, so a bake already
+ * landed for this arrangement costs nothing to ask for again
  */
-const settleLight = async (get: () => AppState): Promise<ScenarioSet['evaluatedAt'] | null> => {
+const settleLight = async (get: () => AppState): Promise<void> => {
   const state = get()
   if (lightIsMissing(state) || lightIsStale(state)) await state.runFinal()
-  return lightQuality(get())
 }
-
-/**
- * Which light a ranking made now rests on: the full check, the quick one the agent can still
- * start, or none. The raster carries no such tag of its own; the options the last run was
- * handed are what say which it was
- */
-const lightQuality = (state: AppState): ScenarioSet['evaluatedAt'] | null =>
-  state.raster.status !== 'ready'
-    ? null
-    : state.options.subdivision === FINAL_OPTIONS.subdivision
-      ? 'final'
-      : 'preview'
 
 /**
  * The electricity term the combinations are scored on. With no panels there is no electricity
@@ -581,7 +556,6 @@ const plantBeds = (run: PlantingRun, set: Setter, get: () => AppState): void => 
       s.planRefusals = plantRefusals
       const generated: GardenGeneration = {
         archetype: run.archetype,
-        evaluatedAt: run.evaluatedAt,
         explanation: run.explanation,
         beds,
         plantingCount: beds.reduce((total, bed) => total + bed.cropIds.length, 0),
@@ -782,19 +756,17 @@ const rankForPlanting = async (
   get: () => AppState,
 ): Promise<{
   readonly sets: readonly RecommendationSet[]
-  readonly evaluatedAt: ScenarioSet['evaluatedAt'] | null
 }> => {
   await get().ensureSite()
   if (get().catalog.status !== 'ready') await get().loadCatalog()
   if (get().companionRules.status !== 'ready') await get().loadEvidence()
-  const evaluatedAt = await settleLight(get)
+  await settleLight(get)
   const sets = await get().recommend()
-  return { sets: sets ?? [], evaluatedAt }
+  return { sets: sets ?? [] }
 }
 
 const generateGarden = async (
   scenario: DesignScenario,
-  evaluatedAt: ScenarioSet['evaluatedAt'],
   set: Setter,
   get: () => AppState,
 ): Promise<void> => {
@@ -806,7 +778,6 @@ const generateGarden = async (
       sets: ranked.sets,
       // the same electricity partial this scenario was scored on
       energyRatio: scenario.energyRatio,
-      evaluatedAt: ranked.evaluatedAt ?? evaluatedAt,
       archetype: scenario.candidate.archetype,
       explanation: layout.explanation,
       // measured by the search against its own open-sky control, carried rather than recomputed
@@ -1431,8 +1402,6 @@ export const useAppStore = create<AppState>()(
           s.options = { ...s.options, ...options }
         }),
 
-      runPreview: () => runBake({ ...PREVIEW_OPTIONS, backend: get().options.backend }, set, get),
-
       runFinal: () => runBake({ ...FINAL_OPTIONS, backend: get().options.backend }, set, get),
 
       runEnergy: () => {
@@ -1571,7 +1540,7 @@ export const useAppStore = create<AppState>()(
 
       /**
        * The harvest the LAST season would have made with every panel removed: the plot with
-       * `arrays: []`, baked at preview quality through its own client (never the editor's or the
+       * `arrays: []`, baked through its own client (never the editor's or the
        * design search's, so this can never cancel either of theirs), and that same season's own
        * science run again against the counterfactual light. Nothing here reaches `s.plot`,
        * `s.bedLight`, `s.simulation` or `s.simulationNotice`: the real season stands exactly as
@@ -1619,7 +1588,7 @@ export const useAppStore = create<AppState>()(
         const season = latest.season
         const history = historyBeforeSeason(state.simulation.history, season)
         const noPanelPlot = withoutPanels(plot)
-        const options: SimulationOptions = { ...PREVIEW_OPTIONS, backend: state.options.backend }
+        const options: SimulationOptions = { ...FINAL_OPTIONS, backend: state.options.backend }
 
         noPanelsToken += 1
         const token = noPanelsToken
@@ -1667,7 +1636,6 @@ export const useAppStore = create<AppState>()(
                   kind: outcome.kind,
                   realized: outcome.realized,
                 })),
-                evaluatedAt: 'preview' as const,
               })
             : failed(unavailableMessage('no-panels comparison', result.message))
         })
@@ -2172,7 +2140,7 @@ export const useAppStore = create<AppState>()(
           s.draft = []
           s.selectedBedId = null
           // the light each bed was placed in, carried across rather than re-baked. It's the
-          // wizard's preview run and `quality` on every entry says so
+          // search's own bake of this layout
           s.bedLight = layout.beds.map((bed) => bed.light)
           s.compliance = []
           // captured only when the slot is empty: a second apply before an undo must still
@@ -2184,14 +2152,8 @@ export const useAppStore = create<AppState>()(
           s.planRefusals = []
           s.planting = true
         })
-        const designs = state.onboarding.designs
         try {
-          await generateGarden(
-            scenario,
-            designs.status === 'ready' ? designs.value.evaluatedAt : 'preview',
-            set,
-            get,
-          )
+          await generateGarden(scenario, set, get)
         } finally {
           set((s) => {
             s.planting = false
@@ -2242,8 +2204,6 @@ export const useAppStore = create<AppState>()(
               beds,
               sets: ranked.sets,
               energyRatio: energyRatioFor(get),
-              // the light is the editor's own; `preview` says the quick check, `final` the full one
-              evaluatedAt: ranked.evaluatedAt ?? 'preview',
               archetype: null,
               explanation: PLANTED_AS_IT_STANDS,
               // no search measured this plot against the open sky, so there's nothing to claim
