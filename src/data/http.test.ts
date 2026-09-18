@@ -9,6 +9,7 @@ import {
   rateLimitWindow,
   REMEMBERED_CACHE,
   requestUrl,
+  PROXIED_DEADLINE_MS,
   RESPONSE_DEADLINE_MS,
   UpstreamError,
   UpstreamTimeout,
@@ -67,32 +68,63 @@ const silent = (): typeof fetch =>
 const call = (): Promise<unknown> =>
   fetchJson('open-meteo', '/v1/archive', new URLSearchParams({ q: '1' }), OPTIONS)
 
+/** the one the browser reaches itself, so the caller's deadline is the whole of the wait */
+const callDirect = (): Promise<unknown> =>
+  fetchJson('nasa-power', '/api/temporal/hourly/point', new URLSearchParams({ q: '1' }), OPTIONS)
+
 describe('an upstream that never answers', () => {
   it('is refused once the deadline passes rather than waited on forever', async () => {
     globalThis.fetch = silent()
-    await expect(call()).rejects.toBeInstanceOf(UpstreamTimeout)
+    await expect(callDirect()).rejects.toBeInstanceOf(UpstreamTimeout)
   })
 
   it('is asked exactly once, because a retry only buys another deadline of waiting', async () => {
     const stub = silent()
     globalThis.fetch = stub
-    await expect(call()).rejects.toBeInstanceOf(UpstreamTimeout)
+    await expect(callDirect()).rejects.toBeInstanceOf(UpstreamTimeout)
     expect(stub).toHaveBeenCalledTimes(1)
   })
 
   it('names the upstream and reports no status, because there was no status line', async () => {
     globalThis.fetch = silent()
-    const error = await call().catch((reason: unknown) => reason)
+    const error = await callDirect().catch((reason: unknown) => reason)
     expect(error).toBeInstanceOf(UpstreamTimeout)
-    expect((error as UpstreamTimeout).upstream).toBe('open-meteo')
+    expect((error as UpstreamTimeout).upstream).toBe('nasa-power')
     expect((error as UpstreamTimeout).status).toBe(0)
+  })
+
+  /**
+   * The proxy bounds its own wait for an upstream and answers 504 past it, so a request through
+   * it is given that long and a little more, whatever shorter deadline the caller carried: at
+   * 12 s a phone gave up on a ten-year archive the proxy received and cached two seconds later
+   */
+  it("is waited on past the proxy's own timeout when it sits behind the Worker", async () => {
+    vi.useFakeTimers()
+    try {
+      globalThis.fetch = silent()
+      let settled = false
+      const outcome = call()
+        .catch((reason: unknown) => reason)
+        .finally(() => {
+          settled = true
+        })
+      // the deadline is set after an await, so it exists once the microtasks have drained
+      await vi.advanceTimersByTimeAsync(0)
+      await vi.advanceTimersByTimeAsync(PROXIED_DEADLINE_MS - 1)
+      expect(settled).toBe(false)
+      await vi.advanceTimersByTimeAsync(2)
+      expect(await outcome).toBeInstanceOf(UpstreamTimeout)
+      expect(PROXIED_DEADLINE_MS).toBeGreaterThan(RESPONSE_DEADLINE_MS)
+    } finally {
+      vi.useRealTimers()
+    }
   })
 })
 
 describe('an upstream whose body is slower than the deadline', () => {
   it('is read to the end, because the deadline is on the headers and nothing else', async () => {
     globalThis.fetch = slowBody(OPTIONS.deadlineMs * 3)
-    await expect(call()).resolves.toEqual({ value: 'arrived' })
+    await expect(callDirect()).resolves.toEqual({ value: 'arrived' })
   })
 })
 

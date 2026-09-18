@@ -122,6 +122,43 @@ describe('the place the app is already showing gets looked up', () => {
     expect(state().site.status).toBe('ready')
   })
 
+  /**
+   * The press is answered before the lookup it has to run first lands. That lookup is seconds on a
+   * phone, and a button that shows nothing for that long reads as broken
+   */
+  it('shows the search as running while the lookup it needs first is still out', async () => {
+    resolveSite.mockRejectedValueOnce(new Error('upstream said no'))
+    await state().ensureSite()
+    let land: (value: unknown) => void = () => undefined
+    resolveSite.mockReturnValueOnce(
+      new Promise((resolve) => {
+        land = resolve
+      }),
+    )
+    const press = state().suggestDesigns()
+    await Promise.resolve()
+    expect(state().onboarding.designs.status).toBe('loading')
+    expect(state().sidebarStep).toBe('panels')
+    land({ site: siteFixture(), weather: tmyFixture(), years: [] })
+    await press
+    expect(state().site.status).toBe('ready')
+  })
+
+  /** A lookup that fails again ends the search with its own sentence, rather than running twice */
+  it("fails the search with the lookup's sentence when the place can't be looked up", async () => {
+    resolveSite.mockRejectedValue(new Error('upstream said no'))
+    await state().ensureSite()
+    await state().suggestDesigns()
+    expect(resolveSite).toHaveBeenCalledTimes(2)
+    const designs = state().onboarding.designs
+    const site = state().site
+    expect(designs.status).toBe('error')
+    expect(site.status).toBe('error')
+    if (designs.status === 'error' && site.status === 'error') {
+      expect(designs.message).toBe(site.message)
+    }
+  })
+
   /** And it never overrides a place the visitor actually chose */
   it('leaves a resolved site alone', async () => {
     await state().resolveSite(
