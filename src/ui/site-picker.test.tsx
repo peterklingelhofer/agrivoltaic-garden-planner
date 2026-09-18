@@ -26,10 +26,11 @@ const HITS: readonly GeocodeHit[] = [
 ]
 
 const geocode = vi.hoisted(() => vi.fn())
+const reverseGeocode = vi.hoisted(() => vi.fn())
 
 /* captured before the mock is installed, so the spread carries the real module */
 const actualGeocode = await import('../data/geocode')
-mock.module('../data/geocode', () => ({ ...actualGeocode, geocode }))
+mock.module('../data/geocode', () => ({ ...actualGeocode, geocode, reverseGeocode }))
 
 const resolveSite = vi.fn(async () => undefined)
 let originalResolve: typeof resolveSite
@@ -48,6 +49,8 @@ beforeEach(() => {
   vi.useFakeTimers()
   geocode.mockReset()
   geocode.mockResolvedValue(HITS)
+  reverseGeocode.mockReset()
+  reverseGeocode.mockResolvedValue(hit('Glassboro, New Jersey', 39.7029, -75.1118))
   resolveSite.mockClear()
   originalResolve = useAppStore.getState().resolveSite as typeof resolveSite
   useAppStore.setState({ resolveSite })
@@ -235,6 +238,92 @@ describe('using the browser location', () => {
     )
     expect(notice.className).toContain('notice-idle')
     expect(harness.find('status-site-search')).toBeNull()
+    await harness.unmount()
+  })
+
+  /**
+   * A position IS resolving the site, the way choosing a result is, so a phone that shares its
+   * location needs no second press. The device's own coordinates are the site. The reverse lookup
+   * only names it
+   */
+  it('resolves the site at the position the browser shared, named by the reverse lookup', async () => {
+    Object.defineProperty(navigator, 'geolocation', {
+      configurable: true,
+      value: {
+        getCurrentPosition: (ok: (position: unknown) => void) =>
+          ok({ coords: { latitude: 39.7302, longitude: -75.1385 } }),
+      },
+    })
+    const harness = await mount(<SitePanel />)
+    await harness.click('action-site-geolocate')
+    await act(async () => {
+      await Promise.resolve()
+      await Promise.resolve()
+    })
+    expect(reverseGeocode).toHaveBeenCalledTimes(1)
+    expect(resolveSite).toHaveBeenCalledTimes(1)
+    const [location, label, countryCode] = resolveSite.mock.calls[0] as unknown as [
+      { latitudeDeg: number; longitudeDeg: number },
+      string,
+      string | null,
+    ]
+    expect(location).toEqual({ latitudeDeg: 39.7302, longitudeDeg: -75.1385 })
+    expect(label).toBe('Glassboro, New Jersey')
+    expect(countryCode).toBe('US')
+    expect(harness.get('readout-site-label').textContent).toBe('Glassboro, New Jersey')
+    expect(harness.find('status-site-geolocate')).toBeNull()
+    await harness.unmount()
+  })
+
+  it('still resolves the site, as "Current location", when the reverse lookup fails', async () => {
+    reverseGeocode.mockRejectedValue(new Error('nominatim is down'))
+    Object.defineProperty(navigator, 'geolocation', {
+      configurable: true,
+      value: {
+        getCurrentPosition: (ok: (position: unknown) => void) =>
+          ok({ coords: { latitude: 39.7302, longitude: -75.1385 } }),
+      },
+    })
+    const harness = await mount(<SitePanel />)
+    await harness.click('action-site-geolocate')
+    await act(async () => {
+      await Promise.resolve()
+      await Promise.resolve()
+    })
+    expect(resolveSite).toHaveBeenCalledTimes(1)
+    const [location, label, countryCode] = resolveSite.mock.calls[0] as unknown as [
+      { latitudeDeg: number; longitudeDeg: number },
+      string,
+      string | null,
+    ]
+    expect(location).toEqual({ latitudeDeg: 39.7302, longitudeDeg: -75.1385 })
+    expect(label).toBe('Current location')
+    expect(countryCode).toBeNull()
+    await harness.unmount()
+  })
+
+  /** A phone can take seconds to find itself, and the press says so and gives the browser a deadline */
+  it('reads as looking while the browser is, and hands the browser a timeout', async () => {
+    let options: { timeout?: number; maximumAge?: number } | undefined
+    Object.defineProperty(navigator, 'geolocation', {
+      configurable: true,
+      value: {
+        getCurrentPosition: (
+          _ok: unknown,
+          _fail: unknown,
+          given: { timeout?: number; maximumAge?: number },
+        ) => {
+          options = given
+        },
+      },
+    })
+    const harness = await mount(<SitePanel />)
+    await harness.click('action-site-geolocate')
+    const button = harness.get('action-site-geolocate') as HTMLButtonElement
+    expect(button.textContent).toBe('Finding your location...')
+    expect(button.disabled).toBe(true)
+    expect(options?.timeout).toBeGreaterThan(0)
+    expect(options?.maximumAge).toBeGreaterThan(0)
     await harness.unmount()
   })
 
