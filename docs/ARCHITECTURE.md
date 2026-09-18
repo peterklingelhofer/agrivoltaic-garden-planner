@@ -407,11 +407,17 @@ v{schemaVersion}/{upstream}/{lat}/{lon}/{dataset}/{variant}
 - Key is materialised as a synthetic `https://cache.invalid/{key}` request for the Cache API.
 
 TTLs: `TTL_TMY_SECONDS` and `TTL_ELEVATION_SECONDS` are one year (a TMY for a fixed point does not
-change, and neither does the height of the ground), `TTL_ERROR_SECONDS` is 60, so an upstream outage
-does not get pinned for a year. A 429 is forwarded rather than swallowed and is held for that same
-60 s, which turns a stampede into one upstream request a minute, `withRetry` in `src/data/http.ts`
-correspondingly does **not** retry a 429, because the backoff there is a quarter of a second and a
-retry spends two more of the requests the limit is counting.
+change, and neither does the height of the ground), `TTL_ERROR_SECONDS` is 60 for a 4xx and
+`TTL_OUTAGE_SECONDS` is 10 for a 5xx, so an upstream outage does not get pinned for a year, or for
+the minute the client waits before it asks again: held for a minute, a 502 answered the client's
+first scheduled retry with the failure it had already read. A 429 is forwarded rather than
+swallowed and is held for the full 60 s, which turns a stampede into one upstream request a minute,
+`withRetry` in `src/data/http.ts` correspondingly does **not** retry a 429, because the backoff
+there is a quarter of a second and a retry spends two more of the requests the limit is counting.
+The client's deadline for the response headers is `RESPONSE_DEADLINE_MS` (12 s) on an upstream it
+reaches itself and `PROXIED_DEADLINE_MS` (20 s) through the Worker, which bounds its own wait for
+an upstream at `UPSTREAM_TIMEOUT_MS` (15 s) and answers 504 past it: the client outlasts that and
+reads whichever it was.
 
 `bun run dev` has no Worker behind it, so `vite.config.ts` sends `/api/proxy/open-meteo/*` and
 `/api/proxy/open-elevation/*` straight to their upstreams. PVGIS and NSRDB can fall back silently

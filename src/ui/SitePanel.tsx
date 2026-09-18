@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState, type ReactElement } from 'react'
-import { ELEVATION_UNKNOWN, type GeocodeHit } from '../data/geocode'
+import { ELEVATION_UNKNOWN, type GeocodeHit, reverseGeocode } from '../data/geocode'
 import { NRCAN_SCHEME_NOTE } from '../data/static-layers'
 import { describeWaterLimitation } from '../data/water'
 import { showingExample, useAppStore } from '../state/store'
@@ -22,6 +22,9 @@ export const OSM_ATTRIBUTION = '© OpenStreetMap contributors'
 const RESULTS_ID = 'site-search-results'
 const SITE_IDLE = 'No place looked up yet. Search an address above'
 const WEATHER_IDLE = 'No weather yet. Looking up the place loads it'
+/** Firefox on a phone can wait on a satellite fix past any patience, a network fix comes in seconds */
+const GEOLOCATION_TIMEOUT_MS = 15_000
+const GEOLOCATION_MAX_AGE_MS = 600_000
 
 /**
  * "usda-2023 6a" is a dataset id; a gardener reads "zone 6a (USDA)". Off the grid the zone is
@@ -83,6 +86,8 @@ export const SitePanel = (): ReactElement => {
   const [geoBlocked, setGeoBlocked] = useState(false)
   // hidden rather than shown-and-refused: a permission already denied is not worth a press
   const [geoOffered, setGeoOffered] = useState(true)
+  // the press is answered while the browser looks: a phone can take seconds to find itself
+  const [locating, setLocating] = useState(false)
 
   useEffect(() => {
     if (typeof navigator === 'undefined' || !navigator.permissions?.query) return
@@ -107,24 +112,47 @@ export const SitePanel = (): ReactElement => {
     [clear, resolveSite],
   )
 
+  /**
+   * A position IS resolving the site, the way choosing a result is: writing the coordinates and
+   * waiting for a second press would make the press read as doing nothing on a phone. The place's
+   * name comes from the reverse lookup and the coordinates stay the device's, and without a name
+   * the site still resolves as "Current location"
+   */
   const useBrowserLocation = useCallback(() => {
     if (typeof navigator === 'undefined' || !navigator.geolocation) {
       setGeoBlocked(true)
       return
     }
     setGeoBlocked(false)
+    setLocating(true)
     navigator.geolocation.getCurrentPosition(
-      (position) =>
-        setLocation(
-          {
-            latitudeDeg: degreesLatitude(position.coords.latitude),
-            longitudeDeg: degreesLongitude(position.coords.longitude),
-          },
-          'Current location',
-        ),
-      () => setGeoBlocked(true),
+      (position) => {
+        setLocating(false)
+        const location = {
+          latitudeDeg: degreesLatitude(position.coords.latitude),
+          longitudeDeg: degreesLongitude(position.coords.longitude),
+        }
+        void reverseGeocode(location, null)
+          .then(
+            (hit): GeocodeHit => ({ ...hit, location }),
+            (): GeocodeHit => ({
+              label: 'Current location',
+              location,
+              countryCode: '',
+              attribution: '',
+            }),
+          )
+          .then(choose)
+      },
+      () => {
+        setLocating(false)
+        setGeoBlocked(true)
+      },
+      // a fix the phone found in the last few minutes places this garden as well as a fresh
+      // one, and past the timeout the browser has said no in its own way
+      { maximumAge: GEOLOCATION_MAX_AGE_MS, timeout: GEOLOCATION_TIMEOUT_MS },
     )
-  }, [setLocation])
+  }, [choose])
 
   const resolved = site.status === 'ready' ? site.value : null
   const example = useAppStore(showingExample)
@@ -163,8 +191,8 @@ export const SitePanel = (): ReactElement => {
           {searching ? 'Searching...' : 'Find this place'}
         </Action>
         {geoOffered ? (
-          <Action testId="action-site-geolocate" onClick={useBrowserLocation}>
-            Use my location
+          <Action testId="action-site-geolocate" disabled={locating} onClick={useBrowserLocation}>
+            {locating ? 'Finding your location...' : 'Use my location'}
           </Action>
         ) : null}
       </div>

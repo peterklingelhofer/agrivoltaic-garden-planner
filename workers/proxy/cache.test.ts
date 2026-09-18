@@ -6,6 +6,7 @@ import {
   KV_BODY_LIMIT_BYTES,
   quantiseCoordinate,
   TTL_ERROR_SECONDS,
+  TTL_OUTAGE_SECONDS,
   TTL_TMY_SECONDS,
   withCache,
 } from './cache'
@@ -141,16 +142,37 @@ describe('withCache', () => {
     expect(TTL_TMY_SECONDS).toBe(31_536_000)
   })
 
-  it('pins an upstream failure for 60 s, not a year', async () => {
+  it('pins a refusal for 60 s, not a year', async () => {
     const { waited } = stubCaches()
     const response = await withCache('bad', TTL_TMY_SECONDS, contextWith(waited), () =>
-      Promise.resolve(new Response('nope', { status: 502 })),
+      Promise.resolve(new Response('slow down', { status: 429 })),
     )
-    expect(response.status).toBe(502)
+    expect(response.status).toBe(429)
     expect(response.headers.get('Cache-Control')).toBe(
       `public, max-age=${String(TTL_ERROR_SECONDS)}`,
     )
     expect(TTL_ERROR_SECONDS).toBe(60)
+  })
+
+  /**
+   * The client schedules its first retry a minute after a failure, so an outage held for a
+   * minute answered that retry with the failure it had already read
+   */
+  it('holds an outage for less than the minute the client waits to ask again', async () => {
+    const { waited } = stubCaches()
+    for (const status of [502, 504]) {
+      const response = await withCache(
+        `down-${String(status)}`,
+        TTL_TMY_SECONDS,
+        contextWith(waited),
+        () => Promise.resolve(new Response('nope', { status })),
+      )
+      expect(response.status).toBe(status)
+      expect(response.headers.get('Cache-Control')).toBe(
+        `public, max-age=${String(TTL_OUTAGE_SECONDS)}`,
+      )
+    }
+    expect(TTL_OUTAGE_SECONDS).toBeLessThan(60)
   })
 
   it('strips upstream Set-Cookie, which both breaks cache.put and leaks onto our origin', async () => {

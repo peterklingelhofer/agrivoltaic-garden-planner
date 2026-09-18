@@ -452,6 +452,9 @@ const runBake = async (
  * whatever was scheduled, through `siteRetryAt`
  */
 const SITE_RETRY_MS: readonly number[] = [60_000, 120_000, 240_000]
+
+/** A search asked for while no lookup has run or landed; the site step says what stopped it */
+const SITE_UNRESOLVED = 'The place has to be looked up before the layouts can be compared'
 let siteRetries = 0
 
 const scheduleSiteRetry = (
@@ -2037,6 +2040,14 @@ export const useAppStore = create<AppState>()(
       suggestDesigns: async () => {
         designToken += 1
         const token = designToken
+        set((s) => {
+          // the agent's cursor moves to the layouts, which is what lets it read "use that one".
+          // Written before the site below is settled: a lookup that has to run first is seconds
+          // of waiting, and a press that showed nothing for them read as broken on a phone
+          s.onboarding = { ...s.onboarding, step: 'results', designs: loading(), progress: null }
+          // the comparison lands on the panels step, whichever step asked for the search
+          s.sidebarStep = 'panels'
+        })
         /**
          * The editor's own site is settled BEFORE the search, so the two cannot disagree about
          * the place the answers named.
@@ -2053,14 +2064,19 @@ export const useAppStore = create<AppState>()(
         if (get().site.status !== 'ready') {
           await get().resolveSite(get().location, get().locationLabel)
           if (token !== designToken) return
+          const site = get().site
+          if (site.status !== 'ready') {
+            // the lookup's own sentence, rather than a search that would run the lookup again
+            set((s) => {
+              s.onboarding = {
+                ...s.onboarding,
+                designs: failed(site.status === 'error' ? site.message : SITE_UNRESOLVED),
+              }
+            })
+            return
+          }
         }
         const state = get()
-        set((s) => {
-          // the agent's cursor moves to the layouts, which is what lets it read "use that one"
-          s.onboarding = { ...s.onboarding, step: 'results', designs: loading(), progress: null }
-          // the comparison lands on the panels step, whichever step asked for the search
-          s.sidebarStep = 'panels'
-        })
         // the search's own client, so the candidate bakes leave the thread the wizard has to
         // animate on without the editor being able to cancel them out from under it. Where
         // `createSimClient` already failed there is nothing to pass and the engine falls back

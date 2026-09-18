@@ -65,6 +65,15 @@ export const COORDINATE_DECIMALS = 2
  */
 export const RESPONSE_DEADLINE_MS = 12_000
 
+/**
+ * Through the Worker the wait is bounded twice over: the proxy gives an upstream
+ * `UPSTREAM_TIMEOUT_MS` (15 s, `workers/proxy/routes.ts`) and answers 504 past it, so a request
+ * to it only has to outlast that to read whichever it was. At the 12 s above, a phone asking for
+ * the ten-year archive of a new place gave up two seconds before the proxy received it and
+ * cached it, then spent the fallbacks reaching the same answer the slow way
+ */
+export const PROXIED_DEADLINE_MS = 20_000
+
 export interface FetchOptions {
   readonly signal: AbortSignal | null
   readonly minIntervalMs: number
@@ -367,10 +376,13 @@ const guard = async (
   options: FetchOptions,
   accept: string,
 ): Promise<Response> => {
+  const deadlineMs = isProxied(upstream)
+    ? Math.max(options.deadlineMs, PROXIED_DEADLINE_MS)
+    : options.deadlineMs
   const clock = new AbortController()
   const timer = setTimeout(() => {
-    clock.abort(new UpstreamTimeout(upstream, options.deadlineMs))
-  }, options.deadlineMs)
+    clock.abort(new UpstreamTimeout(upstream, deadlineMs))
+  }, deadlineMs)
   try {
     const response = await fetch(url, {
       signal:
