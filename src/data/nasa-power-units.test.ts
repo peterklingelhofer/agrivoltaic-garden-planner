@@ -1,12 +1,13 @@
 import { describe, expect, it, mock } from 'bun:test'
-import { vi } from '../../test/vi'
 import type { LatLon } from '../types/geo'
 import type { DegreesLatitude, DegreesLongitude } from '../types/units'
+import type { WeatherRecord } from '../types/weather'
 import {
   implausibleWeather,
   MAX_ANNUAL_RAIN_MM,
   MIN_ANNUAL_GHI_KWH_M2,
   normaliseWeather,
+  preferredSourceFor,
 } from './tmy'
 
 const AMHERST: LatLon = {
@@ -83,6 +84,29 @@ const openMeteoBody = (years: readonly number[], rainMmPerHour: number): unknown
   }
 }
 
+/**
+ * A PVGIS v5.3 TMY answer: 8,760 rows under the column names the live API uses, and the
+ * radiation database it chose for the place named in `inputs`, as measured at Amherst on
+ * 2026-09-17 (PVGIS-ERA5, since SARAH-3 is the Meteosat disk)
+ */
+const pvgisBody = (noonGhi: number): unknown => ({
+  inputs: { meteo_data: { radiation_db: 'PVGIS-ERA5' } },
+  outputs: {
+    tmy_hourly: Array.from({ length: 8760 }, (_, hour) => {
+      const daylight = Math.max(0, Math.sin((Math.PI * ((hour % 24) - 6)) / 12))
+      return {
+        'G(h)': noonGhi * daylight,
+        'Gb(n)': noonGhi * daylight * 0.8,
+        'Gd(h)': noonGhi * daylight * 0.2,
+        T2m: 10 + 8 * daylight,
+        RH: 60,
+        WS10m: 2,
+        SP: 101_000,
+      }
+    }),
+  },
+})
+
 const sum = (values: Float32Array | undefined): number =>
   values === undefined ? Number.NaN : values.reduce((total, value) => total + value, 0)
 
@@ -144,25 +168,72 @@ describe('a year that cannot have happened is refused, whichever source answered
  * first source failed the way a timeout fails, silently to the caller and loudly in the log
  */
 describe('the fallback chain treats an impossible year as a failed source', () => {
-  it('falls through to the next source and hands back its record', async () => {
-    const fetchJson = vi.fn((upstream: string) =>
+  /*
+    Vitest hoisted a mock and then reset the module registry so the next import got a fresh
+    `./tmy`. Bun has neither: `mock.module` swaps the module in place, and because ESM bindings
+    are live the `./tmy` already imported at the top of this file starts calling the stub. So
+    the mock goes in, the call is made, and the real module goes back at the end rather than
+    the registry being torn down. NSRDB is fetched as text, so both entry points are stubbed
+  */
+  const run = async (
+    answer: (upstream: string) => Promise<unknown>,
+    location: LatLon = AMHERST,
+  ): Promise<{
+    readonly settled: PromiseSettledResult<WeatherRecord>
+    readonly asked: readonly string[]
+  }> => {
+    const asked: string[] = []
+    const stub = (upstream: string): Promise<unknown> => {
+      asked.push(upstream)
+      return answer(upstream)
+    }
+    const actualHttp = await import('./http')
+    mock.module('./http', () => ({ ...actualHttp, fetchJson: stub, fetchText: stub }))
+    const { fetchWeather } = await import('./tmy')
+    const [settled] = await Promise.allSettled([
+      fetchWeather({ location, source: preferredSourceFor(location), signal: null }),
+    ])
+    mock.module('./http', () => actualHttp)
+    return { settled, asked: [...new Set(asked)] }
+  }
+
+  it('falls through to PVGIS, whose typical year lands in seconds, and names its database', async () => {
+    const { settled, asked } = await run((upstream) =>
       Promise.resolve(
-        upstream === 'open-meteo' ? openMeteoBody([2023, 2024], 500) : powerBody(2023, 649.85, 0.1),
+        upstream === 'open-meteo' ? openMeteoBody([2023, 2024], 500) : pvgisBody(500),
       ),
     )
-    /*
-      Vitest hoisted a mock and then reset the module registry so the next import got a fresh
-      `./tmy`. Bun has neither: `mock.module` swaps the module in place, and because ESM bindings
-      are live the `./tmy` already imported at the top of this file starts calling the stub. So
-      the mock goes in, the call is made, and the real module goes back at the end rather than
-      the registry being torn down
-    */
-    const actualHttp = await import('./http')
-    mock.module('./http', () => ({ ...actualHttp, fetchJson }))
-    const { fetchWeather } = await import('./tmy')
-    const record = await fetchWeather({ location: AMHERST, source: 'open-meteo', signal: null })
-    expect(record.typical.source).toBe('nasa-power')
-    expect(fetchJson.mock.calls.map(([upstream]) => upstream)).toContain('open-meteo')
-    mock.module('./http', () => actualHttp)
+    expect(settled.status).toBe('fulfilled')
+    if (settled.status !== 'fulfilled') return
+    expect(settled.value.typical.source).toBe('pvgis-sarah3')
+    expect(settled.value.typical.provenance.datasetLabel).toBe('PVGIS v5.3 TMY (PVGIS-ERA5)')
+    expect(settled.value.years).toEqual([])
+    expect(asked).toEqual(['open-meteo', 'pvgis'])
+  })
+
+  it('reaches NASA POWER only once PVGIS has failed too', async () => {
+    const { settled, asked } = await run((upstream) =>
+      upstream === 'pvgis'
+        ? Promise.reject(new Error('PVGIS is down'))
+        : Promise.resolve(
+            upstream === 'open-meteo'
+              ? openMeteoBody([2023, 2024], 500)
+              : powerBody(2023, 649.85, 0.1),
+          ),
+    )
+    expect(settled.status).toBe('fulfilled')
+    if (settled.status !== 'fulfilled') return
+    expect(settled.value.typical.source).toBe('nasa-power')
+    expect(asked).toEqual(['open-meteo', 'pvgis', 'nasa-power'])
+  })
+
+  it('asks a polar site, whose preferred source is POWER, for POWER once', async () => {
+    const pole: LatLon = {
+      latitudeDeg: 86 as DegreesLatitude,
+      longitudeDeg: 20 as DegreesLongitude,
+    }
+    const { settled, asked } = await run(() => Promise.reject(new Error('nothing answers')), pole)
+    expect(settled.status).toBe('rejected')
+    expect(asked).toEqual(['nasa-power', 'pvgis', 'nsrdb'])
   })
 })

@@ -487,6 +487,9 @@ const fromNasaPower = (body: PowerBody): Stacked => {
 }
 
 interface PvgisBody {
+  readonly inputs?: {
+    readonly meteo_data?: { readonly radiation_db?: unknown }
+  }
   readonly outputs?: {
     readonly tmy_hourly?: readonly Record<string, number | string>[]
   }
@@ -607,8 +610,8 @@ const provenanceFor = (
       attribution: NASA_POWER_ATTRIBUTION,
     },
     'pvgis-sarah3': {
-      label: 'PVGIS v5.3 TMY (SARAH-3)',
-      measured: 'PVGIS v5.3 (SARAH-3), the calendar year',
+      label: 'PVGIS v5.3 TMY',
+      measured: 'PVGIS v5.3, the calendar year',
       licence: 'PVGIS terms of use, non-AJAX access only',
       attribution: PVGIS_ATTRIBUTION,
     },
@@ -722,8 +725,19 @@ export const normaliseWeather = (payload: RawTmyPayload, location: LatLon): Weat
   }
   const single = { ...TYPICAL_PACK, precipPresent: false }
   if (payload.source === 'pvgis-sarah3') {
-    const columns = fromPvgis(payload.body as PvgisBody)
-    return { typical: pack(payload.source, columns, [], utcOffsetHours, single), years: [] }
+    const body = payload.body as PvgisBody
+    const typical = pack(payload.source, fromPvgis(body), [], utcOffsetHours, single)
+    // PVGIS picks its radiation database by the place, SARAH-3 on the Meteosat disk and ERA5
+    // elsewhere (Amherst answers PVGIS-ERA5), and names the choice, so the label carries it
+    const database = body.inputs?.meteo_data?.radiation_db
+    const provenance =
+      typeof database === 'string' && database !== ''
+        ? {
+            ...typical.provenance,
+            datasetLabel: `${typical.provenance.datasetLabel} (${database})`,
+          }
+        : typical.provenance
+    return { typical: { ...typical, provenance }, years: [] }
   }
   const label = payload.source === 'nsrdb-psm3' ? 'NSRDB' : 'The uploaded CSV'
   const columns = parseCsvColumns(String(payload.body), label)
@@ -781,11 +795,15 @@ export const fetchWeather = async (request: TmyRequest): Promise<WeatherRecord> 
     'nsrdb-psm3': fetchNsrdbTmy,
     'user-upload': () => Promise.reject(new Error('user-upload requires parseUploadedTmy')),
   }
-  const order: readonly WeatherSourceId[] = [
-    request.source,
-    'nasa-power',
-    'pvgis-sarah3',
-    'nsrdb-psm3',
+  /*
+    PVGIS ahead of NASA POWER, measured: PVGIS answers its whole typical year in about 4 s
+    (Amherst, 1.27 MB) where POWER's hourly endpoint is three sequential four-year chunks at up
+    to 12 s each. The cost is a typical year with no measured years behind it, which the season
+    simulation says out loud. The Set keeps a polar site, whose preferred source is POWER, from
+    asking it a second time
+  */
+  const order = [
+    ...new Set<WeatherSourceId>([request.source, 'pvgis-sarah3', 'nasa-power', 'nsrdb-psm3']),
   ]
   let lastError: unknown = null
   for (const source of order) {

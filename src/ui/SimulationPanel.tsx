@@ -103,11 +103,12 @@ const HOW_IT_WORKS =
 
 const describeRecord = (years: readonly MeasuredYear[], source: WeatherSourceId | null): string => {
   if (years.length === 0) {
-    return 'This weather source holds no measured years, so every season runs on the typical year.'
+    const name = source === null ? 'this weather source' : SOURCE_NAME[source]
+    return `${name.charAt(0).toUpperCase()}${name.slice(1)} only has a typical year for this place and none of the actual years, so whichever year you pick below, the season runs on the typical one.`
   }
   const numbers = years.map((measured) => measured.year)
   const from = source === null ? '' : `, from ${SOURCE_NAME[source]}`
-  return `Weather record: ${String(years.length)} measured years, ${String(Math.min(...numbers))} to ${String(Math.max(...numbers))}${from}. The typical year is a composite of them.`
+  return `Weather on record: ${String(years.length)} actual years, ${String(Math.min(...numbers))} to ${String(Math.max(...numbers))}${from}. The typical year is assembled from them.`
 }
 
 /** "(12 more than the typical year)", or nothing where there is no typical year to compare with */

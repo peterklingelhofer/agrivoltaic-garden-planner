@@ -88,8 +88,8 @@ export const stubUpstreams = async (page: Page, over: Upstreams = {}): Promise<v
     route.fulfill({ status: 200, contentType: 'application/json', body: '{}' }),
   )
   /**
-   * `fetchTmy` falls back from Open-Meteo through NASA POWER, PVGIS and NSRDB in turn when the
-   * preferred source throws, and the last three are same-origin (`WORKER_PROXY_BASE`), so the
+   * `fetchTmy` falls back from Open-Meteo through PVGIS, NASA POWER and NSRDB in turn when the
+   * preferred source throws, and PVGIS and NSRDB are same-origin (`WORKER_PROXY_BASE`), so the
    * blanket external-abort above never sees them. Unstubbed, they reach Vite's own dev proxy,
    * which forwards them to the Worker on 127.0.0.1:8787 -- not running here -- and a refused
    * connection there is not a fast failure from the browser's side, so a test that makes

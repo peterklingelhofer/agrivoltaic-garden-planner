@@ -136,6 +136,14 @@ is `CumulativeSky`.
 RSR and "shade fraction" are the same quantity. The canonical name is RSR,
 `src/sim/units.ts#relativeShadeRatio` is the single definition.
 
+Hop 2 asks four sources in turn, `fetchWeather`: Open-Meteo's ten-year hourly archive, then PVGIS,
+then NASA POWER, then NSRDB. PVGIS comes second because it answers its whole typical year in about
+4 s where POWER's hourly endpoint is three sequential four-year chunks at up to 12 s each; the
+price is a typical year with no measured years behind it, and the season simulation says so. The
+label carries the radiation database PVGIS chose for the place (`PVGIS-ERA5` at Amherst,
+`PVGIS-SARAH3` on the Meteosat disk). A source whose year cannot have happened
+(`implausibleWeather`) counts as failed and the chain moves on.
+
 ### Hop 23: what owns the pointer in Move mode, and why `dragging` exists
 
 Two things in the scene take the pointer for a drag: the plot's corner handles in
