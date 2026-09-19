@@ -1,4 +1,5 @@
 import { waterBalances } from '../recommend/water'
+import { rainFieldOf } from './rain'
 import type { BedWaterBalance } from '../types/water'
 import { attempt, unavailableMessage } from './safe'
 import type { AppState } from './slices'
@@ -37,6 +38,7 @@ export const waterBalanceView = (state: WaterInputs): WaterBalanceView => {
       plot,
       bedLight: state.bedLight,
       catalog: catalog.status === 'ready' ? catalog.value : [],
+      rain: rainFieldOf(plot, weather.value) ?? undefined,
     }),
   )
   return result.ok

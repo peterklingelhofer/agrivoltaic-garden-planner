@@ -18,7 +18,6 @@ export interface Irrigation {
   readonly method: IrrigationMethod
   readonly available: boolean
   readonly appliedMmPerYear: MillimetersPerYear
-  readonly harvestsPanelRunoff: boolean
 }
 
 export type CanopyTier = 'overstory' | 'mid-canopy' | 'shrub' | 'herb-ground'
@@ -41,7 +40,6 @@ export type WaterHarvestingScale = 'micro-basin' | 'macro-catchment'
 export interface WaterHarvestingElement {
   readonly scale: WaterHarvestingScale
   readonly footprint: Polygon2D
-  readonly tiedToArrayDripLine: boolean
 }
 
 export type PlantingRole = 'target-crop' | 'nurse' | 'insectary' | 'cover' | 'trap'

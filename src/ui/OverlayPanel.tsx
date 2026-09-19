@@ -1,9 +1,10 @@
 import { useMemo, type ReactElement } from 'react'
 import { overlayField } from '../state/overlay'
+import { rainFieldOf } from '../state/rain'
 import { useOverlayPlayback } from './useOverlayPlayback'
 import type { OverlayChannel, OverlaySlice } from '../state/slices'
 import type { LightingQuality } from '../types/render'
-import { overlaySlice, useAppStore } from '../state/store'
+import { overlaySlice, scenePlot, useAppStore } from '../state/store'
 import type { MonthIndex } from '../types/units'
 import { Action, SelectField, SliderField, Toggle } from './controls'
 import { MONTH_LABELS } from './format'
@@ -15,6 +16,7 @@ const CHANNELS: readonly (readonly [OverlayChannel, string])[] = [
   ['dli', 'Daily light integral'],
   ['rsr', 'Relative shade ratio'],
   ['sky-view-factor', 'Sky view factor'],
+  ['rain', 'Rain reaching the ground'],
 ]
 
 /**
@@ -30,6 +32,7 @@ const CHANNEL_HELP: Readonly<Record<OverlayChannel, string>> = {
   rsr: 'Relative shade ratio (RSR): the share of the light under an open sky that the panels take away, over the growing season. At 30%, about seven tenths of that light still reaches the soil.',
   'sky-view-factor':
     "Sky view factor: how much of the whole sky a patch of ground can still see. 1 is nothing overhead, 0 is completely covered. It depends only on what stands over the ground, so weather doesn't change it.",
+  rain: "Rain reaching the ground: how much rain lands on a patch of ground compared with open ground, once the panels have sheltered it and dripped on it. 0 is dry under a panel, 1 is open ground. The bright strips along the panels' low edges are where the rain that ran down a panel lands, several times what open ground gets.",
 }
 
 const LIGHTING: readonly (readonly [LightingQuality, string])[] = [
@@ -54,6 +57,8 @@ export const OverlayPanel = (): ReactElement => {
   const playback = useOverlayPlayback()
   const imageryEnabled = useAppStore((s) => s.imageryEnabled)
   const raster = useAppStore((s) => (s.raster.status === 'ready' ? s.raster.value : null))
+  const plot = useAppStore(scenePlot)
+  const weather = useAppStore((s) => (s.weather.status === 'ready' ? s.weather.value : null))
   const setOverlay = useAppStore((s) => s.setOverlay)
   const setImagery = useAppStore((s) => s.setImagery)
   const lighting = useAppStore((s) => s.lighting)
@@ -61,9 +66,10 @@ export const OverlayPanel = (): ReactElement => {
   const effects = useAppStore((s) => s.effects)
   const setEffects = useAppStore((s) => s.setEffects)
 
+  const rain = useMemo(() => rainFieldOf(plot, weather), [plot, weather])
   const field = useMemo(
-    () => overlayField(raster, overlay.channel, slice, overlayPlayback),
-    [raster, overlay.channel, slice, overlayPlayback],
+    () => overlayField(raster, overlay.channel, slice, overlayPlayback, rain),
+    [raster, overlay.channel, slice, overlayPlayback, rain],
   )
   const channelLabel = CHANNELS.find(([value]) => value === overlay.channel)?.[1] ?? overlay.channel
 
@@ -159,7 +165,7 @@ export const OverlayPanel = (): ReactElement => {
         beside the control that picks the channel
       */}
       {field.note ? <p className="legend-note">{field.note}</p> : null}
-      {!raster ? <MissingRaster testId="status-overlay" /> : null}
+      {!raster && overlay.channel !== 'rain' ? <MissingRaster testId="status-overlay" /> : null}
     </Panel>
   )
 }

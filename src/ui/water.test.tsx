@@ -87,7 +87,7 @@ describe('water panel', () => {
     expect(harness.get('readout-water-saving').textContent).toMatch(
       /^\d+-\d+%, \d+% (plausible range|confidence interval)$/,
     )
-    expect(harness.get('readout-water-rain-split').textContent).toMatch(/intercepted/)
+    expect(harness.get('readout-water-rain-split').textContent).toMatch(/rain shadow/)
     expect(harness.get('control-water-bed')).not.toBeNull()
     await harness.unmount()
   })
@@ -131,7 +131,9 @@ describe('water panel', () => {
     expect(runoff).toMatch(/no source/)
     expect(runoff).toMatch(/modeling assumptions/)
     expect(harness.get('readout-water-unsourced-stages').textContent).toMatch(/Table 11/)
-    expect(harness.get('readout-water-caveat-rain-shadow').textContent).toMatch(/rain shadow/)
+    expect(harness.get('readout-water-caveat-rain-shadow').textContent).toMatch(
+      /mean wind in rain hours/,
+    )
     expect(harness.get('readout-water-modeled').textContent).toMatch(/can go either way/)
     expect(harness.all('item-water-band-basis').length).toBeGreaterThan(0)
     await harness.unmount()

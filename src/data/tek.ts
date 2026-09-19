@@ -86,7 +86,11 @@ const RULES: readonly TekDesignRule[] = [
       ['Zuni (A:shiwi) of the US Southwest', 'Mossi farmers of Burkina Faso'],
       ['Yacouba Sawadogo, for the modern zai revival'],
       'living',
-      ['elamri2018-rain-concentration'],
+      [
+        'elamri2018-rain-concentration',
+        'cook-mccuen2013-solar-farm-hydrology',
+        'wang2024-desert-pv-ecology',
+      ],
     ),
   },
   {

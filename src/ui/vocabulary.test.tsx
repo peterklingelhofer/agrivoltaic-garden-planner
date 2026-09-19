@@ -24,6 +24,7 @@ const GLOSSED: readonly (readonly [OverlayChannel, readonly string[]])[] = [
   ['dli', ['DLI', 'mol/m²/d']],
   ['rsr', ['RSR', 'open sky']],
   ['sky-view-factor', ['Sky view factor', 'sky']],
+  ['rain', ['Rain reaching the ground', 'open ground']],
 ]
 
 describe('the editor explains its own vocabulary where the vocabulary appears', () => {
