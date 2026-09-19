@@ -289,7 +289,7 @@ export const SIDEBAR_STEPS: readonly SidebarStep[] = [
   'check',
   'sources',
 ]
-export type OverlayChannel = 'dli' | 'rsr' | 'sky-view-factor'
+export type OverlayChannel = 'dli' | 'rsr' | 'sky-view-factor' | 'rain'
 export type OverlaySlice = MonthIndex | 'annual'
 
 /**

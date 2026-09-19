@@ -236,7 +236,6 @@ const plot = (clearanceM: number, nameplateKw: number): GardenPlot => ({
         method: 'drip',
         available: true,
         appliedMmPerYear: 0 as never,
-        harvestsPanelRunoff: false,
       },
       raisedHeightM: 0 as Meters,
       modifiers: [],

@@ -509,7 +509,7 @@ const MOUNTINGS = ['overhead-canopy', 'ground-rows', 'vertical-bifacial', 'any']
 const EXPERIENCES = ['novice', 'some', 'experienced'] as const
 const OBJECTIVE_KEYS = ['food', 'energy', 'water', 'simplicity'] as const
 const LIGHTING = ['auto', 'low', 'high'] as const
-const CHANNELS = ['dli', 'rsr', 'sky-view-factor'] as const
+const CHANNELS = ['dli', 'rsr', 'sky-view-factor', 'rain'] as const
 const MONTHS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] as const
 const PREFERENCE_KINDS = ['require', 'prefer', 'avoid', 'exclude'] as const
 

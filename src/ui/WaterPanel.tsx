@@ -79,7 +79,7 @@ const Balance = ({ balance }: { readonly balance: BedWaterBalance }): ReactEleme
         <Readout
           id="water-rain-split"
           label="Where the rain goes"
-          value={`${share(balance.rain.interceptedFraction)} intercepted by panels, ${share(balance.rain.reachingBedFraction)} reaching the bed, ${share(balance.rain.harvestedFraction)} recovered as runoff`}
+          value={`${share(balance.rain.interceptedFraction)} of the bed in the panels' rain shadow, ${share(balance.rain.reachingBedFraction)} open to the rain${balance.rain.dripMultiple > 0 ? `, and the strip where a panel's runoff lands adds water equal to ${balance.rain.dripMultiple.toFixed(1)} times the bed's own rain after losses` : ', and no panel sheds its rain onto it'}`}
         />
       </div>
       <p

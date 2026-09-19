@@ -34,7 +34,6 @@ const irrigation = (patch: Partial<Irrigation>): Irrigation => ({
   method: 'drip',
   available: true,
   appliedMmPerYear: millimetersPerYear(180),
-  harvestsPanelRunoff: false,
   ...patch,
 })
 

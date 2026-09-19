@@ -32,6 +32,7 @@ export type CitationType =
   | 'dataset'
   | 'legislation'
   | 'paper-conference'
+  | 'patent'
   | 'regulation'
   | 'report'
   | 'software'

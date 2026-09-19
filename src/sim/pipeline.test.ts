@@ -195,7 +195,6 @@ const plot: GardenPlot = {
         method: 'drip',
         available: true,
         appliedMmPerYear: 0 as never,
-        harvestsPanelRunoff: false,
       },
       raisedHeightM: 0 as Meters,
       modifiers: [],

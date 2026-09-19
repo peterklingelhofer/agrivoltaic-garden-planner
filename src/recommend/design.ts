@@ -746,7 +746,6 @@ const plotFor = (
       appliedMmPerYear: (answers.irrigationAvailable
         ? 300
         : 0) as Bed['irrigation']['appliedMmPerYear'],
-      harvestsPanelRunoff: false,
     },
     raisedHeightM: meters(0),
     modifiers: [],
