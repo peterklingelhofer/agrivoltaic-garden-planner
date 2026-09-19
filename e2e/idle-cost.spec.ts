@@ -29,6 +29,10 @@ const MAX_IDLE_DRAWS_PER_SECOND = 3_000
 
 test('a garden nobody is touching stops paying for itself', async ({ page }) => {
   test.setTimeout(180_000)
+  // what this measures is the loops that run with nobody touching anything, and the project asks
+  // for reduced motion, which stops two of them: the wind ticker and the example's orbit. This one
+  // asks back out, before the first navigation, so the number below is the one a visitor pays
+  await page.emulateMedia({ reducedMotion: 'no-preference' })
   await openApp(page, { exampleGarden: true })
   await waitForCanvas(page)
   await expect(page.getByTestId('panel-example')).toBeVisible({ timeout: 60_000 })

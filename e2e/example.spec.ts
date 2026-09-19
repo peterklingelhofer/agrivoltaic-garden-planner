@@ -99,6 +99,10 @@ test('the guided camera move runs, and the first pointer event stops it dead', a
   // biome-ignore lint/suspicious/noSkippedTests: waits on a settled GPU frame; GitHub macOS runners have no real GPU
   test.skip(!!process.env.CI, 'waits on a settled GPU frame; GitHub macOS runners have no real GPU')
   test.setTimeout(240_000)
+  // the project asks for reduced motion, which is what keeps the orbit and the wind ticker off the
+  // machine for the other tests: this one is about the orbit, so it asks back out, before the first
+  // navigation because the preference is read once when the scene mounts
+  await page.emulateMedia({ reducedMotion: 'no-preference' })
   await openExample(page)
   await page.waitForTimeout(SETTLE_MS)
 

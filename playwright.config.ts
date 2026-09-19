@@ -30,13 +30,16 @@ export default defineConfig({
   // fresh browser passes the same test. A laptop gets no retry, so a real failure stays loud
   retries: process.env.CI ? 1 : 0,
   /*
-    Two on a laptop. Playwright's default is half the logical cores, eight on a 16-core
-    machine, and eight headless Chromiums each drawing the scene on Metal and baking on the same
-    GPU spin the fans up for the whole run. Two costs wall clock, 5.7 minutes for the functional
-    project against 3.5 at four and 2.4 at eight, which is the better trade at a desk. The
-    runner keeps the default: nobody sits next to it
+    One on a laptop, because heat is what the author pays for and wall clock isn't. Playwright's
+    default is half the logical cores, eight on a 16-core machine, and eight headless Chromiums
+    each drawing the scene on Metal and baking on the same GPU spin the fans up for the whole
+    run. Measured machine-wide, 100 percent being all 16 cores: `interaction.spec.ts` sits at a
+    median 19 percent of the machine at two workers and 20 at one, since a single spec file runs
+    in one worker either way, and the whole functional project halves its concurrent browsers.
+    Wall clock: 5.7 minutes at two, 3.5 at four, 2.4 at eight. The runner keeps the default,
+    since nobody sits next to it
   */
-  workers: process.env.CI ? undefined : 2,
+  workers: process.env.CI ? undefined : 1,
   expect: {
     toHaveScreenshot: { maxDiffPixelRatio: 0.02 },
   },
@@ -72,6 +75,19 @@ export default defineConfig({
         // Playwright's own default, stated here because it's load-bearing rather than incidental:
         // a headed run puts the scene on a real display and its compositing on the machine too
         headless: true,
+        /*
+          The suite asks for less movement, and the app answers by holding two loops still: the
+          example's slow orbit, whose every frame is structural (cascades and occlusion both), and
+          the 24 fps wind ticker, which is the only loop that runs with nobody touching anything.
+          Both of them ran for the whole of every test that opened the app, which is 174 tests.
+
+          The two specs that measure the motion itself, `example.spec.ts`'s guided camera move and
+          `idle-cost.spec.ts`'s idle draw count, call `emulateMedia({ reducedMotion:
+          'no-preference' })` on their own page and keep what they always measured. Nothing else in
+          the project asserts on movement: the scroll and sweep animations this preference also
+          settles are ones the specs wait out rather than watch
+        */
+        contextOptions: { reducedMotion: 'reduce' },
         launchOptions: {
           // On macOS this is ANGLE's Metal backend rather than its GL one. Measured over two
           // runs of all 114 tests each: the GPU process drops from 89 to 40 percent of a core at
@@ -103,8 +119,19 @@ export default defineConfig({
        * mean gating the render on a run whose stability is marginal by construction, which is the
        * exact condition behind the `dli-legend-ramp` flake.
        *
-       * So the lever that works isn't running this project while iterating:
-       * `--project=functional` is 114 of the 117 tests at a tenth of the load
+       * So the lever that works is leaving this project out while iterating, and `bun run test:e2e`
+       * names the functional project for exactly that reason: 174 of the 176 tests at a quarter of
+       * the load. Measured machine-wide over a whole run, 100 percent being all 16 cores: this
+       * project's two tests sit at a median 45 percent and a peak 62, where `interaction.spec.ts`
+       * on Metal sits at 20. `bun run test:e2e:visual` is how the baselines get checked, and `bun
+       * run test:e2e:all` runs both.
+       *
+       * `bun run test:e2e:cool` is the functional project under `taskpolicy -c utility`, which is
+       * the macOS scheduler's own answer to "this is background work": measured on
+       * `interaction.spec.ts`, the same median 11 percent of the machine with p95 down from 21 to
+       * 16 and the peak from 25 to 20, all 11 tests passing in the same 46 s. It's the desk
+       * default. `-c background`, which is the harder demotion to the efficiency cores, is what
+       * broke the screenshots above, so it stays out of both
        */
       name: 'visual',
       testMatch: /visual\.spec\.ts/,
