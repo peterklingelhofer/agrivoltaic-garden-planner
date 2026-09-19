@@ -11,7 +11,8 @@
  * flag that `GardenScene` attaches to the same event
  */
 import { useThree } from '@react-three/fiber'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { prefersReducedMotion } from '../state/motion'
 import { useAppStore } from '../state/store'
 import { requestStructuralRedraw } from './redraw'
 
@@ -68,12 +69,17 @@ export const useInvalidate = (windRunning: boolean): void => {
    * a frame sets r3f's counter to two rather than one, which sustains the loop at full rate and
    * would quietly put the app back where it started
    */
+  const [reducedMotion] = useState(prefersReducedMotion)
   useEffect(() => {
-    if (!windRunning) return
+    // sway is decoration, so a visitor who asked their system for less movement gets none of it,
+    // which is what the guided tour's orbit and the season sweep already do with the same answer.
+    // It is also the one loop a headless test inherits for its whole run, so the e2e suite asks
+    // for reduced motion and the two specs that measure the motion itself ask back out of it
+    if (!windRunning || reducedMotion) return
     const tick = (): void => {
       if (attended()) invalidate()
     }
     const timer = window.setInterval(tick, Math.round(1000 / WIND_FPS))
     return () => window.clearInterval(timer)
-  }, [windRunning, invalidate])
+  }, [windRunning, reducedMotion, invalidate])
 }

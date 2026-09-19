@@ -54,6 +54,10 @@ const MIN_STOP_PIXELS = 20
 
 test('the rendered overlay is the colour its legend advertises', async ({ page }) => {
   test.setTimeout(BAKE_TIMEOUT_MS + 240_000)
+  // the year's playback is one of the things the app holds still for a visitor who asked for less
+  // movement, and the project asks for that, so the half of this test that plays the year asks
+  // back out, before the first navigation because the preference gates the button itself
+  await page.emulateMedia({ reducedMotion: 'no-preference' })
   await openApp(page)
   await resolveSite(page)
   await drawPolygon(page, 'bed', BED_RING)
