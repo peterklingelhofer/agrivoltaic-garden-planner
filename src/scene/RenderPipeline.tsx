@@ -92,6 +92,16 @@ export const RenderPipeline = ({
    */
   const drawnFrom = useRef(new Matrix4())
   const drawnThrough = useRef(new Matrix4())
+  /**
+   * The pass whose map the materials are reading. A store write asks for a frame and marks it
+   * structural in the same call, while the React commit that hands this callback a new pass
+   * arrives on its own schedule, and when the frame beats the commit (a busy main thread is
+   * enough) the flag is spent on the old pass. The next frame then has the new pass, no flag and
+   * no camera movement, and would hand the materials a map that was never drawn: every shaded
+   * pixel black until something else asked for a structural frame. So a pass is integrated on
+   * its first frame whatever the flag says
+   */
+  const integrated = useRef<GTAOPass | null>(null)
 
   /**
    * The cascades are redrawn when this pass says so, not on every frame three would otherwise
@@ -172,7 +182,7 @@ export const RenderPipeline = ({
      * not moved. Skipping it here is the difference between wind costing a colour pass and wind
      * costing a colour pass plus a sixteen-sample integral and a sixteen-tap denoise
      */
-    if (occlusion && structural) {
+    if (occlusion && (structural || integrated.current !== occlusion)) {
       const width = Math.max(1, Math.round(drawingSize.x * quality.occlusionScale))
       const height = Math.max(1, Math.round(drawingSize.y * quality.occlusionScale))
       // the pass's own size, not a ref beside it: a ref outlives the pass a toggle rebuilds and
@@ -188,6 +198,7 @@ export const RenderPipeline = ({
       attempt(() => occlusion.render(gl, null as never, null as never, 0, false))
       camera.layers.enable(OVERLAY_LAYER)
       gl.setRenderTarget(null)
+      integrated.current = occlusion
       SKY_OCCLUSION.aoMapScreen.value = occlusion.gtaoMap
     }
     SKY_OCCLUSION.aoStrength.value = occlusion ? 1 : 0

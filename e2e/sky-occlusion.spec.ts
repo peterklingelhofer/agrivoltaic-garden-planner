@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 import { sceneLuminance } from '../src/scene/agx.ts'
 import { TONE_MAPPING_EXPOSURE } from '../src/scene/lighting.ts'
-import { canvas, openApp, resolveSite, step } from './fixtures/app.ts'
+import { openApp, resolveSite, settledCanvas, step } from './fixtures/app.ts'
 import { decodePng, pixelAt } from './fixtures/png.ts'
 
 /**
@@ -72,10 +72,8 @@ const median = (values: readonly number[]): number =>
 
 const groundLuminance = async (page: Page, occlusion: boolean): Promise<GroundLuminance> => {
   await page.getByTestId('control-overlay-occlusion').setChecked(occlusion)
-  // the enrolment sweep runs every fifteenth frame, so the first frame after the toggle is not
-  // necessarily the frame that has it
-  await page.waitForTimeout(1000)
-  const shot = await canvas(page).screenshot()
+  // the toggle asks for a structural frame, and the shot is read once that frame has landed
+  const shot = await settledCanvas(page)
   // `SKY_DUMP=<dir>` keeps both captures, which is how the band above gets re-cut
   if (process.env.SKY_DUMP !== undefined)
     await import('node:fs').then((fs) =>

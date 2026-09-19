@@ -1,7 +1,15 @@
 import { expect, test, type Page } from '@playwright/test'
 import { sceneLuminance } from '../src/scene/agx.ts'
 import { TONE_MAPPING_EXPOSURE } from '../src/scene/lighting.ts'
-import { canvas, openApp, openFold, resolveSite, step } from './fixtures/app.ts'
+import {
+  canvas,
+  nextPaint,
+  openApp,
+  openFold,
+  resolveSite,
+  settledCanvas,
+  step,
+} from './fixtures/app.ts'
 import { decodePng, pixelAt, type Bitmap } from './fixtures/png.ts'
 
 /**
@@ -23,55 +31,67 @@ import { decodePng, pixelAt, type Bitmap } from './fixtures/png.ts'
  * occluded to unoccluded rather than a luminance: albedo multiplies the direct and the indirect
  * terms alike, so it cancels out of the ratio, and what does not cancel is the specular.
  *
- * Measured on the shipped build, three rounds each, on the bed under the middle row:
+ * Measured on the shipped build, re-taken 2026-09-18 from the lowered and zoomed pose the test
+ * stands in, three rounds, repeating to five decimal places:
  *
- * | surface | occluded / unoccluded |
- * |---|---|
- * | dry, roughness 1, no clearcoat | 0.411 |
- * | wetted, roughness 0.55, clearcoat 0.7 | 0.394 |
+ * | bed | dry, roughness 1, no clearcoat | wetted, roughness 0.55, clearcoat 0.7 |
+ * |---|---|---|
+ * | under the middle row, 4,842 pixels | 0.395 | 0.394 |
+ * | the front bed, sky barely blocked, 590 pixels | 0.963 | 0.948 |
  *
- * So the specular and clearcoat lines are worth 0.018 of the 0.589 the pass removes there, about
- * three percent of it. On a bed in the OPEN, where the diffuse occlusion is only 0.037, the same
- * switch is worth 0.015, which is two fifths of the whole effect: the specular occlusion bites
- * hardest where the sky is barely blocked at all, because `computeSpecularOcclusion` is not
- * linear in the visibility it is handed and falls away fastest at low roughness. That asymmetry
- * is the reason this could never have been read off the diffuse measurement.
+ * Under the row the specular and clearcoat lines are worth 0.002 of the 0.605 the pass removes
+ * there (the first measurement, from the old declared pose, had 0.411 against 0.394). On the
+ * front bed, where the diffuse occlusion is only 0.037, the same switch is worth 0.015, which is
+ * two fifths of the whole effect: the specular occlusion bites hardest where the sky is barely
+ * blocked at all, because `computeSpecularOcclusion` is not linear in the visibility it is
+ * handed and falls away fastest at low roughness. That asymmetry is the reason this could never
+ * have been read off the diffuse measurement.
  *
- * Round to round the readings repeat to five decimal places once the first frame after a toggle
- * is discarded, so the margins below are wide against the spread and not against nothing.
+ * Round to round the readings repeat to five decimal places, so the margins below are wide
+ * against the spread and not against nothing. Between 2026-09-11 and 2026-09-18 they did not:
+ * the drag that lowers the view left the controls' damping creeping the camera by under a pixel
+ * over the next hundred frames, every toggle let a little of it through, and a few hundred edge
+ * pixels of panel and grid line then counted as soil beside the few hundred the whole-plot
+ * framing gave a bed. The open bed's shares of 0.04 to 0.15 from that week were that noise, and
+ * so were two failures under eight parallel workers. The creep is now spent before the first
+ * shot and the camera brought in to half the distance. The two notes in the body have the
+ * figures.
  *
- * Re-posed on 2026-09-11, when a visitor's plot started being framed whole from 42 degrees up:
- * from there every bed's share fell under the floor (0.0001 on the open bed, 0.0023 under the
- * middle row), because a wet clearcoat reflects little sky towards a camera that steep. The
- * test now lowers the view by 18 degrees with a drag before it shoots, and asserts the share on
- * the bed that shows it most: from the framed bearing the bed under the middle row reads within
- * 0.01 of zero at every elevation tried (its mirror direction is the row above it), while the
- * open beds read 0.04 to 0.15
+ * Re-posed on 2026-09-11, when a visitor's plot started being framed whole from 42 degrees up.
+ * The test lowers the view by 18 degrees with a drag before it shoots, back to the old declared
+ * pose, and asserts the share on the bed that shows it most: from the framed bearing the bed
+ * under the middle row reads within 0.01 of zero (its mirror direction is the row above it).
+ * From 42 degrees, brought in the same way, the front bed reads a share of 0.083 and the bed
+ * under the middle row a wet ratio of 0.012, the panel's underside in the mirror direction,
+ * which the blackout bound below refuses. So the pose stays lowered
  */
 
 /** The bed's soil is found rather than located by pixel: see `respondingCells` */
 const CHANGED_BY_WETTING = 12
 
-/** Above the round-to-round spread, which measured 0.003 at worst and 0 after the first round */
+/** Well above the round-to-round spread of 0.00005 at worst, and the front bed reads 0.015 */
 const MIN_SPECULAR_SHARE = 0.006
 
 /**
- * How far past 1 a dry surface's occluded-to-unoccluded ratio may read. From the lowered pose the
- * open bed lands at 1.001 to 1.005, repeatable to four figures between runs, so it is a property
- * of the occlusion pass at that grazing view of open ground and not sampling noise; a blackout
- * or a brightening worth noticing is an order of magnitude past this
+ * How far past 1 a dry surface's occluded-to-unoccluded ratio may read. Every bed reads under 1
+ * from the lowered pose (0.963 on the front bed, 0.395 under the row). A brightening worth
+ * noticing is an order of magnitude past this
  */
 const PAST_TOTAL_ALLOWANCE = 0.01
+
+/** Rounds of ten frames the drag's creep may take to die away, about eleven measured */
+const CREEP_ROUNDS = 40
+
+/** Wheel notches after the drag, each five percent closer: fourteen halve the distance */
+const ZOOM_NOTCHES = 14
 
 const median = (values: number[]): number =>
   values.length === 0 ? 0 : (values.slice().sort((a, b) => a - b)[values.length >> 1] ?? 0)
 
-const shoot = async (page: Page): Promise<Bitmap> => {
-  // the occlusion's enrolment sweep runs every fifteenth frame, so the frame straight after a
-  // toggle is not necessarily the frame that has it
-  await page.waitForTimeout(1200)
-  return decodePng(await canvas(page).screenshot())
-}
+// the frame a toggle asks for, and the tail of the drag's glide before the first one, both land
+// before the shot: the picture is read until it stops changing rather than after a fixed time
+// that a shared GPU can outrun
+const shoot = async (page: Page): Promise<Bitmap> => decodePng(await settledCanvas(page))
 
 const lumOver = (image: Bitmap, cells: readonly (readonly [number, number])[]): number =>
   median(cells.map(([x, y]) => sceneLuminance(pixelAt(image, x, y), TONE_MAPPING_EXPOSURE)))
@@ -118,11 +138,10 @@ test('a wetted surface loses more to the sky occlusion than the same surface dry
   /*
     A visitor's plot has been framed whole from 42 degrees up since 2026-09-11, and a wet
     clearcoat reflects little sky towards a camera that steep (the Fresnel term falls away from
-    grazing): measured from there, the share below read 0.0001 on the open bed and 0.0023 under
-    the middle row, against a floor of 0.006. The figures in the header were taken from the old
-    declared pose, 24 degrees up, so the view is lowered to that by a drag before anything is
-    shot. OrbitControls turns a full circle per canvas height, so 18 degrees is 18/360 of it;
-    the drag also latches the automatic framing off, which is what keeps the pose for the run
+    grazing). The figures in the header were taken from the old declared pose, 24 degrees up, so
+    the view is lowered to that by a drag before anything is shot. OrbitControls turns a full
+    circle per canvas height, so 18 degrees is 18/360 of it. The drag also latches the automatic
+    framing off, which is what keeps the pose for the run
   */
   const box = await canvas(page).boundingBox()
   if (box === null) throw new Error('no canvas to pose')
@@ -134,6 +153,41 @@ test('a wetted surface loses more to the sky occlusion than the same surface dry
   await page.mouse.down()
   await page.mouse.move(grabX, grabY - box.height * (18 / 360), { steps: 8 })
   await page.mouse.up()
+  /*
+    The controls damp the drag, so the camera keeps creeping after the mouse is up: under a
+    pixel in all, spent five percent a frame over the next hundred or so frames, and under
+    `frameloop="demand"` those frames only happen when something asks for one. Every toggle
+    below asks for one, and the creep it lets through flips a few hundred edge pixels across the
+    panels and the grid lines, which then read as "moved by wetting" beside the soil that did.
+    Measured on 2026-09-18: an occlusion toggle pair at the framed pose changes 0 pixels, and
+    straight after the drag 645, falling to 35 sixty frames later. So the creep is spent here
+    on that same pair, ten frames at a time, until two pictures agree. It takes about eleven
+    rounds
+  */
+  const nudge = page.getByTestId('control-overlay-occlusion')
+  let creeping = await settledCanvas(page)
+  for (let round = 0; ; round += 1) {
+    if (round === CREEP_ROUNDS) throw new Error('the camera never stopped creeping')
+    for (let frame = 0; frame < 5; frame += 1) {
+      await nudge.setChecked(true)
+      await nudge.setChecked(false)
+    }
+    const next = await settledCanvas(page)
+    if (next.equals(creeping)) break
+    creeping = next
+  }
+  /*
+    The whole-plot framing stands far enough back that a bed is a few hundred pixels, most of
+    them under a row from 24 degrees up, and the sample wants thousands. Each wheel notch
+    brings the camera in by five percent (OrbitControls' zoom scale), applied whole on the next
+    frame with no creep, so fourteen halve the distance: the beds read 590 (front, under its
+    row) and 4,842 (middle) responding pixels from there against 200 and 899 before
+  */
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2)
+  for (let notch = 0; notch < ZOOM_NOTCHES; notch += 1) {
+    await page.mouse.wheel(0, -100)
+    await nextPaint(page)
+  }
 
   // the bed cards and the selected bed's irrigation sit behind the ground step's fold
   const bedTools = async (): Promise<void> => {

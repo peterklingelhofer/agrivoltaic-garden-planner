@@ -1,4 +1,5 @@
 import type { Locator, Page } from '@playwright/test'
+import { nextPaint } from './app.ts'
 
 /**
  * A runtime contrast audit.
@@ -597,8 +598,6 @@ export const auditHovered = async (
 ): Promise<ContrastReport> => {
   await target.hover()
   // a hover style is a paint, so let the frame that applies it land before reading styles
-  await page.evaluate(
-    () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))),
-  )
+  await nextPaint(page)
   return auditContrast(page, { within })
 }
