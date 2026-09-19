@@ -194,8 +194,8 @@ test('soil, irrigation and bed geometry edits reach the model and can be undone 
   await page.getByTestId('control-bed-irrigation').selectOption('subsurface-drip')
   await expect(page.getByTestId('control-bed-irrigation')).toHaveValue('subsurface-drip')
 
-  await page.getByTestId('control-bed-panel-runoff').check()
-  await expect(page.getByTestId('control-bed-panel-runoff')).toBeChecked()
+  await page.getByTestId('control-bed-drip-basin').check()
+  await expect(page.getByTestId('control-bed-drip-basin')).toBeChecked()
 
   await page.getByTestId('control-bed-raised-height').fill('0.6')
   await expect(page.getByTestId('control-bed-raised-height')).toHaveValue('0.6')
@@ -448,6 +448,7 @@ test('the overlay names its channel before there is anything to show', async ({ 
     'Daily light integral',
     'Relative shade ratio',
     'Sky view factor',
+    'Rain reaching the ground',
   ])
 
   await channel.selectOption('rsr')

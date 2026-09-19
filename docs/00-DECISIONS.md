@@ -1769,3 +1769,24 @@ author needs it. The bed names in the view are drawn onto their textures once th
 loaded (`BedLabel.tsx`). The classic Ubuntu face was passed over for its missing 600 weight.
 
 **Cost.** An hour, four files and a licence.
+
+## 28. Rain follows the array's plan geometry, a tracker lies flat in it, and a bed keeps half of its drip strip
+
+The share of rain a bed loses to the panels and the water the drip lines bring it
+are computed from the array's plan geometry (`src/recommend/rain.ts`), in place of the bed's solar
+relative shade ratio standing in for both. A fixed row keeps its tilt and drips from its low edge.
+A tracker is taken lying flat in rain, its night stow, and sheds to both long edges half each. The
+site's mean wind in rain hours, applied from every direction because the record carries none,
+moves each panel's shadow by its height times the wind over a raindrop's fall speed and widens each
+drip strip by what a drip drifts as it falls (Elamri et al. 2018, Gunn and Kinzer 1949). A plain
+bed keeps half of the water its strip brings and a bed with a basin or swale along the strip keeps
+four fifths, both declared modelling assumptions. The free "catches the rain running off the
+panels" switch is gone: whether a bed catches a strip is the geometry's answer, and the bed's
+switch now adds the basin. The ground overlay gained the field as a channel, and every bed's water
+panel names the row that drips on it and the side it drips along. Rotating a tracker out of the
+rain, Elamri's remedy, is a schedule no tracker here runs, and a note says so. A water term in the
+layout search, weighted by the site's water limitation, is left for a later record: it changes the
+ranking and wants measuring first.
+
+**Cost.** An evening: the field and its memo, the split, the overlay channel, the bed switch,
+twelve citations and thirteen tests.

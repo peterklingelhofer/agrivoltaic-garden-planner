@@ -12,6 +12,7 @@ import type {
   MillimetersPerYear,
 } from '../types/units'
 import type {
+  BedRain,
   DailyWeather,
   DualKc,
   Et0Method,
@@ -645,29 +646,22 @@ export const RAIN_DISTRIBUTION_CV_FLAT = 2.13
 export const RAIN_DISTRIBUTION_CV_ROTATED = 0.22
 
 export const RUNOFF_CAPTURE_CLAIM = unsourcedClaim(
-  { basin: 0.5, dripLineTied: 0.8 },
-  'No source quantifies how much drip-line runoff a garden-scale basin recovers. These two fractions are a modelling assumption',
+  { plainBed: 0.5, basin: 0.8 },
+  "No source quantifies how much a bed keeps of the water in its drip strip, the strip of ground where a panel's runoff lands. A plain bed keeps half, the strip floods at several times the rain rate and the rest runs to the path, and a bed with a basin or swale along the strip keeps four fifths. Both are modelling assumptions",
 )
 
 export const RAIN_SHADOW_CAVEAT =
-  'The sheltered fraction is taken from the bed’s solar relative shade ratio, which is a light-geometry quantity. Rain falls near-vertically and is redistributed by wind, so this is an inference. The agrivoltaics literature lists rain shadow and drip-line concentration as the most under-modelled effect in agrivoltaic tools and as thin evidence'
+  "The sheltered share and the drip strips (the ground where a panel's runoff lands) follow the array's plan geometry, averaged over this site's mean wind in rain hours from every direction, because the weather record carries no wind direction. The shadow moves by the panel's height times the wind over a raindrop's fall speed, and the drip by what it drifts while falling. Elamri et al. 2018 found the wind mattered more than the rain amount at 5 m"
 
-export const panelRainSplit = (
-  annualRsr: number,
-  harvestsPanelRunoff: boolean,
-  tiedToDripLine: boolean,
-): PanelRainSplit => {
-  const intercepted = clamp(annualRsr, 0, 1)
-  const capture = !harvestsPanelRunoff
-    ? 0
-    : tiedToDripLine
-      ? RUNOFF_CAPTURE_CLAIM.value.dripLineTied
-      : RUNOFF_CAPTURE_CLAIM.value.basin
+export const TRACKER_RAIN_NOTE = `A tracker is taken lying flat in rain, its night stow and its widest shelter, shedding to both long edges half each. Elamri et al. 2018 rotated theirs out of the rain instead and cut the unevenness from a coefficient of variation of ${RAIN_DISTRIBUTION_CV_FLAT} to ${RAIN_DISTRIBUTION_CV_ROTATED}, a schedule no tracker here runs`
+
+export const panelRainSplit = (rain: BedRain, hasBasin: boolean): PanelRainSplit => {
+  const capture = hasBasin ? RUNOFF_CAPTURE_CLAIM.value.basin : RUNOFF_CAPTURE_CLAIM.value.plainBed
   return {
-    interceptedFraction: intercepted as Fraction,
-    reachingBedFraction: (1 - intercepted) as Fraction,
-    harvestedFraction: (intercepted * capture) as Fraction,
-    measuredCoefficientOfVariation: RAIN_DISTRIBUTION_CV_FLAT,
+    interceptedFraction: rain.shelteredFraction,
+    reachingBedFraction: (1 - rain.shelteredFraction) as Fraction,
+    dripMultiple: rain.dripMultiple * capture,
+    crossings: rain.crossings,
   }
 }
 

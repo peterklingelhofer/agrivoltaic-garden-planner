@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'bun:test'
 import { cropById, loadCropCatalog } from '../data/crops'
 import { shadeBenefitScale, shadeBenefitStatusOf, WATER_LIMITED_INDEX } from '../data/water'
+import { cosDeg } from '../sim/math'
+import { DEFAULT_ROW_GEOMETRY, makeArray } from '../state/defaults'
+import { polygonOf, rectangleRing, vec2 } from '../state/geom'
 import type { Crop } from '../types/crop'
 import type { Planting } from '../types/garden'
 import type { BedId, CropId, PlantingId } from '../types/ids'
@@ -11,6 +14,10 @@ import type { SeasonLight } from '../types/light'
 import { shadeBenefitBonus } from './stages/light-gate'
 import { bedFixture, bedLightFixture, plotFixture, siteFixture, tmyFixture } from './testkit'
 import { waterBalances } from './water'
+
+// A south-facing fixed row, one row deep, at the tracker's default 25 degree tilt: the low edge
+// (the drip line) sits this far south of the row's own centreline
+const ROW_HALF_SPAN_M = (DEFAULT_ROW_GEOMETRY.collectorWidthM * cosDeg(25)) / 2
 
 const catalogPromise = loadCropCatalog()
 
@@ -132,7 +139,6 @@ describe('graded pathways through the recommender', () => {
         method: 'none',
         available: false,
         appliedMmPerYear: 0 as never,
-        harvestsPanelRunoff: false,
       },
     })
     const lettuce = need(await catalogPromise, 'lettuce-leaf')
@@ -164,8 +170,25 @@ describe('per-bed water balance', () => {
     expect(balance.method).toBe('fao56-penman-monteith')
     expect(balance.openSkyEt0Mm).toBeGreaterThan(0)
     expect(balance.underPanelsEt0Mm).toBeLessThan(balance.openSkyEt0Mm)
-    expect(balance.rain.interceptedFraction).toBeCloseTo(0.3, 6)
     expect(balance.notes.some((note) => note.includes('reference grass'))).toBe(true)
+  })
+
+  it('reads a high sheltered fraction for a bed a row stands over', () => {
+    const centre = vec2(2, 2)
+    const bed = bedFixture('bed-a', { footprint: polygonOf(rectangleRing(centre, 2, 1)) })
+    const array = makeArray(1, {
+      geometry: { ...DEFAULT_ROW_GEOMETRY, rowCount: 1, originM: centre },
+    })
+    const balances = waterBalances({
+      site: siteFixture(),
+      weather: tmyFixture(),
+      plot: { ...plotFixture([bed]), arrays: [array] },
+      bedLight: [bedLightFixture('bed-a', 0.3)],
+      catalog: [],
+    })
+    const balance = balances[0]
+    if (balance === undefined) throw new Error('no balance')
+    expect(balance.rain.interceptedFraction).toBeGreaterThan(0.9)
   })
 
   it('reports the saving as a band whose width is the measured spread, not a point', () => {
@@ -180,22 +203,48 @@ describe('per-bed water balance', () => {
     )
   })
 
-  it('cuts the irrigation requirement when the bed harvests panel runoff', () => {
-    const dry = run()[0]
-    const harvesting = run(
-      bedFixture('bed-a', {
-        irrigation: {
-          method: 'drip',
-          available: true,
-          appliedMmPerYear: 0 as never,
-          harvestsPanelRunoff: true,
-        },
-      }),
-    )[0]
-    if (dry === undefined || harvesting === undefined) throw new Error('no balance')
-    expect(harvesting.rain.harvestedFraction).toBeGreaterThan(0)
-    expect(harvesting.irrigationUnderPanelsMm.interval.lower).toBeLessThan(
-      dry.irrigationUnderPanelsMm.interval.lower,
+  it('irrigates least with a basin on the drip strip, less again without one, most with no strip at all', () => {
+    const array = makeArray(1, {
+      geometry: { ...DEFAULT_ROW_GEOMETRY, rowCount: 1, originM: vec2(10, 10) },
+    })
+    const lowEdgeY = 10 - ROW_HALF_SPAN_M
+    // north edge half a metre past the low edge, comfortably past the strip's wind-widened width
+    const stripFootprint = polygonOf(rectangleRing(vec2(5, lowEdgeY - 1), 3, 3))
+    const basinBed = bedFixture('strip-basin', {
+      footprint: stripFootprint,
+      waterHarvesting: [{ scale: 'micro-basin', footprint: stripFootprint }],
+    })
+    const plainStripBed = bedFixture('strip-no-basin', {
+      footprint: polygonOf(rectangleRing(vec2(10, lowEdgeY - 1), 3, 3)),
+    })
+    const noStripBed = bedFixture('no-strip', {
+      footprint: polygonOf(rectangleRing(vec2(10, 18), 3, 2)),
+    })
+    const balances = waterBalances({
+      site: siteFixture(),
+      weather: tmyFixture(),
+      plot: { ...plotFixture([basinBed, plainStripBed, noStripBed]), arrays: [array] },
+      bedLight: [
+        bedLightFixture('strip-basin', 0),
+        bedLightFixture('strip-no-basin', 0),
+        bedLightFixture('no-strip', 0),
+      ],
+      catalog: [],
+    })
+    const basin = balances.find((balance) => (balance.bedId as string) === 'strip-basin')
+    const plain = balances.find((balance) => (balance.bedId as string) === 'strip-no-basin')
+    const none = balances.find((balance) => (balance.bedId as string) === 'no-strip')
+    if (basin === undefined || plain === undefined || none === undefined) {
+      throw new Error('no balance')
+    }
+    expect(basin.rain.crossings.length).toBeGreaterThan(0)
+    expect(plain.rain.crossings.length).toBeGreaterThan(0)
+    expect(none.rain.crossings.length).toBe(0)
+    expect(basin.irrigationUnderPanelsMm.interval.lower).toBeLessThan(
+      plain.irrigationUnderPanelsMm.interval.lower,
+    )
+    expect(plain.irrigationUnderPanelsMm.interval.lower).toBeLessThan(
+      none.irrigationUnderPanelsMm.interval.lower,
     )
   })
 

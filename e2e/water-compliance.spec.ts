@@ -124,7 +124,7 @@ test('the water panel says what it modelled, per bed, and discloses every unsour
   )
   await expect(page.getByTestId('readout-water-unsourced-stages')).toContainText(/FAO-56 Table 11/)
   await expect(page.getByTestId('readout-water-caveat-rain-shadow')).toContainText(
-    /rain shadow|under-modelled/i,
+    /plan geometry|wind/i,
   )
 
   // one balance per bed, and the panel follows the selection

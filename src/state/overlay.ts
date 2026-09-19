@@ -1,7 +1,9 @@
 import { MONTH_LENGTH_DAYS, monthsInWindow } from '../data/util'
 import { MONTH_LABELS } from '../ui/format'
+import type { GridSpec } from '../types/geo'
 import type { DliRaster } from '../types/light'
 import type { MonthIndex } from '../types/units'
+import type { RainField } from '../types/water'
 import type { OverlayChannel, OverlayPlayback, OverlaySlice, SidebarStep } from './slices'
 
 /**
@@ -22,6 +24,8 @@ export const overlayOffOnSeasons = (state: {
 
 export interface OverlayField {
   readonly values: Float32Array | null
+  /** The grid `values` is laid out over: the raster's for every channel but `rain`, which bakes none */
+  readonly grid: GridSpec | null
   readonly min: number
   readonly max: number
   readonly unit: string
@@ -97,14 +101,35 @@ const spanLabel = (months: readonly MonthIndex[]): string => {
   return months.length <= 1 ? start : `${start} to ${MONTH_LABELS[last - 1] ?? ''}`
 }
 
+/**
+ * The rain channel's colour domain, fixed at twice open ground. Scaled to the data, the ramp would
+ * run to the drip strips' peak, nine times open ground on the starting plot in a 3 m/s wind and
+ * seventeen in still air, and sheltered ground and open ground would be two neighbouring shades of
+ * purple: the distinction the channel exists to draw. At two, sheltered is dark, open is the middle
+ * of the ramp and every strip saturates to yellow, and the note says the strips run past
+ */
+const RAIN_OVERLAY_MAX = 2
+
 // One definition of the raster channel so the ground overlay and the legend cannot disagree
 export const overlayField = (
   raster: DliRaster | null,
   channel: OverlayChannel,
   slice: OverlaySlice,
   playback: OverlayPlayback | null = null,
+  rain: RainField | null = null,
 ): OverlayField => {
-  const empty = { values: null, min: 0, max: 1, note: null, span: null }
+  const empty = { values: null, min: 0, max: 1, note: null, span: null, grid: raster?.grid ?? null }
+  if (channel === 'rain') {
+    return {
+      ...empty,
+      values: rain?.values ?? null,
+      grid: rain?.grid ?? null,
+      unit: '',
+      label: 'Rain reaching the ground, as a multiple of open ground',
+      note: "The strips are where rain running off the panels lands. They're widened by this site's mean wind in rain hours, since the record carries no wind direction",
+      max: RAIN_OVERLAY_MAX,
+    }
+  }
   if (channel === 'sky-view-factor') {
     return {
       ...empty,
@@ -159,6 +184,7 @@ export const overlayField = (
 
   return {
     values,
+    grid: raster?.grid ?? null,
     min: 0,
     max,
     unit: 'mol/m²/d',

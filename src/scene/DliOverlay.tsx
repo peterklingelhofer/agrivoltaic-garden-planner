@@ -2,6 +2,7 @@ import { useEffect, useMemo, type ReactElement } from 'react'
 import { ShapeGeometry } from 'three'
 import { contourStep } from '../state/colormap'
 import { overlayField } from '../state/overlay'
+import { rainFieldOf } from '../state/rain'
 import type { OverlayChannel, OverlayPlayback, OverlaySlice } from '../state/slices'
 import { scenePlot, useAppStore } from '../state/store'
 import { OVERLAY_LAYER } from './layers'
@@ -33,10 +34,13 @@ export const DliOverlay = ({
   // failure the whole provenance policy exists to stop. The preview shows geometry, not light
   const previewing = useAppStore((s) => s.previewPlot !== null)
   const raster = useAppStore((s) => (s.raster.status === 'ready' ? s.raster.value : null))
-  const boundary = useAppStore((s) => scenePlot(s)?.boundary ?? null)
+  const plot = useAppStore(scenePlot)
+  const weather = useAppStore((s) => (s.weather.status === 'ready' ? s.weather.value : null))
+  const boundary = plot?.boundary ?? null
+  const rain = useMemo(() => rainFieldOf(plot, weather), [plot, weather])
   const field = useMemo(
-    () => overlayField(raster, channel, month, playback),
-    [raster, channel, month, playback],
+    () => overlayField(raster, channel, month, playback, rain),
+    [raster, channel, month, playback, rain],
   )
 
   // the uniform objects are created once and their values arrive as props: r3f writes
@@ -46,25 +50,27 @@ export const DliOverlay = ({
 
   const texture = useMemo(
     () =>
-      raster && field.values ? fieldTexture(field.values, raster.grid, field.min, field.max) : null,
-    [raster, field],
+      field.values && field.grid
+        ? fieldTexture(field.values, field.grid, field.min, field.max)
+        : null,
+    [field],
   )
   useEffect(() => () => texture?.dispose(), [texture])
 
-  // the plot's own outline, holes and all, rather than a plane the size of the raster: the
-  // raster reaches past the plot wherever a panel stands near its edge, and a light map spilling
+  // the plot's own outline, holes and all, rather than a plane the size of the field: the
+  // field reaches past the plot wherever a panel stands near its edge, and a light map spilling
   // over the fence read as a plot that was bigger than it is. The texture is placed by where
-  // each vertex stands in the raster's extent, so the two line up whatever shape the plot is
+  // each vertex stands in the field's own extent, so the two line up whatever shape the plot is
   const geometry = useMemo(
     () =>
-      raster && boundary
-        ? fieldUvsOnto(new ShapeGeometry(bedShape(boundary)), raster.grid.extent)
+      field.grid && boundary
+        ? fieldUvsOnto(new ShapeGeometry(bedShape(boundary)), field.grid.extent)
         : null,
-    [raster, boundary],
+    [field, boundary],
   )
   useEffect(() => () => geometry?.dispose(), [geometry])
 
-  if (!raster || !texture || !geometry || previewing) return null
+  if (!texture || !geometry || previewing) return null
 
   return (
     <mesh

@@ -347,7 +347,7 @@ for (const scheme of SCHEMES) {
 
     // the three channels whose legends are recoloured by the overlay field
     await step(page, 'light')
-    for (const channel of ['rsr', 'sky-view-factor'] as const) {
+    for (const channel of ['rsr', 'sky-view-factor', 'rain'] as const) {
       await page.getByTestId('control-overlay-channel').selectOption(channel)
       found.add(
         `${scheme} overlay legend on ${channel}`,

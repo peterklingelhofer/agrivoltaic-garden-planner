@@ -1,6 +1,6 @@
 # Citation corpus
 
-218 sources (155 crossref-verified, 1 datacite-verified, 16 unverified, 46 url-verified). Machine-readable companion: [`CITATIONS.csl.json`](./CITATIONS.csl.json) (CSL-JSON).
+230 sources (163 crossref-verified, 1 datacite-verified, 16 unverified, 50 url-verified). Machine-readable companion: [`CITATIONS.csl.json`](./CITATIONS.csl.json) (CSL-JSON).
 Verification pass completed 2026-07-30 against the Crossref REST API, the DataCite REST API, and direct
 fetches of authoritative publisher, standards-body and government URLs.
 
@@ -44,31 +44,41 @@ Physics, geodata and software sources carry `null`: the scheme does not apply to
 
 | Verification | n |
 |---|---|
-| crossref-verified | 155 |
+| crossref-verified | 163 |
 | datacite-verified | 1 |
 | unverified | 16 |
-| url-verified | 46 |
-| **total** | **218** |
+| url-verified | 50 |
+| **total** | **230** |
 
 | Access level | n |
 |---|---|
-| open-access | 62 |
-| paywalled | 110 |
-| public-domain | 45 |
+| open-access | 67 |
+| paywalled | 113 |
+| public-domain | 49 |
 | public-domain-with-conditions | 1 |
 
 | Evidence tier | n |
 |---|---|
-| A | 36 |
-| B | 64 |
-| C | 30 |
-| null (not applicable) | 88 |
+| A | 37 |
+| B | 67 |
+| C | 34 |
+| null (not applicable) | 92 |
 
 ---
 
 ## Agrivoltaics
 
-25 sources.
+33 sources.
+
+#### `allen2023-jacks-solar-garden`
+
+Allen, Gabe; Hickman, Tyler. (2023). *In Colorado, the soil beneath solar panels is ripe for growing crops*. Planet Forward
+
+- URL: <https://planetforward.org/story/soil-beneath-solar-panels/>
+- Verification: URL-verified | Access: public-domain
+- Backs:
+  - at Jack's Solar Garden the trackers' shadows move across the ground through the day and rainwater is deposited along each panel's downward edge, and growers plant to the microclimates that makes
+- **Caveat:** Journalism about a research site, quoted for the practice it reports and for nothing measured.
 
 #### `amaducci2018-maize`
 
@@ -125,6 +135,16 @@ Dupraz, Christian. (2024). *Assessment of the ground coverage ratio of agrivolta
   - ground coverage ratio as a first-order proxy for potential crop productivity under an array
 - **Caveat:** CITATION CORRECTED. The solar geometry document lists this as 'INRAE (2023) ... hal-04240227' with no author. It is single-authored by Christian Dupraz and the version of record is Agroforestry Systems 98:2679-2696 (2024), Crossref-registered online 2023. HAL copy at https://hal.inrae.fr/hal-04240227 (hal.science blocks automated fetch); preprint at https://www.researchsquare.com/article/rs-3030967/v1.
 
+#### `edf2023-photovoltaic-facility-gutter`
+
+Van Iseghem, Mike; Poivey, Romain; Mallo, Etienne. (2023). *Photovoltaic facility*. Electricité de France US 11736061 B2
+
+- URL: <https://patents.google.com/patent/US11736061B2/en>
+- Verification: URL-verified | Access: public-domain
+- Backs:
+  - a gutter hung from a panel's edge on pivots so it swings level at any tilt, made to recover the water and to stop it concentrating on the crops beneath and gullying the soil
+- **Caveat:** A patent describes a device and claims no measurement.
+
 #### `elamri2018-rain-concentration`
 
 Elamri, Yassin; Cheviron, Bruno; Mange, Annabelle; Dejean, Cyril; Liron, François; Belaud, Gilles. (2018). *Rain concentration and sheltering effect of solar panels on cultivated plots*. Hydrology and Earth System Sciences 22: 1285-1298
@@ -133,6 +153,9 @@ Elamri, Yassin; Cheviron, Bruno; Mange, Annabelle; Dejean, Cyril; Liron, Franço
 - Verification: Crossref-verified | Access: open-access, evidence tier **B**
 - Backs:
   - rain shadow beneath panels and concentrated runoff at the drip line
+  - at low tilt about 90 percent of a panel's water leaves through a 20 cm wide outlet, the still-air width of this app's drip strip
+  - under panels held flat the ground beneath got 1.3 mm where open ground got 3.0 and the drip edge 24, and the wind mattered more than the rain amount to where the water landed at their 5 m height
+  - trackers rotated out of the rain cut the coefficient of variation of the water on the ground from 2.13 to 0.22
   - TEK design rule 4: water-harvesting geometry tied to the array drip line and runoff shadow
 
 #### `elamri2018-water-budget`
@@ -143,6 +166,17 @@ Elamri, Yassin; Cheviron, Bruno; Lopez, Jean-Marc; Dejean, Cyril; Belaud, Gilles
 - Verification: Crossref-verified | Access: paywalled, evidence tier **B**
 - Backs:
   - reduced evapotranspiration and irrigation demand under panel shade for irrigated lettuce
+  - the drip-line edge zones of the plot held more soil moisture and ran cooler than its interior
+
+#### `garcia-chica2025-pv-rainwater-irrigation`
+
+García-Chica, Antonio; Rodriguez-Perez, Angel Mariano; Caparros-Mancera, Julio Jose; Rodríguez-Gonzalez, Cesar Antonio; Chica, Rosa Maria. (2025). *Integrated photovoltaic system for rainwater collection and sustainable irrigation*. Irrigation Science 43: 1385-1395
+
+- DOI: [10.1007/s00271-025-01028-7](https://doi.org/10.1007/s00271-025-01028-7)
+- Verification: Crossref-verified | Access: open-access, evidence tier **C**
+- Backs:
+  - the built form of drip-line harvesting: gutters along the modules' low edges, a reservoir, a pump and a drip network, so the row goes where the light says and the water where the crop is
+- **Caveat:** Read from the abstract. The full text was not retrieved when the entry was made.
 
 #### `grommes2023-raytrace-vs-viewfactor`
 
@@ -236,6 +270,16 @@ Marrou, Hélène; Dufour, Lydie; Wery, Jacques. (2013). *How does a shelter of s
   - reduced soil evaporation and improved water-use efficiency under panels
   - rain shadow and drip-line redistribution of water under a panel array
 
+#### `meng2025-desert-pv-plants`
+
+Meng, Ruibing; Meng, Zhongju; Ren, Xiaomeng; Cai, Jiale; Tong, Xufang. (2025). *Positive impacts of typical desert photovoltaic scenarios in China on the growth and physiology of sand-adapted plants*. Frontiers in Plant Science 15: 1515896
+
+- DOI: [10.3389/fpls.2024.1515896](https://doi.org/10.3389/fpls.2024.1515896)
+- Verification: Crossref-verified | Access: open-access, evidence tier **B**
+- Backs:
+  - Astragalus adsurgens under desert panels stood about 50 percent taller by August, with 51 to 87 percent more nitrogen and crude protein than plants in the open, in the more humid air the panels' shade keeps
+- **Caveat:** One site, one species, one season. Soil moisture under and beside the panels was described and not measured.
+
 #### `pataczek2023-wheat-drought`
 
 Pataczek, Lisa; Weselek, Axel; Bauerle, Andrea; Högy, Petra. (2023). *Agrivoltaics mitigate drought effects in winter wheat*. Physiologia Plantarum 175: e14081
@@ -244,6 +288,36 @@ Pataczek, Lisa; Weselek, Axel; Bauerle, Andrea; Högy, Petra. (2023). *Agrivolta
 - Verification: Crossref-verified | Access: open-access, evidence tier **B**
 - Backs:
   - the shade benefit for a C3 cereal is conditional on drought, reinforcing the water-limitation gate
+
+#### `pv-magazine2026-solarroot`
+
+(2026). *Mexican graduates develop agrivoltaic system with rainwater harvesting, smart irrigation*. pv magazine
+
+- URL: <https://www.pv-magazine.com/2026/07/28/mexican-graduates-develop-agrivoltaic-system-with-rainwater-harvesting-smart-irrigation/>
+- Verification: URL-verified | Access: public-domain
+- Backs:
+  - a 2026 proposal pairing rainwater harvesting from the modules with sensor-driven subsurface drip, with the module count, the crops and the water recovered all undisclosed and nothing measured
+- **Caveat:** Trade press on a competition entry. Cited as the state of the idea, nothing in it is evidence.
+
+#### `pvcase-agrivoltaics-guide`
+
+(n.d.). *Agrivoltaics: the technical guide to integrated solar and agricultural systems*. PVcase
+
+- URL: <https://pvcase.com/blog/agrivoltaics>
+- Verification: URL-verified | Access: public-domain
+- Backs:
+  - design practice for the drip line: a gravel drip zone under the module edges, or trackers tilted during heavy rain to spread the water across the rows
+- **Caveat:** A software vendor's guide. Practice, with no source of its own for the figures it gives.
+
+#### `ravi2016-colocation-drylands`
+
+Ravi, Sujith; Macknick, Jordan; Lobell, David; Field, Christopher; Ganesan, Karthik; Jain, Rishabh; Elchinger, Michael; Stoltenberg, Blaise. (2016). *Colocation opportunities for large solar infrastructures and agriculture in drylands*. Applied Energy 165: 383-392
+
+- DOI: [10.1016/j.apenergy.2015.12.078](https://doi.org/10.1016/j.apenergy.2015.12.078)
+- Verification: Crossref-verified | Access: paywalled, evidence tier **C**
+- Backs:
+  - the water used to clean solar panels is about what an aloe crop needs in a year, so the two can share it, and a life cycle analysis of the pairing returns more per cubic metre of water than either alone
+- **Caveat:** A modelling and life cycle study of a hypothetical dryland colocation. The abstract says nothing about rainwater from the panels.
 
 #### `reher2025-pears`
 
@@ -284,6 +358,17 @@ Trommsdorff, Max; Kang, Jinsuk; Reise, Christian; Schindele, Stephan; Bopp, Geor
 - Verification: Crossref-verified | Access: paywalled, evidence tier **B**
 - Backs:
   - Heggelbach reference geometry: clearance height, row pitch and ground coverage ratio for a temperate arable APV system
+
+#### `wang2024-desert-pv-ecology`
+
+Wang, Yimeng; Liu, Benli; Xing, Yu; Peng, Huaiwu; Wu, Hui; Zhong, Jianping. (2024). *Ecological construction status of photovoltaic power plants in China's deserts*. Frontiers in Environmental Science 12: 1406546
+
+- DOI: [10.3389/fenvs.2024.1406546](https://doi.org/10.3389/fenvs.2024.1406546)
+- Verification: Crossref-verified | Access: open-access, evidence tier **C**
+- Backs:
+  - panels cleaned seven to eight times a year drop the cleaning water and the rain from their edges into drip lines, which raise soil moisture under the panels and carry the vegetation and biological crust of China's desert plants
+  - the one setting found where the drip line under a panel edge is counted on to water what grows there
+- **Caveat:** A survey of practice across desert plants, with the soil-moisture mechanism described and no controlled comparison of its own.
 
 #### `weselek2019-apv-review`
 
@@ -346,7 +431,7 @@ Zhang, Yuxin; Hendriks, Chantal; Uchanski, Mark; Page, Ellie. (2025). *Climatic 
 
 ## Solar engineering
 
-47 sources.
+50 sources.
 
 #### `arena2024-vertical-bifacial`
 
@@ -394,6 +479,17 @@ Britton, C. M.; Dodd, J. D.. (1976). *Relationships of photosynthetically active
 - Verification: Crossref-verified | Access: paywalled
 - Backs:
   - PAR/GHI energy ratio 0.41-0.45, the lower bound of the user-adjustable 0.42-0.50 range
+
+#### `cook-mccuen2013-solar-farm-hydrology`
+
+Cook, Lauren M.; McCuen, Richard H.. (2013). *Hydrologic Response of Solar Farms*. Journal of Hydrologic Engineering 18: 536-541
+
+- DOI: [10.1061/(ASCE)HE.1943-5584.0000530](https://doi.org/10.1061/(ASCE)HE.1943-5584.0000530)
+- Verification: Crossref-verified | Access: paywalled, evidence tier **C**
+- Backs:
+  - water leaving a panel's edge carries up to ten times the kinetic energy of rainfall and erodes the ground at the base of a row, so the drip strip is mulched and seedlings are set back from it
+  - the panels themselves leave runoff volumes, peaks and times to peak unchanged, the ground cover under them decides the storm response
+- **Caveat:** A modelling study with sensitivity analysis, no field measurement of its own.
 
 #### `dobos2014-pvwatts-v5`
 
@@ -628,6 +724,16 @@ Michalsky, Joseph J.. (1988). *The Astronomical Almanac's algorithm for approxim
 - Backs:
   - candidate low-cost solar position algorithm, rejected on accuracy grounds
 
+#### `mulla2024-solar-farm-soil-moisture`
+
+Mulla, David; Galzki, Jake; Hanson, Aaron; Simunek, Jirka. (2024). *Measuring and modeling soil moisture and runoff at solar farms using a disconnected impervious surface approach*. Vadose Zone Journal 23: e20335
+
+- DOI: [10.1002/vzj2.20335](https://doi.org/10.1002/vzj2.20335)
+- Verification: Crossref-verified | Access: open-access, evidence tier **B**
+- Backs:
+  - a panel row treated as a disconnected impervious surface that sheds its water to the ground at its drip edge, which is the treatment this app's rain field gives every row
+- **Caveat:** Read from the abstract and title. The full text was not retrieved when the entry was made.
+
 #### `perez1990-transposition`
 
 Perez, Richard; Ineichen, Pierre; Seals, Robert; Michalsky, Joseph; Stewart, Ronald. (1990). *Modeling daylight availability and irradiance components from direct and global irradiance*. Solar Energy 44: 271-289
@@ -807,6 +913,15 @@ Tregenza, P. R.. (1987). *Subdivision of the sky hemisphere for luminance measur
 - Verification: Crossref-verified | Access: paywalled
 - Backs:
   - decision 5: Tregenza 145-patch sky discretisation, retained in `skydome.ts` for coarse tests
+
+#### `yavari2022-solar-farm-hydrology-review`
+
+Yavari, Rouhangiz; Zaliwciw, Demetrius; Cibin, Raj; McPhillips, Lauren. (2022). *Minimizing environmental impacts of solar farms: a review of current science on landscape hydrology and guidance on stormwater management*. Environmental Research: Infrastructure and Sustainability 2: 032002
+
+- DOI: [10.1088/2634-4505/ac76dd](https://doi.org/10.1088/2634-4505/ac76dd)
+- Verification: Crossref-verified | Access: open-access, evidence tier **B**
+- Backs:
+  - concentrated runoff at the drip edge of panel rows and bare ground under them are the erosion and stormwater risks a solar farm adds, and vegetated ground under the rows is the remedy the literature agrees on
 
 ## Horticulture & crop physiology
 
@@ -1712,7 +1827,7 @@ Zimmerman, Cynthia. (2020). *Helpline Hot Topic for June 2020: Moringa Oleifera*
 
 ## Climate & geodata
 
-19 sources.
+20 sources.
 
 #### `beck2018-koppen`
 
@@ -1760,6 +1875,15 @@ Fishman, Svetlana; Erez, Amos; Couvillon, G. A.. (1987). *The temperature depend
 - Verification: Crossref-verified | Access: paywalled, evidence tier **A**
 - Backs:
   - the simulation companion to the Dynamic chill model
+
+#### `gunn-kinzer1949-terminal-velocity`
+
+Gunn, Ross; Kinzer, Gilbert D.. (1949). *The terminal velocity of fall for water droplets in stagnant air*. Journal of Meteorology 6: 243-248
+
+- DOI: [10.1175/1520-0469(1949)006<0243:TTVOFF>2.0.CO;2](https://doi.org/10.1175/1520-0469(1949)006<0243:TTVOFF>2.0.CO;2)
+- Verification: Crossref-verified | Access: paywalled, evidence tier **A**
+- Backs:
+  - a 2 mm raindrop falls at 6.5 m/s and a 4 mm drop at 8.8 m/s in still air, the two speeds the rain field uses for how far the wind moves a panel's rain shadow and its drip
 
 #### `heisler1986-single-tree-irradiance`
 

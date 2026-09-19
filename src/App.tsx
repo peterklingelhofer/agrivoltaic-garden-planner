@@ -2,7 +2,8 @@ import { lazy, Suspense, useEffect, useMemo, useState, type ReactElement } from 
 import { browserCapabilities, preflight } from './ui/preflight'
 import { lightIsStale } from './state/light-freshness'
 import { overlayField, overlayOffOnSeasons } from './state/overlay'
-import { overlaySlice, useAppStore } from './state/store'
+import { rainFieldOf } from './state/rain'
+import { overlaySlice, scenePlot, useAppStore } from './state/store'
 import { DliLegend } from './ui/DliLegend'
 import { ErrorBoundary } from './ui/ErrorBoundary'
 import { SceneCompass } from './ui/SceneCompass'
@@ -139,9 +140,12 @@ const CanvasLegend = (): ReactElement | null => {
   // the colours below are an answer about a garden, so they have to say when they stopped
   // being an answer about THIS one
   const stale = useAppStore(lightIsStale)
+  const plot = useAppStore(scenePlot)
+  const weather = useAppStore((s) => (s.weather.status === 'ready' ? s.weather.value : null))
+  const rain = useMemo(() => rainFieldOf(plot, weather), [plot, weather])
   const field = useMemo(
-    () => overlayField(raster, overlay.channel, slice, overlayPlayback),
-    [raster, overlay.channel, slice, overlayPlayback],
+    () => overlayField(raster, overlay.channel, slice, overlayPlayback, rain),
+    [raster, overlay.channel, slice, overlayPlayback, rain],
   )
   if (!overlay.visible || previewing || offOnSeasons || !field.values) return null
   return (

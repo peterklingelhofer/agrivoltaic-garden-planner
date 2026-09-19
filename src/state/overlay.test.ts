@@ -4,6 +4,7 @@ import { dliRasterFromAccumulation } from '../sim/raster'
 import type { GridSpec } from '../types/geo'
 import type { DliRaster, RasterQuality } from '../types/light'
 import type { Fraction, Meters, MonthIndex } from '../types/units'
+import type { RainField } from '../types/water'
 import { overlayField, overlayOffOnSeasons } from './overlay'
 
 describe('whether the seasons step leaves the ground uncoloured', () => {
@@ -203,5 +204,36 @@ describe('overlay accumulation', () => {
     expect(played.label).toBe('Daily light integral')
     expect(played.span).toBeNull()
     expect(played.note).toBeNull()
+  })
+
+  it('reads the rain channel off the rain field and needs no raster of its own', () => {
+    const values = new Float32Array([0, 0.5, 1, 3])
+    const rainFixture: RainField = { grid, values, beds: [] }
+    const withRaster = overlayField(raster(), 'rain', 'annual', null, rainFixture)
+    expect(withRaster.values).toBe(values)
+    expect(withRaster.grid).toBe(grid)
+    // the domain is fixed at twice open ground whatever the strips peak at, so sheltered and
+    // open ground stay two different colours
+    expect(withRaster.max).toBe(2)
+    expect(withRaster.label).toBe('Rain reaching the ground, as a multiple of open ground')
+
+    const withoutRaster = overlayField(null, 'rain', 'annual', null, rainFixture)
+    expect(withoutRaster.values).toBe(values)
+    expect(withoutRaster.grid).toBe(grid)
+  })
+
+  it('is empty on the rain channel with no rain field computed yet', () => {
+    const field = overlayField(raster(), 'rain', 'annual', null, null)
+    expect(field.values).toBeNull()
+    expect(field.grid).toBeNull()
+    expect(field.max).toBe(2)
+  })
+
+  it('takes every other channel’s grid from the raster', () => {
+    const built = raster()
+    expect(overlayField(built, 'dli', 'annual', null).grid).toBe(built.grid)
+    expect(overlayField(built, 'rsr', 'annual', null).grid).toBe(built.grid)
+    expect(overlayField(built, 'sky-view-factor', 'annual', null).grid).toBe(built.grid)
+    expect(overlayField(null, 'dli', 'annual', null).grid).toBeNull()
   })
 })

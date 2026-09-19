@@ -423,7 +423,6 @@ export const bedFixture = (bedId: string, overrides: Partial<Bed> = {}): Bed => 
     method: 'drip',
     available: true,
     appliedMmPerYear: 400 as MillimetersPerYear,
-    harvestsPanelRunoff: false,
   },
   raisedHeightM: 0.3 as Meters,
   modifiers: [],

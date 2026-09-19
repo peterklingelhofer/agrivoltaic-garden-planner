@@ -162,7 +162,6 @@ export const makeBed = (index: number, patch: Partial<Bed> = {}): Bed => {
       method: 'drip',
       available: true,
       appliedMmPerYear: millimetersPerYear(180),
-      harvestsPanelRunoff: false,
     },
     raisedHeightM: meters(0.35),
     modifiers: [],

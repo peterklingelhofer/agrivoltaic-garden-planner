@@ -1,5 +1,5 @@
 import { cropLabel } from '../data/crops'
-import { at, DAYS_PER_YEAR, mean } from '../data/util'
+import { at, DAYS_PER_YEAR } from '../data/util'
 import {
   canopyCoverFromLai,
   dailyRainfallFromNormals,
@@ -13,6 +13,7 @@ import {
   runWaterBalance,
   shadeBenefitStatusOf,
   shadeShortwaveFactors,
+  RUNOFF_CAPTURE_CLAIM,
   SHADE_ET_MEASURED_ANCHOR,
   SHADE_ET_NOTE,
   SHADE_ET_RELATIVE_HALF_WIDTH,
@@ -20,9 +21,11 @@ import {
   SITE_REFERENCE_ROOT_DEPTH_M,
   soilWaterCapacity,
   stageCalendarFor,
+  TRACKER_RAIN_NOTE,
   type BalanceDay,
   type BalanceOptions,
 } from '../data/water'
+import { rainField, rainHourWindMS } from './rain'
 import { banded, interval, widenBand } from '../types/band'
 import type { Crop } from '../types/crop'
 import type { Bed, GardenPlot } from '../types/garden'
@@ -30,10 +33,12 @@ import type { BedLight } from '../types/light'
 import type { Site } from '../types/site'
 import type { Fraction } from '../types/units'
 import type {
+  BedRain,
   BedWaterBalance,
   DailyWeather,
   Et0Method,
   ReferenceEt,
+  RainField,
   StageCalendar,
 } from '../types/water'
 import type { TmySeries } from '../types/weather'
@@ -44,6 +49,8 @@ export interface WaterBalanceInput {
   readonly plot: GardenPlot
   readonly bedLight: readonly BedLight[]
   readonly catalog: readonly Crop[]
+  /** The plot's rain field where the caller already holds it, the store's memo in the app */
+  readonly rain?: RainField
 }
 
 interface BedCrop {
@@ -118,6 +125,9 @@ interface SharedInput {
   readonly openSkyEt: ReferenceEt
   readonly rainfall: readonly number[]
   readonly catalog: readonly Crop[]
+  readonly rain: RainField
+  /** Whether any array in the plot tracks the sun, so `TRACKER_RAIN_NOTE` applies to every bed alike */
+  readonly anyTrackingArray: boolean
 }
 
 const share = (value: number): string => `${Math.round(value * 100)}%`
@@ -138,18 +148,22 @@ export const bedWaterBalance = (
     bed.soil.textureClass,
     effectiveRootDepthM(crop.rootDepthM, bed.soil.effectiveDepthM),
   )
-  const rain = panelRainSplit(
-    mean(monthlyRsr),
-    bed.irrigation.harvestsPanelRunoff,
-    bed.waterHarvesting.some((element) => element.tiedToArrayDripLine),
-  )
+  const rain: BedRain = shared.rain.beds.find((entry) => entry.bedId === bed.id) ?? {
+    bedId: bed.id,
+    shelteredFraction: 0 as Fraction,
+    dripMultiple: 0,
+    crossings: [],
+  }
+  const hasBasin = bed.waterHarvesting.length > 0
+  const capture = hasBasin ? RUNOFF_CAPTURE_CLAIM.value.basin : RUNOFF_CAPTURE_CLAIM.value.plainBed
+  const split = panelRainSplit(rain, hasBasin)
   const underPanelsEt = referenceEt(
     shared.days,
     shared.method,
     shared.reason,
     shadeShortwaveFactors(monthlyRsr),
   )
-  const reaching = rain.reachingBedFraction + rain.harvestedFraction
+  const reaching = split.reachingBedFraction + split.dripMultiple
   const openDays = balanceDays(shared.openSkyEt, shared.rainfall, crop)
   const panelDays = balanceDays(
     underPanelsEt,
@@ -175,10 +189,18 @@ export const bedWaterBalance = (
   const saving =
     openSky.cropEtMm <= 0 ? 0 : Math.max(1 - underPanels.cropEtMm / openSky.cropEtMm, 0)
 
+  const crossingNotes =
+    split.crossings.length > 0
+      ? split.crossings.map(
+          (crossing) =>
+            `Row ${crossing.rowIndex + 1} of ${crossing.rowCount} sheds its rain along this bed's ${crossing.side} edge. It lands in a strip ${crossing.stripWidthM.toFixed(1)} m wide at this site's rain-hour wind, and that strip gets water equal to ${rain.dripMultiple.toFixed(1)} times what falls on the bed itself, of which the balance keeps ${share(capture)}. Mulch the strip and keep seedlings a hand's width back from it`,
+        )
+      : ['No panel sheds its rain onto this bed']
+
   return {
     bedId: bed.id,
     capacity,
-    rain,
+    rain: split,
     openSky,
     underPanels,
     openSkyEt0Mm: shared.openSkyEt.annualMm,
@@ -205,7 +227,13 @@ export const bedWaterBalance = (
     method: shared.method,
     notes: [
       `Crop coefficients follow ${crop.label}`,
-      `Panels intercept ${share(rain.interceptedFraction)} of rainfall before it reaches this bed and return ${share(rain.harvestedFraction)} of the year's rain through captured runoff`,
+      ...(split.interceptedFraction > 0
+        ? [
+            `${share(split.interceptedFraction)} of the bed sits in the panels' rain shadow, given this site's wind when it rains`,
+          ]
+        : []),
+      ...crossingNotes,
+      ...(shared.anyTrackingArray ? [TRACKER_RAIN_NOTE] : []),
       SHADE_ET_NOTE,
     ],
   }
@@ -226,6 +254,8 @@ export const waterBalances = (input: WaterBalanceInput): readonly BedWaterBalanc
     openSkyEt: referenceEt(days, method, reason, null),
     rainfall: dailyRainfallFromNormals(input.site.normals.monthlyPrecipMm),
     catalog: input.catalog,
+    rain: input.rain ?? rainField(input.plot, rainHourWindMS(input.weather)),
+    anyTrackingArray: input.plot.arrays.some((array) => array.tracker.mode !== 'fixed'),
   }
   return input.plot.beds.map((bed) =>
     bedWaterBalance(shared, bed, input.bedLight.find((entry) => entry.bedId === bed.id) ?? null),

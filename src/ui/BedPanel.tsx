@@ -11,9 +11,10 @@ import {
 import { makeBed, nextBedIndex } from '../state/defaults'
 import { extentOf, polygonAreaM2, polygonOf, rectangleOf, rectangleRing, vec2 } from '../state/geom'
 import { prefersReducedMotion } from '../state/motion'
+import { rainFieldOf } from '../state/rain'
 import { outOfSeason } from '../state/season'
 import { EMPTY_LIST, MAX_PLANT_YEAR } from '../state/slices'
-import { selectedBedOf, useAppStore } from '../state/store'
+import { scenePlot, selectedBedOf, useAppStore } from '../state/store'
 import { dayOfYearUtc } from '../state/sun'
 import type { BedCalendar } from '../types/calendar'
 import type { Crop } from '../types/crop'
@@ -1164,11 +1165,17 @@ export const GroundPanel = (): ReactElement => {
   const undoDraftVertex = useAppStore((s) => s.undoDraftVertex)
   const setPlantYear = useAppStore((s) => s.setPlantYear)
   const hoveredTarget = useAppStore((s) => s.hovered)
+  const rainPlot = useAppStore(scenePlot)
+  const weather = useAppStore((s) => (s.weather.status === 'ready' ? s.weather.value : null))
 
   const light = useMemo(
     () => bedLight.find((entry) => entry.bedId === bed?.id) ?? null,
     [bedLight, bed],
   )
+  const bedRain = useMemo(() => {
+    const field = rainFieldOf(rainPlot, weather)
+    return field?.beds.find((entry) => entry.bedId === bed?.id) ?? null
+  }, [rainPlot, weather, bed])
 
   const bedIsHovered =
     bed !== null && hoveredTarget !== null && hoveredTarget.kind !== 'array'
@@ -1341,16 +1348,23 @@ export const GroundPanel = (): ReactElement => {
               }
             />
             <Toggle
-              testId="control-bed-panel-runoff"
-              label="Catches the rain running off the panels"
-              checked={bed.irrigation.harvestsPanelRunoff}
+              testId="control-bed-drip-basin"
+              label="A basin or swale along the drip line"
+              checked={bed.waterHarvesting.length > 0}
               onChange={(checked) =>
                 upsertBed({
                   ...bed,
-                  irrigation: { ...bed.irrigation, harvestsPanelRunoff: checked },
+                  waterHarvesting: checked
+                    ? [{ scale: 'micro-basin', footprint: bed.footprint }]
+                    : [],
                 })
               }
             />
+            <p className="readout-note" data-testid="readout-bed-drip">
+              {bedRain !== null && bedRain.crossings[0] !== undefined
+                ? `Row ${bedRain.crossings[0].rowIndex + 1} of ${bedRain.crossings[0].rowCount} sheds onto this bed's ${bedRain.crossings[0].side} edge: the rain that runs off its panels lands in a strip of ground there`
+                : 'No panel sheds its rain onto this bed'}
+            </p>
             <SliderField
               testId="control-bed-plant-year"
               label="Show the garden at"

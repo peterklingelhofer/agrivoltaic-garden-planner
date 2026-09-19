@@ -1513,6 +1513,9 @@
       "evidenceTier": "B",
       "backsClaims": [
         "rain shadow beneath panels and concentrated runoff at the drip line",
+        "at low tilt about 90 percent of a panel's water leaves through a 20 cm wide outlet, the still-air width of this app's drip strip",
+        "under panels held flat the ground beneath got 1.3 mm where open ground got 3.0 and the drip edge 24, and the wind mattered more than the rain amount to where the water landed at their 5 m height",
+        "trackers rotated out of the rain cut the coefficient of variation of the water on the ground from 2.13 to 0.22",
         "TEK design rule 4: water-harvesting geometry tied to the array drip line and runoff shadow"
       ],
       "caveat": null
@@ -1563,7 +1566,8 @@
       "accessLevel": "paywalled",
       "evidenceTier": "B",
       "backsClaims": [
-        "reduced evapotranspiration and irrigation demand under panel shade for irrigated lettuce"
+        "reduced evapotranspiration and irrigation demand under panel shade for irrigated lettuce",
+        "the drip-line edge zones of the plot held more soil moisture and ran cooler than its interior"
       ],
       "caveat": null
     }
@@ -9560,6 +9564,557 @@
         "the three daily indicators, minimum temperature, vapour pressure deficit and day length, and their combination as a product, that a drawn deciduous tree's leaf-on months are read against, verbatim: 'We selected as variables: daylength (photoperiod), evaporative demand (vapor pressure deficit), and suboptimal (minimum) temperatures... A combined Growing Season Index (GSI) was derived as the product of the three indices'"
       ],
       "caveat": "Ten-day mean GSI values agreed with satellite greenness at nine sites, r>0.8 at eight of them, and matched field-observed leaf flush and coloration at Harvard Forest within 3 and 2 days. The app reads a drawn tree of unknown species against the same three thresholds, by calendar month from the site's typical year rather than the paper's own ten-day means."
+    }
+  },
+  {
+    "id": "cook-mccuen2013-solar-farm-hydrology",
+    "type": "article-journal",
+    "title": "Hydrologic Response of Solar Farms",
+    "author": [
+      {
+        "family": "Cook",
+        "given": "Lauren M."
+      },
+      {
+        "family": "McCuen",
+        "given": "Richard H."
+      }
+    ],
+    "container-title": "Journal of Hydrologic Engineering",
+    "volume": "18",
+    "issue": "5",
+    "page": "536-541",
+    "publisher": "American Society of Civil Engineers",
+    "issued": {
+      "date-parts": [
+        [
+          2013
+        ]
+      ]
+    },
+    "DOI": "10.1061/(ASCE)HE.1943-5584.0000530",
+    "URL": "https://doi.org/10.1061/(ASCE)HE.1943-5584.0000530",
+    "custom": {
+      "group": "solar",
+      "verification": "crossref-verified",
+      "accessLevel": "paywalled",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "water leaving a panel's edge carries up to ten times the kinetic energy of rainfall and erodes the ground at the base of a row, so the drip strip is mulched and seedlings are set back from it",
+        "the panels themselves leave runoff volumes, peaks and times to peak unchanged, the ground cover under them decides the storm response"
+      ],
+      "caveat": "A modelling study with sensitivity analysis, no field measurement of its own."
+    }
+  },
+  {
+    "id": "yavari2022-solar-farm-hydrology-review",
+    "type": "article-journal",
+    "title": "Minimizing environmental impacts of solar farms: a review of current science on landscape hydrology and guidance on stormwater management",
+    "author": [
+      {
+        "family": "Yavari",
+        "given": "Rouhangiz"
+      },
+      {
+        "family": "Zaliwciw",
+        "given": "Demetrius"
+      },
+      {
+        "family": "Cibin",
+        "given": "Raj"
+      },
+      {
+        "family": "McPhillips",
+        "given": "Lauren"
+      }
+    ],
+    "container-title": "Environmental Research: Infrastructure and Sustainability",
+    "volume": "2",
+    "issue": "3",
+    "page": "032002",
+    "publisher": "IOP Publishing",
+    "issued": {
+      "date-parts": [
+        [
+          2022
+        ]
+      ]
+    },
+    "DOI": "10.1088/2634-4505/ac76dd",
+    "URL": "https://doi.org/10.1088/2634-4505/ac76dd",
+    "custom": {
+      "group": "solar",
+      "verification": "crossref-verified",
+      "accessLevel": "open-access",
+      "evidenceTier": "B",
+      "backsClaims": [
+        "concentrated runoff at the drip edge of panel rows and bare ground under them are the erosion and stormwater risks a solar farm adds, and vegetated ground under the rows is the remedy the literature agrees on"
+      ],
+      "caveat": null
+    }
+  },
+  {
+    "id": "mulla2024-solar-farm-soil-moisture",
+    "type": "article-journal",
+    "title": "Measuring and modeling soil moisture and runoff at solar farms using a disconnected impervious surface approach",
+    "author": [
+      {
+        "family": "Mulla",
+        "given": "David"
+      },
+      {
+        "family": "Galzki",
+        "given": "Jake"
+      },
+      {
+        "family": "Hanson",
+        "given": "Aaron"
+      },
+      {
+        "family": "Simunek",
+        "given": "Jirka"
+      }
+    ],
+    "container-title": "Vadose Zone Journal",
+    "volume": "23",
+    "issue": "4",
+    "page": "e20335",
+    "publisher": "Wiley",
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "DOI": "10.1002/vzj2.20335",
+    "URL": "https://doi.org/10.1002/vzj2.20335",
+    "custom": {
+      "group": "solar",
+      "verification": "crossref-verified",
+      "accessLevel": "open-access",
+      "evidenceTier": "B",
+      "backsClaims": [
+        "a panel row treated as a disconnected impervious surface that sheds its water to the ground at its drip edge, which is the treatment this app's rain field gives every row"
+      ],
+      "caveat": "Read from the abstract and title. The full text was not retrieved when the entry was made."
+    }
+  },
+  {
+    "id": "ravi2016-colocation-drylands",
+    "type": "article-journal",
+    "title": "Colocation opportunities for large solar infrastructures and agriculture in drylands",
+    "author": [
+      {
+        "family": "Ravi",
+        "given": "Sujith"
+      },
+      {
+        "family": "Macknick",
+        "given": "Jordan"
+      },
+      {
+        "family": "Lobell",
+        "given": "David"
+      },
+      {
+        "family": "Field",
+        "given": "Christopher"
+      },
+      {
+        "family": "Ganesan",
+        "given": "Karthik"
+      },
+      {
+        "family": "Jain",
+        "given": "Rishabh"
+      },
+      {
+        "family": "Elchinger",
+        "given": "Michael"
+      },
+      {
+        "family": "Stoltenberg",
+        "given": "Blaise"
+      }
+    ],
+    "container-title": "Applied Energy",
+    "volume": "165",
+    "page": "383-392",
+    "publisher": "Elsevier",
+    "issued": {
+      "date-parts": [
+        [
+          2016
+        ]
+      ]
+    },
+    "DOI": "10.1016/j.apenergy.2015.12.078",
+    "URL": "https://doi.org/10.1016/j.apenergy.2015.12.078",
+    "custom": {
+      "group": "agrivoltaics",
+      "verification": "crossref-verified",
+      "accessLevel": "paywalled",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "the water used to clean solar panels is about what an aloe crop needs in a year, so the two can share it, and a life cycle analysis of the pairing returns more per cubic metre of water than either alone"
+      ],
+      "caveat": "A modelling and life cycle study of a hypothetical dryland colocation. The abstract says nothing about rainwater from the panels."
+    }
+  },
+  {
+    "id": "wang2024-desert-pv-ecology",
+    "type": "article-journal",
+    "title": "Ecological construction status of photovoltaic power plants in China's deserts",
+    "author": [
+      {
+        "family": "Wang",
+        "given": "Yimeng"
+      },
+      {
+        "family": "Liu",
+        "given": "Benli"
+      },
+      {
+        "family": "Xing",
+        "given": "Yu"
+      },
+      {
+        "family": "Peng",
+        "given": "Huaiwu"
+      },
+      {
+        "family": "Wu",
+        "given": "Hui"
+      },
+      {
+        "family": "Zhong",
+        "given": "Jianping"
+      }
+    ],
+    "container-title": "Frontiers in Environmental Science",
+    "volume": "12",
+    "page": "1406546",
+    "publisher": "Frontiers Media",
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "DOI": "10.3389/fenvs.2024.1406546",
+    "URL": "https://doi.org/10.3389/fenvs.2024.1406546",
+    "custom": {
+      "group": "agrivoltaics",
+      "verification": "crossref-verified",
+      "accessLevel": "open-access",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "panels cleaned seven to eight times a year drop the cleaning water and the rain from their edges into drip lines, which raise soil moisture under the panels and carry the vegetation and biological crust of China's desert plants",
+        "the one setting found where the drip line under a panel edge is counted on to water what grows there"
+      ],
+      "caveat": "A survey of practice across desert plants, with the soil-moisture mechanism described and no controlled comparison of its own."
+    }
+  },
+  {
+    "id": "meng2025-desert-pv-plants",
+    "type": "article-journal",
+    "title": "Positive impacts of typical desert photovoltaic scenarios in China on the growth and physiology of sand-adapted plants",
+    "author": [
+      {
+        "family": "Meng",
+        "given": "Ruibing"
+      },
+      {
+        "family": "Meng",
+        "given": "Zhongju"
+      },
+      {
+        "family": "Ren",
+        "given": "Xiaomeng"
+      },
+      {
+        "family": "Cai",
+        "given": "Jiale"
+      },
+      {
+        "family": "Tong",
+        "given": "Xufang"
+      }
+    ],
+    "container-title": "Frontiers in Plant Science",
+    "volume": "15",
+    "page": "1515896",
+    "publisher": "Frontiers Media",
+    "issued": {
+      "date-parts": [
+        [
+          2025
+        ]
+      ]
+    },
+    "DOI": "10.3389/fpls.2024.1515896",
+    "URL": "https://doi.org/10.3389/fpls.2024.1515896",
+    "custom": {
+      "group": "agrivoltaics",
+      "verification": "crossref-verified",
+      "accessLevel": "open-access",
+      "evidenceTier": "B",
+      "backsClaims": [
+        "Astragalus adsurgens under desert panels stood about 50 percent taller by August, with 51 to 87 percent more nitrogen and crude protein than plants in the open, in the more humid air the panels' shade keeps"
+      ],
+      "caveat": "One site, one species, one season. Soil moisture under and beside the panels was described and not measured."
+    }
+  },
+  {
+    "id": "garcia-chica2025-pv-rainwater-irrigation",
+    "type": "article-journal",
+    "title": "Integrated photovoltaic system for rainwater collection and sustainable irrigation",
+    "author": [
+      {
+        "family": "García-Chica",
+        "given": "Antonio"
+      },
+      {
+        "family": "Rodriguez-Perez",
+        "given": "Angel Mariano"
+      },
+      {
+        "family": "Caparros-Mancera",
+        "given": "Julio Jose"
+      },
+      {
+        "family": "Rodríguez-Gonzalez",
+        "given": "Cesar Antonio"
+      },
+      {
+        "family": "Chica",
+        "given": "Rosa Maria"
+      }
+    ],
+    "container-title": "Irrigation Science",
+    "volume": "43",
+    "issue": "6",
+    "page": "1385-1395",
+    "publisher": "Springer",
+    "issued": {
+      "date-parts": [
+        [
+          2025
+        ]
+      ]
+    },
+    "DOI": "10.1007/s00271-025-01028-7",
+    "URL": "https://doi.org/10.1007/s00271-025-01028-7",
+    "custom": {
+      "group": "agrivoltaics",
+      "verification": "crossref-verified",
+      "accessLevel": "open-access",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "the built form of drip-line harvesting: gutters along the modules' low edges, a reservoir, a pump and a drip network, so the row goes where the light says and the water where the crop is"
+      ],
+      "caveat": "Read from the abstract. The full text was not retrieved when the entry was made."
+    }
+  },
+  {
+    "id": "gunn-kinzer1949-terminal-velocity",
+    "type": "article-journal",
+    "title": "The terminal velocity of fall for water droplets in stagnant air",
+    "author": [
+      {
+        "family": "Gunn",
+        "given": "Ross"
+      },
+      {
+        "family": "Kinzer",
+        "given": "Gilbert D."
+      }
+    ],
+    "container-title": "Journal of Meteorology",
+    "volume": "6",
+    "issue": "4",
+    "page": "243-248",
+    "publisher": "American Meteorological Society",
+    "issued": {
+      "date-parts": [
+        [
+          1949
+        ]
+      ]
+    },
+    "DOI": "10.1175/1520-0469(1949)006<0243:TTVOFF>2.0.CO;2",
+    "URL": "https://doi.org/10.1175/1520-0469(1949)006<0243:TTVOFF>2.0.CO;2",
+    "custom": {
+      "group": "climate",
+      "verification": "crossref-verified",
+      "accessLevel": "paywalled",
+      "evidenceTier": "A",
+      "backsClaims": [
+        "a 2 mm raindrop falls at 6.5 m/s and a 4 mm drop at 8.8 m/s in still air, the two speeds the rain field uses for how far the wind moves a panel's rain shadow and its drip"
+      ],
+      "caveat": null
+    }
+  },
+  {
+    "id": "edf2023-photovoltaic-facility-gutter",
+    "type": "patent",
+    "title": "Photovoltaic facility",
+    "author": [
+      {
+        "family": "Van Iseghem",
+        "given": "Mike"
+      },
+      {
+        "family": "Poivey",
+        "given": "Romain"
+      },
+      {
+        "family": "Mallo",
+        "given": "Etienne"
+      }
+    ],
+    "number": "US 11736061 B2",
+    "publisher": "Electricité de France",
+    "issued": {
+      "date-parts": [
+        [
+          2023,
+          8,
+          22
+        ]
+      ]
+    },
+    "URL": "https://patents.google.com/patent/US11736061B2/en",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          9,
+          18
+        ]
+      ]
+    },
+    "note": "Retrieved 2026-09-18 from Google Patents, HTTP 200. Filed 2022-05-24, priority 2021-05-25.",
+    "custom": {
+      "group": "agrivoltaics",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": null,
+      "backsClaims": [
+        "a gutter hung from a panel's edge on pivots so it swings level at any tilt, made to recover the water and to stop it concentrating on the crops beneath and gullying the soil"
+      ],
+      "caveat": "A patent describes a device and claims no measurement."
+    }
+  },
+  {
+    "id": "allen2023-jacks-solar-garden",
+    "type": "webpage",
+    "title": "In Colorado, the soil beneath solar panels is ripe for growing crops",
+    "author": [
+      {
+        "family": "Allen",
+        "given": "Gabe"
+      },
+      {
+        "family": "Hickman",
+        "given": "Tyler"
+      }
+    ],
+    "publisher": "Planet Forward",
+    "issued": {
+      "date-parts": [
+        [
+          2023,
+          2,
+          8
+        ]
+      ]
+    },
+    "URL": "https://planetforward.org/story/soil-beneath-solar-panels/",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          9,
+          18
+        ]
+      ]
+    },
+    "note": "Retrieved 2026-09-18, HTTP 200.",
+    "custom": {
+      "group": "agrivoltaics",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": null,
+      "backsClaims": [
+        "at Jack's Solar Garden the trackers' shadows move across the ground through the day and rainwater is deposited along each panel's downward edge, and growers plant to the microclimates that makes"
+      ],
+      "caveat": "Journalism about a research site, quoted for the practice it reports and for nothing measured."
+    }
+  },
+  {
+    "id": "pv-magazine2026-solarroot",
+    "type": "webpage",
+    "title": "Mexican graduates develop agrivoltaic system with rainwater harvesting, smart irrigation",
+    "publisher": "pv magazine",
+    "issued": {
+      "date-parts": [
+        [
+          2026,
+          7,
+          28
+        ]
+      ]
+    },
+    "URL": "https://www.pv-magazine.com/2026/07/28/mexican-graduates-develop-agrivoltaic-system-with-rainwater-harvesting-smart-irrigation/",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          9,
+          18
+        ]
+      ]
+    },
+    "note": "Retrieved 2026-09-18, HTTP 200.",
+    "custom": {
+      "group": "agrivoltaics",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": null,
+      "backsClaims": [
+        "a 2026 proposal pairing rainwater harvesting from the modules with sensor-driven subsurface drip, with the module count, the crops and the water recovered all undisclosed and nothing measured"
+      ],
+      "caveat": "Trade press on a competition entry. Cited as the state of the idea, nothing in it is evidence."
+    }
+  },
+  {
+    "id": "pvcase-agrivoltaics-guide",
+    "type": "webpage",
+    "title": "Agrivoltaics: the technical guide to integrated solar and agricultural systems",
+    "publisher": "PVcase",
+    "URL": "https://pvcase.com/blog/agrivoltaics",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          9,
+          18
+        ]
+      ]
+    },
+    "note": "Retrieved 2026-09-18, HTTP 200. Undated vendor guide.",
+    "custom": {
+      "group": "agrivoltaics",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": null,
+      "backsClaims": [
+        "design practice for the drip line: a gravel drip zone under the module edges, or trackers tilted during heavy rain to spread the water across the rows"
+      ],
+      "caveat": "A software vendor's guide. Practice, with no source of its own for the figures it gives."
     }
   }
 ]

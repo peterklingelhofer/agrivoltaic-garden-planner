@@ -1,5 +1,6 @@
 import type { Banded, Interval } from './band'
-import type { BedId } from './ids'
+import type { GridSpec } from './geo'
+import type { ArrayId, BedId } from './ids'
 import type { SoilTexture } from './site'
 import type {
   ByMonth,
@@ -65,6 +66,31 @@ export interface SoilWaterCapacity {
   readonly totalEvaporableMm: Millimeters
 }
 
+export interface DripCrossing {
+  readonly arrayId: ArrayId
+  readonly rowIndex: number
+  readonly rowCount: number
+  /** The side of the bed the strip runs along, in the plot frame */
+  readonly side: 'north' | 'south' | 'east' | 'west'
+  readonly stripWidthM: Meters
+}
+
+export interface BedRain {
+  readonly bedId: BedId
+  /** Share of the bed in the panels' rain shadow, averaged over the wind's directions */
+  readonly shelteredFraction: Fraction
+  /** Panel water landing on the bed as a multiple of the bed's own open-ground rain, before any loss */
+  readonly dripMultiple: number
+  readonly crossings: readonly DripCrossing[]
+}
+
+export interface RainField {
+  readonly grid: GridSpec
+  /** Rain reaching each cell as a multiple of open ground: 0 in shadow, 1 open, a strip several */
+  readonly values: Float32Array
+  readonly beds: readonly BedRain[]
+}
+
 /**
  * Panels shelter most of a plot from rain and concentrate it into drip lines
  * (Elamri et al. 2018). Both halves are modelled, and both are thin evidence
@@ -72,8 +98,9 @@ export interface SoilWaterCapacity {
 export interface PanelRainSplit {
   readonly interceptedFraction: Fraction
   readonly reachingBedFraction: Fraction
-  readonly harvestedFraction: Fraction
-  readonly measuredCoefficientOfVariation: number
+  /** The bed's own `BedRain.dripMultiple`, after whatever share the bed's own capture keeps */
+  readonly dripMultiple: number
+  readonly crossings: readonly DripCrossing[]
 }
 
 export interface WaterBalanceRun {
