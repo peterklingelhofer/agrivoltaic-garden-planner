@@ -29,6 +29,14 @@ export default defineConfig({
   // command-buffer errors, a context that takes the whole timeout to close), and a rerun in a
   // fresh browser passes the same test. A laptop gets no retry, so a real failure stays loud
   retries: process.env.CI ? 1 : 0,
+  /*
+    Two on a laptop. Playwright's default is half the logical cores, eight on a 16-core
+    machine, and eight headless Chromiums each drawing the scene on Metal and baking on the same
+    GPU spin the fans up for the whole run. Two costs wall clock, 5.7 minutes for the functional
+    project against 3.5 at four and 2.4 at eight, which is the better trade at a desk. The
+    runner keeps the default: nobody sits next to it
+  */
+  workers: process.env.CI ? undefined : 2,
   expect: {
     toHaveScreenshot: { maxDiffPixelRatio: 0.02 },
   },

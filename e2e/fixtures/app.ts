@@ -347,6 +347,36 @@ export const drawingBuffer = (page: Page): Promise<readonly [number, number]> =>
 export const canvasPixels = async (page: Page): Promise<string> =>
   (await canvas(page).screenshot()).toString('base64')
 
+/** Resolves once the frame the last change asked for has been drawn and handed to the compositor */
+export const nextPaint = (page: Page): Promise<void> =>
+  page.evaluate(
+    () =>
+      new Promise<void>((resolve) => {
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
+      }),
+  )
+
+/** Frames a picture may keep changing for: a controls glide decays over about 140 at 60 Hz */
+const SETTLE_ROUNDS = 200
+
+/**
+ * The canvas once its picture has stopped changing: shot on consecutive drawn frames until two
+ * agree byte for byte, which the scene's own frames do (no wind runs without plantings, and
+ * nothing else in a frame is random). A toggle asks for one structural frame, a drag glides
+ * through a hundred as the controls' damping settles, and a shared GPU stretches either. A fixed
+ * wait can only guess at all of that
+ */
+export const settledCanvas = async (page: Page): Promise<Buffer> => {
+  let last = await canvas(page).screenshot()
+  for (let round = 0; round < SETTLE_ROUNDS; round += 1) {
+    await nextPaint(page)
+    const next = await canvas(page).screenshot()
+    if (next.equals(last)) return next
+    last = next
+  }
+  throw new Error(`the picture kept changing for ${String(SETTLE_ROUNDS)} rounds`)
+}
+
 /**
  * A bed drawn by canvas fractions lands wherever the camera puts that ground, so this ring is a
  * claim about the framing as much as about the bed. Re-cut on 2026-09-11 evening, when the plot
