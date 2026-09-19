@@ -2,7 +2,14 @@ import { describe, expect, it } from 'bun:test'
 import type { LatLon } from '../types/geo'
 import type { DegreesLatitude, DegreesLongitude } from '../types/units'
 import { HOURS_PER_TMY } from '../types/weather'
-import { normaliseTmy, normaliseWeather, TMY_END_YEAR } from './tmy'
+import {
+  NSRDB_DEFAULT_WIND_10M_MS,
+  NSRDB_MIN_MEAN_WIND_MS,
+  normaliseTmy,
+  normaliseWeather,
+  TMY_END_YEAR,
+} from './tmy'
+import { TMY_WIND_HEIGHT_M, windSpeedAt2m } from './water'
 
 const AMHERST: LatLon = {
   latitudeDeg: 42.37 as DegreesLatitude,
@@ -10,11 +17,16 @@ const AMHERST: LatLon = {
 }
 
 /**
- * An Open-Meteo archive answer for whole calendar years, hour by hour, with the rain a caller
- * asks for or without it. The second year is a leap year on purpose: 8,784 hours arrive and
- * 29 February has to be dropped for the year to land on the 8,760 hour grid
+ * An Open-Meteo archive answer for whole calendar years, hour by hour, with the rain and wind
+ * direction a caller asks for or without either. The second year is a leap year on purpose:
+ * 8,784 hours arrive and 29 February has to be dropped for the year to land on the 8,760 hour
+ * grid
  */
-const openMeteoBody = (years: readonly number[], rainMmPerHour: number | null): unknown => {
+const openMeteoBody = (
+  years: readonly number[],
+  rainMmPerHour: number | null,
+  windDirectionDeg: number | null = null,
+): unknown => {
   const time: string[] = []
   const ghi: number[] = []
   const temperature: number[] = []
@@ -22,6 +34,7 @@ const openMeteoBody = (years: readonly number[], rainMmPerHour: number | null): 
   const wind: number[] = []
   const pressure: number[] = []
   const rain: number[] = []
+  const windDirection: number[] = []
   for (const year of years) {
     for (let t = Date.UTC(year, 0, 1); t < Date.UTC(year + 1, 0, 1); t += 3_600_000) {
       const stamp = new Date(t)
@@ -34,6 +47,7 @@ const openMeteoBody = (years: readonly number[], rainMmPerHour: number | null): 
       wind.push(2)
       pressure.push(1010)
       rain.push(rainMmPerHour === null ? 0 : rainMmPerHour * (year === years[0] ? 1 : 2))
+      windDirection.push(windDirectionDeg ?? 0)
     }
   }
   return {
@@ -45,6 +59,7 @@ const openMeteoBody = (years: readonly number[], rainMmPerHour: number | null): 
       wind_speed_10m: wind,
       surface_pressure: pressure,
       ...(rainMmPerHour === null ? {} : { precipitation: rain }),
+      ...(windDirectionDeg === null ? {} : { wind_direction_10m: windDirection }),
     },
   }
 }
@@ -100,6 +115,24 @@ describe('the weather record keeps the years the typical one was assembled from'
     for (const { weather } of dry.years) expect(weather.precipMm).toBeUndefined()
   })
 
+  it('carries the wind direction the source answered, year by year', () => {
+    const breezy = normaliseWeather(
+      { source: 'open-meteo', body: openMeteoBody([2023, 2024], 0.1, 200) },
+      AMHERST,
+    )
+    expect(breezy.typical.windDirectionDeg).toHaveLength(HOURS_PER_TMY)
+    expect(sum(breezy.typical.windDirectionDeg)).toBeCloseTo(200 * HOURS_PER_TMY, 0)
+    for (const { weather } of breezy.years) {
+      expect(weather.windDirectionDeg).toHaveLength(HOURS_PER_TMY)
+      expect(sum(weather.windDirectionDeg)).toBeCloseTo(200 * HOURS_PER_TMY, 0)
+    }
+  })
+
+  it('leaves the wind direction column absent where the source did not answer it, never zero', () => {
+    expect(record.typical.windDirectionDeg).toBeUndefined()
+    for (const { weather } of record.years) expect(weather.windDirectionDeg).toBeUndefined()
+  })
+
   it('is what normaliseTmy has always returned', () => {
     const typical = normaliseTmy(
       { source: 'open-meteo', body: openMeteoBody([2023, 2024], 0.1) },
@@ -110,5 +143,173 @@ describe('the weather record keeps the years the typical one was assembled from'
       yearsCovered: record.typical.provenance.yearsCovered,
     })
     expect(sum(typical.ghiWM2)).toBeCloseTo(sum(record.typical.ghiWM2), 3)
+  })
+})
+
+/**
+ * A PVGIS v5.3 TMY answer: HOURS_PER_TMY rows under the column names the live API uses, with
+ * a wind direction column when a caller asks for one
+ */
+const pvgisBody = (windDirectionDeg: number | null, windSpeedMS = 2): unknown => ({
+  outputs: {
+    tmy_hourly: Array.from({ length: HOURS_PER_TMY }, (_, hour) => {
+      const daylight = Math.max(0, Math.sin((Math.PI * ((hour % 24) - 6)) / 12))
+      return {
+        'G(h)': 800 * daylight,
+        T2m: 10 + 8 * daylight,
+        WS10m: windSpeedMS,
+        SP: 101_000,
+        RH: 60,
+        ...(windDirectionDeg === null ? {} : { WD10m: windDirectionDeg }),
+      }
+    }),
+  },
+})
+
+describe('PVGIS carries a wind direction column when it answers one', () => {
+  it('reads WD10m into every hour of the typical year', () => {
+    const record = normaliseWeather({ source: 'pvgis-sarah3', body: pvgisBody(220) }, AMHERST)
+    expect(record.typical.windDirectionDeg).toHaveLength(HOURS_PER_TMY)
+    expect(sum(record.typical.windDirectionDeg)).toBeCloseTo(220 * HOURS_PER_TMY, 0)
+  })
+
+  it('leaves the column absent where the body carries no WD10m', () => {
+    const record = normaliseWeather({ source: 'pvgis-sarah3', body: pvgisBody(null) }, AMHERST)
+    expect(record.typical.windDirectionDeg).toBeUndefined()
+  })
+})
+
+/**
+ * A NASA POWER hourly answer for one whole year, keyed the way the live API keys it, with
+ * WD10M alongside the parameters `fromNasaPower` already reads
+ */
+const powerBody = (year: number, windDirectionDeg: number | null): unknown => {
+  const parameter: Record<string, Record<string, number>> = {
+    ALLSKY_SFC_SW_DWN: {},
+    ALLSKY_SFC_SW_DNI: {},
+    ALLSKY_SFC_SW_DIFF: {},
+    T2M: {},
+    T2MDEW: {},
+    WS10M: {},
+    PS: {},
+    PRECTOTCORR: {},
+    ...(windDirectionDeg === null ? {} : { WD10M: {} }),
+  }
+  for (let t = Date.UTC(year, 0, 1); t < Date.UTC(year + 1, 0, 1); t += 3_600_000) {
+    const stamp = new Date(t)
+    const key = stamp.toISOString().slice(0, 13).replace(/[-T]/g, '')
+    const hour = stamp.getUTCHours()
+    const daylight = Math.max(0, Math.sin((Math.PI * (hour - 6)) / 12))
+    parameter.ALLSKY_SFC_SW_DWN![key] = 649.85 * daylight
+    parameter.ALLSKY_SFC_SW_DNI![key] = 649.85 * daylight * 0.8
+    parameter.ALLSKY_SFC_SW_DIFF![key] = 649.85 * daylight * 0.2
+    parameter.T2M![key] = 12 + 8 * daylight
+    parameter.T2MDEW![key] = 6
+    parameter.WS10M![key] = 2
+    parameter.PS![key] = 101
+    parameter.PRECTOTCORR![key] = 0.1
+    if (windDirectionDeg !== null) parameter.WD10M![key] = windDirectionDeg
+  }
+  return { properties: { parameter } }
+}
+
+describe('NASA POWER carries a wind direction column when it answers one', () => {
+  it('reads WD10M into every hour of the typical year and the measured year alike', () => {
+    const record = normaliseWeather({ source: 'nasa-power', body: powerBody(2023, 150) }, AMHERST)
+    expect(record.typical.windDirectionDeg).toHaveLength(HOURS_PER_TMY)
+    expect(sum(record.typical.windDirectionDeg)).toBeCloseTo(150 * HOURS_PER_TMY, 0)
+    expect(sum(record.years[0]?.weather.windDirectionDeg)).toBeCloseTo(150 * HOURS_PER_TMY, 0)
+  })
+
+  it('leaves the column absent where POWER answers no WD10M', () => {
+    const record = normaliseWeather({ source: 'nasa-power', body: powerBody(2023, null) }, AMHERST)
+    expect(record.typical.windDirectionDeg).toBeUndefined()
+    expect(record.years[0]?.weather.windDirectionDeg).toBeUndefined()
+  })
+})
+
+/**
+ * An NSRDB-style CSV, a full year long so a wind-guard mean over the record means something,
+ * with a Wind Direction column when a caller asks for one and a Wind Speed column, read at the
+ * NSRDB's own 2 m, when a caller passes a speed
+ */
+const nsrdbCsv = (withWindDirection: boolean, windSpeedMS?: number): string => {
+  const header = [
+    'GHI',
+    'Temperature',
+    ...(withWindDirection ? ['Wind Direction'] : []),
+    ...(windSpeedMS === undefined ? [] : ['Wind Speed']),
+  ].join(',')
+  const rows = Array.from({ length: HOURS_PER_TMY }, (_, hour) => {
+    const cells = [String(500 + hour), String(18 + hour)]
+    if (withWindDirection) cells.push(String(10 * hour))
+    if (windSpeedMS !== undefined) cells.push(String(windSpeedMS))
+    return cells.join(',')
+  })
+  return [header, ...rows].join('\n')
+}
+
+describe('a CSV carries a wind direction column when its header has one', () => {
+  it('reads the Wind Direction column NSRDB style', () => {
+    const record = normaliseWeather({ source: 'nsrdb-psm3', body: nsrdbCsv(true) }, AMHERST)
+    expect(record.typical.windDirectionDeg).toBeDefined()
+    expect(record.typical.windDirectionDeg?.[3]).toBeCloseTo(30, 5)
+  })
+
+  it('leaves the column absent where the header has none', () => {
+    const record = normaliseWeather({ source: 'nsrdb-psm3', body: nsrdbCsv(false) }, AMHERST)
+    expect(record.typical.windDirectionDeg).toBeUndefined()
+  })
+})
+
+describe('NSRDB wind arrives at 2 m and is scaled to the 10 m convention every other source uses', () => {
+  it('scales a 3 m/s NSRDB wind to about 4.01 m/s', () => {
+    const record = normaliseWeather({ source: 'nsrdb-psm3', body: nsrdbCsv(false, 3) }, AMHERST)
+    expect(record.typical.windSpeedMS[0]).toBeCloseTo(3 / windSpeedAt2m(1, TMY_WIND_HEIGHT_M), 5)
+    expect(record.typical.provenance.datasetLabel).not.toContain('FAO-56 default')
+  })
+
+  it('leaves a PVGIS wind already at 10 m unchanged', () => {
+    const record = normaliseWeather({ source: 'pvgis-sarah3', body: pvgisBody(null, 3) }, AMHERST)
+    expect(record.typical.windSpeedMS[0]).toBeCloseTo(3, 5)
+  })
+})
+
+describe('the near-zero wind guard replaces NSRDB wind under 1 m/s with the FAO-56 default', () => {
+  it('replaces a whole year averaging 0.2 m/s with the default, and notes the swap', () => {
+    const record = normaliseWeather({ source: 'nsrdb-psm3', body: nsrdbCsv(false, 0.2) }, AMHERST)
+    expect(
+      record.typical.windSpeedMS.every(
+        (value) => Math.abs(value - NSRDB_DEFAULT_WIND_10M_MS) < 1e-5,
+      ),
+    ).toBe(true)
+    expect(record.typical.provenance.datasetLabel).toContain('FAO-56 default')
+  })
+
+  it('guards the boundary: a scaled mean just above the threshold is left alone', () => {
+    const rawMS = (NSRDB_MIN_MEAN_WIND_MS + 0.1) * windSpeedAt2m(1, TMY_WIND_HEIGHT_M)
+    const record = normaliseWeather({ source: 'nsrdb-psm3', body: nsrdbCsv(false, rawMS) }, AMHERST)
+    expect(record.typical.windSpeedMS[0]).toBeCloseTo(NSRDB_MIN_MEAN_WIND_MS + 0.1, 5)
+    expect(record.typical.provenance.datasetLabel).not.toContain('FAO-56 default')
+  })
+
+  it('guards the boundary: a scaled mean just below the threshold is replaced', () => {
+    const rawMS = (NSRDB_MIN_MEAN_WIND_MS - 0.1) * windSpeedAt2m(1, TMY_WIND_HEIGHT_M)
+    const record = normaliseWeather({ source: 'nsrdb-psm3', body: nsrdbCsv(false, rawMS) }, AMHERST)
+    expect(
+      record.typical.windSpeedMS.every(
+        (value) => Math.abs(value - NSRDB_DEFAULT_WIND_10M_MS) < 1e-5,
+      ),
+    ).toBe(true)
+    expect(record.typical.provenance.datasetLabel).toContain('FAO-56 default')
+  })
+
+  it('leaves a genuinely calm PVGIS year untouched', () => {
+    const record = normaliseWeather(
+      { source: 'pvgis-sarah3', body: pvgisBody(null, 0.05) },
+      AMHERST,
+    )
+    expect(record.typical.windSpeedMS[0]).toBeCloseTo(0.05, 5)
+    expect(record.typical.provenance.datasetLabel).not.toContain('FAO-56 default')
   })
 })

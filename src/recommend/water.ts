@@ -25,7 +25,7 @@ import {
   type BalanceDay,
   type BalanceOptions,
 } from '../data/water'
-import { rainField, rainHourWindMS } from './rain'
+import { rainField, rainWind } from './rain'
 import { banded, interval, widenBand } from '../types/band'
 import type { Crop } from '../types/crop'
 import type { Bed, GardenPlot } from '../types/garden'
@@ -254,7 +254,7 @@ export const waterBalances = (input: WaterBalanceInput): readonly BedWaterBalanc
     openSkyEt: referenceEt(days, method, reason, null),
     rainfall: dailyRainfallFromNormals(input.site.normals.monthlyPrecipMm),
     catalog: input.catalog,
-    rain: input.rain ?? rainField(input.plot, rainHourWindMS(input.weather)),
+    rain: input.rain ?? rainField(input.plot, rainWind(input.weather)),
     anyTrackingArray: input.plot.arrays.some((array) => array.tracker.mode !== 'fixed'),
   }
   return input.plot.beds.map((bed) =>

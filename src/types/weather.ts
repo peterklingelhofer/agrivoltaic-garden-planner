@@ -56,6 +56,12 @@ export interface TmySeries {
    * that finds no series falls back to the thirty-year normals rather than reading zero rain
    */
   readonly precipMm?: Float32Array
+  /**
+   * The direction the wind blows from in each hour, degrees clockwise from north, where the
+   * source carries it. All four do; a series read before the column was asked for has none, and
+   * absent means unknown, never calm
+   */
+  readonly windDirectionDeg?: Float32Array
   readonly provenance: WeatherProvenance
 }
 

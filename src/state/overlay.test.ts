@@ -208,7 +208,14 @@ describe('overlay accumulation', () => {
 
   it('reads the rain channel off the rain field and needs no raster of its own', () => {
     const values = new Float32Array([0, 0.5, 1, 3])
-    const rainFixture: RainField = { grid, values, beds: [] }
+    const rainFixture: RainField = {
+      grid,
+      values,
+      shelter: new Float32Array(CELLS),
+      drip: new Float32Array(CELLS),
+      wind: { bins: [], directed: false },
+      beds: [],
+    }
     const withRaster = overlayField(raster(), 'rain', 'annual', null, rainFixture)
     expect(withRaster.values).toBe(values)
     expect(withRaster.grid).toBe(grid)
@@ -227,6 +234,27 @@ describe('overlay accumulation', () => {
     expect(field.values).toBeNull()
     expect(field.grid).toBeNull()
     expect(field.max).toBe(2)
+  })
+
+  it('changes the rain note once the wind carries a direction, and reads the plain one otherwise', () => {
+    const values = new Float32Array([0, 0.5, 1, 3])
+    const base: RainField = {
+      grid,
+      values,
+      shelter: new Float32Array(CELLS),
+      drip: new Float32Array(CELLS),
+      wind: { bins: [], directed: false },
+      beds: [],
+    }
+    const directed: RainField = { ...base, wind: { bins: [], directed: true } }
+    const undirectedNote =
+      "The strips are where rain running off the panels lands. They're widened by this site's mean wind in rain hours, since the record carries no wind direction"
+    const directedNote =
+      "The strips are where rain running off the panels lands, moved by this site's winds in rain hours, hour by hour"
+
+    expect(overlayField(raster(), 'rain', 'annual', null, directed).note).toBe(directedNote)
+    expect(overlayField(raster(), 'rain', 'annual', null, base).note).toBe(undirectedNote)
+    expect(overlayField(raster(), 'rain', 'annual', null, null).note).toBe(undirectedNote)
   })
 
   it('takes every other channel’s grid from the raster', () => {

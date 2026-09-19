@@ -77,16 +77,46 @@ export interface DripCrossing {
 
 export interface BedRain {
   readonly bedId: BedId
-  /** Share of the bed in the panels' rain shadow, averaged over the wind's directions */
+  /** Share of the bed in the panels' rain shadow, averaged over the site's rain-hour wind rose */
   readonly shelteredFraction: Fraction
   /** Panel water landing on the bed as a multiple of the bed's own open-ground rain, before any loss */
   readonly dripMultiple: number
   readonly crossings: readonly DripCrossing[]
 }
 
+/** One of the twelve 30 degree bins of the direction the wind blows from, in the site's rain hours */
+export interface RainWindBin {
+  /** Degrees clockwise from north, the bin's centre */
+  readonly fromDeg: number
+  /** The share of the site's rain that fell with the wind from this bin, all bins summing to 1 */
+  readonly weight: number
+  /** The rain-weighted mean 10 m wind speed in this bin, m/s */
+  readonly speedMS: number
+  /**
+   * The tangent of the rain's angle off vertical at the record's 10 m, one per third of the rain
+   * reaching the ground (Best 1950's drop sizes for each hour's rate, weighted by fall speed and
+   * cut into three equal thirds, each carrying its own third's mean fall speed): the rain-weighted
+   * mean over the bin's hours of wind speed over that third's fall speed. At height z the tangent
+   * is this times the wind profile's factor for z, so the slow small-drop third shears a panel's
+   * shadow further than the middle third and blurs its downwind edge
+   */
+  readonly slope: readonly [number, number, number]
+}
+
+export interface RainWind {
+  readonly bins: readonly RainWindBin[]
+  /** True where the weather record carried the wind's direction, false where every direction was taken as equally likely */
+  readonly directed: boolean
+}
+
 export interface RainField {
   readonly grid: GridSpec
-  /** Rain reaching each cell as a multiple of open ground: 0 in shadow, 1 open, a strip several */
+  readonly wind: RainWind
+  /** Share of each cell in the panels' rain shadow, over the site's rain-hour wind rose: 0 open, 1 fully sheltered */
+  readonly shelter: Float32Array
+  /** Panel runoff landing on each cell, as a multiple of what the same ground would get open to the sky */
+  readonly drip: Float32Array
+  /** Rain reaching each cell as a multiple of open ground: 0 in shadow, 1 open, a strip several. Equals 1 - shelter + drip */
   readonly values: Float32Array
   readonly beds: readonly BedRain[]
 }

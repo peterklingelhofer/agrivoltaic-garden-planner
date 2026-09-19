@@ -19,6 +19,7 @@ import {
   MONTH_START_DAY,
   requireCoverage,
 } from './util'
+import { TMY_WIND_HEIGHT_M, windSpeedAt2m } from './water'
 
 export interface TmyRequest {
   readonly location: LatLon
@@ -52,6 +53,9 @@ const HOURLY_VARIABLES = [
   // rain, so a measured year can be a dry one: the typical year's balance runs on the
   // thirty-year normals, a simulated season runs on what actually fell (Decision Record 14)
   'precipitation',
+  // for the rain model: which bed a panel's runoff lands on depends on where the wind
+  // comes from in rain hours
+  'wind_direction_10m',
 ].join(',')
 
 const years = (): readonly number[] =>
@@ -157,7 +161,7 @@ export const fetchNasaPowerTmy = async (request: TmyRequest): Promise<RawTmyPayl
           */
           community: 'RE',
           parameters:
-            'ALLSKY_SFC_SW_DWN,ALLSKY_SFC_SW_DNI,ALLSKY_SFC_SW_DIFF,T2M,T2MDEW,WS10M,PS,PRECTOTCORR',
+            'ALLSKY_SFC_SW_DWN,ALLSKY_SFC_SW_DNI,ALLSKY_SFC_SW_DIFF,T2M,T2MDEW,WS10M,PS,PRECTOTCORR,WD10M',
           format: 'JSON',
           'time-standard': 'UTC',
         }),
@@ -212,12 +216,21 @@ interface Columns {
   readonly pressure: Float32Array
   /** Rain in the hour, mm. All zero where the source carries none; `Stacked.precipPresent` says */
   readonly precip: Float32Array
+  /**
+   * The direction the wind blows from, degrees clockwise from north, all zero where the
+   * source carries none, `Stacked.windDirectionPresent` says
+   */
+  readonly windDirection: Float32Array
 }
 
-/** The years a source answered with, one column set each, and whether rain was among them */
+/**
+ * The years a source answered with, one column set each, and whether rain or wind
+ * direction was among them
+ */
 interface Stacked {
   readonly years: Map<number, Columns>
   readonly precipPresent: boolean
+  readonly windDirectionPresent: boolean
 }
 
 const emptyColumns = (length: number): Columns => ({
@@ -229,6 +242,7 @@ const emptyColumns = (length: number): Columns => ({
   wind: new Float32Array(length),
   pressure: new Float32Array(length).fill(1013.25),
   precip: new Float32Array(length),
+  windDirection: new Float32Array(length),
 })
 
 const COLUMN_KEYS: readonly (keyof Columns)[] = [
@@ -240,6 +254,7 @@ const COLUMN_KEYS: readonly (keyof Columns)[] = [
   'wind',
   'pressure',
   'precip',
+  'windDirection',
 ]
 
 const isLeap = (year: number): boolean => year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0)
@@ -374,6 +389,7 @@ interface OpenMeteoBody {
     readonly wind_speed_10m?: readonly (number | null)[]
     readonly surface_pressure?: readonly (number | null)[]
     readonly precipitation?: readonly (number | null)[]
+    readonly wind_direction_10m?: readonly (number | null)[]
   }
 }
 
@@ -424,9 +440,11 @@ const fromOpenMeteo = (body: OpenMeteoBody): Stacked => {
       wind: numberAt(hourly.wind_speed_10m, index),
       pressure: numberAt(hourly.surface_pressure, index) || 1013.25,
       precip: numberAt(hourly.precipitation, index),
+      windDirection: numberAt(hourly.wind_direction_10m, index),
     })),
     // a dry decade is all zeros and still present; only an unanswered column is absent
     precipPresent: countPresent(hourly.precipitation, time.length) > 0,
+    windDirectionPresent: countPresent(hourly.wind_direction_10m, time.length) > 0,
   }
 }
 
@@ -478,10 +496,14 @@ const fromNasaPower = (body: PowerBody): Stacked => {
         // earlier division by 24 here, from a measurement that read the label, left a Melbourne
         // garden with 24 mm of rain in its driest year against 737 mm in its typical one
         precip: value('PRECTOTCORR', key),
+        windDirection: value('WD10M', key),
       }
     }),
     precipPresent: keys.some(
       (key) => (numberOf(parameters.PRECTOTCORR?.[key]) ?? POWER_FILL) > POWER_FILL,
+    ),
+    windDirectionPresent: keys.some(
+      (key) => (numberOf(parameters.WD10M?.[key]) ?? POWER_FILL) > POWER_FILL,
     ),
   }
 }
@@ -496,11 +518,14 @@ interface PvgisBody {
   readonly meta?: unknown
 }
 
-const fromPvgis = (body: PvgisBody): Columns => {
+const fromPvgis = (
+  body: PvgisBody,
+): { readonly columns: Columns; readonly windDirectionPresent: boolean } => {
   const rows = body.outputs?.tmy_hourly ?? []
   const columns = emptyColumns(HOURS_PER_TMY)
   const hours = Math.min(rows.length, HOURS_PER_TMY)
   let present = 0
+  let windDirectionPresent = false
   for (let index = 0; index < hours; index += 1) {
     const row = rows[index] ?? {}
     const read = (key: string): number => numberOf(row[key]) ?? 0
@@ -508,11 +533,13 @@ const fromPvgis = (body: PvgisBody): Columns => {
     const dryBulb = numberOf(row.T2m)
     if (ghi !== null) present += 1
     if (dryBulb !== null) present += 1
+    if (numberOf(row.WD10m) !== null) windDirectionPresent = true
     columns.ghi[index] = ghi ?? 0
     columns.dni[index] = read('Gb(n)')
     columns.dhi[index] = read('Gd(h)')
     columns.dryBulb[index] = dryBulb ?? 0
     columns.wind[index] = read('WS10m')
+    columns.windDirection[index] = read('WD10m')
     columns.pressure[index] = read('SP') / 100 || 1013.25
     columns.dewPoint[index] = (dryBulb ?? 0) - (100 - read('RH')) / 5
   }
@@ -523,7 +550,7 @@ const fromPvgis = (body: PvgisBody): Columns => {
     present,
     expected: hours * 2,
   })
-  return columns
+  return { columns, windDirectionPresent }
 }
 
 const CSV_ALIASES: Readonly<Record<keyof Columns, readonly string[]>> = {
@@ -537,6 +564,7 @@ const CSV_ALIASES: Readonly<Record<keyof Columns, readonly string[]>> = {
   // read where a CSV carries it, but never reported as present: a typical-year CSV holds one
   // assembled year, and one year of rain is a sample rather than the record a season is drawn from
   precip: ['precipitation', 'prectotcorr', 'rain'],
+  windDirection: ['wind direction', 'wind_direction_10m', 'wd10m', 'winddirection'],
 }
 
 export const csvHasNoIrradiance = (upstream: string): Error =>
@@ -544,7 +572,14 @@ export const csvHasNoIrradiance = (upstream: string): Error =>
     `${upstream} carries no recognisable global horizontal irradiance column, so there is no typical meteorological year to read from it`,
   )
 
-export const parseCsvColumns = (csv: string, upstream = 'The TMY CSV'): Columns => {
+export const parseCsvColumns = (
+  csv: string,
+  upstream = 'The TMY CSV',
+): {
+  readonly columns: Columns
+  readonly windDirectionPresent: boolean
+  readonly hours: number
+} => {
   const lines = csv.split(/\r?\n/).filter((line) => line.trim().length > 0)
   const headerIndex = lines.findIndex((line) =>
     /ghi|shortwave|allsky_sfc_sw_dwn|g\(h\)/i.test(line),
@@ -583,7 +618,8 @@ export const parseCsvColumns = (csv: string, upstream = 'The TMY CSV'): Columns 
     present,
     expected: rows * 2,
   })
-  return columns
+  // unlike rain, a typical year's wind directions are usable, so the header alone is enough
+  return { columns, windDirectionPresent: positions.windDirection >= 0, hours: rows }
 }
 
 const provenanceFor = (
@@ -653,6 +689,7 @@ interface PackOptions {
   readonly baseYear: number
   readonly typical: boolean
   readonly precipPresent: boolean
+  readonly windDirectionPresent: boolean
 }
 
 const pack = (
@@ -682,11 +719,46 @@ const pack = (
     windSpeedMS: columns.wind,
     pressureMb: columns.pressure,
     ...(options.precipPresent ? { precipMm: columns.precip } : {}),
+    ...(options.windDirectionPresent ? { windDirectionDeg: columns.windDirection } : {}),
     provenance: provenanceFor(source, yearsCovered, options.typical),
   }
 }
 
 const TYPICAL_PACK = { baseYear: TMY_END_YEAR, typical: true } as const
+
+/**
+ * The NSRDB's wind is MERRA-2's 2 m surface wind, where every other source here reports 10 m.
+ * NREL's own NSRDB builder (github.com/NREL/nsrdb, `nsrdb/config/var_descriptions.csv`) documents
+ * `wind_speed` as "Wind speed at 2 meters above the surface" and computes it from MERRA-2's U2M
+ * and V2M. NREL's SAM lead Paul Gilman, on the SAM forum thread "NSRDB vs wind speed estimation"
+ * (https://sam.nlr.gov/forum/forum-general/4019-nsrdb-vs-wind-speed-estimation.html), corroborates
+ * it: "The MERRA2 wind speed data is at 2 meters above the ground." The public API exposes only
+ * this 2 m column. The factor below is the same FAO-56 profile `windSpeedAt2m` runs the other way,
+ * so the round trip for ET0 is exact
+ */
+const NSRDB_WIND_2M_TO_10M = 1 / windSpeedAt2m(1, TMY_WIND_HEIGHT_M)
+
+/**
+ * No inhabited place has an annual mean 10 m wind below about 1 m/s. NSRDB TMY at Amherst MA
+ * (42.37, -72.52) averages 0.16 m/s with 4,649 of 8,760 hours at exactly 0, and at Springfield MA
+ * 0.15 m/s with 4,905 zero hours, where PVGIS's 10 m wind at the same point averages 2.1 m/s.
+ * NASA POWER's own MERRA-2 WS2M at Amherst averages 0.09 m/s against 1.54 at 10 m, so the figure
+ * is the model's own physics: over cells MERRA-2 treats as rough (forest), its 2 m wind runs near
+ * zero
+ */
+export const NSRDB_MIN_MEAN_WIND_MS = 1.0
+
+/**
+ * FAO-56's own missing-data default, 2 m/s at 2 m where no wind record exists, brought to the
+ * 10 m convention with the same factor the record itself is scaled by
+ */
+export const NSRDB_DEFAULT_WIND_10M_MS = 2 * NSRDB_WIND_2M_TO_10M
+
+/**
+ * Appended to the typical year's label when the guard above replaces a near-zero NSRDB wind
+ * column, so the source of the number is visible where the number itself is shown
+ */
+const NSRDB_NEAR_ZERO_WIND_NOTE = 'wind set to the FAO-56 default, this record carries almost none'
 
 /**
  * The typical year, and every measured year it was assembled from.
@@ -706,10 +778,11 @@ export const normaliseWeather = (payload: RawTmyPayload, location: LatLon): Weat
         ? fromOpenMeteo(payload.body as OpenMeteoBody)
         : fromNasaPower(payload.body as PowerBody)
     const { columns, chosenYears } = assembleTypicalYear(stacked.years)
-    const precipPresent = stacked.precipPresent
+    const { precipPresent, windDirectionPresent } = stacked
     const typical = pack(payload.source, columns, chosenYears, utcOffsetHours, {
       ...TYPICAL_PACK,
       precipPresent,
+      windDirectionPresent,
     })
     const years: MeasuredYear[] = [...stacked.years.entries()]
       .sort(([a], [b]) => a - b)
@@ -719,6 +792,7 @@ export const normaliseWeather = (payload: RawTmyPayload, location: LatLon): Weat
           baseYear: year,
           typical: false,
           precipPresent,
+          windDirectionPresent,
         }),
       }))
     return { typical, years }
@@ -726,7 +800,11 @@ export const normaliseWeather = (payload: RawTmyPayload, location: LatLon): Weat
   const single = { ...TYPICAL_PACK, precipPresent: false }
   if (payload.source === 'pvgis-sarah3') {
     const body = payload.body as PvgisBody
-    const typical = pack(payload.source, fromPvgis(body), [], utcOffsetHours, single)
+    const { columns, windDirectionPresent } = fromPvgis(body)
+    const typical = pack(payload.source, columns, [], utcOffsetHours, {
+      ...single,
+      windDirectionPresent,
+    })
     // PVGIS picks its radiation database by the place, SARAH-3 on the Meteosat disk and ERA5
     // elsewhere (Amherst answers PVGIS-ERA5), and names the choice, so the label carries it
     const database = body.inputs?.meteo_data?.radiation_db
@@ -740,8 +818,31 @@ export const normaliseWeather = (payload: RawTmyPayload, location: LatLon): Weat
     return { typical: { ...typical, provenance }, years: [] }
   }
   const label = payload.source === 'nsrdb-psm3' ? 'NSRDB' : 'The uploaded CSV'
-  const columns = parseCsvColumns(String(payload.body), label)
-  return { typical: pack(payload.source, columns, [], utcOffsetHours, single), years: [] }
+  const { columns, windDirectionPresent, hours } = parseCsvColumns(String(payload.body), label)
+  let windIsNearZero = false
+  if (payload.source === 'nsrdb-psm3') {
+    let windTotalMS = 0
+    for (let hour = 0; hour < columns.wind.length; hour += 1) {
+      const scaled = at(columns.wind, hour) * NSRDB_WIND_2M_TO_10M
+      columns.wind[hour] = scaled
+      windTotalMS += scaled
+    }
+    // over the hours the file carried, since the column is allocated for a whole year and a
+    // short answer's trailing zeros would read as a calm one
+    windIsNearZero = hours > 0 && windTotalMS / hours < NSRDB_MIN_MEAN_WIND_MS
+    if (windIsNearZero) columns.wind.fill(NSRDB_DEFAULT_WIND_10M_MS)
+  }
+  const typical = pack(payload.source, columns, [], utcOffsetHours, {
+    ...single,
+    windDirectionPresent,
+  })
+  const provenance = windIsNearZero
+    ? {
+        ...typical.provenance,
+        datasetLabel: `${typical.provenance.datasetLabel} (${NSRDB_NEAR_ZERO_WIND_NOTE})`,
+      }
+    : typical.provenance
+  return { typical: { ...typical, provenance }, years: [] }
 }
 
 export const normaliseTmy = (payload: RawTmyPayload, location: LatLon): TmySeries =>

@@ -1790,3 +1790,111 @@ ranking and wants measuring first.
 
 **Cost.** An evening: the field and its memo, the split, the overlay channel, the bed switch,
 twelve citations and thirteen tests.
+
+**Amended the same night: the wind's direction, the projected shadow, and a corrected reading of
+the paper.** The weather record now carries the direction the wind blows from (`windDirectionDeg`,
+from Open-Meteo, NASA POWER, PVGIS and NSRDB alike), and the rain field runs on the site's
+rain-hour wind rose: twelve 30 degree bins, each weighted by the rain that fell with the wind from
+it and carrying that rain's mean speed. Each panel is projected to the ground along each bin's
+rain, every corner by its own height times the rain's angle off vertical (Elamri et al. 2018 Eq.
+1, after Van Hamme 1992: tan αR is the wind speed over a raindrop's fall speed, taken that night at a 2 mm drop's 6.5 m/s and corrected the next morning). The
+projected quad is the panel's rain shadow in that bin and its area is the panel's catchment
+(their Eq. 4 in geometric form): a row facing the rain intercepts more than its plan area, one
+turned from it less, and because a tilted row's high edge is higher its shadow reaches further on
+that side, which the old mid-height shift could not show. The drip strip is moved downwind by the
+drift, 0.2 m wide, in place of being widened by it. A record with no direction (a source without
+it, or a year cached before the column was asked for) falls back to the equal twelve-way rose at
+the rain-hour mean, which is the model as first shipped, so the fallback is a special case of the
+model rather than a second one. The still-air width had been justified as "Elamri's 20 cm
+outlet", and that was a misreading: their 20 cm is the width of the outlet along the edge (below
+5 degrees of tilt about 90 percent of a 1 m module's water leaves through 20 cm of its edge), a
+fact about how beaded a flat panel's strip is, which the tracker note now carries. The width
+across the edge is derived instead from their Eq. 5: the runoff film leaves the edge at under 0.2
+m/s (Manning n of 0.01 on glass), so from a garden-height edge the drops land within a hand's
+width of the edge's vertical. The drift keeps a 4 mm drip at 8.8 m/s that morning, near the mass-carrying mode of the 1.4 and
+3.8 mm drops they measured falling from a panel, where their own reference case took 1.5 mm. The paper gives its anemometer's height and its collectors' readings only in figures,
+so the model is compared with it rather than fitted: a test rebuilds their rig (2 m panels 5 m
+up, rows 6.4 m apart, flat) and checks that the ground under a row is dry, the ground between rows
+open, and a 0.3 m collector at the drip line reads between their 11-fold peak in one collector
+and that peak spread along the edge by the outlet, the two bounds the paper supports. The field is
+computed only where it is looked at (the rain channel, the water panel, a bed's panel) and its
+cell coarsens past 3,000 m² of extent (0.2 m at a hectare), with the strip never narrower than a
+cell so no water is lost to the grid. Cost: a night and twenty tests.
+
+**Amended twice after a closer reading of the sources: the rain sized by
+the hour, three thirds of the ground's rain, the drip's whole fall, and the NSRDB's 2 m wind.** A
+second pass over the sources found the model short of them in four places, and a line-by-line
+re-reading of that pass against the papers, then a second round on the four points it left
+open, corrected two of the four and confirmed the rest.
+
+The rain had been one 2 mm drop at 6.5 m/s, which is the median drop of a 13 mm/h downpour. AVrain
+sizes its drops from the rain rate through Best 1950's distribution (the paper's Eq. 3) and reads
+their fall speed from Gunn and Kinzer 1949, and at the hourly rates a typical year carries the
+median drop is 1.1 to 1.6 mm across, so the shadow had been moving 13 to 33 percent short. Best's
+distribution is the water held in the air, and the rain reaching the ground weights every size by
+its own fall speed, which the audit caught: the field now builds that flux-weighted distribution,
+splits it into three equal thirds and gives each third the harmonic mean of its own fall speeds
+(3.3, 5.5 and 6.9 m/s at 2 mm/h, where reading one drop at each sextile of the air's distribution
+gave 2.9, 4.9 and 6.5 and ran 4 to 15 percent long). Three thirds carry the mean shift exactly,
+which is why the count stays at three: five would cut the remaining edge step by about two points
+for seventy percent more projected quads, and the wind-speed spread inside a 30 degree bin is the
+larger unresolved source. Each third projects its own shadow, so a shadow's downwind edge is soft.
+
+The drip's drift had been the small-time limit of its fall from rest, within 7 percent of the full
+fall at 0.78 m/s and 38 percent short at 3 m/s from a 2.5 m edge. It is now integrated from rest
+under quadratic drag along the drop's velocity relative to the wind, through the site's own wind
+profile rather than one wind held at the edge's height, which the audit measured as another 9 to
+10 percent: 0.059 m at 1 m/s, 0.24 m at 3, 0.69 m at 6. Gunn and Kinzer measured their largest
+drops reaching terminal speed only after about 12 m, and Wang and Pruppacher 1977, added to the
+citations, put the fall to 99 percent of terminal at 9.5 m for a 2 mm drop and 14 m for a 4 mm one,
+which is now a test. The drip's diameter is the 3.8 mm mode the paper measured, read off Gunn and
+Kinzer's Table 2, and the code's own table was labelled Table 1 until the audit read the page: that
+paper's Table 1 is indexed by the drop's log mass.
+
+The NSRDB's wind is MERRA-2's 2 m surface wind where every other source reports 10 m. NREL's own
+NSRDB builder documents it (`wind_speed` is "Wind speed at 2 meters above the surface", computed
+from MERRA-2's U2M and V2M) and an hour-by-hour comparison of an NSRDB TMY with MERRA-2's own 2 m
+wind matches at a correlation of 0.994, so the record is scaled to 10 m at ingest by the same
+FAO-56 profile ET0 runs the other way. That exposed a second fault: over cells the reanalysis
+treats as forest its 2 m wind runs near zero (Amherst averages 0.16 m/s with 4,649 of 8,760 hours
+at exactly 0, where PVGIS reads 2.1 m/s at the same point), so a year whose mean falls under 1 m/s
+now takes FAO-56's own default of 2 m/s and says so on its label.
+
+Measured on the starting plot at a 3 m/s rose from every direction, the middle bed's sheltered
+share went from 91 percent before this pass to 77 after it, and its neighbours from 3 and 13 to 10
+and 21. The field costs 6 to 7 ms on the starting plot.
+
+Also fixed, from the audit: a panel at zero clearance made the drip integration return NaN and laid
+no water at all, a strip drifting past the field's 3 m margin had its water dropped silently (the
+margin now comes from the rose's own largest drift, which at 14 m/s was losing 64 percent of a tall
+row's runoff), a non-finite hour poisoned the pooled rose, and `rainHourWindMS` was dead code.
+
+Declared, after checking: the panel's mid-height wind for every corner of its shadow, which holds
+because a raindrop's sideways speed lags the wind it falls through by about its fall speed over
+gravity, metres of falling, so the wind near the panel is what carries it (within about 13 percent
+of an integrated lagged fall for a row 2.5 to 5 m up, further off a metre up, where a column mean
+over the fall would be 20 percent low). A flat tracker sheds half to each long edge, where the
+paper says a nominally flat panel sends all of it to one outlet and its event 07 measured exactly
+that: half each is the expected value over a lean the app cannot know, and the notes now say the
+strip is either twice what the field draws or nothing. The 0.2 m still-air width stays this app's
+own derivation from the paper's Manning n, since the paper gives no width. The capture fractions
+stay declared, with the paper's own event 07 as the nearest anchor: the top metre under the drip
+edge held 6.7 of the 24.0 mm that landed on it.
+
+Where the audit read the literature outward, nothing contradicted a choice. Blocken and Carmeliet's
+review of wind-driven rain, added to the citations, carries the same physics from Lacy's relation
+(which ISO 15927-3 codifies), defines the flux-weighted distribution the audit corrected the field
+to, and recommends Gunn and Kinzer's own drag coefficients over sphere formulae, which is what the
+drip's drag is matched to. Nine sentences across the citations were corrected for over-reading: the
+paper's 1.5 mm reference is "for simplicity" and not "by count", its 9.3 mm mode "might be" an
+artifact, its 11-fold collector sat in the zone it labels F4 beside the drip line, its two
+coefficients of variation are two different events, its collectors are 0.3 m in diameter, its
+anemometer's height is absent, and its Eq. 2 is a drag balance where the field reads the measured
+table.
+
+Every number the field takes from a paper now lives in `src/recommend/rain-sources.ts` with its
+citation, its locator and the sentence the bibliography uses for it, and a test holds the three
+together, which is the check that would have caught the Table 1 label at declaration. The tests
+also hold the equations themselves: Eq. 4's catchment identity over random tilts and bearings,
+Best's round trip, the drip's weak-wind limit against the closed form, Wang and Pruppacher's fall
+distances, and Lacy's 4.5 m/s for the rain's own mean fall speed. Cost: a morning and 37 tests in the rain file.

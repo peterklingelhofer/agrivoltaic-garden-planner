@@ -1,6 +1,6 @@
 # Citation corpus
 
-230 sources (163 crossref-verified, 1 datacite-verified, 16 unverified, 50 url-verified). Machine-readable companion: [`CITATIONS.csl.json`](./CITATIONS.csl.json) (CSL-JSON).
+233 sources (166 crossref-verified, 1 datacite-verified, 16 unverified, 50 url-verified). Machine-readable companion: [`CITATIONS.csl.json`](./CITATIONS.csl.json) (CSL-JSON).
 Verification pass completed 2026-07-30 against the Crossref REST API, the DataCite REST API, and direct
 fetches of authoritative publisher, standards-body and government URLs.
 
@@ -44,23 +44,23 @@ Physics, geodata and software sources carry `null`: the scheme does not apply to
 
 | Verification | n |
 |---|---|
-| crossref-verified | 163 |
+| crossref-verified | 166 |
 | datacite-verified | 1 |
 | unverified | 16 |
 | url-verified | 50 |
-| **total** | **230** |
+| **total** | **233** |
 
 | Access level | n |
 |---|---|
-| open-access | 67 |
-| paywalled | 113 |
+| open-access | 68 |
+| paywalled | 115 |
 | public-domain | 49 |
 | public-domain-with-conditions | 1 |
 
 | Evidence tier | n |
 |---|---|
-| A | 37 |
-| B | 67 |
+| A | 39 |
+| B | 68 |
 | C | 34 |
 | null (not applicable) | 92 |
 
@@ -153,10 +153,20 @@ Elamri, Yassin; Cheviron, Bruno; Mange, Annabelle; Dejean, Cyril; Liron, Franço
 - Verification: Crossref-verified | Access: open-access, evidence tier **B**
 - Backs:
   - rain shadow beneath panels and concentrated runoff at the drip line
-  - at low tilt about 90 percent of a panel's water leaves through a 20 cm wide outlet, the still-air width of this app's drip strip
-  - under panels held flat the ground beneath got 1.3 mm where open ground got 3.0 and the drip edge 24, and the wind mattered more than the rain amount to where the water landed at their 5 m height
-  - trackers rotated out of the rain cut the coefficient of variation of the water on the ground from 2.13 to 0.22
-  - TEK design rule 4: water-harvesting geometry tied to the array drip line and runoff shadow
+  - Eq. 1, after Van Hamme 1992: the rain's angle from vertical is the wind speed over the raindrop's fall speed, so a panel's rain shadow lands its height times that ratio downwind, the projection the rain field uses
+  - Eq. 3 carries Best 1950's drop-size distribution and Eq. 2 a terminal-speed drag balance at a drag coefficient of about 0.5, and the paper derives the rain's angle "from given rain intensity (I) and wind velocity (vw)", the chain the rain field follows hour by hour. The rain field reads Gunn and Kinzer's measured table in place of Eq. 2, which runs 2 to 60 percent fast below 2 mm, and the paper names no drop of the distribution, so splitting each hour's rain into three equal thirds is this app's own step
+  - Table 1 takes a 1.5 mm drop as its reference "for simplicity", at the first mode of Fig. 4's count histogram of the drops leaving a panel edge, whose modes are 1.4, 3.8 and 9.3 mm, of which the paper says diameters above 7.5 mm "might be artifacts" of drops that size breaking up. The rain field carries 3.8 mm, where the mass of the stable drops sits
+  - Eq. 4, after Van Hamme 1992: a panel facing the wind intercepts more than its plan area and one turned from it less, which the rain field gets by projecting the panel along the rain and taking the projected area as its catchment
+  - Eq. 5 is the paper's own closed form for a drip's parabola, a constant wind push over a free-fall time, with the runoff film leaving the edge at the Manning speed for an n of 0.01 on glass (after Chow 1959). The rain field integrates that fall instead and uses Eq. 5 as a limiting check. The paper gives no film depth, speed or landing width, so the still-air strip of 0.2 m is this app's own derivation from its n, both of them from Sect. 2.2.1
+  - the wetting of a panel before its runoff starts "is 0.2 mm at most" in the field at low tilts, where Sect. 4.1 puts the same threshold at "(approximately) 2 mm water depth" on the indoor rig. The rain field carries no retention term and follows the field figure
+  - the rig: 2 m panels 5 m up in north to south rows 6.4 m apart, tilting to 50 degrees either way, read by 21 collectors of 0.3 m diameter in a line across a row
+  - event 06, panels flat and a 0.78 m/s wind: one collector beside the drip line, in the zone the paper labels F4 on the sheltered side, took 11 times the open ground's rain by the text and about 16 times by Fig. 6c, at a coefficient of variation of 2.13 across the row
+  - event 07, panels flat: the ground under the panels got 1.3 mm of a 3.0 mm rain and the drip edge 24 mm, three zones the soil moisture kept. That 24 mm in a 0.3 m collector is a 2 m panel's whole catchment draining to one edge, which is what the paper says a nominally flat panel does, since "the panels are never strictly flat"
+  - indoors, below 20 degrees of tilt the runoff redistributes along the edge and below 5 degrees about 90 percent of a module's water leaves through an outlet 20 cm wide along its 1 m edge, so a flat panel's strip is beaded along the edge
+  - the wind mattered more than the rain amount to where the water landed, and the panels' height less than their width and spacing, in a Morris sensitivity analysis of their model over one event, where the drop size came out "non-negligible but rather weak"
+  - a tracker rotated out of the rain held the water on the ground to a coefficient of variation of 0.22 (event 11, 14.8 mm) where a flat panel gave 2.13 (event 06, 3.6 mm)
+  - AVrain reproduced 11 events at a mean determination coefficient of 0.88, with regression coefficients above 1 in 7 of them, so the model overestimates, and about a quarter of its error sat near the drip line
+- **Caveat:** The paper does not give its anemometer's height (it names a Young 05103-L and no more), and the collectors' readings are in its figures with two numbers in the text, so the rain field is compared with its numbers rather than fitted to them. Its rig stands 5 m up where a garden row stands 1 to 3 m, and its own model is 2D at a one-minute step where this one places whole hours
 
 #### `elamri2018-water-budget`
 
@@ -1827,7 +1837,7 @@ Zimmerman, Cynthia. (2020). *Helpline Hot Topic for June 2020: Moringa Oleifera*
 
 ## Climate & geodata
 
-20 sources.
+23 sources.
 
 #### `beck2018-koppen`
 
@@ -1837,6 +1847,30 @@ Beck, Hylke E.; Zimmermann, Niklaus E.; McVicar, Tim R.; Vergopolan, Noemi; Berg
 - Verification: Crossref-verified | Access: open-access
 - Backs:
   - decision 9: the bundled 1 km Köppen-Geiger raster used for climate context
+
+#### `best1950-raindrop-size-distribution`
+
+Best, A. C.. (1950). *The size distribution of raindrops*. Quarterly Journal of the Royal Meteorological Society 76: 16-36
+
+- DOI: [10.1002/qj.49707632704](https://doi.org/10.1002/qj.49707632704)
+- Verification: Crossref-verified | Access: paywalled, evidence tier **A**
+- Backs:
+  - Eq. 1 (as Elamri et al. 2018 Eq. 3): the share of the liquid water in the air carried by drops smaller than D follows 1 - exp(-(D / a)^2.25) with a = 1.30 I^0.232 mm for a rain rate I in mm/h, so the median drop of the air's water is 1.1 mm across at 1 mm/h and 2.2 mm at 20 mm/h
+  - because that distribution is per volume of air, the rain field weights each size by its own fall speed to get the rain reaching the ground, and splits that into three equal thirds, each carrying its third's own mean fall speed
+- **Caveat:** The form and its coefficients are read from Best's own abstract (through Crossref) and from Elamri et al. 2018's Eq. 3, which prints it with a D/1000 where its own D is in metres. The full paper was not retrieved. Best warns of "appreciable variations from these mean values, particularly in the case of n, if the precipitation is essentially of a showery or orographic nature"
+
+#### `blocken-carmeliet2004-wdr-review`
+
+Blocken, Bert; Carmeliet, Jan. (2004). *A review of wind-driven rain research in building science*. Journal of Wind Engineering and Industrial Aerodynamics 92: 1079-1130
+
+- DOI: [10.1016/j.jweia.2004.06.003](https://doi.org/10.1016/j.jweia.2004.06.003)
+- Verification: Crossref-verified | Access: paywalled, evidence tier **B**
+- Backs:
+  - the rain a horizontal surface receives carries its own drop-size distribution, "the rainfall intensity and raindrop size distribution falling through a horizontal plane in the undisturbed flow field", which is why the rain field weights Best's air-content distribution by each size's fall speed before splitting the rain into thirds
+  - Eq. 5: Lacy's wind-driven rain relation, R = 0.222 U R^0.88, is the rain's angle from vertical at the median drop of the hour's rate: "the WDR coefficient is the inverse of the raindrop terminal velocity of fall ... 4.5 m/s, corresponding to a raindrop diameter of 1.2 mm", the same rule the rain field's median class follows and the band it is checked against
+  - "Appropriate drag coefficients for falling raindrops were measured by Gunn and Kinzer", where sphere formulae underestimate the real ones, which is the basis for reading the fall speed off their table
+  - the coefficient 0.222 holds in the free field with no building in the flow, so a body in the wind deflects both the air and the drops: the rain field takes the free-field rain onto the panels and the ground and models no flow around the array
+- **Caveat:** Read at source from the authors' preprint of the published review. A review, so its own numbers are Lacy's and its raindrop spectra are Best's
 
 #### `canham1994-canopy-light-transmission`
 
@@ -1881,9 +1915,12 @@ Fishman, Svetlana; Erez, Amos; Couvillon, G. A.. (1987). *The temperature depend
 Gunn, Ross; Kinzer, Gilbert D.. (1949). *The terminal velocity of fall for water droplets in stagnant air*. Journal of Meteorology 6: 243-248
 
 - DOI: [10.1175/1520-0469(1949)006<0243:TTVOFF>2.0.CO;2](https://doi.org/10.1175/1520-0469(1949)006<0243:TTVOFF>2.0.CO;2)
-- Verification: Crossref-verified | Access: paywalled, evidence tier **A**
+- Verification: Crossref-verified | Access: open-access, evidence tier **A**
 - Backs:
-  - a 2 mm raindrop falls at 6.5 m/s and a 4 mm drop at 8.8 m/s in still air, the two speeds the rain field uses for how far the wind moves a panel's rain shadow and its drip
+  - Table 2 (p. 246), the fall speed of a water drop in still air by its equivalent diameter, the rain field's lookup: 0.5 mm 2.06 m/s, 1.0 mm 4.03, 1.5 mm 5.41 (between the 1.4 and 1.6 mm rows), 2.0 mm 6.49, 3.0 mm 8.06, 3.8 mm 8.72, 4.0 mm 8.83, 5.8 mm 9.17
+  - the largest drops "reached their terminal velocity after falling about 12 meters", so a drip leaving a garden-height panel edge is still accelerating when it lands, which is why the drift of a drip is integrated from rest under drag and never taken at terminal speed
+  - Table 2's drag coefficient column, 0.544 at 3.8 mm and a Reynolds number of 2211, is the measured coefficient a drip's quadratic drag is matched to when the rain field integrates its fall
+- **Caveat:** Read at source from the scanned PDF. The by-diameter speeds are Table 2, where Table 1 of the same paper is indexed by the drop's log mass. The speeds hold at 760 mm, 20 C and 50 percent humidity, and a drop in rain arrives at its terminal speed where a drip leaves the edge from rest
 
 #### `heisler1986-single-tree-irradiance`
 
@@ -2022,6 +2059,17 @@ Richardson, E. Arlo; Seeley, Schuyler D.; Walker, David R.. (1974). *A model for
   - hardiness zone gating for perennials
   - decision 9: no official USDA hardiness API exists, only an interactive map, ZIP lookup and static downloads
 - **Caveat:** NOT unconditionally public domain: the 2023 PRISM terms permit redistributing ALTERED data only with a prominently displayed disclaimer that it is not the official USDA Plant Hardiness Zone Map. We resample to 0.02 deg, which is an alteration, so the disclaimer is a licence obligation and is rendered by staticLayerLicences() in the attribution panel.
+
+#### `wang-pruppacher1977-acceleration`
+
+Wang, P. K.; Pruppacher, H. R.. (1977). *Acceleration to terminal velocity of cloud and raindrops*. Journal of Applied Meteorology 16: 275-280
+
+- DOI: [10.1175/1520-0450(1977)016<0275:ATTVOC>2.0.CO;2](https://doi.org/10.1175/1520-0450(1977)016<0275:ATTVOC>2.0.CO;2)
+- Verification: Crossref-verified | Access: paywalled, evidence tier **A**
+- Backs:
+  - Sect. 4: measured and computed fall distances to 99 percent of terminal speed at 1000 mb and 20 C: 3.9 m for a 1 mm diameter drop, 9.5 m for 2 mm and 14.0 m for 4 mm, which is the second source for integrating a drip's fall from rest rather than releasing it at terminal speed, and the band the rain field's own fall is checked against
+  - the drag coefficient of an accelerating drop is the coefficient of a drop at terminal speed at the same Reynolds number, which is why the rain field's quadratic drag is matched to the drip's own measured terminal speed
+- **Caveat:** Read at source from an author-hosted scan, text recovered by OCR. The distances are given by drop radius in the paper's own text and converted to diameters here
 
 #### `zhang-taylor2011-dynamic-chill`
 

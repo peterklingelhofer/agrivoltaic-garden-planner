@@ -130,7 +130,7 @@ describe('water panel', () => {
     expect(harness.get('readout-water-unsourced-runoff').textContent).toMatch(/No source/)
     expect(harness.get('readout-water-unsourced-stages').textContent).toMatch(/Table 11/)
     expect(harness.get('readout-water-caveat-rain-shadow').textContent).toMatch(
-      /mean wind in rain hours/,
+      /winds in rain hours/,
     )
     expect(harness.get('readout-water-modelled').textContent).toMatch(/flip sign/)
     expect(harness.all('item-water-band-basis').length).toBeGreaterThan(0)

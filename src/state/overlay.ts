@@ -126,7 +126,10 @@ export const overlayField = (
       grid: rain?.grid ?? null,
       unit: '',
       label: 'Rain reaching the ground, as a multiple of open ground',
-      note: "The strips are where rain running off the panels lands. They're widened by this site's mean wind in rain hours, since the record carries no wind direction",
+      note:
+        rain?.wind.directed === true
+          ? "The strips are where rain running off the panels lands, moved by this site's winds in rain hours, hour by hour"
+          : "The strips are where rain running off the panels lands. They're widened by this site's mean wind in rain hours, since the record carries no wind direction",
       max: RAIN_OVERLAY_MAX,
     }
   }

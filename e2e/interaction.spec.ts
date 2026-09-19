@@ -455,6 +455,15 @@ test('the overlay names its channel before there is anything to show', async ({ 
   await expect(channel).toHaveValue('rsr')
   await expect(page.getByTestId('panel-overlay')).toContainText(/season-cumulative shade fraction/i)
 
+  // the rain channel needs no bake, so the missing-raster notice stands down for it, and the
+  // stubbed archive carries the wind's direction, so its note says the strips were placed by it
+  await channel.selectOption('rain')
+  await expect(channel).toHaveValue('rain')
+  await expect(page.getByTestId('status-overlay')).toHaveCount(0)
+  await expect(page.getByTestId('panel-overlay')).toContainText(
+    /moved by this site's winds in rain hours/i,
+  )
+
   await channel.selectOption('sky-view-factor')
   await expect(channel).toHaveValue('sky-view-factor')
 
