@@ -102,6 +102,7 @@ export const hourlyArchiveBody = (latitudeDeg: number, longitudeDeg: number): un
   const temperature: number[] = []
   const dewPoint: number[] = []
   const wind: number[] = []
+  const windDirection: number[] = []
   const pressure: number[] = []
   const offsetHours = longitudeDeg / 15
   for (const day of daysOf(TMY_YEAR)) {
@@ -116,6 +117,9 @@ export const hourlyArchiveBody = (latitudeDeg: number, longitudeDeg: number): un
       temperature.push(round(base + 4 * Math.sin((2 * Math.PI * (hour - 9)) / 24)))
       dewPoint.push(round(base - 5))
       wind.push(2.5)
+      // a westerly that swings through the day, so the rain field gets a directed rose to place
+      // the drip strips by, the way a real archive answer does
+      windDirection.push(round(250 + 40 * Math.sin((2 * Math.PI * hour) / 24)))
       pressure.push(1013.2)
     }
   }
@@ -128,6 +132,7 @@ export const hourlyArchiveBody = (latitudeDeg: number, longitudeDeg: number): un
       temperature_2m: temperature,
       dew_point_2m: dewPoint,
       wind_speed_10m: wind,
+      wind_direction_10m: windDirection,
       surface_pressure: pressure,
     },
   }

@@ -37,7 +37,12 @@ export const DliOverlay = ({
   const plot = useAppStore(scenePlot)
   const weather = useAppStore((s) => (s.weather.status === 'ready' ? s.weather.value : null))
   const boundary = plot?.boundary ?? null
-  const rain = useMemo(() => rainFieldOf(plot, weather), [plot, weather])
+  // only worth computing when the rain channel is the one on screen: every other channel would
+  // otherwise recompute the field, unused, on every edit of the plot
+  const rain = useMemo(
+    () => (channel === 'rain' ? rainFieldOf(plot, weather) : null),
+    [channel, plot, weather],
+  )
   const field = useMemo(
     () => overlayField(raster, channel, month, playback, rain),
     [raster, channel, month, playback, rain],

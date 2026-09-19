@@ -1,4 +1,4 @@
-import { rainField, rainHourWindMS } from '../recommend/rain'
+import { rainField, rainWind } from '../recommend/rain'
 import type { GardenPlot } from '../types/garden'
 import type { RainField } from '../types/water'
 import type { TmySeries } from '../types/weather'
@@ -18,7 +18,7 @@ export const rainFieldOf = (
 ): RainField | null => {
   if (plot === null) return null
   if (plot === lastPlot && weather === lastWeather) return lastField
-  const field = rainField(plot, weather === null ? 0 : rainHourWindMS(weather))
+  const field = rainField(plot, rainWind(weather))
   lastPlot = plot
   lastWeather = weather
   lastField = field
