@@ -66,7 +66,12 @@ export const OverlayPanel = (): ReactElement => {
   const effects = useAppStore((s) => s.effects)
   const setEffects = useAppStore((s) => s.setEffects)
 
-  const rain = useMemo(() => rainFieldOf(plot, weather), [plot, weather])
+  // only worth computing when the rain channel is the one selected: every other channel would
+  // otherwise recompute the field, unused, on every edit of the plot
+  const rain = useMemo(
+    () => (overlay.channel === 'rain' ? rainFieldOf(plot, weather) : null),
+    [overlay.channel, plot, weather],
+  )
   const field = useMemo(
     () => overlayField(raster, overlay.channel, slice, overlayPlayback, rain),
     [raster, overlay.channel, slice, overlayPlayback, rain],

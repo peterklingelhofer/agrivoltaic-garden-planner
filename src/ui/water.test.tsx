@@ -132,7 +132,7 @@ describe('water panel', () => {
     expect(runoff).toMatch(/modeling assumptions/)
     expect(harness.get('readout-water-unsourced-stages').textContent).toMatch(/Table 11/)
     expect(harness.get('readout-water-caveat-rain-shadow').textContent).toMatch(
-      /mean wind in rain hours/,
+      /winds in rain hours/,
     )
     expect(harness.get('readout-water-modeled').textContent).toMatch(/can go either way/)
     expect(harness.all('item-water-band-basis').length).toBeGreaterThan(0)

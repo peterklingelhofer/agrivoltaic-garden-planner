@@ -142,7 +142,12 @@ const CanvasLegend = (): ReactElement | null => {
   const stale = useAppStore(lightIsStale)
   const plot = useAppStore(scenePlot)
   const weather = useAppStore((s) => (s.weather.status === 'ready' ? s.weather.value : null))
-  const rain = useMemo(() => rainFieldOf(plot, weather), [plot, weather])
+  // the rain field is only worth computing when its own channel is on screen: every other
+  // channel's legend would otherwise compute it on every edit of the plot, for nobody to see
+  const rain = useMemo(
+    () => (overlay.channel === 'rain' ? rainFieldOf(plot, weather) : null),
+    [overlay.channel, plot, weather],
+  )
   const field = useMemo(
     () => overlayField(raster, overlay.channel, slice, overlayPlayback, rain),
     [raster, overlay.channel, slice, overlayPlayback, rain],

@@ -43,7 +43,13 @@ export const STEFAN_BOLTZMANN_MJ_M2_DAY_K4 = 4.903e-9
 export const SOLAR_CONSTANT_MJ_M2_MIN = 0.082
 export const KELVIN_OFFSET = 273.16
 
-/** Open-Meteo, PVGIS and NSRDB all report wind at 10 m; FAO-56 needs it at 2 m */
+/**
+ * Open-Meteo, PVGIS and NASA POWER report wind at 10 m, so FAO-56's log
+ * profile in `windSpeedAt2m` brings it down to 2 m from here. The NSRDB's
+ * wind is MERRA-2 reanalysis at 2 m and is scaled up to this height at
+ * ingest, in tmy.ts's `normalizeWeather`, so every source lands on the same
+ * convention before it reaches this constant
+ */
 export const TMY_WIND_HEIGHT_M = 10
 
 export const slopeSaturationVaporPressureKpaPerC = (tempC: number): number =>
@@ -640,19 +646,19 @@ export const SHADE_ET_RELATIVE_HALF_WIDTH = 0.5
 export const shadeShortwaveFactors = (monthlyRsr: readonly number[]): readonly number[] =>
   [...Array(12).keys()].map((month) => clamp(1 - at(monthlyRsr, month), 0, 1))
 
-/** Elamri et al. 2018 measured these on a monitored rain event, flat versus rotation-avoiding panels */
+/** Elamri et al. 2018 measured these on two different rain events, flat and rotation-avoiding panels */
 export const RAIN_DISTRIBUTION_CV_FLAT = 2.13
 export const RAIN_DISTRIBUTION_CV_ROTATED = 0.22
 
 export const RUNOFF_CAPTURE_CLAIM = unsourcedClaim(
   { plainBed: 0.5, basin: 0.8 },
-  "No source quantifies how much a bed keeps of the water in its drip strip, the strip of ground where a panel's runoff lands. A plain bed keeps half, the strip floods at several times the rain rate and the rest runs to the path, and a bed with a basin or swale along the strip keeps four fifths. Both are modeling assumptions",
+  "A plain bed is taken to keep half the water in its drip strip, the strip of ground where a panel's runoff lands: the strip floods at several times the rain rate and the rest runs to the path. A bed with a basin or swale along the strip is taken to keep four fifths. Both figures are modeling assumptions. The nearest measurement is Elamri et al. 2018's event 07: the top meter under the drip edge stored 6.7 of the 24.0 mm that landed on it, about a quarter to a third. That was one event on one silty soil with no basin",
 )
 
 export const RAIN_SHADOW_CAVEAT =
-  "The sheltered share and the drip strips (the ground where a panel's runoff lands) follow the array's plan geometry, averaged over this site's mean wind in rain hours from every direction, because the weather record carries no wind direction. The shadow moves by the panel's height times the wind over a raindrop's fall speed, and the drip by what it drifts while falling. Elamri et al. 2018 found the wind mattered more than the rain amount at 5 m"
+  "The sheltered share and the drip strips (the ground where a panel's runoff lands) follow the array's layout seen from above, moved by this site's winds in rain hours. Where the weather record carries the wind's direction, each hour's rain is placed by that hour's wind, by direction and speed. Where it doesn't, every direction is taken as equally likely at the rain-hour mean speed. The rain shadow moves by the panel's height times the wind at panel height, divided by the raindrops' fall speed. Each hour's drops are sized from that hour's rain rate, and the rain is split into three equal parts by how fast the drops fall. A drizzle's small drops carry further than a downpour's, so the shadow's downwind edge is soft. A panel facing the wind catches more rain than its area seen from above, and one turned away catches less. A drip drifts as far as the wind carries a drop in its whole fall from the edge. Elamri et al. 2018's model sensitivity analysis found the wind mattered more than the rain amount, for panels 5 m up"
 
-export const TRACKER_RAIN_NOTE = `A tracker is taken to lie flat in rain, the position it's parked in at night and the one that shelters most, with half its runoff going to each long edge. Elamri et al. 2018 rotated theirs out of the rain instead and cut the unevenness from a coefficient of variation of ${RAIN_DISTRIBUTION_CV_FLAT} to ${RAIN_DISTRIBUTION_CV_ROTATED}, a schedule no tracker here runs`
+export const TRACKER_RAIN_NOTE = `A tracker is taken to lie flat in rain, the position it's parked in at night and the one that shelters most, with half its runoff going to each long edge. In practice one edge takes the lot: Elamri et al. 2018 measured a flat 2 m panel's whole catchment landing in one 0.3 m collector at a single edge, so a bed beside a flat tracker gets either twice what the app draws or none, and which edge depends on the tracker's own lean. Flat, its runoff leaves the edge through outlets about 20 cm wide (Elamri et al. 2018), so the strip is a line of puddles the model averages along. Elamri et al. 2018 measured how unevenly the water landed across a row: a coefficient of variation of ${RAIN_DISTRIBUTION_CV_FLAT} under a flat panel in one event, and ${RAIN_DISTRIBUTION_CV_ROTATED} in another where they rotated the panels out of the rain, a schedule no tracker here runs`
 
 export const panelRainSplit = (rain: BedRain, hasBasin: boolean): PanelRainSplit => {
   const capture = hasBasin ? RUNOFF_CAPTURE_CLAIM.value.basin : RUNOFF_CAPTURE_CLAIM.value.plainBed
