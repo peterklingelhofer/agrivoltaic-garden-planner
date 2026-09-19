@@ -130,8 +130,19 @@ export default defineConfig({
        * the macOS scheduler's own answer to "this is background work": measured on
        * `interaction.spec.ts`, the same median 11 percent of the machine with p95 down from 21 to
        * 16 and the peak from 25 to 20, all 11 tests passing in the same 46 s. It is the desk
-       * default. `-c background`, which is the harder demotion to the efficiency cores, is what
-       * broke the screenshots above, so it stays out of both
+       * default. `bun run test:e2e:cold` is the same project under `-c background`, the harder
+       * demotion to the efficiency cores that broke the screenshots above. The functional project
+       * takes it: all 174 tests pass in 25.7 minutes against 10.7, and the slowest test, the a11y
+       * sweep of every editor step, takes 26.9 s against its 300 s timeout. The CPU seconds go
+       * up, the renderer at a mean 0.57 of a core on `interaction.spec.ts` against 0.21 under
+       * `utility`, because an efficiency core does a third or so of the work per second, and
+       * those are the seconds a laptop spends without the fan.
+       *
+       * Where the time goes at one worker, per process on `interaction.spec.ts` under `utility`:
+       * the renderer 0.21 of a core, the GPU process 0.09, the browser 0.05, the Playwright
+       * runner 0.06, the preview server 0.03. A lighter runner has nothing to save (the same spec
+       * under `bunx --bun` measured the identical 0.06), the build is 252 ms on rolldown, and
+       * what remains is the app itself and one Metal bake per test
        */
       name: 'visual',
       testMatch: /visual\.spec\.ts/,
