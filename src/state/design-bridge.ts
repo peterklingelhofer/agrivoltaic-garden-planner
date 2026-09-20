@@ -95,6 +95,7 @@ const isScenario = (value: unknown): boolean => {
     typeof scenario.tradeoff === 'string' &&
     asRecord(scenario.light) !== null &&
     asRecord(scenario.production) !== null &&
+    asRecord(scenario.water) !== null &&
     asRecord(scenario.flags) !== null &&
     asRecord(scenario.energyRatio) !== null &&
     isLayout(scenario.layout)

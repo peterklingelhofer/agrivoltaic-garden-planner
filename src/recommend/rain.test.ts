@@ -900,4 +900,152 @@ describe('rainField over the default plot', () => {
       expect(value).toBeGreaterThanOrEqual(0)
     }
   })
+
+  /**
+   * The tests above hold every constant to its citation, and this one holds the field itself:
+   * the default plot's three beds and its three-row array, under still air, the equal rose at
+   * 3 and 6 m/s, and one bin from the south-west and one from the north, all at the production
+   * slopes (this file's `symmetric` above stands in with one fall speed for every class)
+   *
+   * A change to the physics moves them on purpose, and the commit that does it re-pins them with
+   * the reason
+   */
+  it("holds the starting plot's own figures, so a change to the physics moves them on purpose", () => {
+    const productionRose = (speedMS: number): RainWind => ({
+      directed: false,
+      bins: Array.from({ length: 12 }, (_, k) => ({
+        fromDeg: k * 30,
+        weight: 1 / 12,
+        speedMS,
+        slope: rainSlopes(speedMS, FALLBACK_RAIN_RATE_MM_H.value),
+      })),
+    })
+    const productionBin = (fromDeg: number, speedMS: number): RainWind => ({
+      directed: true,
+      bins: [
+        { fromDeg, weight: 1, speedMS, slope: rainSlopes(speedMS, FALLBACK_RAIN_RATE_MM_H.value) },
+      ],
+    })
+
+    type ExpectedCrossing = {
+      readonly arrayId: string
+      readonly rowIndex: number
+      readonly rowCount: number
+      readonly side: 'north' | 'south' | 'east' | 'west'
+      readonly stripWidthM: number
+    }
+    type ExpectedBed = {
+      readonly bedId: string
+      readonly sheltered: number
+      readonly dripMultiple: number
+      readonly crossings: readonly ExpectedCrossing[]
+    }
+    type Scenario = {
+      readonly label: string
+      readonly wind: RainWind
+      readonly meanShelter: number
+      readonly meanDrip: number
+      readonly peak: number
+      readonly beds: readonly ExpectedBed[]
+    }
+
+    const scenarios: readonly Scenario[] = [
+      {
+        label: 'still air',
+        wind: rainWind(null),
+        meanShelter: 0.15,
+        meanDrip: 0.15,
+        peak: 17.45,
+        beds: [
+          { bedId: 'bed-1', sheltered: 0, dripMultiple: 0, crossings: [] },
+          { bedId: 'bed-2', sheltered: 1, dripMultiple: 0, crossings: [] },
+          { bedId: 'bed-3', sheltered: 0, dripMultiple: 0, crossings: [] },
+        ],
+      },
+      {
+        label: 'the equal rose at 3 m/s',
+        wind: productionRose(3),
+        meanShelter: 0.15,
+        meanDrip: 0.15,
+        peak: 8.62,
+        beds: [
+          { bedId: 'bed-1', sheltered: 0.095, dripMultiple: 0, crossings: [] },
+          { bedId: 'bed-2', sheltered: 0.77, dripMultiple: 0, crossings: [] },
+          { bedId: 'bed-3', sheltered: 0.214, dripMultiple: 0, crossings: [] },
+        ],
+      },
+      {
+        label: 'the equal rose at 6 m/s',
+        wind: productionRose(6),
+        meanShelter: 0.146,
+        meanDrip: 0.15,
+        peak: 6.62,
+        beds: [
+          {
+            bedId: 'bed-1',
+            sheltered: 0.286,
+            dripMultiple: 0.049,
+            crossings: [
+              { arrayId: 'array-1', rowIndex: 1, rowCount: 3, side: 'north', stripWidthM: 0.1 },
+            ],
+          },
+          { bedId: 'bed-2', sheltered: 0.378, dripMultiple: 0, crossings: [] },
+          { bedId: 'bed-3', sheltered: 0.365, dripMultiple: 0, crossings: [] },
+        ],
+      },
+      {
+        label: 'one bin from the south-west at 3 m/s',
+        wind: productionBin(240, 3),
+        meanShelter: 0.169,
+        meanDrip: 0.168,
+        peak: 19.45,
+        beds: [
+          { bedId: 'bed-1', sheltered: 0, dripMultiple: 0, crossings: [] },
+          { bedId: 'bed-2', sheltered: 1, dripMultiple: 0, crossings: [] },
+          { bedId: 'bed-3', sheltered: 0.238, dripMultiple: 0, crossings: [] },
+        ],
+      },
+      {
+        label: 'one bin from the north at 3 m/s',
+        wind: productionBin(0, 3),
+        meanShelter: 0.114,
+        meanDrip: 0.113,
+        peak: 12.47,
+        beds: [
+          { bedId: 'bed-1', sheltered: 0.429, dripMultiple: 0, crossings: [] },
+          { bedId: 'bed-2', sheltered: 0.333, dripMultiple: 0, crossings: [] },
+          { bedId: 'bed-3', sheltered: 0, dripMultiple: 0, crossings: [] },
+        ],
+      },
+    ]
+
+    const plot = makePlot()
+    for (const scenario of scenarios) {
+      const field = rainField(plot, scenario.wind)
+      expect(field.grid.cellSizeM, scenario.label).toBe(0.1)
+      expect(field.grid.cols, scenario.label).toBe(320)
+      expect(field.grid.rows, scenario.label).toBe(272)
+
+      let peak = 0
+      let shelterSum = 0
+      let dripSum = 0
+      for (const value of field.values) peak = Math.max(peak, value)
+      for (const value of field.shelter) shelterSum += value
+      for (const value of field.drip) dripSum += value
+      const cellCount = field.values.length
+      expect(shelterSum / cellCount, scenario.label).toBeCloseTo(scenario.meanShelter, 3)
+      expect(dripSum / cellCount, scenario.label).toBeCloseTo(scenario.meanDrip, 3)
+      expect(peak, scenario.label).toBeCloseTo(scenario.peak, 2)
+
+      for (const bedCase of scenario.beds) {
+        const label = `${scenario.label}: ${bedCase.bedId}`
+        const bed = field.beds.find((entry) => entry.bedId === bedCase.bedId)
+        expect(bed, label).toBeDefined()
+        if (bed === undefined) throw new Error('no bed rain')
+        expect(bed.shelteredFraction, label).toBeCloseTo(bedCase.sheltered, 3)
+        expect(bed.dripMultiple, label).toBeCloseTo(bedCase.dripMultiple, 3)
+        expect(bed.crossings, label).toEqual(bedCase.crossings)
+      }
+    }
+  })
 })
