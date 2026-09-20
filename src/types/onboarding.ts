@@ -4,7 +4,15 @@ import type { LatLon, Polygon2D } from './geo'
 import type { BedId, CropId } from './ids'
 import type { BedLight } from './light'
 import type { RowGeometry, TrackerConfig } from './pv'
-import type { Fraction, KilowattHours, Meters, MolPerM2Day, Ratio, SquareMeters } from './units'
+import type {
+  Fraction,
+  KilowattHours,
+  Meters,
+  Millimeters,
+  MolPerM2Day,
+  Ratio,
+  SquareMeters,
+} from './units'
 
 /** What the user is optimising for. Weights sum to 1 and are the user's, not ours */
 export interface DesignObjective {
@@ -73,6 +81,16 @@ export interface ScenarioYield {
   readonly cropsLostToShade: readonly CropId[]
 }
 
+/** The water balance's reading of a layout's own beds, the figure "Using less water" ranks on */
+export interface ScenarioWater {
+  /** What the beds go short of over a year with nobody watering, open to the sky: mm, area-weighted */
+  readonly deficitOpenSkyMm: Millimeters
+  /** The same beds under this layout: its shade month by month, its rain shadows and its drip strips */
+  readonly deficitUnderPanelsMm: Millimeters
+  /** 1 - under / open. Exactly 0 for the open-sky control, below 0 where a layout leaves its beds shorter than open ground */
+  readonly deficitSavedFraction: Fraction
+}
+
 /**
  * The shade this planting can absorb against the shade it actually gets, in the same units.
  *
@@ -136,6 +154,7 @@ export interface DesignScenario {
   readonly candidate: ArrayCandidate
   readonly light: ScenarioLight
   readonly production: ScenarioYield
+  readonly water: ScenarioWater
   readonly flags: ScenarioFlags
   /** Beds placed against this candidate's own baked ground light, not against geometry */
   readonly layout: BedLayout

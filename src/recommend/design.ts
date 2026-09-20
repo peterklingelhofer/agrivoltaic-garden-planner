@@ -21,6 +21,7 @@ import { chainOptionsFor, runAnnualChain } from '../sim/pv/chain'
 import { DEFAULT_GROUND_COVER, type GroundCover } from '../types/ground'
 import { energyRatio, REFERENCE_MAX_TILT_DEG, REFERENCE_MIN_TILT_DEG } from '../sim/pv/ler'
 import { observerFor, solarPositionSeries } from '../sim/solar'
+import { polygonAreaM2 } from '../state/geom'
 import type { Banded } from '../types/band'
 import type { CompanionRule, RotationConstraint } from '../types/companion'
 import type { ComplianceCheck } from '../types/compliance'
@@ -42,6 +43,7 @@ import type {
   ScenarioFlags,
   ScenarioLight,
   ScenarioSet,
+  ScenarioWater,
   ScenarioYield,
   ShadeBudgetCheck,
 } from '../types/onboarding'
@@ -49,13 +51,16 @@ import type { ModuleSpec, PvArray, RowGeometry, TrackerConfig } from '../types/p
 import type { CropRecommendation } from '../types/recommend'
 import type { Site } from '../types/site'
 import type { Degrees, Fraction, KilowattHours, Meters } from '../types/units'
-import { degrees, fraction, meters, squareMeters, wattsPeak } from '../types/units'
+import { degrees, fraction, meters, millimeters, squareMeters, wattsPeak } from '../types/units'
+import type { RainWind } from '../types/water'
 import type { SolarPositionSeries, TmySeries } from '../types/weather'
 import { placeBeds } from './layout'
 import { houseFootprints, housesOf, overlapsAHouse, rowsFootprint } from './overlap'
 import { runRecommendationPipeline } from './pipeline'
+import { rainField, rainWind } from './rain'
 import { DEFAULT_WEIGHTS, scoreOf } from './stages/rank'
 import { SURROUNDINGS_SHADE, shadedBySurroundings } from './surroundings'
+import { waterBalances } from './water'
 import { landEquivalentRatio } from './yield'
 
 /**
@@ -817,6 +822,7 @@ interface Evaluated {
   readonly candidate: ArrayCandidate
   readonly light: ScenarioLight
   readonly production: ScenarioYield
+  readonly water: ScenarioWater
   readonly flags: ScenarioFlags
   readonly layout: BedLayout
   readonly energyRatio: Banded<Fraction>
@@ -844,6 +850,12 @@ interface Shared {
    * for the winner in the editor
    */
   readonly chainOptions: PvChainOptions
+  /**
+   * The site's rain-hour wind rose, computed once for the whole set: every candidate bakes on
+   * the same plot in the same weather, so the water term reads one shared rose across all five
+   * candidates, the same one the app's own water panel would compute for this site
+   */
+  readonly rain: RainWind
 }
 
 /** Decision Record 2.3: the PV chain and the ground map must read one sky, not two */
@@ -852,6 +864,7 @@ const sharedFor = (deps: DesignDependencies): Shared => {
   return {
     position,
     chainOptions: chainOptionsFor(deps.site, deps.weather, deps.groundCover),
+    rain: rainWind(deps.weather),
     weather: decompose(
       deps.weather,
       position,
@@ -933,6 +946,70 @@ export const measuredEnergyPlan = (
   return best
 }
 
+/**
+ * The water balance's own reading of this candidate's placed beds: each bed's unirrigated
+ * deficit in millimetres at the middle of its soil's available-water range, open to the sky and
+ * again under this candidate's own monthly shade, rain shadows and drip strips, area-weighted
+ * over the beds. `deficitMm` is the point figure the balance already produces, where
+ * `irrigationOpenSkyMm` and `irrigationUnderPanelsMm` are `Banded` ones, and turning a band into
+ * one number is gated behind an allowlist that Decision Record 10c keeps design.ts off.
+ * The rain field runs on `shared.rain`, the site's own rain-hour wind rose, computed once and
+ * shared across the five candidates so every layout is read against the same rain. A refused
+ * layout, no beds at all, saves and loses nothing
+ */
+const scenarioWaterOf = (
+  deps: DesignDependencies,
+  shared: Shared,
+  plot: GardenPlot,
+  layout: BedLayout,
+): ScenarioWater => {
+  if (layout.beds.length === 0) {
+    return {
+      deficitOpenSkyMm: millimeters(0),
+      deficitUnderPanelsMm: millimeters(0),
+      deficitSavedFraction: fraction(0),
+    }
+  }
+  const template = plot.beds[0] as Bed
+  const beds: Bed[] = layout.beds.map((placement) => ({
+    ...template,
+    id: placement.bedId,
+    label: placement.label,
+    footprint: placement.footprint,
+    areaM2: polygonAreaM2(placement.footprint),
+  }))
+  const placed: GardenPlot = { ...plot, beds }
+  const field = rainField(placed, shared.rain)
+  const balances = waterBalances({
+    site: deps.site,
+    weather: deps.weather,
+    plot: placed,
+    bedLight: layout.beds.map((placement) => placement.light),
+    catalog: deps.catalog,
+    rain: field,
+  })
+
+  let openSumMm = 0
+  let underSumMm = 0
+  let areaSumM2 = 0
+  for (const bed of beds) {
+    const balance = balances.find((entry) => entry.bedId === bed.id)
+    if (balance === undefined) continue
+    openSumMm += balance.openSky.deficitMm * bed.areaM2
+    underSumMm += balance.underPanels.deficitMm * bed.areaM2
+    areaSumM2 += bed.areaM2
+  }
+  const deficitOpenSkyMm = areaSumM2 > 0 ? openSumMm / areaSumM2 : 0
+  const deficitUnderPanelsMm = areaSumM2 > 0 ? underSumMm / areaSumM2 : 0
+  return {
+    deficitOpenSkyMm: millimeters(deficitOpenSkyMm),
+    deficitUnderPanelsMm: millimeters(deficitUnderPanelsMm),
+    deficitSavedFraction: fraction(
+      deficitOpenSkyMm > 0 ? 1 - deficitUnderPanelsMm / deficitOpenSkyMm : 0,
+    ),
+  }
+}
+
 const evaluate = (
   deps: DesignDependencies,
   shared: Shared,
@@ -995,10 +1072,11 @@ const evaluate = (
     exposure: answers.exposure,
     houses: houseFootprints(plot),
   })
+  const resolvedLayout = layout.ok ? layout.value : refusedLayout(layout.reason)
 
   return {
     candidate,
-    layout: layout.ok ? layout.value : refusedLayout(layout.reason),
+    layout: resolvedLayout,
     energyRatio: ratio,
     light: {
       meanGrowingSeasonDli: season.meanDliMolM2Day,
@@ -1022,6 +1100,9 @@ const evaluate = (
               .filter((id) => !controlLightExclusions.has(id as string))
               .sort((a, b) => (a as string).localeCompare(b as string)),
     },
+    // the water balance's own reading of these placed beds, the figure the water objective
+    // ranks on, computed by `scenarioWaterOf`
+    water: scenarioWaterOf(deps, shared, plot, resolvedLayout),
     // the shade the planting can take, against the shade the bake says it gets, since the footprint
     // the rows were sized from is not a measurement
     flags: flagsFrom(check, {
@@ -1135,7 +1216,15 @@ const tradeoffOf = (evaluated: Evaluated, catalog: readonly Crop[]): string => {
   // said before the layout is applied, so a grower who drew four beds sees up front that it fits
   // only two
   const bedsText = `${String(beds)} bed${beds === 1 ? '' : 's'} fit the light it leaves`
-  return `You give up about ${given} percent of your daylight for roughly ${kwh} kWh of electricity a year. ${bedsText}. ${lostText}. ${patchy ? 'The darkest part of the plot gets less than half the light of the average, so keep the shade-tolerant plants for it' : 'The light is spread evenly enough that you can plant the whole plot much the same way'}`
+  const saved = evaluated.water.deficitSavedFraction
+  const percent = Math.round(Math.abs(saved) * 100)
+  const waterText =
+    percent === 0
+      ? 'By the water balance its beds go short of about the same water over a year as they would open to the sky'
+      : saved > 0
+        ? `By the water balance its beds go short of about ${String(percent)} percent less water over a year than they would open to the sky`
+        : `By the water balance its beds go short of about ${String(percent)} percent more water over a year than they would open to the sky, where the rows keep rain off ground they leave in the sun`
+  return `You give up about ${given} percent of your daylight for roughly ${kwh} kWh of electricity a year. ${bedsText}. ${waterText}. ${lostText}. ${patchy ? 'The darkest part of the plot gets less than half the light of the average, so keep the shade-tolerant plants for it' : 'The light is spread evenly enough that you can plant the whole plot much the same way'}`
 }
 
 const NOT_CONSIDERED_BASE: readonly string[] = [
@@ -1273,7 +1362,7 @@ export const suggestDesigns = async (
       0.5 * (1 - entry.light.meanShadeRatio),
   )
   const energyRaw = evaluated.map((entry) => entry.production.annualAcKwh as number)
-  const waterRaw = evaluated.map((entry) => entry.light.meanShadeRatio as number)
+  const waterRaw = evaluated.map((entry) => entry.water.deficitSavedFraction)
   const simplicityRaw = evaluated.map(simplicityOf)
   const food = normalise(foodRaw)
   const energy = normalise(energyRaw)
@@ -1286,6 +1375,7 @@ export const suggestDesigns = async (
       candidate: entry.candidate,
       light: entry.light,
       production: entry.production,
+      water: entry.water,
       flags: entry.flags,
       layout: entry.layout,
       energyRatio: entry.energyRatio,

@@ -407,6 +407,57 @@ describe('a full five-scenario run', () => {
     }
   })
 
+  it("reads the open-sky control's water as exactly nothing saved", () => {
+    const control = result.scenarios.find(
+      (entry) => entry.candidate.archetype === 'no-array-control',
+    )
+    if (control === undefined) throw new Error('no control')
+    const { deficitOpenSkyMm, deficitUnderPanelsMm, deficitSavedFraction } = control.water
+    expect(Number.isFinite(deficitOpenSkyMm)).toBe(true)
+    expect(Number.isFinite(deficitUnderPanelsMm)).toBe(true)
+    // the two runs are identical by construction (no shade, no rain shadow), so the two
+    // accumulations agree to float rounding. The saved fraction gets the margin the light figures
+    // above are held to, and the mm figures a relative check, because they run in the hundreds
+    expect(Math.abs(deficitSavedFraction)).toBeLessThan(1e-6)
+    expect(Math.abs(deficitOpenSkyMm - deficitUnderPanelsMm)).toBeLessThan(deficitOpenSkyMm * 1e-5)
+  })
+
+  it("carries the balance's own deficit figures on every layout", () => {
+    for (const entry of result.scenarios) {
+      const { deficitOpenSkyMm, deficitUnderPanelsMm, deficitSavedFraction } = entry.water
+      expect(Number.isFinite(deficitOpenSkyMm)).toBe(true)
+      expect(Number.isFinite(deficitUnderPanelsMm)).toBe(true)
+      expect(deficitOpenSkyMm).toBeGreaterThanOrEqual(0)
+      expect(deficitUnderPanelsMm).toBeGreaterThanOrEqual(0)
+      const expected = deficitOpenSkyMm > 0 ? 1 - deficitUnderPanelsMm / deficitOpenSkyMm : 0
+      expect(deficitSavedFraction).toBeCloseTo(expected, 9)
+    }
+    const control = result.scenarios.find(
+      (entry) => entry.candidate.archetype === 'no-array-control',
+    ) as DesignScenario
+    const panelled = result.scenarios.filter(
+      (entry) => entry.candidate.archetype !== 'no-array-control',
+    )
+    // a layout with panels casts real shade and a real rain shadow, so at least one has to read
+    // differently from the control's near-zero figure
+    expect(
+      panelled.some(
+        (entry) =>
+          Math.abs(entry.water.deficitSavedFraction - control.water.deficitSavedFraction) > 1e-6,
+      ),
+    ).toBe(true)
+  })
+
+  it('writes the water figure into the tradeoff sentence', () => {
+    for (const entry of result.scenarios) {
+      if (entry.candidate.archetype === 'no-array-control') {
+        expect(entry.tradeoff).not.toContain('By the water balance')
+      } else {
+        expect(entry.tradeoff).toContain('By the water balance')
+      }
+    }
+  })
+
   it('returns the same set for the same answers', async () => {
     const again = await suggestDesigns(answersFor(), deps)
     expect(again.scenarios.map((entry) => entry.candidate.archetype)).toEqual(
@@ -456,6 +507,19 @@ describe('ranking answers to the objective weights', () => {
       deps,
     )
     expect(set.recommendedArchetype).toBe('energy-first')
+  }, 600_000)
+
+  it('ranks a water-only grower by the balance and nothing else', async () => {
+    const set = await suggestDesigns(
+      answersFor({ objective: { food: 0, energy: 0, water: 1, simplicity: 0 } }),
+      deps,
+    )
+    // found from the set itself: this pins the rule that the highest water score wins, whichever
+    // archetype that turns out to be
+    const best = set.scenarios.reduce((max, entry) =>
+      entry.water.deficitSavedFraction > max.water.deficitSavedFraction ? entry : max,
+    )
+    expect(set.recommendedArchetype).toBe(best.candidate.archetype)
   }, 600_000)
 
   it('names the archetypes the mounting choice dropped', async () => {
@@ -552,8 +616,13 @@ describe('the archetype names have to match the figures beside them', () => {
       (
         await suggestDesigns(answersFor(), { ...deps, targetCellSizeM: meters(cellM) })
       ).scenarios.map((entry) => entry.candidate.archetype)
-    // the search is deterministic in its inputs; what was fragile is the margin, not the order
-    expect(await orderAt(0.5)).toEqual(await orderAt(0.25))
+    // the search is deterministic in its inputs, what was fragile was the margin, and the winner
+    // holds. The places behind it can move with the cell size since 2026-09-19, because the water term
+    // reads each layout's placed beds against the rain field and the beds are placed off the
+    // raster: on this plot the tracker's second bed lands 0.9 m further west at 0.25 m than at
+    // 0.5 m, onto the row's drip strip, and that bed's deficit goes from 202 mm to none. The app
+    // bakes at one cell size, so a visitor never sees the two placements side by side
+    expect((await orderAt(0.5))[0]).toBe((await orderAt(0.25))[0])
   }, 900_000)
 
   /**

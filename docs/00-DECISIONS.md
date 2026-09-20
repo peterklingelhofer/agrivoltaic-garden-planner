@@ -749,10 +749,33 @@ elevation, shade past the 40 percent level where Laub's anchors are tabulated, a
 or a basket in which every light threshold is a class inference).
 
 Ranking is deterministic: four raw terms (crop retention and light kept, annual AC kWh,
-mean shade as an evapotranspiration proxy, and structural simplicity) min-max normalised across
-the set and combined with the user's own `DesignObjective` weights, an exactly equal score going
-to the archetype named for the answers (`namesakeOf`), then archetype order. No band is collapsed
-anywhere, so `design.ts` is NOT on the `unsafeBandMidpoint` allowlist.
+the water balance's unirrigated deficit saved on the layout's own beds, and structural
+simplicity) min-max normalised across the set and combined with the user's own `DesignObjective`
+weights, an exactly equal score going to the archetype named for the answers (`namesakeOf`), then
+archetype order. No band is collapsed anywhere, so `design.ts` is NOT on the `unsafeBandMidpoint`
+allowlist.
+
+**Amended 2026-09-19: the water term is the balance's own figure.** Until then the term was the
+plot's season shade ratio, a proxy for evapotranspiration, so the layout with the most shade took
+the whole of "Using less water". Measured against `waterBalances` on each layout's placed beds at
+the app's own bake settings, on two real Open-Meteo records: at Amherst (985 mm of rain against
+905 mm of reference ET) the proxy's pick, three tilted rows, put four of its eight beds in the
+rows' rain shadow with July shade of 0.05, and those beds need 157 to 215 mm of irrigation against
+156 open to the sky, while its three beds under the rows need none. The shade it was credited for,
+0.35 of the season, is spring and autumn shade on ground that is dry in July. Vertical walls shade
+0.2 in every month and cut their beds' shortfall by two thirds. At Phoenix (200 mm against
+1,986 mm) rain is a rounding error and the balance's figure tracks shade closely. The term is now
+the unirrigated deficit at the middle of the soil's available-water range, area-weighted over the
+placed beds, as `1 - under / open`, computed from the rain field under the site's rain-hour rose
+and the balance's monthly shade factors. It is the point figure the balance already produces, so
+`design.ts` stays off the `unsafeBandMidpoint` allowlist. On the starting plot under the balanced
+preset the pick moves from the three tilted rows to the open-sky control, by 0.044: the rows'
+whole margin had been the proxy's full credit. Under the food and electricity presets nothing
+moves at either site. Weighting the term by the site's water-limitation index was measured and
+dropped: at 0.14 it cancels the term and at 0.87 the term already agrees with shade. A "wet site
+pushes drip strips onto the paths" rule was not built, because the balance carries no harm from
+excess water and the capture claim already sends half of every strip to the path. Cost: an
+evening, one probe at two sites, four tests.
 
 Until 2026-09-17 the search baked at a coarser preview quality and carried a per-run margin,
 measured from how far the preview's light terms moved against the full bake, listing every
@@ -1784,9 +1807,10 @@ four fifths, both declared modelling assumptions. The free "catches the rain run
 panels" switch is gone: whether a bed catches a strip is the geometry's answer, and the bed's
 switch now adds the basin. The ground overlay gained the field as a channel, and every bed's water
 panel names the row that drips on it and the side it drips along. Rotating a tracker out of the
-rain, Elamri's remedy, is a schedule no tracker here runs, and a note says so. A water term in the
-layout search, weighted by the site's water limitation, is left for a later record: it changes the
-ranking and wants measuring first.
+rain, Elamri's remedy, is a schedule no tracker here runs, and a note says so. The water term in
+the layout search was measured and built on 2026-09-19 (10c, amended): the balance's own deficit
+saving on the placed beds, unweighted by the site's water limitation, which cancelled it at both
+sites measured.
 
 **Cost.** An evening: the field and its memo, the split, the overlay channel, the bed switch,
 twelve citations and thirteen tests.
