@@ -3026,8 +3026,12 @@ details.wizard-advanced > summary:focus-visible {
     padding: 4px;
     border: 1px solid var(--border);
     border-radius: 999px;
-    background: color-mix(in srgb, var(--panel) 88%, transparent);
-    backdrop-filter: blur(6px);
+    /* frosted, so the garden it floats over shows through it: at 88% of the panel colour with
+       a 6px blur, and the buttons inside it solid, it read as one gray block on the phone.
+       70% is as far as the labels allow: the dark pill over the brightest thing the canvas can
+       show keeps them at 4.8:1, and at 60% they drop to 3.6:1 */
+    background: color-mix(in srgb, var(--panel) 70%, transparent);
+    backdrop-filter: blur(14px);
   }
 
   .app:not([data-surface='garden']) .toolbar-modes {
@@ -3041,6 +3045,12 @@ details.wizard-advanced > summary:focus-visible {
     font-size: 12px;
     padding: 0 12px;
     border-radius: 999px;
+  }
+
+  /* the modes that are not on take the frosted pill as their fill: a solid button covered most
+     of it and hid what the blur does. The one that is on keeps its accent */
+  .toolbar-modes .action-ghost {
+    background: transparent;
   }
 
   .tabbar {
