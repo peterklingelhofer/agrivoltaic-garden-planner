@@ -12,12 +12,33 @@ import { at, clamp } from './math'
 import { pointInPolygon } from './shading'
 import { byMonth, monthValue, relativeShadeRatio } from './units'
 
+/**
+ * The layout search's slide (`slideBeds` in `src/recommend/layout.ts`) reads a bed's light at every
+ * step across the room it has, and a full scan of a 30 by 20 m plot at 0.12 m is forty thousand
+ * tests per read. A cell whose center falls outside the footprint's own bounding box can't be
+ * inside the footprint, so only the rows and columns whose cell centers can reach that box are ever
+ * tested, clamped to the grid for a footprint that hangs off its edge or stands wholly outside it
+ */
 export const cellIndicesInPolygon = (raster: DliRaster, footprint: Polygon2D): Uint32Array => {
   const { extent, cellSizeM, cols, rows } = raster.grid
+  let minX = Infinity
+  let maxX = -Infinity
+  let minY = Infinity
+  let maxY = -Infinity
+  for (const point of footprint.exterior) {
+    minX = Math.min(minX, point.xM)
+    maxX = Math.max(maxX, point.xM)
+    minY = Math.min(minY, point.yM)
+    maxY = Math.max(maxY, point.yM)
+  }
+  const colStart = clamp(Math.floor((minX - extent.minXM) / cellSizeM - 0.5), 0, cols - 1)
+  const colEnd = clamp(Math.ceil((maxX - extent.minXM) / cellSizeM - 0.5), 0, cols - 1)
+  const rowStart = clamp(Math.floor((minY - extent.minYM) / cellSizeM - 0.5), 0, rows - 1)
+  const rowEnd = clamp(Math.ceil((maxY - extent.minYM) / cellSizeM - 0.5), 0, rows - 1)
   const indices: number[] = []
-  for (let row = 0; row < rows; row += 1) {
+  for (let row = rowStart; row <= rowEnd; row += 1) {
     const yM = (extent.minYM + (row + 0.5) * cellSizeM) as Meters
-    for (let col = 0; col < cols; col += 1) {
+    for (let col = colStart; col <= colEnd; col += 1) {
       const point: Vec2M = { xM: (extent.minXM + (col + 0.5) * cellSizeM) as Meters, yM }
       if (pointInPolygon(point, footprint)) indices.push(row * cols + col)
     }
