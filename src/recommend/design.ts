@@ -52,15 +52,15 @@ import type { CropRecommendation } from '../types/recommend'
 import type { Site } from '../types/site'
 import type { Degrees, Fraction, KilowattHours, Meters } from '../types/units'
 import { degrees, fraction, meters, millimeters, squareMeters, wattsPeak } from '../types/units'
-import type { RainWind } from '../types/water'
+import type { BedRain, RainField, RainWind } from '../types/water'
 import type { SolarPositionSeries, TmySeries } from '../types/weather'
 import { placeBeds } from './layout'
 import { houseFootprints, housesOf, overlapsAHouse, rowsFootprint } from './overlap'
 import { runRecommendationPipeline } from './pipeline'
-import { rainField, rainWind } from './rain'
+import { rainGround, rainOnBed, rainWind, type RainGround } from './rain'
 import { DEFAULT_WEIGHTS, scoreOf } from './stages/rank'
 import { SURROUNDINGS_SHADE, shadedBySurroundings } from './surroundings'
-import { waterBalances } from './water'
+import { bedShortfallMm, waterBalanceShared, waterBalances } from './water'
 import { landEquivalentRatio } from './yield'
 
 /**
@@ -947,21 +947,81 @@ export const measuredEnergyPlan = (
 }
 
 /**
+ * A `RainField` built from a plot's own ground and whichever beds are asked about. The shelter,
+ * drip and values arrays are the ground itself and never change bed to bed, only the per-bed
+ * figures `rainOnBed` reads off them
+ */
+const fieldOf = (ground: RainGround, beds: readonly BedRain[]): RainField => ({
+  grid: ground.grid,
+  wind: ground.wind,
+  shelter: ground.shelter,
+  drip: ground.drip,
+  values: ground.values,
+  beds,
+})
+
+/**
+ * What the slide asks at every offset it tries: how many millimetres a bed would go short of over
+ * a year if it stood there, the same balance the water term below ranks the whole candidate on,
+ * read at the mid capacity with no irrigation. Read on the reference crop, since a bed the search
+ * is still trying positions for carries no planting yet, and area-weighted over the footprints it
+ * is handed, one at a time as `slideBeds` asks today. `ground` is built once by the caller and
+ * read again here at every offset, because the panel loop it costs is the expensive part of a
+ * balance and one more balance run against it is cheap
+ */
+const shortfallJudge = (
+  deps: DesignDependencies,
+  plot: GardenPlot,
+  raster: DliRaster,
+  answers: OnboardingAnswers,
+  ground: RainGround,
+): ((footprints: readonly Polygon2D[]) => number) => {
+  const template = plot.beds[0] as Bed
+  const balanceShared = waterBalanceShared({
+    site: deps.site,
+    weather: deps.weather,
+    plot,
+    bedLight: [],
+    catalog: deps.catalog,
+    rain: fieldOf(ground, []),
+  })
+  return (footprints) => {
+    let sumMm = 0
+    let areaSumM2 = 0
+    for (const [index, footprint] of footprints.entries()) {
+      const bed: Bed = {
+        ...template,
+        id: bedId(`slide-${String(index)}`),
+        label: `Slide candidate ${String(index)}`,
+        footprint,
+        areaM2: polygonAreaM2(footprint),
+      }
+      const light = shadedBySurroundings(bedLightOf(raster, bed.id, footprint), answers.exposure)
+      const rain = rainOnBed(ground, plot.arrays, bed)
+      sumMm += bedShortfallMm(balanceShared, bed, light, rain) * bed.areaM2
+      areaSumM2 += bed.areaM2
+    }
+    return areaSumM2 > 0 ? sumMm / areaSumM2 : 0
+  }
+}
+
+/**
  * The water balance's own reading of this candidate's placed beds: each bed's unirrigated
  * deficit in millimetres at the middle of its soil's available-water range, open to the sky and
  * again under this candidate's own monthly shade, rain shadows and drip strips, area-weighted
  * over the beds. `deficitMm` is the point figure the balance already produces, where
  * `irrigationOpenSkyMm` and `irrigationUnderPanelsMm` are `Banded` ones, and turning a band into
  * one number is gated behind an allowlist that Decision Record 10c keeps design.ts off.
- * The rain field runs on `shared.rain`, the site's own rain-hour wind rose, computed once and
- * shared across the five candidates so every layout is read against the same rain. A refused
- * layout, no beds at all, saves and loses nothing
+ * The rain field runs on `ground`, this candidate's own rain ground, built once in `evaluate` and
+ * passed in here. Every candidate's ground comes off the same rain-hour wind rose, `shared.rain`,
+ * so every layout is still read against the same rain. A refused layout, no beds at all, saves
+ * and loses nothing
  */
 const scenarioWaterOf = (
   deps: DesignDependencies,
-  shared: Shared,
   plot: GardenPlot,
   layout: BedLayout,
+  ground: RainGround,
 ): ScenarioWater => {
   if (layout.beds.length === 0) {
     return {
@@ -979,7 +1039,10 @@ const scenarioWaterOf = (
     areaM2: polygonAreaM2(placement.footprint),
   }))
   const placed: GardenPlot = { ...plot, beds }
-  const field = rainField(placed, shared.rain)
+  const field = fieldOf(
+    ground,
+    placed.beds.map((bed) => rainOnBed(ground, placed.arrays, bed)),
+  )
   const balances = waterBalances({
     site: deps.site,
     weather: deps.weather,
@@ -1061,6 +1124,13 @@ const evaluate = (
     (entry) => cropById(deps.catalog, entry.cropId)?.light.dliMinMolM2Day.tier === 'C',
   ).length
 
+  // this candidate's own rain ground, built once here and read again by the slide's judge at
+  // every offset it tries and by the water term below, so the panel loop it costs is paid for
+  // once per candidate
+  const ground = rainGround(plot, shared.rain)
+  const shortfallMm =
+    plot.arrays.length === 0 ? undefined : shortfallJudge(deps, plot, raster, answers, ground)
+
   // the beds this candidate would get, placed against the ground light it actually casts
   const layout = placeBeds({
     plotWidthM: answers.plotWidthM,
@@ -1071,6 +1141,7 @@ const evaluate = (
     maxBeds: answers.maxBeds ?? undefined,
     exposure: answers.exposure,
     houses: houseFootprints(plot),
+    shortfallMm,
   })
   const resolvedLayout = layout.ok ? layout.value : refusedLayout(layout.reason)
 
@@ -1102,7 +1173,7 @@ const evaluate = (
     },
     // the water balance's own reading of these placed beds, the figure the water objective
     // ranks on, computed by `scenarioWaterOf`
-    water: scenarioWaterOf(deps, shared, plot, resolvedLayout),
+    water: scenarioWaterOf(deps, plot, resolvedLayout, ground),
     // the shade the planting can take, against the shade the bake says it gets, since the footprint
     // the rows were sized from is not a measurement
     flags: flagsFrom(check, {

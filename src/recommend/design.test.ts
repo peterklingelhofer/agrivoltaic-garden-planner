@@ -1,7 +1,7 @@
 import { beforeAll, describe, expect, it } from 'bun:test'
 import { loadCompanionRules, loadRotationConstraints } from '../data/companions'
 import { loadCropCatalog } from '../data/crops'
-import { cosDeg } from '../sim/math'
+import { cosDeg, sinDeg } from '../sim/math'
 import { REFERENCE_MAX_TILT_DEG, REFERENCE_MIN_TILT_DEG } from '../sim/pv/ler'
 import { polygonOf, rectangleRing, vec2 } from '../state/geom'
 import type { House } from '../types/garden'
@@ -24,6 +24,7 @@ import {
   shadeBudgetFor,
   suggestDesigns,
 } from './design'
+import { BED_GAP_M, PLOT_MARGIN_M, POST_KEEP_CLEAR_M } from './layout'
 import { siteFixture, tmyFixture } from './testkit'
 
 const answersFor = (patch: Partial<OnboardingAnswers> = {}): OnboardingAnswers => ({
@@ -458,6 +459,59 @@ describe('a full five-scenario run', () => {
     }
   })
 
+  /**
+   * `evaluate` hands `placeBeds` a judge built off this candidate's own rain ground, so a bed
+   * slides the way `layout.test.ts` proves it can. At least one panelled scenario on this plot has
+   * to show the move in its own words, and every scenario's beds, slid or left centred, keep the
+   * plot's working margin and stay off every row's own foundations
+   */
+  it('slides at least one bed onto the rain the rows shed, clear of the margin and every row', () => {
+    const { plotWidthM, plotDepthM } = answersFor()
+    const slid = result.scenarios.some(
+      (entry) =>
+        entry.candidate.archetype !== 'no-array-control' &&
+        entry.layout.explanation.includes('onto the rain the rows shed'),
+    )
+    expect(slid).toBe(true)
+
+    // widened past `POST_KEEP_CLEAR_M` where half a working gap is the larger of the two, the
+    // same widening `postSpans` cuts a strip by before any bed is ever placed in it
+    const postClearM = Math.max(POST_KEEP_CLEAR_M, BED_GAP_M / 2)
+    for (const entry of result.scenarios) {
+      const { geometry } = entry.candidate
+      const crossIsX =
+        Math.abs(cosDeg(geometry.rowAzimuthDeg)) > Math.abs(sinDeg(geometry.rowAzimuthDeg))
+      const rowCentresM = Array.from(
+        { length: geometry.rowCount },
+        (_, row) =>
+          (crossIsX ? geometry.originM.xM : geometry.originM.yM) +
+          (row - (geometry.rowCount - 1) / 2) * geometry.pitchM,
+      )
+      for (const bed of entry.layout.beds) {
+        for (const point of bed.footprint.exterior) {
+          expect(Math.abs(point.xM), entry.candidate.archetype).toBeLessThanOrEqual(
+            plotWidthM / 2 - PLOT_MARGIN_M + 1e-9,
+          )
+          expect(Math.abs(point.yM), entry.candidate.archetype).toBeLessThanOrEqual(
+            plotDepthM / 2 - PLOT_MARGIN_M + 1e-9,
+          )
+        }
+        const values = bed.footprint.exterior.map((point) =>
+          crossIsX ? (point.xM as number) : (point.yM as number),
+        )
+        const lo = Math.min(...values)
+        const hi = Math.max(...values)
+        for (const centre of rowCentresM) {
+          const overlaps = lo < centre + postClearM && hi > centre - postClearM
+          expect(
+            overlaps,
+            `${entry.candidate.archetype} ${bed.label} sits on the row at ${String(centre)} m`,
+          ).toBe(false)
+        }
+      }
+    }
+  })
+
   it('returns the same set for the same answers', async () => {
     const again = await suggestDesigns(answersFor(), deps)
     expect(again.scenarios.map((entry) => entry.candidate.archetype)).toEqual(
@@ -616,13 +670,11 @@ describe('the archetype names have to match the figures beside them', () => {
       (
         await suggestDesigns(answersFor(), { ...deps, targetCellSizeM: meters(cellM) })
       ).scenarios.map((entry) => entry.candidate.archetype)
-    // the search is deterministic in its inputs, what was fragile was the margin, and the winner
-    // holds. The places behind it can move with the cell size since 2026-09-19, because the water term
-    // reads each layout's placed beds against the rain field and the beds are placed off the
-    // raster: on this plot the tracker's second bed lands 0.9 m further west at 0.25 m than at
-    // 0.5 m, onto the row's drip strip, and that bed's deficit goes from 202 mm to none. The app
-    // bakes at one cell size, so a visitor never sees the two placements side by side
-    expect((await orderAt(0.5))[0]).toBe((await orderAt(0.25))[0])
+    // the search is deterministic in its inputs, and the whole order holds at both cell sizes
+    // because the search feeds the layout a judge. The slide settles each bed onto the row's drip
+    // strip at either cell size, so the order doesn't depend on where the raster happens to cut a
+    // bed's strip
+    expect(await orderAt(0.5)).toEqual(await orderAt(0.25))
   }, 900_000)
 
   /**

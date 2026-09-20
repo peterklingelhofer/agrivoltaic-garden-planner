@@ -23,6 +23,7 @@ import {
   monthlyRsrRaster,
   rasterTransferables,
 } from './raster'
+import { pointInPolygon } from './shading'
 import { byMonth, molPerM2FromWhPerM2 } from './units'
 import type { AccumulationResult } from './backend'
 
@@ -138,6 +139,51 @@ describe('per-bed aggregation', () => {
   it('selects the cells whose centres fall inside the footprint', () => {
     const indices = cellIndicesInPolygon(raster(), square(2, 2, 3))
     expect(indices).toHaveLength(9)
+  })
+
+  /**
+   * `cellIndicesInPolygon` narrows its scan to the rows and columns the footprint's own bounding
+   * box can reach before it tests a single cell, and this checks that narrowing never drops a
+   * cell a full scan would have kept: a brute-force pass over every cell in the grid, against the
+   * same `pointInPolygon` predicate, has to agree on the indices and their order for a shape
+   * square in the grid, one with a diagonal edge, one that hangs off the grid's own edge and one
+   * that stands nowhere near it
+   */
+  it('agrees with a brute-force scan of every cell, on the grid, off its edge and clear of it', () => {
+    const built = raster()
+    const bruteForce = (footprint: Polygon2D): number[] => {
+      const { extent, cellSizeM, cols, rows } = built.grid
+      const indices: number[] = []
+      for (let row = 0; row < rows; row += 1) {
+        const yM = (extent.minYM + (row + 0.5) * cellSizeM) as Meters
+        for (let col = 0; col < cols; col += 1) {
+          const xM = (extent.minXM + (col + 0.5) * cellSizeM) as Meters
+          if (pointInPolygon({ xM, yM }, footprint)) indices.push(row * cols + col)
+        }
+      }
+      return indices
+    }
+    const triangle: Polygon2D = {
+      exterior: [
+        { xM: 1 as Meters, yM: 1 as Meters },
+        { xM: 6 as Meters, yM: 1 as Meters },
+        { xM: 1 as Meters, yM: 6 as Meters },
+      ],
+      holes: [],
+    }
+    const hangingOffTheEdge = square(6, 6, 4)
+    const whollyOffTheGrid = square(20, 20, 3)
+    for (const [label, footprint] of [
+      ['a square inside the grid', square(2, 2, 3)],
+      ['a triangle inside the grid', triangle],
+      ['a footprint hanging off the grid', hangingOffTheEdge],
+      ['a footprint wholly off the grid', whollyOffTheGrid],
+    ] as const) {
+      expect(Array.from(cellIndicesInPolygon(built, footprint)), label).toEqual(
+        bruteForce(footprint),
+      )
+    }
+    expect(cellIndicesInPolygon(built, whollyOffTheGrid)).toHaveLength(0)
   })
 
   it('summarises a bed and its season', () => {

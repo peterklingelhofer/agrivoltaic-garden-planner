@@ -777,6 +777,34 @@ pushes drip strips onto the paths" rule was not built, because the balance carri
 excess water and the capture claim already sends half of every strip to the path. Cost: an
 evening, one probe at two sites, four tests.
 
+**Amended 2026-09-20: a bed slides onto the rain the rows shed where its plants would go short
+less.** The term above reads each layout's beds where the light put them, and whether a bed stood
+on a row's drip strip was the luck of where the light bands fell: measured on the starting plot at
+Amherst, a bright-gap bed with 0.65 m of room toward a row's low edge went from 191 mm short over
+the year to none across that room, a bed a metre off the strip was never credited, and the search's
+own order moved with the bake's cell size for that reason alone. Each bed now slides, one at a time
+in order along the cross-row axis, within the room its light band, the working margin, the array's
+feet and its neighbours leave it, to the position where the balance says it would go short the
+least (`slideBeds` in `layout.ts`), and stays where the light put it unless the cut is a tenth or
+more (`SLIDE_WORTH_FRACTION`): below that the balance's own inputs, monthly rain normals spread
+over days and a soil's available water read at the middle of its range, cannot tell two positions
+apart. The step is 0.1 m (`SLIDE_STEP_M`), a strip's own width in still air. The judge is the
+balance the term ranks on, at the mid capacity with no irrigation, on the FAO-56 reference crop
+since a bed being placed carries no planting, read on a rain ground built once per candidate. The
+same rain, the same balance, the same rule at every site, because the balance carries no harm from
+water and the strip is credited everywhere. Measured after: at Amherst the energy-first layout's
+term goes from 0.31 to 0.72, two of its beds moving 0.7 m onto a strip, and the food-first
+layout's from 0.26 to 0.57, three beds moving 0.5 to 0.9 m, and under the balanced preset the
+pick moves from the open-sky control back to energy-first, by 0.007. The food and electricity
+presets keep their picks at both sites. At Phoenix nothing moves, and the reason is the wind: its
+rain comes on easterly winds that blow along the east-west rows, so each row's strip stays under
+its low edge inside the shaded band, in the piece south of the row that the bed mix left empty,
+where no bed's room reaches, while Amherst's rain comes from the north and the south, across the
+rows, and the northerly share carries each strip into the bright gap south of its row. Choosing
+which piece of a shaded band takes its bed by the strip it holds is what Phoenix would need, and
+was not built. The search's order at 0.5 and 0.25 m cells agrees on the test plot again. Cost: an
+evening, one probe at two sites before and after, nine tests.
+
 Until 2026-09-17 the search baked at a coarser preview quality and carried a per-run margin,
 measured from how far the preview's light terms moved against the full bake, listing every
 scenario inside it as too close to call: on a 10 x 7 m plot that declared three of the five
@@ -1810,7 +1838,9 @@ panel names the row that drips on it and the side it drips along. Rotating a tra
 rain, Elamri's remedy, is a schedule no tracker here runs, and a note says so. The water term in
 the layout search was measured and built on 2026-09-19 (10c, amended): the balance's own deficit
 saving on the placed beds, unweighted by the site's water limitation, which cancelled it at both
-sites measured.
+sites measured. Since 2026-09-20 each bed the search places slides onto a strip within the room its
+light band leaves it, where the same balance says its plants would go short less (10c, amended
+again).
 
 **Cost.** An evening: the field and its memo, the split, the overlay channel, the bed switch,
 twelve citations and thirteen tests.

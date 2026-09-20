@@ -151,6 +151,15 @@ const extentAlongY = (footprint: Polygon2D): readonly [number, number] => {
   return [Math.min(...ys), Math.max(...ys)]
 }
 
+/** The fixture's rows run east-west, so the cross axis is Y: a footprint's own midpoint on it */
+const crossOf = (footprint: Polygon2D): number => {
+  const [lo, hi] = extentAlongY(footprint)
+  return (lo + hi) / 2
+}
+
+const meanCross = (footprints: readonly Polygon2D[]): number =>
+  footprints.reduce((sum, footprint) => sum + crossOf(footprint), 0) / footprints.length
+
 describe('beds are placed by the light, not by the geometry', () => {
   it('never lets one bed straddle the edge between a shaded band and a bright gap', () => {
     for (const bed of banded().beds) {
@@ -384,5 +393,139 @@ describe('the bed cap', () => {
     expect(evenFootprints(40, 30)).toHaveLength(bedCountFor(40, 30))
     expect(evenFootprints(40, 30, 4)).toHaveLength(4)
     expect(evenFootprints(40, 30, 0)).toHaveLength(1)
+  })
+})
+
+/**
+ * No real water balance runs here: the judge below is a plain function of the footprints it is
+ * handed, tuned so a move clears `SLIDE_WORTH_FRACTION` within this fixture's own half metre of
+ * room, since no real deficit stands behind it. Each bed here is cut from its own span (no two share a strip in
+ * this fixture), so the room a bed's neighbours could add or take is not exercised below; only
+ * `slideBeds`'s span bound, its per-bed judge calls and its ascending order are
+ */
+describe('a bed slides onto the rain the rows shed where it would go short less', () => {
+  const marginHolds = (bed: BedPlacement): void => {
+    const [lo, hi] = extentAlongY(bed.footprint)
+    expect(lo).toBeGreaterThanOrEqual(-DEPTH_M / 2 + PLOT_MARGIN_M - 1e-9)
+    expect(hi).toBeLessThanOrEqual(DEPTH_M / 2 - PLOT_MARGIN_M + 1e-9)
+  }
+
+  const postClearanceHolds = (lo: number, hi: number): void => {
+    for (const centre of rowCentresM(ARRAY)) {
+      const overlaps = lo < centre + POST_KEEP_CLEAR_M && hi > centre - POST_KEEP_CLEAR_M
+      expect(overlaps, `a footprint sits on the row at ${String(centre)} m`).toBe(false)
+    }
+  }
+
+  it('moves every bed with room and a real gain, leaves the rest, and keeps every placement rule', () => {
+    const control = banded()
+    const settled = banded({ shortfallMm: (footprints) => 100 - 100 * meanCross(footprints) })
+    expect(settled.beds.length).toBe(control.beds.length)
+    let sawAMove = false
+    for (const [index, bed] of settled.beds.entries()) {
+      const before = control.beds[index]
+      if (before === undefined) throw new Error('the two placements do not line up')
+      expect(bed.zone).toBe(before.zone)
+      if (bed.zone === 'bright-gap') {
+        // this fixture's bright beds each have half a metre of room and a gain past
+        // `SLIDE_WORTH_FRACTION`
+        expect(crossOf(bed.footprint)).toBeGreaterThan(crossOf(before.footprint))
+        sawAMove = true
+      } else {
+        // the shaded beds are packed exactly to their span's own width here: no room to give
+        expect(bed.footprint).toEqual(before.footprint)
+      }
+      marginHolds(bed)
+      postClearanceHolds(...extentAlongY(bed.footprint))
+    }
+    expect(sawAMove).toBe(true)
+    const spans = settled.beds.map((bed) => extentAlongY(bed.footprint)).sort((a, b) => a[0] - b[0])
+    for (let index = 1; index < spans.length; index += 1) {
+      const previous = spans[index - 1] as readonly [number, number]
+      const current = spans[index] as readonly [number, number]
+      expect(current[0] - previous[1]).toBeGreaterThanOrEqual(BED_GAP_M - 1e-9)
+    }
+    expect(settled.explanation).toMatch(
+      /Bed 1 moved \d+(\.\d)? m north within its strip, onto the rain the rows shed, and its water shortfall there drops by \d+ mm over a year/,
+    )
+    expect(settled.explanation).toMatch(
+      /Bed 4 moved \d+(\.\d)? m north within its strip, onto the rain the rows shed, and its water shortfall there drops by \d+ mm over a year/,
+    )
+  })
+
+  it('leaves every bed centred when the gain is under a tenth', () => {
+    const control = banded()
+    const barelyBetter = banded({ shortfallMm: (footprints) => 100 - 0.01 * meanCross(footprints) })
+    expect(barelyBetter.beds.map((bed) => bed.footprint)).toEqual(
+      control.beds.map((bed) => bed.footprint),
+    )
+    expect(barelyBetter.explanation).toBe(control.explanation)
+  })
+
+  it('never calls the judge, and places exactly as the control does, when the plot carries no array', () => {
+    let calls = 0
+    const countingJudge = (): number => {
+      calls += 1
+      return 0
+    }
+    const control = banded({ arrays: [] })
+    const withJudge = banded({ arrays: [], shortfallMm: countingJudge })
+    expect(calls).toBe(0)
+    expect(withJudge).toEqual(control)
+  })
+
+  it('places the same beds again given the same judge', () => {
+    const judge = (footprints: readonly Polygon2D[]): number => 100 - 100 * meanCross(footprints)
+    const shape = (layout: BedLayout): unknown =>
+      layout.beds.map((bed: BedPlacement) => [bed.bedId, bed.zone, bed.footprint])
+    expect(shape(banded({ shortfallMm: judge }))).toEqual(shape(banded({ shortfallMm: judge })))
+    expect(banded({ shortfallMm: judge }).explanation).toBe(
+      banded({ shortfallMm: judge }).explanation,
+    )
+  })
+
+  it('asks the judge about one bed at a time, each starting at its centred position, and never past its own span', () => {
+    const control = banded()
+    const calls: (readonly Polygon2D[])[] = []
+    const recordingJudge = (footprints: readonly Polygon2D[]): number => {
+      calls.push(footprints)
+      return 100 - 100 * meanCross(footprints)
+    }
+    banded({ shortfallMm: recordingJudge })
+    expect(calls.length).toBeGreaterThan(0)
+
+    // which control bed a probed footprint is nearest to: the beds are far enough apart, and a
+    // bed's own room small enough, that a probe is never ambiguous between two of them
+    const nearestControlIndex = (footprint: Polygon2D): number =>
+      control.beds.reduce(
+        (bestIndex, bed, index) =>
+          Math.abs(crossOf(bed.footprint) - crossOf(footprint)) <
+          Math.abs(
+            crossOf(control.beds[bestIndex]?.footprint ?? bed.footprint) - crossOf(footprint),
+          )
+            ? index
+            : bestIndex,
+        0,
+      )
+
+    let currentBed = -1
+    for (const footprints of calls) {
+      expect(footprints.length).toBe(1)
+      const footprint = footprints[0]
+      if (footprint === undefined) throw new Error('the judge was asked about an empty set')
+      const bedIndex = nearestControlIndex(footprint)
+      if (bedIndex !== currentBed) {
+        const reference = control.beds[bedIndex]
+        if (reference === undefined) throw new Error('the control placed no such bed')
+        expect(footprint, 'the first call for a bed was not its centred position').toEqual(
+          reference.footprint,
+        )
+        currentBed = bedIndex
+      }
+      const [lo, hi] = extentAlongY(footprint)
+      expect(lo).toBeGreaterThanOrEqual(-DEPTH_M / 2 + PLOT_MARGIN_M - 1e-9)
+      expect(hi).toBeLessThanOrEqual(DEPTH_M / 2 - PLOT_MARGIN_M + 1e-9)
+      postClearanceHolds(lo, hi)
+    }
   })
 })

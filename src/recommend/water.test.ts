@@ -9,11 +9,18 @@ import type { Planting } from '../types/garden'
 import type { BedId, CropId, PlantingId } from '../types/ids'
 import type { Site } from '../types/site'
 import type { DayOfYear, Fraction } from '../types/units'
+import type { BedRain } from '../types/water'
 import { drynessOf, droughtPenaltyFor } from './stages/soil-water'
 import type { SeasonLight } from '../types/light'
 import { shadeBenefitBonus } from './stages/light-gate'
 import { bedFixture, bedLightFixture, plotFixture, siteFixture, tmyFixture } from './testkit'
-import { waterBalances } from './water'
+import {
+  bedShortfallMm,
+  bedWaterBalance,
+  waterBalanceShared,
+  waterBalances,
+  type WaterBalanceShared,
+} from './water'
 
 // A south-facing fixed row, one row deep, at the tracker's default 25 degree tilt: the low edge
 // (the drip line) sits this far south of the row's own centreline
@@ -262,5 +269,35 @@ describe('per-bed water balance', () => {
     expect(balance.notes.some((note) => note.includes('first planting'))).toBe(true)
     expect(balance.openSky.cropEtMm).toBeGreaterThan(0)
     expect(balance.openSky.cropEtMm).toBeLessThan(balance.openSkyEt0Mm * 2)
+  })
+})
+
+describe('bedShortfallMm: the deficit alone, for the search to slide beds against', () => {
+  it('matches bedWaterBalance under panels, whether the rain is passed or looked up', () => {
+    const bed = bedFixture('bed-a')
+    const light = bedLightFixture('bed-a', 0.3)
+    const base = waterBalanceShared({
+      site: siteFixture(),
+      weather: tmyFixture(),
+      plot: plotFixture([bed]),
+      bedLight: [light],
+      catalog: [],
+    })
+    // a nonzero shelter and a nonzero drip multiple, so the shortfall exercises panelRainSplit's
+    // whole shading and drip path
+    const rain: BedRain = {
+      bedId: bed.id,
+      shelteredFraction: 0.4 as Fraction,
+      dripMultiple: 1.5,
+      crossings: [],
+    }
+    const shared: WaterBalanceShared = { ...base, rain: { ...base.rain, beds: [rain] } }
+
+    const looked = bedWaterBalance(shared, bed, light)
+    const passed = bedWaterBalance(shared, bed, light, rain)
+    expect(passed).toEqual(looked)
+
+    const shortfall = bedShortfallMm(shared, bed, light, rain)
+    expect(shortfall).toBeCloseTo(passed.underPanels.deficitMm, 9)
   })
 })
