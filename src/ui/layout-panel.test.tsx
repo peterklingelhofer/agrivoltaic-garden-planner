@@ -1,5 +1,5 @@
 import { act } from 'react'
-import { beforeEach, describe, expect, it } from 'bun:test'
+import { afterEach, beforeEach, describe, expect, it } from 'bun:test'
 import { vi } from '../../test/vi'
 import { ready } from '../state/slices'
 import { getAppState, resetAppStore, useAppStore } from '../state/store'
@@ -15,6 +15,14 @@ import { mount, type Harness } from './testkit'
 beforeEach(() => {
   localStorage.clear()
   resetAppStore()
+})
+
+// a reset puts the data back and leaves the actions as they are, so the one test below that
+// stands a stub in for the search has to put the real action back itself, or every store test
+// that runs after it in the same process searches with the stub
+const { suggestDesigns } = getAppState()
+afterEach(() => {
+  useAppStore.setState({ suggestDesigns })
 })
 
 const showResults = async (set = scenarioSetFixture()): Promise<Harness> => {
