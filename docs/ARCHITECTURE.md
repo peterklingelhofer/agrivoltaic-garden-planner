@@ -464,7 +464,7 @@ that 550 ms, plus the surrounding one-off costs:
 | Perez transposition, 8760 h | `src/sim/transposition.ts` | 3 ms | ~40 flops per timestep |
 | Sky patch build + cumulative weights + sun binning | `src/sim/skydome.ts` | 25 ms | 577 patches, dedupe to 600-900 directions on a 2 deg grid |
 | Panel polygon generation | `src/sim/geometry.ts` | 4 ms | per snapshot, not per direction |
-| **GPU accumulation** | `src/sim/gpu/webgl2.ts` | **450 ms** | ~1300 passes, 8 ms/frame budget, 40 passes/frame, adaptive on an EMA of frame time |
+| **GPU accumulation** | `src/sim/gpu/webgl2.ts` | **450 ms** | ~1300 passes, 8 ms/frame budget, 40 passes/frame, adaptive on an EMA of submission time, one draw capped by `MAX_RAY_TESTS_PER_DRAW` |
 | Readback + `DliRaster` assembly | `src/sim/raster.ts` | 25 ms | one `readPixels` for the whole bake, ~1 MB at 512^2 |
 | Per-bed aggregation | `src/sim/aggregate.ts` | 15 ms | polygon rasterisation is cached per bed geometry |
 | Compliance | `src/sim/compliance.ts` | 5 ms | one pass over the growing-season raster |
@@ -481,11 +481,25 @@ Separate budgets, not part of the 550 ms:
 | Site resolution | network-bound | show partial `Site` as fields land, never block the canvas |
 | Crop catalog | 600 KB gzipped | columnar JSON, lazy-loaded after first paint |
 
-Hard invariant: the UI never drops below 50 fps during a bake. `AccumulationRequest.passesPerFrame`
-is a starting hint, not a promise, the backend must reduce it when the frame-time EMA exceeds
-`frameBudgetMs`. A draw is also capped at `MAX_RAY_TESTS_PER_DRAW` cell-direction-panel tests
-(`src/sim/gpu/webgl2.ts`): the EMA times submission, which returns before the GPU starts, and the
-GPU's watchdog judges command buffers, so the cap is what keeps one draw short whatever the grid.
+What the frame rate does during a bake, measured (headless Chromium on Metal, an M-series GPU, a
+120 Hz display, the starting plot, two runs, `requestAnimationFrame` gaps on the main thread): the
+scene keeps the display's cadence through the GPU work, a median gap of 8.3 ms and nothing past
+17 ms while the draws run, for the first light bake and for the layout search's five bakes alike.
+Two things hold that. The bake runs in a Worker on an `OffscreenCanvas`, so its JavaScript never
+holds the thread that draws, and a draw is capped at `MAX_RAY_TESTS_PER_DRAW` cell-direction-panel
+tests (`src/sim/gpu/webgl2.ts`), about 20 ms of GPU, so the scene's own pass is never queued
+behind a long one. `AccumulationRequest.passesPerFrame` is a starting hint: the EMA in
+`accumulate` times submission, which returns before the GPU starts, so it paces how much is queued
+per yielded frame and says nothing about GPU time, and the GPU's watchdog judges command buffers,
+so the cap is what keeps one draw short whatever the grid.
+
+The frames that do stretch are on the main thread, where a result lands: one stall of 310 to
+325 ms at the end of a light bake, the task in which the raster reaches the store and everything
+that reads it recomputes, two hitches of 33 and 80 ms in the first 150 ms of the first bake as the
+site and its weather land, and 40 to 90 ms once per candidate during the layout search as each one
+is evaluated, plus one of about 85 ms at the search's start (the solar year and the tilt sweep
+`design.ts` runs before the first bake). Those are the figures to hold the budget table above
+against.
 
 WebGPU (`src/sim/gpu/webgpu.ts`) reduces the accumulation term to ~30 ms where available. It is a
 detected optimisation via `detectBackendKind()`, never a requirement. WebGL2 shadow maps are the
