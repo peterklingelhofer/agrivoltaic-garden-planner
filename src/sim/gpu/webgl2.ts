@@ -396,18 +396,32 @@ const leafOnMask = (leafOnMonths: readonly boolean[] | null): number => {
 export const MAX_GPU_WINDOWS = 1
 
 /**
+ * Batches allowed submitted and unsettled at once, each sized to `frameBudgetMs` of GPU time.
+ *
+ * The scene's frames share the GPU with the bake, and a frame waits behind whatever bake work is
+ * committed ahead of it, so this depth is the most the scene can be asked to wait: four batches of
+ * 8 ms. Measured on an M-series GPU with a 120 Hz display: at three or four the scene keeps the
+ * display's cadence through the bake, at six a fifth of the layout search's frames stretch past 20
+ * ms, at twelve half do, and at thirty-two, or with the whole bake queued at once, the moment a
+ * bake lands is a 180 to 330 ms freeze. The bake takes longer than it would with the whole of it
+ * queued, about a tenth for the starting plot (0.87 s against 0.79 s) and 17 to 24% for the layout
+ * search's candidates, and that extra time is the GPU time the scene's frames get while it runs
+ */
+const IN_FLIGHT = 4
+
+/**
  * How much of the ray casting one draw may carry, in cell-direction-panel tests.
  *
  * A draw is one command buffer's worth of work, and the GPU's watchdog judges command buffers:
  * a draw that runs long under contention is killed, and every other context on the GPU loses
  * its work with it (the functional suite at eight workers saw one "Caused GPU Hang Error" and
  * seven "victim of GPU error/recovery" in the same second, and the pages never came back).
- * `chunkMs` in `accumulate` measures submission, which returns before the GPU starts, so the
- * chunk doubled without bound: measured on a 16 x 11 m plot, a bake went out as draws of 40, 40,
- * 80, 160, 320, 640 and 1280 directions, the last one 875 million tests, and the example garden's
- * 121 thousand cells and 40 panels would put six billion in one draw. At this cap a draw is about
- * 20 ms on an M-series GPU (a 1.9 billion-test bake ran in 300 ms), whatever the grid and the
- * panel count
+ * `accumulate` fences every batch of draws, reads the GPU cost per direction off its fence, and
+ * sizes the next batch to `frameBudgetMs` of it, in whole draws. At most `IN_FLIGHT` batches
+ * are ever submitted ahead of the fences that settle them, and the readback waits for the last
+ * fence to signal before it copies. A batch can span several draws, and this cap is what keeps
+ * each of them short whatever the batch: at this cap a draw is about 20 ms on an M-series GPU
+ * (a 1.9 billion-test bake ran in 300 ms), whatever the grid and the panel count
  */
 export const MAX_RAY_TESTS_PER_DRAW = 1 << 27
 
@@ -491,17 +505,20 @@ const buildDirTextureData = (
   return { width, data }
 }
 
-const yieldFrame = (): Promise<void> =>
+/**
+ * A short task boundary: a fence's status is only refreshed between tasks, so the loop polls its
+ * fences across these. A frame-long yield would hide any GPU time shorter than a frame and the
+ * batch could never be sized to it, and a message-channel yield spins a core at two hundred
+ * thousand polls a second. A timer the platform may stretch to 4 ms is finer than the 8 ms batch
+ */
+const yieldTask = (): Promise<void> =>
   new Promise((resolve) => {
-    if (typeof requestAnimationFrame === 'function') requestAnimationFrame(() => resolve())
-    else setTimeout(resolve, 0)
+    setTimeout(resolve, 1)
   })
 
-const adaptChunk = (chunk: number, emaMs: number, budgetMs: number): number => {
-  if (emaMs > budgetMs * 1.25) return Math.max(1, Math.floor(chunk / 2))
-  if (emaMs < budgetMs * 0.5) return chunk * 2
-  return chunk
-}
+// a posed direction carries its own panel layout, so it's a draw of its own inside the batch
+export const drawSpan = (posed: boolean, remaining: number, maxDraw: number): number =>
+  posed ? 1 : Math.max(1, Math.min(maxDraw, remaining))
 
 const readAttachment = (
   gl: WebGL2RenderingContext,
@@ -593,49 +610,88 @@ export const createWebgl2Backend = (canvas: OffscreenCanvas): SkyMatrixBackend =
       const directions = buildDirections(request)
       const passesTotal = request.sky.sunDirections.length + request.sky.patches.length
       const total = directions.length
-      const maxChunk = Math.max(
+      const maxDraw = Math.max(
         1,
         Math.floor(MAX_RAY_TESTS_PER_DRAW / (cells * Math.max(1, panels.length))),
       )
-      let chunkSize = Math.max(
+      // directions in the first batch, before a fence has measured anything
+      const startingDirs = Math.max(
         1,
-        Math.min(total || 1, Math.floor(request.passesPerFrame) || 40, maxChunk),
+        Math.min(total || 1, Math.floor(request.passesPerFrame) || 40),
       )
-      let emaMs = request.frameBudgetMs
+      // GPU milliseconds per direction, an EMA of what the fences measure, 0 until the first
+      let msPerDir = 0
       let offset = 0
-      let passesDone = 0
-      let frameMs = 0
+      let completed = 0
+      let lastSignaledAt = 0
+      interface Batch {
+        readonly sync: WebGLSync | null
+        readonly submittedAt: number
+        readonly count: number
+      }
+      // submitted and not yet settled, oldest first
+      const queue: Batch[] = []
+      const signaled = (batch: Batch): boolean =>
+        batch.sync === null || gl.getSyncParameter(batch.sync, gl.SYNC_STATUS) === gl.SIGNALED
+
+      // waits for the oldest batch by yielding a task at a time: a blocking wait would hold the
+      // GPU process the way a readback of unfinished work does. Every batch found finished at that
+      // moment settles with it, and the time since the last observation is theirs together, which
+      // is what makes the cost per direction readable when two fences land in one look
+      const settleOldest = async (): Promise<void> => {
+        const oldest = queue[0]
+        if (oldest === undefined) return
+        while (!signaled(oldest)) await yieldTask()
+        const group: Batch[] = []
+        while (queue[0] !== undefined && signaled(queue[0])) {
+          const batch = queue.shift()!
+          if (batch.sync !== null) gl.deleteSync(batch.sync)
+          group.push(batch)
+        }
+        const now = performance.now()
+        const first = group[0]!
+        // the group couldn't start before its first batch was submitted, nor before the batch
+        // ahead of it was seen finished
+        const spanMs = now - Math.max(first.submittedAt, lastSignaledAt)
+        const count = group.reduce((sum, batch) => sum + batch.count, 0)
+        lastSignaledAt = now
+        completed += count
+        const sample = Math.max(spanMs, 0.01) / count
+        msPerDir = msPerDir === 0 ? sample : msPerDir * 0.7 + sample * 0.3
+        onProgress({ passesDone: completed, passesTotal, elapsedMs: now - started })
+      }
 
       while (offset < total) {
-        const posed = directions[offset]?.panels ?? null
-        // a per-direction pose can't share a draw with any other pose, so it costs draw calls,
-        // never extra ray casts; poses only ever occur in the beam prefix
-        const n = posed === null ? Math.min(chunkSize, total - offset) : 1
-        bindPanels(posed ?? panels)
-        const chunkDirs = directions.slice(offset, offset + n)
-        const dirData = buildDirTextureData(chunkDirs)
-        uploadTexture(gl, 1, session.dirTexture, dirData.width, 5, dirData.data)
-        gl.uniform1i(session.uDirs, 1)
-        gl.uniform1i(session.uDirCount, n)
-
-        const chunkStart = performance.now()
-        gl.drawArrays(gl.TRIANGLES, 0, 3)
-        gl.flush()
-        const chunkMs = performance.now() - chunkStart
-
-        offset += n
-        passesDone += n
-        emaMs = emaMs * 0.7 + chunkMs * 0.3
-        chunkSize = Math.min(maxChunk, adaptChunk(chunkSize, emaMs, request.frameBudgetMs))
-        // yield on the budget rather than per draw, so a per-pose chunk of one direction doesn't
-        // cost a whole frame each
-        frameMs += chunkMs
-        if (frameMs >= request.frameBudgetMs || offset >= total) {
-          frameMs = 0
-          onProgress({ passesDone, passesTotal, elapsedMs: performance.now() - started })
-          await yieldFrame()
+        const submittedAt = performance.now()
+        // a batch is whole draws: a posed direction is a draw of its own and an unposed run
+        // fills a draw to the cap, so every draw but the bake's last goes out at the size the
+        // cap was set for
+        const unit = directions[offset]?.panels === null ? maxDraw : 1
+        const draws =
+          msPerDir === 0
+            ? Math.max(1, Math.round(startingDirs / unit))
+            : Math.max(1, Math.round(request.frameBudgetMs / (msPerDir * unit)))
+        const end = Math.min(total, offset + draws * unit)
+        const count = end - offset
+        while (offset < end) {
+          const posed = directions[offset]?.panels ?? null
+          const n = drawSpan(posed !== null, end - offset, maxDraw)
+          bindPanels(posed ?? panels)
+          const drawDirs = directions.slice(offset, offset + n)
+          const dirData = buildDirTextureData(drawDirs)
+          uploadTexture(gl, 1, session.dirTexture, dirData.width, 5, dirData.data)
+          gl.uniform1i(session.uDirs, 1)
+          gl.uniform1i(session.uDirCount, n)
+          gl.drawArrays(gl.TRIANGLES, 0, 3)
+          offset += n
         }
+        const sync = gl.fenceSync(gl.SYNC_GPU_COMMANDS_COMPLETE, 0)
+        gl.flush()
+        queue.push({ sync, submittedAt, count })
+        if (queue.length >= IN_FLIGHT) await settleOldest()
       }
+      while (queue.length > 0) await settleOldest()
+      // every fence has now signaled, so the readback below only copies finished work
 
       const beamWhPerM2 = new Float32Array(cells)
       const diffuseWhPerM2 = new Float32Array(cells)
