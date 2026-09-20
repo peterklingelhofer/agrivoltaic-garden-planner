@@ -24,7 +24,7 @@ import {
 } from './ambientOcclusion'
 import { OVERLAY_LAYER } from './layers'
 import type { RenderQuality } from './quality'
-import { consumeStructuralRedraw } from './redraw'
+import { consumeStructuralRedraw, shadowContentOf } from './redraw'
 
 export interface RenderPipelineProps {
   readonly quality: RenderQuality
@@ -93,6 +93,12 @@ export const RenderPipeline = ({
   const drawnFrom = useRef(new Matrix4())
   const drawnThrough = useRef(new Matrix4())
   /**
+   * What the scene held for shadows on the last frame this pass actually drew, asked the same way
+   * `drawnFrom` and `drawnThrough` ask about the camera. See the fourth paragraph of the note
+   * beside `structural` below for the commit this catches
+   */
+  const drawnContent = useRef(0)
+  /**
    * The pass whose map the materials are reading. A store write asks for a frame and marks it
    * structural in the same call, while the React commit that hands this callback a new pass
    * arrives on its own schedule, and when the frame beats the commit (a busy main thread is
@@ -132,7 +138,7 @@ export const RenderPipeline = ({
      * Whether this frame owes shadows and occlusion. A cosmetic frame is foliage moving and owes
      * neither, which is what makes wind affordable at all.
      *
-     * Two sources, and the second isn't redundant. `requestStructuralRedraw` is a one-shot
+     * Three sources, each catching a case the others miss. `requestStructuralRedraw` is a one-shot
      * boolean that `OrbitControls` sets on every change event, which assumed one change event
      * produces one rendered frame. It doesn't: under `frameloop="demand"` an `invalidate()` can
      * queue more than one frame, so during a drag some frames arrive with the flag already spent
@@ -142,14 +148,31 @@ export const RenderPipeline = ({
      *
      * The note beside the occlusion block already stated the rule this broke: the estimate is
      * screen-space, so it's wrong the moment the camera moves and has to be redone then. Asking
-     * the camera where it is can't get out of step with the frames the way a flag can
+     * the camera where it is can't get out of step with the frames the way a flag can.
+     *
+     * The cascades have the same ordering problem the `integrated` ref above documents. A store
+     * write raises the flag and asks for a frame in one call, but the commit that hands this
+     * scene a new mesh (a house added on the ground step, a bed or tree changed, an array's rows
+     * re-laid, the sun rig's light direction) arrives on its own schedule through React. When the
+     * frame beats the commit the flag is spent on the old scene, and the commit lands after: r3f's
+     * `invalidateInstance` then asks for one more frame that has the mesh, no flag and no camera
+     * movement, so it draws as cosmetic. The house stands under cascades rendered without it,
+     * healed only by the next store write. `held` and `changed` below ask the scene itself the
+     * same question the camera is asked, so this frame gets caught too. Priority-0 callbacks run
+     * before this priority-1 one, among them the sun rig's `csm.update()`, which moves the cascade
+     * lights from the camera and the sun every frame, so what gets hashed here is already this
+     * frame's state
      */
+    scene.updateMatrixWorld()
+    const held = shadowContentOf(scene)
+    const changed = held !== drawnContent.current
+    drawnContent.current = held
     const moved =
       !drawnFrom.current.equals(camera.matrixWorld) ||
       !drawnThrough.current.equals(camera.projectionMatrix)
     drawnFrom.current.copy(camera.matrixWorld)
     drawnThrough.current.copy(camera.projectionMatrix)
-    const structural = consumeStructuralRedraw() || moved
+    const structural = consumeStructuralRedraw() || moved || changed
     // eslint-disable-next-line react-hooks/immutability -- same renderer, same reason
     if (structural) gl.shadowMap.needsUpdate = true
 
