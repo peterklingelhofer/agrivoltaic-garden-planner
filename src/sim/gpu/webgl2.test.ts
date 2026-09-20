@@ -3,7 +3,7 @@ import type { AccumulationRequest } from '../backend'
 import { createCpuReferenceBackend } from '../cpu'
 import { houseQuads, treeQuads } from '../obstruction'
 import { sunUnitVector } from '../solar'
-import { createWebgl2Backend, isWebgl2Available } from './webgl2'
+import { createWebgl2Backend, drawSpan, isWebgl2Available } from './webgl2'
 import type { Extent2D, GridSpec, Vec3M } from '../../types/geo'
 import type { Obstruction } from '../../types/garden'
 import type { PanelPolygon } from '../../types/pv'
@@ -143,6 +143,14 @@ const REQUEST: AccumulationRequest = {
   passesPerFrame: 4,
   frameBudgetMs: 8,
 }
+
+describe('drawSpan', () => {
+  it('draws a posed direction alone, an unposed run up to maxDraw, and never less than one', () => {
+    expect(drawSpan(true, 500, 10)).toBe(1)
+    expect(drawSpan(false, 500, 10)).toBe(10)
+    expect(drawSpan(false, 0, 10)).toBe(1)
+  })
+})
 
 describe('isWebgl2Available', () => {
   it('returns false without throwing outside a browser, where there is no canvas to ask', () => {

@@ -484,22 +484,31 @@ Separate budgets, not part of the 550 ms:
 What the frame rate does during a bake, measured (headless Chromium on Metal, an M-series GPU, a
 120 Hz display, the starting plot, two runs, `requestAnimationFrame` gaps on the main thread): the
 scene keeps the display's cadence through the GPU work, a median gap of 8.3 ms and nothing past
-17 ms while the draws run, for the first light bake and for the layout search's five bakes alike.
-Two things hold that. The bake runs in a Worker on an `OffscreenCanvas`, so its JavaScript never
-holds the thread that draws, and a draw is capped at `MAX_RAY_TESTS_PER_DRAW` cell-direction-panel
-tests (`src/sim/gpu/webgl2.ts`), about 20 ms of GPU, so the scene's own pass is never queued
-behind a long one. `AccumulationRequest.passesPerFrame` is a starting hint: the EMA in
-`accumulate` times submission, which returns before the GPU starts, so it paces how much is queued
-per yielded frame and says nothing about GPU time, and the GPU's watchdog judges command buffers,
-so the cap is what keeps one draw short whatever the grid.
+17 ms while the draws run, for the first light bake and for the layout search's five bakes alike,
+and the moment a bake lands is one more 8.3 ms frame. Three things hold that. The bake runs in a
+Worker on an `OffscreenCanvas`, so its JavaScript never holds the thread that draws. A draw is
+capped at `MAX_RAY_TESTS_PER_DRAW` cell-direction-panel tests (`src/sim/gpu/webgl2.ts`), about
+20 ms of GPU, because the GPU's watchdog judges command buffers. And the loop paces itself on the
+GPU's own progress: a fence sync after every batch of draws, polled between tasks, at most
+`IN_FLIGHT` batches submitted ahead of the fences that settle them, each batch sized in whole
+draws to `frameBudgetMs` of GPU time from the cost per direction the fences measure, and the
+readback issued only once the last fence has signalled. `AccumulationRequest.passesPerFrame` is
+the first batch's size, before anything has been measured.
 
-The frames that do stretch are on the main thread, where a result lands: one stall of 310 to
-325 ms at the end of a light bake, the task in which the raster reaches the store and everything
-that reads it recomputes, two hitches of 33 and 80 ms in the first 150 ms of the first bake as the
-site and its weather land, and 40 to 90 ms once per candidate during the layout search as each one
-is evaluated, plus one of about 85 ms at the search's start (the solar year and the tilt sweep
-`design.ts` runs before the first bake). Those are the figures to hold the budget table above
-against.
+The `IN_FLIGHT` depth is the trade. The scene's frames share the GPU with the bake and a frame waits
+behind whatever bake work is committed ahead of it, so four batches of 8 ms is the most a frame is
+asked to wait: at six, a fifth of the layout search's frames stretch past 20 ms, at twelve half do,
+and with the whole bake queued at once the landing is a 330 ms freeze with the page's main thread
+idle throughout, the worker's `readPixels` waiting for the backlog inside the GPU process and the
+compositor waiting behind it. A bake takes about a tenth longer than it would with the whole of it
+queued, 0.87 s against 0.79 s for the starting plot, and that tenth is the GPU time the scene's
+frames get while it runs.
+
+The frames that do stretch are on the main thread, where a result lands: two hitches of 25 and
+33 ms in the first 150 ms of the first bake as the site and its weather land, and 40 to 100 ms
+once per candidate during the layout search as each one is evaluated, plus one of about 85 ms at
+the search's start (the solar year and the tilt sweep `design.ts` runs before the first bake).
+Those are the figures to hold the budget table above against.
 
 WebGPU (`src/sim/gpu/webgpu.ts`) reduces the accumulation term to ~30 ms where available. It is a
 detected optimisation via `detectBackendKind()`, never a requirement. WebGL2 shadow maps are the
