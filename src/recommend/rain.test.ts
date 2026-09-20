@@ -16,6 +16,8 @@ import {
   fallSpeedMS,
   rainClassFallSpeedsMS,
   rainField,
+  rainGround,
+  rainOnBed,
   rainSlopes,
   rainWind,
   windAtHeightMS,
@@ -899,6 +901,27 @@ describe('rainField over the default plot', () => {
       expect(Number.isFinite(value)).toBe(true)
       expect(value).toBeGreaterThanOrEqual(0)
     }
+  })
+
+  it('reads rainOnBed off a shared rainGround the same as rainField, for any footprint', () => {
+    const plot = makePlot()
+    const wind = symmetric(3)
+    const ground = rainGround(plot, wind)
+    const field = rainField(plot, wind)
+
+    for (const bed of plot.beds) {
+      const fromField = field.beds.find((entry) => entry.bedId === bed.id)
+      expect(fromField).toBeDefined()
+      expect(rainOnBed(ground, plot.arrays, bed)).toEqual(fromField)
+    }
+
+    // a footprint the plot never held, read off the same ground with no second pass over the panels
+    const outside = rainOnBed(ground, plot.arrays, rectBed('outside-the-plot', 0, 6, 2, 2))
+    expect(Number.isFinite(outside.shelteredFraction)).toBe(true)
+    expect(outside.shelteredFraction).toBeGreaterThanOrEqual(0)
+    expect(outside.shelteredFraction).toBeLessThanOrEqual(1)
+    expect(Number.isFinite(outside.dripMultiple)).toBe(true)
+    expect(outside.dripMultiple).toBeGreaterThanOrEqual(0)
   })
 
   /**

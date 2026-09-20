@@ -70,6 +70,19 @@ export const POST_KEEP_CLEAR_M = 0.25
  * place against, and an even layout is the honest answer rather than an invented band
  */
 export const BAND_SEPARATION_MIN = 0.12
+/**
+ * How far a bed tries at each step off center when a judge is sliding it onto the rain the rows
+ * shed. A drip strip is 0.2 m wide in still air (`STILL_AIR_STRIP_M`) and wider under wind, so a
+ * step of half that can't pass over one
+ */
+export const SLIDE_STEP_M = 0.1
+/**
+ * How much a bed's own shortfall has to fall before a move is worth taking. Below a tenth the
+ * balance's own inputs, monthly rain normals spread over days and a soil's available water read
+ * at the middle of its range, can't tell two positions apart, and a bed left where the light
+ * put it is easier to explain
+ */
+export const SLIDE_WORTH_FRACTION = 0.1
 
 export const layoutNeedsRoom = (widthM: number, depthM: number): string =>
   `A bed has to be at least ${MIN_BED_DEPTH_M.toFixed(1)} m across and ${MIN_BED_LENGTH_M.toFixed(1)} m long, with a ${PLOT_MARGIN_M.toFixed(1)} m working margin around the plot, and ${widthM.toFixed(1)} by ${depthM.toFixed(1)} m leaves no room for one. Nothing was placed`
@@ -87,6 +100,14 @@ export interface LayoutRequest {
   readonly exposure?: SiteExposure
   /** Drawn houses a bed may never be placed inside. A tree is never policed (Decision Record 26) */
   readonly houses?: readonly House[]
+  /**
+   * How much water the beds standing on these footprints would go short of over a year, in
+   * millimeters per square meter averaged over them, from the water balance on the rain the rows
+   * shed onto them and keep off them. With it, each bed slides within the room it has to where
+   * its own plants would go short the least (see `slideBeds`). Without it, every bed sits
+   * centered in its strip
+   */
+  readonly shortfallMm?: (footprints: readonly Polygon2D[]) => number
 }
 
 /* ------------------------------- the cross-row axis ------------------------------ */
@@ -313,10 +334,12 @@ interface Slot {
   readonly kind: LightZoneKind
   readonly centerM: number
   readonly depthM: number
+  /** Which call to `slotsIn` cut this slot, so a bed that slides finds the room its own span leaves it */
+  readonly run: number
 }
 
 /** Beds fill a strip from the middle out, each with a working gap to the next */
-const slotsIn = (kind: LightZoneKind, [loM, hiM]: Span): readonly Slot[] => {
+const slotsIn = (kind: LightZoneKind, [loM, hiM]: Span, run: number): readonly Slot[] => {
   const lengthM = hiM - loM
   if (lengthM < MIN_BED_DEPTH_M) return []
   const depthM = Math.min(BED_DEPTH_M, lengthM)
@@ -327,6 +350,7 @@ const slotsIn = (kind: LightZoneKind, [loM, hiM]: Span): readonly Slot[] => {
     kind,
     centerM: firstM + index * (depthM + BED_GAP_M),
     depthM,
+    run,
   }))
 }
 
@@ -350,6 +374,112 @@ const interleave = (slots: readonly Slot[], limit: number): readonly Slot[] => {
     if (taken.length === before) break
   }
   return [...taken].sort((a, b) => a.centerM - b.centerM)
+}
+
+/* ------------------------------------ the slide ------------------------------------ */
+
+/** One bed's move, kept alongside the slid slots so the explanation can name it afterward */
+interface BedMove {
+  readonly bedNumber: number
+  readonly deltaM: number
+  readonly reducedMm: number
+}
+
+interface Slid {
+  readonly slots: readonly Slot[]
+  readonly moves: readonly BedMove[]
+}
+
+/**
+ * Slides each bed on its own, one at a time in ascending order along the axis, to wherever the
+ * judge reports the least shortfall for that bed alone. A bed judged as one piece with its
+ * whole strip leaves gains on the table: the bed nearest a row's low edge is the one with
+ * something to gain, and it gains alone, so it moves alone.
+ *
+ * A bed's room is bounded by its own span's ends (the working margin, the half-gap off a
+ * neighboring band and the post keep-clear cuts already carried by that span) and by its
+ * neighbors: the bed before it at the position that bed already settled on, plus the working
+ * gap, and the bed after it at its still-centered position, minus the working gap. Ascending
+ * order means a later bed can use room an earlier one vacated, and never the other way round.
+ * Two beds cut from the same span start with no room against each other at all, exactly the
+ * gap `slotsIn` packed them at, until the earlier one moves and opens some.
+ *
+ * A bed with less than a step of room on both sides together is left where it was, and so is a
+ * bed whose best offset doesn't beat staying centered by at least `SLIDE_WORTH_FRACTION`
+ */
+const slideBeds = (
+  slots: readonly Slot[],
+  spans: readonly Span[],
+  axis: Axis,
+  lengthM: number,
+  shortfallMm: (footprints: readonly Polygon2D[]) => number,
+): Slid => {
+  const ordered = [...slots].sort((a, b) => a.centerM - b.centerM)
+  // the position each bed has settled on so far: its own center until this pass moves it
+  const settledM = ordered.map((slot) => slot.centerM)
+  const moves: BedMove[] = []
+
+  for (const [index, slot] of ordered.entries()) {
+    const span = spans[slot.run]
+    if (span === undefined) continue
+    const previous = index > 0 ? ordered[index - 1] : undefined
+    const next = index < ordered.length - 1 ? ordered[index + 1] : undefined
+    const loEdgeBoundM =
+      previous === undefined
+        ? span[0]
+        : Math.max(span[0], (settledM[index - 1] ?? 0) + previous.depthM / 2 + BED_GAP_M)
+    const hiEdgeBoundM =
+      next === undefined ? span[1] : Math.min(span[1], next.centerM - next.depthM / 2 - BED_GAP_M)
+
+    const roomLoM = slot.centerM - slot.depthM / 2 - loEdgeBoundM
+    const roomHiM = hiEdgeBoundM - (slot.centerM + slot.depthM / 2)
+    // the same float slack as the step count below, so a room the arithmetic meant to land
+    // exactly on a step is never skipped by a rounding error in its last digit
+    if (roomLoM + roomHiM < SLIDE_STEP_M - 1e-9) continue
+
+    // a tiny slack against float rounding in the span's own arithmetic, far smaller than a step
+    const stepsHi = Math.floor(roomHiM / SLIDE_STEP_M + 1e-9)
+    const stepsLo = Math.floor(roomLoM / SLIDE_STEP_M + 1e-9)
+    const deltasM = [0]
+    for (let step = 1; step <= Math.max(stepsHi, stepsLo); step += 1) {
+      if (step <= stepsHi) deltasM.push(step * SLIDE_STEP_M)
+      if (step <= stepsLo) deltasM.push(-step * SLIDE_STEP_M)
+    }
+
+    const shortfallAt = (deltaM: number): number =>
+      shortfallMm([footprintAt(axis, slot.centerM + deltaM, slot.depthM, lengthM)])
+
+    let centeredMm = 0
+    let bestDeltaM = 0
+    let bestMm = Infinity
+    for (const [order, deltaM] of deltasM.entries()) {
+      const mm = shortfallAt(deltaM)
+      if (order === 0) centeredMm = mm
+      const better =
+        mm < bestMm ||
+        (mm === bestMm &&
+          (Math.abs(deltaM) < Math.abs(bestDeltaM) ||
+            (Math.abs(deltaM) === Math.abs(bestDeltaM) && deltaM < bestDeltaM)))
+      if (better) {
+        bestMm = mm
+        bestDeltaM = deltaM
+      }
+    }
+
+    if (bestDeltaM !== 0 && bestMm <= (1 - SLIDE_WORTH_FRACTION) * centeredMm) {
+      settledM[index] = slot.centerM + bestDeltaM
+      moves.push({ bedNumber: index + 1, deltaM: bestDeltaM, reducedMm: centeredMm - bestMm })
+    }
+  }
+
+  return {
+    slots: ordered.map((slot, index) =>
+      settledM[index] === slot.centerM
+        ? slot
+        : { ...slot, centerM: settledM[index] ?? slot.centerM },
+    ),
+    moves,
+  }
 }
 
 /* ------------------------------------ the words ----------------------------------- */
@@ -376,6 +506,17 @@ const bandedExplanation = (beds: readonly BedPlacement[]): string => {
   const spread = Math.max(...shades) - Math.min(...shades)
   return `The light under these panels comes at two levels. The bright strips between the rows hold ${String(bright)} bed${bright === 1 ? '' : 's'}, and the ground under the rows holds ${String(shaded)}. The shadiest bed gives up about ${percent(spread)} more of its daylight than the brightest one. The shaded beds carry the leaves and roots that do well out of full sun, and the bright beds carry the crops that have to set fruit. No bed straddles the edge between the two, because such a bed would have no single light level to choose crops against`
 }
+
+/** The plot frame is +x east, +y north, so which way a positive offset reads depends on the axis */
+const directionWord = (axis: Axis, deltaM: number): string =>
+  axis.crossIsX ? (deltaM > 0 ? 'east' : 'west') : deltaM > 0 ? 'north' : 'south'
+
+const moveSentence = (axis: Axis, move: BedMove): string =>
+  `Bed ${String(move.bedNumber)} moved ${Math.abs(move.deltaM).toFixed(1)} m ${directionWord(axis, move.deltaM)} within its strip, onto the strip where rain runs off the rows, and its water shortfall there drops by ${String(Math.round(move.reducedMm))} mm over a year`
+
+/** Nothing to add when no bed moved, so a request with no judge gets no move sentences */
+const moveSentences = (axis: Axis, moves: readonly BedMove[]): string =>
+  moves.map((move) => `. ${moveSentence(axis, move)}`).join('')
 
 /* ---------------------------------- the placement ---------------------------------- */
 
@@ -458,7 +599,9 @@ const clearOfHouses = (
 /**
  * Deterministic and bounded: one pass over the grid to build the seasonal field, one pass
  * along the cross-row axis to profile it, one exact two-cluster split, then at most
- * `MAX_BEDS` polygon rasterizations. No search, no seed, no iteration limit
+ * `MAX_BEDS` polygon rasterizations. With a judge, each bed is also tried at every
+ * `SLIDE_STEP_M` across the room its span and its neighbors leave it, a few dozen balances
+ * per bed at most. Still no search, no seed, no iteration limit
  */
 export const placeBeds = (request: LayoutRequest): Derivation<BedLayout> => {
   const axis = axisFor(request)
@@ -475,22 +618,36 @@ export const placeBeds = (request: LayoutRequest): Derivation<BedLayout> => {
   const field = seasonField(request.raster, request.window)
   const refusals: string[] = []
 
+  // every call tags its slots with the span it cut them from (`Slot.run`), so a bed that
+  // slides later finds the room its own span leaves it
+  const spans: Span[] = []
+  const cutSlots = (kind: LightZoneKind, span: Span): readonly Slot[] => {
+    spans.push(span)
+    return slotsIn(kind, span, spans.length - 1)
+  }
+
+  // a judge slides each bed onto the rain the rows shed, when the plot carries an array to shed it.
+  // A request missing either keeps every bed exactly where it was centered
+  const settle = (slots: readonly Slot[]): Slid =>
+    request.shortfallMm !== undefined && request.arrays.length > 0
+      ? slideBeds(slots, spans, axis, lengthM, request.shortfallMm)
+      : { slots, moves: [] }
+
   const even = (reason: string): Derivation<BedLayout> => {
+    const slid = settle(interleave(cutSlots('even-light', [-halfM, halfM]), limit))
     const beds = clearOfHouses(
-      placementsFor(
-        interleave(slotsIn('even-light', [-halfM, halfM]), limit),
-        axis,
-        lengthM,
-        request.raster,
-        field,
-        request.exposure ?? 'open',
-      ),
+      placementsFor(slid.slots, axis, lengthM, request.raster, field, request.exposure ?? 'open'),
       request.houses ?? [],
       refusals,
     )
     return {
       ok: true,
-      value: { beds, banded: false, explanation: evenExplanation(reason), refusals },
+      value: {
+        beds,
+        banded: false,
+        explanation: evenExplanation(reason) + moveSentences(axis, slid.moves),
+        refusals,
+      },
     }
   }
 
@@ -513,7 +670,7 @@ export const placeBeds = (request: LayoutRequest): Derivation<BedLayout> => {
     const hi = Math.min(hiM, halfM) - (hiM > halfM ? 0 : BED_GAP_M / 2)
     return hi - lo < MIN_BED_DEPTH_M
       ? []
-      : subtract([lo, hi], cuts).flatMap((span) => slotsIn(kind, span))
+      : subtract([lo, hi], cuts).flatMap((span) => cutSlots(kind, span))
   })
   if (slots.length === 0) {
     return even('no strip was wide enough to hold a bed clear of the array feet')
@@ -521,15 +678,9 @@ export const placeBeds = (request: LayoutRequest): Derivation<BedLayout> => {
 
   // a band whose every bed overlaps a house still reports each drop by name. The mix sentence
   // below isn't guarded for a band that empties out entirely, which no plot has shown yet
+  const slid = settle(interleave(slots, limit))
   const beds = clearOfHouses(
-    placementsFor(
-      interleave(slots, limit),
-      axis,
-      lengthM,
-      request.raster,
-      field,
-      request.exposure ?? 'open',
-    ),
+    placementsFor(slid.slots, axis, lengthM, request.raster, field, request.exposure ?? 'open'),
     request.houses ?? [],
     refusals,
   )
@@ -539,7 +690,15 @@ export const placeBeds = (request: LayoutRequest): Derivation<BedLayout> => {
       `Only the ${kinds.has('shaded-band') ? 'shaded strips under the rows' : 'bright strips between the rows'} were wide enough to hold a bed, so this plot doesn't get the shade-tolerant and sun-demanding mix the design would otherwise give it`,
     )
   }
-  return { ok: true, value: { beds, banded: true, explanation: bandedExplanation(beds), refusals } }
+  return {
+    ok: true,
+    value: {
+      beds,
+      banded: true,
+      explanation: bandedExplanation(beds) + moveSentences(axis, slid.moves),
+      refusals,
+    },
+  }
 }
 
 /** The geometry-only layout, which is all there is to say before anything has been baked */

@@ -592,12 +592,32 @@ const bedRainOf = (
 }
 
 /**
- * Where the site's rain lands, over the plot's own panel geometry: sheltered under the panels,
- * concentrated into a drip strip along each row's low edge (both long edges, half each, for a
- * flat panel that has no low edge), open everywhere else. `plot.northOffsetDeg` is ignored, the
- * way the light bake ignores it: `panelSnapshot`'s plot frame is +x east, +y north already
+ * The rain the rows shed and keep off the ground, over the plot's own panel geometry: sheltered
+ * under the panels, concentrated into a drip strip along each row's low edge (both long edges,
+ * half each, for a flat panel that has no low edge), open everywhere else. `plot.northOffsetDeg`
+ * is ignored, the way the light bake ignores it: `panelSnapshot`'s plot frame is +x east, +y north
+ * already. None of it depends on where a bed sits, so `rainGround` builds it once per plot and
+ * `rainOnBed` reads it for as many footprints as a search needs to try
  */
-export const rainField = (plot: GardenPlot, wind: RainWind): RainField => {
+export interface RainGround {
+  readonly grid: GridSpec
+  readonly wind: RainWind
+  /** Share of each cell in the panels' rain shadow, over the site's rain-hour wind rose: 0 open, 1 fully sheltered */
+  readonly shelter: Float32Array
+  /** Panel runoff landing on each cell, as a multiple of what the same ground would get open to the sky */
+  readonly drip: Float32Array
+  /** Rain reaching each cell as a multiple of open ground: 0 in shadow, 1 open, a strip several. Equals 1 - shelter + drip */
+  readonly values: Float32Array
+  /** The panel whose drip strip laid water on each cell, a 1-based index into `snapshot.panels`, 0 where no strip reached it */
+  readonly owner: Int32Array
+  readonly snapshot: PanelSnapshot
+}
+
+/**
+ * Builds the ground the plot's own panels give it: the shelter, drip and per-cell values
+ * `rainOnBed` reads for one bed at a time, plus the panel snapshot it reads them against
+ */
+export const rainGround = (plot: GardenPlot, wind: RainWind): RainGround => {
   const snapshot = panelSnapshot(plot.arrays, 0 as EpochMillis, -90 as Degrees, 0 as Degrees)
 
   // every edge of a row shares a height, and a rose has only twelve speeds, so the same
@@ -738,12 +758,30 @@ export const rainField = (plot: GardenPlot, wind: RainWind): RainField => {
     values[i] = 1 - (shelter[i] ?? 0) + (drip[i] ?? 0)
   }
 
+  return { grid, wind, shelter, drip, values, owner, snapshot }
+}
+
+/**
+ * One bed's own rain, read off a ground already built for the plot: a thin call into `bedRainOf`
+ * so a search can try as many footprints as it needs against the same ground without paying for
+ * the panel loop again
+ */
+export const rainOnBed = (ground: RainGround, arrays: readonly PvArray[], bed: Bed): BedRain =>
+  bedRainOf(bed, arrays, ground.snapshot, ground.grid, ground.shelter, ground.drip, ground.owner)
+
+/**
+ * Where the site's rain lands, over the plot's own panel geometry, for every bed the plot already
+ * holds: `rainGround` once for the whole plot, then `rainOnBed` for each of its beds. Kept for the
+ * callers that already have a plot's own beds and want the whole field back in one call
+ */
+export const rainField = (plot: GardenPlot, wind: RainWind): RainField => {
+  const ground = rainGround(plot, wind)
   return {
-    grid,
-    wind,
-    shelter,
-    drip,
-    values,
-    beds: plot.beds.map((bed) => bedRainOf(bed, plot.arrays, snapshot, grid, shelter, drip, owner)),
+    grid: ground.grid,
+    wind: ground.wind,
+    shelter: ground.shelter,
+    drip: ground.drip,
+    values: ground.values,
+    beds: plot.beds.map((bed) => rainOnBed(ground, plot.arrays, bed)),
   }
 }

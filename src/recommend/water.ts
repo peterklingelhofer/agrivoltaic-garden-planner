@@ -37,8 +37,10 @@ import type {
   BedWaterBalance,
   DailyWeather,
   Et0Method,
+  PanelRainSplit,
   ReferenceEt,
   RainField,
+  SoilWaterCapacity,
   StageCalendar,
 } from '../types/water'
 import type { TmySeries } from '../types/weather'
@@ -117,7 +119,7 @@ const balanceDays = (
     }
   })
 
-interface SharedInput {
+export interface WaterBalanceShared {
   readonly site: Site
   readonly days: readonly DailyWeather[]
   readonly method: Et0Method
@@ -132,30 +134,37 @@ interface SharedInput {
 
 const share = (value: number): string => `${Math.round(value * 100)}%`
 
+interface PanelBalanceInputs {
+  readonly crop: BedCrop
+  readonly capacity: SoilWaterCapacity
+  readonly split: PanelRainSplit
+  readonly panelDays: readonly BalanceDay[]
+  readonly options: (totalAvailableWaterMm: number, autoIrrigate: boolean) => BalanceOptions
+  readonly low: number
+  readonly high: number
+  readonly underPanelsEt: ReferenceEt
+  readonly hasBasin: boolean
+}
+
 /**
- * One bed, one year, FAO-56 dual coefficient, run twice: open sky and under the
- * array. Panels enter through the shortwave term of reference ET and through
- * the rain split, and every band is the soil's own available-water range
+ * The steps `bedWaterBalance` and `bedShortfallMm` both need before either can run a balance under
+ * the panels: the bed's own crop, its soil capacity, the rain split the panels leave it and the
+ * daily series its own shade drives reference ET from. Kept in one place so the two callers read
+ * the same crop, the same capacity and the same split and never drift apart
  */
-export const bedWaterBalance = (
-  shared: SharedInput,
+const panelBalanceInputs = (
+  shared: WaterBalanceShared,
   bed: Bed,
   light: BedLight | null,
-): BedWaterBalance => {
+  rain: BedRain,
+): PanelBalanceInputs => {
   const monthlyRsr = light === null ? new Array<number>(12).fill(0) : [...light.monthlyRsr]
   const crop = bedCropOf(bed, shared.catalog)
   const capacity = soilWaterCapacity(
     bed.soil.textureClass,
     effectiveRootDepthM(crop.rootDepthM, bed.soil.effectiveDepthM),
   )
-  const rain: BedRain = shared.rain.beds.find((entry) => entry.bedId === bed.id) ?? {
-    bedId: bed.id,
-    shelteredFraction: 0 as Fraction,
-    dripMultiple: 0,
-    crossings: [],
-  }
   const hasBasin = bed.waterHarvesting.length > 0
-  const capture = hasBasin ? RUNOFF_CAPTURE_CLAIM.value.basin : RUNOFF_CAPTURE_CLAIM.value.plainBed
   const split = panelRainSplit(rain, hasBasin)
   const underPanelsEt = referenceEt(
     shared.days,
@@ -164,13 +173,11 @@ export const bedWaterBalance = (
     shadeShortwaveFactors(monthlyRsr),
   )
   const reaching = split.reachingBedFraction + split.dripMultiple
-  const openDays = balanceDays(shared.openSkyEt, shared.rainfall, crop)
   const panelDays = balanceDays(
     underPanelsEt,
     shared.rainfall.map((millimeters) => millimeters * reaching),
     crop,
   )
-
   const options = (totalAvailableWaterMm: number, autoIrrigate: boolean): BalanceOptions => ({
     totalAvailableWaterMm,
     depletionFraction: crop.depletionFraction,
@@ -178,8 +185,41 @@ export const bedWaterBalance = (
     readilyEvaporableMm: capacity.readilyEvaporableMm,
     autoIrrigate,
   })
-  const low = capacity.totalAvailableWaterMm.lower
-  const high = capacity.totalAvailableWaterMm.upper
+  return {
+    crop,
+    capacity,
+    split,
+    panelDays,
+    options,
+    low: capacity.totalAvailableWaterMm.lower,
+    high: capacity.totalAvailableWaterMm.upper,
+    underPanelsEt,
+    hasBasin,
+  }
+}
+
+/**
+ * One bed, one year, FAO-56 dual coefficient, run twice: open sky and under the
+ * array. Panels enter through the shortwave term of reference ET and through
+ * the rain split, and every band is the soil's own available-water range
+ */
+export const bedWaterBalance = (
+  shared: WaterBalanceShared,
+  bed: Bed,
+  light: BedLight | null,
+  rain?: BedRain,
+): BedWaterBalance => {
+  const resolvedRain: BedRain = rain ??
+    shared.rain.beds.find((entry) => entry.bedId === bed.id) ?? {
+      bedId: bed.id,
+      shelteredFraction: 0 as Fraction,
+      dripMultiple: 0,
+      crossings: [],
+    }
+  const { crop, capacity, split, panelDays, options, low, high, underPanelsEt, hasBasin } =
+    panelBalanceInputs(shared, bed, light, resolvedRain)
+  const capture = hasBasin ? RUNOFF_CAPTURE_CLAIM.value.basin : RUNOFF_CAPTURE_CLAIM.value.plainBed
+  const openDays = balanceDays(shared.openSkyEt, shared.rainfall, crop)
   const irrigation = (days: readonly BalanceDay[], totalAvailableWaterMm: number): number =>
     runWaterBalance(days, options(totalAvailableWaterMm, true)).irrigationMm
   const bandNote = `Available water for a ${capacity.texture} spans ${low.toFixed(0)} to ${high.toFixed(0)} mm in this root zone, and that range is the whole width of this band`
@@ -193,7 +233,7 @@ export const bedWaterBalance = (
     split.crossings.length > 0
       ? split.crossings.map(
           (crossing) =>
-            `Row ${crossing.rowIndex + 1} of ${crossing.rowCount} sheds its rain along this bed's ${crossing.side} edge. It lands in a strip ${crossing.stripWidthM.toFixed(1)} m wide at this site's rain-hour wind, and that strip gets water equal to ${rain.dripMultiple.toFixed(1)} times what falls on the bed itself, of which the balance keeps ${share(capture)}. Mulch the strip and keep seedlings a hand's width back from it`,
+            `Row ${crossing.rowIndex + 1} of ${crossing.rowCount} sheds its rain along this bed's ${crossing.side} edge. It lands in a strip ${crossing.stripWidthM.toFixed(1)} m wide, given this site's wind when it rains. That strip gets water equal to ${resolvedRain.dripMultiple.toFixed(1)} times what falls on the bed itself, and the bed keeps ${share(capture)} of it. Mulch the strip and keep seedlings a hand's width back from it`,
         )
       : ['No panel sheds its rain onto this bed']
 
@@ -234,14 +274,36 @@ export const bedWaterBalance = (
   }
 }
 
-export const waterBalances = (input: WaterBalanceInput): readonly BedWaterBalance[] => {
+/**
+ * One bed's own under-panels deficit, in millimeters, at the mid capacity with no auto irrigation:
+ * the same figure `bedWaterBalance` reports as `underPanels.deficitMm`, without the five other
+ * balance runs it also does for the open-sky side and the low and high bands. The layout search's
+ * slide reads this many times over per candidate footprint, and the open-sky run and the bands are
+ * what it leaves out
+ */
+export const bedShortfallMm = (
+  shared: WaterBalanceShared,
+  bed: Bed,
+  light: BedLight | null,
+  rain: BedRain,
+): number => {
+  const { panelDays, options, low, high } = panelBalanceInputs(shared, bed, light, rain)
+  return runWaterBalance(panelDays, options((low + high) / 2, false)).deficitMm
+}
+
+/**
+ * The pieces every bed's own balance in the plot shares: one weather-to-days pass, one open-sky
+ * reference ET and one rain field, built once per plot for `bedWaterBalance` to read for each bed
+ * in turn
+ */
+export const waterBalanceShared = (input: WaterBalanceInput): WaterBalanceShared => {
   const { method, reason } = et0MethodFor(input.weather)
   const days = dailyWeatherFromTmy(
     input.weather,
     input.site.location.latitudeDeg,
     input.site.elevationM,
   )
-  const shared: SharedInput = {
+  return {
     site: input.site,
     days,
     method,
@@ -252,6 +314,10 @@ export const waterBalances = (input: WaterBalanceInput): readonly BedWaterBalanc
     rain: input.rain ?? rainField(input.plot, rainWind(input.weather)),
     anyTrackingArray: input.plot.arrays.some((array) => array.tracker.mode !== 'fixed'),
   }
+}
+
+export const waterBalances = (input: WaterBalanceInput): readonly BedWaterBalance[] => {
+  const shared = waterBalanceShared(input)
   return input.plot.beds.map((bed) =>
     bedWaterBalance(shared, bed, input.bedLight.find((entry) => entry.bedId === bed.id) ?? null),
   )
