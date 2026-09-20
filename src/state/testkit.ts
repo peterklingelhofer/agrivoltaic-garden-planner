@@ -40,6 +40,7 @@ import {
   fraction,
   kilowattHours,
   meters,
+  millimeters,
   molPerM2Day,
   ratio,
   squareMeters,
@@ -139,6 +140,11 @@ export const designScenarioFixture = (archetype: CandidateArchetype): DesignScen
     // what the panels cost the plot against the open sky, which the control by definition has none of
     cropsLostToShade:
       archetype === 'no-array-control' ? [] : [cropId('watermelon'), cropId('sweet-potato')],
+  },
+  water: {
+    deficitOpenSkyMm: millimeters(126),
+    deficitUnderPanelsMm: millimeters(archetype === 'no-array-control' ? 126 : 91),
+    deficitSavedFraction: fraction(archetype === 'no-array-control' ? 0 : 0.28),
   },
   flags: {
     meetsExpeditedClearance: true,
