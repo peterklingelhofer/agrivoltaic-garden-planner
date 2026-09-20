@@ -4,7 +4,9 @@ import {
   BAKE_TIMEOUT_MS,
   openApp,
   openFold,
+  resolveSite,
   runLightCheck,
+  settledCanvas,
   step,
   waitForCanvas,
 } from './fixtures/app.ts'
@@ -87,4 +89,44 @@ test('a house drawn on the ground shades the light and the ranking, and survives
   await page.getByTestId('action-house-remove-house-1').click()
   await expect(exposureFieldset).not.toHaveAttribute('disabled', '')
   expect(app.errors).toEqual([])
+})
+
+/**
+ * A house added on the ground step needs its shadow and its contact occlusion the instant it
+ * lands, in the same frame as its mesh. That frame can beat the React commit that hands the mesh
+ * to the scene (see the third paragraph beside `structural` in RenderPipeline.tsx), which spends
+ * the one-shot redraw flag on the old scene and lets the house through on a cosmetic frame.
+ * Caught this way, the house stood on a band with no contact occlusion at the base of its walls,
+ * about 1,700 pixels differing from the healed picture, gone only once something else asked for a
+ * structural frame
+ */
+test('a house added is drawn with its shadows and occlusion in the same frame it lands', async ({
+  page,
+}) => {
+  test.setTimeout(BAKE_TIMEOUT_MS + 60_000)
+  await openApp(page)
+  await resolveSite(page)
+  await step(page, 'light')
+  await expect(page.getByTestId('readout-bed-light-open-bed-1')).toBeVisible({
+    timeout: BAKE_TIMEOUT_MS,
+  })
+  // the map and its legend are out of the picture before either shot, so a raster landing under
+  // them cannot change a later frame for a reason this test is not about
+  await page.getByTestId('control-overlay-visible').setChecked(false)
+
+  await step(page, 'ground')
+  const shotA = await settledCanvas(page)
+  await page.getByTestId('action-house-add').click()
+  const shotB = await settledCanvas(page)
+  // useInvalidate answers a window focus event with one structural frame and nothing else, which
+  // is what heals a house that landed on a cosmetic one
+  await page.evaluate(() => window.dispatchEvent(new Event('focus')))
+  const shotC = await settledCanvas(page)
+
+  expect(
+    shotB.equals(shotC),
+    'the frame that landed the house was drawn without its shadows and occlusion',
+  ).toBe(true)
+  // the self-test: the house did land, so two shots that never differed would not pass by accident
+  expect(shotA.equals(shotC)).toBe(false)
 })
