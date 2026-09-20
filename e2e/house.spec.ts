@@ -129,4 +129,21 @@ test('a house added is drawn with its shadows and occlusion in the same frame it
   ).toBe(true)
   // the self-test: the house did land, so two shots that never differed would not pass by accident
   expect(shotA.equals(shotC)).toBe(false)
+
+  /*
+    And nothing a later frame does changes how it is lit.
+
+    The two shots above agree on a laptop and disagreed on the runner, by ten percent on every
+    face of the house and nothing else in the frame. The house's material was enrolled in the
+    shadow cascades on a fifteen-frame sweep, and under demand rendering fifteen frames is fifteen
+    invalidations, which is whenever: until then the house drew `cascades` times too bright
+    (`src/scene/cascades.ts` says why) and the sweep then darkened it. Sixteen frames one at a
+    time cover the interval on any machine, so a material that lands un-enrolled fails here
+  */
+  for (let frame = 0; frame < 16; frame += 1) {
+    await page.evaluate(() => window.dispatchEvent(new Event('focus')))
+    await settledCanvas(page)
+  }
+  const shotD = await settledCanvas(page)
+  expect(shotD.equals(shotC), 'a later frame changed how the house is lit').toBe(true)
 })

@@ -12,7 +12,7 @@
  */
 
 import { useFrame, useThree } from '@react-three/fiber'
-import { useEffect, useMemo, useRef, type ReactElement } from 'react'
+import { useEffect, useMemo, useRef, type ReactElement, type RefObject } from 'react'
 import { Matrix4, Vector2, type Material, type Mesh } from 'three'
 import { GTAOPass } from 'three/examples/jsm/postprocessing/GTAOPass.js'
 import { attempt } from '../state/safe'
@@ -22,6 +22,7 @@ import {
   occlusionRadiusM,
   SKY_OCCLUSION,
 } from './ambientOcclusion'
+import { enrolInCascades, type CascadeEnroller } from './cascades'
 import { OVERLAY_LAYER } from './layers'
 import type { RenderQuality } from './quality'
 import { consumeStructuralRedraw, shadowContentOf } from './redraw'
@@ -31,6 +32,7 @@ export interface RenderPipelineProps {
   readonly ambientOcclusion: boolean
   /** Metres to the top of the tallest thing that can stand between the ground and the sky */
   readonly occluderHeightM: number
+  readonly cascades?: RefObject<CascadeEnroller | null>
 }
 
 /** Frames between sweeps for materials the scene has grown since the last one */
@@ -43,6 +45,7 @@ export const RenderPipeline = ({
   quality,
   ambientOcclusion,
   occluderHeightM,
+  cascades,
 }: RenderPipelineProps): ReactElement => {
   const gl = useThree((s) => s.gl)
   const scene = useThree((s) => s.scene)
@@ -84,6 +87,12 @@ export const RenderPipeline = ({
 
   const drawingSize = useMemo(() => new Vector2(), [])
   const enrolled = useRef(new WeakSet<Material>())
+  // What is enrolled in which cascades instance: a quality change rebuilds the CSM, and every
+  // material needs enrolling again in the new one, which the instance check below catches
+  const inCascades = useRef<{
+    readonly of: CascadeEnroller | null
+    readonly materials: WeakSet<Material>
+  }>({ of: null, materials: new WeakSet() })
   const sweep = useRef(0)
   /**
    * Where the camera was on the last frame this pass actually drew, so that "did it move" can be
@@ -178,16 +187,33 @@ export const RenderPipeline = ({
     if (structural) gl.shadowMap.needsUpdate = true
 
     sweep.current = (sweep.current + 1) % SWEEP_INTERVAL
-    // on a structural frame as well as on the interval: new geometry arrives with a design
-    // change, and under demand rendering the interval alone could be minutes away
+    // Enrols new materials in the cascades and the sky occlusion, on a structural frame as well
+    // as on the interval: new geometry arrives with a design change, and under demand rendering
+    // the interval alone could be minutes away.
+    //
+    // The cascades enrolment runs here, on every structural frame, because a mesh landing is one.
+    // On the interval alone, fifteen frames under demand rendering is fifteen invalidations,
+    // whenever that lands, so a house added on the ground step would draw un-enrolled: every
+    // cascade light would give it its full contribution, `cascades` times too bright (see
+    // cascades.ts), until the sweep came round to it.
+    //
+    // `inCascades` is keyed by the cascades instance above so a rebuilt CSM starts its WeakSet
+    // over, which is what makes a quality change re-enrol everything
     if (sweep.current === 0 || structural) {
+      const csm = cascades?.current ?? null
+      if (inCascades.current.of !== csm) inCascades.current = { of: csm, materials: new WeakSet() }
       const seen = enrolled.current
       attempt(() =>
         scene.traverse((object) => {
           const mesh = object as Mesh
           if (!mesh.isMesh) return
           for (const material of materialsOf(mesh)) {
-            if (!material || seen.has(material) || !occludable(material)) continue
+            if (!material) continue
+            if (csm !== null && !inCascades.current.materials.has(material)) {
+              inCascades.current.materials.add(material)
+              enrolInCascades(csm, material)
+            }
+            if (seen.has(material) || !occludable(material)) continue
             seen.add(material)
             enrolInSkyOcclusion(material)
           }

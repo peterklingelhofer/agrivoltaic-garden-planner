@@ -1,9 +1,15 @@
 import { useFrame, useThree } from '@react-three/fiber'
-import { useEffect, useLayoutEffect, useMemo, useRef, type ReactElement } from 'react'
-import { Vector3, type DirectionalLight, type Material, type Mesh } from 'three'
+import {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  type ReactElement,
+  type RefObject,
+} from 'react'
+import { Vector3, type DirectionalLight } from 'three'
 import { CSM } from 'three/examples/jsm/csm/CSM.js'
 import { attempt } from '../state/safe'
-import { enrolInCascades } from './cascades'
 import { sceneCloud, scenePlot, useAppStore } from '../state/store'
 import { sunAt } from '../state/sun'
 import { cascadeShadowRadius, keyLight, penumbraWidthM } from './lighting'
@@ -15,10 +21,8 @@ export interface SunRigProps {
   readonly atUtcMillis: EpochMillis
   readonly castShadows: boolean
   readonly quality: RenderQuality
+  readonly cascades?: RefObject<CSM | null>
 }
-
-const materialsOf = (mesh: Mesh): Material[] =>
-  Array.isArray(mesh.material) ? mesh.material : [mesh.material]
 
 const tuneShadow = (
   light: DirectionalLight,
@@ -33,7 +37,14 @@ const tuneShadow = (
   light.shadow.normalBias = texelM * radius * 1.5
 }
 
-export const SunRig = ({ atUtcMillis, castShadows, quality }: SunRigProps): ReactElement => {
+export const SunRig = ({
+  atUtcMillis,
+  castShadows,
+  quality,
+  // aliased to end in Ref: react-hooks/immutability reads a write to `.current` as a prop
+  // mutation unless the local name says it is a ref
+  cascades: cascadesRef,
+}: SunRigProps): ReactElement => {
   const location = useAppStore((s) => s.location)
   const plot = useAppStore(scenePlot)
   const camera = useThree((s) => s.camera)
@@ -41,7 +52,6 @@ export const SunRig = ({ atUtcMillis, castShadows, quality }: SunRigProps): Reac
   const size = useThree((s) => s.size)
   const csmRef = useRef<CSM | null>(null)
   const keyRef = useRef<DirectionalLight | null>(null)
-  const registered = useRef(new WeakSet<Material>())
 
   const sun = useMemo(() => sunAt(location, atUtcMillis), [location, atUtcMillis])
   // the beam under the hour's measured cloud: the sky dome carries the diffuse look of it, and
@@ -99,9 +109,10 @@ export const SunRig = ({ atUtcMillis, castShadows, quality }: SunRigProps): Reac
     })
     const active = built.ok ? built.value : null
     csmRef.current = active
-    registered.current = new WeakSet<Material>()
+    if (cascadesRef) cascadesRef.current = active
     return () => {
       csmRef.current = null
+      if (cascadesRef) cascadesRef.current = null
       if (!active) return
       attempt(() => {
         active.remove()
@@ -110,7 +121,7 @@ export const SunRig = ({ atUtcMillis, castShadows, quality }: SunRigProps): Reac
         active.dispose()
       })
     }
-  }, [castShadows, camera, scene, quality])
+  }, [castShadows, camera, scene, quality, cascadesRef])
 
   // Cascade extents come from the camera's projection, so a resize invalidates them
   useEffect(() => {
@@ -118,16 +129,6 @@ export const SunRig = ({ atUtcMillis, castShadows, quality }: SunRigProps): Reac
     attempt(() => csmRef.current?.updateFrustums())
   }, [size])
 
-  // New geometry needs re-enrolling in the cascades, so the seen-material cache is dropped
-  // whenever the plot changes
-  // biome-ignore lint/correctness/useExhaustiveDependencies: plot is the trigger, not a read
-  useEffect(() => {
-    registered.current = new WeakSet<Material>()
-  }, [plot])
-
-  // Materials are enrolled in the cascades on a throttled sweep rather than an effect: meshes
-  // mount after this sibling, and a WeakSet makes the repeat sweep free
-  const sweep = useRef(0)
   useFrame(() => {
     const csm = csmRef.current
     const key = keyRef.current
@@ -144,21 +145,6 @@ export const SunRig = ({ atUtcMillis, castShadows, quality }: SunRigProps): Reac
       light.color.setRGB(colour[0] * intensity, colour[1] * intensity, colour[2] * intensity)
       const shadowCamera = light.shadow.camera
       tuneShadow(light, shadowCamera.right - shadowCamera.left, quality.shadowMapSize, penumbraM)
-    }
-    sweep.current = (sweep.current + 1) % 15
-    if (sweep.current === 0) {
-      const seen = registered.current
-      attempt(() =>
-        scene.traverse((object) => {
-          const mesh = object as Mesh
-          if (!mesh.isMesh) return
-          for (const material of materialsOf(mesh)) {
-            if (!material || seen.has(material)) continue
-            seen.add(material)
-            enrolInCascades(csm, material)
-          }
-        }),
-      )
     }
     attempt(() => csm.update())
   })
