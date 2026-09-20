@@ -1,5 +1,6 @@
 import { Grid, OrbitControls } from '@react-three/drei'
-import { useMemo, type ReactElement } from 'react'
+import { useMemo, useRef, type ReactElement } from 'react'
+import type { CSM } from 'three/examples/jsm/csm/CSM.js'
 import { sceneExtent } from '../sim/geometry'
 import { overlayOffOnSeasons } from '../state/overlay'
 import { MAX_PLANT_YEAR } from '../state/slices'
@@ -87,6 +88,8 @@ export const GardenScene = (): ReactElement => {
   const mode = useAppStore((s) => s.mode)
   const quality = useRenderQuality()
   const tour = useGuidedTour()
+  // Built by SunRig and read by RenderPipeline, which is where materials get enrolled in it
+  const cascades = useRef<CSM | null>(null)
   /**
    * Wind is the only thing in this scene that moves without being asked, so it's the only
    * reason to keep requesting frames when nobody is doing anything. It's asked for only where
@@ -103,12 +106,13 @@ export const GardenScene = (): ReactElement => {
           quality={quality}
           ambientOcclusion={effects.ambientOcclusion}
           occluderHeightM={occluderHeightM(plot)}
+          cascades={cascades}
         />
       </SceneBoundary>
       <SceneBoundary label="sky-light">
         <SkyLight atUtcMillis={timeUtcMillis} quality={quality} />
       </SceneBoundary>
-      <SunRig atUtcMillis={timeUtcMillis} castShadows quality={quality} />
+      <SunRig atUtcMillis={timeUtcMillis} castShadows quality={quality} cascades={cascades} />
       <Ground />
       {/*
         Two millimeters above the ground, which removes a hazard and is NOT the fix for anything
