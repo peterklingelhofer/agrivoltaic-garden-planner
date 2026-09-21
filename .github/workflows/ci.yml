@@ -55,7 +55,7 @@ jobs:
           # generate` is the only thing that has run, so anything it changed in there is its own
           # output, and a table added later is covered without anyone remembering to come back
           # here. `data/` is the neutral crop catalogue, which has the same drift risk
-          git diff --exit-code -- src/types/citation-ids.generated.ts docs/CITATIONS.md crates/agv-sim/src/ data/ || {
+          git diff --exit-code -- src/types/citation-ids.generated.ts docs/CITATIONS.md src/data/catalog/laub.generated.ts crates/agv-sim/src/ data/ || {
             echo "::error::bun run generate changed committed output; run it locally and commit the result"
             exit 1
           }

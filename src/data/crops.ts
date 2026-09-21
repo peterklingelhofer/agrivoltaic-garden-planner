@@ -1,4 +1,3 @@
-import type { DataTier } from '../types/evidence'
 import { citedDerived, citedVerbatim } from '../types/cited'
 import type { Crop, Cultivar, DliClass, LaubCropGroup, LaubCurve } from '../types/crop'
 import type { CropId, CultivarId } from '../types/ids'
@@ -90,21 +89,24 @@ export const dliClassLimits = (dliClass: DliClass): DliClassLimits => {
   }
 }
 
-export const dliClassTier = (dliClass: DliClass): DataTier => DLI_CLASSES[dliClass].tier
-
 /**
- * The nine Laub et al. 2022 crop-group curves as the published Table S2
- * anchors. Predictions and 95 % confidence bounds are verbatim; the underlying
- * b1 coefficient is a derived algebraic recovery, so no coefficient is
- * evaluated here and the tabulated anchors themselves drive interpolation
+ * The nine Laub et al. 2022 crop-group curves as the published Table S2 anchors. Predictions and
+ * 95 % confidence bounds are verbatim, the underlying b1 coefficient is a derived algebraic
+ * recovery, so no coefficient is evaluated here and the tabulated anchors themselves drive
+ * interpolation.
+ *
+ * `groupNote` is the crop's own reason for reading this curve where its group is an analogy: a
+ * crop the meta-analysis excluded, a harvested organ its trials did not measure, or a family no
+ * group holds. It travels on the anchors' caveat and reaches the reader as a yield caveat
  */
-export const laubCurve = (group: LaubCropGroup): LaubCurve => {
+export const laubCurve = (group: LaubCropGroup, groupNote: string | null = null): LaubCurve => {
   const data = LAUB_GROUPS[group]
-  const optimum = data.benefitOptimumRsrPercent
+  const peak = data.benefitPeakRsrPercent
   return {
     group,
     studyCount: data.studies,
-    peakRsr: optimum === null ? null : ((optimum / 100) as Fraction),
+    peakRsr: peak === null ? null : ((peak / 100) as Fraction),
+    groupNote,
     intervalKind: 'confidence-95',
     anchors: citedVerbatim(
       LAUB_RSR_LEVELS_PERCENT.map((percent, index) => ({
@@ -115,7 +117,7 @@ export const laubCurve = (group: LaubCropGroup): LaubCurve => {
       })),
       'A',
       ['laub2022-shade-meta'],
-      LAUB_AUTHOR_CAVEAT,
+      groupNote === null ? LAUB_AUTHOR_CAVEAT : `${LAUB_AUTHOR_CAVEAT} ${groupNote}`,
     ),
     coefficients: citedDerived(
       { b1PerPercentRsr: data.b1PerPercentRsr, b2PerPercentRsrSquared: LAUB_B2_PER_PERCENT_RSR },

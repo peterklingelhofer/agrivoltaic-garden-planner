@@ -1,8 +1,11 @@
 # Citation corpus
 
-233 sources (166 crossref-verified, 1 datacite-verified, 16 unverified, 50 url-verified). Machine-readable companion: [`CITATIONS.csl.json`](./CITATIONS.csl.json) (CSL-JSON).
+241 sources (171 crossref-verified, 1 datacite-verified, 16 unverified, 53 url-verified). Machine-readable companion: [`CITATIONS.csl.json`](./CITATIONS.csl.json) (CSL-JSON).
 Verification pass completed 2026-07-30 against the Crossref REST API, the DataCite REST API, and direct
 fetches of authoritative publisher, standards-body and government URLs.
+Eight sources were added on 2026-09-20 the same way: five verified against Crossref, three by fetching
+the publisher's own page, one of those through the Internet Archive because the live page refuses
+automated fetches.
 
 ## How to read this
 
@@ -44,31 +47,31 @@ Physics, geodata and software sources carry `null`: the scheme does not apply to
 
 | Verification | n |
 |---|---|
-| crossref-verified | 166 |
+| crossref-verified | 171 |
 | datacite-verified | 1 |
 | unverified | 16 |
-| url-verified | 50 |
-| **total** | **233** |
+| url-verified | 53 |
+| **total** | **241** |
 
 | Access level | n |
 |---|---|
-| open-access | 68 |
+| open-access | 73 |
 | paywalled | 115 |
-| public-domain | 49 |
+| public-domain | 52 |
 | public-domain-with-conditions | 1 |
 
 | Evidence tier | n |
 |---|---|
 | A | 39 |
-| B | 68 |
-| C | 34 |
-| null (not applicable) | 92 |
+| B | 73 |
+| C | 36 |
+| null (not applicable) | 93 |
 
 ---
 
 ## Agrivoltaics
 
-33 sources.
+38 sources.
 
 #### `allen2023-jacks-solar-garden`
 
@@ -89,6 +92,7 @@ Amaducci, Stefano; Yin, Xinyou; Colauzzi, Michele. (2018). *Agrivoltaic systems 
 - Backs:
   - maize gains under agrivoltaic shade appear only under rainfed water stress
   - the water-limitation flag that gates the shade-benefit pathway
+- **Caveat:** A simulation study: a coupled radiation and shading model driving the GECROS crop model over a 40-year climate record, with no field trial of its own. Laub et al. 2022's inclusion criteria exclude modelling work, so this paper is outside the meta-analysis this app's yield curves come from and its maize result cannot be read as a data point inside them.
 
 #### `barron-gafford2019-arizona`
 
@@ -103,6 +107,40 @@ Barron-Gafford, Greg A.; Pavao-Zuckerman, Mitchell A.; Minor, Rebecca L.; Sutter
   - soil moisture +15% under panels at an arid site
   - daytime air-temperature cooling under panels in a hot arid climate
 - **Caveat:** Dryland-specific. The product gates every 'shade improves yield' pathway behind a water-limitation flag precisely because these gains do not transfer to temperate gardens. Directionally contradicted on both temperature and soil moisture by the temperate Heggelbach site (Weselek 2021). FALSE ATTRIBUTION CORRECTED 2026-07-30. This entry previously read '2-3x for chiltepin and jalapeno'. Full text (https://www.osti.gov/servlets/purl/1567040) shows the 3x belongs to chiltepin, the 2x belongs to CHERRY TOMATO, and jalapeno showed NO yield gain at all: 'total fruit production was nearly equal between treatments... but this was attained with 65% less transpirational H2O loss'. Jalapeno cumulative CO2 uptake was in fact 11% LOWER under the panels. Any product copy claiming a jalapeno yield gain from this paper is false.
+
+#### `bennaim2025-tomato-shade`
+
+Ben Naim, Yariv; Ladell, Chanani; Cohen, Yigal. (2025). *Agri-Photovoltaic technology allows dual use of land for tomato production and electricity generation*. Scientific Reports 15: 43717
+
+- DOI: [10.1038/s41598-025-27602-9](https://doi.org/10.1038/s41598-025-27602-9)
+- Verification: Crossref-verified | Access: open-access, evidence tier **B**
+- Backs:
+  - a row-resolved tomato yield response under single-axis trackers, verbatim: 'Plants in row 4 yielded the highest fruit weight (~ 3.5 kg per plant), which declined significantly and progressively in adjacent rows. The yields in rows 3 and 5 were similar to row 4 while rows 2 and 6 showed a significant reduction in yield (~ 2.6 kg/plant) compared with row 4.'
+  - the shading those rows received, verbatim: 'The relative gradual reduction in irradiation levels in rows 1-7, compared to row 4, were 92.7%, 19.3%, 11.9%, 0.0%, 8.6%, 16.5%, and 91.2%, respectively', so a significant tomato yield loss appears at 16.5 and 19.3 percent season shading and none at 8.6 and 11.9
+  - the whole-system reading the authors draw, verbatim: 'A coverage of up to 26% of the land area with PV modules did not significantly affect plant growth or fruit quality', with total fruit yield loss of 19.4% across all seven rows and an improved land equivalent ratio
+- **Caveat:** Bar Ilan University, Israel (32.07 N), hot Mediterranean, processing tomato in 110 L containers on white plastic mulch under computer-controlled drip fertigation, two seasons. Irrigated and container-grown, so water is not the limiting factor. The east and west asymmetry between rows at similar shading (row 2 against row 6, row 3 against row 5) is larger than the shading difference between them, so the trial carries a confounder the paper does not resolve. The row-level result is the one a per-bed tool should quote, and the land-coverage sentence is about module coverage of the plot.
+
+#### `both2025-nj-lessons`
+
+Both, A. J.; Bamka, Bill; Besancon, Thierry; Birnie, Dunbar P.; Burgher, Clint; Gimenez, Daniel; Guran, Serpil; Kornitas, Michael; Nitzsche, Pete; Robinson, David; Rucker, W. Ross; Schoolman, Ethan; Specca, David; Sullivan, Kevin P.; Ward, Daniel L.; Westendorf, Mike; Wyenandt, Christian A.. (2025). *Lessons Learned from Three Agrivoltaic Installations in New Jersey*. AgriVoltaics Conference Proceedings 3
+
+- DOI: [10.52825/agripv.v3i.1357](https://doi.org/10.52825/agripv.v3i.1357)
+- Verification: Crossref-verified | Access: open-access
+- Backs:
+  - the design premise this app is built on, verbatim: 'While some yield reduction is to be expected, resulting from less sunlight reaching the plant canopy and ground occupied by support structures, the generated electricity provides a low-risk supplemental income to farmers'
+  - why an agrivoltaic array is built at a lower ground coverage ratio and a greater height than a solar farm, verbatim: 'agrivoltaic systems use a lower ground coverage ratio compared to normal solar farms and the PV panels are often mounted higher above the ground in order to facilitate the movement of agricultural equipment and to reduce the contrast between shaded and non-shaded areas'
+  - the three Rutgers and NJAES installations the Bridgeton trials run on
+- **Caveat:** A practice paper about designing, permitting and building three research installations. It reports no crop yield of its own and carries no evidence tier.
+
+#### `dalpra2025-organic-tomato-shade`
+
+Dal Pra, Aldo; Dainelli, Riccardo; Santoni, Margherita; Lanini, Giuseppe Mario; Di Serio, Annamaria; Zanotti, Davide; Greco, Antonino; Ronga, Domenico. (2025). *Impact of Different Shading Conditions on Processing Tomato Yield and Quality Under Organic Agrivoltaic Systems*. Horticulturae 11: 319
+
+- DOI: [10.3390/horticulturae11030319](https://doi.org/10.3390/horticulturae11030319)
+- Verification: Crossref-verified | Access: open-access, evidence tier **B**
+- Backs:
+  - processing tomato under trackers at a 41% ground coverage ratio, verbatim from the abstract: 'In 2023, the results showed that A2 achieved a total yield of only 24.5% lower than FL, with a marketable yield reduction of just 6.5%, indicating its potential to maintain productivity under shaded conditions'
+- **Caveat:** Read from the publisher abstract, verified against Crossref. Two seasons in northwest Italy under organic management, with the shading treatments defined by ground coverage ratio and panel position rather than by a measured season-cumulative shade fraction.
 
 #### `doedt2024-japan-legal`
 
@@ -177,6 +215,8 @@ Elamri, Yassin; Cheviron, Bruno; Lopez, Jean-Marc; Dejean, Cyril; Belaud, Gilles
 - Backs:
   - reduced evapotranspiration and irrigation demand under panel shade for irrigated lettuce
   - the drip-line edge zones of the plot held more soil moisture and ran cooler than its interior
+  - a delay of 3 to 7 days of plant maturity under the panels, alongside a decrease of about 20% in plant water consumption
+- **Caveat:** The 3 to 7 day figure is read from the published abstract and is not quoted from the full text, which is paywalled and uncached. It is a modelling result and the abstract offers it as the alternative to a 10% yield decrease when irrigation is cut by 20%: 'it is possible to improve land use efficiency and water productivity at once, by reducing irrigation amounts by 20%, when tolerating a decrease of 10% in yield or, alternatively, a slight extension of the cropping cycle'. Quote it from the PDF before pinning a constant to it.
 
 #### `garcia-chica2025-pv-rainwater-irrigation`
 
@@ -221,6 +261,17 @@ Horowitz, Kelsey; Ramasamy, Vignesh; Macknick, Jordan; Margolis, Robert. (2020).
   - that the crop-mount premium is structural balance of system (the racking structure) and installation labour, not modules, inverters or soft costs
 - **Caveat:** A 500 kWdc benchmark, a simple average across eight US states, in 2020 USD, installed cost only: no financing, no operations and maintenance, no revenue. The smallest system modelled anywhere in the report is 200 kW and cost per watt rises as system size falls, so a garden's few kilowatts sit below the bottom of the report's own size curve by an amount it never gives. It states verbatim (p. 9) that it has 'a limited number of input data points for nonconventional system designs in the PV + crop space, and so the costs associated with those applications are more uncertain'.
 
+#### `kujawa2025-greenhouse-tomato-shade`
+
+Kujawa, Anna; Kornas, Julian; Hanrieder, Natalie; Gonzalez Rodriguez, Sergio; Hristov, Lyubomir; Fernandez Solas, Alvaro; Wilbert, Stefan; Blanco, Manuel Jesus; Berzosa Alvarez, Leontina; Martinez Gallardo, Ana. (2025). *Tomato Yield Under Different Shading Levels in an Agrivoltaic Greenhouse in Southern Spain*. AgriEngineering 7: 178
+
+- DOI: [10.3390/agriengineering7060178](https://doi.org/10.3390/agriengineering7060178)
+- Verification: Crossref-verified | Access: open-access, evidence tier **B**
+- Backs:
+  - tomato yield falls with shading in a Mediterranean greenhouse, verbatim from the abstract: 'The 30% and 50% shading zones resulted in 15% and 26% crop yield reductions, respectively'
+  - the trade the authors draw from it, verbatim: 'A preliminary, theoretical analysis of potential revenues of the photovoltaic yield showed that reductions in crop yield can be overcompensated by the energy generated by the PV system'
+- **Caveat:** Read from the publisher abstract, verified against Crossref. The modules are mimicked by opaque plastic sheets in a checkerboard on the roof of a raspa-y-amagado greenhouse in Almeria, so the shading is a roof cover ratio in a greenhouse and not a field array.
+
 #### `laub2021-shade-dataset`
 
 Pataczek, Lisa; Laub, Moritz. (2021). *Crop yield responses at varying levels of shade*. Zenodo
@@ -257,8 +308,11 @@ Marrou, Hélène; Wery, Jacques; Dufour, Lydie; Dupraz, Christian. (2013). *Prod
 - DOI: [10.1016/j.eja.2012.08.003](https://doi.org/10.1016/j.eja.2012.08.003)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **B**
 - Backs:
-  - lettuce maintains yield under partial panel shade via increased radiation use efficiency and leaf area expansion
-  - 3-7 day phenology delay in shaded lettuce, the only solid per-crop phenology number located
+  - lettuce maintains yield under partial panel shade through improved radiation interception efficiency, verbatim: 'Lettuce yield was maintained through an improved Radiation Interception Efficiency (RIE) in the shade, while Radiation Conversion Efficiency (RCE) did not change significantly'
+  - no phenological delay in thermal time to harvest, verbatim: 'Thermal time was calculated from air temperature measurement above control plots (CPs): indeed no significant difference in cumulated thermal time was measured between FD, HD and the control plots, whatever reference temperature is used (crop or air temperature) (not shown)'
+  - measured yields against the unshaded control: 58% in 2010 and 79% in 2011 under full density (RSR 50%), 81% in 2010 and 99% in 2011 under half density (RSR 30%)
+  - one of the four studies inside Laub et al. 2022's leafy-vegetables curve, listed in Table S1 as 'Marrou et al., 2013b' with this paper's DOI, so a comparison against it is an in-sample check
+- **Caveat:** The claim '3-7 day phenology delay in shaded lettuce' was carried here until 2026-09-20 and is not in this paper, which reports a null on cumulated thermal time. The figure belongs to elamri2018-water-budget. Laub's Table S1 labels this paper 2013b where this corpus labels it 2013a, so a reader checking the supplement meets a naming collision.
 
 #### `marrou2013-microclimate`
 
@@ -279,6 +333,17 @@ Marrou, Hélène; Dufour, Lydie; Wery, Jacques. (2013). *How does a shelter of s
 - Backs:
   - reduced soil evaporation and improved water-use efficiency under panels
   - rain shadow and drip-line redistribution of water under a panel array
+
+#### `mata2026-rutgers-solanaceous`
+
+Mata, Rebeca; Ward, Daniel L.; Wyenandt, Christian A.. (2026). *First Year Observations of Growing Solanaceous Vegetable Crops in an Agrivoltaic System in New Jersey*. AgriVoltaics Conference Proceedings 4
+
+- DOI: [10.52825/agripv.v4i.2829](https://doi.org/10.52825/agripv.v4i.2829)
+- Verification: Crossref-verified | Access: open-access, evidence tier **B**
+- Backs:
+  - Solanaceae yield falls nearest the array in a temperate field trial, verbatim: 'Total yield of all crops studied was lower at the rows closer to the solar panels, especially on eggplants'
+  - fruit quality does not follow yield, verbatim: 'while quality of the fruit, expressed as the marketable percentage of the harvested fruit, was higher closer to the modules row for eggplant, but was unaffected for tomatoes and peppers'
+- **Caveat:** One season, 2024, the first of the trial. Eggplant 'Palermo', bell pepper 'Turnpike' and fresh-market tomato 'Red Deuce' under single-axis trackers at 2.4 m with 10 m row spacing, on raised plastic mulch beds with drip irrigation. The paper reports yield by distance from the array and states no light measurement, so no season-cumulative shade fraction can be paired with its yields, which is the number this app would need from it.
 
 #### `meng2025-desert-pv-plants`
 
@@ -396,10 +461,12 @@ Weselek, Axel; Bauerle, Andrea; Hartung, Jens; Zikeli, Sabine; Lewandowski, Iris
 - DOI: [10.1007/s13593-021-00714-y](https://doi.org/10.1007/s13593-021-00714-y)
 - Verification: Crossref-verified | Access: open-access, evidence tier **B**
 - Backs:
-  - the sign of the shade effect flips between years: potato -20% in a normal year, +11% in a dry year
+  - the sign of the shade effect flips between years, and the 2017 figures are the significant ones: fresh-matter tuber yield 23.6 t/ha under the array against 28.8 t/ha on the reference in 2017 (-18.2%, p = 0.005) and 25.5 against 23.0 t/ha in 2018 (+11%, p = 0.034), winter wheat grain yield 4.6 against 5.7 t/ha in 2017 (-18.7%, p = 0.03) and 4.7 against 4.6 t/ha in 2018 (+2.7%, not significant, p = 0.78). The 7.2% and 8% figures quoted elsewhere are two-year averages
   - decision 4: weather input must be a TMY, never a single year
-  - temperate-site warming under panels, contradicting the Arizona and Oregon cooling results
-  - reduced soil moisture at Heggelbach, contradicting the Arizona and Oregon increases
+  - temperate-site cooling under panels, verbatim: 'In both, 2017 (n = 132 days) and 2018 (n = 112 days) daily mean air temperature was significantly lower by about 1.1 C on average. This effect was found across the whole year but was most prevalent during summertime. However, on 7 days in 2017 and 18 days in 2018, measured air temperature was higher under AV' (page 7), which agrees in direction with the Arizona and Oregon results
+  - reduced soil moisture at Heggelbach, contradicting the Arizona and Oregon increases, verbatim: 'Soil moisture was significantly decreased under AV on 26 days in 2017 and on 133 days in 2018. In 2017, significant differences only occurred during wintertime from the end of November onwards. Similar results were observed in 2018, where daily mean soil moisture was significantly lower under AV until the middle of April and from the end of October onwards', so the significant reductions fall in winter and the shoulder seasons and the authors attribute the difference from the irrigated sites to irrigation (page 6)
+  - crop development was slightly delayed under the array and the visible differences had gone by final harvest (page 12)
+- **Caveat:** The sentence 'air temperature tended to be higher underneath the AV facility on days with high solar radiation or low wind speeds' is Weselek reporting Marrou et al. 2013b as a contrast to their own result, introduced by 'In contrast' and closed by 'the opposing results'. It was read as Weselek's own finding until 2026-09-20 and inverted the sign of what they measured.
 
 #### `widmer-strawberry-dli`
 
@@ -408,7 +475,8 @@ Widmer, Jocelyn; Ançay, André; Duchemin, Mathilde; Nardin, Gaël; Ackermann, M
 - DOI: [10.52825/agripv.v4i.2837](https://doi.org/10.52825/agripv.v4i.2837)
 - Verification: Crossref-verified | Access: open-access, evidence tier **B**
 - Backs:
-  - strawberry minimum DLI 25 mol/m2/d and raspberry minimum DLI 15 mol/m2/d, verbatim: 'Based on the point where the standardized regression line crosses zero, the minimal DLI recommendation for maintaining average yield was 15 mol m-2 d-1 for raspberry and 25 mol m-2 d-1 for strawberry'
+  - strawberry minimum DLI 25 mol/m2/d and raspberry minimum DLI 15 mol/m2/d, verbatim: 'Based on the point where the standardized regression line crosses zero, the minimal DLI recommendation for maintaining average yield was 15 mol m-2 d-1 for raspberry and 25 mol m-2 d-1 for strawberries.'
+  - the shading that recommendation corresponds to, verbatim: 'Based on our findings, we recommend a minimum DLI of 25 mol m-2 d-1 ... corresponded to an estimated total shading of 10-30%, depending on the type of cover', which is the only shading percentage in the paper and the basis for this app's 10% strawberry ceiling
   - a positive linear relationship between DLI and both yield and sugar content in both species, stronger in strawberry
   - strawberry firmness declines at low DLI; fruit weight and titratable acidity are unaffected in both species
   - the authority for splitting strawberry out of Laub's lumped berry group
@@ -434,10 +502,12 @@ Zhang, Yuxin; Hendriks, Chantal; Uchanski, Mark; Page, Ellie. (2025). *Climatic 
 - Verification: Crossref-verified | Access: open-access, evidence tier **B**
 - Backs:
   - the paper's own headline tipping point is SYSTEM SIZE, ~2 ha (breakpoint 19,839 m2), beyond which microclimate temperature effects reverse
-  - segmented regression on shading rate (n=155): <20% no significant difference from control (p=0.084); 20-30% lower yield (p<0.01); 30-40% positive trend (p~0.05); 40-50% slight non-significant reduction (p>0.05); 50-60% marked suppression (p<0.05); >60% further inhibition (p<0.01)
+  - segmented regression on shading rate (n=155), verbatim: 'Results from segmented regression lines revealed that at shading rates below 20%, crop yield shows no statistically significant difference from the control group (p = 0.084) ... In the shading scale between 20% and 30% (which does not significantly change the microclimate), lower yield is observed (p < 0.01)'
+  - the design ceiling this app's Solanaceae and cucurbits classes now carry, verbatim: 'To reduce the impact on the growth of crops, the shading caused by PV systems should preferably not exceed 20%, but such a strategy might sacrifice energy generation per unit of land'
+  - where a shade benefit is observed at all, verbatim: 'Additionally, some variability is present in the climate conditions of the studies reporting yield increase, but in summary, the climates share some main features: hot summers, limited precipitation and (semi-) arid conditions (Fig. 9)'
   - the authors' design conclusion that 30-40% shading may support plant growth while maintaining reasonable solar output, and that shading above 50% is not ideal from a crop standpoint
   - crop groupings used: corn shade-sensitive (n=17), beans partial (n=40), lettuce shade-tolerant (n=42)
-- **Caveat:** CORRECTED 2026-07-30. Full text (21 pp, CC BY 4.0) retrieved with curl and a browser UA from https://link.springer.com/content/pdf/10.1007/s13593-025-01060-z.pdf. DO NOT ATTRIBUTE A '~50% SHADE TIPPING POINT' TO THIS PAPER. Its tipping point is ~2 ha of system size. The shade result is a separate segmented regression whose significant suppression band is 50-60%, and the literal 50% figure is Zhang et al.'s own citation of Beck et al. 2012, not their result. NO per-group effect-size table with confidence intervals exists in the paper; any such numbers cited to it are unsupportable.
+- **Caveat:** CORRECTED 2026-07-30. Full text (21 pp, CC BY 4.0) retrieved with curl and a browser UA from https://link.springer.com/content/pdf/10.1007/s13593-025-01060-z.pdf. DO NOT ATTRIBUTE A '~50% SHADE TIPPING POINT' TO THIS PAPER. Its tipping point is ~2 ha of system size. The shade result is a separate segmented regression whose significant suppression band is 50-60%, and the literal 50% figure is Zhang et al.'s own citation of Beck et al. 2012, not their result. NO per-group effect-size table with confidence intervals exists in the paper; any such numbers cited to it are unsupportable. The segmented regression pools crops: its three crop-resolved regressions are corn, beans and lettuce, and no Solanaceae appears in any of them, so the 20% ceiling it supports is a design figure across crops and not a tomato result.
 
 ## Solar engineering
 
@@ -935,7 +1005,7 @@ Yavari, Rouhangiz; Zaliwciw, Demetrius; Cibin, Raj; McPhillips, Lauren. (2022). 
 
 ## Horticulture & crop physiology
 
-81 sources.
+84 sources.
 
 #### `adhikary2025-clubroot-review`
 
@@ -1594,7 +1664,40 @@ Runkle, Erik. (2011). *Lighting Greenhouse Vegetables*. GPN (Greenhouse Product 
   - minimum DLI for vine crops (tomato, pepper, cucumber), verbatim: 'A recommended minimum DLI for lettuce production is 12 to 14 mol/m2/d, whereas at least 15 (and preferably more than 20) mol/m2/d is suggested for vine crops'
   - the 1-percent rule, verbatim: 'As a general rule, a 1 percent increase in DLI increases production by 1 percent'
   - tomato develops chlorotic leaves under continuous light, so four to six hours of darkness is suggested each night
-- **Caveat:** THIS IS THE REPLACEMENT FOR THE FALSE TOMATO DLI CITATION, and it does not give 22. It is the only Extension-authored source located that states a tomato/vine-crop DLI minimum, and the number is 15 (preferably >20), not 22. The 'at least 22 mol/m2/d' figure in the horticulture document is verbatim ReduSystems vendor marketing and has no source in this corpus or in the literature; it must be deleted, not re-cited. SCOPE: greenhouse production of vine crops, lumped as a group; the column names tomato, pepper and cucumber together and does not resolve per-species numbers. It is a trade-magazine column, not peer reviewed, and it cites no primary source for the 15/20 figures. Tier C. Must not reach a hard filter.
+- **Caveat:** THIS IS THE REPLACEMENT FOR THE FALSE TOMATO DLI CITATION, and it does not give 22. It is the only Extension-authored source located that states a tomato/vine-crop DLI minimum, and the number is 15 (preferably >20), not 22. The 'at least 22 mol/m2/d' figure in the horticulture document is verbatim ReduSystems vendor marketing and has no source in this corpus or in the literature; it must be deleted, not re-cited. SCOPE: the sentence carrying the 15 names no crop at all, it says only 'is suggested for vine crops'. The tomato, pepper and cucumber lumping is the opening sentence of the column, 'Greenhouse vegetable crops, such as tomato, pepper and cucumber, are considered vine crops', so the per-species reading is this app's. The column prints no 30 anywhere: the top of this app's 20 to 30 band comes from VCE SPES-720NP Table 3 and Purdue HO-238-B-W. It is a trade-magazine column, not peer reviewed, and it cites no primary source for the 15/20 figures. Tier C. Must not reach a hard filter.
+
+#### `runkle2019-dli-requirements`
+
+Runkle, Erik. (2019). *DLI 'Requirements'*. GPN (Greenhouse Product News)
+
+- URL: <https://gpnmag.com/article/dli-requirements/>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - Extension's own objection to the concept this app gates on, verbatim: 'Growers sometimes ask for the DLI "requirement" of a particular crop, or type of crops. In my opinion, there is no such thing as a DLI requirement because, with some notable exceptions, most plants can grow under a wide range of environmental conditions, including different DLIs. Growth of crops also depends on carbon dioxide (CO2) concentration and especially temperature, as well as crop culture. Therefore, providing a DLI requirement is both subjective and situational.'
+  - fruiting vegetables at a target of 15+ mol/m2/d in Table 1, whose caption reads 'Suggested daily light integral (DLI) targets for crops grown in controlled environments. Values are subjective and situational, and can vary depending on the shade tolerance of species, other environmental factors (notably, temperature and CO2), the market, and economics.'
+  - the direction behind the lettuce disorder ceiling, verbatim: 'there can be negative outcomes for some crops when the DLI is too high. Examples include leaf tip burn of some lettuces'
+- **Caveat:** The quote in the app's DLI disclosure is from this column, which had no citekey until 2026-09-20 and was quoted under its own title. Table 1's cells are served as an image on the archived page: the caption is verbatim from the page and the values (leafy greens and herbs 12+, cut flowers 15+, fruiting vegetables 15+, late plugs 10-15) are transcribed from the printed table. A trade-magazine column, not peer reviewed, citing no primary source.
+
+#### `rutgers-fs547-tomato-diseases`
+
+Wyenandt, Andy; Nitzsche, Peter. (2025). *Diagnosing and Controlling Fungal Diseases of Tomato in the Home Garden*. Rutgers New Jersey Agricultural Experiment Station FS547
+
+- URL: <https://njaes.rutgers.edu/fs547/>
+- Verification: URL-verified | Access: public-domain, evidence tier **B**
+- Backs:
+  - the Solanaceae rotation interval this app applies, verbatim: 'A minimum rotation of three years is considered essential to help reduce populations of soil-borne fungi'
+  - the crops that interval covers together, verbatim: 'Each year, plant tomatoes in a new location away from areas where tomatoes, eggplant, potatoes, or peppers have been grown in the past, since these vegetables all have similar disease problems'
+- **Caveat:** Extension guidance for home gardeners, citing no trial of its own for the three years. The A to E scheme grades study designs and has no rung for an extension consensus on a characterised mechanism, so the grade this rule ships with is a judgment call recorded in `src/data/companions.ts`.
+
+#### `rutgers-fs678-growing-tomatoes`
+
+Reiners, Steve; Nitzsche, Peter. (2021). *Growing Tomatoes in the Home Garden*. Rutgers New Jersey Agricultural Experiment Station FS678
+
+- URL: <https://njaes.rutgers.edu/fs678/>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - the laxer rotation figure in the same extension service, verbatim: 'If possible, plant tomatoes in an area where tomatoes, peppers, eggplants, and potatoes have not grown for at least two years to help avoid soil-borne disease problems'
+- **Caveat:** Four years older than FS547 and not disease-specific. Carried as the lower end of the range the two sheets give, and the app ships the longer interval.
 
 #### `sahli2012-chemlali-olive-chilling`
 

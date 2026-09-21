@@ -99,17 +99,20 @@ export const fetchOpenMeteoTmy = async (request: TmyRequest): Promise<RawTmyPayl
  *
  * | extent | answer |
  * |---|---|
- * | 2021-2024, four years | 200 |
+ * | 2021-2024, four years | 200 when first measured, 422 on 2026-09-20 |
  * | 2020-2024, five years | 422 |
+ * | 2016-2018 and 2022-2024, three years | 200 on 2026-09-20, 4.4 MB in 2 s |
  * | 2015-2024, ten years, as CSV | 200 |
  *
- * The window is therefore fetched in chunks and stitched back together, rather than shortened.
- * Ten years is what makes this a climatology instead of a sample, and a source quietly carrying a
- * different span from every other source would be exactly the kind of unlabelled difference the
- * provenance rules here exist to prevent. CSV would take it in one request and is the other
- * honest fix; it costs a second parser for one upstream, where this costs two extra requests
+ * The window is therefore fetched in chunks and stitched back together, and never shortened.
+ * Ten years is what makes this a climatology and a source quietly carrying a different span from
+ * every other source would be exactly the kind of unlabelled difference the provenance rules here
+ * exist to prevent. CSV would take it in one request and is the other honest fix, at the cost of
+ * a second parser for one upstream, where this costs a few extra requests. Two years a request
+ * leaves a year of margin under the cap the API moved down to: at four the whole fallback
+ * answered 422 on 2026-09-20 and nothing behind Open-Meteo could serve a lookup
  */
-const POWER_MAX_YEARS_PER_REQUEST = 4
+const POWER_MAX_YEARS_PER_REQUEST = 2
 
 /** The requested window as [firstYear, lastYear] spans no longer than POWER will encode */
 export const powerSpans = (
@@ -127,20 +130,24 @@ export const powerSpans = (
  * The chunks put back together as the one body `fromNasaPower` already reads. POWER keys every
  * reading by `YYYYMMDDHH` under its parameter name, so the chunks share no keys and a shallow
  * merge per parameter is the whole join; the parser sorts the keys itself, so the order the
- * chunks arrive in does not matter
+ * chunks arrive in does not matter.
+ *
+ * The point travels with the merge, because that is where POWER puts the site's elevation, and
+ * every chunk answers for the same point
  */
 export const mergedPowerBody = (bodies: readonly PowerBody[]): PowerBody => {
   const parameter: Record<string, Record<string, number>> = {}
   for (const body of bodies)
     for (const [name, series] of Object.entries(body.properties?.parameter ?? {}))
       parameter[name] = { ...(parameter[name] ?? {}), ...series }
-  return { properties: { parameter } }
+  const geometry = bodies.find((body) => body.geometry !== undefined)?.geometry
+  return { properties: { parameter }, ...(geometry === undefined ? {} : { geometry }) }
 }
 
 export const fetchNasaPowerTmy = async (request: TmyRequest): Promise<RawTmyPayload> => {
   const bodies: PowerBody[] = []
-  // sequential, because `MIN_INTERVAL_MS` paces this upstream and three requests fired at once
-  // would be three requests arriving at once
+  // sequential, because `MIN_INTERVAL_MS` paces this upstream and five requests fired at once
+  // would be five requests arriving at once
   for (const [firstYear, lastYear] of powerSpans(TMY_END_YEAR - TMY_YEAR_COUNT + 1, TMY_END_YEAR)) {
     bodies.push(
       await fetchJson<PowerBody>(
@@ -450,6 +457,8 @@ const fromOpenMeteo = (body: OpenMeteoBody): Stacked => {
 
 export interface PowerBody {
   readonly properties?: { readonly parameter?: Record<string, Record<string, number>> }
+  /** POWER's own point for the cell it answered from, written [lon, lat, elevation] */
+  readonly geometry?: { readonly coordinates?: readonly number[] }
 }
 
 /** POWER's no-data marker, in the hourly and the daily product alike */
@@ -510,6 +519,7 @@ const fromNasaPower = (body: PowerBody): Stacked => {
 
 interface PvgisBody {
   readonly inputs?: {
+    readonly location?: { readonly elevation?: unknown }
     readonly meteo_data?: { readonly radiation_db?: unknown }
   }
   readonly outputs?: {
@@ -620,6 +630,43 @@ export const parseCsvColumns = (
   })
   // unlike rain, a typical year's wind directions are usable, so the header alone is enough
   return { columns, windDirectionPresent: positions.windDirection >= 0, hours: rows }
+}
+
+/**
+ * The elevation in a TMY CSV's metadata header. NSRDB writes the field names on the first line
+ * and their values on the second, one of the names being `Elevation`. Null where a file has no
+ * such column, as an uploaded CSV of bare hourly rows has none
+ */
+const csvElevation = (csv: string): number | null => {
+  const [names, values] = csv.split(/\r?\n/).filter((line) => line.trim().length > 0)
+  const column = (names ?? '')
+    .split(',')
+    .findIndex((cell) => cell.trim().toLowerCase() === 'elevation')
+  return column < 0 ? null : numberOf((values ?? '').split(',')[column])
+}
+
+/**
+ * The site's height above sea level, read off the weather body itself.
+ *
+ * Every source here answers with the elevation of the cell it interpolated the year from, each in
+ * its own spelling: Open-Meteo puts it at the top of the archive body, PVGIS under its inputs,
+ * POWER as the third coordinate of the point, NSRDB in a CSV metadata column. So the one weather
+ * fetch a site already makes carries the number, and a lookup depends on no separate elevation
+ * service: the free DEM API that used to answer this stopped completing a TLS handshake on
+ * 2026-09-20 and every fresh lookup failed with it.
+ *
+ * Null where a body names none, and 0 stays 0, because sea level is a real elevation
+ */
+export const elevationOfPayload = (payload: RawTmyPayload): number | null => {
+  if (payload.source === 'nsrdb-psm3' || payload.source === 'user-upload')
+    return csvElevation(String(payload.body))
+  const body = payload.body
+  if (typeof body !== 'object' || body === null) return null
+  if (payload.source === 'open-meteo')
+    return numberOf((body as { readonly elevation?: unknown }).elevation)
+  if (payload.source === 'pvgis-sarah3')
+    return numberOf((body as PvgisBody).inputs?.location?.elevation)
+  return numberOf((body as PowerBody).geometry?.coordinates?.[2])
 }
 
 const provenanceFor = (
@@ -772,6 +819,7 @@ const NSRDB_NEAR_ZERO_WIND_NOTE = 'wind set to the FAO-56 default, this record c
 export const normaliseWeather = (payload: RawTmyPayload, location: LatLon): WeatherRecord => {
   // the longitude's whole-hour guess; `resolveSite` stamps the zone the normals name over it
   const utcOffsetHours = utcOffsetHoursFor(location)
+  const elevationM = elevationOfPayload(payload)
   if (payload.source === 'open-meteo' || payload.source === 'nasa-power') {
     const stacked =
       payload.source === 'open-meteo'
@@ -795,7 +843,7 @@ export const normaliseWeather = (payload: RawTmyPayload, location: LatLon): Weat
           windDirectionPresent,
         }),
       }))
-    return { typical, years }
+    return { typical, years, elevationM }
   }
   const single = { ...TYPICAL_PACK, precipPresent: false }
   if (payload.source === 'pvgis-sarah3') {
@@ -815,7 +863,7 @@ export const normaliseWeather = (payload: RawTmyPayload, location: LatLon): Weat
             datasetLabel: `${typical.provenance.datasetLabel} (${database})`,
           }
         : typical.provenance
-    return { typical: { ...typical, provenance }, years: [] }
+    return { typical: { ...typical, provenance }, years: [], elevationM }
   }
   const label = payload.source === 'nsrdb-psm3' ? 'NSRDB' : 'The uploaded CSV'
   const { columns, windDirectionPresent, hours } = parseCsvColumns(String(payload.body), label)
@@ -842,7 +890,7 @@ export const normaliseWeather = (payload: RawTmyPayload, location: LatLon): Weat
         datasetLabel: `${typical.provenance.datasetLabel} (${NSRDB_NEAR_ZERO_WIND_NOTE})`,
       }
     : typical.provenance
-  return { typical: { ...typical, provenance }, years: [] }
+  return { typical: { ...typical, provenance }, years: [], elevationM }
 }
 
 export const normaliseTmy = (payload: RawTmyPayload, location: LatLon): TmySeries =>
@@ -898,7 +946,7 @@ export const fetchWeather = async (request: TmyRequest): Promise<WeatherRecord> 
   }
   /*
     PVGIS ahead of NASA POWER, measured: PVGIS answers its whole typical year in about 4 s
-    (Amherst, 1.27 MB) where POWER's hourly endpoint is three sequential four-year chunks at up
+    (Amherst, 1.27 MB) where POWER's hourly endpoint is five sequential two-year chunks at up
     to 12 s each. The cost is a typical year with no measured years behind it, which the season
     simulation says out loud. The Set keeps a polar site, whose preferred source is POWER, from
     asking it a second time

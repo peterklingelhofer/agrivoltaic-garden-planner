@@ -54,8 +54,11 @@
         "dtmRef": "transplant",
         "support": "cage",
         "dliCitations": [
+          "stallknecht2025-vce-dli",
+          "torres-purdue-dli-b",
           "runkle2011-vegetable-dli"
-        ]
+        ],
+        "dliCaveat": "The 15 is Runkle 2011’s figure for vine crops as a group, \"at least 15 (and preferably more than 20)\", in a sentence that names no crop, and the lowest band Purdue HO-238-B-W marks acceptable for tomato and pepper is 10 to 12. The 20 to 30 is the range Virginia Cooperative Extension’s Table 3 prints for tomato. Both are greenhouse figures and neither traces to a tomato experiment. The yield curve these rows run on is Laub’s fruity-vegetables group, three studies (bell pepper under nets and sweet pepper under cloth, both subtropical, and squash), none of them tomato and none under panels. The field trials in this corpus (Mata et al. 2026 at Bridgeton, Ben Naim et al. 2025 in Israel) measured yield losses that grew with shading, with no gain measured anywhere"
       }
     },
     {
@@ -83,8 +86,11 @@
         "dtmRef": "transplant",
         "minSoilTempC": 18,
         "dliCitations": [
+          "stallknecht2025-vce-dli",
+          "torres-purdue-dli-b",
           "runkle2011-vegetable-dli"
-        ]
+        ],
+        "dliCaveat": "The 15 is Runkle 2011’s figure for vine crops as a group, \"at least 15 (and preferably more than 20)\", in a sentence that names no crop, and the lowest band Purdue HO-238-B-W marks acceptable for tomato and pepper is 10 to 12. The 20 to 30 is the range Virginia Cooperative Extension’s Table 3 prints for tomato. Both are greenhouse figures and neither traces to a tomato experiment. The yield curve these rows run on is Laub’s fruity-vegetables group, three studies (bell pepper under nets and sweet pepper under cloth, both subtropical, and squash), none of them tomato and none under panels. The field trials in this corpus (Mata et al. 2026 at Bridgeton, Ben Naim et al. 2025 in Israel) measured yield losses that grew with shading, with no gain measured anywhere"
       }
     },
     {
@@ -112,8 +118,11 @@
         "dtmRef": "transplant",
         "minSoilTempC": 18,
         "dliCitations": [
+          "stallknecht2025-vce-dli",
+          "torres-purdue-dli-b",
           "runkle2011-vegetable-dli"
-        ]
+        ],
+        "dliCaveat": "The 15 is Runkle 2011’s figure for vine crops as a group, \"at least 15 (and preferably more than 20)\", in a sentence that names no crop, and the lowest band Purdue HO-238-B-W marks acceptable for tomato and pepper is 10 to 12. The 20 to 30 is the range Virginia Cooperative Extension’s Table 3 prints for tomato. Both are greenhouse figures and neither traces to a tomato experiment. The yield curve these rows run on is Laub’s fruity-vegetables group, three studies (bell pepper under nets and sweet pepper under cloth, both subtropical, and squash), none of them tomato and none under panels. The field trials in this corpus (Mata et al. 2026 at Bridgeton, Ben Naim et al. 2025 in Israel) measured yield losses that grew with shading, with no gain measured anywhere"
       }
     },
     {
@@ -136,11 +145,7 @@
       "widthM": 0.7,
       "overrides": {
         "harvestDays": 60,
-        "dtmRef": "transplant",
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "dtmRef": "transplant"
       }
     },
     {
@@ -163,11 +168,7 @@
       "widthM": 1,
       "overrides": {
         "harvestDays": 60,
-        "dtmRef": "transplant",
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "dtmRef": "transplant"
       }
     },
     {
@@ -193,8 +194,10 @@
         "zr": 0.95,
         "p": 0.5,
         "dliCitations": [
+          "stallknecht2025-vce-dli",
           "runkle2011-vegetable-dli"
-        ]
+        ],
+        "dliCaveat": "The 15 is Runkle 2011’s figure for vine crops as a group, \"at least 15 (and preferably more than 20)\", in a sentence that names no crop, and the lowest band Purdue HO-238-B-W marks acceptable for tomato and pepper is 10 to 12. The 20 to 30 is the range Virginia Cooperative Extension’s Table 3 prints for tomato. Both are greenhouse figures and neither traces to a tomato experiment. The yield curve these rows run on is Laub’s fruity-vegetables group, three studies (bell pepper under nets and sweet pepper under cloth, both subtropical, and squash), none of them tomato and none under panels. The field trials in this corpus (Mata et al. 2026 at Bridgeton, Ben Naim et al. 2025 in Israel) measured yield losses that grew with shading, with no gain measured anywhere"
       }
     },
     {
@@ -218,11 +221,7 @@
       "overrides": {
         "harvestDays": 50,
         "zr": 0.8,
-        "p": 0.5,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "p": 0.5
       }
     },
     {
@@ -245,11 +244,7 @@
       "widthM": 3,
       "overrides": {
         "zr": 0.8,
-        "p": 0.5,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "p": 0.5
       }
     },
     {
@@ -272,11 +267,7 @@
       "widthM": 3.5,
       "overrides": {
         "zr": 0.8,
-        "p": 0.5,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "p": 0.5
       }
     },
     {
@@ -299,11 +290,7 @@
       "widthM": 2.5,
       "overrides": {
         "zr": 1.15,
-        "p": 0.4,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "p": 0.4
       }
     },
     {
@@ -326,11 +313,7 @@
       "widthM": 3,
       "overrides": {
         "zr": 1.1,
-        "p": 0.4,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "p": 0.4
       }
     },
     {
@@ -352,11 +335,7 @@
       "heightM": 1.5,
       "widthM": 0.6,
       "overrides": {
-        "harvestDays": 60,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "harvestDays": 60
       }
     },
     {
@@ -383,10 +362,7 @@
         "p": 0.45,
         "nfix": true,
         "succession": 14,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "laubNote": "The grain-legume trials in the meta-analysis measured dry seed, and this crop is picked as an immature pod or a green seed, which is a different sink (where the plant sends its sugars)"
       }
     },
     {
@@ -412,10 +388,7 @@
         "zr": 0.6,
         "p": 0.45,
         "nfix": true,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "laubNote": "The grain-legume trials in the meta-analysis measured dry seed, and this crop is picked as an immature pod or a green seed, which is a different sink (where the plant sends its sugars)"
       }
     },
     {
@@ -438,10 +411,7 @@
       "widthM": 0.3,
       "overrides": {
         "nfix": true,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "laubNote": "The grain-legume trials in the meta-analysis measured dry seed, and this crop is picked as an immature pod or a green seed, which is a different sink (where the plant sends its sugars)"
       }
     },
     {
@@ -468,10 +438,7 @@
         "gddBase": 4.5,
         "nfix": true,
         "succession": 14,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "laubNote": "The grain-legume trials in the meta-analysis measured dry seed, and this crop is picked as an immature pod or a green seed, which is a different sink (where the plant sends its sugars)"
       }
     },
     {
@@ -494,10 +461,7 @@
       "widthM": 0.3,
       "overrides": {
         "nfix": true,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "laubNote": "The grain-legume trials in the meta-analysis measured dry seed, and this crop is picked as an immature pod or a green seed, which is a different sink (where the plant sends its sugars)"
       }
     },
     {
@@ -520,11 +484,7 @@
       "widthM": 0.4,
       "overrides": {
         "harvestDays": 30,
-        "nfix": true,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "nfix": true
       }
     },
     {
@@ -547,10 +507,7 @@
       "widthM": 0.3,
       "overrides": {
         "nfix": true,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "laubNote": "The grain-legume trials in the meta-analysis measured dry seed, and this crop is picked as an immature pod or a green seed, which is a different sink (where the plant sends its sugars)"
       }
     },
     {
@@ -572,11 +529,7 @@
       "heightM": 0.4,
       "widthM": 0.2,
       "overrides": {
-        "nfix": true,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "nfix": true
       }
     },
     {
@@ -598,11 +551,7 @@
       "heightM": 0.5,
       "widthM": 0.4,
       "overrides": {
-        "nfix": true,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "nfix": true
       }
     },
     {
@@ -624,11 +573,7 @@
       "heightM": 0.5,
       "widthM": 0.6,
       "overrides": {
-        "nfix": true,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "nfix": true
       }
     },
     {
@@ -655,10 +600,7 @@
         "gddBase": 6.7,
         "gddUpper": 30,
         "betweenCm": 75,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "laubNote": "The maize trials in the meta-analysis are grain maize, and sweet corn is cut at the milk stage, so the loss this curve predicts is likely overstated for it"
       }
     },
     {
@@ -678,13 +620,7 @@
       "daysToMaturity": 110,
       "spacingCm": 12,
       "heightM": 1,
-      "widthM": 0.15,
-      "overrides": {
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
-      }
+      "widthM": 0.15
     },
     {
       "id": "barley",
@@ -703,13 +639,7 @@
       "daysToMaturity": 100,
       "spacingCm": 12,
       "heightM": 0.9,
-      "widthM": 0.15,
-      "overrides": {
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
-      }
+      "widthM": 0.15
     },
     {
       "id": "oat",
@@ -728,13 +658,7 @@
       "daysToMaturity": 100,
       "spacingCm": 12,
       "heightM": 1.1,
-      "widthM": 0.15,
-      "overrides": {
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
-      }
+      "widthM": 0.15
     },
     {
       "id": "rye-cereal",
@@ -753,13 +677,7 @@
       "daysToMaturity": 120,
       "spacingCm": 12,
       "heightM": 1.4,
-      "widthM": 0.15,
-      "overrides": {
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
-      }
+      "widthM": 0.15
     },
     {
       "id": "quinoa",
@@ -780,10 +698,7 @@
       "heightM": 1.5,
       "widthM": 0.4,
       "overrides": {
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "laubNote": "The C3-cereals group is wheat and barley, and this crop is an Amaranthaceae pseudocereal, so the group is a proxy"
       }
     },
     {
@@ -791,7 +706,7 @@
       "acceptedName": "Amaranthus cruentus",
       "family": "Amaranthaceae",
       "commonNames": "grain amaranth",
-      "laubGroup": "c3-cereals",
+      "laubGroup": "maize-c4",
       "dliClass": "c3-cereals",
       "habit": "upright-herb",
       "archetype": "hot",
@@ -803,13 +718,7 @@
       "daysToMaturity": 110,
       "spacingCm": 30,
       "heightM": 1.8,
-      "widthM": 0.5,
-      "overrides": {
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
-      }
+      "widthM": 0.5
     },
     {
       "id": "goosefoot",
@@ -830,9 +739,7 @@
       "heightM": 1.2,
       "widthM": 0.4,
       "overrides": {
-        "dliCitations": [
-          "mueller2025-eastern-ag-complex"
-        ]
+        "laubNote": "The C3-cereals group is wheat and barley, and this crop is an Amaranthaceae pseudocereal, so the group is a proxy"
       }
     },
     {
@@ -854,9 +761,7 @@
       "heightM": 1.5,
       "widthM": 0.5,
       "overrides": {
-        "dliCitations": [
-          "mueller2025-eastern-ag-complex"
-        ]
+        "laubNote": "No group in the meta-analysis holds an oilseed, so this crop reads the nearest grain curve as a proxy"
       }
     },
     {
@@ -882,11 +787,13 @@
         "p": 0.35,
         "maxRsr": 0.5,
         "maxRsrTier": "B",
+        "maxRsrNote": "Potato is the one crop in this catalogue with a shade trial of its own: Weselek et al. 2021 grew it under an array at about 30 percent shade across two seasons, and Laub et al. 2022 class tubers and root crops as tolerant to about half the light. The 50 percent ceiling is the level the reviews put the yield-loss threshold at for potato, and it is well past anything the trial tested",
         "betweenCm": 75,
         "dliCitations": [
           "weselek2021-potato",
           "laub2022-shade-meta"
-        ]
+        ],
+        "dliCaveat": "Weselek et al. 2021 grew potato under an array at about 30 percent shade and Laub et al. 2022 place tubers and root crops on their own response curve. Neither prints a daily light integral for potato, so the 12 and the 18 to 25 are this app’s own band and the tier stands on the shade evidence"
       }
     },
     {
@@ -909,11 +816,7 @@
       "widthM": 1.5,
       "overrides": {
         "zr": 1.25,
-        "p": 0.65,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "p": 0.65
       }
     },
     {
@@ -928,7 +831,7 @@
       "dliMin": 8,
       "dliTargetLow": 14,
       "dliTargetHigh": 20,
-      "tier": "B",
+      "tier": "C",
       "shade": 1,
       "daysToMaturity": 75,
       "spacingCm": 6,
@@ -937,11 +840,7 @@
       "overrides": {
         "zr": 0.75,
         "p": 0.35,
-        "succession": 21,
-        "dliCitations": [
-          "weselek2021-potato",
-          "laub2022-shade-meta"
-        ]
+        "succession": 21
       }
     },
     {
@@ -956,18 +855,14 @@
       "dliMin": 8,
       "dliTargetLow": 14,
       "dliTargetHigh": 20,
-      "tier": "B",
+      "tier": "C",
       "shade": 1,
       "daysToMaturity": 60,
       "spacingCm": 10,
       "heightM": 0.35,
       "widthM": 0.2,
       "overrides": {
-        "succession": 21,
-        "dliCitations": [
-          "weselek2021-potato",
-          "laub2022-shade-meta"
-        ]
+        "succession": 21
       }
     },
     {
@@ -991,11 +886,7 @@
       "overrides": {
         "zr": 0.4,
         "p": 0.3,
-        "succession": 10,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "succession": 10
       }
     },
     {
@@ -1017,11 +908,7 @@
       "heightM": 0.35,
       "widthM": 0.25,
       "overrides": {
-        "succession": 21,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "succession": 21
       }
     },
     {
@@ -1041,13 +928,7 @@
       "daysToMaturity": 90,
       "spacingCm": 20,
       "heightM": 0.4,
-      "widthM": 0.3,
-      "overrides": {
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
-      }
+      "widthM": 0.3
     },
     {
       "id": "parsnip",
@@ -1068,11 +949,7 @@
       "heightM": 0.4,
       "widthM": 0.2,
       "overrides": {
-        "life": "biennial",
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "life": "biennial"
       }
     },
     {
@@ -1094,11 +971,7 @@
       "heightM": 0.5,
       "widthM": 0.35,
       "overrides": {
-        "dtmRef": "transplant",
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "dtmRef": "transplant"
       }
     },
     {
@@ -1120,11 +993,7 @@
       "heightM": 0.4,
       "widthM": 0.3,
       "overrides": {
-        "succession": 21,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "succession": 21
       }
     },
     {
@@ -1147,11 +1016,7 @@
       "widthM": 0.6,
       "overrides": {
         "life": "perennial",
-        "coldC": -30,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "coldC": -30
       }
     },
     {
@@ -1174,11 +1039,7 @@
       "widthM": 0.6,
       "overrides": {
         "life": "perennial",
-        "coldC": -34,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "coldC": -34
       }
     },
     {
@@ -1202,11 +1063,7 @@
       "overrides": {
         "zr": 0.45,
         "p": 0.3,
-        "k": 0.35,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "k": 0.35
       }
     },
     {
@@ -1231,11 +1088,7 @@
         "synonyms": [
           "Allium cepa Aggregatum group"
         ],
-        "k": 0.35,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "k": 0.35
       }
     },
     {
@@ -1267,10 +1120,6 @@
         "sow": [
           280,
           296
-        ],
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
         ]
       }
     },
@@ -1294,11 +1143,7 @@
       "widthM": 0.2,
       "overrides": {
         "k": 0.35,
-        "dtmRef": "transplant",
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "dtmRef": "transplant"
       }
     },
     {
@@ -1321,11 +1166,7 @@
       "widthM": 0.1,
       "overrides": {
         "k": 0.35,
-        "succession": 21,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "succession": 21
       }
     },
     {
@@ -1348,11 +1189,7 @@
       "widthM": 0.25,
       "overrides": {
         "life": "perennial",
-        "coldC": -34,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "coldC": -34
       }
     },
     {
@@ -1377,7 +1214,6 @@
         "zr": 0.4,
         "p": 0.3,
         "ceiling": 17,
-        "ceilingDays": 3,
         "succession": 14,
         "dliCitations": [
           "both1997-cornell-lettuce-light",
@@ -1385,7 +1221,7 @@
           "kelly2020-lettuce-dli",
           "pennisi2020-lettuce-basil-ppfd"
         ],
-        "dliCaveat": "5.8 mol/m2/d is the lowest level Pennisi et al. 2020 grew lettuce at (100 µmol/m2/s for 16 h), where it still produced a crop with the least biomass, Kelly et al. 2020 grew two cultivars from 6.9. No trial in the corpus places a failure point below that, so the floor is where measurement stops. The target runs from Pennisi et al.’s optimum, 14.4, past which yield stopped rising, to the Cornell CEA programme’s 17"
+        "dliCaveat": "5.8 mol/m2/d is the lowest level Pennisi et al. 2020 grew lettuce at (100 µmol/m2/s for 16 h), where it still produced a crop with the least biomass. Kelly et al. 2020 grew two cultivars from 6.9. No trial in the corpus places a failure point below that, so the floor is where measurement stops. The target runs from Pennisi et al.’s optimum, 14.4, past which yield stopped rising, to the Cornell CEA programme’s 17. Every trial behind these numbers is a growth chamber or a greenhouse at a fixed photoperiod, and none measured an outdoor bed"
       }
     },
     {
@@ -1410,7 +1246,6 @@
         "zr": 0.4,
         "p": 0.3,
         "ceiling": 17,
-        "ceilingDays": 3,
         "succession": 14,
         "dliCitations": [
           "both1997-cornell-lettuce-light",
@@ -1418,7 +1253,7 @@
           "kelly2020-lettuce-dli",
           "pennisi2020-lettuce-basil-ppfd"
         ],
-        "dliCaveat": "5.8 mol/m2/d is the lowest level Pennisi et al. 2020 grew lettuce at (100 µmol/m2/s for 16 h), where it still produced a crop with the least biomass, Kelly et al. 2020 grew two cultivars from 6.9. No trial in the corpus places a failure point below that, so the floor is where measurement stops. The target runs from Pennisi et al.’s optimum, 14.4, past which yield stopped rising, to the Cornell CEA programme’s 17"
+        "dliCaveat": "5.8 mol/m2/d is the lowest level Pennisi et al. 2020 grew lettuce at (100 µmol/m2/s for 16 h), where it still produced a crop with the least biomass. Kelly et al. 2020 grew two cultivars from 6.9. No trial in the corpus places a failure point below that, so the floor is where measurement stops. The target runs from Pennisi et al.’s optimum, 14.4, past which yield stopped rising, to the Cornell CEA programme’s 17. Every trial behind these numbers is a growth chamber or a greenhouse at a fixed photoperiod, and none measured an outdoor bed"
       }
     },
     {
@@ -1444,9 +1279,9 @@
         "p": 0.2,
         "succession": 14,
         "dliCitations": [
-          "torres-purdue-dli-b",
           "stallknecht2025-vce-dli"
-        ]
+        ],
+        "dliCaveat": "Virginia Cooperative Extension’s Table 3 prints 14 to 20 mol/m2/d for spinach, which is this row’s target. The 6 floor is this app’s own: Gao et al. 2020 grew spinach from 11.5 to 20.2 with an optimum at 17.3, so the trial starts too high to place a minimum"
       }
     },
     {
@@ -1471,11 +1306,7 @@
         "synonyms": [
           "Beta vulgaris subsp. vulgaris Cicla group"
         ],
-        "harvestDays": 90,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "harvestDays": 90
       }
     },
     {
@@ -1490,7 +1321,7 @@
       "dliMin": 6,
       "dliTargetLow": 12,
       "dliTargetHigh": 18,
-      "tier": "B",
+      "tier": "C",
       "shade": 2,
       "daysToMaturity": 60,
       "spacingCm": 40,
@@ -1500,11 +1331,7 @@
         "synonyms": [
           "Brassica oleracea Acephala group"
         ],
-        "harvestDays": 90,
-        "dliCitations": [
-          "weselek2021-potato",
-          "laub2022-shade-meta"
-        ]
+        "harvestDays": 90
       }
     },
     {
@@ -1526,11 +1353,7 @@
       "heightM": 0.8,
       "widthM": 0.6,
       "overrides": {
-        "harvestDays": 90,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "harvestDays": 90
       }
     },
     {
@@ -1552,11 +1375,7 @@
       "heightM": 0.5,
       "widthM": 0.3,
       "overrides": {
-        "succession": 14,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "succession": 14
       }
     },
     {
@@ -1578,11 +1397,7 @@
       "heightM": 0.25,
       "widthM": 0.2,
       "overrides": {
-        "succession": 10,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "succession": 10
       }
     },
     {
@@ -1607,11 +1422,7 @@
         "synonyms": [
           "Brassica rapa var. nipposinica"
         ],
-        "succession": 14,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "succession": 14
       }
     },
     {
@@ -1636,11 +1447,7 @@
         "synonyms": [
           "Brassica rapa var. rosularis"
         ],
-        "succession": 14,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "succession": 14
       }
     },
     {
@@ -1665,11 +1472,7 @@
         "synonyms": [
           "Brassica rapa Chinensis group"
         ],
-        "succession": 14,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "succession": 14
       }
     },
     {
@@ -1689,13 +1492,7 @@
       "daysToMaturity": 80,
       "spacingCm": 30,
       "heightM": 0.3,
-      "widthM": 0.35,
-      "overrides": {
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
-      }
+      "widthM": 0.35
     },
     {
       "id": "radicchio",
@@ -1714,13 +1511,7 @@
       "daysToMaturity": 85,
       "spacingCm": 25,
       "heightM": 0.3,
-      "widthM": 0.3,
-      "overrides": {
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
-      }
+      "widthM": 0.3
     },
     {
       "id": "celery",
@@ -1742,11 +1533,7 @@
       "widthM": 0.3,
       "overrides": {
         "dtmRef": "transplant",
-        "p": 0.2,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "p": 0.2
       }
     },
     {
@@ -1768,11 +1555,7 @@
       "heightM": 0.4,
       "widthM": 1,
       "overrides": {
-        "harvestDays": 90,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "harvestDays": 90
       }
     },
     {
@@ -1796,11 +1579,7 @@
       "overrides": {
         "life": "perennial",
         "coldC": -34,
-        "harvestDays": 120,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "harvestDays": 120
       }
     },
     {
@@ -1826,11 +1605,7 @@
           2,
           5
         ],
-        "succession": 14,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "succession": 14
       }
     },
     {
@@ -1855,10 +1630,6 @@
         "window": [
           2,
           5
-        ],
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
         ]
       }
     },
@@ -1882,11 +1653,7 @@
       "widthM": 0.4,
       "overrides": {
         "life": "perennial",
-        "coldC": -20,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "coldC": -20
       }
     },
     {
@@ -1906,13 +1673,7 @@
       "daysToMaturity": 50,
       "spacingCm": 30,
       "heightM": 1.2,
-      "widthM": 0.4,
-      "overrides": {
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
-      }
+      "widthM": 0.4
     },
     {
       "id": "purslane",
@@ -1931,13 +1692,7 @@
       "daysToMaturity": 50,
       "spacingCm": 20,
       "heightM": 0.15,
-      "widthM": 0.4,
-      "overrides": {
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
-      }
+      "widthM": 0.4
     },
     {
       "id": "good-king-henry",
@@ -1959,11 +1714,7 @@
       "widthM": 0.4,
       "overrides": {
         "life": "perennial",
-        "coldC": -30,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "coldC": -30
       }
     },
     {
@@ -1986,11 +1737,7 @@
       "widthM": 0.8,
       "overrides": {
         "life": "perennial",
-        "coldC": -25,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "coldC": -25
       }
     },
     {
@@ -2017,11 +1764,7 @@
         "synonyms": [
           "Brassica oleracea Capitata group"
         ],
-        "dtmRef": "transplant",
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "dtmRef": "transplant"
       }
     },
     {
@@ -2048,11 +1791,7 @@
         "synonyms": [
           "Brassica oleracea Italica group"
         ],
-        "dtmRef": "transplant",
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "dtmRef": "transplant"
       }
     },
     {
@@ -2077,11 +1816,7 @@
         "synonyms": [
           "Brassica oleracea Botrytis group"
         ],
-        "dtmRef": "transplant",
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "dtmRef": "transplant"
       }
     },
     {
@@ -2107,11 +1842,7 @@
           "Brassica oleracea Gemmifera group"
         ],
         "dtmRef": "transplant",
-        "fallHarvest": true,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "fallHarvest": true
       }
     },
     {
@@ -2135,10 +1866,6 @@
       "overrides": {
         "synonyms": [
           "Brassica rapa Pekinensis group"
-        ],
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
         ]
       }
     },
@@ -2161,11 +1888,7 @@
       "heightM": 0.6,
       "widthM": 0.6,
       "overrides": {
-        "dtmRef": "transplant",
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "dtmRef": "transplant"
       }
     },
     {
@@ -2194,7 +1917,7 @@
           "pennisi2020-lettuce-basil-ppfd",
           "walters2018-basil-species-dli"
         ],
-        "dliCaveat": "12.9 mol/m2/d is the level Dou et al. 2018 suggest for commercial production, the lowest of their five at which yield and nutritional quality were both high, their plants still grew at 9.3 with 54 to 79 percent less shoot mass, and Walters and Currey 2018 found 59 percent less at 7 or below than at about 15. The target runs from Pennisi et al. 2020’s optimum, 14.4, to 17.8, the top of Dou et al.’s range, where shoot mass was highest"
+        "dliCaveat": "12.9 mol/m2/d is the level Dou et al. 2018 suggest for commercial production, the lowest of their five at which yield and nutritional quality were both high, and 9.3 is the lowest level they grew it at, where it produced a crop with shoot fresh weight 35 to 44 percent below the three higher levels. Walters and Currey 2018 grew sweet basil at about 7 and about 15 mol/m2/d and report fresh weight 144 percent higher at the high level, which inverts to 59 percent less at the low one, a figure this app derives and the paper does not print. The target runs from Pennisi et al. 2020’s optimum, 14.4, to 17.8, the top of Dou et al.’s range, where shoot mass was highest"
       }
     },
     {
@@ -2217,11 +1940,7 @@
       "widthM": 0.3,
       "overrides": {
         "life": "biennial",
-        "harvestDays": 120,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "harvestDays": 120
       }
     },
     {
@@ -2243,11 +1962,7 @@
       "heightM": 0.5,
       "widthM": 0.2,
       "overrides": {
-        "succession": 14,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "succession": 14
       }
     },
     {
@@ -2269,11 +1984,7 @@
       "heightM": 1,
       "widthM": 0.3,
       "overrides": {
-        "succession": 21,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "succession": 21
       }
     },
     {
@@ -2297,11 +2008,7 @@
       "overrides": {
         "life": "perennial",
         "coldC": -29,
-        "harvestDays": 120,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "harvestDays": 120
       }
     },
     {
@@ -2331,11 +2038,7 @@
           30,
           40
         ],
-        "harvestDays": 120,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "harvestDays": 120
       }
     },
     {
@@ -2365,11 +2068,7 @@
           30,
           40
         ],
-        "harvestDays": 150,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "harvestDays": 150
       }
     },
     {
@@ -2394,11 +2093,7 @@
         "life": "woody-perennial",
         "coldC": -12,
         "deciduous": false,
-        "harvestDays": 200,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "harvestDays": 200
       }
     },
     {
@@ -2429,11 +2124,7 @@
           40
         ],
         "deciduous": false,
-        "harvestDays": 150,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "harvestDays": 150
       }
     },
     {
@@ -2457,11 +2148,7 @@
       "overrides": {
         "life": "perennial",
         "coldC": -29,
-        "harvestDays": 120,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "harvestDays": 120
       }
     },
     {
@@ -2485,11 +2172,7 @@
       "overrides": {
         "life": "perennial",
         "coldC": -29,
-        "harvestDays": 120,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "harvestDays": 120
       }
     },
     {
@@ -2513,11 +2196,7 @@
       "overrides": {
         "life": "perennial",
         "coldC": -34,
-        "harvestDays": 120,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "harvestDays": 120
       }
     },
     {
@@ -2539,11 +2218,7 @@
       "heightM": 0.4,
       "widthM": 0.35,
       "overrides": {
-        "harvestDays": 90,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "harvestDays": 90
       }
     },
     {
@@ -2563,13 +2238,7 @@
       "daysToMaturity": 90,
       "spacingCm": 25,
       "heightM": 1,
-      "widthM": 0.4,
-      "overrides": {
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
-      }
+      "widthM": 0.4
     },
     {
       "id": "shiso",
@@ -2590,11 +2259,7 @@
       "heightM": 0.8,
       "widthM": 0.4,
       "overrides": {
-        "harvestDays": 80,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "harvestDays": 80
       }
     },
     {
@@ -2616,11 +2281,7 @@
       "heightM": 0.4,
       "widthM": 0.2,
       "overrides": {
-        "succession": 14,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "succession": 14
       }
     },
     {
@@ -2640,13 +2301,7 @@
       "daysToMaturity": 65,
       "spacingCm": 20,
       "heightM": 0.4,
-      "widthM": 0.25,
-      "overrides": {
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
-      }
+      "widthM": 0.25
     },
     {
       "id": "bay-laurel",
@@ -2670,11 +2325,7 @@
         "life": "woody-perennial",
         "coldC": -9,
         "deciduous": false,
-        "yearsToMature": 8,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "yearsToMature": 8
       }
     },
     {
@@ -2703,10 +2354,6 @@
           12,
           30,
           40
-        ],
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
         ]
       }
     },
@@ -2736,10 +2383,6 @@
           12,
           30,
           40
-        ],
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
         ]
       }
     },
@@ -2763,10 +2406,7 @@
       "widthM": 0.5,
       "overrides": {
         "life": "perennial",
-        "coldC": -34,
-        "dliCitations": [
-          "fiedler2007-insectary"
-        ]
+        "coldC": -34
       }
     },
     {
@@ -2781,7 +2421,7 @@
       "dliMin": 25,
       "dliTargetLow": 25,
       "dliTargetHigh": 30,
-      "tier": "C",
+      "tier": "B",
       "shade": 2,
       "daysToMaturity": 365,
       "spacingCm": 35,
@@ -2792,12 +2432,11 @@
         "coldC": -25,
         "yearsToMature": 2,
         "harvestDays": 30,
-        "maxRsr": 0.1,
-        "maxRsrTier": "B",
         "dliCitations": [
           "widmer-strawberry-dli",
           "kubota-osu-strawberry-dli"
-        ]
+        ],
+        "dliCaveat": "25 mol/m2/d is the level Widmer et al. 2026 found maintains trial-average yield under agrivoltaic cover, from a four-year study of 21 cases in Switzerland, every one substrate-grown under a protective cover. The 30 at the top of the band is where the Ohio State Kubota Lab’s greenhouse guidance reports strawberry plants tend to be stressed. Neither figure is a failure point, and transfer to an in-ground bed is an extrapolation"
       }
     },
     {
@@ -2825,7 +2464,8 @@
         "harvestDays": 30,
         "dliCitations": [
           "widmer-strawberry-dli"
-        ]
+        ],
+        "dliCaveat": "15 mol/m2/d is the level Widmer et al. 2026 found maintains trial-average yield for raspberry, on the same convention as strawberry. They publish no target band and no shading percentage for raspberry, so the 18 to 25 is this app’s own"
       }
     },
     {
@@ -2850,11 +2490,7 @@
         "life": "woody-perennial",
         "coldC": -23,
         "yearsToMature": 2,
-        "harvestDays": 30,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "harvestDays": 30
       }
     },
     {
@@ -2887,11 +2523,7 @@
         ],
         "chillHours": 800,
         "deciduous": true,
-        "harvestDays": 30,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "harvestDays": 30
       }
     },
     {
@@ -2927,11 +2559,7 @@
         ],
         "maxRsr": 0.5,
         "maxRsrTier": "C",
-        "harvestDays": 21,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "harvestDays": 21
       }
     },
     {
@@ -2966,11 +2594,7 @@
           "tirmenstein1991-lowbush-blueberry-feis"
         ],
         "deciduous": true,
-        "harvestDays": 21,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "harvestDays": 21
       }
     },
     {
@@ -3002,11 +2626,7 @@
           6.5
         ],
         "envCitations": [],
-        "harvestDays": 21,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "harvestDays": 21
       }
     },
     {
@@ -3041,11 +2661,7 @@
           "coladonato1994-teaberry-feis"
         ],
         "maxRsr": 0.75,
-        "maxRsrTier": "C",
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "maxRsrTier": "C"
       }
     },
     {
@@ -3080,10 +2696,7 @@
         ],
         "envCitations": [],
         "deciduous": true,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "laubNote": "The forages curve is a biomass-yield response measured on cut hay and pasture. Nothing is harvested from this planting, so a relative yield means nothing for it"
       }
     },
     {
@@ -3112,11 +2725,7 @@
         "deciduous": true,
         "maxRsr": 0.45,
         "maxRsrTier": "C",
-        "harvestDays": 21,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "harvestDays": 21
       }
     },
     {
@@ -3145,11 +2754,7 @@
         "deciduous": true,
         "maxRsr": 0.4,
         "maxRsrTier": "C",
-        "harvestDays": 21,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "harvestDays": 21
       }
     },
     {
@@ -3178,11 +2783,7 @@
         "deciduous": true,
         "maxRsr": 0.45,
         "maxRsrTier": "C",
-        "harvestDays": 21,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "harvestDays": 21
       }
     },
     {
@@ -3208,11 +2809,7 @@
         "coldC": -34,
         "yearsToMature": 4,
         "deciduous": true,
-        "harvestDays": 21,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "harvestDays": 21
       }
     },
     {
@@ -3238,10 +2835,7 @@
         "coldC": -34,
         "yearsToMature": 3,
         "harvestDays": 45,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "laubNote": "No crop in the nine groups is harvested the way this one is, so the group is an analogy this app chose"
       }
     },
     {
@@ -3269,10 +2863,7 @@
         "maxRsr": 0.1,
         "maxRsrTier": "C",
         "harvestDays": 45,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "laubNote": "No crop in the nine groups is harvested the way this one is, so the group is an analogy this app chose"
       }
     },
     {
@@ -3298,10 +2889,7 @@
         "coldC": -12,
         "yearsToMature": 2,
         "harvestDays": 45,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "laubNote": "No crop in the nine groups is harvested the way this one is, so the group is an analogy this app chose"
       }
     },
     {
@@ -3331,11 +2919,7 @@
         "support": "trellis",
         "maxRsr": 0.1,
         "maxRsrTier": "C",
-        "harvestDays": 21,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "harvestDays": 21
       }
     },
     {
@@ -3363,11 +2947,7 @@
         "chillHours": 800,
         "maxRsr": 0.1,
         "maxRsrTier": "C",
-        "harvestDays": 30,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "harvestDays": 30
       }
     },
     {
@@ -3395,11 +2975,7 @@
         "chillHours": 700,
         "maxRsr": 0.1,
         "maxRsrTier": "C",
-        "harvestDays": 30,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "harvestDays": 30
       }
     },
     {
@@ -3427,11 +3003,7 @@
         "chillHours": 750,
         "maxRsr": 0.1,
         "maxRsrTier": "C",
-        "harvestDays": 21,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "harvestDays": 21
       }
     },
     {
@@ -3459,11 +3031,7 @@
         "chillHours": 800,
         "maxRsr": 0.1,
         "maxRsrTier": "C",
-        "harvestDays": 21,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "harvestDays": 21
       }
     },
     {
@@ -3491,11 +3059,7 @@
         "chillHours": 1000,
         "maxRsr": 0.1,
         "maxRsrTier": "C",
-        "harvestDays": 14,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "harvestDays": 14
       }
     },
     {
@@ -3523,11 +3087,7 @@
         "chillHours": 1100,
         "maxRsr": 0.1,
         "maxRsrTier": "C",
-        "harvestDays": 14,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "harvestDays": 14
       }
     },
     {
@@ -3555,11 +3115,7 @@
         "chillHours": 700,
         "maxRsr": 0.1,
         "maxRsrTier": "C",
-        "harvestDays": 14,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "harvestDays": 14
       }
     },
     {
@@ -3587,11 +3143,7 @@
         "deciduous": true,
         "maxRsr": 0.1,
         "maxRsrTier": "C",
-        "harvestDays": 45,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "harvestDays": 45
       }
     },
     {
@@ -3620,11 +3172,7 @@
         "deciduous": true,
         "maxRsr": 0.3,
         "maxRsrTier": "C",
-        "harvestDays": 21,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "harvestDays": 21
       }
     },
     {
@@ -3652,11 +3200,7 @@
         "deciduous": true,
         "maxRsr": 0.45,
         "maxRsrTier": "C",
-        "harvestDays": 21,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "harvestDays": 21
       }
     },
     {
@@ -3683,11 +3227,7 @@
         "yearsToMature": 4,
         "chillHours": 800,
         "deciduous": true,
-        "harvestDays": 21,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "harvestDays": 21
       }
     },
     {
@@ -3713,11 +3253,7 @@
         "coldC": -37,
         "yearsToMature": 4,
         "deciduous": true,
-        "harvestDays": 21,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "harvestDays": 21
       }
     },
     {
@@ -3745,11 +3281,7 @@
         "chillHours": 600,
         "deciduous": true,
         "support": "arbor",
-        "harvestDays": 21,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "harvestDays": 21
       }
     },
     {
@@ -3775,11 +3307,7 @@
         "coldC": -34,
         "yearsToMature": 3,
         "support": "trellis",
-        "harvestDays": 21,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "harvestDays": 21
       }
     },
     {
@@ -3807,10 +3335,7 @@
         "chillHours": 800,
         "maxRsr": 0.2,
         "maxRsrTier": "C",
-        "harvestDays": 30,
-        "dliCitations": [
-          "armstrong2021-forest-garden-traits"
-        ]
+        "harvestDays": 30
       }
     },
     {
@@ -3838,10 +3363,7 @@
         "deciduous": true,
         "maxRsr": 0.45,
         "maxRsrTier": "C",
-        "harvestDays": 21,
-        "dliCitations": [
-          "armstrong2021-forest-garden-traits"
-        ]
+        "harvestDays": 21
       }
     },
     {
@@ -3867,10 +3389,7 @@
         "coldC": -29,
         "coldWinterOnly": true,
         "maxRsr": 0.75,
-        "maxRsrTier": "C",
-        "dliCitations": [
-          "armstrong2021-forest-garden-traits"
-        ]
+        "maxRsrTier": "C"
       }
     },
     {
@@ -3900,11 +3419,7 @@
           5
         ],
         "maxRsr": 0.75,
-        "maxRsrTier": "C",
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "maxRsrTier": "C"
       }
     },
     {
@@ -3929,10 +3444,7 @@
         "life": "perennial",
         "coldC": 0,
         "yearsToMature": 5,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "laubNote": "No crop in the nine groups is harvested the way this one is, so the group is an analogy this app chose"
       }
     },
     {
@@ -3988,10 +3500,7 @@
         ],
         "zr": 0.65,
         "p": 0.35,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "laubNote": "The meta-analysis took data from temperate and subtropical sites only, and this crop is grown outside that range, so the curve is an extrapolation"
       }
     },
     {
@@ -4044,10 +3553,7 @@
           "Cfa",
           "Cfb"
         ],
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "laubNote": "The meta-analysis took data from temperate and subtropical sites only, and this crop is grown outside that range, so the curve is an extrapolation"
       }
     },
     {
@@ -4105,10 +3611,7 @@
           "Csa",
           "Csb"
         ],
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "laubNote": "The meta-analysis took data from temperate and subtropical sites only, and this crop is grown outside that range, so the curve is an extrapolation"
       }
     },
     {
@@ -4170,10 +3673,7 @@
         ],
         "zr": 0.7,
         "p": 0.35,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "laubNote": "The meta-analysis took data from temperate and subtropical sites only, and this crop is grown outside that range, so the curve is an extrapolation"
       }
     },
     {
@@ -4230,10 +3730,7 @@
         ],
         "zr": 0.75,
         "p": 0.2,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "laubNote": "Laub et al. 2022 name this species among the crops they excluded as not relevant for temperate regions, so the curve runs past the data it was fitted on"
       }
     },
     {
@@ -4294,11 +3791,7 @@
         "zr": 1.3,
         "p": 0.5,
         "maxRsr": 0.1,
-        "maxRsrTier": "C",
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "maxRsrTier": "C"
       }
     },
     {
@@ -4358,10 +3851,7 @@
         ],
         "maxRsr": 0.1,
         "maxRsrTier": "C",
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "laubNote": "The meta-analysis took data from temperate and subtropical sites only, and this crop is grown outside that range, so the curve is an extrapolation"
       }
     },
     {
@@ -4413,10 +3903,7 @@
           "Af",
           "Am"
         ],
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "laubNote": "The meta-analysis took data from temperate and subtropical sites only, and this crop is grown outside that range, so the curve is an extrapolation"
       }
     },
     {
@@ -4475,10 +3962,7 @@
           "Cwa",
           "Cwb"
         ],
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "laubNote": "The meta-analysis took data from temperate and subtropical sites only, and this crop is grown outside that range, so the curve is an extrapolation"
       }
     },
     {
@@ -4536,10 +4020,7 @@
         ],
         "zr": 1.25,
         "p": 0.6,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "laubNote": "No group in the meta-analysis holds an oilseed, so this crop reads the nearest grain curve as a proxy"
       }
     },
     {
@@ -4591,10 +4072,7 @@
           "Csa",
           "Csb"
         ],
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "laubNote": "The meta-analysis took data from temperate and subtropical sites only, and this crop is grown outside that range, so the curve is an extrapolation"
       }
     },
     {
@@ -4602,7 +4080,7 @@
       "acceptedName": "Pennisetum glaucum",
       "family": "Poaceae",
       "commonNames": "pearl millet|bajra|bulrush millet",
-      "laubGroup": "forages",
+      "laubGroup": "maize-c4",
       "dliClass": "forages-c3-pasture",
       "habit": "clumping-grass",
       "archetype": "hot",
@@ -4652,10 +4130,6 @@
           "Csb",
           "Cwa",
           "Cwb"
-        ],
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
         ]
       }
     },
@@ -4664,7 +4138,7 @@
       "acceptedName": "Sorghum bicolor",
       "family": "Poaceae",
       "commonNames": "grain sorghum|milo|jowar|durra|great millet",
-      "laubGroup": "forages",
+      "laubGroup": "maize-c4",
       "dliClass": "forages-c3-pasture",
       "habit": "clumping-grass",
       "archetype": "hot",
@@ -4706,10 +4180,6 @@
           "BSk",
           "Csa",
           "Csb"
-        ],
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
         ]
       }
     },
@@ -4761,10 +4231,7 @@
         ],
         "harvestDays": 30,
         "nfix": true,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "laubNote": "Laub et al. 2022 name this species among the crops they excluded as not relevant for temperate regions, so the curve runs past the data it was fitted on"
       }
     },
     {
@@ -4822,10 +4289,6 @@
           "Dfa",
           "Dwa",
           "Dwb"
-        ],
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
         ]
       }
     },
@@ -4883,10 +4346,7 @@
           "Csa",
           "Csb"
         ],
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "laubNote": "The meta-analysis took data from temperate and subtropical sites only, and this crop is grown outside that range, so the curve is an extrapolation"
       }
     },
     {
@@ -4941,10 +4401,7 @@
         ],
         "maxRsr": 0.1,
         "maxRsrTier": "C",
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "laubNote": "The meta-analysis took data from temperate and subtropical sites only, and this crop is grown outside that range, so the curve is an extrapolation"
       }
     },
     {
@@ -4998,10 +4455,7 @@
           "Cwa",
           "Cwb"
         ],
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "laubNote": "Laub et al. 2022 name this species among the crops they excluded as not relevant for temperate regions, so the curve runs past the data it was fitted on"
       }
     },
     {
@@ -5063,10 +4517,7 @@
         ],
         "zr": 0.7,
         "p": 0.35,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "laubNote": "The meta-analysis took data from temperate and subtropical sites only, and this crop is grown outside that range, so the curve is an extrapolation"
       }
     },
     {
@@ -5088,11 +4539,7 @@
       "heightM": 0.4,
       "widthM": 0.3,
       "overrides": {
-        "role": "insectary",
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "role": "insectary"
       }
     },
     {
@@ -5114,11 +4561,7 @@
       "heightM": 0.9,
       "widthM": 0.4,
       "overrides": {
-        "role": "insectary",
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "role": "insectary"
       }
     },
     {
@@ -5140,11 +4583,7 @@
       "heightM": 0.3,
       "widthM": 0.9,
       "overrides": {
-        "role": "trap",
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "role": "trap"
       }
     },
     {
@@ -5166,11 +4605,7 @@
       "heightM": 0.8,
       "widthM": 0.6,
       "overrides": {
-        "role": "insectary",
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "role": "insectary"
       }
     },
     {
@@ -5192,11 +4627,7 @@
       "heightM": 0.5,
       "widthM": 0.4,
       "overrides": {
-        "role": "insectary",
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "role": "insectary"
       }
     },
     {
@@ -5218,10 +4649,7 @@
       "heightM": 2.5,
       "widthM": 0.6,
       "overrides": {
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "laubNote": "No group in the meta-analysis holds an oilseed, so this crop reads the nearest grain curve as a proxy"
       }
     },
     {
@@ -5243,11 +4671,7 @@
       "heightM": 0.9,
       "widthM": 0.3,
       "overrides": {
-        "role": "cover",
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "role": "cover"
       }
     },
     {
@@ -5270,11 +4694,7 @@
       "widthM": 0.2,
       "overrides": {
         "role": "cover",
-        "nfix": true,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "nfix": true
       }
     },
     {
@@ -5299,10 +4719,7 @@
         "role": "cover",
         "life": "perennial",
         "coldC": -34,
-        "nfix": true,
-        "dliCitations": [
-          "finch-collier2000-landings"
-        ]
+        "nfix": true
       }
     },
     {
@@ -5327,11 +4744,7 @@
         "role": "cover",
         "life": "perennial",
         "coldC": -29,
-        "nfix": true,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "nfix": true
       }
     },
     {
@@ -5354,9 +4767,7 @@
       "widthM": 0.3,
       "overrides": {
         "role": "insectary",
-        "dliCitations": [
-          "fiedler2007-insectary"
-        ]
+        "laubNote": "The forages curve is a biomass-yield response measured on cut hay and pasture. Nothing is harvested from this planting, so a relative yield means nothing for it"
       }
     },
     {
@@ -5378,10 +4789,7 @@
       "heightM": 0.15,
       "widthM": 0.3,
       "overrides": {
-        "role": "insectary",
-        "dliCitations": [
-          "fiedler2007-insectary"
-        ]
+        "role": "insectary"
       }
     },
     {
@@ -5406,9 +4814,7 @@
         "role": "insectary",
         "life": "perennial",
         "coldC": -40,
-        "dliCitations": [
-          "fiedler2007-insectary"
-        ]
+        "laubNote": "The forages curve is a biomass-yield response measured on cut hay and pasture. Nothing is harvested from this planting, so a relative yield means nothing for it"
       }
     },
     {
@@ -5432,11 +4838,7 @@
       "overrides": {
         "role": "cover",
         "life": "perennial",
-        "coldC": -23,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "coldC": -23
       }
     },
     {
@@ -5459,11 +4861,7 @@
       "widthM": 1,
       "overrides": {
         "role": "cover",
-        "nfix": true,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "nfix": true
       }
     },
     {
@@ -5486,11 +4884,7 @@
       "widthM": 0.4,
       "overrides": {
         "role": "cover",
-        "nfix": true,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "nfix": true
       }
     },
     {
@@ -5512,11 +4906,7 @@
       "heightM": 0.9,
       "widthM": 0.3,
       "overrides": {
-        "role": "cover",
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "role": "cover"
       }
     },
     {
@@ -5538,11 +4928,7 @@
       "heightM": 2.5,
       "widthM": 0.4,
       "overrides": {
-        "role": "cover",
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "role": "cover"
       }
     },
     {
@@ -5567,10 +4953,7 @@
         "role": "cover",
         "life": "perennial",
         "coldC": 2,
-        "nfix": true,
-        "dliCitations": [
-          "khan2008-push-pull-onfarm"
-        ]
+        "nfix": true
       }
     },
     {
@@ -5594,10 +4977,7 @@
       "overrides": {
         "role": "trap",
         "life": "perennial",
-        "coldC": 4,
-        "dliCitations": [
-          "khan2008-push-pull-onfarm"
-        ]
+        "coldC": 4
       }
     },
     {
@@ -5621,11 +5001,7 @@
       "overrides": {
         "life": "perennial",
         "coldC": -34,
-        "zr": 1.8,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "zr": 1.8
       }
     },
     {
@@ -5647,11 +5023,7 @@
       "heightM": 0.5,
       "widthM": 0.25,
       "overrides": {
-        "nfix": true,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "nfix": true
       }
     },
     {
@@ -5676,9 +5048,7 @@
         "role": "insectary",
         "life": "perennial",
         "coldC": -37,
-        "dliCitations": [
-          "fiedler2007-insectary"
-        ]
+        "laubNote": "The forages curve is a biomass-yield response measured on cut hay and pasture. Nothing is harvested from this planting, so a relative yield means nothing for it"
       }
     },
     {
@@ -5703,9 +5073,7 @@
         "role": "insectary",
         "life": "perennial",
         "coldC": -40,
-        "dliCitations": [
-          "fiedler2007-insectary"
-        ]
+        "laubNote": "The forages curve is a biomass-yield response measured on cut hay and pasture. Nothing is harvested from this planting, so a relative yield means nothing for it"
       }
     },
     {
@@ -5730,9 +5098,7 @@
         "role": "insectary",
         "life": "perennial",
         "coldC": -37,
-        "dliCitations": [
-          "fiedler2007-insectary"
-        ]
+        "laubNote": "The forages curve is a biomass-yield response measured on cut hay and pasture. Nothing is harvested from this planting, so a relative yield means nothing for it"
       }
     },
     {
@@ -5757,9 +5123,7 @@
         "role": "insectary",
         "life": "perennial",
         "coldC": -37,
-        "dliCitations": [
-          "fiedler2007-insectary"
-        ]
+        "laubNote": "The forages curve is a biomass-yield response measured on cut hay and pasture. Nothing is harvested from this planting, so a relative yield means nothing for it"
       }
     },
     {
@@ -5784,9 +5148,7 @@
         "role": "insectary",
         "life": "perennial",
         "coldC": -40,
-        "dliCitations": [
-          "fiedler2007-insectary"
-        ]
+        "laubNote": "The forages curve is a biomass-yield response measured on cut hay and pasture. Nothing is harvested from this planting, so a relative yield means nothing for it"
       }
     },
     {
@@ -5809,11 +5171,7 @@
       "widthM": 0.2,
       "overrides": {
         "life": "perennial",
-        "coldC": -7,
-        "dliCitations": [
-          "torres-purdue-dli-b",
-          "stallknecht2025-vce-dli"
-        ]
+        "coldC": -7
       }
     }
   ]

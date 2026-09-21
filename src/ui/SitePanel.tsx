@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState, type ReactElement } from 'react'
-import { ELEVATION_UNKNOWN, type GeocodeHit, reverseGeocode } from '../data/geocode'
+import { type GeocodeHit, reverseGeocode } from '../data/geocode'
 import { NRCAN_SCHEME_NOTE } from '../data/static-layers'
 import { describeWaterLimitation } from '../data/water'
 import { showingExample, useAppStore } from '../state/store'
@@ -14,7 +14,7 @@ import { Picker, type PickerHandle } from './Picker'
 import { SeasonSummary } from './SeasonSummary'
 import { SiteNotice } from './SiteNotice'
 import { SiteVerdict } from './SiteVerdict'
-import { siteNoticeText, soilSampledNote } from './site-notice'
+import { elevationUnknownWords, siteNoticeText, soilSampledNote } from './site-notice'
 import { timezoneWords } from './timezone-words'
 import { useAddressSearch } from './useAddressSearch'
 
@@ -158,6 +158,8 @@ export const SitePanel = (): ReactElement => {
   const example = useAppStore(showingExample)
   const siteText = siteNoticeText(site, SITE_IDLE, locationLabel)
   const weatherText = siteNoticeText(weather, WEATHER_IDLE, locationLabel)
+  // the weather record the elevation came with, named in the readout when it carried none
+  const weatherRecord = weather.status === 'ready' ? weather.value.provenance.datasetLabel : null
   const nrcanZone =
     resolved?.hardiness.find((rating) => rating.scheme === 'nrcan')?.zoneLabel ?? null
   /**
@@ -338,7 +340,9 @@ export const SitePanel = (): ReactElement => {
               id="site-elevation"
               label="Elevation"
               value={
-                resolved.elevationM === null ? ELEVATION_UNKNOWN : formatMeters(resolved.elevationM)
+                resolved.elevationM === null
+                  ? elevationUnknownWords(weatherRecord)
+                  : formatMeters(resolved.elevationM)
               }
             />
             <Readout

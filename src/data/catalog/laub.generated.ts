@@ -1,15 +1,20 @@
 // GENERATED FILE. Do not edit by hand
 // Source of truth: docs/laub-2022-table-s2.json
-// Regenerate after any change to that file; the JSON is authoritative and this
-// module is a typed transcription of it for the browser bundle
+// Written by scripts/generate-laub.mjs, which `bun run generate` runs
 import type { LaubCropGroup } from '../../types/crop'
 
 export interface LaubGroupData {
   readonly studies: number
   /** DERIVED by algebraic recovery from the published predictions, never published */
   readonly b1PerPercentRsr: number
-  /** RSR (percent) of maximum predicted yield, null where the response only declines */
-  readonly benefitOptimumRsrPercent: number | null
+  /**
+   * RSR (percent) of the highest predicted yield, null where the curve declines from the lowest
+   * tabulated level. Computed from `predicted`, because the paper's own prose names 25% for
+   * fruits where its Table S2 peaks at 30%
+   */
+  readonly benefitPeakRsrPercent: number | null
+  /** RSR (percent) of the last level the table classes B, null where no level is classed B */
+  readonly benefitPhaseEndRsrPercent: number | null
   readonly predicted: readonly number[]
   readonly ciLow: readonly number[]
   readonly ciHigh: readonly number[]
@@ -64,7 +69,8 @@ export const LAUB_GROUPS: Readonly<Record<LaubCropGroup, LaubGroupData>> = {
   berries: {
     studies: 5,
     b1PerPercentRsr: 0.00435911,
-    benefitOptimumRsrPercent: 30,
+    benefitPeakRsrPercent: 30,
+    benefitPhaseEndRsrPercent: 55,
     predicted: [
       104.7, 108.7, 111.9, 114.3, 115.7, 116.1, 115.6, 114.1, 111.6, 108.3, 104.2, 99.5, 94.1, 88.3,
       82.2, 75.8, 69.3, 62.9,
@@ -101,7 +107,8 @@ export const LAUB_GROUPS: Readonly<Record<LaubCropGroup, LaubGroupData>> = {
   fruits: {
     studies: 7,
     b1PerPercentRsr: 0.00428533,
-    benefitOptimumRsrPercent: 25,
+    benefitPeakRsrPercent: 30,
+    benefitPhaseEndRsrPercent: 55,
     predicted: [
       104.6, 108.5, 111.6, 113.9, 115.2, 115.5, 114.9, 113.3, 110.8, 107.4, 103.3, 98.5, 93.1, 87.3,
       81.1, 74.8, 68.3, 61.9,
@@ -138,7 +145,8 @@ export const LAUB_GROUPS: Readonly<Record<LaubCropGroup, LaubGroupData>> = {
   'fruity-vegetables': {
     studies: 3,
     b1PerPercentRsr: 0.00319481,
-    benefitOptimumRsrPercent: 20,
+    benefitPeakRsrPercent: 20,
+    benefitPhaseEndRsrPercent: 40,
     predicted: [
       103.3, 105.8, 107.5, 108.3, 108.2, 107.1, 105.2, 102.5, 98.9, 94.7, 89.9, 84.7, 79.1, 73.2,
       67.2, 61.2, 55.2, 49.4,
@@ -175,7 +183,8 @@ export const LAUB_GROUPS: Readonly<Record<LaubCropGroup, LaubGroupData>> = {
   forages: {
     studies: 11,
     b1PerPercentRsr: 0.0021618,
-    benefitOptimumRsrPercent: 25,
+    benefitPeakRsrPercent: 15,
+    benefitPhaseEndRsrPercent: 25,
     predicted: [
       102.1, 103.3, 103.7, 103.3, 101.9, 99.7, 96.8, 93.2, 88.9, 84.1, 78.9, 73.4, 67.7, 62, 56.2,
       50.6, 45.1, 39.9,
@@ -212,7 +221,8 @@ export const LAUB_GROUPS: Readonly<Record<LaubCropGroup, LaubGroupData>> = {
   'leafy-vegetables': {
     studies: 4,
     b1PerPercentRsr: 0.00127197,
-    benefitOptimumRsrPercent: null,
+    benefitPeakRsrPercent: 10,
+    benefitPhaseEndRsrPercent: 15,
     predicted: [
       101, 101.3, 100.6, 99.1, 96.8, 93.8, 90.1, 85.8, 81.1, 75.9, 70.5, 64.9, 59.3, 53.7, 48.2,
       42.9, 37.9, 33.2,
@@ -249,7 +259,8 @@ export const LAUB_GROUPS: Readonly<Record<LaubCropGroup, LaubGroupData>> = {
   'c3-cereals': {
     studies: 10,
     b1PerPercentRsr: -0.00227979,
-    benefitOptimumRsrPercent: null,
+    benefitPeakRsrPercent: null,
+    benefitPhaseEndRsrPercent: null,
     predicted: [
       97, 93.3, 89, 84.2, 78.9, 73.4, 67.7, 61.9, 56.1, 50.4, 45, 39.8, 34.8, 30.3, 26.1, 22.3,
       18.9, 15.9,
@@ -286,7 +297,8 @@ export const LAUB_GROUPS: Readonly<Record<LaubCropGroup, LaubGroupData>> = {
   'tubers-root-crops': {
     studies: 2,
     b1PerPercentRsr: -0.00247235,
-    benefitOptimumRsrPercent: null,
+    benefitPeakRsrPercent: null,
+    benefitPhaseEndRsrPercent: null,
     predicted: [
       96.8, 92.9, 88.4, 83.4, 78.1, 72.4, 66.6, 60.8, 55, 49.3, 43.9, 38.7, 33.9, 29.4, 25.2, 21.5,
       18.2, 15.3,
@@ -323,7 +335,8 @@ export const LAUB_GROUPS: Readonly<Record<LaubCropGroup, LaubGroupData>> = {
   'grain-legumes': {
     studies: 14,
     b1PerPercentRsr: -0.00450551,
-    benefitOptimumRsrPercent: null,
+    benefitPeakRsrPercent: null,
+    benefitPhaseEndRsrPercent: null,
     predicted: [
       94.6, 88.6, 82.4, 76, 69.5, 63, 56.6, 50.4, 44.6, 39.1, 33.9, 29.2, 25, 21.2, 17.8, 14.8,
       12.2, 10,
@@ -360,7 +373,8 @@ export const LAUB_GROUPS: Readonly<Record<LaubCropGroup, LaubGroupData>> = {
   'maize-c4': {
     studies: 10,
     b1PerPercentRsr: -0.00565256,
-    benefitOptimumRsrPercent: null,
+    benefitPeakRsrPercent: null,
+    benefitPhaseEndRsrPercent: null,
     predicted: [
       93.3, 86.3, 79.2, 72, 65, 58.1, 51.5, 45.3, 39.5, 34.2, 29.3, 24.9, 21, 17.6, 14.6, 12, 9.8,
       7.9,

@@ -125,10 +125,12 @@ export const shadedGroundFractionInfiniteRows: (
   return Math.min(1, shaded) as Fraction
 }
 
-const SUN_ANGULAR_RADIUS_RAD = 0.0093
+// the Sun's mean angular diameter, 0.533 deg limb to limb, so the width needs no doubling
+const SUN_ANGULAR_DIAMETER_RAD = 0.0093
 
+/** The penumbra's width across the ray at a slant distance; on the ground it is 1/sin(elevation) wider */
 export const penumbraWidthM: (slantDistanceM: Meters) => Meters = (slantDistanceM) =>
-  (SUN_ANGULAR_RADIUS_RAD * slantDistanceM) as Meters
+  (SUN_ANGULAR_DIAMETER_RAD * slantDistanceM) as Meters
 
 export const rowSelfShadeFraction: (
   collectorWidthM: Meters,

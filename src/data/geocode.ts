@@ -1,5 +1,5 @@
 import type { LatLon } from '../types/geo'
-import type { DegreesLatitude, DegreesLongitude, Meters } from '../types/units'
+import type { DegreesLatitude, DegreesLongitude } from '../types/units'
 import { DEFAULT_FETCH_OPTIONS, fetchJson } from './http'
 import { nearestTimezone } from './timezone-bands'
 
@@ -12,7 +12,6 @@ export interface GeocodeHit {
 
 export const NOMINATIM_ATTRIBUTION = 'Data (c) OpenStreetMap contributors, ODbL 1.0'
 export const PHOTON_ATTRIBUTION = 'Photon by Komoot, data (c) OpenStreetMap contributors, ODbL 1.0'
-export const OPEN_ELEVATION_ATTRIBUTION = 'Open-Elevation, SRTM/ASTER derived'
 
 const latLon = (latitude: number, longitude: number): LatLon => ({
   latitudeDeg: latitude as DegreesLatitude,
@@ -176,26 +175,6 @@ export const reverseGeocode = async (
   const hit = fromNominatim(place)
   if (hit === null) throw unusableGeocode('Nominatim', 1)
   return hit
-}
-
-export const ELEVATION_UNKNOWN =
-  'Open-Elevation returned no elevation for this location. The elevation is unknown, and the solar position falls back to the sea-level reference'
-
-/** null, not 0: 0 m is a real elevation, and sea level is not what an empty lookup means */
-export const elevation = async (
-  location: LatLon,
-  signal: AbortSignal | null,
-): Promise<Meters | null> => {
-  const body = await fetchJson<{ readonly results?: readonly { readonly elevation?: number }[] }>(
-    'open-elevation',
-    '/api/v1/lookup',
-    new URLSearchParams({
-      locations: `${String(location.latitudeDeg)},${String(location.longitudeDeg)}`,
-    }),
-    { ...DEFAULT_FETCH_OPTIONS, signal },
-  )
-  const value = (body.results ?? [])[0]?.elevation
-  return typeof value === 'number' && Number.isFinite(value) ? (value as Meters) : null
 }
 
 /**

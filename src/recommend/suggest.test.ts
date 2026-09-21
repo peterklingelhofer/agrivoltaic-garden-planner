@@ -419,7 +419,7 @@ describe('an inference never passes for a measurement', () => {
 
   /**
    * The defect this reproduces. A Phoenix shade band at 55 percent season-cumulative shade
-   * refuses lettuce, spinach and sixty-odd others on shade ceilings that were MEASURED, and keeps
+   * refuses the fruiting vegetables and potato on shade ceilings that carry a source, and keeps
    * claytonia on an inferred 0.6 that is 0.1 past anything measured. Nothing here claims claytonia
    * fails: no measured figure says that either. What it refuses to do is present the survivor as
    * the equal of the numbers it outlived
@@ -450,10 +450,12 @@ describe('an inference never passes for a measurement', () => {
       true,
     )
 
-    // and the measured refusals it stands on top of are legible, not silently dropped
-    const lettuce = set.refused.find((entry) => entry.cropId === ('lettuce-leaf' as CropId))
-    expect(lettuce?.limiting?.cause).toEqual({ kind: 'max-design-rsr' })
-    expect(lettuce?.reason).toMatch(/design ceiling/)
+    // and the sourced refusals it stands on top of are legible, not silently dropped. Tomato is one
+    // of them: its 20 percent ceiling is Zhang et al. 2025's segmented regression at tier B, where
+    // the leafy-greens 40 percent is this app's own band and reads as the inference it is
+    const tomato = set.refused.find((entry) => entry.cropId === ('tomato' as CropId))
+    expect(tomato?.limiting?.cause).toEqual({ kind: 'max-design-rsr' })
+    expect(tomato?.reason).toMatch(/design ceiling/)
     for (const refusal of set.refused) {
       expect(refusal.limiting?.cause).toEqual({ kind: 'max-design-rsr' })
       expect(crop(refusal.cropId as string).light.maxDesignRsr.provenance).not.toBe('inferred')

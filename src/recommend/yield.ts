@@ -1,4 +1,5 @@
 import { banded, interval } from '../types/band'
+import { unsourcedClaim } from '../types/cited'
 import type {
   Banded,
   LandEquivalentRatio,
@@ -12,6 +13,17 @@ import type { Fraction, Ratio } from '../types/units'
 
 export const SEASONAL_PAR_HALF_WIDTH: Fraction = 0.1 as Fraction
 
+/**
+ * The allowance is this app's own, from Decision Record 7's one line. Declared so it reaches the
+ * sources step's ledger beside the crowding penalty it sits next to in every band
+ * (Decision Record 23)
+ */
+export const SEASONAL_PAR_CLAIM = unsourcedClaim(
+  SEASONAL_PAR_HALF_WIDTH,
+  'Treating season-cumulative PAR as plus or minus 10 percent is a figure of this app’s own: no source in the corpus gives an uncertainty for a season’s integrated light, and the relative yield it widens is a ratio of two integrals of the same weather series',
+  'It widens every yield band by a tenth of its midpoint and is named as the dominant term wherever the published interval is narrower',
+)
+
 export const SEASONAL_PAR_CONTRIBUTION: UncertaintyContribution = {
   source: 'seasonal-par',
   halfWidthFraction: SEASONAL_PAR_HALF_WIDTH,
@@ -21,7 +33,7 @@ export const SEASONAL_PAR_CONTRIBUTION: UncertaintyContribution = {
 export const CROP_RESPONSE_CONTRIBUTION: UncertaintyContribution = {
   source: 'crop-response',
   halfWidthFraction: 0.3 as Fraction,
-  note: 'Laub et al. 2022 Table S2 95 percent CONFIDENCE interval for the crop group. Prediction intervals are not tabulated in the paper and are not available',
+  note: 'Laub et al. 2022 Table S2 95 percent CONFIDENCE interval for the crop group. Prediction intervals are drawn in the paper’s Fig. 3 and are not tabulated, so this band is the confidence interval',
 }
 
 /**
@@ -197,6 +209,9 @@ export const estimateYield = (
     message:
       'Shade type was not significant in the meta-analysis, so shade-cloth trials are pooled with panel trials',
   })
+  if (curve.groupNote !== null) {
+    extra.push({ code: 'group-is-a-proxy', message: curve.groupNote })
+  }
 
   return {
     cropId,

@@ -79,6 +79,12 @@ export interface WeatherRecord {
   readonly typical: TmySeries
   /** Empty where the source ships a typical year and nothing else */
   readonly years: readonly MeasuredYear[]
+  /**
+   * The site's height above sea level in metres, as the weather body gave it, and null where it
+   * gave none. Every source here answers with the elevation of the cell its year was read from,
+   * so the one fetch carries both and a site lookup asks no separate elevation service
+   */
+  readonly elevationM: number | null
 }
 
 export interface WeatherProvenance {

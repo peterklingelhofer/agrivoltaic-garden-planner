@@ -371,21 +371,25 @@ Responsibilities, and nothing else:
 1. Proxy **PVGIS v5.3**, which forbids AJAX by written policy (Decision Record 9).
 2. Proxy **NREL NSRDB PSM3**, to keep the API key server-side. Host is an env binding, not a
    constant, which is what let the `developer.nrel.gov` -> `developer.nlr.gov` retirement of 29 May 2026 be a config change. The PATHS were not a binding and had to be edited: PSM v3.2.2 was replaced by GOES v4.0.0 at the same time.
-3. Proxy **Open-Meteo** and **Open-Elevation**, for load rather than for access.
-4. Cache all four aggressively at the edge.
+3. Proxy **Open-Meteo**, which needs no credential and is here for load.
+4. Cache each of them aggressively at the edge.
 5. Emit CORS headers scoped to the configured origins.
 
 **Two different reasons, and they must not blur.** PVGIS and NSRDB are here because a browser cannot
-hold the credential or the policy exemption. Open-Meteo and Open-Elevation are here because they are
-free, unauthenticated, rate limited per IP, and called on **every** site resolve: one developer
-reloading a handful of times in a minute earned a 429, and a lecture hall opening the app at once is
-thirty identical requests from thirty addresses for a town. Behind the cache that is one upstream
-request per town per year. When adding a fifth upstream, decide which reason applies, routing
-something through for neither burns the free tier for nothing.
+hold the credential or the policy exemption. Open-Meteo is here because it is free,
+unauthenticated, rate limited per IP, and called on **every** site resolve: one developer reloading
+a handful of times in a minute earned a 429, and a lecture hall opening the app at once is thirty
+identical requests from thirty addresses for a town. Behind the cache that is one upstream request
+per town per year. When adding another upstream, decide which reason applies, routing something
+through for neither burns the free tier for nothing.
 
-It does **not** proxy NASA POWER, Nominatim, Photon or Overpass. Those stay browser-direct (CORS
-verified). Geocoding in particular is a text search rather than a coordinate lookup and does not
-fit the cache key below at all.
+The site's height above sea level comes with the weather, from the archive body's own `elevation`
+field, so there is no elevation upstream to proxy at all. Decision Record 9b has the reason.
+
+It does **not** proxy NASA POWER, SoilGrids or Overpass. Those stay browser-direct (CORS
+verified). Nominatim and Photon are proxied and held for a week (`TTL_GEOCODE_SECONDS`): a place
+name is a text search against a live index, so its answer is good for days where a TMY's is good
+for a year, and it carries its own key rather than the coordinate key below.
 
 It does not transform payloads. Normalisation into `TmySeries` happens in
 `src/data/tmy.ts#normaliseTmy`, in the browser, where it is unit-testable.
@@ -399,7 +403,7 @@ v{schemaVersion}/{upstream}/{lat}/{lon}/{dataset}/{variant}
 - `lat`/`lon` quantised to 0.01 deg (Decision Record 9) and rendered with `toFixed(2)`, so
   `42.3736` and `42.3701` collapse to the same key. At mid-latitudes 0.01 deg is ~1.1 km, well
   inside TMY spatial resolution.
-- `dataset` distinguishes e.g. `tmy` from `seriescalc`, `upstream` is one of the four above.
+- `dataset` distinguishes e.g. `tmy` from `seriescalc`, `upstream` is one of the ones above.
 - `variant` is what tells two answers from one dataset apart. It held a year range, which is all
   PVGIS and NSRDB vary by. **Open-Meteo serves the 1991-2020 climate normals and the 2015-2024
   hourly record from one path**, `/v1/archive`, distinguished only by `daily=` versus `hourly=`, so
@@ -414,23 +418,22 @@ v{schemaVersion}/{upstream}/{lat}/{lon}/{dataset}/{variant}
   upstream.
 - Key is materialised as a synthetic `https://cache.invalid/{key}` request for the Cache API.
 
-TTLs: `TTL_TMY_SECONDS` and `TTL_ELEVATION_SECONDS` are one year (a TMY for a fixed point does not
-change, and neither does the height of the ground), `TTL_ERROR_SECONDS` is 60 for a 4xx and
-`TTL_OUTAGE_SECONDS` is 10 for a 5xx, so an upstream outage does not get pinned for a year, or for
-the minute the client waits before it asks again: held for a minute, a 502 answered the client's
-first scheduled retry with the failure it had already read. A 429 is forwarded rather than
-swallowed and is held for the full 60 s, which turns a stampede into one upstream request a minute,
-`withRetry` in `src/data/http.ts` correspondingly does **not** retry a 429, because the backoff
-there is a quarter of a second and a retry spends two more of the requests the limit is counting.
-The client's deadline for the response headers is `RESPONSE_DEADLINE_MS` (12 s) on an upstream it
-reaches itself and `PROXIED_DEADLINE_MS` (20 s) through the Worker, which bounds its own wait for
-an upstream at `UPSTREAM_TIMEOUT_MS` (15 s) and answers 504 past it: the client outlasts that and
-reads whichever it was.
+TTLs: `TTL_TMY_SECONDS` is one year (a TMY for a fixed point does not change), `TTL_ERROR_SECONDS`
+is 60 for a 4xx and `TTL_OUTAGE_SECONDS` is 10 for a 5xx, so an upstream outage does not get pinned
+for a year, or for the minute the client waits before it asks again: held for a minute, a 502
+answered the client's first scheduled retry with the failure it had already read. A 429 is forwarded
+rather than swallowed and is held for the full 60 s, which turns a stampede into one upstream
+request a minute, `withRetry` in `src/data/http.ts` correspondingly does **not** retry a 429,
+because the backoff there is a quarter of a second and a retry spends two more of the requests the
+limit is counting. The client's deadline for the response headers is `RESPONSE_DEADLINE_MS` (12 s)
+on an upstream it reaches itself and `PROXIED_DEADLINE_MS` (20 s) through the Worker, which bounds
+its own wait for an upstream at `UPSTREAM_TIMEOUT_MS` (15 s) and answers 504 past it: the client
+outlasts that and reads whichever it was.
 
-`bun run dev` has no Worker behind it, so `vite.config.ts` sends `/api/proxy/open-meteo/*` and
-`/api/proxy/open-elevation/*` straight to their upstreams. PVGIS and NSRDB can fall back silently
-when nothing is on `:8787` because both have fallbacks, the weather has none. `wrangler dev` fetches
-from the developer's own IP, so the property this exists for cannot be shown locally.
+`bun run dev` has no Worker behind it, so `vite.config.ts` sends `/api/proxy/open-meteo/*`
+straight to its upstream. PVGIS and NSRDB can fall back silently when nothing is on `:8787`
+because both have fallbacks, the weather has none. `wrangler dev` fetches from the developer's own
+IP, so the property this exists for cannot be shown locally.
 
 ### 4.2 Simulation web worker (`src/sim/worker/`)
 

@@ -45,6 +45,9 @@ export interface YieldCaveat {
   // duplicate a React list key
     | 'tier-c-inference'
     | 'proxy-shade-cloth'
+    // the crop's Laub group is an analogy: an excluded species, a different harvested organ, or
+    // a family no group holds. Carried per crop from the catalogue row
+    | 'group-is-a-proxy'
     | 'water-limitation-gated'
     | 'paywalled-source'
     | 'weak-evidence-base'

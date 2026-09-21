@@ -52,13 +52,16 @@ const reasonOf = (cited: Cited<number>): string =>
           : (cited.caveat ?? '')
 
 /**
- * A Tier C figure is this app's own inference from the crop's sun label, and the citations
- * beside it are the class-range methodology, so the sentence says which is which: a reader
- * took "(Purdue, VCE)" beside the number as the number's source
+ * A Tier C figure is this app's own inference from the crop's sun label, so the sentence says
+ * so: a reader took "(Purdue, VCE)" beside the number as the number's source. Since the sweep of
+ * 2026-09-20 an inference carries a citation only where that document prints this crop's own
+ * figure, and the sentence splits on whether it does
  */
 const summaryOf = (label: string, value: string, cited: Cited<number>): string =>
   cited.provenance === 'inferred'
-    ? `${label} ${value} is a class-level inference this app makes from the crop's sun label. The class ranges follow Purdue HO-238-B-W and VCE SPES-720NP, no cited work measured it for this crop`
+    ? cited.citations.length === 0
+      ? `${label} ${value} is this app's own figure for the crop's class, and no cited work measured it for this crop`
+      : `${label} ${value} is printed for this crop in the cited work, which is greenhouse guidance`
     : cited.provenance === 'unsourced'
       ? `${label} ${value} has no source in the verified corpus`
       : `${label} ${value} is read from a Tier ${cited.tier} source`
@@ -163,12 +166,12 @@ export const DLI_DISCLOSURE: readonly DisclosurePoint[] = [
 export const RUNKLE_QUOTE = 'In my opinion, there is no such thing as a DLI requirement'
 
 export const RUNKLE_ATTRIBUTION =
-  'Erik Runkle, "DLI Requirements", GPN / Michigan State University Extension'
+  'Erik Runkle, "DLI \'Requirements\'", GPN (Greenhouse Product News), May 2019'
 
-export const RUNKLE_CITEKEY_GAP =
-  'That column carries no citekey in this app\'s corpus, so it is quoted under its own title. The Runkle work the corpus does hold is his GPN column "Lighting Greenhouse Vegetables", the source of the 15 (preferably above 20) mol/m²/d vine-crop figure used for tomato, pepper and cucumber.'
+export const RUNKLE_COMPANION_NOTE =
+  'The same author\'s earlier column, "Lighting Greenhouse Vegetables", is the source of the 15 (preferably above 20) mol/m²/d vine-crop figure used for tomato, pepper and cucumber. Both are in this app\'s corpus.'
 
-export const RUNKLE_CITED: CitationId = 'runkle2011-vegetable-dli'
+export const RUNKLE_CITED: CitationId = 'runkle2019-dli-requirements'
 
 /** The ramps statement in `shade-plants-in-sun`, so the quote travels with its record */
 export const RAMPS_LIGHT_CITED: CitationId = 'chamberlain2014-forest-farming-ramps'

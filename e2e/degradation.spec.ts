@@ -12,8 +12,8 @@ import {
   type Upstreams,
 } from './fixtures/app.ts'
 import {
-  emptyElevationBody,
   emptySoilBody,
+  hourlyArchiveBody,
   nulledDailyNormalsBody,
   soilBodyWith,
   truncatedDailyNormalsBody,
@@ -86,7 +86,7 @@ for (const [label, over] of Object.entries(SOIL_CASES)) {
 const DEGRADED: Readonly<Record<string, Upstreams>> = {
   'soil no-data': { soil: soilBodyWith(null) },
   'soil absent': { soil: emptySoilBody() },
-  'elevation absent': { elevation: emptyElevationBody() },
+  'elevation absent': { hourly: hourlyArchiveBody(LAT, LON, null) },
 }
 
 for (const [label, over] of Object.entries(DEGRADED)) {
@@ -115,18 +115,18 @@ for (const [label, over] of Object.entries(DEGRADED)) {
 }
 
 /**
- * Fixed: `elevation()` returned `?? 0`, so a lookup that found nothing rendered "0.00 m",
- * a real elevation at sea level, and fed the PV chain's pressure and air-mass terms as if
- * it had been measured. It is null now, and the readout says which upstream had nothing
+ * An elevation nobody answered is null, and the readout names the weather record that carried no
+ * height. Rendered as "0.00 m" it would be a real elevation at sea level, and it would feed the PV
+ * chain's pressure and air-mass terms as if it had been measured
  */
-test('elevation absent: the readout names the upstream instead of reading 0.00 m', async ({
+test('elevation absent: the readout names the weather record and never reads 0.00 m', async ({
   page,
 }) => {
   test.setTimeout(SITE_TIMEOUT_MS + 120_000)
-  const app = await openApp(page, { elevation: emptyElevationBody() })
+  const app = await openApp(page, { hourly: hourlyArchiveBody(LAT, LON, null) })
   await resolveSite(page)
   const readout = page.getByTestId('readout-site-elevation')
-  await expect(readout).toContainText(/Open-Elevation/i)
+  await expect(readout).toContainText(/Open-Meteo/i)
   await expect(readout).not.toContainText('0.00 m')
   expect(app.errors).toEqual([])
 })

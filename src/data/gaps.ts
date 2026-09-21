@@ -1,6 +1,8 @@
+import { SHADE_BENEFIT_BONUS_CLAIM } from '../recommend/stages/light-gate'
 import { WEIGHTS_CLAIM } from '../recommend/stages/rank'
 import { SURROUNDINGS_CLAIM } from '../recommend/surroundings'
 import { MAX_CROWDING_YIELD_PENALTY } from '../recommend/stages/space'
+import { SEASONAL_PAR_CLAIM } from '../recommend/yield'
 import { PEST_YIELD_LOSS_AT_FULL_PRESSURE } from '../simulation/pests'
 import { isUnsourced } from '../types/cited'
 import type { Cited } from '../types/cited'
@@ -61,6 +63,20 @@ export const provenanceLedger = async (): Promise<readonly ProvenanceGap[]> => {
       gapOf('crop-hardiness', crop.id, 'coldHardinessMinC', crop.coldHardinessMinC),
     ]
     for (const gap of candidates) if (gap !== null) gaps.push(gap)
+    // the basis sentence on an uncited light figure says the sources step lists it as a gap, so
+    // it is listed here. `gapOf` cannot see it: the record is an inference with a tier of its own,
+    // where an unsourced claim carries none, and the tier it carries is the honest one
+    if (crop.light.dliMinMolM2Day.citations.length === 0) {
+      gaps.push({
+        area: 'crop-light',
+        subject: crop.id,
+        field: 'dliMinMolM2Day',
+        reason:
+          crop.light.dliMinMolM2Day.provenance === 'inferred'
+            ? crop.light.dliMinMolM2Day.basis
+            : 'a light figure with no work in the corpus behind it',
+      })
+    }
     // the crop-vs-crop pH verdict cites the envelope, so an envelope with no work behind it
     // is a claim the suggestion engine would otherwise make silently
     if (crop.envelope.citations.length === 0) {
@@ -131,6 +147,18 @@ export const provenanceLedger = async (): Promise<readonly ProvenanceGap[]> => {
       subject: 'season pests',
       field: 'pestYieldLossAtFullPressure',
       reason: PEST_YIELD_LOSS_AT_FULL_PRESSURE.justification,
+    },
+    {
+      area: 'model-constant',
+      subject: 'yield band',
+      field: 'seasonalParHalfWidth',
+      reason: SEASONAL_PAR_CLAIM.justification,
+    },
+    {
+      area: 'model-constant',
+      subject: 'crop ranking',
+      field: 'shadeBenefitBonus',
+      reason: SHADE_BENEFIT_BONUS_CLAIM.justification,
     },
   )
 

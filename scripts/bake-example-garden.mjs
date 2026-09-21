@@ -13,7 +13,7 @@
  * open sky. Everything else is produced by the same code the browser runs, loaded straight out
  * of `src/` through Vite so there is no second implementation to drift:
  *
- *   `resolveSite`    real Open-Meteo weather, elevation, soil and the bundled climate grids
+ *   `resolveSite`    real Open-Meteo weather (its body carries the elevation), soil and the bundled climate grids
  *   `runSimulation`  the CPU reference backend, which is the ground truth the GPU ones are
  *                    checked against, at the cell size and sky subdivision recorded below
  *   `runRecommendations` + `suggestPolycultures` + `derivePlanting`

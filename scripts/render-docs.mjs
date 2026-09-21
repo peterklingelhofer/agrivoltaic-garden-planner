@@ -40,6 +40,12 @@ const PUBLISHED = [
       'The Koppen, hardiness and botanical-region rasters: their sources, what resampling cost, and how each is checked against its own source',
   },
   {
+    file: 'VALIDATION.md',
+    title: 'Validation record',
+    blurb:
+      'Which numbers have been checked against something outside this app, in four bands from a named physics oracle down to nothing measured in a garden',
+  },
+  {
     file: 'CITATIONS.md',
     title: 'Citation corpus',
     blurb:

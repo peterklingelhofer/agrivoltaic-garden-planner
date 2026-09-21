@@ -27,7 +27,12 @@ export interface DerivedCited<T> extends CitedCore<T> {
 export interface InferredCited<T> extends CitedCore<T> {
   readonly provenance: 'inferred'
   readonly tier: 'C'
-  readonly citations: NonEmpty<CitationId>
+  /**
+   * Empty where the figure is printed in no cited work. An inference that names a document the
+   * number is not in is a worse record than one that names none, because it survives a spot
+   * check, so the list is allowed to be empty and the basis says the figure is this app's own
+   */
+  readonly citations: readonly CitationId[]
   readonly basis: string
 }
 
@@ -75,7 +80,7 @@ export const citedDerived = <T>(
 
 export const citedInferred = <T>(
   value: T,
-  citations: NonEmpty<CitationId>,
+  citations: readonly CitationId[],
   basis: string,
   caveat: string | null = null,
 ): InferredCited<T> => seal({ provenance: 'inferred', value, tier: 'C', citations, basis, caveat })

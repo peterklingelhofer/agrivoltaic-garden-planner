@@ -3,24 +3,24 @@ import type { ProxyOptions } from 'vite'
 /**
  * The proxy table both dev servers need, kept in one place so it cannot fork.
  *
- * `vite.config.ts` resolves real sites in dev, and the game prototype's own dev server did too
- * while it existed. Any second server needs the exact same upstream routing for weather,
- * elevation and geocoding, and the rules are order-sensitive: vite matches proxy keys in the order they are
- * listed, and the catch-all `/api/proxy` rule is a prefix of every rule above it, so it has to
- * come last or it swallows them. A copy pasted into the second config would drift the first time
- * either config's rules changed, and silently, because there is no test for a dev proxy: the only
- * sign would be one of the two apps resolving a site against the wrong host
+ * `vite.config.ts` resolves real sites with it under `bun run dev` and `vite preview`. Any other
+ * server needs the exact same upstream routing for weather and geocoding, and the rules are
+ * order-sensitive: vite matches proxy keys in the order they are listed, and the catch-all
+ * `/api/proxy` rule is a prefix of every rule above it, so it has to come last or it swallows them.
+ * A copy pasted into the second config would drift the first time either config's rules changed,
+ * and silently, because there is no test for a dev proxy: the only sign would be one of the two
+ * apps resolving a site against the wrong host
  */
 export const DEV_PROXY = {
   /*
-   * The weather and the elevation go straight to their upstreams under plain `bun run dev`.
+   * The weather goes straight to its upstream under plain `bun run dev`.
    *
-   * They moved behind the proxy for the edge cache, and PVGIS and NSRDB can afford to fall
-   * back silently when no `wrangler dev` is listening because both have fallbacks. Weather
-   * has none: it is what every simulation, ranking, calendar and water balance reads, so
-   * routing it at 127.0.0.1:8787 would mean `bun run dev` alone could not resolve a site at
-   * all. These two rules are listed FIRST because vite matches proxy keys in order, and the
-   * `/api/proxy` rule below is a prefix of both.
+   * The app asks for it under `/api/proxy` so the deployed edge cache can hold it. PVGIS and NSRDB
+   * can afford to fall back silently when no `wrangler dev` is listening, because both have
+   * fallbacks. Weather has none: it is what every simulation, ranking, calendar and water balance
+   * reads, so routing it at 127.0.0.1:8787 would mean `bun run dev` alone could not resolve a site
+   * at all. This rule is listed FIRST because vite matches proxy keys in order, and the
+   * `/api/proxy` rule below is a prefix of it.
    *
    * There is no cache on this leg, which is correct: one developer is not the load the cache
    * exists for, and `bun run dev:worker` exercises the real path when that is what is wanted
@@ -29,11 +29,6 @@ export const DEV_PROXY = {
     target: 'https://archive-api.open-meteo.com',
     changeOrigin: true,
     rewrite: (path) => path.replace(/^\/api\/proxy\/open-meteo/, ''),
-  },
-  '/api/proxy/open-elevation': {
-    target: 'https://api.open-elevation.com',
-    changeOrigin: true,
-    rewrite: (path) => path.replace(/^\/api\/proxy\/open-elevation/, ''),
   },
   /*
    * And the place-name lookup, for the same reason and with one caveat worth writing down.

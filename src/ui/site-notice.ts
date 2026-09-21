@@ -43,6 +43,16 @@ export const waitLabel = (seconds: number): string => {
 }
 
 /**
+ * The elevation readout where the weather record carried no height above sea level.
+ *
+ * The elevation arrives with the weather: every source answers with the height of the cell its
+ * year was read from, so the readout names the record that was read. A record carrying none
+ * leaves the sun's air mass on the sea-level reference, and the sentence says both
+ */
+export const elevationUnknownWords = (weatherRecord: string | null): string =>
+  `${weatherRecord ?? 'The weather record'} carries no elevation for this place. The elevation is unknown, and the solar position is computed as if the place were at sea level`
+
+/**
  * What the soil map answered, where it answered anything other than the point itself. SoilGrids
  * masks built-up ground, so the centre of nearly every town has no reading and the nearest one
  * a few kilometres out stands in; the sentence says how far, so a reader knows it is the area's

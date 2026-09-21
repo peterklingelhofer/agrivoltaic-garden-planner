@@ -36,15 +36,33 @@ describe('crop catalogue', () => {
     expect(catalog.length).toBeLessThanOrEqual(200)
   })
 
-  it('gives every crop a sourced DLI value with an honest evidence tier', async () => {
+  it('gives every crop a DLI value with an honest evidence tier, and a citation only where one prints it', async () => {
     const catalog = await loadCropCatalog()
     for (const crop of catalog) {
       expect(['A', 'B', 'C']).toContain(crop.light.dliMinMolM2Day.tier)
-      expect(crop.light.dliMinMolM2Day.citations.length).toBeGreaterThan(0)
       expect(crop.light.dliMinMolM2Day.value).toBeGreaterThan(0)
       expect(crop.light.dliTargetMolM2Day.value).toBeGreaterThanOrEqual(
         crop.light.dliMinMolM2Day.value,
       )
+      // a row above tier C has to name the work it read the number off. A tier C row may name
+      // nothing, which since the sweep of 2026-09-20 is the ordinary case: the two extension
+      // documents print a band for six crops and this catalogue holds 182
+      if (crop.light.dliMinMolM2Day.tier !== 'C') {
+        expect(crop.light.dliMinMolM2Day.citations.length, String(crop.id)).toBeGreaterThan(0)
+      }
+    }
+  })
+
+  it('cites nothing for most light figures, and says so on every row that cites nothing', async () => {
+    const catalog = await loadCropCatalog()
+    const uncited = catalog.filter((crop) => crop.light.dliMinMolM2Day.citations.length === 0)
+    expect(uncited.length).toBeGreaterThan(catalog.length / 2)
+    for (const crop of uncited) {
+      const record = crop.light.dliMinMolM2Day
+      expect(record.provenance, String(crop.id)).toBe('inferred')
+      if (record.provenance === 'inferred') {
+        expect(record.basis, String(crop.id)).toContain('No cited work measured it for this crop')
+      }
     }
   })
 
@@ -108,7 +126,8 @@ describe('DLI class limits', () => {
   it('applies the Decision Record maximum design RSR per class', () => {
     expect(dliClassLimits('maize-c4').maxDesignRsr).toBeCloseTo(0.1)
     expect(dliClassLimits('leafy-greens').maxDesignRsr).toBeCloseTo(0.4)
-    expect(dliClassLimits('strawberry').maxDesignRsr).toBeCloseTo(0.15)
+    // Widmer's own range is 10 to 30 percent, collapsed to its conservative end
+    expect(dliClassLimits('strawberry').maxDesignRsr).toBeCloseTo(0.1)
     expect(dliClassLimits('strawberry').minMolM2Day).toBe(25)
   })
 

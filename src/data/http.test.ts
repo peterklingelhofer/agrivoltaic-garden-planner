@@ -246,7 +246,6 @@ describe('the client and the allowlist agree on every proxied path', () => {
     ['nsrdb', '/api/nsrdb/v2/solar/nsrdb-GOES-tmy-v4-0-0-download.csv'],
     ['nsrdb', '/api/nsrdb/v2/solar/nsrdb-GOES-aggregated-v4-0-0-download.csv'],
     ['open-meteo', '/v1/archive'],
-    ['open-elevation', '/api/v1/lookup'],
     ['nominatim', '/search'],
     ['nominatim', '/reverse'],
     ['photon', '/api'],
@@ -278,7 +277,6 @@ describe('the client and the allowlist agree on every proxied path', () => {
     // the weather is the one nothing in the app can do without, so it is named rather than
     // left to a loop that would still pass if the list were emptied
     expect(WORKER_PROXIED).toContain('open-meteo')
-    expect(WORKER_PROXIED).toContain('open-elevation')
     /**
      * And the place-name lookup, named here because a browser may not set a User-Agent: every
      * Nominatim search sent from the browser would arrive anonymous against a policy that asks

@@ -608,17 +608,32 @@ const ROTATION: readonly RotationConstraint[] = [
     grade: 'A',
     citations: ['peng2015-clubroot-rotation'],
   },
+  /**
+   * Three years, from Rutgers FS547: "A minimum rotation of three years is considered essential
+   * to help reduce populations of soil-borne fungi", written for tomato, eggplant, potato and
+   * pepper together by the Extension vegetable pathologist at the station whose agrivoltaic
+   * trials this catalogue is checked against. FS678, four years older and not disease-specific,
+   * says "at least two years" for the same four crops, and the app ships the longer interval.
+   * The 4 that stood here until 2026-09-20 was stricter than any Rutgers source and cited
+   * `fao-ecocrop`, which holds no rotation data at all.
+   *
+   * The grade stays B, and it is a judgment call: both sheets are extension guidance citing no
+   * trial of their own, the A to E scheme in Record 11 grades study designs and has no rung for
+   * an extension consensus on a characterised mechanism, and only A and B reach scoring, so
+   * grading this C would stop it constraining a layout at all. Whether the scheme gains that
+   * rung is the author's call
+   */
   {
     id: 'rotation-solanaceae-wilt' as RuleId,
     groupRef: 'Solanaceae',
     pathogen: 'Verticillium and Fusarium wilts, early blight, bacterial canker',
-    minIntervalYears: 4,
+    minIntervalYears: 3,
     inoculumPersistenceYearsLow: 3,
     inoculumPersistenceYearsHigh: 10,
     rotationEffective: true,
     alternativeControl: 'Resistant cultivars and grafted rootstocks',
     grade: 'B',
-    citations: ['fao-ecocrop'],
+    citations: ['rutgers-fs547-tomato-diseases', 'rutgers-fs678-growing-tomatoes'],
   },
   {
     id: 'rotation-allium-white-rot' as RuleId,

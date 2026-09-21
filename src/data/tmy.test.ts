@@ -3,10 +3,14 @@ import type { LatLon } from '../types/geo'
 import type { DegreesLatitude, DegreesLongitude } from '../types/units'
 import { HOURS_PER_TMY } from '../types/weather'
 import {
+  elevationOfPayload,
+  mergedPowerBody,
+  powerSpans,
   NSRDB_DEFAULT_WIND_10M_MS,
   NSRDB_MIN_MEAN_WIND_MS,
   normaliseTmy,
   normaliseWeather,
+  type PowerBody,
   TMY_END_YEAR,
 } from './tmy'
 import { TMY_WIND_HEIGHT_M, windSpeedAt2m } from './water'
@@ -18,14 +22,15 @@ const AMHERST: LatLon = {
 
 /**
  * An Open-Meteo archive answer for whole calendar years, hour by hour, with the rain and wind
- * direction a caller asks for or without either. The second year is a leap year on purpose:
- * 8,784 hours arrive and 29 February has to be dropped for the year to land on the 8,760 hour
- * grid
+ * direction a caller asks for or without either, and the top-level elevation the live archive
+ * carries. The second year is a leap year on purpose: 8,784 hours arrive and 29 February has to
+ * be dropped for the year to land on the 8,760 hour grid
  */
 const openMeteoBody = (
   years: readonly number[],
   rainMmPerHour: number | null,
   windDirectionDeg: number | null = null,
+  elevationM: number | null = 15,
 ): unknown => {
   const time: string[] = []
   const ghi: number[] = []
@@ -51,6 +56,7 @@ const openMeteoBody = (
     }
   }
   return {
+    ...(elevationM === null ? {} : { elevation: elevationM }),
     hourly: {
       time,
       shortwave_radiation: ghi,
@@ -148,9 +154,15 @@ describe('the weather record keeps the years the typical one was assembled from'
 
 /**
  * A PVGIS v5.3 TMY answer: HOURS_PER_TMY rows under the column names the live API uses, with
- * a wind direction column when a caller asks for one
+ * a wind direction column when a caller asks for one, and the point's elevation where PVGIS
+ * reports it
  */
-const pvgisBody = (windDirectionDeg: number | null, windSpeedMS = 2): unknown => ({
+const pvgisBody = (
+  windDirectionDeg: number | null,
+  windSpeedMS = 2,
+  elevationM: number | null = 62,
+): unknown => ({
+  ...(elevationM === null ? {} : { inputs: { location: { elevation: elevationM } } }),
   outputs: {
     tmy_hourly: Array.from({ length: HOURS_PER_TMY }, (_, hour) => {
       const daylight = Math.max(0, Math.sin((Math.PI * ((hour % 24) - 6)) / 12))
@@ -181,9 +193,14 @@ describe('PVGIS carries a wind direction column when it answers one', () => {
 
 /**
  * A NASA POWER hourly answer for one whole year, keyed the way the live API keys it, with
- * WD10M alongside the parameters `fromNasaPower` already reads
+ * WD10M alongside the parameters `fromNasaPower` already reads, and the point POWER answers for,
+ * whose third coordinate is its elevation
  */
-const powerBody = (year: number, windDirectionDeg: number | null): unknown => {
+const powerBody = (
+  year: number,
+  windDirectionDeg: number | null,
+  elevationM: number | null = 153,
+): unknown => {
   const parameter: Record<string, Record<string, number>> = {
     ALLSKY_SFC_SW_DWN: {},
     ALLSKY_SFC_SW_DNI: {},
@@ -210,7 +227,11 @@ const powerBody = (year: number, windDirectionDeg: number | null): unknown => {
     parameter.PRECTOTCORR![key] = 0.1
     if (windDirectionDeg !== null) parameter.WD10M![key] = windDirectionDeg
   }
-  return { properties: { parameter } }
+  const point = {
+    type: 'Point',
+    coordinates: [AMHERST.longitudeDeg, AMHERST.latitudeDeg, elevationM],
+  }
+  return { ...(elevationM === null ? {} : { geometry: point }), properties: { parameter } }
 }
 
 describe('NASA POWER carries a wind direction column when it answers one', () => {
@@ -231,9 +252,14 @@ describe('NASA POWER carries a wind direction column when it answers one', () =>
 /**
  * An NSRDB-style CSV, a full year long so a wind-guard mean over the record means something,
  * with a Wind Direction column when a caller asks for one and a Wind Speed column, read at the
- * NSRDB's own 2 m, when a caller passes a speed
+ * NSRDB's own 2 m, when a caller passes a speed. The two metadata lines NSRDB writes above the
+ * column header come first, the field names on one and their values on the next
  */
-const nsrdbCsv = (withWindDirection: boolean, windSpeedMS?: number): string => {
+const nsrdbCsv = (
+  withWindDirection: boolean,
+  windSpeedMS?: number,
+  elevationM: number | null = 52,
+): string => {
   const header = [
     'GHI',
     'Temperature',
@@ -246,7 +272,14 @@ const nsrdbCsv = (withWindDirection: boolean, windSpeedMS?: number): string => {
     if (windSpeedMS !== undefined) cells.push(String(windSpeedMS))
     return cells.join(',')
   })
-  return [header, ...rows].join('\n')
+  const metadata =
+    elevationM === null
+      ? []
+      : [
+          'Source,Location ID,Latitude,Longitude,Elevation',
+          `NSRDB,149417,42.37,-72.52,${String(elevationM)}`,
+        ]
+  return [...metadata, header, ...rows].join('\n')
 }
 
 describe('a CSV carries a wind direction column when its header has one', () => {
@@ -311,5 +344,81 @@ describe('the near-zero wind guard replaces NSRDB wind under 1 m/s with the FAO-
     )
     expect(record.typical.windSpeedMS[0]).toBeCloseTo(0.05, 5)
     expect(record.typical.provenance.datasetLabel).not.toContain('FAO-56 default')
+  })
+})
+
+/**
+ * The height above sea level comes with the weather. Every source answers with the elevation of
+ * the cell its year was read from, each in its own spelling, so the one weather fetch a site
+ * already makes carries the number and a lookup depends on no separate elevation service
+ */
+describe('the elevation the weather body carries', () => {
+  it('reads the top-level elevation of an Open-Meteo archive answer', () => {
+    expect(
+      elevationOfPayload({ source: 'open-meteo', body: openMeteoBody([2023, 2024], 0.1) }),
+    ).toBe(15)
+  })
+
+  it("reads PVGIS's elevation from the location it echoes back", () => {
+    expect(elevationOfPayload({ source: 'pvgis-sarah3', body: pvgisBody(null) })).toBe(62)
+  })
+
+  it('reads the third coordinate of the point NASA POWER answered for', () => {
+    expect(elevationOfPayload({ source: 'nasa-power', body: powerBody(2023, null) })).toBe(153)
+  })
+
+  it('reads the Elevation field of a CSV metadata header, NSRDB and upload alike', () => {
+    expect(elevationOfPayload({ source: 'nsrdb-psm3', body: nsrdbCsv(true) })).toBe(52)
+    expect(elevationOfPayload({ source: 'user-upload', body: nsrdbCsv(false) })).toBe(52)
+  })
+
+  it('is null where a body names none, for every source', () => {
+    expect(
+      elevationOfPayload({ source: 'open-meteo', body: openMeteoBody([2023], 0.1, null, null) }),
+    ).toBeNull()
+    expect(
+      elevationOfPayload({ source: 'pvgis-sarah3', body: pvgisBody(null, 2, null) }),
+    ).toBeNull()
+    expect(
+      elevationOfPayload({ source: 'nasa-power', body: powerBody(2023, null, null) }),
+    ).toBeNull()
+    expect(
+      elevationOfPayload({ source: 'nsrdb-psm3', body: nsrdbCsv(false, undefined, null) }),
+    ).toBeNull()
+  })
+
+  it('keeps a real 0 m, because sea level is an elevation and an absent answer is not', () => {
+    expect(
+      elevationOfPayload({ source: 'open-meteo', body: openMeteoBody([2023], 0.1, null, 0) }),
+    ).toBe(0)
+  })
+
+  it('reaches the record the site takes its typical year from', () => {
+    const record = normaliseWeather(
+      { source: 'open-meteo', body: openMeteoBody([2023, 2024], 0.1) },
+      AMHERST,
+    )
+    expect(record.elevationM).toBe(15)
+  })
+
+  /**
+   * POWER's ten years arrive as five merged chunks and the point travels with them, so the
+   * elevation survives the join the parameters go through
+   */
+  it('asks POWER for the ten years in spans no longer than the cap, tiling the window', () => {
+    const spans = powerSpans(2015, 2024)
+    expect(spans[0]?.[0]).toBe(2015)
+    expect(spans[spans.length - 1]?.[1]).toBe(2024)
+    for (const [first, last] of spans) expect(last - first + 1).toBeLessThanOrEqual(3)
+    for (let i = 1; i < spans.length; i += 1)
+      expect(spans[i]?.[0]).toBe((spans[i - 1]?.[1] ?? 0) + 1)
+  })
+
+  it("survives the merge of POWER's chunked answers", () => {
+    const merged = mergedPowerBody([
+      powerBody(2023, null) as PowerBody,
+      powerBody(2024, null) as PowerBody,
+    ])
+    expect(elevationOfPayload({ source: 'nasa-power', body: merged })).toBe(153)
   })
 })
