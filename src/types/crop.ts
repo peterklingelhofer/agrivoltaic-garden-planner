@@ -83,7 +83,6 @@ export interface LightRequirement {
   readonly dliMinMolM2Day: SourcedCited<MolPerM2Day>
   readonly dliTargetMolM2Day: SourcedCited<MolPerM2Day>
   readonly dliMaxBeforeDisorderMolM2Day: MaybeCited<MolPerM2Day>
-  readonly disorderSustainedDays: Days
   readonly maxDesignRsr: SourcedCited<Fraction>
   readonly shadeBenefitingWhenWaterLimited: boolean
 }
@@ -184,6 +183,11 @@ export interface Crop {
   /** What it asks of pollinators and what it offers them, derived in `catalog/wildlife.ts` */
   readonly wildlife: WildlifeValue
   readonly laubGroup: LaubCropGroup
+  /**
+   * Why the group is an analogy for this crop, where it is one. Null for a crop the
+   * meta-analysis has a comparable trial for
+   */
+  readonly laubGroupNote: string | null
   readonly dliClass: DliClass
   readonly envelope: EcocropEnvelope
   readonly light: LightRequirement
@@ -250,7 +254,12 @@ export type LaubIntervalKind = 'confidence-95'
 export interface LaubCurve {
   readonly group: LaubCropGroup
   readonly studyCount: number
+  /**
+   * Relative shade ratio (RSR) of the highest predicted yield, null where the curve only declines
+   */
   readonly peakRsr: Fraction | null
+  /** The crop's own note on the group, where the group is an analogy for it */
+  readonly groupNote: string | null
   readonly intervalKind: LaubIntervalKind
   readonly anchors: VerbatimCited<readonly LaubAnchor[]>
   /** Recovered algebraically, published nowhere: the type forbids quoting them as Laub's */

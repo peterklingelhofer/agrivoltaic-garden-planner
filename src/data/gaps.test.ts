@@ -27,12 +27,17 @@ for (const path of new Glob('**/*.ts').scanSync(ROOT)) {
 // measures for a garden bed
 // recommend/surroundings.ts declares one: the share of the sky's light the things already
 // around a space take, per answer to the surroundings question
+// recommend/stages/light-gate.ts declares one: the three numbers the shade-benefit bonus is
+// built from, which no study calibrates against a heat-day count
+// recommend/yield.ts declares one: the plus or minus 10 percent seasonal PAR allowance
 const ALLOWED_UNSOURCED_SITES: readonly string[] = [
   './catalog/schema.ts',
   './water.ts',
+  '../recommend/stages/light-gate.ts',
   '../recommend/stages/rank.ts',
   '../recommend/stages/space.ts',
   '../recommend/surroundings.ts',
+  '../recommend/yield.ts',
   '../simulation/pests.ts',
 ]
 

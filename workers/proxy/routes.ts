@@ -2,7 +2,6 @@ import {
   buildCacheKey,
   buildQueryCacheKey,
   type CachedUpstream,
-  TTL_ELEVATION_SECONDS,
   TTL_GEOCODE_SECONDS,
   TTL_RETAIL_PRICE_SECONDS,
   TTL_TMY_SECONDS,
@@ -177,18 +176,6 @@ export const ROUTES: readonly Route[] = [
     variant: queryVariant,
   },
   /**
-   * The height above sea level, asked once per site resolve alongside the weather. It's a
-   * property of the ground and doesn't change, which is why `TTL_ELEVATION_SECONDS` was written
-   * here before anything used it
-   */
-  {
-    upstream: 'open-elevation',
-    path: '/api/v1/lookup',
-    dataset: 'lookup',
-    host: () => 'api.open-elevation.com',
-    ttlSeconds: TTL_ELEVATION_SECONDS,
-  },
-  /**
    * The place-name lookup.
    *
    * Three things it couldn't do from a browser and can do here. It couldn't identify itself:
@@ -285,11 +272,10 @@ const inRange = (latitudeDeg: number, longitudeDeg: number): Coordinates | null 
     : null
 
 /**
- * Four upstreams, four ways of writing down one point, one cache key.
+ * Three upstreams, three ways of writing down one point, one cache key.
  *
- * PVGIS takes `lat`/`lon`, NSRDB takes `wkt=POINT(lon lat)`, open-meteo spells them out as
- * `latitude`/`longitude`, and open-elevation takes `locations=lat,lon`. None of that is a
- * difference the cache is entitled to see
+ * PVGIS takes `lat`/`lon`, NSRDB takes `wkt=POINT(lon lat)`, and open-meteo spells them out as
+ * `latitude`/`longitude`. None of that is a difference the cache is entitled to see
  */
 export const coordinatesOf = (params: URLSearchParams): Coordinates | null => {
   const wkt = params.get('wkt')
@@ -297,8 +283,8 @@ export const coordinatesOf = (params: URLSearchParams): Coordinates | null => {
     const match = WKT_POINT.exec(wkt)
     return match === null ? null : inRange(Number(match[2]), Number(match[1]))
   }
-  // open-elevation batches points, and only the first is ever asked for here: a key built from
-  // one point of several would claim to answer for all of them
+  // a `locations=lat,lon` parameter spells one point out in one value, and a batch of them
+  // spells out several: a key built from the first of a batch would claim to answer for all of them
   const locations = params.get('locations')?.trim()
   if (locations !== undefined && locations !== '') {
     if (locations.includes('|')) return null

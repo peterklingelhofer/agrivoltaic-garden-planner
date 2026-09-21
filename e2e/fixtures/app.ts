@@ -1,11 +1,5 @@
 import { expect, type Locator, type Page, type Route } from '@playwright/test'
-import {
-  dailyNormalsBody,
-  elevationBody,
-  geocodeBody,
-  hourlyArchiveBody,
-  soilBody,
-} from './weather.ts'
+import { dailyNormalsBody, geocodeBody, hourlyArchiveBody, soilBody } from './weather.ts'
 
 export const LAT = 42.37
 export const LON = -72.52
@@ -29,7 +23,6 @@ export interface Upstreams {
   readonly soil?: unknown
   /** the EIA retail-sales answer, in the shape `fetchRetailPrice` decodes */
   readonly price?: unknown
-  readonly elevation?: unknown
   readonly geocode?: unknown
   /**
    * The pre-baked example garden is served only where it's the subject. Every other spec here
@@ -98,15 +91,13 @@ export const stubUpstreams = async (page: Page, over: Upstreams = {}): Promise<v
    */
   await page.route('**/api/proxy/**', (route) => route.abort())
   /**
-   * The weather and the elevation are SAME-ORIGIN now.
+   * The weather is SAME-ORIGIN now, and it carries the site's elevation.
    *
-   * They used to be fetched straight from `open-meteo.com` and `open-elevation.com`, and the two
-   * host routes below were the whole stub. Then both moved behind `/api/proxy/` so the edge cache
-   * could hold them, which put them squarely inside the blanket abort above: the host patterns
-   * stopped matching anything, every weather request was aborted, and the failure showed up as
-   * four `net::ERR_FAILED` console lines and a site that never resolved. Registered AFTER the
-   * abort on purpose, because Playwright gives the most recently registered matching route the
-   * request.
+   * It goes through `/api/proxy/` so the edge cache can hold it, which puts it squarely inside the
+   * blanket abort above: without the proxy route below, every weather request is aborted, and the
+   * failure shows up as `net::ERR_FAILED` console lines and a site that never resolves. Registered
+   * AFTER the abort on purpose, because Playwright gives the most recently registered matching
+   * route the request.
    *
    * `pvgis` and `nsrdb` are deliberately still aborted by the rule above: they're the fallback
    * chain, and the comment on it explains why letting them reach a dev proxy aimed at a Worker
@@ -121,13 +112,8 @@ export const stubUpstreams = async (page: Page, over: Upstreams = {}): Promise<v
             ? (over.daily ?? dailyNormalsBody(LAT, LON))
             : (over.hourly ?? hourlyArchiveBody(LAT, LON)),
         )
-  const elevation = (route: Route): Promise<void> =>
-    json(route, over.elevation ?? elevationBody(52))
-
   await page.route(/open-meteo\.com/, weather)
   await page.route('**/api/proxy/open-meteo/**', weather)
-  await page.route(/open-elevation\.com/, elevation)
-  await page.route('**/api/proxy/open-elevation/**', elevation)
   await page.route(/isric\.org/, (route) => json(route, over.soil ?? soilBody()))
   /*
    * The electricity price, same-origin behind the proxy like the weather, and stubbed for the

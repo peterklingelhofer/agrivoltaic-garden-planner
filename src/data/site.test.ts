@@ -109,6 +109,9 @@ const dailyBody = (fill: number): unknown => {
 const HOURS_PER_TMY = 8760
 
 const hourlyBody = (fill: number, shortwave: number): unknown => ({
+  // the height above sea level the archive answers with, which is where a site's elevation
+  // comes from
+  elevation: 50,
   hourly: {
     time: Array.from(
       { length: HOURS_PER_TMY },
@@ -146,12 +149,13 @@ describe('resolveSite marks whether the zone came from the weather service or th
             : hourlyBody(12, 200),
         )
       }
-      if (upstream === 'open-elevation') return Promise.resolve({ results: [{ elevation: 50 }] })
       return Promise.reject(new Error(`${String(upstream)} isn't answered here`))
     })
     const { site } = await resolveSite(LOCATION, 'Amherst', null)
     expect(site.timezone).toBe('America/New_York')
     expect(site.timezoneBasis).toBe('upstream')
+    // and the elevation came with the weather record, off the archive body's own field
+    expect(site.elevationM).toBe(50)
   })
 
   it('marks nearest-zone when no upstream names one', async () => {
@@ -159,7 +163,6 @@ describe('resolveSite marks whether the zone came from the weather service or th
       if (upstream === 'open-meteo') {
         return Promise.resolve(params.has('daily') ? dailyBody(12) : hourlyBody(12, 200))
       }
-      if (upstream === 'open-elevation') return Promise.resolve({ results: [{ elevation: 50 }] })
       return Promise.reject(new Error(`${String(upstream)} isn't answered here`))
     })
     const { site } = await resolveSite(LOCATION, 'Amherst', null)

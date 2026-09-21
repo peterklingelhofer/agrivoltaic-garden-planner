@@ -1,4 +1,5 @@
 import { growingWindowFor } from '../../data/crops'
+import { unsourcedClaim } from '../../types/cited'
 import { clamp, MONTH_LENGTH_DAYS, monthsInWindow } from '../../data/util'
 import { shadeBenefitStatusOf } from '../../data/water'
 import type { Crop } from '../../types/crop'
@@ -21,6 +22,21 @@ export const HEAT_DAY_BONUS_THRESHOLD = 30
 export const HEAT_DAY_BONUS_SATURATION = 90
 
 export const MAX_SHADE_BENEFIT_BONUS = 0.15
+
+/**
+ * The three numbers the shade-benefit bonus is built from are this app's own. Declared so they
+ * reach the sources step's ledger beside the ranking weights and the crowding penalty
+ * (Decision Record 23)
+ */
+export const SHADE_BENEFIT_BONUS_CLAIM = unsourcedClaim(
+  {
+    maxBonus: MAX_SHADE_BENEFIT_BONUS,
+    heatDayThreshold: HEAT_DAY_BONUS_THRESHOLD,
+    heatDaySaturation: HEAT_DAY_BONUS_SATURATION,
+  },
+  'The shade-benefit bonus (at most 0.15 of the light score, rising as heat days above 30 C go from 30 to 90) is a design choice of this app. Studies report where a shade benefit appears, and no cited study sets its size for a given count of heat days',
+  'It lifts a shade-tolerant crop’s ranking on a hot, water-limited site and never admits a crop a gate refused',
+)
 
 const monthValue = (values: readonly number[], month: number): number => values[month - 1] ?? 0
 
@@ -75,7 +91,9 @@ export const dliFit = (
   disorderCeilingMolM2Day: number | null,
 ): Fraction => {
   const mean = seasonLight.meanDliMolM2Day
-  if (mean <= minMolM2Day) return 0 as Fraction
+  // the same comparison the refusal below makes, so a bed exactly at the minimum is on the same
+  // side of the boundary in both: admitted, at the bottom of its band, scoring zero on light
+  if (mean < minMolM2Day) return 0 as Fraction
   const span = targetMolM2Day - minMolM2Day
   const rising = span <= 0 ? 1 : clamp((mean - minMolM2Day) / span, 0, 1)
   if (disorderCeilingMolM2Day === null || mean <= disorderCeilingMolM2Day) {
@@ -167,7 +185,10 @@ export const lightGate = (crop: Crop, light: BedLight, site: Site): LightGateOut
     }
   }
 
-  if (ceiling !== null && seasonLight.daysAboveDisorderCeiling > crop.light.disorderSustainedDays) {
+  // a whole month of the crop's window whose mean sits above the ceiling. The counter adds month
+  // lengths, so it reads 0 or at least 28 . An advisory: the crop has already passed, and the bed
+  // isn't a reason to move it
+  if (ceiling !== null && seasonLight.daysAboveDisorderCeiling > 0) {
     const offender = months.find(
       (month) => monthValue(light.monthlyMeanDliMolM2Day, month) > ceiling,
     )
@@ -180,7 +201,7 @@ export const lightGate = (crop: Crop, light: BedLight, site: Site): LightGateOut
         stage: 'light-gate',
         cause: { kind: 'dli-disorder-ceiling', month: asMonth(offender ?? months[0] ?? 1) },
         membership: fit,
-        explanation: `Light stays above ${ceiling.toFixed(0)} mol/m²/d for ${String(seasonLight.daysAboveDisorderCeiling)} days, long enough to risk a physiological disorder such as tipburn`,
+        explanation: `Mean light in this bed stays above ${ceiling.toFixed(0)} mol/m²/d for a whole month, where greenhouse trials saw tipburn in lettuce. Outdoors the cultivar and the airflow matter more than the number, so treat it as a reason to pick a bolt-resistant variety or to sow earlier`,
       },
     }
   }

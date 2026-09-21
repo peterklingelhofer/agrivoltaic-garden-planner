@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'bun:test'
+import TABLE from '../../docs/laub-2022-table-s2.json'
 import {
   cropById,
   laubCurve,
   LAUB_ANOVA,
+  LAUB_B2_PER_PERCENT_RSR,
   LAUB_RSR_LEVELS_PERCENT,
   loadCropCatalog,
 } from '../data/crops'
@@ -42,6 +44,13 @@ const catalogPromise = loadCropCatalog()
 const RSR_DOMAIN: readonly Fraction[] = LAUB_RSR_LEVELS_PERCENT.map(
   (percent) => (percent / 100) as Fraction,
 )
+
+/**
+ * A thousandth of b2, which is two hundred times the error the recovery actually carries
+ * (4.8e-10 against a coefficient of 7.3e-5) and a hundredth of the perturbation the test has to
+ * catch, so it fails on a typo and passes on the rounding in the published table
+ */
+const TOLERANCE = 1e-3
 
 /**
  * Both numbers are fractions of full yield (1 = 100%). The tolerance is stated in percentage points
@@ -146,13 +155,55 @@ describe('the Laub et al. 2022 anchor data, read against the primary paper', () 
     },
   )
 
-  it('reproduces the benefit-optimum RSR the paper states for the three shade-benefiting groups it names explicitly', () => {
-    // "berries, fruits and fruity vegetables may experience increases in harvestable yield until
-    // about 30, 25 and 20% RSR, respectively" and "Forages are shade benefiting until 25% RSR"
+  it("reads the peak of each curve off the published table, where the paper's prose disagrees with it", () => {
+    // The paper's prose, section 3.1: "berries, fruits and fruity vegetables may experience
+    // increases in harvestable yield until about 30, 25 and 20% RSR, respectively", and section
+    // 4.1: "forages are shade benefiting until 25% RSR, and shade tolerant at higher RSR".
+    //
+    // Two different quantities. The first is a peak and the second is a phase boundary, and for
+    // fruits the peak the prose names (25%) isn't the one Table S2 tabulates: the table's
+    // highest prediction for fruits is 115.5 at 30% RSR against 115.2 at 25%. `peakRsr` is the
+    // argmax of the published predictions, generated from the table, so the table wins and the
+    // phase boundaries live in `benefitPhaseEndRsrPercent` beside it
     expect(laubCurve('berries').peakRsr).toBeCloseTo(0.3, 6)
-    expect(laubCurve('fruits').peakRsr).toBeCloseTo(0.25, 6)
+    expect(laubCurve('fruits').peakRsr).toBeCloseTo(0.3, 6)
     expect(laubCurve('fruity-vegetables').peakRsr).toBeCloseTo(0.2, 6)
-    expect(laubCurve('forages').peakRsr).toBeCloseTo(0.25, 6)
+    expect(laubCurve('forages').peakRsr).toBeCloseTo(0.15, 6)
+    // leafy vegetables rises above 100% too, at 101.0, 101.3 and 100.6 for RSR 5, 10 and 15
+    expect(laubCurve('leafy-vegetables').peakRsr).toBeCloseTo(0.1, 6)
+  })
+
+  it('recovers the shared quadratic coefficient from the published predictions', () => {
+    // `LAUB_B2_PER_PERCENT_RSR` is the one coefficient this app asserts a value for, and Laub
+    // publishes none: it was recovered algebraically, and this test is what tells a correct
+    // recovery from a typo. This refits it from `docs/laub-2022-table-s2.json` by least squares,
+    // one b1 per group and one shared b2, both forced through the origin, which is the model the
+    // paper states. The check is relative, and the last line is the point of it: a perturbation of
+    // one percent has to fail
+    const levels = TABLE.rsrLevels
+    const sxx = levels.reduce((total, x) => total + x * x, 0)
+    const sx3 = levels.reduce((total, x) => total + x ** 3, 0)
+    const sx4 = levels.reduce((total, x) => total + x ** 4, 0)
+    let numerator = 0
+    let denominator = 0
+    for (const group of Object.values(TABLE.groups)) {
+      const y = group.predicted.map((percent) => Math.log10(percent / 100))
+      const sxy = levels.reduce((total, x, index) => total + x * (y[index] ?? 0), 0)
+      const sx2y = levels.reduce((total, x, index) => total + x * x * (y[index] ?? 0), 0)
+      numerator += sx2y - (sx3 / sxx) * sxy
+      denominator += sx4 - (sx3 * sx3) / sxx
+    }
+    const recovered = numerator / denominator
+    const error = Math.abs(recovered - LAUB_B2_PER_PERCENT_RSR) / Math.abs(LAUB_B2_PER_PERCENT_RSR)
+    expect(
+      error,
+      `least squares on the 162 published predictions gives ${recovered.toExponential(6)} against the shipped ${LAUB_B2_PER_PERCENT_RSR.toExponential(6)}`,
+    ).toBeLessThan(TOLERANCE)
+    const perturbed = LAUB_B2_PER_PERCENT_RSR * 1.01
+    expect(
+      Math.abs(recovered - perturbed) / Math.abs(perturbed),
+      'a one percent perturbation of b2 must fail this check',
+    ).toBeGreaterThan(TOLERANCE)
   })
 
   it('reproduces the ANOVA table (Table 1, final reduced model) to the decimal the paper prints', () => {
@@ -210,6 +261,37 @@ describe('Marrou et al. 2013 (lettuce, Montpellier FR, irrigated, not water-limi
     expect(laubCentralRelativeYield(curve, 0.5 as Fraction, false) * 100).toBeGreaterThan(70)
     expect(laubCentralRelativeYield(curve, 0.3 as Fraction, false) * 100).toBeGreaterThan(85)
   })
+
+  it.each([
+    // RSR, year, measured yield as a percent of the unshaded control
+    [0.5 as Fraction, 2010, 58],
+    [0.5 as Fraction, 2011, 79],
+    [0.3 as Fraction, 2010, 81],
+    [0.3 as Fraction, 2011, 99],
+  ] as const)(
+    'at %s RSR the %s crop measured %s%% of the control, which the published band covers',
+    async (rsr, year, measuredPercent) => {
+      // The paper's own per-year figures, section 3.2 p. 60: "In 2010, yield was reduced
+      // significantly to 58% of control (all varieties together), when plants were submitted to
+      // heavy shading (FD). In HD, yields were at 81% of the control yield for the same year. In
+      // 2011, yield reductions were lower: they equaled 79% of full sun in FD and 99% in HD."
+      // FD transmitted 50% of incoming radiation and HD 70%, so FD is RSR 50% and HD RSR 30%.
+      //
+      // IN-SAMPLE, and the comparison is worth less for it: Laub's Table S1 lists this trial
+      // (as "Marrou et al., 2013b", with this paper's DOI) inside the leafy-vegetables group,
+      // one of its four studies. The app is being checked against a curve this trial helped fit,
+      // so agreement here shows consistency, and independent validation comes from the
+      // out-of-sample checks in this file: Weselek, Barron-Gafford and Amaducci
+      const catalog = await catalogPromise
+      const lettuce = need(catalog, 'lettuce-head')
+      const curve = laubCurve(lettuce.laubGroup)
+      const central = laubCentralRelativeYield(curve, rsr, false)
+      const band = laubRelativeYield(curve, rsr, false)
+      const message = `Marrou et al. 2013a measured ${String(measuredPercent)}% of control in ${String(year)} at ${String(rsr * 100)}% RSR; app central ${(central * 100).toFixed(1)}%, band ${(band.interval.lower * 100).toFixed(1)} to ${(band.interval.upper * 100).toFixed(1)}%`
+      expect(band.interval.lower * 100, message).toBeLessThanOrEqual(measuredPercent)
+      expect(band.interval.upper * 100, message).toBeGreaterThanOrEqual(measuredPercent)
+    },
+  )
 })
 
 describe('Barron-Gafford et al. 2019 (chiltepin, jalapeno, cherry tomato, Biosphere 2 AZ, water-limited)', () => {
@@ -304,15 +386,16 @@ describe('Weselek et al. 2021 (potato and wheat, Heggelbach DE, ~30% RSR, drough
     const potato = need(catalog, 'potato')
     const curve = laubCurve(potato.laubGroup)
     const central = laubCentralRelativeYield(curve, RSR, false)
-    // the agrivoltaics document's own extraction gives potato a -20% to +11% range across both years; a normal-year
-    // point within that range is roughly -7%, i.e. 93% of the reference. The app is markedly more
-    // pessimistic even in the ordinary year, consistent with tubers-root-crops carrying the
-    // thinnest evidence base of the nine Laub groups (n=2)
+    // The paper's own 2017 figure, p. 12: fresh-matter tuber yield 23.6 t/ha under the array
+    // against 28.8 t/ha on the reference, -18.2%, p = 0.005. So the trial measured 81.8% of the
+    // reference in the ordinary year, and the app is 9 points more pessimistic. The two-year
+    // average of -7% isn't the normal year's figure, and the tolerance below is tight enough to
+    // fail on it
     closeToPercent(
       central,
-      93,
-      30,
-      `Weselek et al. 2021, 2017 (normal year): potato roughly 93% of reference at ~30% RSR; app predicts ${(central * 100).toFixed(1)}%, a real and sizable gap even without invoking drought`,
+      81.8,
+      10,
+      `Weselek et al. 2021, 2017 (normal year): potato at 81.8% of reference at ~30% RSR (-18.2%, p = 0.005); app predicts ${(central * 100).toFixed(1)}%`,
     )
     expect(central * 100).toBeLessThan(85)
   })
@@ -323,7 +406,11 @@ describe('Weselek et al. 2021 (potato and wheat, Heggelbach DE, ~30% RSR, drough
     const curve = laubCurve(wheat.laubGroup)
     const central = laubCentralRelativeYield(curve, RSR, true)
     const band = laubRelativeYield(curve, RSR, true)
-    const message = `Weselek et al. 2021 measured winter wheat yield at 102.7% of the reference in the 2018 drought year at ~30% RSR (this app's catalog carries spring wheat as the c3-cereals stand-in). The c3-cereals curve never predicts above 100% at this RSR either, so central stays ${(central * 100).toFixed(1)}% regardless of the gate and the top of its own band reaches only ${(band.interval.upper * 100).toFixed(1)}%`
+    // "In 2018, it was 4.7 t ha-1 under AV compared to 4.6 t ha-1 in REF (+2.7%; not significant;
+    // p = 0.78)". This is the one year-crop cell in the pair that is not significant, so what
+    // this block pins is weaker than the potato case: the app predicts a loss where the trial
+    // found no difference it could establish, which is a gap against a null
+    const message = `Weselek et al. 2021 measured winter wheat yield at 102.7% of the reference in the 2018 drought year at ~30% RSR, a difference they report as not significant (p = 0.78). This app's catalog carries spring wheat as the c3-cereals stand-in. The c3-cereals curve never predicts above 100% at this RSR either, so central stays ${(central * 100).toFixed(1)}% regardless of the gate and the top of its own band reaches only ${(band.interval.upper * 100).toFixed(1)}%`
     expect(central, message).toBeCloseTo(laubCentralRelativeYield(curve, RSR, false), 6)
     expect(band.interval.upper, message).toBeLessThan(1.027)
   })
@@ -333,11 +420,16 @@ describe('Weselek et al. 2021 (potato and wheat, Heggelbach DE, ~30% RSR, drough
     const wheat = need(catalog, 'wheat-spring')
     const curve = laubCurve(wheat.laubGroup)
     const central = laubCentralRelativeYield(curve, RSR, false)
+    // p. 11: "In 2017, grain yield of winter wheat was 4.6 t ha-1 under AV compared to 5.7 t ha-1
+    // on the REF site (-18.7%; p = 0.03)", so 81.3% of the reference. The measured value is inside
+    // Laub's c3-cereals confidence interval at this RSR (61.5 to 87.6), so the app and the trial
+    // agree in the ordinary year, and the app's central estimate is 8 points lower. Averaged over
+    // both years, the trial comes to -8%
     closeToPercent(
       central,
-      92,
-      30,
-      `Weselek et al. 2021, 2017 (normal year): wheat roughly 92% of reference at ~30% RSR; app predicts ${(central * 100).toFixed(1)}%`,
+      81.3,
+      10,
+      `Weselek et al. 2021, 2017 (normal year): wheat at 81.3% of reference at ~30% RSR (-18.7%, p = 0.03); app predicts ${(central * 100).toFixed(1)}%`,
     )
     expect(central * 100).toBeLessThan(85)
   })

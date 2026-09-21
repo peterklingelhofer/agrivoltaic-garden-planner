@@ -176,7 +176,7 @@ export const runRecommendationPipeline = (input: PipelineInput): readonly Recomm
       const estimate = estimateYield(
         crop.id,
         light.bedId,
-        laubCurve(crop.laubGroup),
+        laubCurve(crop.laubGroup, crop.laubGroupNote),
         lightOutcome.light.cumulativeRsr,
         crowdingYieldPenalty(space.crowdingIndex),
         input.site.waterLimitation.limited,

@@ -21,7 +21,7 @@ import {
   DLI_STANDFIRST,
   RUNKLE_ATTRIBUTION,
   RUNKLE_CITED,
-  RUNKLE_CITEKEY_GAP,
+  RUNKLE_COMPANION_NOTE,
   RUNKLE_QUOTE,
   THRESHOLD_LABEL,
   dliEvidence,
@@ -56,18 +56,27 @@ describe('the DLI threshold a crop was gated on names its own evidence', () => {
     ])
   })
 
-  it('marks a tree-fruit minimum as a class-level inference, not a measurement', async () => {
+  it("marks a tree-fruit minimum as this app's own figure and cites nothing for it", async () => {
     const catalog = await loadCropCatalog()
     const evidence = dliEvidence(cropBy(catalog, 'apple'), 'minimum')
     expect(evidence).not.toBeNull()
     expect(evidence?.tier).toBe('C')
     expect(evidence?.provenance).toBe('inferred')
     expect(evidence?.classInference).toBe(true)
-    expect(evidence?.summary).toContain('class-level inference')
+    expect(evidence?.summary).toContain("this app's own figure")
     expect(evidence?.summary).toContain('no cited work measured it for this crop')
-    expect(evidence?.citations.length).toBeGreaterThan(0)
-    // FAO ECOCROP holds no DLI values, so no tree fruit may cite it for one
-    expect(evidence?.citations).not.toContain('fao-ecocrop')
+    // no source in the corpus prints a daily light integral for apple, so the row names none.
+    // Purdue HO-238-B-W and VCE SPES-720NP stood here until the sweep of 2026-09-20 and print
+    // a band for six crops, apple among none of them
+    expect(evidence?.citations).toEqual([])
+  })
+
+  it('cites the printed table on the one crop in the six that a table names', async () => {
+    const catalog = await loadCropCatalog()
+    const evidence = dliEvidence(cropBy(catalog, 'spinach'), 'minimum')
+    expect(evidence?.provenance).toBe('inferred')
+    expect(evidence?.citations).toEqual(['stallknecht2025-vce-dli'])
+    expect(evidence?.reason).toContain('14 to 20')
   })
 
   it('distinguishes a measured threshold from an inferred one on primitives', async () => {
@@ -125,13 +134,16 @@ describe('the DLI disclosure states the limitation without overstating it', () =
     expect(DLI_DISCLOSURE.map((point) => point.id)).toContain('ordinal-holds')
   })
 
-  it('quotes Runkle and cites the Runkle work the corpus actually holds', () => {
+  it('quotes Runkle and cites the column the quote is from', () => {
     const corpus = new Set((cslEntries as readonly { readonly id: string }[]).map((e) => e.id))
     expect(RUNKLE_QUOTE).toBe('In my opinion, there is no such thing as a DLI requirement')
     expect(RUNKLE_ATTRIBUTION).toContain('Runkle')
+    // the quoted column had no citekey until 2026-09-20 and was quoted under its own title.
+    // It has one now, so the quote cites it and the note points at the author's other column
+    expect(RUNKLE_CITED).toBe('runkle2019-dli-requirements')
     expect(corpus.has(RUNKLE_CITED)).toBe(true)
-    // the quoted column has no citekey, so the disclosure has to say so rather than borrow one
-    expect(RUNKLE_CITEKEY_GAP).toContain('no citekey')
+    expect(corpus.has('runkle2011-vegetable-dli')).toBe(true)
+    expect(RUNKLE_COMPANION_NOTE).toContain('Lighting Greenhouse Vegetables')
   })
 })
 

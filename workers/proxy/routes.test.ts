@@ -18,9 +18,9 @@ import {
   buildCacheKey,
   buildQueryCacheKey,
   normalizeQuery,
-  TTL_ELEVATION_SECONDS,
   TTL_GEOCODE_SECONDS,
   TTL_RETAIL_PRICE_SECONDS,
+  TTL_TMY_SECONDS,
 } from './cache'
 
 const ENV: ProxyEnv = {
@@ -61,7 +61,6 @@ afterEach(() => {
 const PVGIS_PATH = `${PROXY_PREFIX}/pvgis/api/v5_3/tmy`
 const NSRDB_PATH = `${PROXY_PREFIX}/nsrdb/api/nsrdb/v2/solar/nsrdb-GOES-tmy-v4-0-0-download.csv`
 const METEO_PATH = `${PROXY_PREFIX}/open-meteo/v1/archive`
-const ELEVATION_PATH = `${PROXY_PREFIX}/open-elevation/api/v1/lookup`
 const SEARCH_PATH = `${PROXY_PREFIX}/nominatim/search`
 const REVERSE_PATH = `${PROXY_PREFIX}/nominatim/reverse`
 const PHOTON_PATH = `${PROXY_PREFIX}/photon/api`
@@ -130,16 +129,15 @@ describe('coordinatesOf', () => {
 })
 
 /**
- * The two upstreams that moved behind this proxy for load rather than for a credential.
+ * The upstream that sits behind this proxy for load and holds no credential.
  *
- * Both are free, unauthenticated and rate limited per IP, and both are called on every site
- * resolve. A measured session earned a 429 from open-meteo after a handful of reloads by one
- * person. A lecture hall opening this at once is the case that matters
+ * It's free, unauthenticated and rate limited per IP, and it's called on every site resolve. A
+ * measured session earned a 429 from open-meteo after a handful of reloads by one person. A
+ * lecture hall opening this at once is the case that matters
  */
-describe('the weather and the elevation, cached at the edge', () => {
-  it('routes the two paths src/data actually builds', () => {
+describe('the weather, cached at the edge', () => {
+  it('routes the path src/data actually builds', () => {
     expect(matchRoute(METEO_PATH)?.upstream).toBe('open-meteo')
-    expect(matchRoute(ELEVATION_PATH)?.upstream).toBe('open-elevation')
   })
 
   it('forwards the weather query verbatim to open-meteo', async () => {
@@ -198,16 +196,6 @@ describe('the weather and the elevation, cached at the edge', () => {
     ).toBe('')
     expect(queryVariant(new URLSearchParams('b=2&a=1'))).toBe(
       queryVariant(new URLSearchParams('a=1&b=2')),
-    )
-  })
-
-  it('holds an elevation for as long as the ground stays where it is', async () => {
-    passthroughCaches()
-    const fetched = captureFetch()
-    await call(`${ELEVATION_PATH}?locations=42.3736,-72.5199`)
-    expect(new URL(fetched.url()).host).toBe('api.open-elevation.com')
-    expect(ROUTES.find((route) => route.upstream === 'open-elevation')?.ttlSeconds).toBe(
-      TTL_ELEVATION_SECONDS,
     )
   })
 
@@ -632,12 +620,12 @@ describe('the geocoders, which have a policy rather than a rate limit', () => {
   })
 
   /**
-   * A week, where the weather and the elevation are a year. A closed fact can't change; a place
-   * index gains a street, and a grower typing an address added last month has to find it
+   * A week, where a typical year is held for one. A closed fact can't change. A place index
+   * gains a street, and a grower typing an address added last month has to find it
    */
   it('holds a place name for a week rather than a year', () => {
     expect(matchRoute(SEARCH_PATH)?.ttlSeconds).toBe(TTL_GEOCODE_SECONDS)
-    expect(TTL_GEOCODE_SECONDS).toBeLessThan(TTL_ELEVATION_SECONDS)
+    expect(TTL_GEOCODE_SECONDS).toBeLessThan(TTL_TMY_SECONDS)
   })
 })
 
@@ -705,7 +693,7 @@ describe('the retail electricity price', () => {
     // and the same question asked twice is one entry, which is what the cache is for
     expect(keyFor('MA')).toBe(keyFor('MA'))
     expect(matchRoute(EIA_PATH)?.ttlSeconds).toBe(TTL_RETAIL_PRICE_SECONDS)
-    expect(TTL_RETAIL_PRICE_SECONDS).toBeLessThan(TTL_ELEVATION_SECONDS)
+    expect(TTL_RETAIL_PRICE_SECONDS).toBeLessThan(TTL_TMY_SECONDS)
     expect(TTL_RETAIL_PRICE_SECONDS).toBeGreaterThan(TTL_GEOCODE_SECONDS)
   })
 })

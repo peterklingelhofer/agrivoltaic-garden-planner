@@ -117,18 +117,6 @@ const fresh = async () => {
       const body = url.includes('daily=') ? served('daily.json') : served('hourly.json')
       return route.fulfill({ status: 200, contentType: 'application/json', body })
     })
-    // and the elevation, when the directory holds one: open-elevation refuses a connection
-    // after a handful of lookups a minute, and four browsers at once locked every step behind
-    // "the elevation lookup has answered as many requests as it allows" for ninety seconds
-    if (existsSync(join(weatherDir, 'elevation.json'))) {
-      await context.route(/\/api\/v1\/lookup/, (route) =>
-        route.fulfill({
-          status: 200,
-          contentType: 'application/json',
-          body: served('elevation.json'),
-        }),
-      )
-    }
   }
   page = await context.newPage()
   page.on('console', (m) => {

@@ -6,7 +6,6 @@ export type UpstreamId =
   | 'nominatim'
   | 'photon'
   | 'overpass'
-  | 'open-elevation'
   | 'soilgrids'
   | 'pvgis'
   | 'nsrdb'
@@ -18,11 +17,11 @@ export const BROWSER_DIRECT: readonly UpstreamId[] = ['nasa-power', 'overpass', 
  * Through the Worker, and cached at its edge.
  *
  * `pvgis`, `nsrdb` and `eia` are here because they need a credential or a policy exemption a
- * browser can't hold. `open-meteo` and `open-elevation` are here for load: both are free,
- * unauthenticated and rate limited per IP, both are called on every single site resolve, and a
- * measured session earned a 429 from open-meteo after a handful of reloads by one person. Thirty
- * browsers in a lecture hall asking about one town is the case that matters, and behind the edge
- * cache that is one upstream request for all thirty. See `workers/proxy/cache.ts`.
+ * browser can't hold. `open-meteo` is here for load: it's free, unauthenticated and rate
+ * limited per IP, it's called on every single site resolve, and a measured session earned a 429
+ * from it after a handful of reloads by one person. Thirty browsers in a lecture hall asking about
+ * one town is the case that matters, and behind the edge cache that is one upstream request for
+ * all thirty. See `workers/proxy/cache.ts`.
  *
  * The two geocoders are here for a reason a browser can't work around at all. The OSM Nominatim
  * usage policy asks for a User-Agent that identifies the application and `fetch` in a browser is
@@ -38,7 +37,6 @@ export const WORKER_PROXIED: readonly UpstreamId[] = [
   'nsrdb',
   'eia',
   'open-meteo',
-  'open-elevation',
   'nominatim',
   'photon',
 ]
@@ -149,7 +147,6 @@ const ORIGINS: Readonly<Record<UpstreamId, string>> = {
   nominatim: 'https://nominatim.openstreetmap.org',
   photon: 'https://photon.komoot.io',
   overpass: 'https://overpass-api.de',
-  'open-elevation': 'https://api.open-elevation.com',
   soilgrids: 'https://rest.isric.org',
   pvgis: 'https://re.jrc.ec.europa.eu',
   nsrdb: 'https://developer.nlr.gov',
@@ -162,7 +159,6 @@ export const MIN_INTERVAL_MS: Readonly<Record<UpstreamId, number>> = {
   nominatim: 1000,
   photon: 200,
   overpass: 1000,
-  'open-elevation': 200,
   soilgrids: 500,
   pvgis: 0,
   nsrdb: 0,
@@ -210,7 +206,6 @@ export const UPSTREAM_LABEL: Readonly<Record<UpstreamId, string>> = {
   nominatim: 'the place-name lookup',
   photon: 'the place-name lookup',
   overpass: 'the map lookup',
-  'open-elevation': 'the elevation lookup',
   soilgrids: 'the soil database',
   pvgis: 'the solar radiation service',
   nsrdb: 'the solar radiation service',

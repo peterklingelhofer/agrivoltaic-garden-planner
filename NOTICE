@@ -29,8 +29,8 @@ public/data/manifest.json:
 
 Fetched at run time and attributed on the sources step, never redistributed
 here: Open-Meteo (CC BY 4.0), Kew World Checklist of Vascular Plants
-(CC BY 4.0), NASA POWER, PVGIS, NSRDB, SoilGrids, Open-Elevation,
-OpenStreetMap Nominatim and Photon, and the U.S. EIA.
+(CC BY 4.0), NASA POWER, PVGIS, NSRDB, SoilGrids, OpenStreetMap Nominatim
+and Photon, and the U.S. EIA.
 
 -----------------------------------------------------------------------
 pvlib-python (BSD-3-Clause), https://github.com/pvlib/pvlib-python

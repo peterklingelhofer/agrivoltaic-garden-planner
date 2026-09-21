@@ -84,18 +84,21 @@ derivation rather than a claim of fresh verification.
 
 | Trial | Crop(s) | Site, water status | Shade level | Trial finding | This app predicts | Agreement |
 |---|---|---|---|---|---|---|
-| Marrou et al. 2013a (`marrou2013-lettuce-rue`) | Lettuce | Montpellier FR, irrigated, **not** water-limited by design | RSR 30% and 50% | Relative yield >= relative available radiation at both levels (paper's own headline finding) | 94% at 30% RSR, 76% at 50% RSR (leafy-vegetables curve) | **Agrees**, with room to spare: the app predicts a smaller loss than the paper's own floor at both levels |
+| Marrou et al. 2013a (`marrou2013-lettuce-rue`) | Lettuce | Montpellier FR, irrigated, **not** water-limited by design | RSR 30% and 50% | 81% of control in 2010 and 99% in 2011 at RSR 30%, 58% in 2010 and 79% in 2011 at RSR 50%. The paper's headline is the inequality: relative yield >= relative available radiation at both levels | 94% at 30% RSR (band 72.5 to 100), 76% at 50% RSR (band 49.8 to 100) | **In sample.** All four measured yields fall inside the published band, and the trial is one of the four studies Laub's leafy-vegetables curve is fitted on (Table S1, listed as "Marrou et al., 2013b" with this paper's DOI), so this is a consistency check and not an independent one |
 | Barron-Gafford et al. 2019 (`barron-gafford2019-arizona`) | Chiltepin pepper, jalapeno, cherry tomato | Biosphere 2, Tucson AZ, irrigated desert, water-limited | Not stated numerically in the paper (Fig. 2A shows PAR roughly halved, graphically only) | Chiltepin 3x control, cherry tomato 2x control (both P<0.01), jalapeno statistically unchanged | At most 108% central, 161% at the top of its own 95% band, at any RSR the app defines, water-limited gate open | **Agrees on direction** (shade can help), **disagrees on magnitude by roughly 2 to 3x**. Laub's meta-analysis pools mostly non-desert sites, so it can't see the size of relief a semi-arid, high-VPD, irrigated site gets, which the agrivoltaics document section 2.2 already flags as this trial's least generalizable feature |
-| Weselek et al. 2021 (`weselek2021-potato`) | Potato | Heggelbach DE, ~30% RSR, 2018 drought year read as water-limited | RSR ~30% | Potato +11% (2018 drought), roughly -7% (2017 normal) | 72% central regardless of the water-limitation flag, 103% at the top of the water-limited 95% band | **Disagrees**, in a specific, structural way: see finding 1 below |
-| Weselek et al. 2021 (`weselek2021-potato`) | Winter wheat (catalog stand-in: spring wheat, same species) | Heggelbach DE, ~30% RSR, 2018 drought year read as water-limited | RSR ~30% | Wheat +2.7% (2018 drought), roughly -8% (2017 normal) | 73% central regardless of the water-limitation flag, 88% at the top of the water-limited 95% band | **Disagrees**, same structural reason |
+| Weselek et al. 2021 (`weselek2021-potato`) | Potato | Heggelbach DE, ~30% RSR, 2018 drought year read as water-limited | RSR ~30% | 23.6 against 28.8 t/ha in 2017, **-18.2%, p = 0.005**, so 81.8% of the reference. 25.5 against 23.0 t/ha in the 2018 drought year, **+11%, p = 0.034** | 72% central regardless of the water-limitation flag, 103% at the top of the water-limited 95% band | **Agrees in the normal year**: 81.8% sits inside the published band at 30% RSR (50.7 to 100), 9 points above the central estimate. The drought year is the disagreement, and section 3 below says why |
+| Weselek et al. 2021 (`weselek2021-potato`) | Winter wheat (catalog stand-in: spring wheat, same species) | Heggelbach DE, ~30% RSR, 2018 drought year read as water-limited | RSR ~30% | 4.6 against 5.7 t/ha in 2017, **-18.7%, p = 0.03**, so 81.3% of the reference. 4.7 against 4.6 t/ha in the 2018 drought year, **+2.7%, not significant, p = 0.78** | 73% central regardless of the water-limitation flag, 88% at the top of the water-limited 95% band | **Agrees in the normal year**: 81.3% is inside Laub's c3-cereals interval at 30% RSR (61.5 to 87.6). The drought-year gain the app can't reach is one the trial didn't establish either |
 
 **Looked for, and couldn't use.** Marrou et al. 2013b (`marrou2013-microclimate`), the companion
 cucumber trial, reports growth-rate differences confined to the juvenile
 phase rather than a final per-area yield ratio, so it can't be reduced to the yield-ratio comparison
 this file makes for the other trials. Amaducci et al. 2018 (`amaducci2018-corn`), the rainfed-corn
-paper Decision Record 6 itself cites, reports that shaded corn yield was "higher and more stable"
-under drought stress, without a comparison yield ratio a test could pin, it appears below as a
-qualitative check rather than a numeric one.
+paper Decision Record 6 itself cites, is a simulation: a coupled radiation and shading model
+driving the GECROS crop model over a 40-year climate record, with no field trial of its own. It
+reports that shaded corn yield was "higher and more stable" under drought stress, without a
+comparison yield ratio a test could pin, and Laub's inclusion criteria exclude modeling work, so
+it sits outside the meta-analysis as well as outside this table. It appears below as a qualitative
+check.
 
 ## 3. What the water-limitation gate can and can't do
 
@@ -109,18 +112,20 @@ That's the whole mechanism, and it has one consequence: **the clip can only matt
 whose raw curve rises above 100% somewhere in its own range.** Checked directly against the shipped
 data across every RSR the app defines (5% to 90%):
 
-- **Berries, fruits, fruity vegetables and forages** do rise above 100% at low RSR. For these four
-  groups the gate does what Decision Record 6 describes: a water-limited site can show a modeled
-  benefit, and a non-water-limited site is held at parity.
+- **Berries, fruits, fruity vegetables, forages and leafy vegetables** rise above 100% in the
+  published central estimate at low RSR: berries and fruits through 55%, fruity vegetables through
+  40%, forages through 25% and leafy vegetables through 15%, peaking at 116.1%, 115.5%, 108.3%,
+  103.7% and 101.3%. For these five groups the gate does what Decision Record 6 describes: a
+  water-limited site can show a modeled benefit, and a non-water-limited site is held at parity.
+  Leafy vegetables is the one to watch, because it holds 62 of the 182 catalog rows and its
+  upper 95% bound exceeds 100% from 5% to 65% RSR, so the gate moves its band across most of the
+  usable range.
 - **Corn and grain legumes** never rise above 100% at any RSR, central estimate or 95% upper
   bound. For these two groups, water limitation changes nothing: `shade-validation.test.ts` asserts
   the two bands are bit-for-bit identical at every RSR level. So the gate moves this app no closer to Amaducci's rainfed-corn finding, because the curve never reaches the ceiling the gate lifts.
-- **Tubers/root crops and C3 cereals** sit in between: the central estimate never exceeds 100%
-  (so potato and wheat's central predictions are also unmoved by the gate, which is the Weselek
-  disagreement in the table above), but the *upper* 95% bound briefly does, by a few percentage
-  points, between roughly 5% and 30% RSR for tubers. That's why the water-limited potato band's top
-  edge (103%) lands closer to Weselek's +11% than the corn case gets to Amaducci's finding, though
-  it still falls short.
+- **Tubers/root crops and C3 cereals** sit in between: the central estimate never exceeds 100%, but the *upper* 95% bound briefly does. So the gate doesn't move potato and wheat's central predictions either, which is the Weselek drought-year gap in the table above. For tubers the upper bound exceeds 100% from 5% to 35% RSR and reaches 106.1%. For C3 cereals it does so at one level, 100.3% at 5% RSR.
+  That's why the water-limited potato band's top edge (103%) lands closer to Weselek's +11% than
+  the corn case gets to Amaducci's finding, though it still falls short.
 
 The arithmetic behind the cap is applied correctly and consistently. The gap is between what the decision record's prose implies the gate can do and what it can produce. The prose implies the gate can move this app toward Amaducci's corn finding, and by extension toward Weselek's drought-year potato and wheat. A ceiling-only gate on Laub's *pooled, mostly non-water-limited* curves can't produce a benefit for crop groups whose pooled curve never predicted one. Closing that gap would mean sourcing a response curve specific to water-limited sites for corn, grain legumes, tubers and C3 cereals (a search found none, since
 Laub's meta-analysis doesn't stratify by water status), or moving the gate from a ceiling to a
@@ -157,13 +162,14 @@ regression tests, and nowhere else:
   need something to compare against.
 - **The DLI gate** that decides whether a crop can grow in a bed at all is a different mechanism
   from the shade-yield curve this file checks, and it rests on thinner evidence.
-  `the verification document`'s "Searched and not found" section already states it: 167 of the 174
+  `the verification document`'s "Searched and not found" section already states it: 177 of the 182
   per-crop DLI rows are Tier C, inferred from the crop's garden sun label through the app's own
   conversion and citing only the class methodology, and the three Tier A rows (leaf and head
   lettuce, basil) are read from per-crop trials that place no failure point and say so on the record
-  (Decision Record 23). This file's new test doesn't touch the DLI gate, a crop that clears it can
-  still have its realized yield checked here, but whether it clears the gate at all is a separate,
-  thinner claim.
+  (Decision Record 23). Two more rows are Tier B: potato, citing an agrivoltaic potato trial, and strawberry, citing
+  a four-year, 21-site agrivoltaic trial that states its figure in the app's own unit. This file's new test doesn't touch the DLI
+  gate, a crop that clears it can still have its realized yield checked here, but whether it clears
+  the gate at all is a separate, thinner claim.
 
 ## 5. Unvalidated: measured in no garden
 
@@ -174,9 +180,11 @@ by agronomists. None is a home garden, and none matches the scale, management st
 ## The one-line answer
 
 Solar position, irradiance decomposition and the plane-of-array energy chain are checked against
-named physics oracles (pvlib, NREL, PVWatts v5) in the test suite, the shade-to-yield curve is now
-checked against three published field trials, agreeing with one, agreeing on direction but not
-magnitude with a second, and disagreeing with a third for a specific, now-documented structural
-reason, the crop ranking, polyculture rules, pest and drought terms, and the DLI gate that decides
-whether a crop grows at all rest on this project's own literature reading with no external check,
-and nothing anywhere in the app has been compared against a real garden's harvest.
+named physics oracles (pvlib, NREL, PVWatts v5) in the test suite, the shade-to-yield curve is
+checked against three published field trials, agreeing with the lettuce trial that helped fit the
+curve it is checked against, agreeing on direction and short on magnitude with the Arizona trial,
+and agreeing with the German trial in its ordinary year while it cannot reach the drought-year gain
+that trial measured for potato and did not establish for wheat, the crop ranking, polyculture
+rules, pest and drought terms, and the DLI gate that decides whether a crop grows at all rest on
+this project's own literature reading with no external check, and nothing anywhere in the app has
+been compared against a real garden's harvest.

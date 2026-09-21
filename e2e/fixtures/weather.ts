@@ -94,7 +94,15 @@ export const dailyNormalsBody = (latitudeDeg: number, longitudeDeg: number): unk
   }
 }
 
-export const hourlyArchiveBody = (latitudeDeg: number, longitudeDeg: number): unknown => {
+/** The height Open-Meteo answers the archive with, which is where a site's elevation comes from */
+const ARCHIVE_ELEVATION_M = 52
+
+export const hourlyArchiveBody = (
+  latitudeDeg: number,
+  longitudeDeg: number,
+  // null for the archive answer that names no elevation, which the site readout says out loud
+  elevationM: number | null = ARCHIVE_ELEVATION_M,
+): unknown => {
   const time: string[] = []
   const ghi: number[] = []
   const dni: number[] = []
@@ -124,6 +132,7 @@ export const hourlyArchiveBody = (latitudeDeg: number, longitudeDeg: number): un
     }
   }
   return {
+    ...(elevationM === null ? {} : { elevation: elevationM }),
     hourly: {
       time,
       shortwave_radiation: ghi,
@@ -137,10 +146,6 @@ export const hourlyArchiveBody = (latitudeDeg: number, longitudeDeg: number): un
     },
   }
 }
-
-export const elevationBody = (elevationM: number): unknown => ({
-  results: [{ elevation: elevationM }],
-})
 
 export const soilBody = (): unknown => ({
   properties: {
@@ -207,8 +212,6 @@ export const truncatedDailyNormalsBody = (latitudeDeg: number, longitudeDeg: num
     },
   }
 }
-
-export const emptyElevationBody = (): unknown => ({ results: [] })
 
 export const geocodeBody = (label: string, latitudeDeg: number, longitudeDeg: number): unknown => [
   {

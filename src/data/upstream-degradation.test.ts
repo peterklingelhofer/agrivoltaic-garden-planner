@@ -9,7 +9,7 @@ mock.module('./http', () => ({ ...actualHttp, fetchJson }))
 
 const { climateNormalsAt, dailyNormalsAt, hardinessAt, koppenAt, resetStaticLayerCache } =
   await import('./static-layers')
-const { elevation, geocode, reverseGeocode } = await import('./geocode')
+const { geocode, reverseGeocode } = await import('./geocode')
 const { resolveSite } = await import('./site')
 const { fetchNasaPowerTmy, normalizeTmy, parseCsvColumns, TMY_END_YEAR, TMY_YEAR_COUNT } =
   await import('./tmy')
@@ -93,24 +93,6 @@ describe('a daily-normals response with no values', () => {
   })
 })
 
-/** Was `it.fails`: `?? 0` rendered "0.00 m", a real elevation, for a lookup that returned nothing */
-describe('an elevation lookup with no result', () => {
-  it('is unknown rather than 0 m, which is a real elevation', async () => {
-    fetchJson.mockResolvedValue({ results: [] })
-    expect(await elevation(LOCATION, null)).toBeNull()
-  })
-
-  it('is unknown when the result carries no numeric elevation', async () => {
-    fetchJson.mockResolvedValue({ results: [{ elevation: null }] })
-    expect(await elevation(LOCATION, null)).toBeNull()
-  })
-
-  it('still reads a real elevation, including a genuine 0 m', async () => {
-    fetchJson.mockResolvedValue({ results: [{ elevation: 0 }] })
-    expect(await elevation(LOCATION, null)).toBe(0)
-  })
-})
-
 const place = (lat: unknown, lon: unknown): unknown => ({
   display_name: 'somewhere',
   lat,
@@ -177,6 +159,9 @@ const HOURS = 8760
 const hourlyBody = (fill: number | null, shortwave: number | null = fill): unknown => {
   const series = Array.from({ length: HOURS }, () => fill)
   return {
+    // the height above sea level the archive answers with, which is where a site's elevation
+    // comes from
+    elevation: 50,
     hourly: {
       time: Array.from(
         { length: HOURS },
@@ -334,7 +319,6 @@ describe('a resolved site keeps the zone its normals were aggregated in', () => 
             : hourlyBody(12, 200),
         )
       }
-      if (upstream === 'open-elevation') return Promise.resolve({ results: [{ elevation: 50 }] })
       return Promise.reject(new Error(`${String(upstream)} isn't answered here`))
     })
     const { site, weather, years } = await resolveSite(LOCATION, 'Amherst', null)
@@ -357,7 +341,6 @@ describe('a resolved site keeps the zone its normals were aggregated in', () => 
       if (upstream === 'open-meteo') {
         return Promise.resolve(params.has('daily') ? dailyBody(12) : hourlyBody(12, 200))
       }
-      if (upstream === 'open-elevation') return Promise.resolve({ results: [{ elevation: 50 }] })
       return Promise.reject(new Error(`${String(upstream)} isn't answered here`))
     })
     const { site, weather } = await resolveSite(LOCATION, 'Amherst', null)

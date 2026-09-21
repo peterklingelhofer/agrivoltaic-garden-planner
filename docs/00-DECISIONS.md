@@ -87,13 +87,16 @@ real and is now shipped as a qualitative reading (§2.7a), the conclusion is not
 model it would need is deliberately absent.
 
 RESOLUTION: no under-panel air or canopy temperature is derived, and no crop gate reads one. Doc
-02 §3.2 is the reason. Air-temperature effects **contradict each other across climates** in the
-primary literature: ~1 °C cooler by day and ~0.5 °C warmer at night in semi-arid Arizona
-(Barron-Gafford et al. 2019), *higher* under the array in temperate Germany (Weselek et al. 2021),
-significantly different but "magnitudes smaller" than simulations predicted in Oregon (Hassanpour
-Adeh et al. 2018). The one consistent result is **soil cooling in summer**, which is the opposite
-sign to the expectation that prompted this. A model whose sign flips by site is not a model this
-app can put behind a planting date.
+02 §3.2 is the reason. The measured air-temperature effects are about a degree and **differ in
+shape by site**: ~1 °C cooler by day and ~0.5 °C warmer at night in semi-arid Arizona
+(Barron-Gafford et al. 2019), daily means about 1.1 °C lower across both years in temperate
+Germany, with warmer readings on 7 days in 2017 and 18 in 2018 (Weselek et al. 2021, corrected
+2026-09-20 from a reading that had this sentence backward), significantly different but
+"magnitudes smaller" than simulations predicted in Oregon (Hassanpour Adeh et al. 2018). The one
+consistent result is **soil cooling in summer**, which is the opposite sign to the expectation that
+prompted this, and the quantity that does flip sign by site is soil moisture. A one-degree effect
+whose shape changes by site, measured at three sites and badly simulated at one of them, is not a
+model this app can put behind a planting date.
 
 Two consequences a reader is likely to get backward, recorded because they are the reasons this
 is not merely "not done yet":
@@ -128,12 +131,14 @@ chill are untouched.
 - `DLI (mol/m2/d) ~= GHI (MJ/m2/d) x 2.06`, or `x 7.4` for kWh/m2/d.
 - Inter-reflection (only material for white backsheets, 3-8% in the shade strip):
   `E / (1 - rho_g (1 - SVF) rho_m)`.
-- Penumbra: **the 7.5 cm figure was WRONG by 2x.** The sun's 0.533 deg angular diameter is already
-  the full limb-to-limb angle, so someone doubled it for "both limbs" and double counted. Correct
-  value at 4 m is `h*tan(0.533 deg)` = **3.72 cm**, 7.5 cm corresponds to 8.1 m. The original also
-  ignored elevation dependence: divide by `sin^2(alpha)`, giving 14.9 cm at 30 deg elevation. The
-  "ignore for annual DLI" conclusion still holds, but for a different reason than we recorded.
-  Derived from geometry, not cited.
+- Penumbra: derived from geometry, with no citation to make. Across the ray the width is `d * tan(0.533 deg)` at
+  slant distance `d`, the Sun's mean angular diameter being the full limb-to-limb angle, so
+  nothing is doubled: 3.72 cm at 4 m overhead, 7.4 cm at the 8 m slant of a 4 m edge at 30 deg
+  elevation, which is the solar geometry document's 7.5 cm. On the ground along the sun's azimuth the same edge's
+  penumbra is `h * tan(0.533 deg) / sin^2(alpha)`, 14.9 cm at 30 deg. Under the 12 cm cell near
+  noon and past it below about 33 deg, where the hours carry little energy, so annual DLI ignores
+  it. A note here of 2026-07-30 called the 7.5 cm figure doubled, having read it as the overhead
+  case at 4 m. Withdrawn 2026-09-20, see `the verification document` 5a.
 - Inter-reflection 3-8% for white backsheets: **UNVERIFIABLE.** The radiosity formula itself is
   valid two-surface theory, but no PV paper states it and the 3-8% figure appears nowhere.
   Marion 2017 was checked and is NOT the source. Mark unsourced in the UI or drop the range.
@@ -219,8 +224,20 @@ data must carry this distinction, and the UI must show it.
 
 TRAP: eartharxiv.org/repository/object/7354 is a DIFFERENT paper that merely cites Laub. Its
 equations (e.g. `C3 Cereals Y=106.34-0.44X1`) are NOT Laub's. Do not use them.
-- Any "shade improves yield" pathway is **gated on a water-limitation flag**. Barron-Gafford
-  2019's 2-3x Arizona gains do not transfer to temperate gardens.
+- Any "shade improves yield" pathway is **gated on a water-limitation flag**, because every
+  published gain this corpus holds comes from a hot, dry or irrigated-arid site: Barron-Gafford's
+  Sonoran plot, Amaducci's rainfed drought simulations, Weselek's 2018 drought year. Zhang et al.
+  2025 report the same clustering across 20 countries, that the climates reporting a yield
+  increase "share some main features: hot summers, limited precipitation and (semi-) arid
+  conditions". No published work stratifies a shade-response curve by water status, and none can
+  from this literature: Laub et al. 2022 excluded any trial applying "additional implementation of
+  treatments other than shading, which were not applied to a corresponding control treatment
+  (e.g., reduced irrigation)", so the pooled curves are structurally blind to the interaction. The
+  ceiling is therefore a floor-of-evidence choice and no fitted effect: it declines to predict a
+  gain where the mechanism the literature names is absent, and it claims no size for the gain
+  where it is present. **It also cannot move corn or grain legumes at all**, at any shade level,
+  because neither group's curve reaches 100% for the ceiling to lift, which is what
+  `docs/VALIDATION.md` section 3 measures.
 - The same pathway is also gated on **the shade the bed actually has**, and that third factor was
   missing until it was caught by a bad example garden. `shadeBenefitBonus` scaled with site heat
   and the water-limitation index alone, so every shade-tolerant crop collected the full bonus
@@ -239,7 +256,7 @@ equations (e.g. `C3 Cereals Y=106.34-0.44X1`) are NOT Laub's. Do not use them.
 | Leafy greens | 6 | 12-17 | 40-50% (tipburn >17 for a month) |
 | Forages / C3 pasture | - | - | 45-50% |
 | Cane/bush berries | 15 | - | 30-35% |
-| Strawberry | 25 | - | 15-20% |
+| Strawberry | 25 | - | 10-30% (Widmer's own range, collapsed to 10%) |
 | Brassicas | - | 12-17 (inferred) | 30-40% |
 | Root/tuber | none established | - | 15-25% |
 | Solanaceae | 10-12 | 20-30 | 20-25% temperate, to 40% arid |
@@ -251,6 +268,39 @@ equations (e.g. `C3 Cereals Y=106.34-0.44X1`) are NOT Laub's. Do not use them.
 
 Strawberry is split out from Laub's lumped berry group on the authority of Widmer et al.'s
 21-site Swiss study, the only source expressing agrivoltaic limits directly as DLI.
+
+**Amendment, 2026-09-20, from an audit against the sources.** Five things in this record were
+wrong or unstated, and the shipped data now reads as follows.
+
+- **The fruity-vegetables curve is three studies**, bell pepper under nets, sweet pepper under
+  cloth (both subtropical) and squash. No tomato is in it and none of the three is under panels,
+  so the +8% it predicts at 20% RSR for a tomato is an analogy. The field trials in the corpus
+  measured the other direction: Mata et al. 2026 at Bridgeton found yield lower in every row
+  nearest the array, and Ben Naim et al. 2025 found a significant tomato yield loss at 16.5% and
+  19.3% season shading with none at 8.6% and 11.9%. The tomato, pepper and cucumber rows carry
+  that as their caveat.
+- **Weselek's temperate trial measured cooling**: daily mean air temperature
+  significantly lower by about 1.1 C in both years, most prevalent in summer. The warming sentence
+  this project quoted is Weselek reporting Marrou et al. 2013b as a contrast to their own result.
+  The contradiction with the Arizona and Oregon sites is in soil water, where Weselek measured a
+  decrease, in winter and the shoulder seasons, which they attribute to those other sites being
+  irrigated.
+- **The 2017 figures are the significant ones**: potato -18.2% (p = 0.005) and winter wheat
+  -18.7% (p = 0.03). The 2018 drought-year potato gain is +11% (p = 0.034) and the wheat gain is
+  +2.7% and not significant (p = 0.78). The -7% and -8% this project carried for 2017 are
+  two-year averages.
+- **The shade-benefit optimum was two quantities in one field.** `laub.generated.ts` now carries
+  `benefitPeakRsrPercent`, the RSR of the highest tabulated prediction (berries 30, fruits 30,
+  fruity vegetables 20, forages 15, leafy vegetables 10), beside `benefitPhaseEndRsrPercent`, the
+  last level Table S2 classes benefiting (55, 55, 40, 25, 15). Both are generated from the table,
+  so the paper's own prose sentence for fruits, which its Table S2 contradicts by five RSR points,
+  can no longer be transcribed into either.
+- **The 20% ceiling on Solanaceae and cucurbits has a source now**, at tier B: Zhang et al. 2025's
+  segmented regression finds no statistically significant yield difference from the control below
+  20% shading (p = 0.084) and lower yield from 20% to 30% (p < 0.01), and recommends that "the
+  shading caused by PV systems should preferably not exceed 20%". The regression pools crops, and
+  its three crop-resolved fits are corn, beans and lettuce, so it supports a design figure across
+  crops and resolves no Solanaceae of its own.
 
 ## 7. Uncertainty policy (product-level, non-negotiable)
 
@@ -309,11 +359,13 @@ number is distinguishable from one excluded on a measured one. The full disclosu
 `panel-dli-evidence-inline`. Tone is deliberately calibrated, not apologetic: the ordinal
 ranking is stated as reliable in the same breath as the absolutes are called provisional.
 
-**MISSING CITEKEY, not invented.** Runkle's "DLI Requirements" column, the source of "in my
-opinion, there is no such thing as a DLI requirement", has no entry in `CITATIONS.csl.json`. The
-disclosure quotes it under its own title, says plainly that it carries no citekey, and cites
-`runkle2011-vegetable-dli` ("Lighting Greenhouse Vegetables") only for the vine-crop figure that
-work actually backs. Add the column to the corpus and the quote can be attached properly.
+**CITEKEY ADDED 2026-09-20.** Runkle's "DLI 'Requirements'" column (GPN, May 2019), the source of
+"in my opinion, there is no such thing as a DLI requirement", is now `runkle2019-dli-requirements`
+in `CITATIONS.csl.json` and the disclosure cites it for the quote. The live page returns HTTP 403
+to automated fetch and was read through the Internet Archive. Its Table 1 gives fruiting vegetables
+a target of 15+ mol/m2/d under a caption calling its own values "subjective and situational", which
+is the same author and the same figure as the 2011 column this app's vine-crop minimum comes from.
+`runkle2011-vegetable-dli` stays cited for that minimum.
 
 Vendor-marketing origin confirmed for the 22: ReduSystems, "An adult tomato crop requires at
 least 22 mol/m2/d for good productivity", citing no primary literature. Hydroponics and LED
@@ -404,7 +456,7 @@ Estimate-only (require field agronomy, label as such):
 
 Browser-direct (CORS verified by live curl 2026-07-29): Open-Meteo (primary, only global, keyless,
 CORS-enabled, CC BY 4.0 commercial source returning GHI+DNI+DHI), NASA POWER, Nominatim (1 req/s +
-UA header), Photon, Overpass, Open-Elevation.
+UA header), Photon, Overpass.
 
 Worker-proxied: PVGIS v5.3 (**explicitly forbids AJAX by written policy**), NREL NSRDB PSM3 (key
 secrecy). `developer.nrel.gov` was retired May 29, 2026, and the endpoint is now GOES TMY v4.0.0 on
@@ -444,6 +496,22 @@ Licensing: PFAF and Permapeople are CC BY-SA (viral) and must be isolated behind
 excluded. Trefle is unusable (repeated shutdowns). No open, well-licensed horticultural
 attribute DB exists: the ~200-crop curated table from public-domain Extension publications is
 the ownable asset.
+
+### 9b. The elevation comes with the weather record
+
+A site's height above sea level is read from the weather record the site already
+fetches. Open-Meteo's archive body names its `elevation`, PVGIS names it under the location it
+echoes back, NASA POWER writes it as the third coordinate of the point it answered for, and an
+NSRDB or uploaded CSV names it in the metadata header, so `elevationOfPayload` reads whichever
+spelling the source used and the record carries the number. Null where a body names none, which
+the site readout says and the solar position answers by working from the sea-level reference. A
+genuine 0 m stays 0 m.
+
+The separate elevation upstream is gone. It was a free DEM API fetched once per site resolve
+alongside the weather and inside the same `Promise.all`, which made it a point of failure for
+every fresh lookup: on 2026-09-20 `api.open-elevation.com` stopped completing a TLS handshake and
+every fresh lookup failed with it, while places looked up earlier kept working off the edge
+cache's year-long copy of their elevation. One fetch carries both numbers now.
 
 ## 10. Recommendation pipeline
 
@@ -1398,12 +1466,39 @@ found 112 rows citing `fao-ecocrop` for their daily light integral, five more ci
 the schema default carrying it too, weeks after record 7 had called that attribution false and
 fixed. ECOCROP holds no light integral, its light field is a descriptor. The rows' own comments and
 section 3.6 of the horticulture document say where every Tier C class came from: the crop's conventional garden sun
-label, converted into a band by this app's own arithmetic in section 3.3. So the only work behind a
-Tier C figure is the class-range methodology (Purdue HO-238-B-W and VCE SPES-720NP), and that is
-what every Tier C row now cites: the `C` citation set in `rows.ts` is the methodology set, the
-schema default dropped ECOCROP, and the inferred record's basis says in one sentence that the class
-is the app's own reading of the sun label. The UI sentence "nothing was measured for this crop"
-became "no cited work measured it for this crop", because for spinach the first was untrue.
+label, converted into a band by this app's own arithmetic in section 3.3. Every Tier C row was
+moved onto the `C` citation set, which is Purdue HO-238-B-W and VCE SPES-720NP, the schema default
+dropped ECOCROP, and the inferred record's basis says in one sentence that the class is the app's
+own reading of the sun label. The UI sentence "nothing was measured for this crop" became "no
+cited work measured it for this crop", because for spinach the first was untrue.
+
+**Withdrawn 2026-09-20, by an audit against the sources.** This record said "the only work behind a
+Tier C figure is the class-range methodology (Purdue HO-238-B-W and VCE SPES-720NP)", and neither
+document is a class-range methodology: both are per-crop tables, and the conversion in the horticulture document
+section 3.3 is behind no row in the catalog. Reading both documents against all 182 rows puts
+every row in one of three states.
+
+1. **The figure is printed for this crop.** Six rows: tomato and cucumber carry VCE Table 3's own
+   "Tomato 20-30" and "Cucumber 20-30", spinach its "Spinach 14-20", both peppers Purdue's
+   Capsicum bands, and raspberry Widmer's 15. Each cites the document that prints it, alone, and
+   the row comment names the row or the band it came from.
+2. **The figure is printed nowhere.** 168 rows, which is most of the catalog. They cite nothing
+   for their light figures and carry one sentence: "This app's own figure, set by analogy with the
+   crops in its class for which a published DLI exists. No cited work measured it for this crop,
+   and the sources step lists it as a gap. Trust the ordering it gives, and treat the number
+   itself as provisional." The sources step lists each of them, so the claim in that sentence is
+   true of itself.
+3. **The figure contradicts the document the row cited.** Three rows: cilantro carries 10 to 16
+   where VCE prints 15 to 20, summer squash 18 to 25 where VCE prints "Zucchini 20-30", and
+   parsley 10 to 16 where VCE prints 10 to 15. The numbers stay, the citation goes, and each row
+   comment names the difference, because a citation that does not hold the number survives a spot
+   check by a reader who does not open the PDF.
+
+Two tiers moved with the sweep. Strawberry is B: Widmer et al. 2026 is a four-year study of 21
+cases stating its figure in this app's own unit. Carrot, beet and kale drop to C: they cited a
+potato shade trial and the meta-analysis for daily light integrals neither work prints. Potato
+keeps B, and its record now says in words that its tier stands on the shade evidence and that the
+12 and the 18 to 25 are this app's own band.
 
 **The four Tier A rows.** Lettuce (leaf and head), spinach and basil carried tier A while citing
 that same methodology, which `rows.ts` itself says cannot support an A. Per-crop trials were found
