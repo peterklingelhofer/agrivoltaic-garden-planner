@@ -2,7 +2,6 @@ import type { ExecutionContextLike, KVStore } from './env'
 
 export const COORDINATE_PRECISION_DEG = 0.01
 export const TTL_TMY_SECONDS = 31_536_000
-export const TTL_ELEVATION_SECONDS = 31_536_000
 export const TTL_ERROR_SECONDS = 60
 /**
  * A 5xx, which is an upstream down or one that outran `UPSTREAM_TIMEOUT_MS`, held for less than
@@ -13,10 +12,10 @@ export const TTL_ERROR_SECONDS = 60
 export const TTL_OUTAGE_SECONDS = 10
 
 /**
- * A week, where the two above are a year, and the difference is what the answer is about.
+ * A week, where a typical year is held for a year, and the difference is what the answer is about.
  *
- * A typical meteorological year and the height of a hill are closed facts: they can't change,
- * so an answer is good for as long as the cache will hold it. A place name is a live index that
+ * A typical meteorological year is a closed fact: it can't change, so an answer is good for as
+ * long as the cache will hold it. A place name is a live index that
  * gains a new street or a renamed village, and a grower typing an address that was added last
  * month has to be able to find it. A week is long enough that a classroom typing the same town
  * costs one upstream request, and short enough that the map catching up isn't a year away.
@@ -41,25 +40,18 @@ export const TTL_RETAIL_PRICE_SECONDS = 2_592_000
  * The upstreams whose answers this proxy holds.
  *
  * `pvgis`, `nsrdb` and `eia` are here because they need a credential or a policy exemption the
- * browser can't be given. The two below are here for a different reason and it's worth writing
- * down: they're free, unauthenticated, per-IP rate limited, and every visit calls both. A
- * classroom opening this at once is thirty browsers asking the same question about the same town
- * in the same minute, and a measured session earned a 429 from open-meteo on a handful of
- * reloads by one person. Cached at the edge it is one upstream request per town per year.
+ * browser can't be given. `open-meteo` below is here for a different reason: it's free,
+ * unauthenticated, per-IP rate limited, and every visit calls it. A classroom opening this at
+ * once is thirty browsers asking the same question about the same town in the same minute, and a
+ * measured session earned a 429 from open-meteo on a handful of reloads by one person. Cached at
+ * the edge it is one upstream request per town per year.
  *
  * The two geocoders are here for a third reason again, and it's the one that can't be worked
  * around in a browser at all: the OSM Nominatim usage policy asks for a User-Agent that
  * identifies the application, and a browser isn't permitted to set one. Every request this app
  * made to Nominatim therefore arrived anonymous, at the rate of one per browser, uncached
  */
-export type CachedUpstream =
-  | 'pvgis'
-  | 'nsrdb'
-  | 'open-meteo'
-  | 'open-elevation'
-  | 'nominatim'
-  | 'photon'
-  | 'eia'
+export type CachedUpstream = 'pvgis' | 'nsrdb' | 'open-meteo' | 'nominatim' | 'photon' | 'eia'
 
 export interface CacheKeyParts {
   readonly upstream: CachedUpstream

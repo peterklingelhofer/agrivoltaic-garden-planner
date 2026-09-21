@@ -2,7 +2,7 @@ import { molPerM2FromWhPerM2, PAR_FRACTION_DEFAULT } from '../sim/units'
 import type { LatLon } from '../types/geo'
 import type { SiteId } from '../types/ids'
 import type { ExceedancePercentile, Site, SoilProfile } from '../types/site'
-import type { Celsius, Millimeters } from '../types/units'
+import type { Celsius, Meters, Millimeters } from '../types/units'
 import type { WaterLimitation } from '../types/water'
 import type { ClimateNormals, MeasuredYear, TmySeries } from '../types/weather'
 import {
@@ -14,7 +14,7 @@ import {
   seasonGdd,
   type DailyTemperature,
 } from './agronomy'
-import { elevation, timezoneFor, utcOffsetHoursFor } from './geocode'
+import { timezoneFor, utcOffsetHoursFor } from './geocode'
 import { cacheKeyFor } from './http'
 import {
   botanicalAreaAt,
@@ -71,9 +71,8 @@ export const resolveSite = async (
   // the country a geocoder named, which narrows the fallback clock to that country's zones
   countryCode: string | null = null,
 ): Promise<ResolvedSite> => {
-  const [elevationM, koppenCode, botanicalArea, hardiness, frost, normals, soil, record, daily] =
+  const [koppenCode, botanicalArea, hardiness, frost, normals, soil, record, daily] =
     await Promise.all([
-      elevation(location, signal),
       koppenAt(location),
       botanicalAreaAt(location),
       hardinessAt(location),
@@ -84,6 +83,13 @@ export const resolveSite = async (
       // the same cached answer the normals above read, for the zone it names
       dailyNormalsAt(location),
     ])
+  /**
+   * The height above sea level comes with the weather, from the body the record was read out of. A
+   * separate elevation service would be one more free API every fresh lookup has to reach, in the
+   * same `Promise.all`, so the day it stops answering no new place can be looked up at all. Null
+   * where the weather body named none, and the sun then works from sea level
+   */
+  const elevationM = record.elevationM as Meters | null
   // the zone the daily normals were aggregated in, and the nearest zone from `timezoneFor` only
   // where no upstream named one. The hourly series stays in UTC and carries the zone for its
   // readers. An answer of plain GMT for a place an hour or more off it is a request that asked for

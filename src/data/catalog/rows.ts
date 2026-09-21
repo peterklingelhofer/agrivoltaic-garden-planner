@@ -3,25 +3,27 @@ import type { CitationId } from '../../types/citation-ids.generated'
 import type { CropRow } from './schema'
 
 /**
- * Citation sets, not evidence tiers. The letters are historical and don't
- * correspond to the row `tier` column
- *
- * `A` is DLI measurement and classification METHODOLOGY only. Neither Purdue
- * HO-238-B-W nor VCE SPES-720NP contains a per-crop DLI table, so a row citing
- * `A` must be tier C and its number is a class-level inference
+ * The two extension documents, kept apart because they print different things and a row may cite
+ * one without the other. A sweep on 2026-09-20 read both for every row: VCE SPES-720NP Table 3
+ * prints a band for lettuce, spinach, parsley, cilantro, basil, tomato, cucumber and zucchini,
+ * and Purdue HO-238-B-W's chart marks bands for Lycopersicon and Capsicum among its greenhouse
+ * species. Five rows carry a figure one of them prints for the crop itself, and raspberry
+ * carries one Widmer prints. Every other row cites neither, because neither holds its number
+ * (Decision Record 23)
  */
-const A: NonEmpty<CitationId> = ['torres-purdue-dli-b', 'stallknecht2025-vce-dli']
-const B: NonEmpty<CitationId> = ['weselek2021-potato', 'laub2022-shade-meta']
+const VCE: NonEmpty<CitationId> = ['stallknecht2025-vce-dli']
 
 /**
- * `C` read `['fao-ecocrop']` on 112 rows until 2026-09-11. ECOCROP holds no light integral, and
- * its light descriptor was never what put a crop in its class either: every Tier C class came
- * from the crop's garden sun label through the conversion in the horticulture document section
- * 3.3, which is this app's own arithmetic. So the only work behind a Tier C figure is the
- * class-range methodology in `A`, and the set is kept under its old name only so that the rows
- * citing it need no edit (Decision Record 23)
+ * The three documents behind the vine crops' numbers, in the order the numbers come from them:
+ * VCE Table 3 prints "Tomato 20-30", Purdue HO-238-B-W's chart marks Lycopersicon and Capsicum
+ * at 10 to 12 for minimum acceptable quality, 14 to 20 for good and 22 to 30 for high, and
+ * Runkle 2011 is the 15 for vine crops as a group
  */
-const C: NonEmpty<CitationId> = A
+const VINE_CROPS: NonEmpty<CitationId> = [
+  'stallknecht2025-vce-dli',
+  'torres-purdue-dli-b',
+  'runkle2011-vegetable-dli',
+]
 
 /**
  * Per-crop DLI trials read in full or by abstract on 2026-09-11 (Decision Record 23). The
@@ -46,9 +48,58 @@ const BASIL: NonEmpty<CitationId> = [
  * where each number comes from
  */
 const LETTUCE_CAVEAT =
-  '5.8 mol/m2/d is the lowest level Pennisi et al. 2020 grew lettuce at (100 µmol/m2/s for 16 h), where it still produced a crop with the least biomass, Kelly et al. 2020 grew two cultivars from 6.9. No cited trial places a failure point below that, so the floor is where measurement stops. The target runs from Pennisi et al.’s optimum, 14.4, past which yield stopped rising, to the Cornell CEA program’s 17'
+  '5.8 mol/m2/d is the lowest level Pennisi et al. 2020 grew lettuce at (100 µmol/m2/s for 16 h), where it still produced a crop with the least biomass. Kelly et al. 2020 grew two cultivars from 6.9. No cited trial places a failure point below that, so the floor is where measurement stops. The target runs from Pennisi et al.’s optimum, 14.4, past which yield stopped rising, to the Cornell CEA program’s 17. Every trial behind these numbers is a growth chamber or a greenhouse at a fixed photoperiod, and none measured an outdoor bed'
 const BASIL_CAVEAT =
-  '12.9 mol/m2/d is the level Dou et al. 2018 suggest for commercial production, the lowest of their five at which yield and nutritional quality were both high, their plants still grew at 9.3 with 54 to 79 percent less shoot mass, and Walters and Currey 2018 found 59 percent less at 7 or below than at about 15. The target runs from Pennisi et al. 2020’s optimum, 14.4, to 17.8, the top of Dou et al.’s range, where shoot mass was highest'
+  "12.9 mol/m2/d is the level Dou et al. 2018 suggest for commercial production, the lowest of their five light levels at which yield and nutritional quality were both high. 9.3 is the lowest level they grew it at, where it produced a crop with shoot fresh weight 35 to 44 percent below the three higher levels. Walters and Currey 2018 grew sweet basil at about 7 and about 15 mol/m2/d and report fresh weight 144 percent higher at the high level, which inverts to 59 percent less at the low one, a figure this app derives and the paper doesn't print. The target runs from Pennisi et al. 2020’s optimum, 14.4, to 17.8, the top of Dou et al.’s range, where shoot mass was highest"
+
+/**
+ * Tomato, both peppers and cucumber share one record: the numbers come from the same two
+ * greenhouse tables and the same trade column, and the trials that have measured these crops
+ * under panels all measured losses. Carried as the rows' basis so the UI prints it beside the
+ * number (audit of 2026-09-20)
+ */
+const VINE_CROP_CAVEAT =
+  'The 15 is Runkle 2011’s figure for vine crops as a group, "at least 15 (and preferably more than 20)", in a sentence that names no crop. The lowest band Purdue HO-238-B-W marks acceptable for tomato and pepper is 10 to 12. The 20 to 30 is the range Virginia Cooperative Extension’s Table 3 prints for tomato. Both are greenhouse figures and neither traces to a tomato experiment. The yield curve for these crops is Laub’s fruity-vegetables group, three studies (bell pepper under nets and sweet pepper under cloth, both subtropical, and squash), none of them tomato and none under panels. The field trials this app cites (Mata et al. 2026 at Bridgeton, Ben Naim et al. 2025 in Israel) measured yield losses that grew with shading, with no gain measured anywhere'
+
+/** Spinach carries Virginia Extension's own spinach row, and a floor that table doesn't print */
+const SPINACH_CAVEAT =
+  'Virginia Cooperative Extension’s Table 3 prints 14 to 20 mol/m2/d for spinach, which is this row’s target. The 6 floor is this app’s own: Gao et al. 2020 grew spinach from 11.5 to 20.2 with an optimum at 17.3, so the trial starts too high to place a minimum'
+
+/** Strawberry and raspberry are the two rows an agrivoltaic trial states a DLI for */
+const STRAWBERRY_CAVEAT =
+  '25 mol/m2/d is the level Widmer et al. 2026 found maintains trial-average yield under agrivoltaic cover, from a four-year study of 21 cases in Switzerland, every one substrate-grown under a protective cover. The 30 at the top of the band is where the Ohio State Kubota Lab’s greenhouse guidance reports strawberry plants tend to be stressed. Neither figure is a failure point, and transfer to an in-ground bed is an extrapolation'
+const RASPBERRY_CAVEAT =
+  '15 mol/m2/d is the level Widmer et al. 2026 found maintains trial-average yield for raspberry, on the same convention as strawberry. They publish no target band and no shading percentage for raspberry, so the 18 to 25 is this app’s own'
+
+/** The one row whose shade ceiling a trial on the crop itself stands behind */
+const POTATO_CEILING_NOTE =
+  "Potato is the one crop in this catalog with a shade trial of its own: Weselek et al. 2021 grew it under an array at about 30 percent shade across two seasons, and Laub et al. 2022 class tubers and root crops as tolerant to about half the light. The 50 percent ceiling is where the reviews put potato's yield-loss threshold, well past anything the trial tested"
+
+/** Potato keeps a tier B record for its shade behavior, and neither cited work prints a DLI */
+const POTATO_CAVEAT =
+  'Weselek et al. 2021 grew potato under an array at about 30 percent shade and Laub et al. 2022 place tubers and root crops on their own response curve. Neither prints a daily light integral for potato, so the 12 and the 18 to 25 are this app’s own band. The tier shown comes from the shade studies'
+
+/**
+ * Where a crop's Laub group is an analogy, its row says in one sentence which fact makes it one.
+ * Each reaches the reader as a yield caveat, so the band shows as the extrapolation it is
+ * (audit of 2026-09-20)
+ */
+const IMMATURE_POD_NOTE =
+  'The grain-legume trials in the meta-analysis measured dry seed, and this crop is picked as an immature pod or a green seed, which is a different sink (where the plant sends its sugars)'
+const OILSEED_NOTE =
+  'No group in the meta-analysis holds an oilseed, so this crop uses the nearest grain curve as a proxy'
+const PSEUDOCEREAL_NOTE =
+  'The C3-cereals group is wheat and barley, and this crop is a pseudocereal of the amaranth family (Amaranthaceae), so the group is a proxy'
+const NO_COMPARABLE_CROP_NOTE =
+  'No crop in the nine groups is harvested the way this one is, so the group is an analogy this app chose'
+const LAUB_EXCLUDED_NOTE =
+  'Laub et al. 2022 name this species among the crops they excluded as not relevant for temperate regions, so the curve runs past the data it was fitted on'
+const OUTSIDE_SCOPE_NOTE =
+  'The meta-analysis took data from temperate and subtropical sites only, and this crop is grown outside that range, so the curve is an extrapolation'
+const SWEET_CORN_NOTE =
+  'The corn trials in the meta-analysis are grain corn, and sweet corn is cut at the milk stage, so the loss this curve predicts is likely overstated for it'
+const NO_HARVEST_NOTE =
+  'The forages curve is a biomass-yield response measured on cut hay and pasture. Nothing is harvested from this planting, so a relative yield means nothing for it'
 
 /**
  * ECOCROP names its climate zones in Trewartha's letters. Read onto the Köppen codes
@@ -109,9 +160,10 @@ export const CROP_ROWS: readonly CropRow[] = [
     'solanaceae',
     'vining-trellised',
     'warm',
-    // 15 / >20 for vine crops as a group, Runkle 2011. The former 14/22 pair carried a
-    // Purdue citation but 22 was verbatim ReduSystems vendor copy, so it's deleted not
-    // re-cited. Tier C: Runkle lumps tomato, pepper and cucumber and cites no primary source
+    // VCE SPES-720NP Table 3 prints "Tomato 20-30", and Purdue HO-238-B-W's chart marks
+    // Lycopersicon at 10 to 12 for minimum acceptable quality, 14 to 20 for good and 22 to 30
+    // for high. The 15 is Runkle 2011's vine-crop figure, in a sentence that names no crop, and
+    // it stays as the floor. Tier C: none of the three chains ends in a tomato experiment
     15,
     20,
     30,
@@ -132,7 +184,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       gddBase: 10,
       dtmRef: 'transplant',
       support: 'cage',
-      dliCitations: ['runkle2011-vegetable-dli'],
+      dliCitations: VINE_CROPS,
+      dliCaveat: VINE_CROP_CAVEAT,
     },
   ],
   [
@@ -144,9 +197,10 @@ export const CROP_ROWS: readonly CropRow[] = [
     'solanaceae',
     'bush',
     'warm',
-    // Runkle 2011 names pepper among the vine crops: 15, preferably >20. The former
-    // 14/20-30 pair was verbatim ReduSystems vendor copy carrying Purdue and VCE
-    // citation IDs. Tier C: Runkle lumps the three vine crops and cites no primary
+    // Purdue HO-238-B-W gives Capsicum the same three bands as Lycopersicon, cell for cell:
+    // 10 to 12 minimum acceptable, 14 to 20 good, 22 to 30 high. VCE Table 3 has no pepper row,
+    // so the 20 to 30 is the range it prints for tomato, and the 15 is Runkle's vine-crop
+    // figure. Tier C for the same reason as tomato
     15,
     20,
     30,
@@ -161,10 +215,11 @@ export const CROP_ROWS: readonly CropRow[] = [
       zr: 0.75,
       p: 0.3,
       dtmRef: 'transplant',
-      // peppers set out into soil at 65 F (18 C), where the warm archetype's 13 C is the tomato
+      // peppers set out into soil at 65 F (18 C). The warm archetype's 13 C is the tomato
       // rule, and it puts the pepper date about three weeks early in a New England spring
       minSoilTempC: 18,
-      dliCitations: ['runkle2011-vegetable-dli'],
+      dliCitations: VINE_CROPS,
+      dliCaveat: VINE_CROP_CAVEAT,
     },
   ],
   [
@@ -191,7 +246,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       p: 0.3,
       dtmRef: 'transplant',
       minSoilTempC: 18,
-      dliCitations: ['runkle2011-vegetable-dli'],
+      dliCitations: VINE_CROPS,
+      dliCaveat: VINE_CROP_CAVEAT,
     },
   ],
   [
@@ -212,7 +268,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     60,
     1,
     0.7,
-    { harvestDays: 60, dtmRef: 'transplant', dliCitations: C },
+    { harvestDays: 60, dtmRef: 'transplant' },
   ],
   [
     'tomatillo',
@@ -232,7 +288,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     90,
     1.2,
     1,
-    { harvestDays: 60, dtmRef: 'transplant', dliCitations: C },
+    { harvestDays: 60, dtmRef: 'transplant' },
   ],
   [
     'cucumber',
@@ -243,9 +299,9 @@ export const CROP_ROWS: readonly CropRow[] = [
     'cucurbits',
     'vining-trellised',
     'warm',
-    // Runkle 2011 names cucumber among the vine crops: 15, preferably >20. The horticulture document called
-    // 12/18-26 a greenhouse DLI recommendation, but neither cited Extension sheet contains
-    // any per-crop figure
+    // VCE SPES-720NP Table 3 prints "Cucumber 20-30" for the crop itself, and Runkle 2011
+    // names cucumber among the vine crops at 15, preferably above 20. Purdue's chart has no
+    // cucumber row, so this row doesn't cite it
     15,
     20,
     30,
@@ -255,7 +311,13 @@ export const CROP_ROWS: readonly CropRow[] = [
     45,
     2,
     0.5,
-    { harvestDays: 45, zr: 0.95, p: 0.5, dliCitations: ['runkle2011-vegetable-dli'] },
+    {
+      harvestDays: 45,
+      zr: 0.95,
+      p: 0.5,
+      dliCitations: ['stallknecht2025-vce-dli', 'runkle2011-vegetable-dli'],
+      dliCaveat: VINE_CROP_CAVEAT,
+    },
   ],
   [
     'squash-summer',
@@ -266,6 +328,8 @@ export const CROP_ROWS: readonly CropRow[] = [
     'cucurbits',
     'bush',
     'warm',
+    // VCE Table 3 prints "Zucchini 20-30" and this row carries 18 to 25. The row keeps its numbers
+    // and cites nothing
     12,
     18,
     25,
@@ -275,7 +339,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     90,
     0.8,
     1.2,
-    { harvestDays: 50, zr: 0.8, p: 0.5, dliCitations: C },
+    { harvestDays: 50, zr: 0.8, p: 0.5 },
   ],
   [
     'squash-winter',
@@ -295,7 +359,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     150,
     0.5,
     3,
-    { zr: 0.8, p: 0.5, dliCitations: C },
+    { zr: 0.8, p: 0.5 },
   ],
   [
     'pumpkin',
@@ -315,7 +379,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     180,
     0.5,
     3.5,
-    { zr: 0.8, p: 0.5, dliCitations: C },
+    { zr: 0.8, p: 0.5 },
   ],
   [
     'melon',
@@ -337,7 +401,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     120,
     0.4,
     2.5,
-    { zr: 1.15, p: 0.4, dliCitations: A },
+    { zr: 1.15, p: 0.4 },
   ],
   [
     'watermelon',
@@ -357,7 +421,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     150,
     0.4,
     3,
-    { zr: 1.1, p: 0.4, dliCitations: A },
+    { zr: 1.1, p: 0.4 },
   ],
   [
     'okra',
@@ -377,7 +441,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     45,
     1.5,
     0.6,
-    { harvestDays: 60, dliCitations: A },
+    { harvestDays: 60 },
   ],
 
   // Grain and fresh legumes
@@ -399,7 +463,14 @@ export const CROP_ROWS: readonly CropRow[] = [
     15,
     0.5,
     0.3,
-    { harvestDays: 21, zr: 0.6, p: 0.45, nfix: true, succession: 14, dliCitations: C },
+    {
+      harvestDays: 21,
+      zr: 0.6,
+      p: 0.45,
+      nfix: true,
+      succession: 14,
+      laubNote: IMMATURE_POD_NOTE,
+    },
   ],
   [
     'bean-pole',
@@ -419,7 +490,13 @@ export const CROP_ROWS: readonly CropRow[] = [
     20,
     2.5,
     0.3,
-    { harvestDays: 45, zr: 0.6, p: 0.45, nfix: true, dliCitations: C },
+    {
+      harvestDays: 45,
+      zr: 0.6,
+      p: 0.45,
+      nfix: true,
+      laubNote: IMMATURE_POD_NOTE,
+    },
   ],
   [
     'bean-runner',
@@ -439,7 +516,10 @@ export const CROP_ROWS: readonly CropRow[] = [
     20,
     2.5,
     0.3,
-    { nfix: true, dliCitations: C },
+    {
+      nfix: true,
+      laubNote: IMMATURE_POD_NOTE,
+    },
   ],
   [
     'pea-garden',
@@ -459,7 +539,14 @@ export const CROP_ROWS: readonly CropRow[] = [
     8,
     1.5,
     0.2,
-    { zr: 0.8, p: 0.35, gddBase: 4.5, nfix: true, succession: 14, dliCitations: C },
+    {
+      zr: 0.8,
+      p: 0.35,
+      gddBase: 4.5,
+      nfix: true,
+      succession: 14,
+      laubNote: IMMATURE_POD_NOTE,
+    },
   ],
   [
     'fava-bean',
@@ -479,7 +566,10 @@ export const CROP_ROWS: readonly CropRow[] = [
     20,
     1.2,
     0.3,
-    { nfix: true, dliCitations: C },
+    {
+      nfix: true,
+      laubNote: IMMATURE_POD_NOTE,
+    },
   ],
   [
     'cowpea',
@@ -499,7 +589,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     20,
     0.6,
     0.4,
-    { harvestDays: 30, nfix: true, dliCitations: C },
+    { harvestDays: 30, nfix: true },
   ],
   [
     'soybean-edamame',
@@ -519,7 +609,10 @@ export const CROP_ROWS: readonly CropRow[] = [
     15,
     0.8,
     0.3,
-    { nfix: true, dliCitations: C },
+    {
+      nfix: true,
+      laubNote: IMMATURE_POD_NOTE,
+    },
   ],
   [
     'lentil',
@@ -539,7 +632,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     10,
     0.4,
     0.2,
-    { nfix: true, dliCitations: C },
+    { nfix: true },
   ],
   [
     'chickpea',
@@ -559,7 +652,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     25,
     0.5,
     0.4,
-    { nfix: true, dliCitations: C },
+    { nfix: true },
   ],
   [
     'peanut',
@@ -579,7 +672,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     30,
     0.5,
     0.6,
-    { nfix: true, dliCitations: C },
+    { nfix: true },
   ],
 
   // Cereals and pseudocereals
@@ -612,7 +705,7 @@ export const CROP_ROWS: readonly CropRow[] = [
       gddBase: 6.7,
       gddUpper: 30,
       betweenCm: 75,
-      dliCitations: ['torres-purdue-dli-b', 'stallknecht2025-vce-dli'],
+      laubNote: SWEET_CORN_NOTE,
     },
   ],
   [
@@ -633,7 +726,6 @@ export const CROP_ROWS: readonly CropRow[] = [
     12,
     1,
     0.15,
-    { dliCitations: C },
   ],
   [
     'barley',
@@ -653,7 +745,6 @@ export const CROP_ROWS: readonly CropRow[] = [
     12,
     0.9,
     0.15,
-    { dliCitations: C },
   ],
   [
     'oat',
@@ -673,7 +764,6 @@ export const CROP_ROWS: readonly CropRow[] = [
     12,
     1.1,
     0.15,
-    { dliCitations: C },
   ],
   [
     'rye-cereal',
@@ -693,7 +783,6 @@ export const CROP_ROWS: readonly CropRow[] = [
     12,
     1.4,
     0.15,
-    { dliCitations: C },
   ],
   [
     'quinoa',
@@ -713,14 +802,19 @@ export const CROP_ROWS: readonly CropRow[] = [
     30,
     1.5,
     0.4,
-    { dliCitations: C },
+    {
+      laubNote: PSEUDOCEREAL_NOTE,
+    },
   ],
   [
     'amaranth-grain',
     'Amaranthus cruentus',
     'Amaranthaceae',
     'grain amaranth',
-    'c3-cereals',
+    // Laub's C3-cereals group in Table S1 is wheat, barley, durum wheat and winter wheat. The paper
+    // separates its two cereal groups on C3 and C4, and grain amaranth is a C4 species, so it reads
+    // the corn curve
+    'corn-c4',
     'c3-cereals',
     'upright-herb',
     'hot',
@@ -733,7 +827,6 @@ export const CROP_ROWS: readonly CropRow[] = [
     30,
     1.8,
     0.5,
-    { dliCitations: C },
   ],
   [
     'goosefoot',
@@ -753,7 +846,9 @@ export const CROP_ROWS: readonly CropRow[] = [
     30,
     1.2,
     0.4,
-    { dliCitations: ['mueller2025-eastern-ag-complex'] },
+    {
+      laubNote: PSEUDOCEREAL_NOTE,
+    },
   ],
   [
     'sumpweed',
@@ -773,7 +868,9 @@ export const CROP_ROWS: readonly CropRow[] = [
     40,
     1.5,
     0.5,
-    { dliCitations: ['mueller2025-eastern-ag-complex'] },
+    {
+      laubNote: OILSEED_NOTE,
+    },
   ],
 
   // Root, tuber and bulb
@@ -786,6 +883,8 @@ export const CROP_ROWS: readonly CropRow[] = [
     'root-tuber',
     'upright-herb',
     'cool',
+    // tier B for the shade evidence, which is what Weselek and Laub carry for this crop. The
+    // 12 and the 18 to 25 are this app's own band: neither work prints a daily light integral
     12,
     18,
     25,
@@ -795,7 +894,16 @@ export const CROP_ROWS: readonly CropRow[] = [
     30,
     0.6,
     0.5,
-    { zr: 0.5, p: 0.35, maxRsr: 0.5, maxRsrTier: 'B', betweenCm: 75, dliCitations: B },
+    {
+      zr: 0.5,
+      p: 0.35,
+      maxRsr: 0.5,
+      maxRsrTier: 'B',
+      maxRsrNote: POTATO_CEILING_NOTE,
+      betweenCm: 75,
+      dliCitations: ['weselek2021-potato', 'laub2022-shade-meta'],
+      dliCaveat: POTATO_CAVEAT,
+    },
   ],
   [
     'sweet-potato',
@@ -815,7 +923,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     30,
     0.3,
     1.5,
-    { zr: 1.25, p: 0.65, dliCitations: C },
+    { zr: 1.25, p: 0.65 },
   ],
   [
     'carrot',
@@ -826,16 +934,18 @@ export const CROP_ROWS: readonly CropRow[] = [
     'root-tuber',
     'rosette',
     'cool',
+    // tier C since 2026-09-20: the row cited a potato shade trial and the meta-analysis, and
+    // neither prints a daily light integral for carrot
     8,
     14,
     20,
-    'B',
+    'C',
     1,
     75,
     6,
     0.35,
     0.15,
-    { zr: 0.75, p: 0.35, succession: 21, dliCitations: B },
+    { zr: 0.75, p: 0.35, succession: 21 },
   ],
   [
     'beet',
@@ -846,16 +956,17 @@ export const CROP_ROWS: readonly CropRow[] = [
     'root-tuber',
     'rosette',
     'cool',
+    // tier C since 2026-09-20, as carrot: no cited work prints a daily light integral for beet
     8,
     14,
     20,
-    'B',
+    'C',
     1,
     60,
     10,
     0.35,
     0.2,
-    { succession: 21, dliCitations: B },
+    { succession: 21 },
   ],
   [
     'radish',
@@ -875,7 +986,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     5,
     0.2,
     0.1,
-    { zr: 0.4, p: 0.3, succession: 10, dliCitations: C },
+    { zr: 0.4, p: 0.3, succession: 10 },
   ],
   [
     'turnip',
@@ -895,7 +1006,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     10,
     0.35,
     0.25,
-    { succession: 21, dliCitations: C },
+    { succession: 21 },
   ],
   [
     'rutabaga',
@@ -915,7 +1026,6 @@ export const CROP_ROWS: readonly CropRow[] = [
     20,
     0.4,
     0.3,
-    { dliCitations: C },
   ],
   [
     'parsnip',
@@ -935,7 +1045,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     10,
     0.4,
     0.2,
-    { life: 'biennial', dliCitations: C },
+    { life: 'biennial' },
   ],
   [
     'celeriac',
@@ -955,7 +1065,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     25,
     0.5,
     0.35,
-    { dtmRef: 'transplant', dliCitations: C },
+    { dtmRef: 'transplant' },
   ],
   [
     'kohlrabi',
@@ -975,7 +1085,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     20,
     0.4,
     0.3,
-    { succession: 21, dliCitations: C },
+    { succession: 21 },
   ],
   [
     'jerusalem-artichoke',
@@ -995,7 +1105,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     45,
     2.5,
     0.6,
-    { life: 'perennial', coldC: -30, dliCitations: C },
+    { life: 'perennial', coldC: -30 },
   ],
   [
     'horseradish',
@@ -1015,7 +1125,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     45,
     0.8,
     0.6,
-    { life: 'perennial', coldC: -34, dliCitations: C },
+    { life: 'perennial', coldC: -34 },
   ],
   [
     'onion-bulb',
@@ -1035,7 +1145,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     12,
     0.5,
     0.15,
-    { zr: 0.45, p: 0.3, k: 0.35, dliCitations: C },
+    { zr: 0.45, p: 0.3, k: 0.35 },
   ],
   [
     'shallot',
@@ -1055,7 +1165,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     15,
     0.4,
     0.15,
-    { synonyms: ['Allium cepa Aggregatum group'], k: 0.35, dliCitations: C },
+    { synonyms: ['Allium cepa Aggregatum group'], k: 0.35 },
   ],
   [
     'garlic',
@@ -1095,7 +1205,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       // and keeps the harvest window from being cut short by this same autumn's first freeze
       window: [10, 7],
       sow: [280, 296],
-      dliCitations: C,
     },
   ],
   [
@@ -1116,7 +1225,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     15,
     0.7,
     0.2,
-    { k: 0.35, dtmRef: 'transplant', dliCitations: C },
+    { k: 0.35, dtmRef: 'transplant' },
   ],
   [
     'scallion',
@@ -1136,7 +1245,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     5,
     0.4,
     0.1,
-    { k: 0.35, succession: 21, dliCitations: C },
+    { k: 0.35, succession: 21 },
   ],
   [
     'chives',
@@ -1156,7 +1265,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     20,
     0.35,
     0.25,
-    { life: 'perennial', coldC: -34, dliCitations: C },
+    { life: 'perennial', coldC: -34 },
   ],
 
   // Leafy greens
@@ -1187,7 +1296,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       zr: 0.4,
       p: 0.3,
       ceiling: 17,
-      ceilingDays: 3,
       succession: 14,
       dliCitations: LETTUCE,
       dliCaveat: LETTUCE_CAVEAT,
@@ -1218,7 +1326,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       zr: 0.4,
       p: 0.3,
       ceiling: 17,
-      ceilingDays: 3,
       succession: 14,
       dliCitations: LETTUCE,
       dliCaveat: LETTUCE_CAVEAT,
@@ -1233,10 +1340,10 @@ export const CROP_ROWS: readonly CropRow[] = [
     'leafy-greens',
     'rosette',
     'cool',
-    // Gao et al. 2020 (gao2020-spinach-dli) grew hydroponic spinach at 11.5, 14.4, 17.3 and 20.2
-    // mol/m2/d and found the optimum at 17.3 with less at 20.2. Their lowest level is a
-    // plant-factory setting, so the trial places no minimum, and 6 / 14-20 stays the sun-label
-    // inference it always was. The former tier A cited only the class methodology
+    // VCE SPES-720NP Table 3 prints "Spinach 14-20" for the crop itself, which is this row's
+    // target. Gao et al. 2020 (gao2020-spinach-dli) grew hydroponic spinach at 11.5, 14.4, 17.3
+    // and 20.2 mol/m2/d and found the optimum at 17.3, a plant-factory setting that places no
+    // minimum, so the 6 floor stays this app's own
     6,
     14,
     20,
@@ -1246,7 +1353,13 @@ export const CROP_ROWS: readonly CropRow[] = [
     15,
     0.25,
     0.2,
-    { zr: 0.4, p: 0.2, succession: 14, dliCitations: A },
+    {
+      zr: 0.4,
+      p: 0.2,
+      succession: 14,
+      dliCitations: VCE,
+      dliCaveat: SPINACH_CAVEAT,
+    },
   ],
   [
     'swiss-chard',
@@ -1266,7 +1379,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     25,
     0.5,
     0.35,
-    { synonyms: ['Beta vulgaris subsp. vulgaris Cicla group'], harvestDays: 90, dliCitations: C },
+    { synonyms: ['Beta vulgaris subsp. vulgaris Cicla group'], harvestDays: 90 },
   ],
   [
     'kale',
@@ -1277,16 +1390,18 @@ export const CROP_ROWS: readonly CropRow[] = [
     'leafy-greens',
     'upright-herb',
     'cool',
+    // tier C since 2026-09-20: the row cited a potato shade trial and the meta-analysis for a
+    // figure neither of them prints for kale
     6,
     12,
     18,
-    'B',
+    'C',
     2,
     60,
     40,
     0.7,
     0.5,
-    { synonyms: ['Brassica oleracea Acephala group'], harvestDays: 90, dliCitations: B },
+    { synonyms: ['Brassica oleracea Acephala group'], harvestDays: 90 },
   ],
   [
     'collards',
@@ -1306,7 +1421,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     45,
     0.8,
     0.6,
-    { harvestDays: 90, dliCitations: C },
+    { harvestDays: 90 },
   ],
   [
     'mustard-greens',
@@ -1326,7 +1441,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     20,
     0.5,
     0.3,
-    { succession: 14, dliCitations: C },
+    { succession: 14 },
   ],
   [
     'arugula',
@@ -1346,7 +1461,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     12,
     0.25,
     0.2,
-    { succession: 10, dliCitations: C },
+    { succession: 10 },
   ],
   [
     'mizuna',
@@ -1366,7 +1481,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     20,
     0.3,
     0.3,
-    { synonyms: ['Brassica rapa var. nipposinica'], succession: 14, dliCitations: C },
+    { synonyms: ['Brassica rapa var. nipposinica'], succession: 14 },
   ],
   [
     'tatsoi',
@@ -1386,7 +1501,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     20,
     0.2,
     0.25,
-    { synonyms: ['Brassica rapa var. rosularis'], succession: 14, dliCitations: C },
+    { synonyms: ['Brassica rapa var. rosularis'], succession: 14 },
   ],
   [
     'bok-choy',
@@ -1406,7 +1521,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     20,
     0.3,
     0.25,
-    { synonyms: ['Brassica rapa Chinensis group'], succession: 14, dliCitations: C },
+    { synonyms: ['Brassica rapa Chinensis group'], succession: 14 },
   ],
   [
     'endive',
@@ -1426,7 +1541,6 @@ export const CROP_ROWS: readonly CropRow[] = [
     30,
     0.3,
     0.35,
-    { dliCitations: C },
   ],
   [
     'radicchio',
@@ -1446,7 +1560,6 @@ export const CROP_ROWS: readonly CropRow[] = [
     25,
     0.3,
     0.3,
-    { dliCitations: C },
   ],
   [
     'celery',
@@ -1466,7 +1579,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     25,
     0.6,
     0.3,
-    { dtmRef: 'transplant', p: 0.2, dliCitations: C },
+    { dtmRef: 'transplant', p: 0.2 },
   ],
   [
     'nz-spinach',
@@ -1486,7 +1599,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     45,
     0.4,
     1,
-    { harvestDays: 90, dliCitations: C },
+    { harvestDays: 90 },
   ],
   [
     'sorrel',
@@ -1506,7 +1619,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     30,
     0.4,
     0.3,
-    { life: 'perennial', coldC: -34, harvestDays: 120, dliCitations: C },
+    { life: 'perennial', coldC: -34, harvestDays: 120 },
   ],
   [
     'mache',
@@ -1526,7 +1639,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     10,
     0.12,
     0.12,
-    { window: [2, 5], succession: 14, dliCitations: C },
+    { window: [2, 5], succession: 14 },
   ],
   [
     'claytonia',
@@ -1546,7 +1659,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     12,
     0.15,
     0.15,
-    { window: [2, 5], dliCitations: C },
+    { window: [2, 5] },
   ],
   [
     'watercress',
@@ -1566,7 +1679,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     20,
     0.2,
     0.4,
-    { life: 'perennial', coldC: -20, dliCitations: C },
+    { life: 'perennial', coldC: -20 },
   ],
   [
     'orach',
@@ -1586,7 +1699,6 @@ export const CROP_ROWS: readonly CropRow[] = [
     30,
     1.2,
     0.4,
-    { dliCitations: C },
   ],
   [
     'purslane',
@@ -1606,7 +1718,6 @@ export const CROP_ROWS: readonly CropRow[] = [
     20,
     0.15,
     0.4,
-    { dliCitations: C },
   ],
   [
     'good-king-henry',
@@ -1626,7 +1737,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     40,
     0.5,
     0.4,
-    { life: 'perennial', coldC: -30, dliCitations: C },
+    { life: 'perennial', coldC: -30 },
   ],
   [
     'sea-kale',
@@ -1646,7 +1757,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     60,
     0.7,
     0.8,
-    { life: 'perennial', coldC: -25, dliCitations: C },
+    { life: 'perennial', coldC: -25 },
   ],
 
   // Heading brassicas
@@ -1673,7 +1784,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       p: 0.45,
       synonyms: ['Brassica oleracea Capitata group'],
       dtmRef: 'transplant',
-      dliCitations: C,
     },
   ],
   [
@@ -1699,7 +1809,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       p: 0.45,
       synonyms: ['Brassica oleracea Italica group'],
       dtmRef: 'transplant',
-      dliCitations: C,
     },
   ],
   [
@@ -1720,7 +1829,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     50,
     0.6,
     0.6,
-    { synonyms: ['Brassica oleracea Botrytis group'], dtmRef: 'transplant', dliCitations: C },
+    { synonyms: ['Brassica oleracea Botrytis group'], dtmRef: 'transplant' },
   ],
   [
     'brussels-sprouts',
@@ -1748,7 +1857,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       // June for an October harvest. Dated from the spring, it would be transplanted in early April
       // and harvested in the July heat
       fallHarvest: true,
-      dliCitations: C,
     },
   ],
   [
@@ -1769,7 +1877,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     35,
     0.4,
     0.4,
-    { synonyms: ['Brassica rapa Pekinensis group'], dliCitations: C },
+    { synonyms: ['Brassica rapa Pekinensis group'] },
   ],
   [
     'romanesco',
@@ -1789,7 +1897,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     50,
     0.6,
     0.6,
-    { dtmRef: 'transplant', dliCitations: C },
+    { dtmRef: 'transplant' },
   ],
 
   // Herbs
@@ -1815,7 +1923,12 @@ export const CROP_ROWS: readonly CropRow[] = [
     25,
     0.6,
     0.4,
-    { harvestDays: 90, succession: 21, dliCitations: BASIL, dliCaveat: BASIL_CAVEAT },
+    {
+      harvestDays: 90,
+      succession: 21,
+      dliCitations: BASIL,
+      dliCaveat: BASIL_CAVEAT,
+    },
   ],
   [
     'parsley',
@@ -1826,6 +1939,8 @@ export const CROP_ROWS: readonly CropRow[] = [
     'understory-herbs',
     'rosette',
     'cool',
+    // VCE Table 3 prints "Parsley 10-15" and this row carries 10 to 16, so it cites nothing:
+    // the number is close to the printed one and isn't it (audit of 2026-09-20)
     5,
     10,
     16,
@@ -1835,7 +1950,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     20,
     0.35,
     0.3,
-    { life: 'biennial', harvestDays: 120, dliCitations: C },
+    { life: 'biennial', harvestDays: 120 },
   ],
   [
     'cilantro',
@@ -1846,6 +1961,8 @@ export const CROP_ROWS: readonly CropRow[] = [
     'understory-herbs',
     'upright-herb',
     'cool',
+    // VCE Table 3 prints "Cilantro 15-20" and this row carries 10 to 16, a lower band for a crop
+    // grown for leaf. The row keeps its numbers and cites nothing
     5,
     10,
     16,
@@ -1855,7 +1972,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     15,
     0.5,
     0.2,
-    { succession: 14, dliCitations: C },
+    { succession: 14 },
   ],
   [
     'dill',
@@ -1875,7 +1992,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     25,
     1,
     0.3,
-    { succession: 21, dliCitations: C },
+    { succession: 21 },
   ],
   [
     'mint',
@@ -1895,7 +2012,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     40,
     0.6,
     0.9,
-    { life: 'perennial', coldC: -29, harvestDays: 120, dliCitations: C },
+    { life: 'perennial', coldC: -29, harvestDays: 120 },
   ],
   [
     'oregano',
@@ -1920,7 +2037,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       coldC: -23,
       temp: MEDITERRANEAN_SUBSHRUB_TEMP,
       harvestDays: 120,
-      dliCitations: C,
     },
   ],
   [
@@ -1946,7 +2062,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       coldC: -23,
       temp: MEDITERRANEAN_SUBSHRUB_TEMP,
       harvestDays: 150,
-      dliCitations: C,
     },
   ],
   [
@@ -1967,7 +2082,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     60,
     1.2,
     1,
-    { life: 'woody-perennial', coldC: -12, deciduous: false, harvestDays: 200, dliCitations: C },
+    { life: 'woody-perennial', coldC: -12, deciduous: false, harvestDays: 200 },
   ],
   [
     'sage',
@@ -1993,7 +2108,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       temp: MEDITERRANEAN_SUBSHRUB_TEMP,
       deciduous: false,
       harvestDays: 150,
-      dliCitations: C,
     },
   ],
   [
@@ -2014,7 +2128,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     45,
     0.8,
     0.5,
-    { life: 'perennial', coldC: -29, harvestDays: 120, dliCitations: C },
+    { life: 'perennial', coldC: -29, harvestDays: 120 },
   ],
   [
     'lemon-balm',
@@ -2034,7 +2148,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     40,
     0.7,
     0.6,
-    { life: 'perennial', coldC: -29, harvestDays: 120, dliCitations: C },
+    { life: 'perennial', coldC: -29, harvestDays: 120 },
   ],
   [
     'lovage',
@@ -2054,7 +2168,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     60,
     1.8,
     0.9,
-    { life: 'perennial', coldC: -34, harvestDays: 120, dliCitations: C },
+    { life: 'perennial', coldC: -34, harvestDays: 120 },
   ],
   [
     'marjoram',
@@ -2074,7 +2188,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     25,
     0.4,
     0.35,
-    { harvestDays: 90, dliCitations: C },
+    { harvestDays: 90 },
   ],
   [
     'fennel-bulb',
@@ -2094,7 +2208,6 @@ export const CROP_ROWS: readonly CropRow[] = [
     25,
     1,
     0.4,
-    { dliCitations: C },
   ],
   [
     'shiso',
@@ -2114,7 +2227,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     30,
     0.8,
     0.4,
-    { harvestDays: 80, dliCitations: C },
+    { harvestDays: 80 },
   ],
   [
     'chervil',
@@ -2134,7 +2247,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     15,
     0.4,
     0.2,
-    { succession: 14, dliCitations: C },
+    { succession: 14 },
   ],
   [
     'summer-savory',
@@ -2154,7 +2267,6 @@ export const CROP_ROWS: readonly CropRow[] = [
     20,
     0.4,
     0.25,
-    { dliCitations: C },
   ],
   [
     'bay-laurel',
@@ -2174,7 +2286,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     200,
     4,
     2.5,
-    { life: 'woody-perennial', coldC: -9, deciduous: false, yearsToMature: 8, dliCitations: C },
+    { life: 'woody-perennial', coldC: -9, deciduous: false, yearsToMature: 8 },
   ],
   [
     'winter-savory',
@@ -2194,7 +2306,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     30,
     0.4,
     0.4,
-    { life: 'perennial', coldC: -23, temp: MEDITERRANEAN_SUBSHRUB_TEMP, dliCitations: C },
+    { life: 'perennial', coldC: -23, temp: MEDITERRANEAN_SUBSHRUB_TEMP },
   ],
   [
     'hyssop',
@@ -2214,7 +2326,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     40,
     0.6,
     0.5,
-    { life: 'perennial', coldC: -29, temp: MEDITERRANEAN_SUBSHRUB_TEMP, dliCitations: C },
+    { life: 'perennial', coldC: -29, temp: MEDITERRANEAN_SUBSHRUB_TEMP },
   ],
   [
     'anise-hyssop',
@@ -2234,7 +2346,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     45,
     0.9,
     0.5,
-    { life: 'perennial', coldC: -34, dliCitations: ['fiedler2007-insectary'] },
+    { life: 'perennial', coldC: -34 },
   ],
 
   // Fruits and perennial crops
@@ -2248,17 +2360,17 @@ export const CROP_ROWS: readonly CropRow[] = [
     'rosette',
     'cool-perennial',
     // 25 is Widmer 2026 verbatim: the DLI at which the standardized yield regression
-    // crosses zero, i.e. the level that maintains trial-average yield. It's a design
-    // convention, not a physiological failure threshold. The horticulture document's 10 was a sun-hour class
-    // guess. Widmer publishes no target band, so 25-30 is inference and the row is tier C.
+    // crosses zero, the level that maintains trial-average yield. It's a design convention
+    // and no physiological failure threshold. The horticulture document's 10 was a sun-hour class guess.
     // The 30 at the top of the band is where the Ohio State Kubota Lab's greenhouse guidance
-    // says plants tend to be stressed; the same page gives 12 as a greenhouse-productivity
+    // says plants tend to be stressed, and the same page gives 12 as a greenhouse-productivity
     // minimum and 20-25 as the optimum, a different quantity from Widmer's agrivoltaic 25,
-    // which is the one the gate uses (Decision Record 23)
+    // which is the one the gate uses (Decision Record 23). Tier B since 2026-09-20: Widmer is
+    // a four-year study of 21 cases and states its figure in the unit this row carries
     25,
     25,
     30,
-    'C',
+    'B',
     2,
     365,
     35,
@@ -2269,12 +2381,10 @@ export const CROP_ROWS: readonly CropRow[] = [
       coldC: -25,
       yearsToMature: 2,
       harvestDays: 30,
-      // Widmer: the 25 mol/m2/d recommendation 'corresponded to an estimated total
-      // shading of 10-30%, depending on the type of cover'. Collapsed to the
-      // conservative bound. The former 15-20% appears nowhere in the paper
-      maxRsr: 0.1,
-      maxRsrTier: 'B',
+      // the 0.10 ceiling and its tier live on the strawberry class in `schema.ts`, and this row is
+      // the class's only member, so the number is kept in one place
       dliCitations: ['widmer-strawberry-dli', 'kubota-osu-strawberry-dli'],
+      dliCaveat: STRAWBERRY_CAVEAT,
     },
   ],
   [
@@ -2286,8 +2396,9 @@ export const CROP_ROWS: readonly CropRow[] = [
     'cane-bush-berries',
     'caned',
     'cool-perennial',
-    // 15 is Widmer 2026 verbatim for raspberry, on the same average-yield convention as
-    // strawberry. The former 10 was a sun-hour class guess citing a potato trial
+    // 15 is Widmer 2026 verbatim for raspberry, on the same average-yield convention as strawberry.
+    // The 18 to 25 band is this app's own: Widmer publishes no target and no shading figure for
+    // raspberry
     15,
     18,
     25,
@@ -2303,6 +2414,7 @@ export const CROP_ROWS: readonly CropRow[] = [
       yearsToMature: 2,
       harvestDays: 30,
       dliCitations: ['widmer-strawberry-dli'],
+      dliCaveat: RASPBERRY_CAVEAT,
     },
   ],
   [
@@ -2323,7 +2435,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     90,
     2,
     1.2,
-    { life: 'woody-perennial', coldC: -23, yearsToMature: 2, harvestDays: 30, dliCitations: C },
+    { life: 'woody-perennial', coldC: -23, yearsToMature: 2, harvestDays: 30 },
   ],
   [
     'blueberry',
@@ -2351,7 +2463,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       chillHours: 800,
       deciduous: true,
       harvestDays: 30,
-      dliCitations: C,
     },
   ],
 
@@ -2387,7 +2498,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       maxRsr: 0.5,
       maxRsrTier: 'C',
       harvestDays: 21,
-      dliCitations: A,
     },
   ],
   [
@@ -2418,7 +2528,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       envCitations: ['tirmenstein1991-lowbush-blueberry-feis'],
       deciduous: true,
       harvestDays: 21,
-      dliCitations: A,
     },
   ],
   [
@@ -2449,7 +2558,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       ph: [3.2, 4, 5.5, 6.5],
       envCitations: [],
       harvestDays: 21,
-      dliCitations: C,
     },
   ],
   [
@@ -2482,7 +2590,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       envCitations: ['coladonato1994-teaberry-feis'],
       maxRsr: 0.75,
       maxRsrTier: 'C',
-      dliCitations: A,
     },
   ],
   [
@@ -2515,7 +2622,7 @@ export const CROP_ROWS: readonly CropRow[] = [
       ph: [3.5, 4.5, 6.5, 7.5],
       envCitations: [],
       deciduous: true,
-      dliCitations: A,
+      laubNote: NO_HARVEST_NOTE,
     },
   ],
 
@@ -2546,7 +2653,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       maxRsr: 0.45,
       maxRsrTier: 'C',
       harvestDays: 21,
-      dliCitations: C,
     },
   ],
   [
@@ -2576,7 +2682,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       maxRsr: 0.4,
       maxRsrTier: 'C',
       harvestDays: 21,
-      dliCitations: C,
     },
   ],
   [
@@ -2606,7 +2711,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       maxRsr: 0.45,
       maxRsrTier: 'C',
       harvestDays: 21,
-      dliCitations: C,
     },
   ],
   [
@@ -2633,7 +2737,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       yearsToMature: 4,
       deciduous: true,
       harvestDays: 21,
-      dliCitations: C,
     },
   ],
   [
@@ -2654,7 +2757,13 @@ export const CROP_ROWS: readonly CropRow[] = [
     90,
     0.9,
     1.1,
-    { life: 'perennial', coldC: -34, yearsToMature: 3, harvestDays: 45, dliCitations: C },
+    {
+      life: 'perennial',
+      coldC: -34,
+      yearsToMature: 3,
+      harvestDays: 45,
+      laubNote: NO_COMPARABLE_CROP_NOTE,
+    },
   ],
   [
     'asparagus',
@@ -2681,7 +2790,7 @@ export const CROP_ROWS: readonly CropRow[] = [
       maxRsr: 0.1,
       maxRsrTier: 'C',
       harvestDays: 45,
-      dliCitations: C,
+      laubNote: NO_COMPARABLE_CROP_NOTE,
     },
   ],
   [
@@ -2702,7 +2811,13 @@ export const CROP_ROWS: readonly CropRow[] = [
     120,
     1.4,
     1.4,
-    { life: 'perennial', coldC: -12, yearsToMature: 2, harvestDays: 45, dliCitations: C },
+    {
+      life: 'perennial',
+      coldC: -12,
+      yearsToMature: 2,
+      harvestDays: 45,
+      laubNote: NO_COMPARABLE_CROP_NOTE,
+    },
   ],
   [
     'grape',
@@ -2732,7 +2847,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       maxRsr: 0.1,
       maxRsrTier: 'C',
       harvestDays: 21,
-      dliCitations: C,
     },
   ],
   [
@@ -2763,7 +2877,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       maxRsr: 0.1,
       maxRsrTier: 'C',
       harvestDays: 30,
-      dliCitations: A,
     },
   ],
   [
@@ -2792,7 +2905,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       maxRsr: 0.1,
       maxRsrTier: 'C',
       harvestDays: 30,
-      dliCitations: A,
     },
   ],
   [
@@ -2821,7 +2933,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       maxRsr: 0.1,
       maxRsrTier: 'C',
       harvestDays: 21,
-      dliCitations: C,
     },
   ],
   [
@@ -2850,7 +2961,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       maxRsr: 0.1,
       maxRsrTier: 'C',
       harvestDays: 21,
-      dliCitations: A,
     },
   ],
   [
@@ -2879,7 +2989,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       maxRsr: 0.1,
       maxRsrTier: 'C',
       harvestDays: 14,
-      dliCitations: A,
     },
   ],
   [
@@ -2908,7 +3017,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       maxRsr: 0.1,
       maxRsrTier: 'C',
       harvestDays: 14,
-      dliCitations: A,
     },
   ],
   [
@@ -2937,7 +3045,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       maxRsr: 0.1,
       maxRsrTier: 'C',
       harvestDays: 14,
-      dliCitations: A,
     },
   ],
   [
@@ -2966,7 +3073,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       maxRsr: 0.1,
       maxRsrTier: 'C',
       harvestDays: 45,
-      dliCitations: A,
     },
   ],
   [
@@ -2996,7 +3102,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       maxRsr: 0.3,
       maxRsrTier: 'C',
       harvestDays: 21,
-      dliCitations: C,
     },
   ],
   [
@@ -3025,7 +3130,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       maxRsr: 0.45,
       maxRsrTier: 'C',
       harvestDays: 21,
-      dliCitations: C,
     },
   ],
   [
@@ -3053,7 +3157,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       chillHours: 800,
       deciduous: true,
       harvestDays: 21,
-      dliCitations: C,
     },
   ],
   [
@@ -3080,7 +3183,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       yearsToMature: 4,
       deciduous: true,
       harvestDays: 21,
-      dliCitations: C,
     },
   ],
   [
@@ -3109,7 +3211,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       deciduous: true,
       support: 'arbor',
       harvestDays: 21,
-      dliCitations: C,
     },
   ],
   [
@@ -3136,7 +3237,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       yearsToMature: 3,
       support: 'trellis',
       harvestDays: 21,
-      dliCitations: C,
     },
   ],
   [
@@ -3165,7 +3265,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       maxRsr: 0.2,
       maxRsrTier: 'C',
       harvestDays: 30,
-      dliCitations: ['armstrong2021-forest-garden-traits'],
     },
   ],
   [
@@ -3194,7 +3293,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       maxRsr: 0.45,
       maxRsrTier: 'C',
       harvestDays: 21,
-      dliCitations: ['armstrong2021-forest-garden-traits'],
     },
   ],
   [
@@ -3224,7 +3322,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       coldWinterOnly: true,
       maxRsr: 0.75,
       maxRsrTier: 'C',
-      dliCitations: ['armstrong2021-forest-garden-traits'],
     },
   ],
   [
@@ -3256,7 +3353,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       window: [3, 5],
       maxRsr: 0.75,
       maxRsrTier: 'C',
-      dliCitations: C,
     },
   ],
   [
@@ -3277,7 +3373,12 @@ export const CROP_ROWS: readonly CropRow[] = [
     300,
     6,
     4,
-    { life: 'perennial', coldC: 0, yearsToMature: 5, dliCitations: C },
+    {
+      life: 'perennial',
+      coldC: 0,
+      yearsToMature: 5,
+      laubNote: NO_COMPARABLE_CROP_NOTE,
+    },
   ],
 
   // Tropical and subtropical staples (Decision Record 23). Every envelope below is transcribed
@@ -3328,7 +3429,7 @@ export const CROP_ROWS: readonly CropRow[] = [
       // FAO-56 Table 22, cassava year 1: Zr 0.5-0.8 m, p 0.35
       zr: 0.65,
       p: 0.35,
-      dliCitations: C,
+      laubNote: OUTSIDE_SCOPE_NOTE,
     },
   ],
   [
@@ -3369,7 +3470,7 @@ export const CROP_ROWS: readonly CropRow[] = [
       cycle: [180, 300],
       // ECOCROP sheet 758 climate zones: Aw, Ar, Cf
       koppen: [...AW, ...AR, ...CF],
-      dliCitations: C,
+      laubNote: OUTSIDE_SCOPE_NOTE,
     },
   ],
   [
@@ -3414,7 +3515,7 @@ export const CROP_ROWS: readonly CropRow[] = [
       cycle: [220, 300],
       // ECOCROP sheet 936 climate zones: Aw, Ar, Cf, Cs
       koppen: [...AW, ...AR, ...CF, ...CS],
-      dliCitations: C,
+      laubNote: OUTSIDE_SCOPE_NOTE,
     },
   ],
   [
@@ -3460,7 +3561,7 @@ export const CROP_ROWS: readonly CropRow[] = [
       // FAO-56 Table 22, banana first year: Zr 0.5-0.9 m, p 0.35
       zr: 0.7,
       p: 0.35,
-      dliCitations: C,
+      laubNote: OUTSIDE_SCOPE_NOTE,
     },
   ],
   [
@@ -3500,7 +3601,7 @@ export const CROP_ROWS: readonly CropRow[] = [
       // FAO-56 Table 22, rice: Zr 0.5-1.0 m, p 0.20 (the table's saturation value)
       zr: 0.75,
       p: 0.2,
-      dliCitations: C,
+      laubNote: LAUB_EXCLUDED_NOTE,
     },
   ],
   [
@@ -3550,7 +3651,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       // the 0.1 floor as its own Tier C inference
       maxRsr: 0.1,
       maxRsrTier: 'C',
-      dliCitations: C,
     },
   ],
   [
@@ -3598,7 +3698,7 @@ export const CROP_ROWS: readonly CropRow[] = [
       // as apple and grape: the 0.1 floor as the tree fruit's own Tier C inference
       maxRsr: 0.1,
       maxRsrTier: 'C',
-      dliCitations: C,
+      laubNote: OUTSIDE_SCOPE_NOTE,
     },
   ],
   [
@@ -3640,7 +3740,7 @@ export const CROP_ROWS: readonly CropRow[] = [
       cycle: [330, 365],
       // ECOCROP sheet 630 climate zones: Aw, Ar
       koppen: [...AW, ...AR],
-      dliCitations: C,
+      laubNote: OUTSIDE_SCOPE_NOTE,
     },
   ],
   [
@@ -3682,7 +3782,7 @@ export const CROP_ROWS: readonly CropRow[] = [
       cycle: [90, 365],
       // ECOCROP sheet 576 climate zones: Aw, Ar, Bs, Cf, Cs, Cw
       koppen: [...AW, ...AR, ...BS, ...CF, ...CS, ...CW],
-      dliCitations: C,
+      laubNote: OUTSIDE_SCOPE_NOTE,
     },
   ],
   [
@@ -3726,7 +3826,7 @@ export const CROP_ROWS: readonly CropRow[] = [
       // FAO-56 Table 22, sesame: Zr 1.0-1.5 m, p 0.60
       zr: 1.25,
       p: 0.6,
-      dliCitations: C,
+      laubNote: OILSEED_NOTE,
     },
   ],
   [
@@ -3767,7 +3867,7 @@ export const CROP_ROWS: readonly CropRow[] = [
       cycle: [210, 330],
       // ECOCROP sheet 2348 climate zones: Aw, Bs, Cs
       koppen: [...AW, ...BS, ...CS],
-      dliCitations: C,
+      laubNote: OUTSIDE_SCOPE_NOTE,
     },
   ],
   [
@@ -3775,9 +3875,11 @@ export const CROP_ROWS: readonly CropRow[] = [
     'Pennisetum glaucum',
     'Poaceae',
     'pearl millet|bajra|bulrush millet',
-    // laubGroup, dliClass, habit and DLI figures as sorghum-sudangrass; grown here for grain,
-    // so no cover role
-    'forages',
+    // dliClass, habit and DLI figures as sorghum-sudangrass, grown here for grain, so no cover
+    // role. Laub's forages in Table S1 are fescue, perennial grass, clovers, alfalfa and cover
+    // crops, all C3 and all cut as biomass, and corn is the only C4 grain group, so a C4 grain
+    // crop reads that curve (audit of 2026-09-20)
+    'corn-c4',
     'forages-c3-pasture',
     'clumping-grass',
     'hot',
@@ -3802,7 +3904,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       cycle: [60, 120],
       // ECOCROP sheet 8418 climate zones: Aw, Ar, Bw, Bs, Cf, Cs, Cw
       koppen: [...AW, ...AR, ...BW, ...BS, ...CF, ...CS, ...CW],
-      dliCitations: C,
     },
   ],
   [
@@ -3810,10 +3911,11 @@ export const CROP_ROWS: readonly CropRow[] = [
     'Sorghum bicolor',
     'Poaceae',
     'grain sorghum|milo|jowar|durra|great millet',
-    // laubGroup, dliClass, habit, DLI figures, spacing, height and width as pearl-millet above
-    // (from sorghum-sudangrass); sorghum-sudangrass itself is the Sorghum x drummondii
-    // cover-crop hybrid, and this row is the grain species
-    'forages',
+    // dliClass, habit, DLI figures, spacing, height and width as pearl-millet above (from
+    // sorghum-sudangrass), which is itself the Sorghum x drummondii cover-crop hybrid, where
+    // this row is the grain species. It reads the corn curve for the same reason pearl millet
+    // does: a C4 grain crop, and Laub's forages are C3 biomass (audit of 2026-09-20)
+    'corn-c4',
     'forages-c3-pasture',
     'clumping-grass',
     'hot',
@@ -3837,7 +3939,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       cycle: [90, 300],
       // ECOCROP sheet 48747 climate zones: Aw, Bs, Cs
       koppen: [...AW, ...BS, ...CS],
-      dliCitations: C,
     },
   ],
   [
@@ -3875,7 +3976,7 @@ export const CROP_ROWS: readonly CropRow[] = [
       koppen: [...AW, ...CF],
       harvestDays: 30,
       nfix: true,
-      dliCitations: C,
+      laubNote: LAUB_EXCLUDED_NOTE,
     },
   ],
   [
@@ -3912,7 +4013,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       // ECOCROP sheet 5746 climate zones: Aw, Bs, Cf, Cs, Cw, Do, Dc, Df, Dw. Do and Cf both
       // read onto Cfb, and Dc and Df both read onto Dfb, so the list is deduped
       koppen: [...new Set([...AW, ...BS, ...CF, ...CS, ...CW, ...DO, ...DC, ...DF, ...DW])],
-      dliCitations: C,
     },
   ],
   [
@@ -3961,7 +4061,7 @@ export const CROP_ROWS: readonly CropRow[] = [
       cycle: [365, 365],
       // ECOCROP sheet 1553 climate zones: Ar, Bs, Cs
       koppen: [...AR, ...BS, ...CS],
-      dliCitations: C,
+      laubNote: OUTSIDE_SCOPE_NOTE,
     },
   ],
   [
@@ -4003,7 +4103,7 @@ export const CROP_ROWS: readonly CropRow[] = [
       koppen: [...AW, ...AR],
       maxRsr: 0.1,
       maxRsrTier: 'C',
-      dliCitations: C,
+      laubNote: OUTSIDE_SCOPE_NOTE,
     },
   ],
   [
@@ -4043,7 +4143,7 @@ export const CROP_ROWS: readonly CropRow[] = [
       cycle: [210, 330],
       // ECOCROP sheet 749 climate zones: Aw, Cf, Cw
       koppen: [...AW, ...CF, ...CW],
-      dliCitations: C,
+      laubNote: LAUB_EXCLUDED_NOTE,
     },
   ],
   [
@@ -4083,7 +4183,7 @@ export const CROP_ROWS: readonly CropRow[] = [
       koppen: [...AW, ...AR, ...BS, ...CF, ...CS, ...CW],
       zr: 0.7,
       p: 0.35,
-      dliCitations: C,
+      laubNote: OUTSIDE_SCOPE_NOTE,
     },
   ],
 
@@ -4106,7 +4206,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     25,
     0.4,
     0.3,
-    { role: 'insectary', dliCitations: C },
+    { role: 'insectary' },
   ],
   [
     'marigold-african',
@@ -4126,7 +4226,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     35,
     0.9,
     0.4,
-    { role: 'insectary', dliCitations: C },
+    { role: 'insectary' },
   ],
   [
     'nasturtium',
@@ -4146,7 +4246,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     35,
     0.3,
     0.9,
-    { role: 'trap', dliCitations: C },
+    { role: 'trap' },
   ],
   [
     'borage',
@@ -4166,7 +4266,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     45,
     0.8,
     0.6,
-    { role: 'insectary', dliCitations: C },
+    { role: 'insectary' },
   ],
   [
     'calendula',
@@ -4186,7 +4286,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     30,
     0.5,
     0.4,
-    { role: 'insectary', dliCitations: C },
+    { role: 'insectary' },
   ],
   [
     'sunflower',
@@ -4206,7 +4306,9 @@ export const CROP_ROWS: readonly CropRow[] = [
     45,
     2.5,
     0.6,
-    { dliCitations: C },
+    {
+      laubNote: OILSEED_NOTE,
+    },
   ],
   [
     'buckwheat',
@@ -4226,7 +4328,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     10,
     0.9,
     0.3,
-    { role: 'cover', dliCitations: C },
+    { role: 'cover' },
   ],
   [
     'clover-crimson',
@@ -4246,7 +4348,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     8,
     0.5,
     0.2,
-    { role: 'cover', nfix: true, dliCitations: C },
+    { role: 'cover', nfix: true },
   ],
   [
     'clover-white',
@@ -4271,7 +4373,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       life: 'perennial',
       coldC: -34,
       nfix: true,
-      dliCitations: ['finch-collier2000-landings'],
     },
   ],
   [
@@ -4292,7 +4393,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     15,
     0.5,
     0.3,
-    { role: 'cover', life: 'perennial', coldC: -29, nfix: true, dliCitations: C },
+    { role: 'cover', life: 'perennial', coldC: -29, nfix: true },
   ],
   [
     'phacelia',
@@ -4312,7 +4413,10 @@ export const CROP_ROWS: readonly CropRow[] = [
     15,
     0.8,
     0.3,
-    { role: 'insectary', dliCitations: ['fiedler2007-insectary'] },
+    {
+      role: 'insectary',
+      laubNote: NO_HARVEST_NOTE,
+    },
   ],
   [
     'sweet-alyssum',
@@ -4332,7 +4436,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     20,
     0.15,
     0.3,
-    { role: 'insectary', dliCitations: ['fiedler2007-insectary'] },
+    { role: 'insectary' },
   ],
   [
     'yarrow',
@@ -4352,7 +4456,12 @@ export const CROP_ROWS: readonly CropRow[] = [
     40,
     0.7,
     0.5,
-    { role: 'insectary', life: 'perennial', coldC: -40, dliCitations: ['fiedler2007-insectary'] },
+    {
+      role: 'insectary',
+      life: 'perennial',
+      coldC: -40,
+      laubNote: NO_HARVEST_NOTE,
+    },
   ],
   [
     'ryegrass-perennial',
@@ -4372,7 +4481,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     5,
     0.4,
     0.15,
-    { role: 'cover', life: 'perennial', coldC: -23, dliCitations: C },
+    { role: 'cover', life: 'perennial', coldC: -23 },
   ],
   [
     'vetch-hairy',
@@ -4392,7 +4501,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     10,
     0.4,
     1,
-    { role: 'cover', nfix: true, dliCitations: C },
+    { role: 'cover', nfix: true },
   ],
   [
     'field-pea',
@@ -4412,7 +4521,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     10,
     0.6,
     0.4,
-    { role: 'cover', nfix: true, dliCitations: C },
+    { role: 'cover', nfix: true },
   ],
   [
     'mustard-cover',
@@ -4432,7 +4541,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     15,
     0.9,
     0.3,
-    { role: 'cover', dliCitations: C },
+    { role: 'cover' },
   ],
   [
     'sorghum-sudangrass',
@@ -4452,7 +4561,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     15,
     2.5,
     0.4,
-    { role: 'cover', dliCitations: C },
+    { role: 'cover' },
   ],
   [
     'desmodium',
@@ -4477,7 +4586,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       life: 'perennial',
       coldC: 2,
       nfix: true,
-      dliCitations: ['khan2008-push-pull-onfarm'],
     },
   ],
   [
@@ -4498,7 +4606,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     100,
     3,
     1,
-    { role: 'trap', life: 'perennial', coldC: 4, dliCitations: ['khan2008-push-pull-onfarm'] },
+    { role: 'trap', life: 'perennial', coldC: 4 },
   ],
   [
     'comfrey',
@@ -4518,7 +4626,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     90,
     1,
     1,
-    { life: 'perennial', coldC: -34, zr: 1.8, dliCitations: C },
+    { life: 'perennial', coldC: -34, zr: 1.8 },
   ],
   [
     'fenugreek',
@@ -4538,7 +4646,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     15,
     0.5,
     0.25,
-    { nfix: true, dliCitations: C },
+    { nfix: true },
   ],
   [
     'bergamot-wild',
@@ -4558,7 +4666,12 @@ export const CROP_ROWS: readonly CropRow[] = [
     45,
     1.2,
     0.6,
-    { role: 'insectary', life: 'perennial', coldC: -37, dliCitations: ['fiedler2007-insectary'] },
+    {
+      role: 'insectary',
+      life: 'perennial',
+      coldC: -37,
+      laubNote: NO_HARVEST_NOTE,
+    },
   ],
   [
     'cup-plant',
@@ -4578,7 +4691,12 @@ export const CROP_ROWS: readonly CropRow[] = [
     90,
     2.5,
     1,
-    { role: 'insectary', life: 'perennial', coldC: -40, dliCitations: ['fiedler2007-insectary'] },
+    {
+      role: 'insectary',
+      life: 'perennial',
+      coldC: -40,
+      laubNote: NO_HARVEST_NOTE,
+    },
   ],
   [
     'boneset',
@@ -4598,7 +4716,12 @@ export const CROP_ROWS: readonly CropRow[] = [
     60,
     1.5,
     0.8,
-    { role: 'insectary', life: 'perennial', coldC: -37, dliCitations: ['fiedler2007-insectary'] },
+    {
+      role: 'insectary',
+      life: 'perennial',
+      coldC: -37,
+      laubNote: NO_HARVEST_NOTE,
+    },
   ],
   [
     'lanceleaf-coreopsis',
@@ -4618,7 +4741,12 @@ export const CROP_ROWS: readonly CropRow[] = [
     40,
     0.6,
     0.4,
-    { role: 'insectary', life: 'perennial', coldC: -37, dliCitations: ['fiedler2007-insectary'] },
+    {
+      role: 'insectary',
+      life: 'perennial',
+      coldC: -37,
+      laubNote: NO_HARVEST_NOTE,
+    },
   ],
   [
     'canada-anemone',
@@ -4638,7 +4766,12 @@ export const CROP_ROWS: readonly CropRow[] = [
     40,
     0.4,
     0.5,
-    { role: 'insectary', life: 'perennial', coldC: -40, dliCitations: ['fiedler2007-insectary'] },
+    {
+      role: 'insectary',
+      life: 'perennial',
+      coldC: -40,
+      laubNote: NO_HARVEST_NOTE,
+    },
   ],
   [
     'murnong',
@@ -4658,6 +4791,6 @@ export const CROP_ROWS: readonly CropRow[] = [
     20,
     0.3,
     0.2,
-    { life: 'perennial', coldC: -7, dliCitations: C },
+    { life: 'perennial', coldC: -7 },
   ],
 ]

@@ -275,8 +275,32 @@ export interface DliClassSpec {
   readonly targetHighMolM2Day: number | null
   /** Conservative end of the Decision Record 6 range, so the ceiling never over-promises */
   readonly maxDesignRsr: number
-  readonly tier: DataTier
+  /**
+   * The ceiling's own evidence tier, which is a different question from the DLI figures' tier
+   * the row column carries. Zhang et al. 2025 fit a segmented regression in the quantity this
+   * ceiling is written in, so the two classes it covers are B, and Widmer et al. 2026 measured
+   * strawberry under cover, so strawberry is B. Every other ceiling is this app's own band, so
+   * it's C and renders as an inference
+   */
+  readonly maxDesignRsrTier: DataTier
+  readonly maxDesignRsrCitations: NonEmpty<CitationId>
+  /** Rendered beside the ceiling: the basis on an inference, the caveat on a verbatim record */
+  readonly maxDesignRsrNote: string
 }
+
+const LAUB_CEILING: NonEmpty<CitationId> = ['laub2022-shade-meta']
+
+const RSR_CLASS_BASIS =
+  'The shade ceiling is the conservative end of this app’s own range for the crop, set below the shade the cited meta-analysis classes as tolerable. No shade trial was run on this crop'
+
+const RSR_BERRY_BASIS =
+  'It’s this app’s own conservative bound for a class that spans cane fruit, tree fruit and coffee, none of which has a cited shade trial. Laub et al. 2022 class berries as benefiting from shade to 55 percent RSR (relative shade ratio), so this ceiling sits well inside the published range'
+
+const RSR_SEGMENTED_BASIS =
+  'Zhang et al. 2025, a meta-analysis over 20 countries, fit a segmented regression on shading rate: below 20 percent shading, yield shows no statistically significant difference from the control (p = 0.084), and from 20 to 30 percent yield is lower (p < 0.01). The paper recommends that shading from PV systems "should preferably not exceed 20%". The regression pools crops and resolves none of them on its own'
+
+const RSR_STRAWBERRY_BASIS =
+  'Widmer et al. 2026 recommend a minimum daily light integral of 25 mol/m2/d for strawberry, which "corresponded to an estimated total shading of 10-30%, depending on the type of cover". The ceiling is the conservative end of that range'
 
 /** Decision Record section 6. Ranges are collapsed to their conservative bound */
 export const DLI_CLASSES: Readonly<Record<DliClass, DliClassSpec>> = {
@@ -285,91 +309,119 @@ export const DLI_CLASSES: Readonly<Record<DliClass, DliClassSpec>> = {
     targetLowMolM2Day: 4,
     targetHighMolM2Day: 10,
     maxDesignRsr: 0.6,
-    tier: 'C',
+    maxDesignRsrTier: 'C',
+    maxDesignRsrCitations: LAUB_CEILING,
+    maxDesignRsrNote: RSR_CLASS_BASIS,
   },
   'leafy-greens': {
     minMolM2Day: 6,
     targetLowMolM2Day: 12,
     targetHighMolM2Day: 17,
     maxDesignRsr: 0.4,
-    tier: 'A',
+    maxDesignRsrTier: 'C',
+    maxDesignRsrCitations: LAUB_CEILING,
+    maxDesignRsrNote: RSR_CLASS_BASIS,
   },
   'forages-c3-pasture': {
     minMolM2Day: null,
     targetLowMolM2Day: null,
     targetHighMolM2Day: null,
     maxDesignRsr: 0.45,
-    tier: 'B',
+    maxDesignRsrTier: 'C',
+    maxDesignRsrCitations: LAUB_CEILING,
+    maxDesignRsrNote: RSR_CLASS_BASIS,
   },
   'cane-bush-berries': {
     minMolM2Day: 15,
     targetLowMolM2Day: null,
     targetHighMolM2Day: null,
     maxDesignRsr: 0.3,
-    tier: 'B',
+    maxDesignRsrTier: 'C',
+    maxDesignRsrCitations: LAUB_CEILING,
+    maxDesignRsrNote: RSR_BERRY_BASIS,
   },
   strawberry: {
     minMolM2Day: 25,
     targetLowMolM2Day: null,
     targetHighMolM2Day: null,
-    maxDesignRsr: 0.15,
-    tier: 'B',
+    // 0.10 is the conservative end of Widmer's own 10 to 30 percent, and it's the one place
+    // this number is kept: the row carried an override of the same value until 2026-09-20
+    maxDesignRsr: 0.1,
+    maxDesignRsrTier: 'B',
+    maxDesignRsrCitations: ['widmer-strawberry-dli'],
+    maxDesignRsrNote: RSR_STRAWBERRY_BASIS,
   },
   brassicas: {
     minMolM2Day: null,
     targetLowMolM2Day: 12,
     targetHighMolM2Day: 17,
     maxDesignRsr: 0.3,
-    tier: 'C',
+    maxDesignRsrTier: 'C',
+    maxDesignRsrCitations: LAUB_CEILING,
+    maxDesignRsrNote: RSR_CLASS_BASIS,
   },
   'root-tuber': {
     minMolM2Day: null,
     targetLowMolM2Day: null,
     targetHighMolM2Day: null,
     maxDesignRsr: 0.15,
-    tier: 'C',
+    maxDesignRsrTier: 'C',
+    maxDesignRsrCitations: LAUB_CEILING,
+    maxDesignRsrNote: RSR_CLASS_BASIS,
   },
   solanaceae: {
     minMolM2Day: 10,
     targetLowMolM2Day: 20,
     targetHighMolM2Day: 30,
     maxDesignRsr: 0.2,
-    tier: 'B',
+    maxDesignRsrTier: 'B',
+    maxDesignRsrCitations: ['zhang2025-tipping-points', 'laub2022-shade-meta'],
+    maxDesignRsrNote: RSR_SEGMENTED_BASIS,
   },
   cucurbits: {
     minMolM2Day: null,
     targetLowMolM2Day: 20,
     targetHighMolM2Day: 30,
     maxDesignRsr: 0.2,
-    tier: 'C',
+    maxDesignRsrTier: 'B',
+    maxDesignRsrCitations: ['zhang2025-tipping-points', 'laub2022-shade-meta'],
+    maxDesignRsrNote: RSR_SEGMENTED_BASIS,
   },
   alliums: {
     minMolM2Day: null,
     targetLowMolM2Day: null,
     targetHighMolM2Day: null,
     maxDesignRsr: 0.15,
-    tier: 'C',
+    maxDesignRsrTier: 'C',
+    maxDesignRsrCitations: LAUB_CEILING,
+    maxDesignRsrNote: RSR_CLASS_BASIS,
   },
   'grain-legumes': {
     minMolM2Day: null,
     targetLowMolM2Day: null,
     targetHighMolM2Day: null,
     maxDesignRsr: 0.1,
-    tier: 'B',
+    maxDesignRsrTier: 'C',
+    maxDesignRsrCitations: LAUB_CEILING,
+    maxDesignRsrNote: RSR_CLASS_BASIS,
   },
   'c3-cereals': {
     minMolM2Day: null,
     targetLowMolM2Day: null,
     targetHighMolM2Day: null,
     maxDesignRsr: 0.15,
-    tier: 'B',
+    maxDesignRsrTier: 'C',
+    maxDesignRsrCitations: LAUB_CEILING,
+    maxDesignRsrNote: RSR_CLASS_BASIS,
   },
   'corn-c4': {
     minMolM2Day: null,
     targetLowMolM2Day: null,
     targetHighMolM2Day: null,
     maxDesignRsr: 0.1,
-    tier: 'A',
+    maxDesignRsrTier: 'C',
+    maxDesignRsrCitations: LAUB_CEILING,
+    maxDesignRsrNote: RSR_CLASS_BASIS,
   },
 }
 
@@ -404,9 +456,10 @@ export interface CropOverrides {
   readonly cycle?: readonly [number, number]
   readonly koppen?: readonly string[]
   readonly ceiling?: number
-  readonly ceilingDays?: number
   readonly maxRsr?: number
   readonly maxRsrTier?: DataTier
+  /** What stands behind a row's own ceiling, where the class note is untrue of it */
+  readonly maxRsrNote?: string
   readonly yearsToMature?: number
   readonly support?: SupportRequirement
   readonly shape?: CanopyShape
@@ -423,12 +476,21 @@ export interface CropOverrides {
   readonly synonyms?: readonly string[]
   readonly gbif?: string
   readonly qid?: string
-  readonly dliCitations?: NonEmpty<CitationId>
   /**
-   * What a Tier A or B figure is in the cited trial, where the trial states a level rather
-   * than a threshold; rendered beside the number as the verbatim record's caveat
+   * Set only where a cited work prints this crop's own figure. Absent is the ordinary case and
+   * means the row cites nothing for its light numbers, which a sweep on 2026-09-20 found true
+   * of 171 of the 182 rows
    */
+  readonly dliCitations?: NonEmpty<CitationId>
+  /** What the figure is in the cited work, rendered beside the number in place of the default */
   readonly dliCaveat?: string
+  /**
+   * Why this crop's Laub group is an analogy and no membership, carried onto the yield curve's
+   * own record and into the yield caveats. Set where the group holds no comparable
+   * crop, where the harvested organ differs from the group's trials, or where the
+   * meta-analysis excluded the species outright
+   */
+  readonly laubNote?: string
 }
 
 /**
@@ -493,33 +555,43 @@ const stratumFor = (depthM: number): 'shallow' | 'medium' | 'deep' =>
   depthM < 0.5 ? 'shallow' : depthM <= 1 ? 'medium' : 'deep'
 
 /**
- * How a Tier C class was assigned (Decision Record 23): from the crop's conventional garden sun
- * label, through this app's own conversion of that label into a light band (docs/04 section
- * 3.3). ECOCROP's light descriptor was never the basis, which is why the class methodology and
- * no ECOCROP entry is cited for a DLI figure
+ * What a Tier C light figure is (Decision Record 23): the crop's conventional garden sun label,
+ * converted into a band by this app's own arithmetic (docs/04 section 3.3) and set beside the
+ * crops in its class that do have a published figure. A sweep on 2026-09-20 found the two cited
+ * extension documents print a band for five of the 182 rows and for none of the rest, so the
+ * rest cite nothing and say so
  */
 const DLI_CLASS_BASIS =
-  'a class-level inference: the class comes from the crop’s garden sun label through this app’s own conversion, and the figure is that class’s range from the cited measurement methodology, no cited work measured it for this crop'
+  'It’s set by analogy with the crops in its class that have a published DLI, and the sources step lists it as a gap. Trust the ordering it gives, and treat the number itself as provisional'
 
-const RSR_CLASS_BASIS =
-  'a class-level inference: the shade ceiling is the conservative end of the class’s range in this app’s design record, drawn from the cited meta-analysis and strawberry trial, no shade trial was run on this crop'
+/** The few rows whose figure a cited table prints for the crop itself, named in the row comment */
+const DLI_PRINTED_BASIS =
+  'The figure is printed for this crop in the cited table. That table is greenhouse guidance and cites no trial of its own for it'
 
 const COLD_FLOOR_BASIS =
   'a curated cold-hardiness floor with ECOCROP’s killing-temperature and envelope fields as the cited basis, no per-crop trial'
 
 /**
- * Decision Record 7: most per-crop DLI values are Tier C class-level
- * inferences, so tier C is expressed as `inferred` and only A and B rows may
- * claim a value read straight off a source
+ * Decision Record 7: most per-crop DLI values are Tier C class-level inferences, so tier C is
+ * expressed as `inferred` and only A and B rows may claim a value read straight off a source.
+ * The note travels either way, as the basis of an inference and as the caveat of a verbatim
+ * record, because both are what the UI prints beside the number
  */
 const sourced = <T>(
   value: T,
   tier: DataTier,
   ids: NonEmpty<CitationId>,
-  basis: string,
-  caveat: string | null = null,
+  note: string,
 ): SourcedCited<T> =>
-  tier === 'C' ? citedInferred(value, ids, basis) : citedVerbatim(value, tier, ids, caveat)
+  tier === 'C' ? citedInferred(value, ids, note) : citedVerbatim(value, tier, ids, note)
+
+/**
+ * The ceiling is this app's own figure and the rule it drives is a monthly one, because a month is
+ * the finest the bake resolves. A three-day form can't be evaluated: the counter adds whole months,
+ * so it reads 0 or at least 28
+ */
+const TIPBURN_CEILING_CLAIM =
+  'Cornell’s CEA (controlled-environment agriculture) lettuce handbook puts the light level where tipburn starts at 12 to 17 mol/m2/d, depending on cultivar and on airflow. A greenhouse controls these, and a field bed can’t. In Both et al. 1997, 17 was the level that produced a marketable head with a downward fan preventing tipburn. A three-day rule would be this app’s own, with no source, and monthly light can’t test one. What’s shown is whether a whole month sits above the ceiling'
 
 export const expandRow = (row: CropRow): Crop => {
   const [
@@ -556,12 +628,19 @@ export const expandRow = (row: CropRow): Crop => {
   const zr = overrides.zr ?? rootDefault[0]
   const maxDesignRsr = overrides.maxRsr ?? classSpec.maxDesignRsr
   const ceiling = overrides.ceiling ?? null
-  // the class-range methodology only. ECOCROP left this default on 2026-09-11: it holds no
-  // light integral, and no class was ever read from its light descriptor (Decision Record 23)
-  const dliCitations: NonEmpty<CitationId> = overrides.dliCitations ?? [
-    'torres-purdue-dli-b',
-    'stallknecht2025-vce-dli',
-  ]
+  // no default citation. Purdue HO-238-B-W and VCE SPES-720NP stood here until 2026-09-20 and
+  // print a band for five rows of the catalog, so the rows they cover name them and every
+  // other row names nothing, which is the state a reader can check (Decision Record 23)
+  const dliCitations = overrides.dliCitations ?? null
+  const dliNote =
+    overrides.dliCaveat ?? (dliCitations === null ? DLI_CLASS_BASIS : DLI_PRINTED_BASIS)
+  if (dliCitations === null && tier !== 'C') {
+    throw new Error(`${id} claims tier ${tier} for its light figures and cites nothing for them`)
+  }
+  const dliCited = (value: number): SourcedCited<MolPerM2Day> =>
+    dliCitations === null
+      ? citedInferred(value as MolPerM2Day, [], dliNote)
+      : sourced(value as MolPerM2Day, tier, dliCitations, dliNote)
   const lifeCycle = overrides.life ?? arch.lifeCycle
   const perennial = lifeCycle === 'perennial' || lifeCycle === 'woody-perennial'
 
@@ -591,36 +670,19 @@ export const expandRow = (row: CropRow): Crop => {
     role: overrides.role ?? null,
     wildlife: wildlifeOf(family, laubGroup, overrides.role ?? null),
     laubGroup,
+    laubGroupNote: overrides.laubNote ?? null,
     dliClass,
     envelope,
     light: {
-      dliMinMolM2Day: sourced(
-        dliMin as MolPerM2Day,
-        tier,
-        dliCitations,
-        DLI_CLASS_BASIS,
-        overrides.dliCaveat ?? null,
-      ),
-      dliTargetMolM2Day: sourced(
-        ((dliTargetLow + dliTargetHigh) / 2) as MolPerM2Day,
-        tier,
-        dliCitations,
-        DLI_CLASS_BASIS,
-        overrides.dliCaveat ?? null,
-      ),
+      dliMinMolM2Day: dliCited(dliMin),
+      dliTargetMolM2Day: dliCited((dliTargetLow + dliTargetHigh) / 2),
       dliMaxBeforeDisorderMolM2Day:
-        ceiling === null
-          ? null
-          : unsourcedClaim(
-              ceiling as MolPerM2Day,
-              'The lettuce tipburn ceiling of 17 mol/m2/d sustained beyond three days is carried from this app’s own design record. The Cornell CEA lettuce handbook in the corpus reports tipburn as light-limited, at 12 to 17 mol/m2/d by cultivar and airflow, and states no sustained-days rule, so the three-day form stays unsourced',
-            ),
-      disorderSustainedDays: (overrides.ceilingDays ?? 3) as Days,
+        ceiling === null ? null : unsourcedClaim(ceiling as MolPerM2Day, TIPBURN_CEILING_CLAIM),
       maxDesignRsr: sourced(
         maxDesignRsr as Fraction,
-        overrides.maxRsrTier ?? classSpec.tier,
-        ['laub2022-shade-meta', 'widmer-strawberry-dli'],
-        RSR_CLASS_BASIS,
+        overrides.maxRsrTier ?? classSpec.maxDesignRsrTier,
+        classSpec.maxDesignRsrCitations,
+        overrides.maxRsrNote ?? classSpec.maxDesignRsrNote,
       ),
       shadeBenefitingWhenWaterLimited: shade === 2,
     },

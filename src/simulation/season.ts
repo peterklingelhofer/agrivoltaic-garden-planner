@@ -361,7 +361,7 @@ export const simulateSeason = (input: SeasonInput): SeasonResult => {
       const estimate = estimateYield(
         crop.id,
         bed.id,
-        laubCurve(crop.laubGroup),
+        laubCurve(crop.laubGroup, crop.laubGroupNote),
         gate.light.cumulativeRsr,
         crowdingYieldPenalty(space.crowdingIndex),
         year.site.waterLimitation.limited,

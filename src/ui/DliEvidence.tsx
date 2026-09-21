@@ -9,7 +9,7 @@ import {
   RUNKLE_ATTRIBUTION,
   RAMPS_LIGHT_CITED,
   RUNKLE_CITED,
-  RUNKLE_CITEKEY_GAP,
+  RUNKLE_COMPANION_NOTE,
   RUNKLE_QUOTE,
   type DliEvidence,
 } from './dli'
@@ -95,7 +95,7 @@ export const DliEvidencePanel = (): ReactElement => {
         <footer>{RUNKLE_ATTRIBUTION}</footer>
       </blockquote>
       <p className="readout-note" data-testid="readout-dli-evidence-citekey-gap">
-        {RUNKLE_CITEKEY_GAP} <SourceLink id={RUNKLE_CITED} />
+        {RUNKLE_COMPANION_NOTE} <SourceLink id={RUNKLE_CITED} />
       </p>
       <p className="disclaimer" data-testid="readout-dli-evidence-calibration">
         {DLI_CALIBRATION}
