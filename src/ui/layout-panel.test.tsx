@@ -99,7 +99,7 @@ describe('the comparison', () => {
 
   /**
    * One card at a time, chosen by its tab, and the scene shows that one: the preview follows the
-   * tab rather than waiting for a press of its own, which on a phone changed nothing that could
+   * tab. It never waits for a press of its own, which on a phone changed nothing that could
    * be seen. Leaving the step takes the preview with it
    */
   it('opens on the pick, previews the tab that is pressed, and clears the preview on unmount', async () => {

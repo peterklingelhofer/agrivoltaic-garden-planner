@@ -37,10 +37,10 @@ const CREDITS: readonly Credit[] = [
     text: 'NASA Prediction of Worldwide Energy Resources, public domain',
   },
   /*
-   * Read from `data/static-layers.ts` rather than written out again here. Both lines are
-   * obligations rather than courtesies: WCVP is CC BY 4.0, which is a license that is met by
-   * attributing it and breached by shipping the data without, and the scheme is the standard
-   * the checklist indexes its ranges by, so citing one without the other names no regions
+   * Read from `data/static-layers.ts`, and never duplicated here. Both lines are obligations. WCVP
+   * is CC BY 4.0, a license that is met by attributing it and breached by shipping the data
+   * without. WGSRPD is the scheme the checklist indexes its ranges by, so citing one without the
+   * other names no regions
    */
   {
     id: 'wcvp',

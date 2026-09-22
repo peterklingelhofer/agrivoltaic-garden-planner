@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test'
 import { BAKE_TIMEOUT_MS, openApp, step } from './fixtures/app.ts'
 
 /**
- * The state a newcomer meets before touching anything, which is where this was reported from.
+ * The state a beginner meets before touching anything.
  *
  * The app opens on a garden: the shipped example when one loads, the default plot when it doesn't,
  * and either way the toolbar names a town and the scene draws beds under an array. It also has to
@@ -27,7 +27,7 @@ test('the app looks up the place it is already naming, without being asked', asy
   // `AsyncNotice` renders nothing at all once a slice is ready, so the notice going away IS the
   // resolution. The hardiness readout is the positive half, and only a resolved site has one
   await expect(page.getByTestId('status-site')).toHaveCount(0, { timeout: 60_000 })
-  // behind the panel's "More about this place" fold, so attached with a value rather than visible
+  // behind the panel's "More about this place" fold, so checked for a value
   await expect(page.getByTestId('readout-site-hardiness')).not.toBeEmpty({ timeout: 60_000 })
 })
 

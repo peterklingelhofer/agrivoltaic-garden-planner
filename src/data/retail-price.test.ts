@@ -16,7 +16,7 @@ const {
   usStateOf,
 } = await import('./retail-price')
 
-/** the shape api.eia.gov actually answered with on 2026-09-04, prices included */
+/** the shape api.eia.gov actually answers with, prices included */
 const body = (rows: readonly { period: string; price: string | null }[]): unknown => ({
   response: {
     total: String(rows.length),

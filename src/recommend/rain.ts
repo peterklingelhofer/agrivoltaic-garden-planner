@@ -140,7 +140,7 @@ export const RAIN_CELL_M = 0.1 as Meters
 export const WIND_DIRECTIONS = 12
 /**
  * A one-hectare plot at 0.1 m is a million cells and 230 ms a field, a visible hitch on every
- * edit, so `rainCellM` grows the cell past this many cells rather than holding the resolution fixed
+ * edit, so `rainCellM` grows the cell once past this many cells, to keep the count bounded
  */
 export const RAIN_MAX_CELLS = 300_000
 

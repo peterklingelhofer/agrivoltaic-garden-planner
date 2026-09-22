@@ -17,12 +17,11 @@ import { approxPlural, bedName, cropName, plural, SOURCE_NAME } from './format'
 /**
  * The design as one sheet of paper.
  *
- * "I would want export to PDF, and it'll be like the full guide: what seeds to buy, when to
- * sow, when to harvest, what to watch out for, the dimensions of every bed and the panel angle.
- * It should all be a design spec PDF export." (the author, 2026-09-11). The browser's own print
- * dialog saves a PDF on every platform, so what this builds is the sheet it prints: every line
- * is read off the same store the panels read, in the words the panels use, so the paper and
- * the screen can never disagree. Pure, and tested as text
+ * Export to PDF reads like the full guide: what seeds to buy, when to sow, when to harvest,
+ * what to watch out for, the dimensions of every bed and the panel angle, a design spec on one
+ * sheet. The browser's own print dialog saves a PDF on every platform, so what this builds is
+ * the sheet it prints: every line is read off the same store the panels read, in the words the
+ * panels use, so the paper and the screen can never disagree. Pure, and tested as text
  */
 
 export interface PrintBedPlanting {

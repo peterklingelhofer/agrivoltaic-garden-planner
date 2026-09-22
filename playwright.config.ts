@@ -3,15 +3,14 @@ import { defineConfig, devices } from '@playwright/test'
 /**
  * How the functional project asks for a GL context, which is platform-dependent and wasn't.
  *
- * `--use-angle=metal` names a backend that exists only on macOS, and `e2e-functional` runs on
- * `ubuntu-latest`. On a runner with no Metal and no GPU, Chromium fell back on its own and the
- * scene never settled: run 33462892651 took **2h42m** and failed 25 tests across 13 spec files,
- * nearly all of them timeouts waiting on a predicate, a camera move, or paint stability rather
- * than on a wrong value. The same specs pass on a laptop in seconds.
+ * `--use-angle=metal` names a backend that exists only on macOS, and CI's `e2e-functional` job runs
+ * on `macos-latest` for it. On a Linux machine with no Metal and no GPU, Chromium falls back on its
+ * own and the scene never settles: nearly every spec times out waiting on a predicate, a camera
+ * move, or paint stability. The same specs pass on a laptop in seconds.
  *
  * So name the backend that is actually there. `swiftshader` is what a GitHub runner has, and
  * `--enable-unsafe-swiftshader` is what lets WebGL use it: without that flag current Chromium
- * refuses a software WebGL context rather than being slow about it.
+ * refuses a software WebGL context outright.
  *
  * `AGV_GL_BACKEND` overrides both, so the CI path can be reproduced on a laptop
  * (`AGV_GL_BACKEND=swiftshader bun run test:e2e --project=functional`) without editing this file
@@ -30,7 +29,7 @@ export default defineConfig({
   // fresh browser passes the same test. A laptop gets no retry, so a real failure stays loud
   retries: process.env.CI ? 1 : 0,
   /*
-    One on a laptop, because heat is what the author pays for and wall clock isn't. Playwright's
+    One on a laptop, because heat costs more there than wall clock does. Playwright's
     default is half the logical cores, eight on a 16-core machine, and eight headless Chromiums
     each drawing the scene on Metal and baking on the same GPU spin the fans up for the whole
     run. Measured machine-wide, 100 percent being all 16 cores: `interaction.spec.ts` sits at a
@@ -48,14 +47,11 @@ export default defineConfig({
   },
   webServer: {
     /*
-      Built the way a deploy is built, which since 2026-09-07 means WITHOUT the agent.
+      Built the way a deploy is built, which is WITHOUT the agent.
 
-      It used to say `VITE_AGENT=on` here, so that every spec ran against a build carrying the
-      panel and could catch it disturbing something. That was the right trade while the feature
-      was on its way in. It's off in production, off in `bun run dev`, and the author's judgment
-      is that it's not yet useful enough to be worth the suite carrying it: the 44 tests in
-      `agent.spec.ts` plus the agent halves of `a11y` and `contrast` were pinning a surface
-      nobody is shipping, and the 58 MB of weights they need were being fetched in CI for it.
+      The agent is off in production and off in `bun run dev`, so the 44 tests in `agent.spec.ts`
+      and the agent halves of `a11y` and `contrast` skip against this build, and the e2e job in CI
+      doesn't fetch the 58 MB of weights they need.
 
       Nothing is deleted. `VITE_AGENT=on bunx playwright test` builds it back in and un-skips
       every one of those tests, because the same variable reaches both this build and the specs
@@ -72,7 +68,7 @@ export default defineConfig({
       testIgnore: /(?:visual|demo)\.spec\.ts/,
       use: {
         ...devices['Desktop Chrome'],
-        // Playwright's own default, stated here because it's load-bearing rather than incidental:
+        // Playwright's own default, stated here because it's load-bearing:
         // a headed run puts the scene on a real display and its compositing on the machine too
         headless: true,
         /*
@@ -85,11 +81,11 @@ export default defineConfig({
           `idle-cost.spec.ts`'s idle draw count, call `emulateMedia({ reducedMotion:
           'no-preference' })` on their own page and keep what they always measured. Nothing else in
           the project asserts on movement: the scroll and sweep animations this preference also
-          settles are ones the specs wait out rather than watch
+          settles are ones the specs simply wait out
         */
         contextOptions: { reducedMotion: 'reduce' },
         launchOptions: {
-          // On macOS this is ANGLE's Metal backend rather than its GL one. Measured over two
+          // On macOS this is ANGLE's Metal backend. Measured over two
           // runs of all 114 tests each: the GPU process drops from 89 to 40 percent of a core at
           // the median and from 107 to 60 at p95, and the whole run from 205 to 128. It costs
           // wall clock, 161.5 s to 188.6 s, so this is a heat trade. Nothing here compares
@@ -108,11 +104,11 @@ export default defineConfig({
        *
        * Two ways of making it cheaper were measured and BOTH fail. `--workers=1` doesn't help:
        * SwiftShader sizes its own thread pool to the machine, so one process already saturates it
-       * and halving the workers only stretches the same heat over 106 s instead of 83.
+       * and halving the workers only stretches the same heat over 106 s.
        *
        * `taskpolicy -c background`, which pins a process to the four efficiency cores, cuts the
        * heat exactly as hoped, the GPU process dropping from 938 to **240 percent** of a core at
-       * the median, and then **both tests fail**. The run takes 574 s instead of 83, and at that
+       * the median, and then **both tests fail**. The run takes 574 s, and at that
        * speed neither screenshot can hold two identical frames inside `toHaveScreenshot`'s 5 s
        * stability window. The failures are all timeouts, so the baselines are fine. The scene
        * simply can't settle on E-cores. Raising the timeout to cover it would
@@ -157,11 +153,11 @@ export default defineConfig({
     /**
      * The explainer recording, and only when it's asked for.
      *
-     * Registered behind an env flag rather than filtered out of the default run, because this
-     * project isn't a test: it drives the app against LIVE upstreams for twenty minutes and
-     * writes a video. `bun run test:e2e` runs every registered project, so a demo project that
-     * merely ignored itself by name would still have to be remembered by every future
-     * `--project` argument. Off by default is the only version of this that stays off
+     * Registered behind an env flag, because this project isn't a test: it drives the app against
+     * LIVE upstreams for twenty minutes and writes a video. `bun run test:e2e:all` runs every
+     * registered project, so a demo project that merely ignored itself by name would still have to
+     * be remembered by every future `--project` argument. Off by default is the only version of
+     * this that stays off
      */
     ...(process.env.DEMO === '1'
       ? [

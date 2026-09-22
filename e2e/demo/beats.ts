@@ -5,7 +5,7 @@ import type { CaptionAt, Director } from './overlay.ts'
  * The film itself: what is said, what is done while it's being said, and which of the two cuts
  * each moment belongs to.
  *
- * One table rather than two scripts. A short cut that drifted out of step with the long one
+ * A single table drives both cuts. A short cut that drifted out of step with the long one
  * would be two films to keep true as the product changes, and the short cut is the one that
  * gets emailed, so it's the one that must never be showing a screen the app no longer has.
  *
@@ -63,7 +63,7 @@ const openDetails = async (d: Director, testId: string): Promise<boolean> => {
  * The address search against the real geocoder, with one retry.
  *
  * Nominatim is a free service with a rate limit, and this is the one moment of the film that
- * depends on a stranger's server answering. A retry isn't flake-hiding here: a visitor whose
+ * depends on a third-party server answering. A retry isn't flake-hiding here: a visitor whose
  * first search came back with nothing would press it again too
  */
 const chooseSite = async (d: Director, query: string): Promise<void> => {
@@ -81,10 +81,10 @@ const chooseSite = async (d: Director, query: string): Promise<void> => {
 }
 
 /**
- * The wait on the layout search, filled with the garden rather than with a frozen frame.
+ * The wait on the layout search, filled with the garden in motion.
  *
  * This is real work: a year of hourly weather run over every candidate layout, with a progress
- * bar reading actual passes rather than counting a timer. It can run for a minute or more, so
+ * bar reading actual passes. It can run for a minute or more, so
  * the camera orbits while it does and the captions say what is happening
  */
 const RETRIES = 4
@@ -97,14 +97,13 @@ const waitForLayouts = async (d: Director): Promise<void> => {
   while (Date.now() < deadline) {
     if (await scenarios.isVisible()) return
     /*
-     * An upstream said no, and the search press is the retry rather than the search being stuck.
+     * An upstream said no, and the search press is the retry.
      *
-     * Open-Meteo rate-limits its free tier, and recording this film five times in an hour was
-     * enough to meet it: the run came back with `open-meteo responded 429` under the search. That's
-     * not a fault in the app, which surfaced the refusal instead of inventing a year of
-     * weather, and it's not one in the recording either. A visitor who saw it would wait a
-     * moment and press the button again, so that is what this does, while the camera keeps
-     * moving rather than freezing on a dead frame
+     * Open-Meteo rate-limits its free tier, and a run can come back with `open-meteo responded
+     * 429` under the search. The app and the recording are both behaving as they should: the app
+     * surfaces the refusal in place of inventing a year of weather. A visitor who saw
+     * it would wait a moment and press the button again, so that is what this does, while the
+     * camera keeps moving
      */
     if (attempts < RETRIES && (await failed.count()) > 0 && (await failed.isVisible())) {
       attempts += 1
@@ -135,11 +134,11 @@ const showLayout = async (d: Director, archetype: string): Promise<void> => {
 
 /**
  * Applies the best layout that actually has panels, and this is the one editorial decision in the
- * whole film, so it's written down rather than buried.
+ * whole film, so it's written down here, in the open.
  *
  * The comparison is allowed to recommend the open sky, and on a small plot aimed squarely at food
- * it frequently does: on the run this was written against, 71 m² in New Jersey asking mostly for
- * food, "no panels at all" was the suggestion. That's the tool being honest, and it's the entire
+ * it frequently does: a 71 m² plot in New Jersey asking mostly for
+ * food can land on "no panels at all" as the honest suggestion. That's the tool being honest, and it's the entire
  * reason the baseline is in the comparison. It also produces a film about agrivoltaics that ends
  * on a garden with no photovoltaics in it.
  *
@@ -182,8 +181,7 @@ const pointIfPresent = async (d: Director, testId: string): Promise<boolean> => 
 }
 
 /**
- * The light, computed and ready, which is a step of the product and not a detail of the
- * recording.
+ * The light, computed and ready, which is a step of the product.
  *
  * The layout search bakes every layout at full quality. The light check runs again by itself
  * once a layout is applied, and everything after the light stays locked until it has: a film

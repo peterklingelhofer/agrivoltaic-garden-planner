@@ -255,7 +255,7 @@ const WINDOW_WORDS: Readonly<
  *
  * Deliberately says what to DO where there's something to do. A 429 in particular isn't a
  * fault at all: these are free, unauthenticated services with an allowance per address, and the
- * honest thing to say is which allowance ran out and when it comes back, rather than a number
+ * honest thing to say is which allowance ran out and when it comes back
  */
 export const plainUpstreamMessage = (
   upstream: UpstreamId,
@@ -280,17 +280,17 @@ export class UpstreamError extends Error {
   readonly upstream: UpstreamId
   readonly status: number
   /**
-   * The technical version, for whoever is debugging rather than gardening.
+   * The technical version, for whoever is debugging.
    *
    * `message` is what reaches the screen: `state/safe.ts` flattens a thrown error to its message
-   * and every panel prints that, so the plain sentence has to BE the message rather than sit
-   * beside it. Nothing is lost, it moves here
+   * and every panel prints that, so the plain sentence has to BE the message. Nothing is lost,
+   * it moves here
    */
   readonly detail: string
   /**
    * When the upstream will take the request again, as a wait from when it refused. Null when
-   * it gave no reason to expect a particular moment. The store schedules its retry on this
-   * rather than on its own guess, so the countdown a reader watches is the upstream's clock
+   * it gave no reason to expect a particular moment. The store schedules its retry on this,
+   * so the countdown a reader watches is the upstream's clock
    */
   readonly retryAfterMs: number | null
 
@@ -398,7 +398,7 @@ const guard = async (
     return response
   } catch (error) {
     // what `fetch` rejects an aborted request with isn't the same across engines, so the
-    // reason is read off the signal rather than trusted to arrive in the rejection
+    // reason is read off the signal
     if (clock.signal.aborted && options.signal?.aborted !== true) throw clock.signal.reason
     throw error
   } finally {

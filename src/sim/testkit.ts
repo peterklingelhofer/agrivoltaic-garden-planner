@@ -4,11 +4,10 @@
  * Nothing in the application imports this file. It exists so `gap.test.ts` can hold the shipped
  * raster bake against a completely different arithmetic for the same physics, the way
  * `shading.test.ts` holds it against pvlib's closed forms, and both halves have to live beside the
- * bake rather than in a throwaway: this was `prototypes/light-harness/` until 2026-09-04, where it
- * ran under a config of its own and so ran for nobody.
+ * bake, sharing its test config: a throwaway of their own would run under nobody's notice.
  *
- * Two halves, kept in one module because a divergence between them would look like a physics
- * finding rather than a fixture bug:
+ * Two halves, kept in one module because a divergence between them would be mistaken for a
+ * physics finding when it's really a fixture bug:
  *
  * - **The coarse driver**, which answers "how much light reaches a tile under an array of THIS
  *   configuration" from the infinite-row closed forms in `shading.ts` and `viewfactor.ts`, at
@@ -117,11 +116,10 @@ export interface RunPosition {
 /**
  * No run given means rows running forever in both directions.
  *
- * That default is load-bearing rather than lazy. `gap.test.ts` validates this driver against the
- * full raster bake and its whole framing is "one tile, infinite rows in both directions"; making
- * a finite run the default silently changed what that test was comparing and it failed at once.
- * The infinite model is the validated one, so it stays the default and a finite run is something
- * a caller asks for
+ * That default is load-bearing. `gap.test.ts` validates this driver against the full raster bake
+ * and its whole framing is "one tile, infinite rows in both directions", so a finite default would
+ * silently change what that test compares. The infinite model is the validated one, so it stays the
+ * default and a finite run is something a caller asks for
  */
 const INFINITE = null
 
@@ -138,7 +136,7 @@ const INFINITE = null
  * `(cos a - cos b) / 2` summed over the unblocked wedges. With nothing overhead that is
  * `(cos 0 - cos pi) / 2 = 1`, which is the check the test uses as its floor.
  *
- * Bands are UNIONED rather than assumed disjoint. At a shallow tilt two rows can occlude the same
+ * Bands are UNIONED. They're never assumed disjoint. At a shallow tilt two rows can occlude the same
  * wedge, and summing their gaps without merging would count sky that is blocked twice as visible
  */
 export const skyViewFactorForRun = (
@@ -316,7 +314,7 @@ const FIXTURE_ELEVATION_M = 90 as Meters
 /**
  * A clear-sky year modulated by a deterministic cloud field.
  *
- * Synthetic rather than fetched, so the comparison needs no network and gives the same numbers on
+ * Synthetic, so the comparison needs no network and gives the same numbers on
  * every machine. The point of it is the driver against the bake on the SAME weather, so whether
  * the weather is real doesn't enter into it.
  *
@@ -381,11 +379,11 @@ export const buildYear = (): TmySeries => {
 /**
  * Amherst, Massachusetts, which is the latitude `buildYear` lays its sun path on.
  *
- * Written out rather than taken from `observerFor(site)`, which is what this was until the
- * comparison moved out of `prototypes/`: `src/sim` may not import `src/data`, and assembling a
- * whole `Site` only to read four fields off it would drag the agronomy layer into a light test.
- * These are the numbers `observerFor` would return for that site, refraction temperature
- * included: it reads the July normal, and the fixture's normals put it at 21 C
+ * The same four numbers `observerFor(site)` would derive from a full `Site`, written out
+ * directly here, refraction temperature included: `src/sim` may not import `src/data`, and
+ * assembling a whole `Site` only to read four fields off it would drag the agronomy layer
+ * into a light test. `observerFor` reads the July normal for that figure, and the fixture's
+ * normals put it at 21 C
  */
 export const OBSERVER: SpaObserver = {
   location: {
@@ -401,7 +399,7 @@ export const OBSERVER: SpaObserver = {
  * The one array both sides of the comparison use, in the two shapes they want it: a `TileArray`
  * for the coarse driver and a `PvArray` for the real bake.
  *
- * Here rather than in the test file because every comparison must agree on it exactly; a
+ * Here, shared by both sides, because every comparison must agree on it exactly. A
  * divergence between them would look like a physics finding
  */
 export const ARRAY: TileArray = {

@@ -10,12 +10,12 @@ beforeEach(async () => {
   resetAppStore()
   getAppState().setPlot(makePlot())
   // loaded before the mount below so the tree card's SourceLink already has the citation
-  // registry on its first render, rather than the citekey it falls back to while loading
+  // registry on its first render, without falling back to the citekey while loading
   await loadCitations()
 })
 
 /**
- * A house or a tree is drawn, sized, placed and turned from the sidebar rather than only from
+ * A house or a tree is drawn, sized, placed and turned from the sidebar as well as from
  * the scene, and it stands in for the surroundings answer the moment either exists (Decision
  * Record 26)
  */

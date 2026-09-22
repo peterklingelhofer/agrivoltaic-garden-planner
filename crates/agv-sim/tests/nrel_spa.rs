@@ -1,9 +1,8 @@
 //! The same published worked example `src/sim/solar.test.ts` is held to.
 //!
-//! This is the point of porting the tests as data rather than rewriting them: the numbers below
-//! are NREL's, not the TypeScript's, so this asserts that the Rust is right rather than that it
-//! agrees with something else that might be wrong. Agreement with the TypeScript is a separate
-//! and weaker claim, and `src/sim/rust-parity.test.ts` is where that one is made.
+//! This is the point of porting the tests as data: the numbers below are NREL's. The TypeScript's
+//! numbers play no part in this file, so what gets asserted is that the Rust itself is right, on
+//! its own terms.
 //!
 //! NREL/TP-560-34302 rev. Jan 2008, Appendix A.5
 
@@ -62,7 +61,7 @@ fn the_sun_is_below_the_horizon_at_local_midnight() {
         "elevation at local midnight was {}",
         sample.apparent_elevation_deg
     );
-    // and the air mass says so rather than returning a number nobody should use
+    // and the air mass reports zero: never a number nobody should use
     assert_eq!(sample.relative_air_mass, 0.0);
     assert_eq!(sample.absolute_air_mass, 0.0);
 }

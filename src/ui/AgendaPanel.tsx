@@ -51,11 +51,9 @@ const Item = ({
       <p className="agenda-line">
         {/*
           Two marks, and they say different things. The swatch is the JOB: it's the color the
-          planting calendar's legend gives sowing, transplanting or harvesting, and it's what
-          lets a week of jobs be read by kind. The picture below is the CROP. An earlier note
-          had this list down as drawing something else instead of the crop, which was
-          a misreading: it drew the action and named the crop, and what was missing was the third
-          thing, which is being able to find a crop in a year of dated jobs without reading them
+          planting calendar's legend gives sowing, transplanting or harvesting, and it's what lets
+          a week of jobs be read by kind. The picture below is the CROP, and it's what lets a crop
+          be found in a year of dated jobs without reading them
         */}
         <span className={`cal-swatch ${ACTION_SWATCH[item.action]}`} />
         <strong data-testid={`readout-agenda-date-${item.id}`}>{dayLabel(item.day)}</strong>{' '}
@@ -78,7 +76,7 @@ const Item = ({
         </p>
       )}
       {/* an indoor start is the only thing that makes this crop finish here, so it's an
-          instruction rather than a footnote on the row */}
+          instruction, said right on the row */}
       {item.feasibility.kind === 'fits' ? null : (
         <p
           className={NOTICE_CLASS[feasibility.tone]}
@@ -241,8 +239,8 @@ export const AgendaPanel = (): ReactElement => {
   const empty = agenda.groups.length === 0 && agenda.blocked.length === 0
   const crops = catalog.status === 'ready' ? catalog.value : EMPTY_LIST
   const beds = plot?.beds ?? EMPTY_LIST
-  // an empty list over planted beds is a calendar that hasn't been computed, not a garden
-  // with nothing in it. The two need opposite things said to them
+  // an empty list over planted beds is a calendar that hasn't been computed, and over bare beds
+  // it's a garden with nothing in it. The two need opposite things said to them
   const undated = empty && beds.some((bed) => bed.plantings.length > 0)
 
   return (
@@ -252,9 +250,8 @@ export const AgendaPanel = (): ReactElement => {
       subtitle="Every job your beds need, nearest first, and what to buy for them. The dates come from the planting calendar"
     >
       <AsyncNotice state={calendars} testId="status-agenda" idleLabel="No planting calendar yet" />
-      {/* the jobs first, and how they were dated one fold below them. Five paragraphs of
-          method landing above the first job read as unusable, so the method sits below the
-          jobs it dates */}
+      {/* the jobs first. How they were dated is one fold below them, because five paragraphs of
+          method landing above the first job read as unusable */}
       <p className="panel-sub" data-testid="readout-agenda-reference">
         Dated from today, {dayLabel(agenda.referenceDay)}, and running one year forward from it
       </p>

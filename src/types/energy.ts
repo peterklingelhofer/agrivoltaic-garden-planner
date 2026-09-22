@@ -13,9 +13,9 @@ import type {
 } from './units'
 
 /**
- * Faiman is the default; the Sandia/King form stays available. Neither primary
+ * Faiman is the default, and the Sandia/King form stays available. Neither primary
  * reference is in the citation corpus yet, so both carry their provenance as
- * data rather than as a bare comment
+ * data, in the form a caller such as `EnergyPanel` can read and print
  */
 export type CellTemperatureModel = 'faiman' | 'sapm'
 
@@ -97,7 +97,7 @@ export interface ArrayEnergy {
 
 /**
  * The denominator of the LER electricity term. LER is meaningless without it,
- * so it travels with every report rather than living in a comment
+ * so it travels with every report as data a caller can read
  */
 export interface ReferenceSystem {
   readonly groundCoverRatio: Fraction

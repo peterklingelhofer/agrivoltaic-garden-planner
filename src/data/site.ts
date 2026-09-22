@@ -140,9 +140,9 @@ const MONTHS = [...Array(12).keys()]
  *
  * The thirty-year normals are what a place is like, and these are what it was like that year, so
  * everything downstream that reads a monthly mean (the season origin, the snow cover in the PV
- * chain, the crop calendar's brightest month) sees the year rather than the average. Rain is the
- * year's own only where the source carried it. Otherwise the normals stand, because an absent
- * column says nothing about the rain, and a zero would claim a dry year
+ * chain, the crop calendar's brightest month) sees that year. Rain is the year's own only where the
+ * source carried it. Otherwise the normals stand, because an absent column says nothing about the
+ * rain, and a zero would claim a dry year
  */
 const normalsOfYear = (
   base: ClimateNormals,

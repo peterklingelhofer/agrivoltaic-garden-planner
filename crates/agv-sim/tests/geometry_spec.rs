@@ -5,8 +5,7 @@
 //! evidence that they're right.
 //!
 //! So every assertion below is against something outside this repository, or against a limit the
-//! geometry fixes analytically. Where neither exists, the test says what it's really claiming
-//! rather than pretending to more
+//! geometry fixes analytically. Where neither exists, the test says exactly what it's claiming
 
 use agv_sim::geom::{Extent2D, GridSpec, UnitVec3, Vec2M, Vec3M};
 use agv_sim::geometry::{
@@ -223,8 +222,8 @@ fn an_overhead_sun_casts_a_shadow_the_shape_of_the_panel() {
     assert!(!point_in_polygon(Vec2M { x_m: 5.0, y_m: 0.0 }, &shadow));
 }
 
-/// A sun on the horizon lights nothing, and the kernel says so rather than dividing by a
-/// vanishing z and producing a shadow the length of the county
+/// A sun on the horizon lights nothing, and the kernel says so: it never divides by a vanishing
+/// z or produces a shadow the length of the county
 #[test]
 fn a_sun_at_the_horizon_leaves_the_ground_dark() {
     let corners = vec![vec![
@@ -430,7 +429,7 @@ fn infinite_row_shading_matches_its_closed_form() {
 }
 
 /// A row shades its neighbor only once the shadow is longer than the pitch, which is what makes
-/// this a loss to the array rather than to the ground
+/// this a loss to the array
 #[test]
 fn a_row_shades_its_neighbor_only_once_the_shadow_reaches_it() {
     // a high sun casts a short shadow and nothing reaches the next row
@@ -458,7 +457,8 @@ fn interreflection_is_unity_under_open_sky() {
     assert_eq!(interreflection_gain(1.0, 0.2, 0.05), 1.0);
     let under = interreflection_gain(0.4, 0.2, 0.05);
     assert!(under > 1.0 && under < 1.02, "{under}");
-    // and a physically impossible pair of reflectances is clamped rather than divided by zero
+    // a physically impossible pair of reflectances is clamped: the denominator must never reach
+    // zero
     assert!(interreflection_gain(0.0, 1.0, 1.0).is_finite());
 }
 
@@ -482,8 +482,8 @@ fn the_dc_model_returns_the_nameplate_at_standard_test_conditions() {
     assert_eq!(pvwatts_dc(0.0, 25.0, 5.0, PVWATTS_GAMMA_PDC_PER_C), 0.0);
 }
 
-/// The inverter can't pass more than its rating, and what it can't pass is reported rather than
-/// discarded. Clipping is the whole reason agrivoltaic arrays are oversized
+/// The inverter can't pass more than its rating, and what it can't pass is reported and kept.
+/// Clipping is the whole reason agrivoltaic arrays are oversized
 #[test]
 fn the_inverter_clips_and_says_how_much() {
     let rating = 10.0;
@@ -505,7 +505,7 @@ fn both_thermal_models_reduce_to_air_temperature_in_the_dark() {
     assert!(
         (sapm_cell_temperature(0.0, 14.0, 2.0, SAPM_OPEN_RACK_GLASS_GLASS) - 14.0).abs() < 1e-12
     );
-    // and in full sun both run hotter than the air, by tens of degrees rather than by a rounding
+    // and in full sun both run hotter than the air, by tens of degrees, well past rounding noise
     let faiman = faiman_cell_temperature(1000.0, 14.0, 1.0, FAIMAN_DEFAULT);
     assert!(faiman > 40.0 && faiman < 60.0, "{faiman}");
 }

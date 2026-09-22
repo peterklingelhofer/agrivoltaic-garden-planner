@@ -6,7 +6,7 @@ import type { OnboardingStep } from '../state/slices'
  * Closed is the whole design. The engine already decides what to plant and already words the
  * answer with its caveat attached, so nothing here has to generate a sentence or hold an opinion:
  * what is left is deciding which of a few dozen things a typed sentence meant, and that is a
- * classification over a fixed vocabulary rather than a conversation. A router that can only
+ * classification over a fixed vocabulary. A router that can only
  * return one of these can be wrong, but it can't invent a crop, a number or a reassurance
  *
  * The list is deliberately shorter than `AppState`'s 81 actions. Most of those are UI plumbing
@@ -26,14 +26,14 @@ export type IntentId =
   | 'set-mounting'
   | 'set-height'
   | 'set-water'
-  // what the grower wants in the beds, which is asked at any point rather than at a step
+  // what the grower wants in the beds, which is asked at any point
   | 'like-crop'
   | 'dislike-crop'
   // the engine
   | 'propose-designs'
   | 'apply-design'
   | 'plan-planting'
-  // reading rather than changing
+  // reading only
   | 'describe-garden'
   | 'explain'
   | 'list-crops'
@@ -52,7 +52,7 @@ export type IntentId =
   | 'ask-companions'
   | 'ask-sources'
   | 'define'
-  // changing a garden that already exists, rather than answering a question about one
+  // changing a garden that already exists
   | 'remove-planting'
   | 'add-bed'
   | 'adjust-panels'
@@ -75,7 +75,7 @@ export type IntentId =
   | 'out-of-scope'
 
 /**
- * What an intent needs filled in before it can be carried out, named rather than typed here so
+ * What an intent needs filled in before it can be carried out, named here so
  * the table stays readable. `none` is a real answer: `propose-designs` and `undo` take nothing
  */
 export type SlotKind =
@@ -100,7 +100,7 @@ export interface Intent {
   /**
    * The step this intent answers, or null when it's answerable at any moment.
    *
-   * Used to bias the router rather than to gate it. Standing on the question about panel height
+   * Used to bias the router. Standing on the question about panel height
    * makes "about two meters" overwhelmingly likely to be an answer to THAT, and a router with no
    * idea which question is on screen has to guess between height, plot width and row spacing on
    * the strength of the word "meters" alone. It's a bias because a grower who
@@ -110,8 +110,8 @@ export interface Intent {
   /**
    * How the intent gets said. These feed BOTH understanders: the lexical one scores them with
    * Dice, and the embedding one turns the same strings into vectors. That's the single source of
-   * truth that makes the 23 MB upgrade a swap of one file rather than a second vocabulary to
-   * maintain and to drift
+   * truth that makes the 23 MB upgrade a swap of one file, with no second vocabulary to
+   * maintain and drift
    */
   readonly phrases: readonly string[]
 }
@@ -200,7 +200,7 @@ export const INTENTS: readonly Intent[] = [
   },
   {
     /*
-      Placed high, so that a question the app can't answer is declined rather than routed to
+      Placed high, so that a question the app can't answer is declined. It's never routed to
       whichever readout shares a word with it. Being unhelpful on purpose beats being confidently
       irrelevant, and the tie-break in `scoreIntents` reads this table's order
     */
@@ -245,12 +245,11 @@ export const INTENTS: readonly Intent[] = [
     id: 'ask-energy',
     slot: 'none',
     step: null,
-    /*
-      Broadened from the words people use for electricity rather than from the words this app
-      uses. "Yield" and "output" are how somebody who has read a solar brochure asks, and neither
-      appeared here; "yield" is also genuinely ambiguous with crop yield, which is why it's
-      anchored to the panels rather than left bare
-    */
+    /**
+     * Covers the words people use for electricity, on top of the words this app uses on its own.
+     * "Yield" and "output" are how somebody who has read a solar brochure asks. "Yield" is also
+     * ambiguous with crop yield, which is why it's anchored to the panels
+     */
     phrases: [
       'how much electricity will i get',
       'how much power',
@@ -686,7 +685,7 @@ export const isDestructive = (id: IntentId): boolean => DESTRUCTIVE.includes(id)
  * "scratch that", which any reader takes as undoing the last thing, reached `start-over`. The two
  * are close as sentences and nowhere near each other in what they cost.
  *
- * A multiplier rather than a second constant, so the relationship stays visible: whatever bar the
+ * A multiplier, so the relationship stays visible: whatever bar the
  * others clear, this one clears more
  */
 export const IRREVERSIBLE: readonly IntentId[] = ['start-over']

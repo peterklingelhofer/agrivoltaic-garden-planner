@@ -11,10 +11,10 @@ import { CROP_GLYPH } from './crop-glyph'
  * an eye skip down a list of 182 crops and land on the roots or the beans without reading every
  * row, which is the thing a list of words can't do and the reason this exists.
  *
- * What it draws is the class, and the class is named in `DLI_CLASS_LABEL` in the
- * same plain words the cold open uses. That's carried here as `data-class` rather than as a
- * title, because a tooltip on a decorative mark is a promise to a pointer that a phone doesn't
- * have; the class it stands for is one place a test can read, and the row already says the name
+ * What it draws is the crop's class, and the class is named in `DLI_CLASS_LABEL` in the same
+ * plain words the cold open uses. That's carried here as `data-class`, with no title attribute
+ * at all, because a tooltip on a decorative mark is a promise to a pointer that a phone doesn't
+ * have. The class it stands for is one place a test can read, and the row already says the name
  */
 export const CropGlyph = ({ dliClass }: { readonly dliClass: DliClass }): ReactElement => (
   <svg

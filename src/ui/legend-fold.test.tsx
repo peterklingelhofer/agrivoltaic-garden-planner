@@ -56,7 +56,7 @@ describe('the color key folds', () => {
       'Daily light integral',
     )
     // and still says the colors are for a garden that has since changed, which is the one thing
-    // on this surface that is a warning rather than a key
+    // on this surface that is a warning. It's never a key
     expect(harness.find('readout-overlay-legend-stale')).not.toBeNull()
     await harness.unmount()
   })
@@ -77,7 +77,7 @@ describe('the key says what the colors mean, in words a beginner reads', () => {
     const note = harness.container.querySelector('.legend-note')?.textContent ?? ''
     expect(note).toContain('Darker is less, brighter is more')
     expect(note).toContain('Lines on the ground every')
-    // the audit's defect 6: a contrast construction survived the voice sweep here
+    // guards against this line ever naming the color ramp or reusing a ", not" construction
     expect(note).not.toMatch(/viridis|rainbow|, not /i)
     await harness.unmount()
   })

@@ -47,8 +47,8 @@ describe('the sidebar stepper', () => {
     expect(opened(harness)).toEqual(['place'])
     expect(harness.get('action-step-place').getAttribute('aria-controls')).toBe('steppanel-place')
     expect(harness.get('panel-step-place').getAttribute('aria-labelledby')).toBe('step-place')
-    // a real `section` with an accessible name, which is what makes it a region, rather than a
-    // div wearing the role
+    // a real `section` with an accessible name, which is what makes it a region, when a
+    // div wearing the role wouldn't be
     expect(harness.get('panel-step-place').tagName).toBe('SECTION')
     await harness.unmount()
   })
@@ -90,7 +90,7 @@ describe('the sidebar stepper', () => {
    * down a 570px window, under the closed headers of the steps before it, and from mid-panel it can
    * land inside a sow-day dropdown with nothing on screen naming the step it belongs to.
    *
-   * Asserted on the header the scroll was asked of rather than on any offset, because jsdom has
+   * Asserted on the header the scroll was asked of. No offset is asserted, because jsdom has
    * no layout: what this holds is that the right element is asked, once, per press. That the
    * element is the header is the part worth pinning, since the header is the only thing on
    * screen that says which step this is
@@ -110,9 +110,8 @@ describe('the sidebar stepper', () => {
     /*
       The scroll is asked for in a frame callback, because opening a step closes the one before it
       and the header isn't where the press found it until React has committed. The callback then
-      schedules itself, to hold the header there while a step whose content arrives late arrives:
-      only the outermost frame is run here, so one press records one call rather than a second's
-      worth of them
+      schedules itself, to hold the header there while a step's late content arrives: only the
+      outermost frame is run here, so one press records one call, without a second's worth of them
     */
     let inFrame = false
     vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback) => {
@@ -130,7 +129,7 @@ describe('the sidebar stepper', () => {
       await harness.click('action-step-ground')
       expect(scrolled).toEqual(['action-step-ground'])
       // and the keyboard path is the same path: Arrow keys move the open step, so they move the
-      // column with it rather than leaving the focus ring somewhere off screen
+      // column with it, without leaving the focus ring somewhere off screen
       await harness.press('action-step-ground', 'ArrowDown')
       expect(scrolled).toEqual(['action-step-ground', 'action-step-wants'])
       await harness.unmount()
@@ -141,7 +140,7 @@ describe('the sidebar stepper', () => {
 
   /**
    * A step whose prerequisite is missing names the ONE thing it is waiting on and offers the
-   * press that settles it, rather than rendering panels that would read as broken. It still
+   * press that settles it, without rendering panels that would read as broken. It still
    * opens: refusing the click would hide the sentence explaining the refusal
    */
   it('locks a step on the first unmet prerequisite and says which one', async () => {
@@ -174,7 +173,7 @@ describe('the sidebar stepper', () => {
     expect(number?.getAttribute('data-locked')).toBe('true')
     expect(harness.find('badge-step-locked-plants')).not.toBeNull()
 
-    // and the reason travels with the label rather than waiting inside the step
+    // and the reason travels with the label. It's never left waiting inside the step
     const describedBy = button.getAttribute('aria-describedby')
     expect(describedBy).toBe('step-locked-plants')
     const said = harness.container.querySelector(`#${String(describedBy)}`)?.textContent ?? ''

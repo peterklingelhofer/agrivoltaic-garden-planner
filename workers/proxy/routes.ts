@@ -53,9 +53,10 @@ export interface Route {
    * Headers this route must send upstream.
    *
    * The reason the geocoders are proxied at all. The OSM Nominatim usage policy asks for a
-   * User-Agent identifying the application, and a browser is forbidden from setting one, so
-   * every request this app used to make arrived anonymous. A function of the environment, so the
-   * contact URL is the origin this is actually deployed at rather than a string that rots
+   * User-Agent identifying the application, and a browser is forbidden from setting one, so a
+   * request sent straight from the browser arrives anonymous. A function of the environment, so the
+   * contact URL always matches wherever this is actually deployed: a hardcoded string would rot the
+   * first time that changes
    */
   readonly headers?: (env: ProxyEnv) => Record<string, string>
 }
@@ -184,7 +185,7 @@ export const ROUTES: readonly Route[] = [
    * looking up the same town were thirty requests, where here they are one. And its own throttle
    * was per tab, which isn't what a rate limit means.
    *
-   * Keyed on the query rather than on a location, because a search has no location. The reverse
+   * Keyed on the query, because a search has no location. The reverse
    * lookup below is the same upstream on the other side of that line: it's given a point and
    * asked what is there, so it keys like everything else in this file
    */
@@ -226,7 +227,7 @@ export const ROUTES: readonly Route[] = [
    * One path, and deliberately only one. `api.eia.gov/v2` is a general query API over every
    * series EIA publishes, so an allowlist entry per dataset is what stops a free key of ours
    * becoming somebody else's data pipeline. The annual residential price is the one series this
-   * app asks for. Keyed on the query rather than a location, because a state code isn't a point
+   * app asks for. Keyed on the query, because a state code isn't a point
    * this proxy could quantize
    */
   {
@@ -472,8 +473,8 @@ export const handleRoute = async (route: Route, context: RouteContext): Promise<
   if (typeof cacheKey !== 'string') return cacheKey
 
   // a config fault, so it's never cached and never reported as a 502.
-  // The secret is named after the upstream it belongs to, so the cause names itself rather than
-  // being a second literal that can drift from the binding it is describing
+  // The secret is named after the upstream it belongs to, so the cause names itself: there's no
+  // second literal that could drift from the binding it is describing
   const key = route.apiKey?.(context.env)
   if (route.apiKey !== undefined && (key === undefined || key === '')) {
     return unconfigured(route, 'API_KEY')

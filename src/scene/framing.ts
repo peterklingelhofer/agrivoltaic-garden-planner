@@ -31,11 +31,11 @@ const FIT_MARGIN = 1.06
  * At the default camera the DLI surface is nearly uniform, because most of the ground in view is
  * open sky and the contours have nothing to draw. The field only varies across the pitch: one
  * band of shade per row, brightest a little south of the next row up. So the shot is framed
- * across the rows rather than along them, from the side the panels face, low enough that the
- * bands read as bands rather than as a plan view
+ * across the rows, from the side the panels face, low enough that the
+ * bands read as bands
  */
 const ELEVATION_DEG = 27
-/** Off the pitch axis, so the rows recede instead of stacking into one line */
+/** Off the pitch axis, so the rows recede into depth */
 const BEARING_OFFSET_DEG = 38
 const DISTANCE_FACTOR = 1.12
 const TARGET_HEIGHT_M = 1.5
@@ -51,12 +51,11 @@ const toScene = (xM: number, yM: number, heightM: number): Triple => [xM, height
 /**
  * Which way to stand, in plot coordinates: the row-offset direction, which is the axis the field
  * varies along, turned off itself by the bearing offset. Every subject below is framed from this
- * same bearing, so moving between them swings along one side of the garden rather than crossing it
+ * same bearing, so moving between them swings along one side of the garden
  *
  * `rowAzimuthDeg` is the direction the rows RUN, so the axis the field varies along is the one
- * across them, `(cos, -sin)` rather than `(sin, cos)`. It read the along-row direction until
- * 2026-09-01, which stood the camera off the END of the rows and looked down the gaps instead of
- * across the shade bands
+ * across them, using `(cos, -sin)`. The along-row direction, `(sin, cos)`, would stand the camera
+ * off the END of the rows, looking down the gaps and missing the shade bands
  */
 const standingDirection = (rowAzimuthDeg: number): readonly [number, number] => {
   const ux = cosDeg(rowAzimuthDeg)
@@ -131,14 +130,13 @@ const cross = (a: Triple, b: Triple): Triple => [
  * How far back the camera has to stand, along the line it will look down, for every corner to
  * land inside the frame with room to spare.
  *
- * A fixed multiple of the plot's longest side used to do this, and on 2026-09-11 a gardener
- * resized the plot and watched the near edge leave the bottom of the picture: a 42 degree look
- * down at a 35 by 25 m rectangle puts the near corners much lower in the frame than the far
- * ones, and the multiple had been tuned on a squarer plot. So the corners are projected instead.
- * With the camera `d` meters from the target along the unit line `look`, a corner at `p` from
- * the target sits `p . look + d` deep and `p . right`, `p . up` across, and it fits when each
- * of those is inside the frustum's half-angle at that depth. Solving for `d` per corner and
- * taking the largest is exact, and nothing about it depends on the plot being a rectangle
+ * With a fixed multiple of the plot's longest side, resizing the plot can leave the near edge off
+ * the bottom of the picture: a 42 degree look down at a 35 by 25 m rectangle puts the near corners
+ * much lower in the frame than the far ones. So the corners are projected. With the camera `d`
+ * meters from the target along the unit line `look`, a corner at `p` from the target sits `p . look
+ * + d` deep and `p . right`, `p . up` across, and it fits when each of those is inside the
+ * frustum's half-angle at that depth. Solving for `d` per corner and taking the largest is exact,
+ * and nothing about it depends on the plot being a rectangle
  */
 const standOffM = (
   corners: readonly Triple[],
@@ -170,8 +168,8 @@ const standOffM = (
 const DEFAULT_ROW_AZIMUTH_DEG = 180
 
 /**
- * Frames whatever the given rings span. The extent center rather than a centroid of the rings,
- * because what wants to be in the middle of the frame is the middle of what is on screen, which a
+ * Frames whatever the given rings span. The extent center is used, because what wants to be in
+ * the middle of the frame is the middle of what is on screen, which a
  * centroid pulls away from as soon as the beds are unevenly sized
  */
 const framingForRings = (
@@ -208,7 +206,7 @@ const framingForRings = (
 /**
  * Where to stand to see the one thing the guided panel is currently asking about. Derived from
  * the geometry every time and stored nowhere, so a step that is answered while the design changes
- * under it reframes rather than flying to where the garden used to be. Null wherever the geometry
+ * under it reframes on the spot, without flying to where the garden used to be. Null wherever the geometry
  * the subject names doesn't exist yet, which is the caller's cue to leave the camera alone
  */
 export const framingForSubject = (

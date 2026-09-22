@@ -5,7 +5,7 @@ import type { Triple } from './framing'
  * A camera pose in the coordinates OrbitControls itself thinks in: the point it orbits, plus
  * where the camera stands around that point.
  *
- * Interpolating here rather than in world space is the whole mechanic. `OrbitControls.update()`
+ * Interpolating here, in this local space, is the whole mechanic. `OrbitControls.update()`
  * runs every frame at priority -1, re-derives exactly these numbers from `position - target`,
  * clamps them to its own limits and calls `object.lookAt(target)` itself. So a flight that lerps
  * a world position and looks anywhere other than `controls.target` is erased on the very next
@@ -92,7 +92,7 @@ const lerp = (from: number, to: number, t: number): number => from + (to - from)
 /**
  * The pose part way from one to another, at an already-eased fraction.
  *
- * The radius moves geometrically rather than linearly, because what reads as a constant rate of
+ * The radius moves geometrically, because what reads as a constant rate of
  * approach is a constant proportion of the remaining distance: a linear 12 m to 60 m flight is
  * still 36 m out at the halfway mark, so it spends most of its time far away and then arrives all
  * at once, where the geometric one is at 26.8 m and closing evenly

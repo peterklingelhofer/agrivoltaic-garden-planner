@@ -127,11 +127,9 @@ export const foliageColor = (cropId: string): number =>
 /**
  * How far one plant's leaves may sit either side of its crop's own green.
  *
- * A planting is one color on every plant of it, which at fifty chickpeas in a bed renders as
- * one flat slab of green rather than fifty plants. Real foliage varies plant to plant, and a
- * little of that is the difference between a bed reading as vegetation and reading as a
- * painted rectangle. Small enough that two crops never trade places: the hues above are
- * separated by four times this
+ * A planting is one color on every plant of it, which at fifty chickpeas in a bed renders as one
+ * flat slab of green. Real foliage varies plant to plant, and a little of that is the difference
+ * between a bed reading as vegetation and reading as a painted rectangle
  */
 export const FOLIAGE_JITTER = 0.05
 
@@ -162,11 +160,11 @@ interface PanelCeiling {
 /**
  * The ground each array stands over, and how much room is under it.
  *
- * The ceiling is `clearanceHeightM`, the module's underside at its LOW edge, rather than the local
- * underside along the tilt: that is the one height `assignCanopyTier` calls the overstory line, so
- * the plant the designer has already refused as overstory is the plant the picture draws stopped.
- * A tilted row does hold more room than this uphill, and claiming it would need the tracker's live
- * pose, which would make a plant's drawn height a function of the time of day.
+ * The ceiling is `clearanceHeightM`, the module's underside at its LOW edge. `assignCanopyTier`
+ * draws its overstory line at `clearanceHeightM` too, so a plant it has already refused as
+ * overstory is a plant the picture draws stopped. A tilted row does hold more room than this
+ * uphill, and claiming it would need the tracker's live pose, which would make a plant's drawn
+ * height a function of the time of day.
  *
  * The footprint is taken at the widest a row can ever be in plan, `collectorWidthM` flat with no
  * projection by the tilt, for that same reason. Along the row it is the span `arrayLayout`
@@ -240,7 +238,7 @@ export const layoutPlanting = (
       widthM,
       heightM: cappedM(heightM, ceilings, x, y),
       // this plant's own green, from the same stream that placed it, so a bed of one crop is
-      // fifty plants rather than one slab of color and the scatter is still deterministic
+      // fifty plants, each with its own color, and the scatter is still deterministic
       color: jitteredFoliage(color, random()),
     })
   }
@@ -250,14 +248,14 @@ export const layoutPlanting = (
 /** How a season's outcome shows on a planting: how big it stands, and the cast of its leaves */
 export interface OutcomeLook {
   readonly scale: number
-  /** Height on its own where a look flattens rather than shrinks; the width keeps `scale` */
+  /** Height on its own, where a look flattens without shrinking. The width keeps `scale` */
   readonly heightScale: number
   /** A reflectance to lean the foliage toward, or null to leave the crop's own color alone */
   readonly tint: number | null
   readonly tintStrength: number
 }
 
-/** What a bed under heavy pest pressure goes, which is sallow rather than brown */
+/** What a bed under heavy pest pressure goes: sallow */
 const EATEN = 0xa8a04e
 /** What a bed that got no light to speak of goes */
 const STARVED = 0x8f9463
@@ -310,7 +308,7 @@ export const bedThirst = (
  * How old the garden is drawn: the bed panel's "show the garden at year N" or the seasons the
  * simulation has run, whichever is greater, capped at the ceiling the slider has.
  *
- * Derived here rather than written by a season, because a season that WROTE `plantYear` made
+ * Derived here, because a season that WROTE `plantYear` made
  * the shipped example younger on its first press: the example is drawn at year 3, the first
  * season wrote 1, and the biggest shrub in the garden vanished as if the season had killed it.
  * The greater of the two is the honest age, and a reset needs no second write to undo it
@@ -319,7 +317,7 @@ export const gardenAge = (plantYear: number, seasonsRun: number, ceiling: number
   Math.min(ceiling, Math.max(plantYear, seasonsRun))
 
 /**
- * The season's outcome, drawn rather than reported.
+ * The season's outcome, drawn.
  *
  * Reflectances, all of them, so they multiply into the leaf texture and stay inside the exposure
  * the rest of the scene is graded at. Nothing here is emissive and nothing is an annotation. The

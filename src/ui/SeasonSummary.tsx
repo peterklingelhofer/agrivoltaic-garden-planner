@@ -7,19 +7,18 @@ import { SOURCE_NAME } from './format'
 /**
  * What the place the visitor chose is actually like to garden in.
  *
- * The app has always known this and has never said it. `seasonAnchors` reads the frost curve the
- * site lookup already fetched, and every sowing date in the product is derived from it, but a
- * grower met those dates only crop by crop, as a "basis" line under a row, and met the frost
- * risk itself only as a percentage dropdown three steps into the editor. A gardener's second
- * question about a place, after where it is, is how long they get to grow in it. So it's
- * answered on the step that chose the place, and again on the site panel, where a Master
- * Gardener went looking for plain frost dates and found a percentile.
+ * `seasonAnchors` reads the frost curve the site lookup already fetched, and every sowing date in
+ * the product is derived from it, but elsewhere a grower meets those dates only crop by crop, as a
+ * "basis" line under a row, and meets the frost risk itself as a percentage dropdown three steps
+ * into the editor. A gardener's second question about a place, after where it is, is how long they
+ * get to grow in it. So it's answered on the step that chose the place, and again on the site
+ * panel.
  *
- * Read through `seasonAnchors` rather than off `site.frost` directly, because that function
+ * Read through `seasonAnchors`. Never straight off `site.frost`: that function
  * already knows the two things this must not get wrong: which curve to take, and that a season
  * can wrap past new year in the southern hemisphere. The last sentence names the source at the
- * point of use, which a researcher asked for: the dates come from thirty years of daily records,
- * and it names which service supplied them, since either of two may
+ * point of use: the dates come from thirty years of daily records, and it names which service
+ * supplied them, since either of two may
  */
 export const SeasonSummary = (): ReactElement | null => {
   const site = useAppStore((s) => (s.site.status === 'ready' ? s.site.value : null))

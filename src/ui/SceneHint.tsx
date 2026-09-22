@@ -12,17 +12,16 @@ import { useSeasonEvent } from './useSeasonSweep'
  * What to do with the bed that was just tapped.
  *
  * On a laptop this would be furniture: the panel about the selected bed is in the sidebar beside
- * the garden, and selecting a bed visibly fills it. On a phone the garden and the editor take
- * turns on the screen, so a tap selected the bed, raised its move handles, and nothing anywhere
- * said that the thing to do with it was on another surface. It was the one dead end left in the
- * walkthrough of the phone.
+ * the garden, and selecting a bed visibly fills it. On a phone the garden and the editor take turns
+ * on the screen, so a tap selects the bed and raises its move handles, and without this nothing
+ * says that the thing to do with it is on another surface.
  *
  * The press has to do two things or it is not worth having. Switching surfaces alone lands the
  * visitor wherever the stepper happened to be, which after a first visit is the first step and
  * the address they already gave. It opens the step that plants a bed as well, which is the answer
  * to the question the tap asked.
  *
- * Hidden above the breakpoint by the stylesheet rather than by a width read in JavaScript, for
+ * Hidden above the breakpoint by the stylesheet, with no width read in JavaScript, for
  * the reasons `MobileTabs` gives: one definition of "narrow", and `display: none` keeps a control
  * with nothing to do out of a desktop reader's accessibility tree entirely
  */
@@ -40,9 +39,9 @@ const PlantPrompt = (): ReactElement | null => {
   if (bed === null) return null
   /*
     What is in the bed, on the strip, and a press that says where it goes. "Plant it" on a bed
-    already full of plants read as a way to see them planted, so the press could look like it
-    should change the picture. It shouldn't open the plan. A bed's plants also couldn't be read
-    off the garden without landing a tap on each clump
+    already full of plants reads as a way to see them planted, so the press could look like it
+    should change the picture. What it does is open the plan. A bed's plants also can't be read off
+    the garden without landing a tap on each clump
   */
   const names = bed.plantings.map((planting) => cropName(catalog, planting.cropId))
   const planted = names.length > 0
@@ -73,10 +72,9 @@ const PlantPrompt = (): ReactElement | null => {
  * A line of instruction over the scene while a shape is being drawn, and the keys it promises.
  *
  * The keyboard half is deliberately in the same component as the sentence advertising it: they're
- * one promise, and the failure this fixes was a UI that had the finishing move and never said
- * so anywhere the drawer could see. The listener is on `window` rather than on the canvas because
- * the canvas can't hold focus after a click on a sidebar field, and a grower who typed a plot
- * width and came back to the drawing would otherwise find Enter dead.
+ * one promise, so the finishing move is always said somewhere the drawer can see. The listener is
+ * on `window`, because the canvas can't hold focus after a click on a sidebar field, and a grower
+ * who typed a plot width and came back to the drawing would otherwise find Enter dead.
  *
  * The effect is above the early return so the keys work for as long as the mode does. Both
  * handlers are gated on the mode, and the store's own `commitDraft` refuses a draft under three

@@ -81,9 +81,9 @@ export const CompliancePanel = (): ReactElement => {
           it's the only dual-use rule the app can check a layout against.
         </p>
       ) : null}
-      {/* the idle case carries a press now, so it's the one state `AsyncNotice` doesn't
-          render here: loading and error still belong to it, because those are this slice's own
-          business rather than a thing the visitor can settle */}
+      {/* the idle case carries a press, so it's the one state `AsyncNotice` doesn't render
+          here: loading and error belong to it, because those are this slice's own business, and
+          there's nothing there for the visitor to settle */}
       {raster.status === 'idle' ? (
         <MissingRaster testId="status-compliance" />
       ) : (

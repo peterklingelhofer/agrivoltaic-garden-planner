@@ -23,11 +23,10 @@ interface Stub {
 const stubs: Stub[] = []
 
 /*
-  Bun fakes timers inside the runtime rather than by swapping `globalThis.setTimeout`, so capturing
-  a reference to `setTimeout` before `useFakeTimers` does NOT give you a real one: it still goes
-  through the frozen clock and never fires. That cost an afternoon. Anything that has to make
-  progress while fake timers are installed must therefore ride the microtask queue, which isn't
-  faked
+  Bun fakes timers inside the runtime. It never swaps `globalThis.setTimeout`, so capturing a
+  reference to `setTimeout` before `useFakeTimers` does NOT give you a real one: it still goes
+  through the frozen clock and never fires. Anything that has to make progress while fake timers are
+  installed must therefore ride the microtask queue, which isn't faked
 
   Ten turns is arbitrary and it's enough: it drains ten levels of `await` chaining, and the
   suites this replaces resolve in one or two
@@ -65,7 +64,7 @@ export const vi = {
     /*
       Assignment isn't enough. Several of the globals worth stubbing are accessors with no
       setter: jsdom defines `localStorage` as a getter, and `target.localStorage = x` throws
-      "Attempted to assign to readonly property" rather than stubbing anything
+      "Attempted to assign to readonly property". Nothing here is ever stubbed
     */
     Object.defineProperty(target, key, {
       value,
@@ -92,7 +91,8 @@ export const vi = {
    * intervals and this keeps those numbers, because the suites calling it were written against them
    *
    * This polls on a timer, so it can't make progress under fake timers. Neither of the two files
-   * that call it installs any, and a caller that did would hang here rather than fail quietly
+   * that call it installs any, and a caller that did would hang here. Failing quietly isn't
+   * what happens
    */
   waitFor: async <T>(
     check: () => T | Promise<T>,

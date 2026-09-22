@@ -246,10 +246,9 @@ export interface RootDepthRemedy {
 /**
  * What a bed would have to grow by for a crop's own root depth to fit it.
  *
- * `raiseToM` is the bed's new `raisedHeightM`, not an amount to add: the soil's own depth never
- * changes, so raising the bed is the only knob, and rounding the target UP to the nearest step is
- * what makes "press this and the crop fits" a promise the app can keep rather than a number that
- * only comes close
+ * `raiseToM` is the bed's new `raisedHeightM`, replacing the old value directly: the soil's own
+ * depth never changes, so raising the bed is the only knob, and rounding the target UP to the
+ * nearest step is what makes "press this and the crop fits" a promise the app can keep
  */
 export const rootDepthRemedy = (crop: Crop, bed: Bed): RootDepthRemedy => {
   const bedDepthM = bed.soil.effectiveDepthM + bed.raisedHeightM
@@ -278,8 +277,8 @@ export const rootDepthRemedy = (crop: Crop, bed: Bed): RootDepthRemedy => {
 }
 
 /**
- * A bed shallower than the roots would reach in deep soil limits the crop rather than refusing
- * it (see `ROOT_DEPTH_FLOOR_M`), and only a bed under the floor refuses it. The plain sentence
+ * A bed shallower than the roots would reach in deep soil limits the crop (see
+ * `ROOT_DEPTH_FLOOR_M`). Only a bed under the floor refuses it. The plain sentence
  * for each is what every caller without a bed to hand gets. With the bed, the figures follow it
  */
 const ROOT_DEPTH_LIMITED =
@@ -294,8 +293,7 @@ const rootDepthDetail = (remedy: RootDepthRemedy): string =>
       : `${ROOT_DEPTH_LIMITED}: in deep soil they'd reach ${formatMeters(remedy.cropDepthM)}, and this bed is ${formatMeters(remedy.bedDepthM)} deep. Raising the bed by ${formatMeters(remedy.shortfallM)} would give them room`
 
 /**
- * What ruled a crop out or held it back, in words a gardener uses rather than the ones the
- * pipeline stage carries internally.
+ * What ruled a crop out or held it back, in words a gardener uses.
  *
  * The parenthetical at the end of every line names the pipeline stage and the fuzzy-logic
  * membership that decided it: real information to someone checking the model, and Greek to everyone
@@ -303,7 +301,7 @@ const rootDepthDetail = (remedy: RootDepthRemedy): string =>
  * behind `showsFigures`, the same novice/expert split every other figure in the app reads.
  *
  * `crop` and `bed` are optional and used only for the root-depth cause, so every other caller,
- * which has neither, still gets the plain sentence below rather than a broken call. Without
+ * which has neither, still gets the plain sentence below. Without
  * them a shallow bed reads as limiting, which is what it is everywhere above the floor. Only a
  * caller with the bed to hand can say it was refused
  */
@@ -359,7 +357,7 @@ export const weakestScoreTerm = (outcome: RecommendationVerdict): string => {
   if (outcome.verdict === 'excluded') return 'excluded'
   const s = outcome.score
   // 'light fit' / 'climate fit' / 'soil fit' are the score breakdown's own field names, and each
-  // read as a model term rather than a reason: a gardener asks "why", not which fit was weakest
+  // names a model term, when what a gardener actually wants is "why" a crop landed where it did
   const terms: readonly (readonly [string, number])[] = [
     ['how much light it gets', s.lightFit],
     ['how well the climate here suits it', s.climateFit],
@@ -372,9 +370,9 @@ export const weakestScoreTerm = (outcome: RecommendationVerdict): string => {
 }
 
 /**
- * The three verdicts in words a child reads as advice. "EXCLUDED" beside a strawberry
- * reads as a ban, and the row it sits on adds the crop anyway when it's pressed, while
- * "Marginal" is jargon to any reader who hasn't met it
+ * The three verdicts in words a beginner reads as advice: "EXCLUDED" beside a
+ * crop reads as forbidden, though the row can still be pressed and added anyway, and "Marginal"
+ * carries no meaning by itself
  */
 export const verdictLabel = (outcome: RecommendationVerdict): string =>
   outcome.verdict === 'recommended'
@@ -384,16 +382,15 @@ export const verdictLabel = (outcome: RecommendationVerdict): string =>
       : 'Not suited'
 
 /**
- * How much of a score gap among the leading run of a list is worth telling a beginner apart,
- * read as a share of how far apart that list's OWN leaders land rather than a number chosen in
- * the abstract.
+ * How small a score gap in the leading run of a list must be for a beginner to be told the entries
+ * are tied, read as a share of how far apart that list's OWN leaders land.
  *
  * `rank.ts` and `suggest.ts` both break an exact numeric tie at 1e-9, which is finer than
  * either score claims to be accurate to: `lightFit` and `climateFit` mostly rest on Tier C
- * class-level inferences rather than a measurement of the crop in front of you, so a gap that
+ * class-level inferences about the crop, so a gap that
  * is small next to how far apart THIS list's own top few otherwise land is inside that same
- * noise, not a finding worth reporting as one. Dividing by the spread being displayed means a
- * bed that clearly favors one crop over the rest gets a tighter margin than one where the
+ * noise, too small to report as a finding on its own. Dividing by the spread being displayed
+ * means a bed that clearly favors one crop over the rest gets a tighter margin than one where the
  * whole top of the list scores about the same.
  *
  * This is an unmeasured presentation threshold picked for this screen: nothing here reruns the
@@ -439,7 +436,7 @@ export const tiedLeadingCropCount = (ranked: readonly CropRecommendation[]): num
 /**
  * What a truncated ranking says about the part of itself it is not showing.
  *
- * Said as a count of what is missing rather than a count of what is shown, because the reader can
+ * Said as a count of what is missing, because the reader can
  * already see what is shown. It's a `panel-sub`: nothing has gone wrong and
  * nothing needs fixing, the list is simply longer than it is worth reading
  */
@@ -496,7 +493,7 @@ export const criterionSummary = (result: CriterionResult): string => {
 
 /**
  * What favoring natives can and can't do for a vegetable garden, said before anyone turns it
- * on rather than discovered from a list that looks unchanged.
+ * on.
  *
  * Almost nothing anybody eats is native to where they garden: the tomato is Andean, lettuce is
  * Mediterranean, and a grower who read "favor native plants" as a promise of a native garden
@@ -540,7 +537,7 @@ export const nativeNote = (native: boolean | null): string =>
 
 /**
  * What the plant offers flower visitors. The half of the pollinator question that moves the
- * ranking, because it's the half that is about the garden rather than about the harvest
+ * ranking, because it's the half that is about the garden
  */
 export const forageNote = (forage: PollinatorForage): string =>
   forage === 'high'

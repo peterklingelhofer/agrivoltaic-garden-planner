@@ -20,9 +20,9 @@ import {
  * refusals reach the screen with their reasoning intact, and that a combination can be
  * planted through the same write-back a manual planting uses.
  *
- * The combinations live on the plants step now, behind "All the combinations for Bed N", and
- * they arrive by themselves once the ranking has: the press that used to ask for them is gone,
- * so every helper here waits for the ranking and opens the fold rather than pressing anything
+ * The combinations live on the plants step, behind "All the combinations for Bed N", and they
+ * arrive by themselves once the ranking has, so every helper here waits for the ranking and opens
+ * the fold, without pressing anything
  */
 
 const anchoredOnBlueberry = async (page: Page): Promise<void> => {
@@ -217,8 +217,8 @@ test.describe('polyculture suggestions', () => {
     page,
   }) => {
     await rankedBed(page)
-    // the default bed is near-neutral, and blueberry's pH envelope is physiology rather than
-    // a preference, so the ranking rules it out before any preference could ask for it
+    // the default bed is near-neutral, and blueberry's pH envelope is physiology, so the ranking
+    // rules it out before any preference could ask for it
     await expect(page.getByTestId('control-plants-like-blueberry')).toHaveCount(0)
     await openFold(page, 'details-plants-more')
     await expect(page.getByTestId('item-polyculture-preference-blueberry')).toHaveCount(0)

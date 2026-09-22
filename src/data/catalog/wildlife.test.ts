@@ -17,7 +17,7 @@ describe('what a crop asks of pollinators', () => {
   it('separates the orchard and the berries from the self-fertile nightshades', () => {
     expect(pollinatorDependenceOf('Rosaceae', 'fruits')).toBe('great')
     expect(pollinatorDependenceOf('Ericaceae', 'berries')).toBe('great')
-    // a tomato sets fruit on its own, and gains from a visit rather than depending on one
+    // a tomato sets fruit on its own, and gains from a visit
     expect(pollinatorDependenceOf('Solanaceae', 'fruity-vegetables')).toBe('little')
   })
 

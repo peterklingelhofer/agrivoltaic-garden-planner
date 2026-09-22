@@ -3,7 +3,7 @@
  *
  * With the loop on demand, a frame happens only when this asks for one. Miss a source and the
  * canvas goes stale, which reads worse than the waste it replaced, so the rule here is to ask
- * too often rather than too rarely: a spurious frame costs one frame, a missed one costs a
+ * too often, since a spurious frame costs one frame, while a missed one costs a
  * visitor believing the picture.
  *
  * What already asks without help: drei's `OrbitControls` calls `invalidate()` itself on every
@@ -36,7 +36,7 @@ export const useInvalidate = (windRunning: boolean): void => {
   const invalidate = useThree((s) => s.invalidate)
 
   /**
-   * Any store write may move the picture. Subscribed whole rather than per-slice deliberately:
+   * Any store write may move the picture. Subscribed whole, deliberately:
    * the list of fields the scene reads is long and grows, and a field added to the store without
    * a line added here would show up as a canvas that stops updating, which is a bug nobody would
    * connect to the commit that caused it. An extra frame on a store write nothing in the scene
@@ -61,12 +61,12 @@ export const useInvalidate = (windRunning: boolean): void => {
   /**
    * The wind ticker, and the one loop in this app that runs without anybody doing anything.
    *
-   * It asks for a frame rather than doing work: `PlantInstances` writes the clock the vertex
+   * It only ever asks for a frame: `PlantInstances` writes the clock the vertex
    * shader reads, and it can only do that on a frame that happens. The frame it asks for is
    * cosmetic, so `RenderPipeline` skips the cascades and the occlusion for it.
    *
-   * `setInterval` rather than a self-invalidating `useFrame`: calling `invalidate()` from inside
-   * a frame sets r3f's counter to two rather than one, which sustains the loop at full rate and
+   * This uses `setInterval`. Calling `invalidate()` from inside
+   * a frame, the way a self-invalidating `useFrame` would, sets r3f's counter to two, which sustains the loop at full rate and
    * would quietly put the app back where it started
    */
   const [reducedMotion] = useState(prefersReducedMotion)

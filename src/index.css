@@ -79,10 +79,9 @@
   --sans: 'Ubuntu Sans', system-ui, 'Segoe UI', Roboto, sans-serif;
   --mono: 'Ubuntu Sans Mono', ui-monospace, Consolas, monospace;
 
-  /* The only motion in this sheet. State changes here are instant on purpose, and this is the
-     one exception: a progress segment that fills with no travel at all reads as a repaint
-     rather than as progress. Reduced motion zeroes it in one place, below, so nothing built on
-     the token can forget to answer for itself */
+  /* The one motion token in this sheet. State changes here are instant on purpose, and the cold
+     open's fade in and fade out are the exception. Reduced motion zeroes it in one place, below,
+     so nothing built on the token can forget to answer for itself */
   --motion-quick: 160ms;
 
   color-scheme: light dark;
@@ -336,7 +335,7 @@ body {
  * Absent altogether wherever the editor is already on screen beside the garden. Above
  * the breakpoint selecting a bed fills the panel next to it, so a prompt saying where to go would
  * be pointing at something already in view, and `display: none` keeps it out of the
- * accessibility tree rather than announcing it to a reader who has nowhere to be sent
+ * accessibility tree, so a reader is never sent to a spot with nothing there
  */
 .scene-hint-select {
   display: none;
@@ -381,7 +380,7 @@ body {
 }
 
 /* Every bed at once: the overview the dropdown can't be, and the surface a dragged planting
-   is dropped onto. Scrolls sideways rather than wrapping, so a plot with twenty beds doesn't
+   is dropped onto. Scrolls sideways, so a plot with twenty beds doesn't
    push the editor below the fold */
 .bed-strip-wrap {
   display: flex;
@@ -404,8 +403,8 @@ body {
   gap: 2px;
   align-items: flex-start;
   min-width: 116px;
-  /* the card names its plants now, so it wraps at a readable width instead of running a bed of
-     four crops the whole way across the strip */
+  /* the card names its plants, so it wraps at a readable width and stops a bed of four crops
+     from running the whole way across the strip */
   max-width: 200px;
   padding: 6px 9px;
   font: inherit;
@@ -600,7 +599,7 @@ body {
  * The cold open: what the example garden is showing, said once, over the scene it is about.
  *
  * It has to find room between two things that were there first, so it's anchored to the one
- * whose size is a stated constant rather than a function of its own text. `.example-banner` is
+ * whose size is a stated constant. `.example-banner` is
  * top-left and `--banner-width` across, `.legend` is top-right. Sitting at the foot of the
  * canvas, in the column to the right of the banner, clears both at every desktop size this app
  * is usable at.
@@ -610,7 +609,7 @@ body {
  *
  * The background is fully OPAQUE: `.canvas-host` carries the pre-paint sky gradient under
  * everything stacked on it, and the contrast audit reports text over a still-visible
- * background-image as unresolvable rather than guessing a color for it.
+ * background-image as unresolvable.
  *
  * It arrives on `--motion-quick`, which is 0s under `prefers-reduced-motion`, so whoever asked
  * for less movement gets the whole sentence at once. What that preference suppresses here is the
@@ -676,17 +675,16 @@ body {
    * absolute intervals and the stepper's hidden sentences were positioned against the page,
    * which grew to 2,679px under a 900px window. `scrollIntoView` on a step header then also
    * scrolled the page, and the toolbar left the screen by 44px on the plants step and by the
-   * whole bar on the sources step. Measured on 2026-09-11 with a scroll probe
+   * whole bar on the sources step
    */
   position: relative;
   /**
-   * The gutter is reserved whether or not it is needed, and that is load-bearing rather than
-   * tidy. One open step at a time means the column's content height now lands wherever that
-   * step puts it, and a height that sits within a pixel or two of the viewport oscillates: the
-   * scrollbar appears, the narrower column reflows the text taller, the scrollbar is still
-   * needed, it disappears, and so on. It shows up as a sidebar that shivers, and it was found
-   * as two visual snapshots that could never be taken because the canvas beside it never held
-   * still long enough to be photographed
+   * The gutter is reserved whether or not it is needed, and that is load-bearing. One open step at
+   * a time means the column's content height now lands wherever that step puts it, and a height
+   * that sits within a pixel or two of the viewport oscillates: the scrollbar appears, the narrower
+   * column reflows the text taller, the scrollbar is still needed, it disappears, and so on. It
+   * shows up as a sidebar that shivers, and as a visual snapshot that can't be taken because the
+   * canvas beside it never holds still long enough to be photographed
    */
   scrollbar-gutter: stable;
   min-height: 0;
@@ -696,7 +694,7 @@ body {
 }
 
 /* The sidebar is a numbered list of questions with one open at a time. The counter is CSS's
-   own rather than a number in the markup, so inserting a step can't leave the list mis-numbered */
+   own, so inserting a step can't leave the list mis-numbered */
 .stepper {
   list-style: none;
   margin: 0;
@@ -758,10 +756,10 @@ body {
 /*
  * A step that is waiting keeps its number and gets a lock beside the title.
  *
- * The lock used to REPLACE the number, so the list read 1, 2, 3, lock, lock, lock, lock, 8, 9:
- * the count the design set up gives out exactly where a beginner most needs to know how far along
- * they are. Column 2 with the title rather than over the circle, because a glyph on top of a
- * numeral is two things in one 22px space and neither is readable
+ * A lock that replaced the number would make the list read 1, 2, 3, lock, lock, lock, lock, 8, 9:
+ * the count the design set up would give out exactly where a beginner most needs to know how far
+ * along they are. Column 3, beside the title, because a glyph on top of a numeral is two things in
+ * one 22px space and neither is readable
  */
 /*
  * Dashed, and nothing else.
@@ -1152,7 +1150,7 @@ input[type='range'] {
 }
 
 /*
- * The focus ring, stated rather than left to the browser.
+ * The focus ring, stated explicitly.
  *
  * Without this `:focus-visible` rule `.action` takes Chrome's default ring. That default isn't a
  * fixed color: on macOS it resolves to something visible and on Linux to `rgb(16, 16, 16)`, which
@@ -1228,9 +1226,10 @@ input[type='range'] {
   border: 1px solid var(--control-border);
   border-radius: 6px;
   padding: 4px;
-  /* about six rows rather than four: at 220px a search that found three crops looked like a
-     list that had been cut off, and scrolling 163 rows four at a time is what sent a reader
-     past the plant she came for */
+  /**
+   * about six rows: at 220px a search that finds three crops looks like a list that has been cut
+   * off, and scrolling 182 rows four at a time sends a reader past the plant she came for
+   */
   max-height: 320px;
   overflow-y: auto;
 }
@@ -1287,7 +1286,7 @@ input[type='range'] {
  * `currentColor` and nothing else: it takes the color of the row it is in, so it inverts with a
  * selected option and needs no second version for the dark scheme, and there's no opacity on it,
  * which is the one way of dimming this project has already been caught by. Aligned on the text
- * baseline rather than the box, so a row with a glyph is exactly as tall as a row without one
+ * baseline, so a row with a glyph is exactly as tall as a row without one
  */
 .crop-glyph {
   flex: 0 0 auto;
@@ -1304,8 +1303,8 @@ input[type='range'] {
  * The same slot, for the drawn version of the same thing.
  *
  * 20px against the silhouette's 16, because this one is carrying color and four or five distinct
- * shapes in a 12 by 12 grid and the extra four pixels are what let a courgette read as a courgette
- * rather than as a green smudge. `image-rendering` is the whole argument for pixels: a 12-wide
+ * shapes in a 12 by 12 grid and the extra four pixels are what let a courgette read as a courgette.
+ * `image-rendering` is the whole argument for pixels: a 12-wide
  * grid drawn at 20 lands on fractional device pixels, and a smoothed sprite is a smear
  */
 .crop-sprite {
@@ -1321,7 +1320,7 @@ input[type='range'] {
   margin-right: 0;
 }
 
-/* mid-sentence rather than at the head of a row, so it takes a space either side: the agenda
+/* mid-sentence, so it takes a space either side: the agenda
    line reads "First harvest <picture> elderberry in Bed 2" */
 .agenda-line .crop-sprite {
   margin: 0 3px;
@@ -1376,8 +1375,8 @@ input[type='range'] {
 
 /*
  * A sentence about the state of things isn't a field. The idle and loading notices sat in the
- * same 1px rounded box as the text fields above them, where six in a row on a phone read as
- * inputs; a tinted ground with no border tells them apart while the warning and error notices
+ * same 1px rounded box as the text fields above them and read as inputs. A tinted ground with
+ * no border tells them apart while the warning and error notices
  * keep their colored borders, which are the whole of what they say
  */
 .notice-idle,
@@ -1406,8 +1405,8 @@ input[type='range'] {
 /*
  * Something is happening, said with motion as well as words. "Looking up the weather..." sat
  * still for several seconds and read as a screen that had stopped. One rule on the state class
- * rather than markup in every notice, so a spinner can't be forgotten by the next loading
- * sentence. The site notice is a flex column, so its spinner rides the first line of text
+ * means a spinner can't be forgotten by the next loading sentence. The site notice is a flex
+ * column, so its spinner rides the first line of text
  */
 .notice-loading:not(.site-notice)::before,
 .site-notice.notice-loading > p:first-child::before {
@@ -1489,8 +1488,8 @@ input[type='range'] {
 .badge {
   display: inline-block;
   /* a pill is one shape. Left to wrap, the border runs around two lines of text and reads as a
-     rendering fault rather than as a label: "Insect magnet / Ground layer" split mid-pill was the
-     report. Every badge in the app is this shape, so the rule belongs here */
+     rendering fault, as "Insect magnet / Ground layer" does when split mid-pill. Every badge in
+     the app is this shape, so the rule belongs here */
   white-space: nowrap;
   font-size: 10px;
   text-transform: uppercase;
@@ -1811,7 +1810,7 @@ input[type='range'] {
    for the same reason `.scene-tooltip` has it: this labels the ground, and taking the pointer
    would make the ground under it unclickable. The background is fully OPAQUE: `.canvas-host`
    carries the sky gradient under everything stacked on it, and the contrast auditor reports
-   text over a still-visible background-image as unresolved rather than guessing at a color */
+   text over a still-visible background-image as unresolved */
 .legend {
   position: absolute;
   top: 12px;
@@ -1891,13 +1890,13 @@ input[type='range'] {
   display: none;
 }
 
-/* warn coloring rather than muted: this one isn't a footnote about the ramp, it's the
-   reason not to trust the ramp, and it sits above it for the same reason */
+/* warn coloring: this one is the reason not to trust the ramp, and it sits above it for the
+   same reason */
 .carrying .picker-option {
   cursor: grabbing;
 }
 
-/* while a crop is being carried, the canvas is a drop target rather than a camera: saying so
+/* while a crop is being carried, the canvas becomes a drop target: saying so
    with the cursor is the only affordance the 3D can offer, since nothing in it can be outlined
    until the pointer is actually over a bed */
 .carrying .canvas-host {
@@ -2396,8 +2395,8 @@ details.wizard-advanced > summary:focus-visible {
 
 /*
  * A group set aside while a house or a tree is drawn: the native disabled fieldset already
- * refuses the press, and a checked card left at full brightness still reads as an
- * answer in force, so the whole group fades and stops answering the pointer
+ * refuses the press, and a still-bright checked card reads as an answer still in force, so the
+ * whole group fades and stops answering the pointer
  */
 .choices:disabled .choice,
 .choices:disabled .choice:hover,
@@ -2432,8 +2431,9 @@ details.wizard-advanced > summary:focus-visible {
    * back a claim they can't check. Evicting the legend to make room is the same trade, since the
    * legend is what makes the colors readable in the first place.
    *
-   * `.visually-hidden` rather than `display: none`, because none of that reasoning is about the
-   * accessibility tree: a visitor on a screen reader isn't looking at the scene at any width,
+   * `.visually-hidden` keeps the sentence in the accessibility tree, because none of that
+   * reasoning is about the accessibility tree: a visitor on a screen reader isn't looking at
+   * the scene at any width,
    * and the sentence names both beds and quotes both measured figures, so it's worth as much
    * here as it is at full size
    */
@@ -2528,7 +2528,7 @@ details.wizard-advanced > summary:focus-visible {
 /*
  * Stepping between the layouts on the face, above the one that is showing.
  *
- * The position sits between the two presses rather than beside them, so it reads as the label of
+ * The position sits between the two presses, so it reads as the label of
  * the pair and lands under the thumb on a phone with a target either side of it
  */
 /*
@@ -2615,8 +2615,8 @@ details.wizard-advanced > summary:focus-visible {
  * The phone tier.
  *
  * The 900px breakpoint above was reasoned about at 800x900, and every one of its trades still
- * holds there. None of them survive 390x844. Two things break, both structural rather than
- * cosmetic, and both measured rather than guessed:
+ * holds there. None of them survive 390x844. Two things break. Both are structural, and both
+ * are measured:
  *
  * 1. `.example-banner` is `--banner-width` across and `.legend` is up to 260px. On a 390px
  *    screen they are 600px of furniture competing for one row, so they overlapped: the banner's
@@ -2624,7 +2624,7 @@ details.wizard-advanced > summary:focus-visible {
  * 2. The canvas is only 55svh tall, and the banner alone is taller than what is left beside
  *    the legend, so the panels were describing ground that was entirely covered.
  *
- * The answer to both is that at this width they stack instead of sharing a row
+ * The answer to both is that at this width they stack
  */
 @media (max-width: 560px) {
   /*
@@ -2694,7 +2694,7 @@ details.wizard-advanced > summary:focus-visible {
     grid-template-rows: 62svh 1fr;
   }
 
-  /* top and bottom of the same column rather than left and right of the same row */
+  /* the legend moves to the top and bottom of the same column at this width */
   .legend {
     top: auto;
     bottom: 12px;
@@ -2724,12 +2724,12 @@ details.wizard-advanced > summary:focus-visible {
  *legend covered 88% of the canvas between them, and the sidebar was left 119px in which to show
  *1,300px of editor. The garden got 47px.
  *
- * The breakpoint is 760px rather than the 900px the two-column split gives up at, because
+ * The breakpoint is 760px, below the 900px the two-column split gives up at, because
  * between those widths there is still room for a real sidebar beside a real canvas. Below it
  * there is not, and squeezing both is what produced the numbers above. A phone held sideways is
  * 667px wide and lands here too, which is right: 375px of height doesn't want a split either.
  *
- * The surfaces STACK rather than swap. Both children of `.stage` are given the same grid area,
+ * The surfaces STACK. Both children of `.stage` are given the same grid area,
  * so the canvas keeps its full-size layout box whether or not it is the one on screen. That's
  * deliberate and it's about WebGL: a canvas that is unmounted loses its GL context and one that
  * is resized to nothing and back pays for a resize on every tab press. Here it is simply covered
@@ -2751,7 +2751,7 @@ details.wizard-advanced > summary:focus-visible {
   }
 
   /*
-   * Opaque, because it's standing in front of a lit 3D scene rather than beside it, and
+   * Opaque, because it's standing in front of a lit 3D scene, and
    * positioned, because otherwise it stands BEHIND one.
    *
    * The two surfaces share a grid cell, and `.canvas-host` is `position: relative` so that the
@@ -2767,7 +2767,7 @@ details.wizard-advanced > summary:focus-visible {
   }
 
   /*
-   * `visibility` rather than `display`, for the same reason the canvas keeps its box: a sidebar
+   * Hidden with `visibility`, for the same reason the canvas keeps its box: a sidebar
    * removed from the layout is a sidebar whose scroll position is thrown away every time the
    * garden is looked at. Hidden this way it also leaves the tab order and the accessibility
    * tree, which `opacity: 0` wouldn't have done
@@ -2876,7 +2876,7 @@ details.wizard-advanced > summary:focus-visible {
     flex: 0 0 auto;
   }
 
-  /* the key steps up rather than being covered: both of these live along the same foot, and the
+  /* the key steps up clear of the strip below it: both of these live along the same foot, and the
      one that is answering a press the visitor has just made is the one that gets the edge */
   .canvas-host:has(.scene-hint-select) .legend {
     bottom: 74px;
@@ -2885,7 +2885,7 @@ details.wizard-advanced > summary:focus-visible {
   /*
    * And the way to put the rest of it away, which the legend had no version of at all.
    *
-   * Positioned rather than placed in the column, so that folded the whole key is one line: the
+   * Positioned outside the column's flow, so that folded the whole key is one line: the
    * caption and this control share it, and the figure comes to about 34px against the 88 it was.
    * A row of its own would have given back half as much. `pointer-events` is re-enabled because
    * `.legend` turns them off for the whole figure, being something to read over a scene that is
@@ -2909,8 +2909,8 @@ details.wizard-advanced > summary:focus-visible {
   /*
    * The 44px the touch guidance asks for, without 44px of chrome over the garden.
    *
-   * The word itself is 19x16, which is the size of a thing to read rather than the size of a
-   * thing to press, and every other control in this app meets the floor by being 44px tall. This
+   * The word itself is 19x16, sized to be read, and every other control in this app meets the
+   * floor by being 44px tall. This
    * one can't: the point of the fold is that folded the legend is one line, and a 44px line isn't
    * one line. So the target is grown and the ink isn't
    */
@@ -2945,9 +2945,8 @@ details.wizard-advanced > summary:focus-visible {
 
   /*
    * The banner runs the width of the phone and drops below the drawing tools. The fold itself is
-   * unconditional now and lives with the other banner rules above: folded it is about 46px
-   * against the 226px it was, which is the difference between a notice over a garden and a
-   * notice instead of one
+   * unconditional and lives with the other banner rules above: folded it is about 46px against
+   * 226px open, which is the difference between a notice over a garden and a notice that covers it
    */
   .example-banner {
     left: 8px;
@@ -3009,7 +3008,7 @@ details.wizard-advanced > summary:focus-visible {
   /*
    * The drawing tools move onto the thing they draw on.
    *
-   * `position: fixed` rather than a second copy in the markup: one set of buttons, one set of
+   * `position: fixed` avoids a second copy in the markup: one set of buttons, one set of
    * test ids, and the desktop toolbar is untouched. Taking them out of the flow is also what
    * lets the row above collapse to a single line.
    *
@@ -3100,17 +3099,16 @@ details.wizard-advanced > summary:focus-visible {
  * region that is merely invisible still announces every reply to a screen reader on a surface
  * nobody is looking at.
  *
- * Off at every width by default, and turned on by the surface rather than by the width: the two
+ * Off at every width by default, and turned on by the surface: the two
  * rules below say where it goes once `data-surface="chat"` asks for it, and both widths have an
- * answer. The paragraph that used to be here called this a phone surface and said the laptop had
- * no use for one, which the rule immediately below it had already stopped being true
+ * answer
  */
 .agent {
   display: none;
 }
 
 /*
- * On a laptop the conversation takes the editor's column rather than a third one of its own.
+ * On a laptop the conversation takes the editor's column.
  *
  * A third column was the obvious move and is the wrong one: the stage is already a garden and a
  * 380px editor, and a chat beside them would leave every one of the three too narrow to be worth
@@ -3215,9 +3213,8 @@ details.wizard-advanced > summary:focus-visible {
  * A caveat, drawn as a caveat and never as small print.
  *
  * `Cited` values in this app carry one, and the doctrine is that the only thing ever hidden is
- * detail and a caveat is never detail. A chat bubble is exactly where a caveat gets read as a
- * hedge and skipped, so it keeps the body size and takes a rule beside it instead of the gray
- * treatment the supporting line gets
+ * detail and a caveat is never detail. A chat bubble is exactly where a caveat gets read as a hedge
+ * and skipped, so it takes a rule beside it. The supporting line gets a gray treatment
  */
 .agent-line.agent-caveat {
   font-size: 0.82rem;
@@ -3243,7 +3240,7 @@ details.wizard-advanced > summary:focus-visible {
 /*
  * How a thing was computed isn't a warning about it, and drawing it in warning color said so
  * seven times over on one answer. It keeps the rule, because it's still a block of qualification
- * hanging off an answer, and takes the structural border rather than the alarming one
+ * hanging off an answer, and takes the structural border
  */
 .agent-provenances {
   border-left-color: var(--border);
@@ -3316,8 +3313,8 @@ details.wizard-advanced > summary:focus-visible {
 }
 
 /*
- * What the surface says about its own router. Muted and small, because it's chrome rather than
- * an answer, but it sits above the input where it's read before the next sentence is typed
+ * What the surface says about its own router. Muted and small, because it's chrome: it sits
+ * above the input where it's read before the next sentence is typed
  */
 .agent-status {
   margin: 0;
@@ -3330,11 +3327,11 @@ details.wizard-advanced > summary:focus-visible {
 }
 
 /*
- * The works a line rests on, run in after it rather than stacked under it.
+ * The works a line rests on, run in after it.
  *
  * A citation is part of the sentence it supports: putting them on their own row would turn a
  * six-line provenance block into twelve. Each is the app's ordinary `.link`, so it's a real
- * control with a real focus ring, and the separators are drawn rather than typed
+ * control with a real focus ring, and the separators are drawn
  */
 .agent-sources {
   display: inline;
@@ -3367,16 +3364,15 @@ details.wizard-advanced > summary:focus-visible {
   padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
   border-top: 1px solid var(--border);
   background: var(--panel);
-  /* the box grows upward from the bottom, and Send stays on the line it started on rather than
-     stretching to whatever height the sentence has reached */
+  /* the box grows upward from the bottom, and Send stays on the line it started on */
   align-items: flex-end;
 }
 
 /*
  * The box, which is a textarea that starts one line high and grows with what is put in it.
  *
- * One line held 27% of a 137-character sentence, and a sentence somebody spoke rather than typed
- * is the long kind: dictation mishears, and what it heard has to be readable before it's sent.
+ * One line held 27% of a 137-character sentence, and a spoken sentence is the long kind:
+ * dictation mishears, and what it heard has to be readable before it's sent.
  * `AgentPanel.tsx` sets the height from `scrollHeight` on every keystroke. The ceiling is here,
  * because a box that can eat the whole transcript is its own problem. Roughly five lines
  */
@@ -3396,9 +3392,9 @@ details.wizard-advanced > summary:focus-visible {
   border: var(--agent-input-border) solid var(--control-border);
   background: var(--bg);
   color: inherit;
-  /* Five whole lines, computed from the line height and the padding rather than guessed at in
-     rem: a round ceiling cut the fifth line through the middle, which reads as a rendering fault
-     rather than as a box that has stopped growing. The border is in here because the box sizes
+  /* Five whole lines, computed from the line height and the padding: a round ceiling cut the
+     fifth line through the middle, which reads as a rendering fault. The border is in here
+     because the box sizes
      border-box, and leaving it out left the fifth line two pixels short of whole */
   max-height: calc(
     5 *
@@ -3581,7 +3577,7 @@ details.wizard-advanced > summary:focus-visible {
 }
 
 /*
- * The plan column across the window. The garden is hidden rather than unmounted, so the GL
+ * The plan column across the window. The garden stays mounted and hidden, so the GL
  * context and the camera survive the round trip. The column is capped at a reading width and
  * centered, since a 1440px line of calendar prose is no easier on the eyes than a 380px one.
  * Below 900px the tabs already take turns and the press isn't offered
@@ -3617,7 +3613,7 @@ details.wizard-advanced > summary:focus-visible {
 /*
  * The design on paper. The sheet is in the document all the time and the screen never shows
  * it. Printing hides everything else and lets it be the page, in black on white at a reading
- * size, so "save as PDF" in any browser is the export the author asked for
+ * size, so "save as PDF" in any browser is the export
  */
 .print-plan {
   display: none;

@@ -7,9 +7,9 @@ import { answerEveryQuestion, DESIGN_TIMEOUT_MS, revealLayout } from './fixtures
  *
  * Which crops a bed can carry is decided against the light that bed actually gets, and no such
  * light exists until a layout does, so applying one plants every bed it places and lands on the
- * step that shows the result. These walk the whole path from the questions rather than seeding a
- * design, because the thing under test is the handover between the search and the beds, not the
- * step in isolation. Everything upstream is stubbed by `openApp`, weather included, so the search
+ * step that shows the result. These walk the whole path from the questions to seeding a
+ * design, because the thing under test is the handover between the search and the beds.
+ * Everything upstream is stubbed by `openApp`, weather included, so the search
  * runs here with no worker and no network
  */
 
@@ -51,7 +51,7 @@ test('applying a layout plants every bed, and another mix can be tried on any of
 
   /*
    * Either another mix fits this bed, and pressing for it replaces what the bed holds and says
-   * which one it is, or none does, and the press says so rather than sitting there dead. Silence
+   * which one it is, or none does, and the press says so, without sitting there dead. Silence
    * is the one outcome the press must never produce
    */
   const mix = page.getByTestId(`readout-plants-mix-${bedId}`)
@@ -89,7 +89,7 @@ test('the plants step says what it planted and offers the ways on', async ({ pag
   await expect(page.getByTestId('action-plants-fill')).toContainText(/plant every bed again/i)
 
   // a plant to change: the press on a bed's card opens the picker for that bed, with the search
-  // field in view, which is what anyone looking for one plant needs next
+  // field in view, since searching for a different crop is the obvious next step
   const bedId =
     (await page.locator('[data-testid^="item-plants-bed-"]').first().getAttribute('data-bed')) ?? ''
   await page.getByTestId(`action-plants-select-${bedId}`).click()
@@ -115,7 +115,7 @@ test('the plants step says what it planted and offers the ways on', async ({ pag
 /**
  * A picture beside every crop, in every list that names one.
  *
- * The claim is coverage rather than appearance: every row in all five lists carries one, none of
+ * The claim is coverage: every row in all five lists carries one, none of
  * them is empty, and no row falls back to the class silhouette, which is what a crop with no
  * sprite would get. `crop-sprite.test.ts` holds the table total against the catalog. This holds
  * that the table is actually reached from the places a crop is named.
@@ -128,7 +128,7 @@ test('every crop in every list is drawn as well as named', async ({ page }) => {
   await openApp(page, { exampleGarden: true })
   await step(page, 'plants')
   // the picker and the preferences sit behind folds on the plants step, opened so the rows are
-  // read as a visitor sees them rather than only as the document holds them
+  // read the way a visitor actually sees them
   await openFold(page, 'details-plants-by-hand')
   await expect(page.locator('[data-testid^="item-bed-crop-"]').first()).toBeVisible({
     timeout: DESIGN_TIMEOUT_MS,
@@ -140,7 +140,7 @@ test('every crop in every list is drawn as well as named', async ({ page }) => {
     page.evaluate(() => {
       /*
         `data-crop` as well as the testid prefix: the agenda's own prefix also matches its
-        group headings and its supply headings, which name a KIND of job rather than a crop and
+        group headings and its supply headings, which name a KIND of job, separate from a crop, and
         have nothing to draw. Every row that names a crop carries the crop it names
       */
       const rows = (prefix: string): { total: number; drawn: number } => {
@@ -168,7 +168,7 @@ test('every crop in every list is drawn as well as named', async ({ page }) => {
     ranking: onPlants.ranking,
     preferences: onPlants.preferences,
     calendar: onCalendar.calendar,
-    // the dated jobs, where the picture is mid-sentence rather than at the head of a row: the
+    // the dated jobs, where the picture sits mid-sentence. A row's own head differs: the
     // swatch beside it is the ACTION's color and says something else entirely
     agenda: onCalendar.agenda,
   }
@@ -182,7 +182,7 @@ test('every crop in every list is drawn as well as named', async ({ page }) => {
     silent: [...document.querySelectorAll('.crop-sprite')].every(
       (sprite) => sprite.getAttribute('aria-hidden') === 'true',
     ),
-    // and every one actually drew something rather than rendering an empty box
+    // and every one actually drew something
     shapes: [...document.querySelectorAll('.crop-sprite')].every(
       (sprite) => sprite.childElementCount > 0,
     ),

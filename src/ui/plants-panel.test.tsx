@@ -31,7 +31,7 @@ const BED_2 = 'bed-2' as BedId
 
 /**
  * Two beds under one row of panels that read different light, ranked and dated, with automatic
- * ranking off so a test drives every action itself rather than racing a debounce. The same shape
+ * ranking off so a test drives every action itself, without racing a debounce. The same shape
  * `seedRankedStore` builds for one bed, over two
  */
 const seedTwoBeds = async (): Promise<void> => {
@@ -324,10 +324,9 @@ describe('saying what you like to eat', () => {
   })
 
   /**
-   * Checking "Flowers for bees" and "Wild plants from around here" gave no way to tell what either
-   * one changed. `autoRun` is off in this fixture, so the ranking never actually
-   * re-runs behind the switch, and the readout says so honestly rather than guessing at a move
-   * that hasn't happened
+   * The readout says what checking "Flowers for bees" or "Wild plants from around here" changed.
+   * `autoRun` is off in this fixture, so the ranking never actually re-runs behind the switch, and
+   * the readout says so, without guessing at a move that hasn't happened
    */
   it('says what a wildlife switch changed on the selected bed, and offers to replant with it', async () => {
     await seedTwoBeds()

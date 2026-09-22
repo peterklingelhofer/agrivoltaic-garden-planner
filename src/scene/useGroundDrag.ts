@@ -17,19 +17,15 @@ export interface GroundDragHandlers {
 /**
  * Dragging a thing across the ground in Move mode.
  *
- * Moving used to go through a `TransformControls` gizmo: three arrows on the selected bed that
- * looked like "this little square thing" and said nothing about what they did, while a drag
- * anywhere else orbited the camera and a drag on a plot corner reshaped the plot. One
- * rule replaces all three: "you don't move the camera at all, but you drag
- * stuff". So in Move mode the camera holds still (`OrbitControls` keeps only its zoom) and a
- * press on a bed, a row of panels or a plot corner moves that thing, by the ground the pointer
- * crosses. Outside Move mode none of these handlers do anything, and a drag orbits as before.
+ * In Move mode the camera holds still (`OrbitControls` keeps only its zoom) and a press on a bed, a
+ * row of panels or a plot corner moves that thing, by the ground the pointer crosses. Outside Move
+ * mode none of these handlers do anything, and a drag orbits the camera.
  *
  * The objects named are moved in place while the pointer is down and the store is written once
  * on release, the way the gizmo committed: a store write per pointer move re-renders the sidebar
  * per move. `dragging` is raised for the duration so the ground under the pointer doesn't read
  * the press as a request to clear the selection, and the plants group is named alongside its bed
- * so the foliage travels with the soil rather than catching up on release
+ * so the foliage travels with the soil, with nothing to catch up on release
  */
 export const useGroundDrag = (
   enabled: boolean,

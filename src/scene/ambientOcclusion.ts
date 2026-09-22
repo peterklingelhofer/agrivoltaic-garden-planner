@@ -1,7 +1,7 @@
 /**
  * Ambient occlusion, applied to the sky term and to nothing else.
  *
- * The gap this closes was measured in pass 1, not felt: shaded ground sat at 0.168 of sunlit in
+ * The gap this closes is a measured one: shaded ground sat at 0.168 of sunlit in
  * linear luminance while the sky model's own diffuse-to-global ratio is 0.126, because an
  * environment map hands every point the whole hemisphere no matter what is above it. The
  * quantity missing there is the sky view factor, the same one `src/sim` computes per cell for
@@ -11,10 +11,10 @@
  * AO composited over the finished frame, which is how it's usually wired, would instead darken
  * sunlit ground beside every post by occlusion the geometry doesn't cast.
  *
- * `aoStrength` rather than a define, so switching the effect off is a uniform write and not a
- * shader recompile. `SCENE_SKY_OCCLUSION` is a define regardless, because three's program cache
- * is keyed on defines and not on the body of `onBeforeCompile`: without it, an unpatched
- * material of the same type would hand its cached program to a patched one
+ * The effect's strength is `aoStrength`, a uniform: switching the effect off only writes a uniform,
+ * with no shader recompile. `SCENE_SKY_OCCLUSION` is a define regardless, because three's program
+ * cache is keyed only on defines: without it, an unpatched material of the same type would hand its
+ * cached program to a patched one
  */
 
 import { DataTexture, RedFormat, Vector2, type IUniform, type Material, type Texture } from 'three'
@@ -33,7 +33,7 @@ export const unoccludedTexture = (): DataTexture => {
 }
 
 /**
- * One shared uniform object, bound into every lit material rather than copied into each, so the
+ * One shared uniform object, bound into every lit material, so the
  * pass that computes the occlusion writes it in one place. `foliage.ts` shares the wind clock
  * the same way
  */
@@ -56,7 +56,7 @@ void main() {`
  * The specular line is what three's own `aomap_fragment` does
  * when a material carries an aoMap, down to the guards: `computeSpecularOcclusion` is the
  * horizon-based term already defined in `lights_physical_pars_fragment`, and clearcoat and sheen
- * take the occlusion directly the same way. Copying three's treatment rather than authoring one
+ * take the occlusion directly the same way. Copying three's own treatment
  * keeps a single definition of what occlusion means to a physical material, which is the same
  * reason the diffuse half multiplies `indirectDiffuse` and nothing else
  */
@@ -87,7 +87,7 @@ export const occludable = (material: Material): boolean =>
   (material as { isMeshStandardMaterial?: boolean }).isMeshStandardMaterial === true
 
 /**
- * Chains rather than assigns, for the reason written up in `cascades.ts`: the foliage wind and
+ * Chains, for the reason written up in `cascades.ts`: the foliage wind and
  * the cascade light loop are both installed this way and the last writer would win
  */
 export const enrollInSkyOcclusion = (material: Material): void => {
@@ -113,8 +113,8 @@ const HORIZON_TOLERANCE = 0.1
  * cosine-weighted share of the hemisphere below an elevation is `sin^2` of it. Stopping the
  * search at `d` therefore leaves out at most `h^2 / (h^2 + d^2)` of the sky a canopy at that
  * height could block, and solving that for a tenth gives three times the height. Past there the
- * samples spread too thin to stay quiet and the estimate gets worse rather than better, which
- * the pass-3 measurements show: at six times the height it recovers less occlusion, not more.
+ * samples spread too thin to stay quiet and the estimate only gets worse: at six times the
+ * height it recovers strictly less occlusion.
  *
  * What the bound leaves out is sky near the horizon, so this AO under-estimates occlusion and
  * never over-estimates it. Measured against the analytic view factor of the default array, an

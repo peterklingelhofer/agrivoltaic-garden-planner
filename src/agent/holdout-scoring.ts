@@ -15,7 +15,7 @@ import type { Understanding } from './understand'
  * **Offered** is how often, when it asked instead, the right answer was among the chips. **Solved**
  * adds the two: everything that ended right, or ended one tap from right.
  *
- * Imported only by the held-out tests. It lives here rather than in one of them so that all three
+ * Imported only by the held-out tests. It lives here alone, so that all three
  * count the same thing, and nowhere in the application imports it
  */
 

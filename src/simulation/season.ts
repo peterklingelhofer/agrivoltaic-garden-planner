@@ -118,7 +118,7 @@ const drawInBand = (band: Banded<Fraction>, draw: number): Fraction => {
   return (10 ** (low + (high - low) * draw)) as Fraction
 }
 
-/** The life cycles that stay in the ground between seasons rather than being sown again */
+/** The life cycles that stay in the ground between seasons */
 const PERENNIAL: ReadonlySet<LifeCycle> = new Set<LifeCycle>(['perennial', 'woody-perennial'])
 
 const measured = (rule: CompanionRule): rule is ScorableCompanionRule =>
@@ -228,8 +228,8 @@ export const simulateSeason = (input: SeasonInput): SeasonResult => {
             bed,
             planting,
             'refused',
-            // the plain name first and the Latin after it: a sentence opening with
-            // "Plasmodiophora brassicae (clubroot)" reads as another language and stops the reader
+            // the plain name first and the Latin after it: a scientific binomial alone reads
+            // as another language to most readers
             violation.rotationEffective
               ? `This crop family grew here too recently and the soil still carries ${commonName(violation.pathogen)}. The family needs ${String(violation.minIntervalYears ?? 0)} years off this bed (${violation.pathogen})`
               : `${commonName(violation.pathogen)} survives in this soil for ${String(violation.inoculumPersistenceYearsLow)} to ${String(violation.inoculumPersistenceYearsHigh)} years, and no rest period clears it. ${violation.alternativeControl ?? ''} (${violation.pathogen})`.trim(),
@@ -446,11 +446,10 @@ export const simulateSeason = (input: SeasonInput): SeasonResult => {
   }
 
   /*
-    Over EVERY planting planned, and not only the ones that reached the ground: a bed the ground,
-    the climate or the soil refused counts as zero, the same as one the frost took. The standing
-    this feeds is a land equivalent ratio, which is per bed of ground rather than per successful
-    sowing, and leaving the refusals out of it made ignoring a rotation warning free and a frost
-    expensive (`the convergence document` 7.1, item 8)
+    Over EVERY planting planned, including the ones that never reached the ground: a bed the
+    ground, the climate or the soil refused counts as zero, the same as one the frost took. The
+    standing this feeds is a land equivalent ratio, counted per bed of ground, so ignoring a
+    rotation warning costs exactly what a frost costs
   */
   const harvestIndex =
     outcomes.length === 0

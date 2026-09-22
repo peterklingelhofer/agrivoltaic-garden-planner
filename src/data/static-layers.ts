@@ -83,10 +83,10 @@ export const NRCAN_GRID_PATH = '/data/nrcan-hardiness.grid'
 export const WGSRPD_GRID_PATH = '/data/wgsrpd-level3.grid'
 
 /**
- * What `scripts/fetch-static-layers.mjs` builds into `public/data/`, and what the
- * loader falls back to when a file is absent, truncated or corrupt. The fallback is
- * a real derivation from CC BY 4.0 reanalysis, so a deploy
- * without the assets is degraded rather than wrong. See docs/STATIC-LAYERS.md
+ * What `scripts/fetch-static-layers.mjs` builds into `public/data/`, and what the loader falls back
+ * to when a file is absent, truncated or corrupt. The fallback is a real derivation from CC BY 4.0
+ * reanalysis, so a deploy without the assets is degraded and still
+ * correct. See docs/STATIC-LAYERS.md
  */
 export interface StaticLayerRequirement {
   readonly path: string
@@ -148,8 +148,7 @@ export interface ClassGrid {
 
 /**
  * Reads the format `scripts/fetch-static-layers.mjs` writes. Every length in the
- * header is checked against the buffer, so a truncated or mangled asset returns null
- * and the caller derives instead of sampling whatever the bytes happened to decode to
+ * header is checked against the buffer, so a truncated or mangled asset returns null cleanly
  */
 export const decodeClassGrid = (buffer: ArrayBuffer): ClassGrid | null => {
   if (buffer.byteLength < GRID_HEADER_BYTES) return null
@@ -202,9 +201,9 @@ export const decodeClassGrid = (buffer: ArrayBuffer): ClassGrid | null => {
       cursor += 1
       // `+`, because the bitwise `|=` is a 32-bit signed operation, so a crafted varint
       // could set the sign bit, make `run` negative, slip past the `written + run` bound and
-      // reach `fill`, which clamps negative bounds instead of throwing. That decoded a hostile
-      // buffer into a confidently wrong grid rather than into the null every other malformed
-      // input gets
+      // reach `fill`, which clamps negative bounds. That decoded a hostile
+      // buffer into a confidently wrong grid, where every other malformed
+      // input gets null
       run += (byte & 0x7f) * 2 ** shift
       if ((byte & 0x80) === 0) break
       shift += 7
@@ -365,8 +364,8 @@ const readDailyNormals = (
         written += 1
         return
       }
-      // isolated gaps carry the previous day forward; a systematically empty series is
-      // caught by the coverage check below rather than becoming a real reading
+      // isolated gaps carry the previous day forward. A systematically empty series is
+      // caught by the coverage check below
       row[day] = day > 0 ? at(row, day - 1) : 0
     }
     write(normals.minC, daily.temperature_2m_min)
@@ -397,8 +396,8 @@ const fetchOpenMeteoDailyNormals = async (location: LatLon): Promise<DailyNormal
         start_date: `${String(NORMALS_START_YEAR)}-01-01`,
         end_date: `${String(NORMALS_END_YEAR)}-12-31`,
         daily: DAILY_VARIABLES,
-        // local days, so a night's minimum is one reading rather than split across two UTC
-        // dates, and the answer names the zone it used
+        // local days, so a night's minimum is one reading on one date, and the answer names the
+        // zone it used
         timezone: 'auto',
       }),
       { ...DEFAULT_FETCH_OPTIONS, remember: true },
@@ -611,10 +610,9 @@ export const meanAnnualExtremeMinC = (yearlyDailyMin: readonly Float32Array[]): 
   mean(yearlyDailyMin.map((year) => Math.min(...Array.from(year))))
 
 /**
- * Mean annual extreme minimum from thirty years of ERA5 daily minima. This is the same
- * physical quantity the PRISM grid maps, measured from reanalysis rather than read off a
- * map, which is why it can stand in for the grid outside its coverage. It's never a
- * conversion of some other scheme's zone
+ * Mean annual extreme minimum from thirty years of ERA5 daily minima. This is the same physical
+ * quantity the PRISM grid maps, here measured from reanalysis, which is why it can stand in for the
+ * grid outside its coverage. It's never a conversion of some other scheme's zone
  */
 const derivedHardiness = async (location: LatLon): Promise<TemperatureHardinessRating> => {
   const normals = await dailyNormalsAt(location)
@@ -630,7 +628,7 @@ const derivedHardiness = async (location: LatLon): Promise<TemperatureHardinessR
 /**
  * The bundled grid answers first where it has coverage. The Open-Meteo derivation is what
  * every existing figure was built against, so where the two land more than one half-zone
- * apart both are returned rather than one silently replacing the other: the climate gate
+ * apart both are returned: the climate gate
  * takes the coldest rating and the site panel lists them
  */
 const temperatureHardinessAt = async (
@@ -835,10 +833,10 @@ export const staticLayerLicenses = (): readonly Licensed[] => [
   },
   {
     /**
-     * The newest shipped layer, and it belongs here rather than only in a credit list: this
-     * function is what `AttributionPanel` renders and what `docs/STATIC-LAYERS.md` names as the
-     * reason a license obligation can't drift from what actually ships. A CC BY layer credited
-     * only by a hand-maintained array is the drift that sentence exists to prevent
+     * The WCVP layer belongs here as well as in any credit list: this function is what
+     * `AttributionPanel` renders and what `docs/STATIC-LAYERS.md` names as the reason a license
+     * obligation can't drift from what actually ships. A CC BY layer credited only by a
+     * hand-maintained array is the drift that sentence exists to prevent
      */
     sourceId: 'govaerts2021-wcvp',
     license: 'CC BY 4.0',

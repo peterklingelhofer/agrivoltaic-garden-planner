@@ -61,10 +61,9 @@ const WIND_FAMILIES = new Set([
 /**
  * The families whose fruit set is worst hit by losing pollinators, after Klein et al. Squashes,
  * melons and cucumbers are the standing example of a crop that sets almost nothing without an
- * insect visit. The pome and stone fruit, and the Ericaceae berries, lose most of a crop rather
- * than all of it. The nightshades and the grain legumes sit at the other end because they're
- * largely self-fertile: a tomato pollinates itself in a breeze, and gains something from a bee
- * shaking it rather than depending on one
+ * insect visit. The pome and stone fruit, and the Ericaceae berries, lose most of a crop, short of
+ * all of it. The nightshades and the grain legumes sit at the other end because they're largely
+ * self-fertile: a tomato pollinates itself in a breeze, and gains something from a bee shaking it
  */
 const ESSENTIAL_FAMILIES = new Set(['Cucurbitaceae'])
 const GREAT_FAMILIES = new Set(['Rosaceae', 'Ericaceae', 'Grossulariaceae', 'Actinidiaceae'])

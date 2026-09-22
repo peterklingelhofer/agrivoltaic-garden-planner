@@ -32,8 +32,8 @@ const MA_MAX_NAMEPLATE_KW_DC = 7500
 // TIME BASIS, an explicit assumption because the regulation is ambiguous: 'local-clock', read
 // off the site's own clock, daylight saving included where the weather series names its zone
 // (the site lookup stamps one) and its fixed standard-time offset where it doesn't. A legal
-// text writing "9 AM" is naming a wall clock, and the DOER Shading
-// Analysis Tool isn't specified either way. Two consequences are disclosed rather than hidden:
+// text writing "9 AM" is naming a wall clock, and the DOER Shading Analysis Tool isn't
+// specified either way, clock or solar hour angle. Two consequences are disclosed here:
 // Massachusetts observes daylight saving for the whole of March-October, so the window is read
 // on EDT, an hour earlier by the sun than the same hours on standard time. And apparent solar
 // time drifts from clock time by the equation of time plus longitude within the zone, up to

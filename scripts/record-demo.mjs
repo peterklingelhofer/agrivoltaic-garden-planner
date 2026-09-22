@@ -93,7 +93,7 @@ const run = (command, commandArgs, env = {}) => {
 
 /* --------------------------------- the recording --------------------------------- */
 
-// `share-only` skips the camera too, and has to be named here rather than only where it's
+// `share-only` skips the camera too, and has to be named here as well as where it's
 // handled: the guard below is what decides whether a fifteen-minute recording happens, and a
 // flag that meant "just re-encode" but was only read afterward started a full re-record
 if (!has('encode-only') && !has('share-only')) {
@@ -179,13 +179,12 @@ const scriptOf = (timeline) => {
 /**
  * The share copy: the same film, under the size a chat client will accept.
  *
- * Two-pass rather than a constant-rate factor, because here the SIZE is the requirement and the
- * quality is whatever fits: CRF hits a look and lets the bytes land where they may, which is the
- * wrong way round when the file has to clear a hard 25 MB gate. Encoded FROM the finished MP4
- * rather than the raw screencast, so a share copy can be made at any time without re-recording,
- * and 720p because the alternative at these bitrates is 1080p that has been smeared into
- * uselessness. Almost every frame is a still UI, so the rate control spends its budget on the
- * few seconds of camera movement, which is where it belongs
+ * Two-pass encoding, because here the SIZE is the requirement and the quality is whatever fits: CRF
+ * hits a look and lets the bytes land where they may, which is the wrong way round when the file
+ * has to clear a hard 20 MB gate. Encoded from the finished MP4, so a share copy can be made at any
+ * time without re-recording the raw screencast, and 720p because the alternative at these bitrates
+ * is 1080p that has been smeared into uselessness. Almost every frame is a still UI, so the rate
+ * control spends its budget on the few seconds of camera movement, which is where it belongs
  */
 const compress = (cut) => {
   const source = join(OUT, `agrivoltaic-designer-${cut}.mp4`)
@@ -252,7 +251,7 @@ const compress = (cut) => {
     rmSync(`${passlog}${leftover}`, { force: true })
   const megabytes = statSync(out).size / 1024 / 1024
   console.log(`  ${out.slice(OUT.length + 1)}: ${megabytes.toFixed(1)} MB`)
-  // said out loud rather than trusted, because the only thing this file has to do is be small
+  // checked out loud, because the only thing this file has to do is be small
   if (megabytes > SHARE_LIMIT_MB) {
     console.error(
       `  WARNING: over the ${String(SHARE_LIMIT_MB)} MB limit by ${(megabytes - SHARE_LIMIT_MB).toFixed(1)} MB`,

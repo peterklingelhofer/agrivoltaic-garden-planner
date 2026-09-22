@@ -1,15 +1,15 @@
 /**
  * What each surface in the garden is made of.
  *
- * Authored against the pass-1 lighting reference: the numbers below are linear reflectances
- * read under the Preetham beam at `TONE_MAPPING_EXPOSURE`, not values picked to look right
- * against some other exposure. Nothing here adds light, and nothing here is a brightness dial.
+ * Authored against a fixed lighting reference: the numbers below are linear reflectances
+ * read under the Preetham beam at `TONE_MAPPING_EXPOSURE`, values read once and held there
+ * regardless of exposure elsewhere. Nothing here adds light, and nothing here is a brightness dial.
  * A surface that reads wrong is a reflectance to change.
  *
  * Where a surface has a number in the model, the model supplies it. The ground's reflectance is
  * `plot.groundAlbedo`, the same figure `SkyLight` bounces off its IBL ground plane and the same
  * figure the bifacial model reads, so the picture can't disagree with the physics about how
- * bright the ground is. One honest caveat, written here rather than hidden: `groundAlbedo` is a
+ * bright the ground is. One honest caveat, written here in the open: `groundAlbedo` is a
  * broadband shortwave albedo and includes the near infrared, where a leaf reflects far more
  * than it does in the visible. Matching it in the visible band renders vegetation lighter than
  * a photograph would. The alternative is two albedos that drift apart, which is worse
@@ -165,7 +165,7 @@ export const galvanizedSurface = (size: number): Surface =>
     }),
   )
 
-/** Anti-reflective silicon under glass: almost black, and blue rather than neutral */
+/** Anti-reflective silicon under glass: almost black, with a blue cast */
 const CELL: Rgb = [0.009, 0.013, 0.032]
 const BUSBAR: Rgb = [0.33, 0.35, 0.38]
 const BACKSHEET: Rgb = [0.58, 0.59, 0.6]
@@ -222,12 +222,11 @@ export const laminateSurface = (size: number): Surface =>
  * back. It's a shortwave figure read in the visible, the same honest caveat `groundAlbedo`
  * carries above. At this catalog's default it is 0.05: a glass-glass bifacial rear is the cell
  * stack again and is nearly as dark as the front, and a `white` backsheet carries its own higher
- * figure rather than being guessed at here.
+ * figure, defined at its own site.
  *
- * Neutral, because the model carries one number and not three, and matte, because what is
- * actually on the back of a module is a backsheet and a junction box rather than a second glass
- * front; the underside of an array should read as the shade it casts and not as a second
- * reflection of the sky
+ * Neutral: the model supplies one number for this. Matte, because what is
+ * actually on the back of a module is a backsheet and a junction box, no second glass
+ * front. The underside of an array reads as the shade it casts
  */
 export const moduleRearAlbedo = (module: ModuleSpec): number => clamp01(module.rearReflectance)
 
@@ -237,8 +236,8 @@ export const MODULE_REAR_ROUGHNESS = 0.85
 /* ------------------------------- model-driven tints ------------------------------- */
 
 /**
- * Selection, as a multiplier on whatever the thing is already made of rather than a flat color
- * that throws the material away. Warm, because every other warm thing in the scene is lit by the
+ * Selection, as a multiplier on whatever the thing is already made of. It never throws the
+ * material away with a flat color. Warm, because every other warm thing in the scene is lit by the
  * sun and this one isn't, which is what makes it read as an annotation
  */
 export const SELECTION_TINT: Rgb = [1.9, 1.4, 0.6]
@@ -252,7 +251,7 @@ export const tintedBy = (gain: number, selected: boolean, strength = 1): Rgb => 
 /**
  * Dry topsoil against the same soil watered: paler and warmer, by how short of water the bed ran
  * in the last season. The same kind of reading as `bedWetness` darkening, in the other
- * direction, and like it a rendering choice rather than a measurement: the size of the shift is
+ * direction, and like it, a choice this renderer makes: the size of the shift is
  * ours, the direction is what dry soil does. Every channel stays a multiplier on a reflectance
  */
 export const driedBy = (rgb: Rgb, thirst: number): Rgb => {

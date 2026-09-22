@@ -11,13 +11,12 @@ import { QUESTION_STEPS, readNumber, searchLayouts } from './fixtures/qa.ts'
  * Next is at the foot of the open step. The garden keeps the scene and everything drawn over it,
  * and a pinned strip across its top is the way back.
  *
- * 375x667 rather than a taller phone on purpose: it's the smallest screen still in wide use,
- * and every one of these broke there first. The taller case is checked alongside it because the
- * two failed differently, which is the argument for having both
+ * Three phones, smallest first. 375x667 is the smallest screen still in wide use, and the taller
+ * case is checked alongside it because the sizes fail differently, which is the argument for having
+ * more than one
  */
 const PHONES = [
-  // the smallest screen anyone still carries, and where every measurement in the audit was
-  // worst: a 153px toolbar, a 21px sideways pan, and a guided answer column of zero pixels
+  // the smallest screen anyone still carries, and the tightest fit for every check below
   { name: 'a 320x568 phone', width: 320, height: 568 },
   { name: 'a 375x667 phone', width: 375, height: 667 },
   { name: 'a 390x844 phone', width: 390, height: 844 },
@@ -56,7 +55,7 @@ for (const phone of PHONES) {
 
     /**
      * The toolbar wanted 694px on one line, so the document was 694px wide inside a 390px window
-     * and the whole app panned sideways. Asserted on the document rather than on the toolbar
+     * and the whole app panned sideways. Asserted on the document itself,
      * because the symptom a visitor meets is the page sliding under their thumb, and any other
      * element that ever does this should fail here too
      */
@@ -90,12 +89,12 @@ for (const phone of PHONES) {
     /**
      * One surface at a time, and the presses that change which.
      *
-     * `reachable` rather than `toBeVisible`, and the difference is the whole test. The sidebar
-     * and the canvas share a grid cell so that the GL context survives a tab press, and
-     * `.canvas-host` is positioned so the banner can sit inside it. A positioned element paints
-     * over a static one whatever the source order, so the first version of this layout left the
-     * sidebar correctly sized, correctly visible to every API that reports visibility, and
-     * completely behind the 3D scene. Pressing Plan lit the tab and changed nothing on screen
+     * This uses `reachable`. The difference from `toBeVisible` is the whole test. The sidebar and
+     * the canvas share a grid cell so that the GL context survives a tab press, and `.canvas-host`
+     * is positioned so the banner can sit inside it. A positioned element paints over a static one
+     * whatever the source order, so the sidebar can end up correctly sized, correctly visible to
+     * every API that reports visibility, and completely behind the 3D scene, and then pressing Plan
+     * lights the tab and changes nothing on screen
      */
     test("shows the garden when it's asked for, and the strip across it leads back", async ({
       page,
@@ -207,7 +206,7 @@ for (const phone of PHONES) {
         expect(below, `Next isn't under the answers on ${id}`).toBe(true)
         await next.scrollIntoViewIfNeeded()
         expect(await reachable(page, 'action-step-next'), `next on ${id}`).toBe(true)
-        // and not fixed: it moves with the column rather than sitting over it
+        // stays in flow with the column, so it never sits over it
         const position = await next.evaluate((el) => getComputedStyle(el).position)
         expect(position).not.toBe('fixed')
         const following = QUESTION_STEPS[index + 1]
@@ -462,13 +461,13 @@ for (const phone of PHONES) {
 /**
  * With a finger, which nothing in this file had used.
  *
- * Every test above drives a mouse: the project runs `devices['Desktop Chrome']`, so the whole
- * mobile suite was a narrow window on a laptop. That's the right instrument for layout, and it's
- * no instrument at all for the questions a phone actually raises, which are whether the
- * gestures exist. The working notes had been carrying "the carry gesture is pointer-based and should
- * work under touch, but 'should' is doing the work in that sentence" for two sessions.
+ * Every test above drives a mouse: the project runs `devices['Desktop Chrome']`, so the rest of the
+ * mobile suite is a narrow window on a laptop. That's the right instrument for layout, and it's
+ * no instrument at all for the questions a phone actually raises, which are whether the gestures
+ * exist. The carry gesture, which drags a crop from the picker to a bed, is pointer-based and
+ * assumed to work under touch, but an assumption isn't a guarantee until something presses it.
  *
- * One size and one journey rather than the full grid, because emulating touch doesn't change
+ * One size and one journey. Not the full grid: emulating touch doesn't change
  * layout and this isn't a layout test: what it holds is that a garden can be drawn, closed and
  * selected with taps, on a build where nothing but a mouse has ever been tried.
  *
@@ -517,7 +516,7 @@ test.describe('a phone with a finger', () => {
       The same retry the mouse fixture needs, for the same reason: the scene is behind a Suspense
       boundary, so r3f can have sized the canvas before the ground it raycasts against exists and
       the first tap lands on nothing. A tap that misses leaves no corner, which is the retry
-      condition rather than a failure; the hint over the ground counts the corners as they land
+      condition: the hint over the ground counts the corners as they land
     */
     const corners = page.getByTestId('readout-scene-hint-corners')
     await expect(async () => {
@@ -553,16 +552,15 @@ test.describe('a phone with a finger', () => {
     const box = await page.getByTestId('canvas-root').locator('canvas').boundingBox()
     expect(box).not.toBeNull()
     // over the bed in the middle strip, which is the one a 375-wide phone can reach: the example
-    // notice covers the top of the canvas and the rows hide the beds behind them. Mapped rather
-    // than guessed, and it moved on 2026-09-01 when the array stopped being drawn ninety degrees
-    // out of true; see `panelSnapshot`
+    // notice covers the top of the canvas and the rows hide the beds behind them. Mapped
+    // explicitly, since it moves whenever the array is drawn differently (see `panelSnapshot`)
     await page.touchscreen.tap(
       Math.round(box!.x + box!.width * 0.55),
       Math.round(box!.y + box!.height * 0.54),
     )
     const prompt = page.getByTestId('status-scene-selected')
     await expect(prompt).toBeVisible({ timeout: 30_000 })
-    // it names the bed rather than saying something is selected
+    // it names the bed specifically
     await expect(prompt).toContainText(/bed/i)
     const bedId = (await prompt.getAttribute('data-bed')) ?? ''
     expect(bedId).not.toBe('')
@@ -603,7 +601,7 @@ test.describe('a phone with a finger', () => {
     expect(box).not.toBeNull()
 
     /*
-      Tapped across the plot rather than at one point, because which bed is under a given fraction
+      Tapped across the plot broadly, because which bed is under a given fraction
       of the canvas is a fact about the camera and the example garden, and this test is about
       whether a tap selects anything at all. One of them landing on a different bed is the whole
       assertion
@@ -632,7 +630,7 @@ test.describe('a phone with a finger', () => {
  * The other half of the prompt above: on a laptop it doesn't exist.
  *
  * Selecting a bed there fills the panel beside the garden, so a prompt saying where to go would
- * point at something already in view. `display: none` rather than a width read in JavaScript, so
+ * point at something already in view. `display: none` over a width read in JavaScript, so
  * it's absent from the accessibility tree too and no reader is offered a destination they are
  * already looking at
  */
@@ -644,7 +642,7 @@ test.describe('a laptop, where the editor is already beside the garden', () => {
     await openApp(page, { exampleGarden: true })
     await waitForCanvas(page)
     /*
-      Selected from the bed strip rather than by clicking the ground, because where a bed sits
+      Selected from the bed strip here, since where a bed sits
       under the camera is a fact about the viewport and this test is about neither the camera nor
       the click: both routes write the same `selectedBedId`
     */

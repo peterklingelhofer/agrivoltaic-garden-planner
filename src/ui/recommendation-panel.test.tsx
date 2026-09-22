@@ -46,9 +46,9 @@ beforeEach(() => {
 
 describe('how much of the ranking a bed shows', () => {
   /**
-   * The cap is the whole point of the change, so this asserts the count rather than the presence
-   * of a switch: a regression that rendered the switch and went on rendering every row would
-   * leave the switch passing and the sidebar back at tens of thousands of pixels
+   * The cap is the whole point, so this asserts the count. Not merely the presence of a switch: a
+   * regression that rendered the switch and went on rendering every row would leave the switch
+   * passing and the sidebar back at tens of thousands of pixels
    */
   it('shows the leading twelve and says how many it is holding back', async () => {
     await seedRankedStore()
@@ -190,7 +190,7 @@ describe('a ranked row and the wildlife question', () => {
     await setBotanicalArea('PER')
     const harness = await mount(<PlantsPanel />)
     // the fold shows the leading twelve. These tests assert on a crop by name, so they ask for
-    // the whole ranking rather than depending on where the run happened to place it
+    // the whole ranking, without depending on where the run happened to place it
     await harness.click('control-recommendation-all')
     // both wildlife answers start off, so the switch is pressed here: what this reads is the
     // state a grower who asked for natives is in
@@ -221,10 +221,10 @@ describe('a ranked row and the wildlife question', () => {
     await harness.unmount()
   })
 
-  // seedRankedStore's own site fixture resolves with no botanical region, so this is what the
-  // step says for a place the region map doesn't cover: the place is named, and the sentence
-  // no longer suggests the lookup never ran, which is how it read for a place like Trenton.
-  // Said whichever way the switch is set, since it's as true before the press as after
+  // seedRankedStore's own site fixture resolves with no botanical region, so this is what the step
+  // says for a place the region map doesn't cover: the sentence says the garden is outside the
+  // map, so it doesn't read as if the lookup itself never ran. Said whichever way the switch is
+  // set, since it's as true before the press as after
   it('says the place is outside the map rather than letting the switch read as if it had worked', async () => {
     await seedRankedStore()
     const harness = await mount(<PlantsPanel />)

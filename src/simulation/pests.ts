@@ -10,7 +10,7 @@ import { hiddenTruth, measuredEffectLike } from './evidence'
 /**
  * The interaction kinds in the corpus that are about pest numbers.
  *
- * Keyed off `InteractionKind` rather than a list of rule ids, so a rule is recognized by what it
+ * Keyed off `InteractionKind`, and never a list of rule ids, so a rule is recognized by what it
  * IS. The grade A and B pest rules also carry `effectMetric: 'pest-density-pct'` and their
  * measured band is applied directly. The grade C, D and E ones carry no effect figure at all, so
  * their kind is the only thing that says what they're for. A rule of one of these kinds acts on
@@ -88,8 +88,8 @@ export const untreatedPressure = (crowding: Fraction, ratio: number): Fraction =
  *
  * The companion rules measure pest DENSITY, and nothing in this repository publishes what a given
  * density costs a harvest: that is a dose-response curve per pest and per crop that the corpus
- * doesn't hold. It's a scale rather than a ranking, which practice suppresses and by how much
- * is read off the rules themselves, and it appears in the provenance ledger with the other gaps
+ * doesn't hold. It's a scale: which practice suppresses pests, and by how much, is read off
+ * the rules themselves, and it appears in the provenance ledger with the other gaps
  */
 export const PEST_YIELD_LOSS_AT_FULL_PRESSURE = unsourcedClaim(
   0.4 as Fraction,

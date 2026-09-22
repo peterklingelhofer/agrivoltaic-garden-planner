@@ -97,7 +97,7 @@ export const suggestionHeadline = (
   suggestion: PolycultureSuggestion,
 ): string => {
   const crops = joinWords(suggestion.cropIds.map((cropId) => cropName(catalog, cropId)))
-  // rounded past twenty, and "about" said once for the list rather than before each figure
+  // rounded past twenty. "about" is said just once for the whole list. Each figure appears bare
   const counts = suggestion.space.allocations.map((entry) =>
     approxCount(entry.plantCount).replace('about ', ''),
   )
@@ -116,7 +116,7 @@ export const suggestionHeadline = (
  * The term-by-term case is written in the register of its evidence
  * ("cutting the 18.8 mol/m2/d this bed gets in crimson clover's season to about 13.1, above
  * the 8.0 mol/m2/d minimum but under the 17.0 it wants", "attributed to Chagga and Javanese
- * communities"), and a sentence a grower can say back in plain words comes before any of it.
+ * communities"), and what a grower needs first is a sentence they can say back before any of it.
  * What speaks for the mix comes from the terms that scored in its favor. What to watch comes
  * from every caution and conflict, scoring or not, because a shade the score wasn't allowed to
  * count is still shade
@@ -194,8 +194,8 @@ export const REFUSAL_CAUSE_ORDER: readonly RefusalCause[] = [
 ]
 
 /**
- * `SuggestionRefusal` carries `termKind` now, so the cause is read off the term that refused
- * rather than off the phrasing each term writes
+ * `SuggestionRefusal` carries `termKind`, so the cause is read off the term that refused. The
+ * phrasing each term writes plays no part
  */
 const CAUSE_BY_TERM: Partial<Record<CompatibilityTermKind, RefusalCause>> = {
   'soil-ph': 'soil-ph',
@@ -204,7 +204,7 @@ const CAUSE_BY_TERM: Partial<Record<CompatibilityTermKind, RefusalCause>> = {
 }
 
 /**
- * The three limiting factors that are about the bed's LIGHT rather than about the site.
+ * The three limiting factors that are about the bed's LIGHT itself. The site is a separate question.
  *
  * Everything else that carries a limiting factor still reads as "this bed cannot grow it at all",
  * which is the harder no and belongs above any pairing. Light is the exception because in this

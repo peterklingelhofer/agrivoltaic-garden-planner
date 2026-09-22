@@ -47,7 +47,7 @@ const guarded = (label: string, testId: string, panel: ReactNode): ReactElement 
 
 /**
  * The dependency chain, as a prefix. A step waits on everything before it and nothing after,
- * so each step names how far along the chain it needs to be rather than restating the whole of
+ * so each step names how far along the chain it needs to be. It never restates the whole of
  * it, and `firstUnmet` picks the one thing to say out of however many are missing
  */
 const blocking = (s: AppState, depth: number): Requirement | null =>
@@ -92,7 +92,7 @@ const SUMMARY_BEDS = 3
 /**
  * What each step has settled, for the line under its title when it's closed.
  *
- * Null rather than a hedge while nothing is settled: "not yet" under nine titles is nine lines
+ * Null while nothing is settled, with no hedge worded for it: "not yet" under nine titles is nine lines
  * of nothing, and the summary earns its place only by recording a decision that was actually
  * made
  */
@@ -177,7 +177,7 @@ const summaryOf = (s: AppState, id: SidebarStep): string | null => {
  * the step it returns to because a contextual press ("See it in the garden", "Draw bed") is what
  * brought the visitor here, and the tab bar alone doesn't say that the plan is where they were.
  * Hidden above the breakpoint by the stylesheet, where the plan is beside the garden. Beside the
- * labels it reads rather than in `App`, so there's one list of what the steps are called
+ * labels it reads, outside `App`, so there's one list of what the steps are called
  */
 export const GardenPlanStrip = (): ReactElement => {
   const step = useAppStore((s) => s.sidebarStep)
@@ -225,7 +225,7 @@ export const Sidebar = (): ReactElement => {
       s.raster.status,
       // the seasons step's own summary: without it "5 seasons run" would outlive a reset
       s.simulation.season,
-      // and the wants step's, which is an answer rather than a status
+      // and the wants step's, which is an answer. It's never a status
       s.answers.ambition,
       presetMatching(s.answers.objective),
     ].join('|'),

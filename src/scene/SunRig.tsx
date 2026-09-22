@@ -66,7 +66,7 @@ export const SunRig = ({
 
   /**
    * Cascaded shadow maps are the garden-scale requirement. When the example module can't be
-   * constructed the rig degrades to a single directional light rather than failing the scene.
+   * constructed the rig degrades to a single directional light. The scene keeps working.
    *
    * Built in an effect, because `new CSM({ parent: scene })` adds its
    * cascade lights to the scene in its constructor. A memo factory isn't allowed to do that:

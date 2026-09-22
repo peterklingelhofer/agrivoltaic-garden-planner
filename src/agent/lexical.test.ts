@@ -178,7 +178,7 @@ describe('answering the question that was asked', () => {
   })
 
   it('still prefers a sentence that speaks for itself over the question on screen', () => {
-    // said at the location step, and still a refusal of parsnips rather than a place called that
+    // said at the location step, and still a refusal of parsnips
     const routed = routeLexically('actually i hate parsnips', at('location'))
     expect(routed?.intent).toBe('dislike-crop')
   })
@@ -368,10 +368,9 @@ describe('a crop nobody named', () => {
 
 describe("a question isn't an instruction", () => {
   /**
-   * The worst misroute this router ever produced, found by reading a session rather than a test:
-   * "how come theres no tomatoes" names a crop and holds a negator, so it reached `dislike-crop`
-   * and the agent recorded that the grower would rather not have tomatoes. They had asked why
-   * there were none
+   * The worst misroute this router ever produced: "how come theres no tomatoes" names a crop and
+   * holds a negator, so it reached `dislike-crop` and the agent recorded that the grower would
+   * rather not have tomatoes. They had asked why there were none
    */
   it('never records a preference from a question about one', () => {
     const routed = routeLexically('how come theres no tomatoes', at(null))
@@ -532,7 +531,7 @@ describe('measured accuracy on the corpus', () => {
   it('routes most of what a grower would actually type', () => {
     const { hits, misses } = outcome()
     const accuracy = hits / CORPUS.length
-    // recorded rather than asserted tightly: this is the number the embedding understander has
+    // recorded here, loosely: this is the number the embedding understander has
     // to beat, and it's printed on failure so a regression names the sentences it broke
     console.log(
       `lexical corpus accuracy: ${(accuracy * 100).toFixed(0)}% (${String(hits)}/${String(CORPUS.length)})`,

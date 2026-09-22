@@ -28,7 +28,7 @@ export const AUTO_RUN_DELAY_MS = 600
 export const autoRunReady = (s: AppState): boolean =>
   allMet(rankingChain(s)) && s.raster.status !== 'loading' && !lightIsStale(s)
 
-/** Every input the ranking reads, flattened so an edit debounces one run instead of thrashing */
+/** Every input the ranking reads, flattened so an edit debounces one run without thrashing */
 export const autoRunKey = (s: AppState): string =>
   [
     s.site.status === 'ready' ? s.site.value.id : 'no-site',
@@ -42,9 +42,9 @@ export const autoRunKey = (s: AppState): string =>
     s.companionRules.status,
     // a require or prefer entry feeds the ranking's own preferred list, so it's an edit
     s.preferences.entries.map((entry) => `${entry.cropId as string}:${entry.kind}`).join(','),
-    // and so are the wildlife switches, which reach the same preference term. Left out, ticking
-    // one wrote the store, changed nothing this key can see, and the panel went on showing the
-    // ranking it had: the toggle would have looked broken rather than slow
+    // and so are the wildlife switches, which reach the same preference term. Left out, checking one
+    // writes the store, changes nothing this key can see, and the panel goes on showing the ranking
+    // it had: the toggle would look broken. It would never look merely slow
     s.wildlife.favorNative,
     s.wildlife.favorPollinators,
     // the surroundings answer dims every bed's light before the ranking reads it, and the store
@@ -79,7 +79,7 @@ export const useAutoRecommend = (): void => {
   const setAutoRunQueued = useAppStore((s) => s.setAutoRunQueued)
 
   /**
-   * The standing data every surface reads, fetched once rather than waited for.
+   * The standing data every surface reads, fetched once, up front.
    *
    * The site is fetched here with the catalog and the evidence because it's the same kind of
    * thing: `ensureSite` looks up the place the toolbar is already naming, which is what stops a

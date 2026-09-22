@@ -47,8 +47,8 @@ export const LAUB_SOURCE = {
 export const LAUB_PROVENANCE = {
   predictions: 'verbatim',
   confidenceIntervals: 'verbatim, 95% CONFIDENCE intervals not prediction intervals',
-  responseClasses: 'verbatim, non-monotonic at high RSR as published, not corrected',
-  coefficients: 'DERIVED by algebraic recovery, not published anywhere, cite as derived from',
+  responseClasses: 'verbatim, non-monotonic at high RSR as published',
+  coefficients: 'DERIVED by algebraic recovery from Table S2, cite as derived from',
 } as const
 
 /** 95 % CONFIDENCE intervals, symmetric on the log10 scale. Prediction intervals are not tabulated in the paper */

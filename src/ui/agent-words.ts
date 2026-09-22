@@ -28,12 +28,12 @@ import { stageOf } from '../sim/pv/provenance'
  * The `caveat` tone isn't decoration. `Cited` values in this app carry a caveat and the doctrine
  * is that the only thing ever hidden is detail and a caveat is never detail. A conversational
  * surface is where that would go first, because a caveat reads as a hedge in a chat bubble, so it's
- * a tone the panel is obliged to render rather than a string it may drop
+ * a tone the panel is obliged to render
  */
 /**
  * One line of a reply, and how it's drawn.
  *
- * `Tone` comes from `agent/transcript.ts` rather than being restated here, because the transcript
+ * `Tone` comes from `agent/transcript.ts` alone, because the transcript
  * stores these and validates them on the way back: two copies of the list meant a new tone had to
  * be added twice, and forgetting the second silently threw away every restored turn using it.
  *
@@ -64,8 +64,8 @@ export interface Line {
 /**
  * What each intent is called when it's offered as something to tap.
  *
- * A total `Record`, so an intent added to `IntentId` fails the
- * build here rather than appearing in the interface as its own kebab-case identifier
+ * A total `Record`, so an intent added to `IntentId` fails the build here. It never appears in
+ * the interface as its own kebab-case identifier
  */
 export const INTENT_LABEL: Readonly<Record<IntentId, string>> = {
   help: 'What can you do?',
@@ -129,7 +129,7 @@ export const OUT_OF_SCOPE: Readonly<Record<ScopeTopic, string>> = {
  *
  * Total over `BlockedNeed` for the same reason `INTENT_LABEL` is total: a refusal with no words
  * is the worst thing this surface can produce, so a new way of being blocked has to fail the
- * build rather than reach a visitor as an empty bubble
+ * build
  */
 export const BLOCKED_TEXT: Readonly<Record<BlockedNeed, string>> = {
   location: 'I need to know where the garden is first. Tell me a town or an address.',
@@ -137,9 +137,9 @@ export const BLOCKED_TEXT: Readonly<Record<BlockedNeed, string>> = {
   plot: "I didn't catch a size for that. Roughly how many meters across and how deep is it?",
   beds: 'There are no beds to plant yet. I can design a layout first if you like.',
   /*
-    Worded for the sun rather than for the ranking, because this one need stands behind six
-    different questions. A session asked "is this legal" and was told there was no ranking to
-    read from, which is true, unrelated, and reads as the agent answering somebody else
+    Worded for the sun, because this one need stands behind six different
+    questions, some unrelated to ranking, like "is this legal". Framing it around a missing
+    ranking would read as the agent answering a different question
   */
   'light-running':
     'I have started running the sun over this garden. I will answer as soon as it lands.',
@@ -163,7 +163,7 @@ export const BLOCKED_TEXT: Readonly<Record<BlockedNeed, string>> = {
 
 /**
  * What is worth asking about right now, one line each. Said when nothing else was recorded to
- * say, so an empty answer still points at something a visitor can press instead of a dead end
+ * say, so an empty answer still points at something a visitor can press
  */
 const CAPABILITY_LINE: Readonly<Record<Capability, string>> = {
   grow: 'What grows here, ranked for the light each bed gets.',
@@ -230,9 +230,9 @@ const named = (catalog: readonly Crop[], ids: readonly string[]): string =>
 /**
  * The same question a second time running, without the paragraph that explains it.
  *
- * A session answered the height question while the one about native planting was on screen, and
- * got back "Got it." followed by that question again, word for word, help text and all. It had
- * heard perfectly well; it looked like a loop. What is worth repeating is the question
+ * Answering the height question while a different one (native planting, say) is on screen can get
+ * back "Got it." followed by that question again, word for word, help text and all: heard
+ * perfectly well, yet it reads as a loop. What is worth repeating is the question
  */
 export const askAgain = (step: OnboardingStep): readonly Line[] => [
   { text: STEP_COPY[step].title, tone: 'say' },
@@ -288,7 +288,7 @@ export const wordsFor = (utterance: Utterance, catalog: readonly Crop[]): readon
       ]
     case 'noted':
       // just the acknowledgment: what to ask next is a separate utterance, decided by the
-      // conversation rather than by whichever question happened to be answered
+      // conversation
       return [{ text: 'Got it.', tone: 'say' }]
     case 'preference':
       return [
@@ -440,9 +440,9 @@ export const wordsFor = (utterance: Utterance, catalog: readonly Crop[]): readon
           text: 'I understood you, and I have nothing recorded about that one.',
           tone: 'say',
         },
-        // what it CAN answer, read off the store rather than said as one blank sentence. This was
-        // the single most common reply across a usability round and never once said what to ask
-        // instead, which is the one thing an empty answer owes the person who just got it
+        // what it CAN answer, read off the store. A blank reply
+        // that never says what to ask next fails the one thing an empty answer owes the person
+        // who just got it
         ...utterance.canAsk.map((capability) => ({
           text: CAPABILITY_LINE[capability],
           tone: 'note' as const,
@@ -480,7 +480,7 @@ export const wordsFor = (utterance: Utterance, catalog: readonly Crop[]): readon
           module construction" would stand on its own with no subject at all: a sentence about the
           Sandia cell-temperature model that never mentions it.
 
-          The stage rather than the whole description, so the equations stay in the panel where
+          The stage alone, so the equations stay in the panel where
           somebody went looking for them. `T_cell = T_air + G_poa / (u0 + u1 * v_wind)` between a
           grower and the sentence that qualifies their figure helps nobody, and an equation is
           detail in the sense this app's doctrine means it. The caveat is kept word for word.
@@ -619,9 +619,9 @@ export const wordsFor = (utterance: Utterance, catalog: readonly Crop[]): readon
           `In the open ${formatBandRange(balance.irrigationOpenSkyMm, 'mm')}, under the panels ${formatBandRange(balance.irrigationUnderPanelsMm, 'mm')}.`,
       )
       /*
-        Said once when every bed says the same thing. A session with three identical beds got the
-        identical sentence three times over with nothing to tell them apart, which reads as a
-        stutter rather than as three answers; only collapsed when ALL of them agree, because
+        Said once when every bed says the same thing: three identical beds would otherwise repeat
+        the identical sentence three times over with nothing to tell them apart, reading as a
+        stutter. Collapsed only when ALL of them agree, because
         deduplicating a list where two of three match would leave a count that is a lie
       */
       const identical = new Set(perBed).size === 1 && perBed.length > 1
@@ -678,8 +678,8 @@ export const wordsFor = (utterance: Utterance, catalog: readonly Crop[]): readon
       return [
         { text: `${utterance.label} added.`, tone: 'say' },
         {
-          // said out loud because the design search is what decides where a bed belongs, and
-          // this one was placed by the defaults rather than by the light
+          // said out loud because the design search is what decides where a bed belongs, and the
+          // defaults placed this one, without the light going into it
           text: 'It sits where the defaults put it, and nothing about the light went into that. Ask me to design it again if you want it computed properly.',
           tone: 'caveat',
         },

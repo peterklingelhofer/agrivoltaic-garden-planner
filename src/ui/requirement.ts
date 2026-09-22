@@ -2,9 +2,9 @@ import { SEASON_FIX, type SeasonFix, seasonBlocker } from '../state/simulation'
 import type { AppState } from '../state/slices'
 
 /**
- * The one press that settles what is missing. `null` where the fix is a gesture on the canvas
- * rather than a button: drawing a bed is a drag with a mouse, and a button claiming to do it
- * would be lying about what happens next
+ * The one press that settles what is missing. `null` where the fix is a gesture on the canvas,
+ * which gets no button: drawing a bed is a drag with a mouse, and a button claiming to do it would
+ * be lying about what happens next
  */
 export interface Remedy {
   readonly label: string
@@ -48,12 +48,11 @@ export const allMet = (requirements: readonly Requirement[]): boolean =>
 /**
  * Everything any requirement here reads, flattened to one string.
  *
- * Every builder below returns a FRESH object, which makes all of them unusable as a store
- * selector: zustand compares what a selector returned with what it returned last time, two
- * different objects are never equal, and the component re-renders forever. Subscribe to this
- * instead and then build from a plain `getState`, which is a read rather than a subscription.
- * Cheap on purpose: a handful of statuses and lengths, so it changes when a lock can change and
- * at no other time
+ * Every builder below returns a FRESH object, which makes all of them unusable as a store selector:
+ * zustand compares what a selector returned with what it returned last time, two different objects
+ * are never equal, and the component re-renders forever. Subscribe to this, then build from a plain
+ * `getState`, which is a one-off read. Cheap on purpose: a handful of statuses
+ * and lengths, so it changes when a lock can change and at no other time
  */
 export const requirementKey = (s: AppState): string =>
   [

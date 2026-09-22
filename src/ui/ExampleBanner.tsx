@@ -6,13 +6,13 @@ import { Action } from './controls'
 /**
  * Says whose garden this is, and gets out of the way.
  *
- * It sits over the canvas rather than in the sidebar because the questions are already there
+ * It sits over the canvas, outside the sidebar, because the questions are already there
  * and the example is the thing the questions are asked about. The provenance line isn't
  * decoration either: the surface a DLI number is read off has to say where the number came
  * from, and for this one the answer is a bake, untouched by an author.
  *
- * "Gets out of the way" is new, and it was the complaint. There was no close: the only control
- * was the one that DELETES the example, so putting the notice away and throwing the garden away
+ * "Gets out of the way" is new: there was no close, only the one control
+ * that DELETES the example, so putting the notice away and throwing the garden away
  * were the same press. Measured at 360x640 the card was 226px and the legend under it 124px, so
  * between them they covered 88% of the canvas and the garden the card is about got 47px.
  *
@@ -69,7 +69,7 @@ export const ExampleBanner = (): ReactElement | null => {
       <div className="example-banner-body-wrap">
         <p className="example-banner-body">{EXAMPLE_BANNER_BODY}</p>
         {/*
-          The provenance, one press away rather than in the first thing anybody reads.
+          The provenance, one press away.
           It's a record of how the raster beside it was produced and it stays on this surface for
           that reason: a DLI field with no provenance is indistinguishable from an invented one. But
           "65 x 88 cells at 0.4 m, baked on the CPU reference backend ... quantized to within 0.005
@@ -88,8 +88,8 @@ export const ExampleBanner = (): ReactElement | null => {
       </div>
       {/*
         Outside the fold, because it's the one thing on this card a reader arrives wanting: the
-        eighteen year old pressed it as the only invitation on screen. Folding it away with the
-        provenance would leave the card with nothing to do but be read
+        only invitation on screen. Folding it away with the provenance would leave the card with
+        nothing to do but be read
       */}
       <Action testId="action-example-clear" tone="primary" onClick={clearExample}>
         Clear the example and start my own

@@ -15,11 +15,10 @@ export const exampleRasterPath = (band: LatitudeBand): string =>
 /**
  * Which example to open on, and what to do when it's not there.
  *
- * The band comes from the browser's own time zone through a table generated from tzdb, so a
- * visitor at 33 N isn't shown a shade band computed for 42 N. The fallback chain matters as
- * much as the pick: a deploy carrying only some of the three, or a zone this build has never
- * heard of, lands on the temperate example rather than on nothing, and a deploy carrying none of
- * them opens the starting plot exactly as it did before any of this existed
+ * The band comes from the browser's own time zone through a table generated from tzdb, so a visitor
+ * at 33 N isn't shown a shade band computed for 42 N. The fallback chain matters as much as the
+ * pick: a deploy carrying only some of the three, or a zone this build has never heard of, lands on
+ * the temperate example, and a deploy carrying none of them opens the starting plot
  */
 export const BAND_FALLBACK: LatitudeBand = 'temperate'
 
@@ -33,8 +32,8 @@ export const BAND_FALLBACK: LatitudeBand = 'temperate'
  * `growingSeasonMeanTempC` covers its growing window only and would never read the July that would
  * kill it.
  *
- * What it ships with is one empty bed of four, and that is the honest answer rather than a
- * defect. Bed 3 stands in 71 to 79 percent cumulative shade, above the ceiling of every annual in
+ * What it ships with is one empty bed of four, and that is the honest answer.
+ * Bed 3 stands in 71 to 79 percent cumulative shade, above the ceiling of every annual in
  * the catalog. The only three crops carrying a measured ceiling above it are woodland
  * perennials that the climate gate rules out of Phoenix on the July they would have to stand
  * through. Nothing in a 163-crop catalog is both that shade-tolerant and that heat-tolerant, so
@@ -44,8 +43,8 @@ export const BAND_FALLBACK: LatitudeBand = 'temperate'
 export const SHIPPED_BANDS: readonly LatitudeBand[] = ['low', 'temperate', 'high']
 
 /**
- * The bands to try in order. Filtered to what is shipped so that the majority of the world's
- * zones, which are `low`, go straight to the fallback instead of paying for a 404 on first load
+ * The bands to try in order. Filtered to what is shipped, so a band with nothing baked goes
+ * straight to the fallback without paying for a 404 on first load
  */
 export const bandsToTry = (band: LatitudeBand): readonly LatitudeBand[] =>
   [band, BAND_FALLBACK].filter(
@@ -88,7 +87,7 @@ export interface ExampleGarden {
   readonly design: PersistedDesign
   readonly raster: DliRaster
   /**
-   * Derived here rather than shipped, for the same reason no derived slice is ever persisted.
+   * Derived here, for the same reason no derived slice is ever persisted.
    * The compliance checks are the store's, since they read the site's growing window
    */
   readonly bedLight: readonly BedLight[]

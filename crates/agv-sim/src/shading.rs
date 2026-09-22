@@ -93,11 +93,11 @@ fn ring_bounds(polygon: Polygon2D, transmittance: f64) -> GroundShadow {
 ///
 /// Sub-sampled inside each cell, because a cell either side of a shadow edge is part
 /// shaded and a single center sample would quantize the edge to the cell size. A blocked sample
-/// still passes a transmittance, which is what makes a semi-transparent quad a shade level rather
-/// than a switch: `transmittances[i]` for panel `i` where the slice reaches that far, else
-/// `module_transmittance` for every panel, an empty slice being the common case. A sample under
-/// more than one quad keeps the smallest of their transmittances, so a ray through two faces of
-/// one crown counts once
+/// still passes a transmittance, which is what makes a semi-transparent quad a shade level:
+/// `transmittances[i]` for panel `i` where the slice reaches that far, else
+/// `module_transmittance`. The slice is usually empty, so every panel uses `module_transmittance`.
+/// A sample under more than one quad keeps the smallest of their transmittances, so a ray through
+/// two faces of one crown counts once
 pub fn beam_visibility_raster(
     grid: &GridSpec,
     panels: &[Vec<Vec3M>],
@@ -196,7 +196,7 @@ pub fn penumbra_width_m(slant_distance_m: f64) -> f64 {
     SUN_ANGULAR_RADIUS_RAD * slant_distance_m
 }
 
-/// How much of a row its neighbor shades, which is a loss to the array rather than to the ground
+/// How much of a row its neighbor shades: a loss the array takes
 pub fn row_self_shade_fraction(
     collector_width_m: f64,
     pitch_m: f64,

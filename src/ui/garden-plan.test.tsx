@@ -106,10 +106,10 @@ describe('what the guided setup planted', () => {
   })
 
   /**
-   * The three answers the design search was run with have no editable home anywhere, and that is
-   * the decision rather than an omission: a second copy of them would be a second source of truth
-   * for one idea. What is owed is naming them and offering the way back to the one place that
-   * does change them, with everything already typed still in it
+   * The three answers the design search was run with have no editable home on this card, and that
+   * is the decision. Not an omission: a second copy of them would be a second source of truth for
+   * one idea. What is owed is naming them and offering the way back to the one place that does
+   * change them, with everything already typed still in it
    */
   it('names what the layout was optimized for and reopens the question that set it', async () => {
     getAppState().answerOnboarding({
@@ -161,9 +161,8 @@ describe('what the guided setup planted', () => {
 })
 
 /**
- * The panel used to list the crops the generation planted while the
- * planting question had since replaced them, so the old names stayed on screen for as long
- * as the step stayed open, which reads as a planting that failed. The list reads the plot now
+ * The list reads the plot, so once the planting question replaces the crops the generation planted,
+ * no stale name is left to read as a choice that failed
  */
 describe('the plan card follows the beds', () => {
   it('lists what is in each bed now, and counts it, off the plot rather than the snapshot', async () => {
@@ -194,9 +193,8 @@ describe('the plan card follows the beds', () => {
   })
 
   /**
-   * One fold at the foot of the plants step, closed. The card ran to four paragraphs and a bed
-   * list above the open step, and every persona who reached the editor scrolled past it; the bed
-   * cards on the step's face now say what is planted, and this is the record of why
+   * One fold at the foot of the plants step, closed. The bed cards on the step's face say what is
+   * planted, and this fold is the record of why
    */
   it('is one closed fold holding the whole record', async () => {
     await generate()

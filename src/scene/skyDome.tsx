@@ -26,7 +26,7 @@ export interface DomeProps {
 }
 
 /**
- * Uniforms are written during render rather than from an effect on purpose: drei renders the
+ * Uniforms are written during render, on purpose: drei renders the
  * environment cube in a layout effect, which would otherwise capture the previous sun
  */
 export const SkyDome = ({ name, sun, scaleM, sunDisc, cloud = 0 }: DomeProps): ReactElement => {

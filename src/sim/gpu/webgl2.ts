@@ -10,9 +10,9 @@ import type {
 import { sinDeg } from '../math'
 import { sunUnitVector } from '../solar'
 
-// document the alternative shadow-map path; the implemented path below is the analytic
-// ray/quad cast of the solar geometry document section 5.4 Path A, chosen because it matches the CPU oracle
-// exactly and needs no bias to tune
+// these constants document the alternative shadow-map path. The implemented path below is the
+// analytic ray/quad cast, chosen because it matches the CPU oracle exactly and needs no bias to
+// tune
 export const SHADOW_MAP_SIZE = 1024
 export const DEPTH_BIAS_CONSTANT = 2
 export const DEPTH_BIAS_SLOPE = 2.5
@@ -263,16 +263,12 @@ const createFloatTexture = (
 /**
  * Uploads onto the texture unit it names, and the unit is the whole point.
  *
- * `bindTexture` binds on whichever unit is ACTIVE, and this used to bind on whatever unit the
- * previous call had left active. The chunk loop below bound the panels on unit 0, then uploaded
- * the directions, which bound the direction texture on unit 0 as well before moving it to unit 1:
- * so the shader read its panel corners out of the DIRECTION texture on every draw. The bake was
- * shading the ground with sky directions read as panel geometry, which is why a bake changed
- * when the array was removed (no corners to read) and not when it was lowered, tilted or spread
- * (the corners it read were never the panels). The symptom was lowering
- * the panels from 3.4 m to 1.5 m and watching nothing change; the CPU reference disagreed with
- * this backend by up to 20 points of sky view on the default plot. `scripts/probe-bake-backends.mjs`
- * is the reproduction and the check
+ * `bindTexture` binds on whichever unit is ACTIVE. Binding two
+ * textures in a row without making each one's own unit active first crosses them: a later bind
+ * can land on the unit an earlier one used, so a shader ends up reading one texture's data
+ * through another's sampler. This function makes `unit` active before it binds, so every
+ * texture lands on the unit it names and nowhere else.
+ * `scripts/probe-bake-backends.mjs` checks this backend against the CPU reference
  */
 const uploadTexture = (
   gl: WebGL2RenderingContext,

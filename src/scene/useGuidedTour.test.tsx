@@ -140,7 +140,7 @@ describe('useGuidedTour', () => {
     // and the elevation has left where it started
     expect(inDegrees(Math.abs(end.phi - start.phi))).toBeGreaterThan(3)
     // without pulling the camera in or pushing it out: an orbit changes where it looks from, and
-    // a radius that drifts is the pose being accumulated rather than stated
+    // a radius that drifts is the pose being accumulated, when it should be stated directly
     expect(end.radiusM).toBeCloseTo(start.radiusM, 6)
     await renderer.unmount()
   })

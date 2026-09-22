@@ -43,11 +43,11 @@ const withRows = (help: string | undefined, rows: number | null): string | undef
 }
 
 /**
- * One sentence under the choice carries the split. Four bare figures, read
- * before choosing anything, left no way to tell whether they were an answer or the app's
- * default, and thirty percent looked missing when two of the four were
- * behind a fold. So the face carries the choice and one sentence about what it does, and the
- * four shares appear together, sliders and readouts, only when the fold is opened
+ * Said under the choice. Never as four figures beside it: four numbers up front make it unclear
+ * which are the choice and which are the app's default, and with two of the four behind a fold,
+ * as much as thirty percent of the shares is nowhere on the face. So the face carries the choice
+ * and one sentence about what it does, and the four shares appear together, sliders and
+ * readouts, only when the fold is opened
  */
 const OBJECTIVE_HELP =
   'Mostly food gives the plants more of the sunlight, mostly electricity gives the panels more.'

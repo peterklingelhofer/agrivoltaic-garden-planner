@@ -141,9 +141,9 @@ const numberOf = (raw: unknown): number | null => {
 /**
  * The newest annual row that actually carries a price.
  *
- * `sort` is asked for in the request, but the newest row is picked here rather than taken on
- * trust: a sort the upstream silently ignored would otherwise hand back a price from 2001 with
- * this year’s label on it, and the year is shown to the grower
+ * `sort` is asked for in the request, but the newest row is still picked here, by its year: a sort
+ * the upstream silently ignored would otherwise hand back a price from 2001 with this year’s label
+ * on it, and the year is shown to the grower
  */
 const newestPriced = (
   rows: readonly EiaRow[],
@@ -162,8 +162,8 @@ const newestPriced = (
  * The residential retail price for one state, or null.
  *
  * Null is a supported answer everywhere, and it's what a garden outside the United States gets:
- * there's no free per-country series with this coverage (`the economy document` 2c), so
- * the honest answer off the US grid is no price rather than a borrowed one. Nothing here throws.
+ * there's no free per-country series with this coverage, so
+ * the honest answer off the US grid is no price, and never a borrowed one. Nothing here throws.
  * The API key is added by the Worker at the edge and never exists in this bundle
  */
 export const fetchRetailPrice = async (

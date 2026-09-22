@@ -11,18 +11,18 @@ import { saturationVaporPressureKpa } from './vapor'
  * Which months a drawn deciduous tree is in leaf, from the Growing Season Index of Jolly, Nemani
  * and Running 2005 ("A generalized, bioclimatic index to predict foliar phenology in response to
  * climate", Global Change Biology 11(4): 619-632): three daily indicators, each running 0 to 1
- * between a floor and a ceiling, multiplied together and run through a moving mean. Four choices
- * on top of the paper's own rule are this app's: the mean is centered, ten days either side of
- * each day and wrapping past the typical year's end, so the paper's rule itself carries no added
- * lag; a calendar month counts as in leaf when the mean on its 15th day passes 0.5, because the
- * bake that reads this accumulates by month rather than by day; the day length behind the
- * photoperiod indicator is the standard sunrise-hour-angle formula on `spencerDeclination`, the
- * declination the solar geometry already carries; and a drawn tree reads the index with the
- * vapor-pressure-deficit indicator held at 1. The paper chose that indicator as a surrogate for
- * a soil water balance it couldn't compute, so that dry air stands for water the vegetation
- * can't reach. A garden tree stands where the beds are watered, and on a real year at Seville
- * the full index read it bare in July and August, the months its shade matters most. The term
- * is kept in `growingSeasonIndex` for the landscape reading the paper validated
+ * between a floor and a ceiling, multiplied together and run through a moving mean. Four choices on
+ * top of the paper's own rule are this app's. The mean is centered, ten days either side of each day
+ * and wrapping past the typical year's end, so the paper's rule itself carries no added lag. A
+ * calendar month counts as in leaf when the mean on its 15th day passes 0.5, because the bake that
+ * reads this accumulates by whole months. The day length behind the photoperiod indicator is the
+ * standard sunrise-hour-angle formula on `spencerDeclination`, the declination the solar geometry
+ * already carries. A drawn tree reads the index with the vapor-pressure-deficit indicator held at
+ * 1. The paper chose that indicator as a surrogate for a soil water balance it couldn't compute,
+ * so that dry air stands for water the vegetation can't reach. A garden tree stands where the beds
+ * are watered, and on a real year at Seville the full index read it bare in July and August, the
+ * months its shade matters most. The term is kept in `growingSeasonIndex` for the landscape reading
+ * the paper validated
  */
 
 // the paper's daily minimum-temperature indicator: 0 at or below the floor, 1 at or above the

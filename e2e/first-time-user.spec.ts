@@ -38,11 +38,11 @@ import {
  * ordinary person who has never heard of agrivoltaics gets a real garden out of it, whoever
  * they are and whatever they answer. So the personas differ along the axes the engine
  * branches on: objective, ambition, mounting, plot size, the unit it was measured in, exposure,
- * watering and experience, rather than being the same journey wearing different labels
+ * watering and experience, each its own journey
  *
  * Every persona is carried all the way: the questions, the comparison, the layout applied,
  * the beds placed in the light, the plants in those beds, the scene drawing them, and the
- * dated jobs and the shopping list that make it a garden rather than a picture. Nothing here
+ * dated jobs and the shopping list that make it a garden. Nothing here
  * pins an absolute light, yield, land-use or electricity figure, and no persona is pinned to
  * a crop or an archetype unless their own answer forces it
  */
@@ -78,7 +78,7 @@ interface Persona {
   readonly exposure: Exposure
   readonly experience: Experience
   readonly irrigation: boolean
-  /** Whether they look their own address up rather than taking the one already offered */
+  /** Whether they search for their own address, on top of accepting the one already offered */
   readonly searches?: boolean
 }
 
@@ -140,7 +140,7 @@ const PERSONAS: readonly Persona[] = [
 
 /**
  * The ease claim, as a number. Fourteen deliberate answers gets a persona from a cold page to a
- * planted garden, seventeen if they look their own address up rather than taking the place
+ * planted garden, seventeen if they look their own address up, without taking the place
  * already offered.
  *
  * The column asks the questions on four steps with three Nexts between them. The height limit sits
@@ -198,7 +198,7 @@ const answerAs = async (page: Page, user: Hands, persona: Persona): Promise<void
   /*
    * How much detail they want isn't asked here. The switch writes `experience`, whose only
    * reader is the comparison, so it appears on the step it acts on: a visitor meets the cards
-   * and then asks for the figures behind them, rather than answering a question about a screen
+   * and then asks for the figures behind them, without answering a question about a screen
    * they haven't seen. It's set in `waitForScenarios` instead
    */
   await user.click('action-step-next')
@@ -307,7 +307,7 @@ for (const persona of PERSONAS) {
     /*
      * Whether the figures are there is the only trace of the experience this persona chose.
      *
-     * Counted against the cards ON SCREEN rather than against every layout offered: the
+     * Counted against the cards ON SCREEN: the
      * comparison shows one card at a time, so `archetypes.length` is the size of the whole set
      * and was never going to be the number of figure blocks rendered. The claim being made is
      * unchanged and is the one that matters, that asking for the detail puts it on every card
@@ -404,7 +404,7 @@ for (const persona of PERSONAS) {
     const inSeason = windows.map(harvestMidpoint).find((day) => day !== today)
     expect(inSeason, 'every planting harvests on the day the app already opened on').toBeDefined()
 
-    // whatever is out of season on the day the app opened on says so rather than going missing
+    // whatever is out of season on the day the app opened on says so plainly
     const undrawnToday = await undrawnPlantings(page)
     expect(undrawnToday).toBeLessThanOrEqual(inBed)
     const beforeScrub = await canvasPixels(page)
@@ -448,16 +448,16 @@ for (const persona of PERSONAS) {
     /* --------------------- and then they can run the thing forward -------------------------- */
 
     /*
-      The mode this whole app converges on (Decision Record 14), walked by the same person who
-      has never heard of agrivoltaics. Nothing here pins a harvest, an outcome kind or a year:
-      what it pins is that a stranger arriving on this step is TOLD what it is, is told what
-      years they can run it on, can press once and get a report about their own plantings, and
-      can press again and see the two seasons side by side. That's the whole claim of the step
+      The mode this whole app converges on (Decision Record 14), walked by the same persona. Nothing
+      here pins a harvest, an outcome kind or a year: what it pins is that a visitor arriving on
+      this step is TOLD what it is, is told what years they can run it on, can press once and get a
+      report about their own plantings, and can press again and see the two seasons side by side.
+      That's the whole claim of the step
     */
     await step(page, 'seasons')
     await expect(page.getByTestId('readout-seasons-how')).toContainText(/press Run/)
     await expect(page.getByTestId('status-seasons-record')).not.toBeEmpty()
-    // nothing is missing: the run press is live rather than a sentence about what is
+    // nothing is missing: the run press stays live
     await expect(page.getByTestId('control-seasons-run')).toBeEnabled()
 
     await page.getByTestId('control-seasons-run').click()
@@ -475,8 +475,8 @@ for (const persona of PERSONAS) {
     await expect(page.getByTestId('list-seasons-record').locator('li')).toHaveCount(2)
     await expect(page.getByTestId('item-seasons-record-1')).toContainText(/Season 1/)
 
-    // the ease claim as a number, and what the number bought, in the run output rather than
-    // only in an assertion: a test that passed after two hundred clicks wouldn't be evidence
+    // the ease claim as a number, and what the number bought, has to reach the run output:
+    // an assertion that merely passed after two hundred clicks wouldn't be evidence
     const evidence = `${String(spent)} interactions -> ${applied}, ${String(bedCount)} beds, ${String(written)} plants, ${String(jobs.length)} dated jobs, ${String(undrawnToday)} of ${String(inBed)} in the selected bed out of season on day ${String(today)}`
     console.log(`[first-time user] ${persona.name}: ${evidence}`)
     test.info().annotations.push({ type: 'journey', description: evidence })
@@ -486,8 +486,8 @@ for (const persona of PERSONAS) {
 }
 
 /**
- * The fifth person, and the one the claim has to survive. A window box isn't a garden, and
- * the honest answer is to say so rather than to hand back a plot with nothing in it
+ * The fifth persona, and the one the claim has to survive. A window box isn't a garden, and the
+ * honest answer is to say so plainly
  */
 test('the window-box grower is told their space is too small rather than handed an empty plot', async ({
   page,

@@ -27,9 +27,9 @@ const turnDeg = (ring: Ring2D): number => {
 }
 
 /**
- * One house, sized and placed by typing rather than by drawing. Every field reads the footprint
- * live and writes it back through `upsertObstruction`, so a drag in Move mode and a number typed
- * here can never disagree about where the house stands
+ * One house, sized and placed by typing, beside drawing in Move mode. Every field reads the
+ * footprint live and writes it back through `upsertObstruction`, so a drag in Move mode and a
+ * number typed here can never disagree about where the house stands
  */
 const HouseCard = ({
   house,
@@ -127,7 +127,7 @@ const HouseCard = ({
 }
 
 /**
- * One tree, sized and placed the way a house is, plus its crown: a base and a top rather than
+ * One tree, sized and placed the way a house is, plus its crown: a base and a top, replacing
  * one height, whether it keeps its leaves, and how much light passes it in leaf and bare
  * (Decision Record 26)
  */

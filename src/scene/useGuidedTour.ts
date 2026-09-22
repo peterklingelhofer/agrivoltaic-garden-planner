@@ -9,15 +9,16 @@ import { clampPose, type OrbitLimits, poseOf, positionOf } from './flight'
 import { DEFAULT_TARGET, framingFor, framingForSubject, type Framing, type Triple } from './framing'
 
 /**
- * Slow enough to read the scene by. Held in degrees a second rather than in OrbitControls'
- * `autoRotateSpeed`, which steps per frame: on the software rasterizer the e2e suite runs, that
- * would be a tenth of the speed a visitor with a GPU sees, and an orbit whose speed is a
+ * Slow enough to read the scene by. Held in degrees a second, which stays the same regardless
+ * of frame rate. OrbitControls' own `autoRotateSpeed` steps per frame: on the software
+ * rasterizer the e2e suite runs, that would be a tenth of the speed a visitor with a GPU sees,
+ * and an orbit whose speed is a
  * property of the machine isn't an orbit anyone chose
  */
 export const TOUR_DEGREES_PER_SECOND = 2.4
 
 /**
- * The second axis, which is what makes this an orbit rather than a turntable.
+ * The second axis, which is what makes this an orbit.
  *
  * Azimuth alone is the motion a model on a rotating plinth has, and it says the object is the
  * subject. What the example is actually about is a shade band on the ground, and a shade band is
@@ -31,8 +32,8 @@ export const TOUR_DEGREES_PER_SECOND = 2.4
  *
  * The angle is set ABSOLUTELY from the pose the orbit started at, so nothing accumulates from frame
  * to frame. A drift of a hundredth of a degree a frame is invisible and puts the camera on the
- * ground inside a minute, and this file has already been bitten once by a pose accumulating
- * instead of being stated
+ * ground inside a minute, and this file has already paid for a pose that accumulated. The fix
+ * is to state it fresh every frame
  */
 const TOUR_RISE_DEGREES = 4
 const TOUR_RISE_SECONDS = 26
@@ -77,8 +78,8 @@ export interface GuidedTour {
 }
 
 /**
- * OrbitControls, structurally. Taken off the frame state rather than imported, because
- * `three-stdlib` is drei's dependency rather than ours, and because the hook has to work when
+ * OrbitControls, structurally. Read off the frame state directly. `three-stdlib` is drei's
+ * dependency, and this hook has to work when
  * there are no controls at all, which is how the unit tests render it
  */
 interface OrbitControlsLike extends OrbitLimits {
@@ -104,7 +105,7 @@ const limitsOf = (controls: OrbitControlsLike | null): OrbitLimits => controls ?
 /**
  * The one place a pose reaches the camera. `lookAt` is aimed at the same point that goes into
  * `controls.target`, which is what `update()` will aim it at on the next frame, so the two writers
- * agree by construction rather than by luck
+ * agree by construction
  */
 const applyPose = (
   camera: Camera,
@@ -158,7 +159,7 @@ export const useGuidedTour = (): GuidedTour => {
   const [driven, setDriven] = useState(false)
   const [reducedMotion] = useState(prefersReducedMotion)
   // Holds the key of the pose last aimed at, cleared whenever there's nothing to frame, so that
-  // the next time there is, the camera is placed fresh rather than left wherever it drifted to
+  // the next time there is, the camera is placed fresh
   const framedKey = useRef<string | null>(null)
   const grabbed = useRef(false)
   /**
@@ -169,8 +170,8 @@ export const useGuidedTour = (): GuidedTour => {
   const orbitPhi = useRef(0)
   const orbitSeconds = useRef(0)
 
-  // The orbit point has one writer, which is this callback, so the default one is written here
-  // too rather than by drei: see the note beside `OrbitControls` in `GardenScene`
+  // The orbit point has one writer, which is this callback: it writes the default one here
+  // as well. See the note beside `OrbitControls` in `GardenScene`
   const started = useRef(false)
 
   useEffect(() => {
@@ -192,10 +193,10 @@ export const useGuidedTour = (): GuidedTour => {
   }, [])
 
   /**
-   * The pose is written in a frame callback rather than an effect: r3f owns the camera, and this
+   * The pose is written in a frame callback: r3f owns the camera, and this
    * runs after OrbitControls' own update at priority -1, so the two never fight over one frame.
-   * The camera comes off the frame state rather than out of `useThree`, because the React
-   * Compiler's immutability rule refuses a write into anything a hook returned, and it's right
+   * The camera comes off the frame state. `useThree` returns a value the React Compiler's
+   * immutability rule refuses to let anything write into, and it's right
    * to: the render body isn't where a camera is moved
    */
   useFrame((state, delta) => {
@@ -255,11 +256,11 @@ export const useGuidedTour = (): GuidedTour => {
     requestStructuralRedraw()
     orbitSeconds.current += stepSeconds
     /*
-     * Written through the same pose coordinates the flights use, rather than by turning
-     * `camera.position` about y and calling `lookAt`. That older form could only ever move one
-     * axis, since a rotation about y is what azimuth IS, and it also left `controls.target`
-     * unwritten: harmless while the target never moved, and the exact shape the comment on
-     * `OrbitPose` describes being erased by `update()` the moment it does.
+     * Written through the pose coordinates of `flight.ts`. Turning `camera.position` about y and
+     * calling `lookAt` could only ever move one axis, since a rotation about y is what azimuth IS,
+     * and it would leave `controls.target` unwritten: harmless while the target never moves, and
+     * the exact shape the comment on `OrbitPose` describes being erased by `update()` the moment it
+     * does.
      *
      * Read against `framing.target`, because `currentPose` answers against the CONTROLS' target.
      * The two agree once `applyPose` has written one, and before that they don't:

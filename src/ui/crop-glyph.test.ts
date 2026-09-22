@@ -6,7 +6,7 @@ import { CROP_GLYPH } from './crop-glyph'
 
 /**
  * The mapping has to be total, and "total" here means against the catalog's own list of
- * classes rather than against this file's. `DLI_CLASSES` is what the crop schema validates every
+ * classes. `DLI_CLASSES` is what the crop schema validates every
  * crop against, so a class added there and missing here would ship crops with no picture, and the
  * type alone wouldn't catch it if the record were ever widened
  */

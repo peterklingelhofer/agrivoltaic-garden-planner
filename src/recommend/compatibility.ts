@@ -35,11 +35,10 @@ import { assignCanopyTier } from './stages/space'
 import { cropLabel } from '../data/crops'
 
 /**
- * Crop-vs-crop agronomy. Every gate the product already runs compares one crop
- * against the SITE; nothing compared two crops proposed for the same bed. Each
- * term below is computed from data the catalog already holds, carries its own
- * verdict and its own citations, and is reported separately so a suggestion can
- * be argued with rather than merely trusted
+ * Crop-vs-crop agronomy. Every other gate the product runs compares one crop against the SITE, and
+ * these terms compare two crops proposed for the same bed. Each term below is computed from data
+ * the catalog already holds, carries its own verdict and its own citations, and is reported
+ * separately so a suggestion can be argued with, and never merely trusted
  */
 export interface PairContext {
   readonly bed: Bed
@@ -184,8 +183,8 @@ export const phOverlap = (a: Crop, b: Crop): PhOverlap => {
 }
 
 /**
- * A crop whose absolute pH span is narrow enough to be physiology rather than a
- * preference can't be moved to a compromise, so disjoint optima where either
+ * A crop whose absolute pH span is narrow enough to reflect physiology
+ * can't be moved to a compromise, so disjoint optima where either
  * side is that narrow is a hard conflict. Blueberry, alone in
  * this catalog in optimizing below pH 6.2, is exactly that crop
  */

@@ -30,7 +30,7 @@ import { DEFAULT_PV_CHAIN_OPTIONS, runAnnualChain } from './chain'
  * for every garden, would tell a grower who mulched with straw and a grower who left bare soil the
  * same number.
  *
- * These measure the size of what was being hidden rather than assert a chosen answer: the
+ * These measure the size of what was being hidden, without asserting a chosen answer: the
  * relationship each one checks follows from the physics in `transposition.ts` and `bifacial.ts`,
  * and what makes them worth having is that they fail loudly if the cover ever stops reaching the
  * chain again, which is the defect that was actually there

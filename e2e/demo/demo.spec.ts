@@ -6,11 +6,11 @@ import { Director, installOverlay } from './overlay.ts'
 
 /**
  * The recording run. Not a test: nothing here is asserting that the product is correct, and a
- * failure here means the film couldn't be shot rather than that the app is broken.
+ * failure here means the film couldn't be shot. It doesn't mean the app is broken.
  *
  * It's a Playwright spec anyway, and that is the whole trick. Driving a demo needs exactly what
- * driving a test needs: a real browser, a built app, a way to wait for a control rather than
- * for a clock -- and Playwright already records video of the page it is driving. The alternative
+ * driving a test needs: a real browser, a built app, a way to wait for a control. Playwright
+ * already records video of the page it is driving. The alternative
  * was a screen recorder and a steady hand, which produces a film that is out of date the day the
  * UI moves and can't be re-shot without a person.
  *

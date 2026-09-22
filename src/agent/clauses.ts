@@ -24,10 +24,9 @@ const WEAK = ' and '
 /**
  * The shortest a clause may be, in words.
  *
- * Two, because a one-word half is almost always part of the phrase it was cut out of: splitting
- * "a bit of both" at its "and"-less seam isn't possible, but "salt and pepper" would leave
- * "salt", and a single word on one side of a conjunction is the signature of a list rather than
- * of a second request
+ * Two, because a one-word half is almost always part of the phrase it was cut out of: "salt and
+ * pepper" would leave "salt", and a single word on one side of a conjunction is the signature of a
+ * list
  */
 export const MIN_CLAUSE_WORDS = 2
 

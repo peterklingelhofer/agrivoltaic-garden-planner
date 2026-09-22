@@ -26,7 +26,7 @@ const openChat = async (page: Page): Promise<void> => {
 }
 
 /**
- * Waits on a NEW reply rather than on the send control coming back.
+ * Waits on a NEW reply arriving.
  *
  * Sending clears the box, and the control is disabled whenever the box is empty, so waiting for
  * it to re-enable waits forever: it's disabled for the right reason both before the reply and
@@ -76,7 +76,7 @@ test.describe('the agent on a phone', () => {
   /**
    * That an answer reaches the design as well as the transcript, which is the whole point: the
    * agent is a way IN to the same store the column writes to. Checked
-   * through the plan's own controls rather than through the store, because what a visitor can
+   * through the plan's own controls, because what a visitor can
    * verify is what matters and the store is deliberately not on `window`
    */
   test('understands a sentence and writes the answer into the design', async ({ page }) => {
@@ -116,7 +116,7 @@ test.describe('the agent on a phone', () => {
 
   /**
    * The recovery path. This router has no generative model behind it, so a sentence it can't
-   * place has to become something tappable rather than an apology: two taps is the difference
+   * place still becomes something tappable: two taps is the difference
    * between a novice carrying on and a novice leaving
    */
   test("turns a sentence it can't place into something to tap", async ({ page }) => {
@@ -171,7 +171,7 @@ test.describe('the agent on a phone', () => {
     const agent = await page.getByTestId('panel-agent').boundingBox()
     expect(canvas?.height ?? 0).toBeGreaterThan(100)
     expect(agent?.height ?? 0).toBeGreaterThan(100)
-    // the two share the screen rather than one covering the other
+    // the two share the screen, and neither covers the other
     expect((canvas?.y ?? 0) + (canvas?.height ?? 0)).toBeLessThanOrEqual((agent?.y ?? 0) + 1)
   })
 })
@@ -212,7 +212,7 @@ test.describe('on a desktop', () => {
     await page.getByTestId('action-toolbar-ask').click()
     await expect(page.getByTestId('panel-agent')).toBeVisible()
     await expect(page.getByTestId('input-agent')).toBeVisible()
-    // it takes the editor's column rather than a third one, so the garden is still there
+    // it takes the editor's column, so the garden is still there
     await expect(page.getByTestId('panel-sidebar')).toBeHidden()
     await expect(page.getByTestId('canvas-root')).toBeVisible()
   })
@@ -287,7 +287,7 @@ test.describe('on a desktop', () => {
     expect(grown.cut).toBe(false)
     expect(grown.height).toBeGreaterThan(oneLine)
 
-    // and it stops somewhere, rather than eating the transcript it belongs to
+    // and it stops somewhere, without eating the transcript it belongs to
     await box.fill(`${dictated} ${dictated} ${dictated}`)
     const capped = await box.evaluate((node) => node.getBoundingClientRect().height)
     expect(capped).toBeLessThan(200)
@@ -361,8 +361,7 @@ test.describe('on a desktop', () => {
 })
 
 /**
- * The other half of the focus rule, and the reason it is written against the pointer rather than
- * against a width.
+ * The other half of the focus rule, and the reason it is written against the pointer.
  *
  * On a laptop the caret belongs in the box: there's a keyboard attached and nobody opens this
  * surface to look at it. On a touch screen the same call throws the on-screen keyboard over the
@@ -390,7 +389,7 @@ test.describe('the two things that make it worth having', () => {
    * Place lookup, end to end through the same geocoder the site search uses.
    *
    * This is the one intent that reaches the network, and it's the first thing anybody says, so
-   * a failure here is a failure of the whole surface rather than of one feature
+   * a failure here is a failure of the whole surface
    */
   test('looks a place up and works from there, crediting whoever answered', async ({ page }) => {
     await openApp(page)
@@ -445,14 +444,15 @@ test.describe('the cold start', () => {
     const chips = page.getByTestId('readout-agent-opening').locator('.agent-chip')
     await expect(chips).toHaveCount(4)
     await chips.first().click()
-    // a chip that needs something answers by asking for it, rather than refusing
+    // a chip that needs something answers by asking for it
     await expect(lastReply(page)).toContainText(/town or an address/i)
   })
 
   /**
-   * A chip dispatches its intent rather than sending its own label back through the router.
-   * "Where the garden is" is a label and not a sentence anybody says, and it scores against the
-   * place exemplars about as well as a stranger's would: pressing it used to land elsewhere
+   * A chip dispatches its intent directly: it doesn't send its own label back through the router.
+   * "Where the garden is" is a label, the kind nobody actually says as a sentence, and it scores
+   * against the place exemplars about as well as any offhand phrase would, so the label sent back
+   * as text could land elsewhere
    */
   test('presses mean what they say, without being re-read as text', async ({ page }) => {
     await openApp(page)
@@ -467,9 +467,9 @@ test.describe('the cold start', () => {
 /**
  * A conversation, where each utterance depends on the ones before it.
  *
- * Every test above sends one sentence into a fresh surface, and that is precisely the shape that
- * hid the worst defect this feature had: the agent asked a question and didn't remember asking
- * it, so bare replies routed at 53% instead of 98%. One sentence at a time never notices
+ * Every test above sends one sentence into a fresh surface, and that shape can't catch an agent
+ * that forgets the question it asked: bare replies then route at only 53%, where one that remembers
+ * reaches 98%. One sentence at a time never notices
  */
 test.describe('a whole conversation', () => {
   test.use({ viewport: PHONE })
@@ -580,7 +580,7 @@ test.describe('a whole conversation', () => {
 
   /**
    * The answers reach the same store the column writes to, which is what makes the agent a way
-   * IN rather than a toy beside the product: each one is read back off the step that asks it
+   * IN: each one is read back off the step that asks it
    */
   test('writes each answer into the step that asks it', async ({ page }) => {
     await openApp(page)
@@ -633,7 +633,7 @@ test.describe('answering why', () => {
   })
 
   /**
-   * And when there's genuinely nothing, it says so rather than inventing one or pretending not
+   * And when there's nothing, it says so, without inventing one or pretending not
    * to have understood. This is the single place a language model would most want to help
    */
   test('admits to having no recorded answer instead of making one up', async ({ page }) => {
@@ -659,11 +659,10 @@ test.describe('answering why', () => {
     await openChat(page)
     await say(page, 'Amherst, Massachusetts')
     await say(page, 'design it for me')
-    // named rather than "use that one", because this test needs a design WITH PANELS and which
-    // of the five wins turns on scores a hair apart. It began landing on `no-array-control` on
-    // 2026-09-01, when the array
-    // geometry was fixed and every score shifted; a garden with no panels has no PV chain to
-    // show, which is the right answer to the wrong question for a test about provenance
+    // named explicitly, because this test needs a design WITH PANELS and which of the five wins
+    // turns on scores a hair apart. The winner can be `no-array-control`, and a garden with no
+    // panels has no PV chain to show, which is the right answer to the wrong question for a test
+    // about provenance
     await say(page, 'use the balanced one')
     await expect
       .poll(
@@ -698,11 +697,10 @@ test.describe('answering why', () => {
     await openChat(page)
     await say(page, 'Amherst, Massachusetts')
     await say(page, 'design it for me')
-    // named rather than "use that one", because this test needs a design WITH PANELS and which
-    // of the five wins turns on scores a hair apart. It began landing on `no-array-control` on
-    // 2026-09-01, when the array
-    // geometry was fixed and every score shifted; a garden with no panels has no PV chain to
-    // show, which is the right answer to the wrong question for a test about provenance
+    // named explicitly, because this test needs a design WITH PANELS and which of the five wins
+    // turns on scores a hair apart. The winner can be `no-array-control`, and a garden with no
+    // panels has no PV chain to show, which is the right answer to the wrong question for a test
+    // about provenance
     await say(page, 'use the balanced one')
     await expect
       .poll(
@@ -718,7 +716,7 @@ test.describe('answering why', () => {
     // short enough to run inside a sentence, and named in full to a screen reader
     await expect(marker).toHaveText('Faiman 2008')
     await expect(marker).toHaveAttribute('aria-label', /show this work in Sources/)
-    // drawn as a marker rather than typed as one, so the brackets are never in the copied text
+    // drawn as a marker, so the brackets are never in the copied text
     const bracket = await marker.evaluate(
       (el) => getComputedStyle(el, '::before').content + getComputedStyle(el, '::after').content,
     )
@@ -863,9 +861,9 @@ test.describe('the sentence embedder', () => {
   })
 
   /**
-   * The failure that actually hurt here was never a blank look, it was a confident wrong move.
-   * "Scratch that" put three readings inside five hundredths of each other and one of them
-   * forgets the design, so it offers rather than picking, and nothing changes while it asks
+   * The failure to guard against here is a confident wrong move. "Scratch that" puts three readings
+   * inside five hundredths of each other, and one of them forgets the design, so the agent offers
+   * the choice back and changes nothing while it asks
    */
   test('offers the readings when nothing separates them, and changes nothing', async ({ page }) => {
     test.setTimeout(180_000)
@@ -878,7 +876,7 @@ test.describe('the sentence embedder', () => {
       .toBe(true)
     await say(page, 'scratch that')
     await expect(lastReply(page)).toContainText(/could mean a couple of things/i)
-    // and every candidate is a control that says what it would do, rather than a guess carried out
+    // and every candidate is a control that says what it would do
     expect(await page.locator('[data-testid^="action-agent-chip-"]').count()).toBeGreaterThan(1)
   })
 
@@ -950,10 +948,10 @@ test.describe('coming back', () => {
   test.use({ viewport: PHONE })
 
   /**
-   * The answers already survived a reload: they go into the store through the same actions the
-   * wizard uses and are persisted with the design. The conversation about them didn't, so a
-   * visitor came back to a garden nobody had described to them and an agent that greeted them as
-   * a stranger. That reads as the agent having forgotten rather than the page having reloaded
+   * The answers survive a reload: they go into the store through the same actions the wizard uses
+   * and are persisted with the design. The conversation about them is kept too, or a visitor comes
+   * back to a garden nobody has described to them and an agent that greets them as if new to it,
+   * which reads as the agent having forgotten
    */
   test('remembers the conversation across a reload', async ({ page }) => {
     test.setTimeout(180_000)

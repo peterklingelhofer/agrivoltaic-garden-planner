@@ -30,12 +30,8 @@ const CONTROL: CandidateArchetype = 'no-array-control'
  * The tabs, in the order a reader who came for panels wants them: the pick first, then the other
  * layouts with panels, then the space with none, which is here for comparison.
  *
- * The control used to lead, because what the panels cost is only readable against no panels, and
- * that was right for cards laid side by side. As a pager it opened two visits in the newcomer
- * audit on "No panels at all", badged "Suggested for you", with the only green button on the
- * screen reading "Start with no panels and plant it"; the layouts with panels were a small gray
- * "Next ›" or a fold away. The comparison is still read against the control: its tab is always
- * there and says what it is
+ * The comparison is read against the control, the space with no panels, because what the panels
+ * cost is only readable against no panels. Its tab is always there and says what it is
  */
 const ordered = (
   scenarios: readonly DesignScenario[],
@@ -56,9 +52,8 @@ interface CardProps {
   readonly experience: Experience
   /**
    * Whether the site is in Massachusetts, whose SMART program the two regime flags quote.
-   * They were printed for every site: a plot in Denver and a plot in Portland
-   * both read "meet the Massachusetts fast-track rules", which is a rule for neither
-   * town. Outside the state the flags say nothing. The checks step still lists every regime
+   * Anywhere else, a Massachusetts-specific line would read as though the app had the wrong
+   * location. Outside the state the flags say nothing. The checks step still lists every regime
    */
   readonly massachusetts: boolean
   /** The sentence for a card another layout beats on both figures, or null */
@@ -68,11 +63,10 @@ interface CardProps {
 }
 
 /**
- * One layout, as the face of the step: a first line in plain words, three figures, what it
- * costs, what still grows, and the two presses. The pills went with the dock. "SUGGESTED FOR
- * YOU" and "MODERATE CONFIDENCE" in uppercase capsules added clutter on top of the card, and
- * orange-on-green when the card was selected. The same words in the
- * first line say the same thing
+ * One layout, as the face of the step: a first line in plain words, three figures, what it costs,
+ * what still grows, and the two presses. The first line carries "suggested for you" and the
+ * confidence as plain words: in uppercase capsules on top of the card they add clutter, and
+ * orange-on-green when the card is selected
  */
 const ScenarioCard = ({
   scenario,
@@ -142,7 +136,7 @@ const ScenarioCard = ({
         {baseline ? 'The same space with no panels on it. ' : 'What it costs you: '}
         {scenario.tradeoff}
         {/* the one archetype that stands panels on edge, so its shadow moves through the day
-            instead of sitting fixed under a tilted row: worth saying why it costs less light */}
+            while a tilted row's sits fixed. The sentence says why it costs less light */}
         {archetype === 'vertical-east-west'
           ? ' Upright panels throw a narrow shadow that sweeps across the ground through the day, so the beds keep more of the midday sun.'
           : ''}
@@ -155,7 +149,7 @@ const ScenarioCard = ({
 
       {/* a refusal means this option can't give the grower a bed at all, which isn't a
           detail to make anyone click for: it warns what NOT to expect from the button below,
-          so it stays beside the tradeoff rather than behind the disclosure with the rest */}
+          so it stays beside the tradeoff. It never sits behind the disclosure with the rest */}
       {scenario.layout.refusals.map((refusal) => (
         <p
           className="notice notice-warn"
@@ -174,9 +168,9 @@ const ScenarioCard = ({
         )}
       </p>
 
-      {/* the one flag that is a warning rather than a reading: more shade than the plants asked
-          for can take is something to know before the press below, so it stays out of the fold
-          when it's true and lives with the other flags when it isn't */}
+      {/* the one flag that is a warning: more shade than the requested plants can take is
+          something to know before the press below, so it stays out of the fold when it's true
+          and lives with the other flags when it isn't */}
       {scenario.flags.shade.withinBudget ? null : (
         <p
           className="notice notice-warn"

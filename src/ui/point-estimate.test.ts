@@ -127,7 +127,7 @@ describe('bands are confidence intervals and say so', () => {
       // a band whose endpoints meet is a point estimate in band clothing
       expect(band.interval.upper).toBeGreaterThan(band.interval.lower)
       // the term the band is said to be dominated by is one it lists, and this app's own
-      // crowding shift is listed by name rather than folded into the published curve
+      // crowding shift is listed by name and never folded into the published curve
       const sources = band.contributions.map((term) => term.source)
       expect(sources).toContain(band.dominantSource)
       expect(sources).toContain('crowding')

@@ -138,10 +138,10 @@ describe("a traditional rule is credited where it's applied", () => {
     await anchorOnBlueberry(harness)
     const credit = harness.get('readout-polyculture-tek-0')
     const said = credit.textContent ?? ''
-    // the rule's own title rather than its key, and the people it came from
+    // checks for the rule's own title and the people it came from. Its key never appears
     expect(said).not.toMatch(/polyculture-risk-spreading/)
     expect(said).toMatch(/from the .+\(/)
-    // the caveat is the point: nobody was asked, and that is said here rather than three steps away
+    // the caveat is the point: nobody was asked, and that is said here
     expect(said).toContain("Community endorsement wasn't sought")
     expect(
       harness.container.querySelectorAll('[data-testid^="item-polyculture-tek-0-"]').length,
@@ -259,7 +259,7 @@ describe('refusals are the feature', () => {
   })
 
   /**
-   * The one limiting factor a design causes rather than the site. A crop refused because the
+   * The one limiting factor a design causes on its own, separate from the site. A crop refused because the
    * panels shade it past its own ceiling would grow here fine with nothing over it, so reading
    * it as "this bed can't grow it" describes the wrong problem and hides the only part
    * the grower can act on
@@ -368,7 +368,8 @@ describe('the plain case for a combination', () => {
 })
 
 describe('the headline is prose, not a table', () => {
-  // a small fixture rather than the real catalog, so the assertion is about the joining, whatever common name the catalog happens to carry for these ids today
+  // a small fixture over the real catalog, because the assertion is about the joining,
+  // whatever common name the catalog happens to carry for these ids today
   const catalogFixture = ['blueberry', 'teaberry', 'apple'].map(
     (id) =>
       ({ id, taxonomy: { commonNames: [id] } }) as unknown as Parameters<

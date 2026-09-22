@@ -125,7 +125,7 @@ const Row = ({
   const evidence = threshold === null ? null : evidenceFor(String(item.cropId), threshold)
   return (
     // `data-crop` as well as the testid, which is the convention every other list of crops here
-    // follows: a row that is about a crop says which one in an attribute rather than in its name
+    // follows: a row that is about a crop says which one in an attribute
     <li
       className="rec-row"
       data-testid={`item-recommendation-${item.cropId}`}
@@ -228,7 +228,7 @@ const AUTO_RUN_STATE: Readonly<Record<string, string>> = {
  *
  * Every crop in the leading run is recommended with nothing against it, so the only thing left
  * to say about any of them is which part of the match scored lowest, and that is one sentence
- * for the run rather than one per row
+ * shared for the whole run
  */
 const tiedHeadNote = (ranked: readonly CropRecommendation[], tiedCount: number): string => {
   const weakest = [
@@ -329,7 +329,7 @@ export const RankingSection = (): ReactElement => {
       <AsyncNotice state={catalog} testId="status-catalog" idleLabel="Crop list not loaded" />
       <AsyncNotice state={sets} testId="status-recommendation" idleLabel="No ranking yet" />
       {/*
-        One switch above every bed rather than one inside each: the question is "how much of the
+        One shared switch above every bed: the question is "how much of the
         ranking do you want to read", which is asked of the list as a whole, and a plot of
         four beds carrying four of these would ask it four times and let them disagree
       */}
@@ -388,7 +388,7 @@ export const RankingSection = (): ReactElement => {
                     />
                   ))}
                 </ul>
-                {/* the count is said out loud rather than implied by a switch above, because a
+                {/* the count is said out loud here, because a
                     list that silently stops is a list that has been read to the end */}
                 {hidden === 0 ? null : (
                   <p

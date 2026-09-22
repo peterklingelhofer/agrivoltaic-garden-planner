@@ -48,8 +48,8 @@ export const SEA_LEVEL_M = 0 as Meters
 
 /**
  * The single place a site's elevation enters the solar chain. Where the lookup returned
- * nothing the observer sits at the sea-level reference and the site readout says the
- * elevation is unknown, rather than reporting an assumed 0 m as a measurement
+ * nothing the observer sits at the sea-level reference. The site readout calls the elevation
+ * unknown, keeping the assumed 0 m internal to the physics
  */
 export const observerFor = (site: Site): SpaObserver => {
   const elevationM = site.elevationM ?? SEA_LEVEL_M
@@ -89,7 +89,7 @@ export const profileAngle = (
   }
 }
 
-// ENU frame: +x East, +y North, +z Up (the solar geometry document section 0)
+// ENU frame: +x East, +y North, +z Up
 export const sunUnitVector = (
   elevationDeg: Degrees,
   azimuthDeg: Degrees,
@@ -106,7 +106,7 @@ export const sunUnitVector = (
  * the shape `state/sun.ts` wants for one instant and the reason the batched entry point is also
  * exported.
  *
- * It refuses rather than falling back. There's no second implementation to fall back TO, and one
+ * It refuses when the core is missing. There's no second implementation to fall back to, and one
  * that produced plausible numbers from a different algorithm would be worse than none
  */
 export const spaPosition = (utcMillis: EpochMillis, observer: SpaObserver): SolarPositionSample => {
@@ -203,7 +203,7 @@ export const solarPositionSeries = (
 
   /*
     The Rust core answers for the SPA only. Michalsky is a different algorithm, deliberately kept
-    as a cheap cross-check on the SPA rather than ported beside it, so asking for it here has to
+    in TypeScript as a cheap cross-check on the SPA, so asking for it here has to
     keep running the TypeScript whatever is installed. Getting that wrong would mean the check and
     the thing it checks were the same code
   */

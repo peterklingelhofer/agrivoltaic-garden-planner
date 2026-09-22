@@ -35,8 +35,7 @@ describe('the example framing', () => {
   it('stands on the side the panels face', () => {
     // rows RUNNING east-west are spaced north-south, and face south: the camera belongs south of
     // the array, which is +z in scene coordinates. `plotFacing` takes the direction the rows run,
-    // so it's 90 here and 270 for the mirror; it was 180 and 0 until 2026-09-01, when
-    // `standingDirection` read that field as the across-row axis rather than the along-row one
+    // so it's 90 here and 270 for the mirror
     const north = framingFor(plotFacing(90))
     expect(north?.position[2]).toBeGreaterThan(0)
     // and mirrored for an array whose rows are spaced north
@@ -68,7 +67,7 @@ const radiusOf = (framing: Framing | null): number => {
 
 describe('the guided framing', () => {
   // rows running east-west, as everywhere else in this file. These assertions are about
-  // distances rather than bearings, but a second convention in one file is a trap
+  // distances. Not bearings: a second convention in one file is a trap
   const plot = plotFacing(90)
 
   it('has nothing to frame before the geometry the subject names exists', () => {

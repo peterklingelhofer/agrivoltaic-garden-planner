@@ -47,10 +47,10 @@ const ditherHash = (x: number, y: number): number => {
 }
 
 /**
- * A shadow map casts all or nothing, so a crown's density is drawn as a stipple rather than a
+ * A shadow map casts all or nothing, so a crown's density is drawn as a stipple. Not a
  * flat block: each texel of this tile is fully opaque or fully clear, tiled over the crown by
  * `RepeatWrapping`, and the share left opaque is `coveredShare`. Cached per share so two trees
- * losing the same fraction of light to their crown draw the same tile rather than paying for it
+ * losing the same fraction of light to their crown draw the same tile, without paying for it
  * twice
  */
 const ditherTexture = (coveredShare: number): DataTexture => {

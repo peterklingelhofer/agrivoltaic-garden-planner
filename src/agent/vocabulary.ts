@@ -458,15 +458,15 @@ export const scopeSubjectIn = (text: string): ScopeTopic | null => {
  * Greetings, thanks and the other things people say that aren't about the garden.
  *
  * They need naming because the question about the PLACE accepts anything as a possible place
- * name, which is right for "Amherst" and absurd for "hiya": a real session opened with a greeting
- * and the agent sent it to the geocoder. "Ta" at the end of the same session was met with "I didn't follow that", which is a poor way to be thanked
+ * name, which is right for "Amherst" and absurd for "hiya": it goes to the geocoder as a greeting,
+ * and "ta" at the end is met with "I didn't follow that", which is a poor way to be thanked
  */
 /**
- * The pleasantries that are gratitude rather than salutation.
+ * The pleasantries that are gratitude.
  *
- * A real session ended with "thanks" and was answered "Hello." Both are pleasantries and both
- * deserve better than the geocoder, which is why they share an intent, but they're not the same
- * thing said twice: answering thanks with a greeting reads as an agent that heard a noise
+ * "Thanks" answered with "Hello." Both are pleasantries and both deserve better than the
+ * geocoder, which is why they share an intent, but they're not the same thing said twice:
+ * answering thanks with a greeting reads as an agent that heard a noise
  */
 export const THANKS: readonly string[] = ['thanks', 'thank you', 'ta', 'cheers', 'nice one']
 
@@ -592,7 +592,7 @@ const WORD_NUMBER: Readonly<Record<string, number>> = {
  *
  * Words as well as digits, because "about two meters" is how a height limit gets described out
  * loud and refusing it sends someone back to a slider they were trying to avoid. Feet are read
- * and converted rather than refused: the app is metric throughout and a grower who thinks in feet
+ * and converted: the app is metric throughout and a grower who thinks in feet
  * isn't going to convert on our behalf
  */
 export const lengths = (text: string): readonly number[] => {
@@ -632,14 +632,6 @@ export const lengths = (text: string): readonly number[] => {
   return found.sort((a, b) => a.at - b.at).map((entry) => entry.meters)
 }
 
-/**
- * `cropVocabulary`, further down: the crops, as everything the catalog has ever called them.
- *
- * `commonNames` and `synonyms` are already curated per crop and already carry the regional
- * alternatives: courgette and zucchini, coriander and cilantro, aubergine and eggplant. So this
- * needs no vocabulary of its own and can't drift from the catalog it is matching against.
- * The accepted binomial goes in too, for the small number of growers who would type one
- */
 /**
  * The answer vocabulary an intent's slot is drawn from, where it has one.
  *
@@ -706,8 +698,8 @@ const heads = new WeakMap<readonly Crop[], ReadonlyMap<string, readonly CropId[]
  * cow, pigeon, field. Those are the commonest words a beginner types, and without this every one of
  * them would find nothing at all.
  *
- * It returns EVERY crop sharing the head noun rather than guessing at one, and that turns out to
- * be the right answer rather than a compromise. "I do not want beans" means all five of them, and
+ * It returns EVERY crop sharing the head noun, and that turns out to
+ * be the right answer. "I do not want beans" means all five of them, and
  * "I want beans" means the ranking should pick whichever bean this bed's light can carry. That's
  * the decision this whole application exists to make, and the router shouldn't pre-empt it
  */
@@ -744,13 +736,21 @@ export const cropsByHead = (catalog: readonly Crop[]): ReadonlyMap<string, reado
 
 const built = new WeakMap<readonly Crop[], readonly Candidate<CropId>[]>()
 
+/**
+ * `cropVocabulary`, further down: the crops, as everything the catalog has ever called them.
+ *
+ * `commonNames` and `synonyms` are already curated per crop and already carry the regional
+ * alternatives: courgette and zucchini, coriander and cilantro, aubergine and eggplant. So this
+ * needs no vocabulary of its own and can't drift from the catalog it is matching against.
+ * The accepted binomial goes in too, for the small number of growers who would type one
+ */
 export const cropVocabulary = (catalog: readonly Crop[]): readonly Candidate<CropId>[] => {
   /*
-    Memoized on the catalog itself, because the catalog is loaded once and then never
-    changes, and building this isn't free: 163 crops with four or five names each is about 650
-    phrases to normalize and sort. It was being rebuilt once per candidate intent, twenty-one
-    times for every sentence typed, which measured at ~100 ms a sentence in node. A WeakMap, so a test that loads a second catalog gets a second vocabulary
-    rather than the first one's answers
+    Memoized on the catalog itself, because the catalog is loaded once and then never changes,
+    and building this isn't free: 182 crops with two or three names each is about 480 phrases to
+    normalize and sort. Rebuilt once per candidate intent for every sentence typed, it measured ~100
+    ms a sentence in node. A WeakMap, so a test that loads a second catalog gets a second
+    vocabulary of its own
   */
   const held = built.get(catalog)
   if (held !== undefined) return held

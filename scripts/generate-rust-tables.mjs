@@ -8,9 +8,9 @@
  * `perez-tables.ts` stays generated, because `src/sim/skydome.ts` still reads the Perez 1993
  * luminance table from it and skydome isn't ported.
  *
- * `the port document` names this as the thing that quietly forks: these tables are hand-maintained
- * TypeScript, and a Rust port that retypes them has two sources of truth and no way to notice when
- * they drift. Nobody diffs hundreds of rows of astronomical or radiometric coefficients by eye.
+ * A Rust port that retypes these tables would fork quietly: two hand-maintained sources of truth
+ * with no way to notice when they drift. Nobody diffs hundreds of rows of astronomical or
+ * radiometric coefficients by eye.
  *
  * So they're not retyped. Node 24 imports the `.ts` directly (type stripping, no build step and
  * no parser of our own), and this writes what it read. `bun run generate` runs it and CI diffs the
@@ -18,7 +18,7 @@
  *
  * The direction is deliberate: TypeScript is upstream because that is where the tables have been
  * reviewed and tested against the published sources. If the Rust crate ever becomes the reference
- * implementation, reverse this file rather than editing both ends.
+ * implementation, reverse this file and stop editing both ends.
  *
  *     node scripts/generate-rust-tables.mjs
  */
@@ -48,7 +48,7 @@ const literal = (value) => {
  * `chunk` wraps a flat list at that many values per line. Without it the DIRINT table is one
  * 1 260-value line about nine thousand characters wide, which no diff can say anything useful
  * about. Chunking it at its own innermost dimension gives one line per precipitable-water group,
- * so a changed coefficient shows up as a changed group rather than as the whole table
+ * so a changed coefficient shows up as a changed group
  */
 const emit = (name, rows, chunk) => {
   if (!Array.isArray(rows) || rows.length === 0) throw new Error(`${name} is empty or not a table`)
