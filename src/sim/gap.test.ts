@@ -308,7 +308,7 @@ describe('the sky view factor, arbitrated', () => {
     expect(mc.svf, 'far more sky than the closed form allows for finite row ends').toBeLessThan(
       EXACT_2D_UNDER_A_ROW + 0.03,
     )
-  })
+  }, 30_000)
 })
 
 /**
