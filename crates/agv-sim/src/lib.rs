@@ -1,4 +1,4 @@
-//! The agrivoltaic garden designer's physics core.
+//! The agrivoltaic garden model's physics core.
 //!
 //! One implementation of the numbers, callable from the browser through wasm and from a native
 //! binary directly. The physics here is the part of the application worth sharing with anything

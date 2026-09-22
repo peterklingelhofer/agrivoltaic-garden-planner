@@ -2,7 +2,7 @@
 name = "agv-sim"
 version = "0.1.0"
 edition = "2021"
-description = "The agrivoltaic garden designer's physics core: solar geometry, shared by the web app and anything else that needs the same answers"
+description = "The agrivoltaic garden model's physics core: solar geometry, shared by the web app and anything else that needs the same answers"
 license = "Apache-2.0"
 publish = false
 
