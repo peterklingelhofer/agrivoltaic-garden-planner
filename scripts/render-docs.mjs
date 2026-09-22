@@ -18,7 +18,7 @@ import { marked } from 'marked'
 const ROOT = new URL('../', import.meta.url)
 const OUT = new URL('dist/docs/', ROOT)
 
-const SITE_TITLE = 'Agrivoltaic Garden Designer'
+const SITE_TITLE = 'Agrivoltaic Garden Model'
 
 /**
  * What ships, in reading order: a reader arriving cold should meet the decision record first
@@ -178,10 +178,10 @@ const main = () => {
     title: 'How this works, and where the numbers come from',
     home: '/',
     description:
-      "The modeling documents behind the Agrivoltaic Garden Designer: what it computes, what each figure rests on, and which claims it can't yet source.",
+      "The modeling documents behind the Agrivoltaic Garden Model: what it computes, what each figure rests on, and which claims it can't yet source.",
     body: `<h1>How this works, and where the numbers come from</h1>
       <p class="note">${esc(STANDING_NOTE)}</p>
-      <p>The Agrivoltaic Garden Designer models the light a solar array leaves on the ground of a
+      <p>The Agrivoltaic Garden Model computes the light a solar array leaves on the ground of a
       garden at a real address, and ranks crops against what it measures there. These are the
       documents behind it. Claims the project can't source are listed as gaps in the citation
       corpus.</p>
