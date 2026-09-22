@@ -209,10 +209,7 @@ const waitForLight = async (d: Director): Promise<void> => {
 export const BEATS: readonly Beat[] = [
   /* ---------------------------- 1. what you land on ---------------------------- */
   {
-    chapter: [
-      'Agrivoltaic garden designer',
-      'Where the panels go, and what still grows underneath',
-    ],
+    chapter: ['Agrivoltaic garden model', 'Where the panels go, and what still grows underneath'],
     caption:
       'This tool computes where solar panels could stand over a garden, and what will still grow in the shade they cast.',
     cuts: BOTH,
@@ -696,7 +693,7 @@ export const BEATS: readonly Beat[] = [
     },
   },
   {
-    chapter: ['Agrivoltaic garden designer', 'A planning estimate you can argue with, and check'],
+    chapter: ['Agrivoltaic garden model', 'A planning estimate you can argue with, and check'],
     caption: '',
     cuts: BOTH,
     run: async (d) => {

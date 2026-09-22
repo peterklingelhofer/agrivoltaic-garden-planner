@@ -1,6 +1,8 @@
-# Agrivoltaic garden designer
+# Agrivoltaic garden model
 
-Plan a vegetable garden and the solar panels above it, together, for a real address.
+A site-specific model of the light a solar array leaves on the ground, and of which crops that
+light still supports. Every quantitative claim carries its source, and where a figure rests on an
+inference it says so.
 
 **[Live app](https://garden.peterklingelhofer.com)** · [Modelling documents](https://garden.peterklingelhofer.com/docs/)
 
@@ -11,8 +13,6 @@ simulates how much light reaches the ground once panels are over it, and compute
 still suit each bed and what to plant when. The point of the tool is the trade it makes visible:
 every panel that generates electricity takes light off the ground, and the app measures what that
 costs.
-
-Every quantitative claim carries its source. Where a figure rests on an inference, it says so.
 
 It works at **garden scale**: beds a person can reach across, paths a wheelbarrow fits down,
 arrays of a few rows. Farm planning is out of scope: it models no tractor or implement access.

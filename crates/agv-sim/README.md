@@ -1,6 +1,6 @@
 # agv-sim
 
-The physics core of the agrivoltaic garden designer, in Rust: one implementation of the numbers,
+The physics core of the agrivoltaic garden model, in Rust: one implementation of the numbers,
 callable from the browser through wasm and from a native binary directly. A second hand-written
 copy of the Solar Position Algorithm would be a second thing to be wrong.
 
