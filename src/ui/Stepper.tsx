@@ -28,9 +28,8 @@ export interface StepDefinition<T extends string> {
    */
   readonly requirement: Requirement | null
   /**
-   * The one step to look at after the open one. Six personas lost the thread at the same
-   * moment, when the guided setup handed over and nothing on screen said where to go: the list
-   * showed what was open and what was locked, and never what came next
+   * The one step to look at after the open one. When the guided setup hands over, this is what says
+   * where to go: the list alone shows what is open and what is locked, and never what comes next
    */
   readonly next?: boolean
 }
@@ -47,10 +46,8 @@ export interface StepperProps<T extends string> {
    */
   readonly selected: T | null
   /**
-   * A key that changes when the open step was chosen by the app rather than by a press, and
-   * should land at the top of the column the way a press does. The guided setup opens the
-   * plants step as it hands over, and the header used to sit under two cards of prose, with
-   * 48,000 characters of the step below the fold
+   * A key that changes whenever the app itself picks the open step, and should land at the top of
+   * the column the way a press does. The guided setup opens the plants step as it hands over
    */
   readonly landOn?: unknown
   onSelect(id: T): void
@@ -127,7 +124,7 @@ const createLanding = (): Landing => {
     const deadline = performance.now() + LANDING_MS
     const land = (): void => {
       const target = head()
-      // jsdom has neither, and a browser missing one simply doesn't scroll rather than throws
+      // jsdom has neither, and a browser missing one simply skips the scroll, without throwing
       if (typeof target?.scrollIntoView !== 'function') {
         stop()
         return
@@ -145,7 +142,7 @@ const createLanding = (): Landing => {
     }
     frame = requestAnimationFrame(() => {
       /*
-        Registered here rather than beside the press, because the press is one of them. A keydown
+        Registered at this level, because the press is one of them. A keydown
         handler that adds a keydown listener to `window` is adding it to a node the event hasn't
         bubbled to yet, so the very keystroke that opened the step would cancel its own landing
       */
@@ -170,15 +167,10 @@ const createLanding = (): Landing => {
 /**
  * The sidebar as a numbered list with one thing open at a time.
  *
- * This replaced three tabs that stacked up to ten independent panels in one scrolling column.
- * The complaint that produced it named the symptom exactly: questions about the solar array,
- * the light simulation and which town the garden is in were all adjustable in the same scroll,
- * in an order unrelated to which of them the others depend on.
- *
- * An accordion rather than a tablist, and the distinction isn't cosmetic. Tabs say these are
- * peers, pick one. A numbered list that locks says these have an order, and here is where you're in it. The steps are the dependency chain, so the order isn't a preference, and a step
- * whose prerequisite is missing says which one and offers the press that settles it rather than
- * going quietly inert.
+ * An accordion. The distinction from a tablist isn't cosmetic. Tabs say these are
+ * peers, pick one. A numbered list that locks says these have an order, and here is where you're
+ * in it. The steps are the dependency chain, so the order isn't a preference, and a step
+ * whose prerequisite is missing says which one and offers the press that settles it.
  *
  * A locked step still opens. Refusing the click would hide the very sentence explaining the
  * refusal, and the reason a visitor clicks a locked step is to find out why it's locked
@@ -251,15 +243,15 @@ export const Stepper = <T extends string>({
   /**
    * The press lands on the step it opened.
    *
-   * It didn't, and on a phone that is the whole screen. Measured at 375x667 with the ranking
-   * read to the bottom, pressing "When do you plant it?" left the column at the top of the list:
-   * what filled the screen was the first step's title and the name of the town, and the panel
-   * that had just been asked for started 420px down a 570px window. From the middle of a step it
-   * was worse than useless rather than merely unhelpful, because the scroll offset was simply
-   * kept: pressing "What can you grow?" from 2,142px down landed inside a sow-day dropdown
-   * belonging to a bed, with nothing on screen naming the step it was in.
+   * On a phone the step is the whole screen. Measured at 375x667 with the ranking read to the
+   * bottom, a press on "When do you plant it?" that doesn't land leaves the column at the top of
+   * the list: what fills the screen is the first step's title and the name of the town, and the
+   * panel just asked for starts 420px down a 570px window. From the middle of a step it is worse
+   * than useless, because the scroll offset is simply kept: pressing "What can you grow?" from
+   * 2,142px down lands inside a sow-day dropdown belonging to a bed, with nothing on screen naming
+   * the step it is in.
    *
-   * `scrollIntoView` on the header rather than a computed offset, so it's the scrolling
+   * `scrollIntoView` on the header, so it's the scrolling
    * ancestor's problem which element that is: the sidebar is the scroller on a laptop and the
    * whole stage is the scroller on a phone, and neither is named here.
    *
@@ -343,10 +335,10 @@ export const Stepper = <T extends string>({
                 aria-describedby={locked ? `step-locked-${step.id}` : undefined}
               >
                 {/*
-                  The number always, and the lock beside it rather than instead of it.
-                  A padlock replacing the number left the list reading 1, 2, 3, lock, lock, lock,
-                  lock, 8, 9: the count the design set up stops halfway and the steps that are
-                  waiting lose the one thing that says where they come in the order
+                  The number always, and the lock beside it, always together. A padlock replacing
+                  the number would leave the list reading 1, 2, 3, lock, lock, lock, lock, 8, 9: the
+                  count the design set up stops halfway and the steps that are waiting lose the one
+                  thing that says where they come in the order
                 */}
                 <span className="step-number" aria-hidden="true" data-locked={locked}>
                   {index + 1}
@@ -394,7 +386,7 @@ export const Stepper = <T extends string>({
                 )}
                 {/*
                   What a locked step is waiting for, under its title where the summary would go.
-                  The reason lived in a hover title and a hidden span, so five padlocks could
+                  With the reason only in a hover title and a hidden span, five padlocks could
                   appear with nothing said about why. The sentence is the same one the open step
                   prints, cut to one line by the stylesheet
                 */}
@@ -409,7 +401,7 @@ export const Stepper = <T extends string>({
                 ) : null}
               </button>
             </h2>
-            {/* a section rather than a div with the role spelled out: an accessible name is
+            {/* a section here carries its own role: an accessible name is
                 what promotes a section to a landmark, and `aria-labelledby` is giving it one */}
             <section
               className="steppanel"

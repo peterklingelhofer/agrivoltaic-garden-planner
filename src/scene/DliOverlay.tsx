@@ -62,8 +62,8 @@ export const DliOverlay = ({
   )
   useEffect(() => () => texture?.dispose(), [texture])
 
-  // the plot's own outline, holes and all, rather than a plane the size of the field: the
-  // field reaches past the plot wherever a panel stands near its edge, and a light map spilling
+  // the plot's own outline, holes and all. A plane the size of the field would reach past the
+  // plot wherever a panel stands near its edge, and a light map spilling
   // over the fence read as a plot that was bigger than it is. The texture is placed by where
   // each vertex stands in the field's own extent, so the two line up whatever shape the plot is
   const geometry = useMemo(

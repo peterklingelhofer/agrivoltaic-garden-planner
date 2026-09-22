@@ -11,7 +11,7 @@ import { geocodeListBody, searchAddress } from './fixtures/qa.ts'
  * Nothing here asserts a geocoder's answer. It asserts the contract between the list and
  * the rest of the app: the listbox is a listbox, the keyboard reaches every option,
  * Escape puts focus back where it came from, and choosing a result RESOLVES a site
- * rather than filling in two number fields
+ * without filling in two number fields
  */
 
 const HITS = [
@@ -71,7 +71,7 @@ test('Down, Up, Home and End move the active option and the focus with it', asyn
   await page.keyboard.press('ArrowUp')
   await expect(rows[0]!).toBeFocused()
 
-  // and it wraps, rather than dead-ending at the edges
+  // and it wraps, without dead-ending at the edges
   await page.keyboard.press('ArrowUp')
   await expect(rows[HITS.length - 1]!).toBeFocused()
 
@@ -110,10 +110,9 @@ test('the Close results button dismisses without choosing', async ({ page }) => 
 })
 
 /**
- * The regression. Choosing a result used to write the coordinates and stop, so the click
- * looked inert until the user found "Resolve these coordinates". Selecting IS resolving:
- * the list closes, the selection is confirmed, and the site readouts fill from the
- * chosen hit rather than from whatever was in the latitude field
+ * The regression. A click that only wrote the coordinates would look inert until the user found
+ * "Look up these coordinates". Selecting IS resolving: the list closes, the selection is confirmed,
+ * and the site readouts fill from the chosen hit, replacing whatever was in the latitude field
  */
 test('clicking a result resolves the site, not just the coordinates', async ({ page }) => {
   test.setTimeout(SITE_TIMEOUT_MS + 120_000)

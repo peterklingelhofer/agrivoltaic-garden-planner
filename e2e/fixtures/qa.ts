@@ -106,7 +106,7 @@ export const readNumber = async (locator: Locator): Promise<number> => {
 /**
  * Every crop id the page is currently listing under one testid prefix. The rows carry
  * `data-crop` so a planting, a plan entry and a refusal are all read the same way and none
- * of them has to be parsed out of prose. Read off the document rather than the screen, so
+ * of them has to be parsed out of prose. Read off the document, so
  * rows behind a closed fold count too
  */
 export const cropsUnder = (page: Page, prefix: string): Promise<readonly string[]> =>
@@ -256,7 +256,7 @@ export const openCombinations = async (page: Page): Promise<void> => {
   })
 }
 
-/** Each suggestion's crops, read off the row rather than parsed back out of its prose */
+/** Each suggestion's crops, read off the row directly */
 export const suggestedCombinations = (page: Page): Promise<readonly string[]> =>
   page
     .locator('[data-testid^="item-polyculture-suggestion-"]')
@@ -270,7 +270,7 @@ export const refusalsByCause = (page: Page, cause: string): Promise<readonly str
 /* ------------------------------- saved designs ------------------------------- */
 
 /**
- * The key `src/state/persist.ts` writes under. Restated here rather than imported because
+ * The key `src/state/persist.ts` writes under. Restated here, because
  * the e2e project compiles under `nodenext` and doesn't resolve `src`
  */
 export const STORAGE_KEY = 'agrivoltaic-garden-designer/design'
@@ -385,7 +385,7 @@ export const readBand = async (locator: Locator): Promise<readonly [number, numb
 /**
  * The engine runs one annual bake per candidate before the comparison can be drawn. It's
  * about a second on a GPU-backed browser and several on a software rasterizer, so the wait
- * is generous while still being a wait rather than an indefinite one
+ * is generous while still being a bounded wait
  */
 export const DESIGN_TIMEOUT_MS = 240_000
 
@@ -404,11 +404,8 @@ export const searchLayouts = async (page: Page): Promise<void> => {
 /**
  * The comparison shows ONE layout at a time, chosen from a row of tabs that names every layout.
  *
- * It used to lay every card out at once, then became a pager with a fold for the layouts the
- * search could separate from its pick, and a fold is easy to miss: the card above it
- * was "No panels at all" and nothing suggested more below. The row of names is
- * what these helpers read now: every layout is a tab, a tab press shows its card, and a set of
- * one renders no row at all, which is handled by reading the one card that is there
+ * The row of names is what these helpers read: every layout is a tab, a tab press shows its card,
+ * and a set of one renders no row at all, which is handled by reading the one card that is there
  */
 const layoutTabs = (page: Page): Locator => page.locator('[data-testid^="action-onboarding-show-"]')
 
@@ -464,11 +461,10 @@ export const QUESTION_STEPS = ['place', 'ground', 'wants', 'panels'] as const
  * Straight through the questions on their defaults, which is what somebody trying it out does,
  * ending on the comparison the search lands.
  *
- * Waits for each step to be open before pressing Next on it, rather than pressing the same button
- * N times and trusting the count: a press landing mid-render is swallowed, and the failure reads
- * as the column having stopped in the middle rather than as a race. Asserting the step first also
- * makes a wrong ORDER fail here, naming the step it actually reached, instead of somewhere
- * further on
+ * Waits for each step to be open before pressing Next on it. It never presses the same button
+ * N times while trusting the count: a press landing mid-render is swallowed, and the failure reads
+ * as the column having stopped in the middle. Asserting the step first also
+ * makes a wrong ORDER fail here, naming the step it actually reached
  */
 export const answerEveryQuestion = async (page: Page): Promise<void> => {
   await step(page, 'place')
@@ -485,7 +481,7 @@ export const activeTestId = (page: Page): Promise<string> =>
 /**
  * Walks the tab order to a control and leaves focus on it. Nothing here clicks, so a
  * journey built out of these is a journey a keyboard could have made, and a control that
- * can't be tabbed to fails here rather than being quietly clicked anyway
+ * can't be tabbed to fails here, and is never quietly clicked anyway
  */
 export const tabTo = async (page: Page, testId: string, limit = 80): Promise<void> => {
   for (let step = 0; step < limit; step += 1) {
@@ -639,7 +635,7 @@ export const harvestMidpoint = (window: PlantingWindow): number =>
 
 /**
  * How many of the selected bed's plantings the panel says aren't in the ground today. The
- * notice is absent when every one of them is, which is a zero rather than a missing reading
+ * notice is absent when every one of them is, which is a zero
  */
 export const undrawnPlantings = async (page: Page): Promise<number> => {
   await step(page, 'plants')

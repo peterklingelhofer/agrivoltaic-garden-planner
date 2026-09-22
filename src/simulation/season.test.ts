@@ -233,7 +233,7 @@ describe('one season of the garden, as a value', () => {
     expect(thirsty.kind).toBe('harvested')
     expect(soaked.kind).toBe('harvested')
     // the wet year's band is capped at a full crop before the seasonal PAR term widens it, so
-    // the honest comparison is between the two bands rather than against one
+    // the honest comparison holds the two bands against each other
     expect(thirsty.band?.interval.upper ?? 0).toBeGreaterThan(soaked.band?.interval.upper ?? 2)
     expect(thirsty.band?.interval.upper ?? 0).toBeGreaterThan(1)
   })
@@ -292,9 +292,9 @@ describe('one season of the garden, as a value', () => {
   })
 
   it('counts a planting the ground refused as a zero in the harvest share', () => {
-    // the standing this feeds is a land equivalent ratio: per bed of ground rather than per
-    // successful sowing, so a bed that grew nothing is a zero in the mean and not an absence
-    // from it, and ignoring a rotation warning stops being free
+    // the standing this feeds is a land equivalent ratio, counted per bed of ground, so a bed
+    // that grew nothing counts as a zero in the mean, and ignoring a rotation warning stops
+    // being free
     const plot = plotFixture([
       bedFixture('a', { plantings: [planting('a', 'tomato'), planting('a', 'carrot')] }),
     ])
@@ -466,7 +466,7 @@ describe('what a season costs', () => {
     expect(economy?.buildCostUsd).not.toBeNull()
     expect(economy?.electricityValue).toBeNull()
     expect(economy?.price).toBeNull()
-    // no value is no payback rather than a payback of forever
+    // no electricity value means no payback figure
     expect(economy?.paybackYears).toBeNull()
     expect(economy?.managementTasks.length ?? 0).toBeGreaterThan(0)
   })
@@ -501,7 +501,7 @@ describe('what a season costs', () => {
     )
     for (const task of tasks) expect(fromRules.has(task)).toBe(true)
     expect(tasks).toContain('Destroy or treat infested nasturtium before aphids disperse')
-    // and a garden nothing asks anything of says so with an empty list rather than an absent one
+    // and a garden nothing asks anything of says so with an empty list
     expect(
       run(plotFixture([bedFixture('a', { plantings: [planting('a', 'tomato')] })])).report.economy
         ?.managementTasks,

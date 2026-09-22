@@ -32,7 +32,7 @@ import {
  */
 
 /**
- * The route the browser asks, restated rather than imported.
+ * The route the browser asks, restated here directly.
  *
  * `workers/proxy/helper.ts` holds the other copy. Importing it would pull the Worker's routing
  * helpers and its four kilobytes of system prompt into the browser bundle for the sake of one
@@ -55,12 +55,12 @@ export const SUMMARY_LIMIT = 600
 export const PROBE_TIMEOUT_MS = 4000
 
 /**
- * The day's free Neurons are spent, which is a different day rather than a different sentence.
+ * The day's free Neurons are spent, and every request fails until the next day.
  *
- * Thrown rather than returned because it's not a reading: every other failure here falls back to
+ * Thrown, because it's not a reading: every other failure here falls back to
  * the phrase table and answers the turn, and this one has to reach the panel, which says the
  * sentence out loud and stops using the remote router for the rest of the session. Cloudflare
- * fails a request outright once the allowance is gone rather than billing for it
+ * fails a request outright once the allowance is gone, with no billing for it
  */
 export class HelperAllowanceError extends Error {
   constructor() {
@@ -82,7 +82,7 @@ const asNumber = (value: unknown): number | null =>
 /**
  * One of the values the app can act on, or nothing.
  *
- * Read off `vocabulary.ts` rather than restated, because those tables already are the closed list
+ * Read off `vocabulary.ts` directly, because those tables already are the closed list
  * of what an exposure or a mounting preference may be, and a second list here would be a second
  * thing to update when one of them grows a value
  */
@@ -95,8 +95,8 @@ const asChoice = <T extends string>(value: unknown, among: readonly Candidate<T>
  * Validated a second time, on this side of the request. The edge validates the model and this
  * validates the edge, which is worth the few lines: the browser is where a wrong value would be
  * acted on, and a route that answers over the network is a route a proxy, a captive portal or a
- * stale deploy can put words into. A slot that fails becomes null rather than sinking the whole
- * reading, because the intent is the load-bearing half and a half-filled reading is the normal
+ * stale deploy can put words into. A slot that fails becomes null, and the reading as a whole
+ * survives it, because the intent is the load-bearing half and a half-filled reading is the normal
  * case `Slots` was written for
  */
 const readSlots = (value: unknown, catalog: readonly Crop[]): Slots => {
@@ -195,7 +195,7 @@ const probeHelper = async (call: FetchLike, timeoutMs: number): Promise<boolean>
     return await Promise.race([
       call(HELPER_PATH, { method: 'GET', signal: control.signal })
         .then((response) => response.status === 204)
-        // caught here rather than below, so an abort that lands after the deadline has already
+        // caught here, so an abort that lands after the deadline has already
         // answered isn't an unhandled rejection
         .catch(() => false),
       deadline,
@@ -203,7 +203,7 @@ const probeHelper = async (call: FetchLike, timeoutMs: number): Promise<boolean>
   } catch {
     return false
   } finally {
-    // cleared rather than left to fire: a pending four-second timer outlives the surface that
+    // cleared here, so it's never left to fire: a pending four-second timer outlives the surface that
     // opened it, and this runs on every page where somebody opens the conversation
     clearTimeout(timer)
   }
@@ -211,7 +211,7 @@ const probeHelper = async (call: FetchLike, timeoutMs: number): Promise<boolean>
 
 export const createRemoteUnderstander = (options: RemoteOptions = {}): Understander => {
   /*
-    Called through an arrow rather than captured, so a `fetch` replaced after this understander
+    Called through an arrow each time, so a `fetch` replaced after this understander
     was made is still the one used. The panel builds it at module scope, which is before a test
     or a service worker has had any chance to put its own in place
   */

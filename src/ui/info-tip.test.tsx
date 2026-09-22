@@ -4,10 +4,9 @@ import { InfoTip } from './InfoTip'
 import { mount } from './testkit'
 
 /**
- * The other half of a press that shows nothing. A pointer press arrives as pointerenter and
- * then click; the enter opened the bubble and the click toggled it shut, so a press never showed a
- * sentence and only a hover did. A press on the ⓘ beside "DLI" turned it
- * green and left nothing to read
+ * A pointer press arrives as pointerenter and then click. With one toggle, the enter would open the
+ * bubble and the click would toggle it shut, so a press alone would never show a sentence. Pressing
+ * the ⓘ would turn it active and show nothing to read
  */
 
 const tip = (): Promise<Awaited<ReturnType<typeof mount>>> =>

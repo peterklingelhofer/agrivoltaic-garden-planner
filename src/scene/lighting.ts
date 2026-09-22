@@ -19,7 +19,7 @@ export type LinearRgb = readonly [number, number, number]
 
 /**
  * Turbidity 4 is a clear rural atmosphere. `rayleigh` is a multiplier on the true Rayleigh
- * coefficient and is set from the observable rather than left at its nominal 1: at 1 this
+ * coefficient, set from the observable measurement: at 1 this
  * model returns a diffuse-to-global ratio of 5-6% at high sun against a measured clear-sky
  * 10-15%, which renders panel shade almost black. At 2 the ratio is 13% at 60 deg elevation
  */
@@ -85,7 +85,7 @@ const extinction = (sinElevation: number, channel: 0 | 1 | 2): number => {
 
 /**
  * Irradiance the sky's own sun disc delivers, in the sky's units. Defining the key light this
- * way rather than from an almanac keeps one radiometry: swapping the directional light for the
+ * way keeps one radiometry: swapping the directional light for the
  * disc left switched on in the environment map wouldn't change how bright the scene is
  */
 export const beamIrradiance = (elevationDeg: number): LinearRgb => {
@@ -101,12 +101,11 @@ export const beamIrradiance = (elevationDeg: number): LinearRgb => {
 /**
  * The color the ground fades into where it runs out, which is the sky at the horizon.
  *
- * The ground is a 240 m plane and it ended in a hard line against the sky, which is the one
- * thing in this scene that read as unfinished rather than as unfamiliar. This is a rendering
- * convenience and reaches no simulation: nothing is measured through it and the light the
- * physics integrates never sees it. It's derived from the same Preetham extinction the sky
- * dome is drawn with rather than being a fixed gray, so it warms as the sun drops and the
- * ground still meets a sky of its own color at six in the evening.
+ * The ground is a 240 m plane, and without this it ends in a hard line against the sky, the one
+ * thing in this scene that reads as unfinished. This is a rendering convenience and reaches no
+ * simulation: nothing is measured through it and the light the physics integrates never sees it. It's
+ * derived from the same Preetham extinction the sky dome is drawn with, so it warms as the sun
+ * drops and the ground still meets a sky of its own color at six in the evening.
  *
  * Normalized to unit peak and lifted toward white, because the horizon is the longest path
  * through the air the sky has and so the haziest part of it
@@ -147,8 +146,8 @@ export const keyLight = (elevationDeg: number): KeyLight => {
 
 /**
  * Exposure. A 0.18-reflectance Lambertian surface normal to the beam at 60 deg solar elevation
- * renders at a relative luminance of sRGB 118, which is middle gray. Luminance rather than a
- * per-channel value because the beam isn't neutral: that surface renders 125,117,104 at 60 deg
+ * renders at a relative luminance of sRGB 118, which is middle gray. This is a luminance
+ * target: the beam isn't neutral, so that surface renders 125,117,104 at 60 deg
  * and warmer still as the sun drops, which is the point. Fixed, so running the
  * scrubber down to the horizon darkens the picture on purpose: that is the product's subject
  */
@@ -157,16 +156,16 @@ export const TONE_MAPPING_EXPOSURE = 0.0315
 /**
  * The renderer's color pipeline, in one place so a test can pin it.
  *
- * AgX over ACES, measured rather than preferred. Against this scene, at the exposure that puts
+ * AgX over ACES, decided by measurement. Against this scene, at the exposure that puts
  * middle gray at 118 for each: panel shade at 8-25% of open irradiance spans 40 output codes
  * under AgX against 34 under ACES, and across the eight stops below middle gray AgX holds 1.7x
  * the code density, which is the range this whole product is about. AgX also reaches flat white
- * 0.8 EV later, so the sky keeps its gradient instead of bleaching, and it rotates the warm
+ * 0.8 EV later, so the sky keeps its gradient without bleaching out, and it rotates the warm
  * scene colors far less: 4.7 deg on the selection amber and 7.5 deg on foliage against ACES's
  * 12.2 and 11.8 deg, a drift that runs toward the top of the viridis ramp the overlay uses.
  * ACES is better only on the deep blue-purple end, where the scene has little chroma anyway.
  *
- * `outputColorSpace` is set explicitly rather than inherited: r3f's default happens to match,
+ * `outputColorSpace` is set explicitly here: r3f's default happens to match,
  * and the overlay's correctness depends on it, so it shouldn't be a default that can move
  */
 export const RENDERER_SETTINGS = {

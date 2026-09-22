@@ -375,8 +375,8 @@ describe('naming a crop or a bed the way a gardener would', () => {
 
 /**
  * The wildlife sentences, which are the only place a grower meets these three answers. Every
- * test here is about a distinction the words have to keep: three native states rather than two,
- * and two pollinator traits rather than one
+ * test here is about a distinction the words have to keep: exactly three native states,
+ * and exactly two pollinator traits
  */
 describe('what a wildlife preference says about a crop', () => {
   it('never calls an unchecked plant introduced', () => {
@@ -479,7 +479,7 @@ describe('the raise a shallow bed is offered', () => {
     expect(remedy.raiseToM).toBeNull()
   })
 
-  /** A shallow bed limits a crop rather than refusing it, and the plain sentence says what it costs */
+  /** A shallow bed only limits a crop, and the plain sentence says what it costs */
   it('says a shallow bed means more watering, and what a raise would give', () => {
     const factor = {
       stage: 'space-structure' as const,
@@ -495,7 +495,7 @@ describe('the raise a shallow bed is offered', () => {
     const refused = explainLimitingFactor(factor, 'novice', [], rooting(1.1), bedAt(0.1, 0))
     expect(refused).toContain('under the 0.20 m a bed needs')
     // and with no crop or bed to hand, the plain fragment every other caller gets: above the
-    // floor a shallow bed limits rather than refuses, so the fragment says what limiting costs
+    // floor a shallow bed only limits, so the fragment says what limiting costs
     expect(explainLimitingFactor(factor, 'novice', [])).toBe(
       "the soil here is shallower than its roots would reach, so it'll need watering more often",
     )

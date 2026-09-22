@@ -99,13 +99,13 @@ export interface RouteContext {
  * by a language model at this app's own edge. Everything above this line is written against this
  * interface and can't tell which one answered: the tools, the reply envelope, the panel.
  *
- * `ready` is separate from `route` and returns a boolean rather than throwing, because the
+ * `ready` is separate from `route` and returns a boolean, without throwing, because the
  * interesting implementation is one that has to fetch weights and might not get them. A router
  * that can't load leaves the lexical one doing the work
  */
 export interface Understander {
   readonly kind: 'lexical' | 'embedding' | 'remote'
-  /** Resolves false when this understander can't serve, so a caller can fall back rather than fail */
+  /** Resolves false when this understander can't serve, so a caller can fall back safely */
   ready(): Promise<boolean>
   route(text: string, context: RouteContext): Promise<Understanding | null>
 }

@@ -4,7 +4,7 @@ import { inflateRawSync } from 'node:zlib'
  * Minimal ZIP reader: central directory, stored or deflated entries, no ZIP64.
  *
  * Lifted out of `fetch-static-layers.mjs` unchanged when a second script needed it. Written by
- * hand rather than taken from a package because these scripts run against upstream archives on
+ * hand, because these scripts run against upstream archives on
  * a developer's machine and the repo keeps its build dependencies to what it can read
  */
 export const unzip = (buffer, wanted) => {

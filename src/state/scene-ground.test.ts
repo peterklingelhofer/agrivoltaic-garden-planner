@@ -87,7 +87,7 @@ describe('snow reaching the ground the camera sees', () => {
 })
 
 /**
- * The picture and the number, checked against each other rather than each against a copy.
+ * The picture and the number, checked against each other directly.
  *
  * Both the renderer and the PV chain read `groundSnowCover` and both blend with `albedoUnderSnow`,
  * so the scene never draws a white January while the year's generation is computed off summer

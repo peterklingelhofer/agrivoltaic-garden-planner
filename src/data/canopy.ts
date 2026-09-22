@@ -45,7 +45,7 @@ export const CROWN_TRANSMITTANCE_LEAFLESS: DerivedCited<Fraction> = citedDerived
  * Which months count as in leaf: the eight thresholds of the Growing Season Index (Jolly, Nemani
  * and Running 2005), the same constants `src/sim/phenology.ts#growingSeasonIndex` computes from.
  * Declared here too, cited, so the rule's provenance stands beside the two transmittance
- * figures above rather than only in the sim layer (Decision Record 26)
+ * figures above, here as well as in the sim layer (Decision Record 26)
  */
 export const LEAF_SEASON_INDEX: VerbatimCited<{
   readonly GSI_TMIN_MIN_C: number

@@ -13,8 +13,7 @@ import type { Fraction } from '../types/units'
  * That gap is worth closing because the mechanism isn't in doubt. A surface loses heat at night
  * by radiating it to a cold sky, and how much sky it can see is the geometric control on how much
  * it loses: that is Oke's result for street canyons and it's why a frost cloth works. A panel row
- * over a bed is the same geometry. `the agrivoltaics document` section 3.6 reached this
- * conclusion and wrote the sentence to output; this is that sentence.
+ * over a bed is the same geometry.
  *
  * What is deliberately NOT here, and won't be added without a measurement:
  *
@@ -23,8 +22,9 @@ import type { Fraction } from '../types/units'
  * - **No adjusted frost dates.** The site's frost exceedance curve is measured in the open and it
  *   stays that way. Shifting a planting date on an unmeasured mechanism would move real sowings.
  * - **No adjusted degree-days.** Shade cuts daytime warming as surely as it cuts night-time
- *   cooling, and the agrivoltaics document section 3.2 finds soil cooling under panels to be the one temperature
- *   effect that is consistent across studies while air-temperature effects contradict each other
+ *   cooling, and Weselek et al. 2021 and Amaducci et al. 2018 find soil cooling under panels to
+ *   be the one temperature effect that is consistent across studies while air-temperature effects
+ *   contradict each other
  *   between climates. Anyone reading "fewer frosts" as "a longer, warmer season" has it backward
  */
 

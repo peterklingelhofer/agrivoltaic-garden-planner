@@ -2,7 +2,7 @@ import { expect, test, type Page } from '@playwright/test'
 import { openApp } from './fixtures/app.ts'
 
 /**
- * An instrument rather than a test: it plays a session and prints every reply, word for word.
+ * An instrument: it plays a session and prints every reply, word for word.
  *
  * `bun run read-session`. It asserts almost nothing on purpose, because the point is to be READ.
  * Every defect worth fixing on this surface was found this way and none of them was found by the
@@ -37,7 +37,7 @@ const SESSION = [
 test.describe('read a session', () => {
   test.use({ viewport: PHONE })
   test('plays it and prints every reply', async ({ page }) => {
-    // an instrument rather than a test, asked for by name: it prints a wall of text and takes a
+    // an instrument, asked for by name: it prints a wall of text and takes a
     // 45 MB model load to do it, and it asserts almost nothing because the point is to be read
     // biome-ignore lint/suspicious/noSkippedTests: see above
     test.skip(process.env.READ_SESSION !== 'on', 'run `bun run read-session` to play and print it')
@@ -65,7 +65,7 @@ test.describe('read a session', () => {
       const before = await page.getByTestId('item-agent-turn-us').count()
       if (said === 'WAIT') {
         // nothing is typed: this is the pause a run needs, and whatever arrives during it is the
-        // agent finishing a sentence on its own rather than answering a press
+        // agent finishing a sentence on its own, unprompted by any press
         await page.waitForTimeout(30_000)
         const after = await page.getByTestId('item-agent-turn-us').count()
         out.push(

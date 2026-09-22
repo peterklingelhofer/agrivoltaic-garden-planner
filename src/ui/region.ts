@@ -5,12 +5,10 @@ import { NATIVE_REGION_UNKNOWN } from './format'
 /**
  * Why there's no region to favor natives in, said for the case that actually applies.
  *
- * One sentence covered three states and was wrong in two of them. A place looked
- * up on the first question used to read, eight questions later, as a region unknown
- * "because the place hasn't been looked up or its coordinates fall outside the region map"; the
- * lookup had failed on a flaky upstream and nothing on that question said so. A place that has
- * resolved with no region is a place outside the map the app carries, which is a different fact
- * again, and the map covers the whole world at the level of states and provinces, so it's rare
+ * Three states need three sentences: a place not looked up yet, a lookup that failed on a flaky
+ * upstream, and a place that has resolved with no region. The last is a place outside the map the
+ * app carries, and the map covers the whole world at the level of states and provinces, so it's
+ * rare
  */
 export const regionNote = (site: AsyncState<Site>): string | null => {
   if (site.status === 'ready') {

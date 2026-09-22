@@ -38,23 +38,23 @@ export const PLOT_MARGIN_M = 0.5
 export const MAX_BEDS = 4
 /**
  * The most, however big it is. Every bed is ranked against the whole catalog, simulated each
- * season and drawn in the scene, so this is a working ceiling rather than a geometric one: a
+ * season and drawn in the scene, so this is a working ceiling, set by what a person can read: a
  * 60 by 40 m field has room for nineteen strips and nobody reads nineteen rankings
  */
 export const BED_CEILING = 12
 /**
- * How much plot one bed is worth. A 12 by 8 m garden keeps its four beds and a 60 by 40 m
- * field gets the ceiling: a market grower given four beds on six acres' worth of ground said
- * it wasn't a plan, and he was right, because four beds of 1.2 m cover a twelfth of it
+ * How much plot one bed is worth. A 12 by 8 m garden keeps its four beds and a 60 by 40 m field
+ * gets the ceiling: four beds of 1.2 m would cover only a twelfth of 0.6 acres, far too thin a plan
+ * for that much ground
  */
 export const SQUARE_METERS_PER_BED = 60
 
 /**
  * How many beds a plot of this size is cut into, before the light says where they can go.
  *
- * Area rather than the cross-span the strips are actually taken from, because a plot's beds
- * should be a share of the whole ground rather than of one direction: a long thin plot and a
- * square one of the same area are the same amount of gardening
+ * Area drives the count, because
+ * a plot's beds are a share of the whole ground: a long thin
+ * plot and a square one of the same area are the same amount of gardening
  */
 export const bedCountFor = (plotWidthM: number, plotDepthM: number): number => {
   const areaM2 = Math.max(0, plotWidthM) * Math.max(0, plotDepthM)
@@ -67,7 +67,7 @@ export const MIN_BED_LENGTH_M = 0.6
 export const POST_KEEP_CLEAR_M = 0.25
 /**
  * Below this the two clusters are one population: the light is even, there's nothing to
- * place against, and an even layout is the honest answer rather than an invented band
+ * place against, and an even layout is the honest answer here
  */
 export const BAND_SEPARATION_MIN = 0.12
 /**
@@ -122,12 +122,11 @@ interface Axis {
 const axisFor = (request: LayoutRequest): Axis => {
   const geometry = request.arrays[0]?.geometry
   /*
-    `rowAzimuthDeg` is the direction the rows RUN (`sim/geometry.ts`, `arrayLayout`), so the
-    rows are offset across it, along (cos, -sin): rows running east to west (90) are spaced
-    north to south, and the beds run east to west with them. This read the row direction as
-    the offset until 2026-09-11, and passed, because the search's candidates carried the
-    surface azimuth in this field and the two mistakes canceled; once the candidates ran their
-    rows the right way the beds turned across them
+    `rowAzimuthDeg` is the direction the rows RUN (`sim/geometry.ts`, `arrayLayout`), so the rows
+    are offset across it, along (cos, -sin): rows running east to west (90) are spaced north to
+    south, and the beds run east to west with them. Reading the row direction as the offset would
+    only pass while the search's candidates also carried the surface azimuth in this field, two
+    matching mistakes canceling each other out
   */
   const crossIsX =
     geometry !== undefined &&
@@ -235,7 +234,7 @@ export interface LightClusters {
  *
  * In one dimension the optimal k-means partition is contiguous in sorted order, so scanning
  * every split point and keeping the least within-cluster sum of squares is the global
- * optimum rather than a seeded approximation of it. That's why there's no seed here and no
+ * optimum. That's why there's no seed here and no
  * iteration count: the answer is a function of the profile alone, so it can't move between
  * runs. k is 2 because the structure being recovered is a row array, which casts exactly two
  * kinds of ground, under a row and between rows
@@ -302,8 +301,7 @@ const runsOf = (
 /**
  * The cross-axis intervals a bed may not sit on, because the array's feet are in them. The
  * strip is widened to half a working gap where the foundation is narrower than that, so the
- * ground a post stands in is the path between the two beds either side of it rather than a
- * half-meter nobody can get down
+ * ground a post stands in is the path between the two beds either side of it
  */
 const postSpans = (arrays: readonly PvArray[], axis: Axis): readonly Span[] => {
   const halfM = Math.max(POST_KEEP_CLEAR_M, BED_GAP_M / 2)
@@ -356,8 +354,7 @@ const slotsIn = (kind: LightZoneKind, [loM, hiM]: Span, run: number): readonly S
 
 /**
  * The mix, made deliberately. Slots are taken one zone kind at a time starting with the
- * bright ones, so a plot with room for two beds carries one of each rather than two of
- * whichever strip happened to come first along the axis
+ * bright ones, so a plot with room for two beds carries one of each
  */
 const interleave = (slots: readonly Slot[], limit: number): readonly Slot[] => {
   const kinds: readonly LightZoneKind[] = ['bright-gap', 'shaded-band', 'even-light']

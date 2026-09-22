@@ -83,7 +83,7 @@ export const DliLegend = ({
       </button>
       {/*
         Above the ramp and the note, because it changes what every color underneath it
-        means. The colors are left on screen rather than blanked: they're still the answer for
+        means. The colors are left on screen: they're still the answer for
         a garden that existed a moment ago, and a visitor dragging a panel needs something to
         drag it against. What they must not do is go on reading as current
       */}
@@ -112,10 +112,10 @@ export const DliLegend = ({
       ) : null}
       {/*
         The bare numbers below say where the ramp sits and omit which way it runs, and a beginner
-        matching a color on the ground to this legend needs that before the numbers mean
-        anything. "Less" and "More" are said instead of "less light" or "more shade" because
-        the same ramp reads a shade ratio and a sky view factor too, and both those go the
-        opposite way from light: it's always true here, whichever channel is on screen
+        matching a color on the ground to this legend needs that before the numbers mean anything.
+        "Less" and "More" are said. Neither "less light" nor "more shade" is used, because the same
+        ramp reads a shade ratio and a sky view factor too, and the shade ratio goes the opposite
+        way from light. "Less" and "More" are true here, whichever channel is on screen
       */}
       <div className="legend-scale">
         <span>Less {min.toFixed(min >= 10 ? 0 : 1)}</span>

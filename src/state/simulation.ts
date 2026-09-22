@@ -20,7 +20,7 @@ export const SEASON_NEEDS_RULES = "The companion rules haven't loaded yet"
  * Which of the app's own requirements settles a blocker, or `wait` where nothing can: the catalog
  * and the rules are already on their way and a button would only ask twice.
  *
- * Keyed by the sentence rather than by a second enum, so a blocker added above without a fix
+ * Keyed by the sentence itself, so a blocker added above without a fix
  * beside it here is one line away from the one it belongs to. `ui/requirement.ts` turns the tag
  * into the press, off the SAME builders the site and light steps use, which is what stops the
  * season's button and the light step's button from being two different buttons

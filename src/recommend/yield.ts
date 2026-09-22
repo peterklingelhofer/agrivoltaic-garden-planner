@@ -164,7 +164,7 @@ export const estimateYield = (
     Which term moves the band most, in absolute yield, so the attribution follows the numbers:
     half the published interval, the PAR allowance either side of its midpoint, and the whole
     crowding shift. Ties go to the crop response, then to PAR, so an unshaded and uncrowded
-    bed reads as the PAR allowance it is rather than as a paper whose interval there is zero
+    bed reads as the PAR allowance it is
   */
   const mid = (base.interval.lower + base.interval.upper) / 2
   const widths: readonly (readonly [UncertaintySource, number])[] = [

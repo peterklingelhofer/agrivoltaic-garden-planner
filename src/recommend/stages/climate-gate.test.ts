@@ -51,14 +51,11 @@ describe('the temperatures a crop actually stands in', () => {
   })
 
   /**
-   * The misclassification the hot limb exposed rather than caused. Thyme, oregano, sage, winter
-   * savory and hyssop are Mediterranean-basin sub-shrubs that sat on the temperate
-   * `hardy-perennial` envelope and its 34 C ceiling, while rosemary, the same family from the same
-   * region, sat on the subtropical one, so only which archetype an author happened to pick decided
-   * whether a desert gardener was offered thyme. Those five now borrow the subtropical hot limb in
-   * `rows.ts` and nothing else, and this pins both ends of that: the herbs are admitted at Phoenix,
-   * the genuinely temperate perennials the hot limb exists to catch are still refused there on the
-   * same July, and the herbs' cold end is untouched so a cold garden still reads them as it did
+   * Thyme, oregano, sage, winter savory and hyssop are Mediterranean-basin sub-shrubs, the same
+   * family as rosemary and from the same region. They borrow the subtropical hot limb in `rows.ts`
+   * and nothing else, and this pins both ends of that: the herbs are admitted at Phoenix, the
+   * temperate perennials the hot limb exists to catch are still refused there on the same July, and
+   * the herbs keep the temperate cold end, so a cold garden reads them as it reads tarragon
    */
   it('admits the Mediterranean herbs at Phoenix without letting the woodland perennials back in', async () => {
     const catalog = await catalogPromise

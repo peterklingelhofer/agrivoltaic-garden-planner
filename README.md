@@ -6,19 +6,17 @@ Plan a vegetable garden and the solar panels above it, together, for a real addr
 
 [![Ten planted beds under three rows of panels at Amherst on August 14 at 15:30: the light map on the ground beside the light step, which lists each bed's share of open sky and its daily light integral](docs/readme-screenshot.webp)](https://garden.peterklingelhofer.com)
 
-You give it a place and a rough rectangle. It looks up that site's sun, weather and soil,
-simulates how much light reaches the ground once panels are over it, and computes which crops
-still suit each bed and what to plant when. The tool shows a trade-off:
-every panel that generates electricity takes light off the ground, and the app measures what that
-costs rather than guessing.
+You give it a place and a rough rectangle. It looks up that site's sun, weather and soil, simulates
+how much light reaches the ground once panels are over it, and computes which crops still suit each
+bed and what to plant when. The tool shows a trade-off: every panel that generates electricity takes
+light off the ground, and the app measures what that costs.
 
-Every quantitative claim carries its source. Where a figure rests on an inference rather than a
-measurement, it says so.
+Every quantitative claim carries its source. Where a figure rests on an inference, it says so.
 
 It works at **garden scale**: beds a person can reach across, paths a wheelbarrow fits down,
-arrays of a few rows. It's not a farm planning tool and models no tractor or implement access.
-Outputs are planning estimates from a model, not agronomic or engineering recommendations, and
-nothing here has been validated against a real garden.
+arrays of a few rows. Farm planning is out of scope: it models no tractor or implement access.
+Treat the outputs as planning estimates from a model. Nothing here is agronomic or engineering
+advice, and nothing has been validated against a real garden.
 
 The modeling documents behind it are published with the app at
 [garden.peterklingelhofer.com/docs/](https://garden.peterklingelhofer.com/docs/), built from `docs/`
@@ -60,7 +58,7 @@ bun run check        # biome, writes fixes
 
 `bun run generate` re-renders the citation corpus. `docs/CITATIONS.md` and
 `src/types/citation-ids.generated.ts` are both derived from `docs/CITATIONS.csl.json`, so a
-citekey that is not in the corpus is a compile error rather than a broken link.
+citekey missing from the corpus is a compile error.
 
 ## Where things are
 
@@ -77,12 +75,12 @@ citekey that is not in the corpus is a compile error rather than a broken link.
 
 ## Reading further
 
-`docs/` carries the reasoning, not just the API surface:
+`docs/` carries the reasoning:
 
 - `docs/ARCHITECTURE.md`, `docs/00-DECISIONS.md`: how it's put together and why
-- `the agrivoltaics document` through `the grid document`: the domain background
+- `docs/VALIDATION.md`: which numbers have been checked against something outside the app
+- `docs/STATIC-LAYERS.md`: the bundled climate grids
 - `docs/CITATIONS.md`: the corpus, with verification status and evidence tier per source
-- `the verification document`: the project auditing its own claims, including errors it caught
 
 ## Status
 

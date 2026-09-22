@@ -143,7 +143,7 @@ describe('beamVisibilityRaster', () => {
   })
 })
 
-// pvlib.bifacial.utils.vf_ground_sky_2d golden values (the solar geometry document section 8 tolerance: 0.002 absolute)
+// pvlib.bifacial.utils.vf_ground_sky_2d golden values, matched to within 0.002 absolute
 describe('vfGroundSky2dOracle', () => {
   it('matches pvlib for a tilted, high-clearance row', () => {
     const clearanceHeightM = 2.5 - Math.sin((20 * Math.PI) / 180)
@@ -192,12 +192,11 @@ const manyRowArray = makeArray(
     rowLengthM: MANY_ROWS.rowLengthM,
     rowCount: MANY_ROWS.rowCount,
     modulesPerRow: 1,
-    // rows running east-west, facing south: `rowAzimuthDeg` is the direction the rows RUN, so
-    // it has to be perpendicular to the way the modules face. It read 180 here until
-    // 2026-09-01, matching the surface azimuth rather than crossing it, and that made a
-    // coherent array only because `panelSnapshot` had its two horizontal axes exchanged. The
-    // comparisons below are the ones that should have caught that; they couldn't, because
-    // this fixture was the one array shape the old code got right
+    // rows running east-west, facing south: `rowAzimuthDeg` is the direction the rows RUN, so it
+    // has to be perpendicular to the way the modules face. Setting it to the surface azimuth would
+    // only look coherent if `panelSnapshot` also had its two horizontal axes exchanged: two
+    // matching errors read as one correct array. The comparisons below can't catch that kind of
+    // double error
     rowAzimuthDeg: 90 as Degrees,
     originM: { xM: 0 as Meters, yM: 0 as Meters },
   },

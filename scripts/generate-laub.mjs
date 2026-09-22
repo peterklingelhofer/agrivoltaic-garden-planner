@@ -6,8 +6,8 @@
  * plus nine response-class rows, which is exactly the shape of data nobody diffs by eye, and the
  * same argument `generate-rust-tables.mjs` makes for the physics tables.
  *
- * Two fields are computed here rather than transcribed, because both were wrong when a person
- * did it. `benefitPeakRsrPercent` is the argmax of the published predictions, and
+ * Two fields are computed here. A person transcribed them by hand once, and got both wrong.
+ * `benefitPeakRsrPercent` is the argmax of the published predictions, and
  * `benefitPhaseEndRsrPercent` is the last level the table classes B. The single field they
  * replace held the argmax for two groups, a phase boundary for a third, and for fruits the
  * paper's own prose sentence, which its own table contradicts by five RSR points.

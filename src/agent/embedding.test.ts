@@ -10,11 +10,11 @@ import type { Understander } from './understand'
 
 /**
  * The embedding understander, measured against the same held-out set the lexical one is, and
- * measured with the REAL model rather than a stub.
+ * measured with the REAL model.
  *
  * Skipped when the weights are absent, which is the state of a fresh clone: they're 23 MB and
- * gitignored, and `bun run fetch-agent-model` is what puts them in `public/models`. Skipping rather
- * than failing is deliberate -- the app ships without them too, and a test that demands a
+ * gitignored, and `bun run fetch-agent-model` is what puts them in `public/models`. Skipping in
+ * place of failing is deliberate: the app ships without them too, and a test that demands a
  * download is a test that stops anybody running the suite
  */
 
@@ -85,11 +85,10 @@ describe.skipIf(!HAVE_MODEL)('the embedding understander', () => {
     console.log(reportHeldOut('HOLDOUT lexical', lexical))
     console.log(reportHeldOut('HOLDOUT embedding', embedded))
     /*
-      Solved rather than right, because the two routers no longer answer the same question. The
-      lexical one always acts and so is only ever right or wrong. The embedding declines to act on
-      a tie and offers instead, and a sentence that ends one tap from what was meant hasn't
-      failed. A floor rather than an exact figure: what has to hold is that the download earns
-      itself
+      Scored as `solved`, because the two routers answer different questions. The lexical one always
+      acts and so is only ever right or wrong. The embedding declines to act on a tie and offers
+      instead, and a sentence that ends one tap from what was meant hasn't failed. A floor. Not an
+      exact figure: what has to hold is that the download earns itself
     */
     const solved = (verdict: Verdict): number =>
       ((verdict.right + verdict.offered) / verdict.total) * 100
@@ -181,9 +180,9 @@ describe.skipIf(!HAVE_MODEL)('the embedding understander', () => {
   }, 300_000)
 
   /**
-   * And the same guard with the model in front of it, because the model reaches
-   * `understandingFor` by a different road and a played session proved the road matters:
-   * "when do i plant the tomatoes" was answered by replanting every bed
+   * And the same guard with the model in front of it, because the model reaches `understandingFor`
+   * by a different road, and the road matters: without the guard, "when do i plant the tomatoes" is
+   * answered by replanting every bed
    */
   it('never reads a WH-question as an instruction to change the garden', async () => {
     for (const said of [

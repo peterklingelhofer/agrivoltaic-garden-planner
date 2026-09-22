@@ -75,7 +75,7 @@ export interface PhOverlap {
   readonly compromisePh: PhUnits | null
   /** The best membership both crops can hold at once, 0 when no pH suits both */
   readonly jointMembership: Fraction
-  /** Crops whose envelope is narrow enough to be physiological rather than a preference */
+  /** Crops whose narrow envelope is a matter of physiology */
   readonly hardEnvelopeCropIds: readonly CropId[]
 }
 
@@ -183,7 +183,7 @@ export interface SuggestionRefusal {
   readonly reason: string
   readonly conflictsWithCropId: CropId | null
   readonly limiting: LimitingFactor | null
-  /** which term refused, so grouping is structural rather than a match on the prose */
+  /** which term refused, so grouping keys only on structure */
   readonly termKind: CompatibilityTermKind | null
 }
 

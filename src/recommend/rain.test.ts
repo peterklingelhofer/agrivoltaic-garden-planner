@@ -68,7 +68,7 @@ const FLAT_TRACKER: TrackerConfig = {
   mode: 'single-axis-horizontal-ns',
   axisTiltDeg: degrees(0),
   // matched to `rowAzimuthDeg`, the way `ArrayPanel` seeds it: any other axis direction sets
-  // the panel's own face along the row instead of across it, and collapses the plan quad to a line
+  // the panel's own face along the row, and collapses the plan quad to a line
   axisAzimuthDeg: degrees(90),
   maxRotationDeg: degrees(60),
   backtracking: false,

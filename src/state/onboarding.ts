@@ -52,7 +52,7 @@ export interface ObjectivePreset {
 const BALANCED: DesignObjective = { food: 0.35, energy: 0.35, water: 0.15, simplicity: 0.15 }
 
 /**
- * Presets rather than four raw sliders. The weights have to sum to 1, and asking someone who
+ * Presets, chosen over four raw sliders. The weights have to sum to 1, and asking someone who
  * has never heard of agrivoltaics to normalize four numbers by hand is asking them to do
  * arithmetic in order to state a preference. The sliders stay available for whoever wants them
  */
@@ -128,11 +128,11 @@ export const DEFAULT_WIZARD_ANSWERS: WizardAnswers = {
  *
  * `experience` is the whole point of stating this. It appears nowhere in `src/recommend`: it picks
  * whether figures are shown beside the plain sentences, and nothing else. Dropping a finished
- * search because somebody asked to see the numbers threw away five annual bakes and put "Compute
- * some layouts" back on a screen that was already showing the answers, which is the opposite of
- * what the control promises: something to try rather than something to predict.
+ * search because somebody asked to see the numbers would throw away five annual bakes and put "Show
+ * me some layouts" back on a screen that was already showing the answers, which is the opposite of
+ * what the control promises: something to try.
  *
- * Stated as the fields that DO invalidate rather than the ones that don't, so a new answer added
+ * Stated as the fields that DO invalidate, so a new answer added
  * to `WizardAnswers` has to be classified on purpose. Getting that wrong the safe way costs a
  * re-run. Getting it wrong the other way shows figures computed for answers nobody gave
  */
@@ -209,7 +209,7 @@ export const irrigationFor = (answers: WizardAnswers): Irrigation => ({
 
 /**
  * Simplicity is a preference for fewer things to look after, so it's what caps how many
- * crops a bed is allowed to carry rather than a number nobody chose
+ * crops a bed is allowed to carry
  */
 export const cropsPerBedFor = (objective: DesignObjective): number =>
   Math.max(
@@ -279,7 +279,7 @@ export const plotForScenario = (
 
 /**
  * The three answers whose consequence can be computed before they're chosen. Each is a field
- * of `WizardAnswers` rather than a step, because the practical step asks two questions and only
+ * of `WizardAnswers`, separate from a step, because the practical step asks two questions and only
  * one of them changes anything the search would build.
  *
  * `exposure` is deliberately not here. It's the one answer about what is ALREADY around the
@@ -340,7 +340,7 @@ const ARCHETYPE_BY_PRESET: Readonly<Record<ObjectivePresetId, CandidateArchetype
  * The objective is a weight vector the ranking reads, and it reaches no candidate's geometry at
  * all: what it decides is which of the three tilted archetypes comes back marked. So a figure
  * under a choice reads the archetype the choice LEANS TOWARD, one for one with the three
- * presets, and it's a lean rather than a promise: the ranking runs against a baked year of this
+ * presets, and it's only a lean: the ranking runs against a baked year of this
  * location's weather and can still hand back a different one
  */
 export const archetypeLeaning = (objective: DesignObjective): CandidateArchetype => {

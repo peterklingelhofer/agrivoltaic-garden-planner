@@ -10,7 +10,7 @@ describe('subtractPosts', () => {
     const base = new BoxGeometry(2, 2, 2)
     const original = BufferGeometry.prototype.dispose
     const disposed: BufferGeometry[] = []
-    // call through to the real implementation rather than swallowing it: the geometries three-bvh-csg
+    // call through to the real implementation, without swallowing it: the geometries three-bvh-csg
     // builds internally still need their own bookkeeping to run, this just also records who was disposed
     const disposeSpy = vi.spyOn(BufferGeometry.prototype, 'dispose').mockImplementation(function (
       this: BufferGeometry,
@@ -19,7 +19,7 @@ describe('subtractPosts', () => {
       return original.call(this)
     })
     // capture the exact clone `subtractPosts` makes of `base`, so the test can assert on that
-    // object specifically rather than guessing at it from the disposed list
+    // object specifically, without guessing at it from the disposed list
     let clone: BoxGeometry | undefined
     const cloneSpy = vi.spyOn(base, 'clone').mockImplementation(function (this: BoxGeometry) {
       clone = BoxGeometry.prototype.clone.call(this)

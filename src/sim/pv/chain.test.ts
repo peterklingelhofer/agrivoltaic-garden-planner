@@ -361,8 +361,8 @@ describe('what the chain says about its own sources', () => {
   })
 
   it('covers every stage the chain actually runs, the ground included', () => {
-    // every stage of this chain is a model rather than a quoted figure, which is the whole
-    // reason each one names what it computed and not just what it read
+    // every stage of this chain is a model that computes its own figure, which is the whole
+    // reason each one names what it computed as well as what it read
     const models = PV_CHAIN_PROVENANCE.map((entry) =>
       entry.provenance === 'computed' ? entry.model : null,
     )

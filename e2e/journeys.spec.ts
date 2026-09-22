@@ -117,8 +117,8 @@ test('4: a drawn bed takes a light bake, an overlay, a legend and monthly readou
   expect(bedCount).toBeGreaterThan(3)
 
   await runLightCheck(page)
-  // `reinhart-mf2` is the full check's subdivision, and the full check is the only one there is
-  // since 2026-09-09: this readout reports the subdivision the bake actually used, which is what
+  // `reinhart-mf2` is the full check's subdivision, and the full check is the only one there is:
+  // this readout reports the subdivision the bake actually used, which is what
   // catches the fixture waiting on something else
   await openFold(page, 'details-sim-how')
   await expect(page.getByTestId('readout-sim-raster-quality')).toContainText('reinhart-mf2')
@@ -248,12 +248,10 @@ test('6: the calendar dates every crop and the frost dial moves the frost-bound 
 })
 
 /**
- * The three tabs this used to cover became ten accordion steps: one panel open at a time,
- * a header that is a button carrying `aria-expanded` rather than `aria-selected`, and
- * ArrowDown/ArrowUp/Home/End walking all ten instead of ArrowLeft/ArrowRight walking three.
- * What made the original worth having is unchanged and is the one thing kept exactly: the
- * canvas is a single mount for the life of the page, and switching what the sidebar shows
- * must never be the reason it remounts
+ * The sidebar is ten accordion steps: one panel open at a time, and a header that is a button
+ * carrying `aria-expanded` and no `aria-selected`, with ArrowDown/ArrowUp/Home/End walking all ten.
+ * The canvas is a single mount for the life of the page, and switching what the sidebar shows must
+ * never be the reason it remounts
  */
 test('7: steps switch by pointer and keyboard without remounting the canvas', async ({ page }) => {
   const app = await openApp(page)

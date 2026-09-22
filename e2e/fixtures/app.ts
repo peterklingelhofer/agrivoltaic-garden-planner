@@ -9,8 +9,8 @@ export const SITE_TIMEOUT_MS = 120_000
 /**
  * Whether the build under test carries the conversational agent.
  *
- * The webServer builds without it (see `playwright.config.ts`), so the specs that drive it skip
- * rather than fail. One variable decides both halves: `VITE_AGENT=on bunx playwright test` puts
+ * The webServer builds without it (see `playwright.config.ts`), so the specs that drive it skip.
+ * One variable decides both halves: `VITE_AGENT=on bunx playwright test` puts
  * the panel in the build AND un-skips the tests, because Playwright's webServer inherits this
  * process's environment and the specs read the same variable
  */
@@ -27,8 +27,8 @@ export interface Upstreams {
   /**
    * The pre-baked example garden is served only where it's the subject. Every other spec here
    * asserts something about a design the test itself builds, and an example loading underneath
-   * would change the plot, the DOM and every visual baseline. It's refused rather than cleared
-   * after the fact, because clearing it races the fetch, and refusing it exercises the documented
+   * would change the plot, the DOM and every visual baseline. It's refused up front, because
+   * clearing it after the fact races the fetch, and refusing it exercises the documented
    * fallback: a build with no `public/data` opens on the starting plot. See e2e/example.spec.ts.
    *
    * The glob has to cover every band: the assets are `example-garden-<band>.{json,raster}`, and a
@@ -39,11 +39,11 @@ export interface Upstreams {
   /**
    * Puts the weather upstreams out of reach, so the site can't resolve at all.
    *
-   * Needed because "no site" stopped being a state a visitor arrives at by doing nothing: the app
-   * now looks up the place it is already naming, on mount, by every route into the editor. The
-   * refusals that depend on having no site are still worth holding, since inventing weather is
-   * the failure they exist to prevent, so the specs that hold them ask for this instead of
-   * relying on the app having failed to fetch anything yet
+   * Needed because a visitor who does nothing still ends up with a site: the app looks up the place
+   * it is already naming, on mount, by every route into the editor. The refusals that depend on
+   * having no site are worth holding, since inventing weather is the failure they exist to prevent,
+   * so the specs that hold them ask for this directly, without relying on the app having failed to
+   * fetch anything yet
    */
   readonly siteUnreachable?: boolean
 }
@@ -51,10 +51,6 @@ export interface Upstreams {
 const json = (route: Route, body: unknown): Promise<void> =>
   route.fulfill({ contentType: 'application/json', body: JSON.stringify(body) })
 
-/**
- * Every upstream is stubbed and anything else off-origin is aborted, so a test that starts
- * reaching Nominatim or Open-Meteo for real fails here instead of flaking in CI
- */
 /** One annual residential row, the way EIA's API v2 answers `electricity/retail-sales` */
 const retailPriceBody = (): unknown => ({
   response: {
@@ -71,11 +67,15 @@ const retailPriceBody = (): unknown => ({
   },
 })
 
+/**
+ * Every upstream is stubbed and anything else off-origin is aborted, so a test that starts
+ * reaching Nominatim or Open-Meteo for real fails here, deterministically, every time
+ */
 export const stubUpstreams = async (page: Page, over: Upstreams = {}): Promise<void> => {
   await page.route(/^https?:\/\/(?!localhost|127\.0\.0\.1)/i, (route) => route.abort())
   // NASA POWER is the daily normals' fallback, reached from the browser when Open-Meteo has no
-  // answer: answered with an empty body the reader refuses, rather than aborted or given an
-  // error status would make Chromium prints a console error, and the specs assert none.
+  // answer: answered with an empty body the reader refuses. An abort or an error status would
+  // make Chromium print a console error, and the specs assert none.
   // A spec that serves bad normals on purpose then sees the Open-Meteo refusal it asked for
   await page.route(/power\.larc\.nasa\.gov/, (route) =>
     route.fulfill({ status: 200, contentType: 'application/json', body: '{}' }),
@@ -87,7 +87,7 @@ export const stubUpstreams = async (page: Page, over: Upstreams = {}): Promise<v
    * which forwards them to the Worker on 127.0.0.1:8787. The Worker isn't running here, and a
    * refused connection there is not a fast failure from the browser's side, so a test that makes
    * Open-Meteo insufficient without this hangs on a fallback chain aimed at a port nothing is
-   * listening on rather than reaching the error state it is actually after
+   * listening on. It never reaches the error state it is actually after
    */
   await page.route('**/api/proxy/**', (route) => route.abort())
   /**
@@ -141,7 +141,7 @@ export const stubUpstreams = async (page: Page, over: Upstreams = {}): Promise<v
   await page.route('**/data/*.geojson', (route) =>
     json(route, { type: 'FeatureCollection', features: [] }),
   )
-  // an unreadable body rather than a 404: both end in the same refusal, and a 404 puts a console
+  // an unreadable body. Never a 404: both end in the same refusal, and a 404 puts a console
   // error on every page in this suite, which is a thing several specs assert the absence of
   if (over.exampleGarden !== true) {
     await page.route('**/data/example-garden-*', (route) => json(route, {}))
@@ -249,7 +249,7 @@ export const openFold = async (page: Page, testId: string): Promise<void> => {
 export const resolveSite = async (page: Page, lat = LAT, lon = LON): Promise<void> => {
   await step(page, 'place')
   // the coordinate fields sit behind the site panel's "More about this place" fold, with the rest
-  // of what a newcomer never needs; a spec typing coordinates opens it the way a person does
+  // of what a beginner never needs. A spec typing coordinates opens it the way a person does
   await openFold(page, 'details-site-more')
   await page.getByTestId('control-site-latitude').fill(String(lat))
   await page.getByTestId('control-site-longitude').fill(String(lon))
@@ -296,9 +296,9 @@ export const drawPolygon = async (
 /**
  * The light, computed and ready, for the garden as it stands.
  *
- * Nothing is pressed on the way to it any more. Since 2026-09-10 `useAutoLight` runs the full
- * check by itself, the first time once the place has resolved and there's a bed, and again after
- * every settled change to the geometry, so this waits rather than asks: for `ready` AND for the
+ * Nothing is pressed on the way to it any more. `useAutoLight` runs the full check by itself, the
+ * first time once the place has resolved and there's a bed, and again after every settled change
+ * to the geometry, so this waits for `ready` AND for the
  * absence of `data-sim-stale`, together in one reading. Read apart they lie, because a bake that
  * is redoing a stale field passes through `loading`, where the stale mark is off by definition.
  * The one state nothing restarts by itself is a failed run, and that is the one case the press
@@ -365,12 +365,11 @@ export const settledCanvas = async (page: Page): Promise<Buffer> => {
 
 /**
  * A bed drawn by canvas fractions lands wherever the camera puts that ground, so this ring is a
- * claim about the framing as much as about the bed. Re-cut on 2026-09-11 evening, when the plot
- * started being framed by projecting its corners: the old ring (x 0.42 to 0.58, y 0.62 to 0.74)
- * had come to land under the front row at 34 percent season shade, which is above the design
- * ceiling for blueberry and took the polyculture specs down with it. This one lands east of the
- * row ends at the Desktop Chrome viewport, x 6.7 to 14.3 and y -1.5 to 7.5 in plot meters, 35.6
- * square meters in 7.5 percent season shade, measured through the store handle on a local build
+ * claim about the framing as much as about the bed. The plot is framed by projecting its corners,
+ * and a ring under the front row measured 34 percent season shade, which is above the design
+ * ceiling for blueberry and enough to fail the polyculture specs. This one lands east of the row
+ * ends at the Desktop Chrome viewport, x 6.7 to 14.3 and y -1.5 to 7.5 in plot meters, 35.6 square
+ * meters in 7.5 percent season shade, measured through the store handle on a local build
  */
 export const BED_RING: readonly (readonly [number, number])[] = [
   [0.64, 0.55],

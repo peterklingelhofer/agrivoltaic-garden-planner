@@ -34,8 +34,8 @@ interface CriterionCore {
   readonly criterion: Criterion
 }
 
-// 'meets' / 'misses' rather than pass/fail: these are design parameters for an expedited
-// track, not a determination, and pass/fail language must never reach a user
+// 'meets' and 'misses' name design parameters for an expedited track. A determination comes
+// later, from elsewhere, and pass/fail language must never reach a user
 export interface MeetsResult extends CriterionCore {
   readonly outcome: 'meets'
   readonly measured: number

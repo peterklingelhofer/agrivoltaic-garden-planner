@@ -66,8 +66,7 @@ describe('the DLI threshold a crop was gated on names its own evidence', () => {
     expect(evidence?.summary).toContain("this app's own figure")
     expect(evidence?.summary).toContain('no cited work measured it for this crop')
     // no source in the corpus prints a daily light integral for apple, so the row names none.
-    // Purdue HO-238-B-W and VCE SPES-720NP stood here until the sweep of 2026-09-20 and print
-    // a band for six crops, apple among none of them
+    // Purdue HO-238-B-W and VCE SPES-720NP print a band for six crops, and apple isn't one of them
     expect(evidence?.citations).toEqual([])
   })
 
@@ -138,8 +137,8 @@ describe('the DLI disclosure states the limitation without overstating it', () =
     const corpus = new Set((cslEntries as readonly { readonly id: string }[]).map((e) => e.id))
     expect(RUNKLE_QUOTE).toBe('In my opinion, there is no such thing as a DLI requirement')
     expect(RUNKLE_ATTRIBUTION).toContain('Runkle')
-    // the quoted column had no citekey until 2026-09-20 and was quoted under its own title.
-    // It has one now, so the quote cites it and the note points at the author's other column
+    // the quoted column has its own citekey, so the quote cites it and the note points at the
+    // author's other column
     expect(RUNKLE_CITED).toBe('runkle2019-dli-requirements')
     expect(corpus.has(RUNKLE_CITED)).toBe(true)
     expect(corpus.has('runkle2011-vegetable-dli')).toBe(true)

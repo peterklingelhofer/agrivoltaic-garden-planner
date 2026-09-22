@@ -245,7 +245,7 @@ describe('Ground', () => {
   /**
    * The last link in the winter-ground chain, and the one nothing covered: the cover the site's
    * normals produce has to reach the surface the camera sees. Compared at ONE day against a site
-   * with no normals rather than across two seasons, because January and June differ in sun
+   * with no normals, a single snapshot: January and June differ in sun
    * elevation far more than in albedo and a pixel that is darker in January proves nothing
    */
   it('takes its brightness from the snow the site normals put on it', async () => {
@@ -294,11 +294,10 @@ describe('Ground', () => {
  * straight THROUGH them to whatever is behind, which for the gizmo is almost always the ground.
  * A browser probe caught the order: `Ground`'s `onPointerDown` fired FIRST and cleared the
  * selection, `Gizmo` lost its target and unmounted in the same tick it had grabbed the axis, and
- * so no drag ever moved anything. Fifty-five attempts across the gizmo moved a bed zero times.
+ * so no drag ever moved anything: across fifty-five drags on the gizmo, a bed moved zero times.
  *
- * `dragging` is set from HOVER rather than from the press, because by the time the gizmo raises
- * its own `mouseDown` the ground has already deselected. What is pinned here is that the
- * selection handlers ask
+ * `dragging` is raised by the drag's own press and held until release. What is pinned here is that
+ * the selection handlers ask for it first, and leave the selection alone while it's up
  */
 describe("a press that belongs to a handle isn't a press on the scene", () => {
   const press = { point: { x: 1, y: 0, z: 1 }, stopPropagation: () => {} }
@@ -471,7 +470,7 @@ describe('closing a drawn shape by double-clicking it', () => {
     const after = useAppStore.getState()
     expect(after.plot?.beds.length).toBe(before + 1)
     // four corners went in and four came out: the duplicate the gesture itself created is
-    // dropped, rather than raising a bed with a zero-length edge in it
+    // dropped, so no bed ends up with a zero-length edge in it
     expect(after.plot?.beds.at(-1)?.footprint.exterior).toHaveLength(4)
     expect(after.draft).toHaveLength(0)
     expect(after.mode).toBe('select')
@@ -773,7 +772,7 @@ describe('DliOverlay', () => {
   })
 
   /**
-   * The uniforms arrive as r3f props rather than as writes into a memoized object, so this is
+   * The uniforms arrive as r3f props, so this is
    * what says the plumbing is connected: a mis-ordered pierced prop, or a renamed uniform, shows
    * up as a shader reading its default and an overlay that is a flat color on screen
    */

@@ -88,8 +88,8 @@ beforeEach(() => {
     terminate: worker.terminate,
   })
   resetAppStore()
-  // applying a scenario now plants the beds it places, and the ranking behind that needs a
-  // site. Seeding one keeps this file on the wiring it is about rather than on an upstream
+  // applying a scenario plants the beds it places, and the ranking behind that needs a site.
+  // Seeding one keeps this file on the wiring it is about, without an upstream
   useAppStore.setState({ site: ready(siteFixture()) })
   engine.mockReset()
   engine.mockResolvedValue(setFor())
@@ -594,9 +594,9 @@ describe('an engine answer is taken only in a shape the view can render', () => 
  * moved, that press would throw the results away.
  *
  * So a visitor who had waited through five annual bakes, reached the layouts, and asked to see
- * the numbers behind them got "Compute some layouts" back on a screen that had just been
- * showing the answers. `EXPERIENCE_OPTIONS` calls that control "a thing you can try rather than
- * a thing you have to predict". This is what makes that true
+ * the numbers behind them got "Show me some layouts" back on a screen that had just been
+ * showing the answers. `EXPERIENCE_OPTIONS` calls that control "a thing you can try,
+ * never a thing you have to predict". This is what makes that true
  */
 describe('a finished layout search survives an answer the search never reads', () => {
   const searched = (): void => {

@@ -14,9 +14,9 @@ import { PlantsPanel } from './PlantsPanel'
 import { mount, type Harness } from './testkit'
 
 /**
- * The picker as a newcomer meets it: 163 crops in one scroll box, a box that says how many of
- * them to show, and no way to say the name of the plant you came for. The list runs
- * past hops, tomatillo, purslane and phacelia before a tomato, so field pea is the easy pick.
+ * The picker as a beginner meets it: a ranking of 182 crops, a box that says how many of them to
+ * show, and a search for the name of the plant you came for, since scrolling past hops, tomatillo,
+ * purslane and phacelia looking for a tomato ends on field pea.
  *
  * Mounted through the plants step, where it lives inside the "Pick plants one at a time" fold.
  * A closed `<details>` keeps its content in the DOM, so nothing here opens it
@@ -37,7 +37,7 @@ const rankedForBed = (): readonly CropRecommendation[] => {
 }
 
 /**
- * The crops the picker is actually offering, in the order it offers them. By role rather than by
+ * The crops the picker is actually offering, in the order it offers them. By role. Not
  * `data-crop`: the picture inside every option carries the crop it draws, so a plain attribute
  * query counts each row twice
  */
@@ -67,7 +67,7 @@ const calendars = (): readonly BedCalendar[] => {
 /**
  * Stages the first crop in the picker head the bed can actually take, and answers with which one
  * it was. Which crop that is depends on the calendar the seeded light field produces, so it's
- * found by asking the panel rather than pinned to a name that could stop deriving
+ * found by asking the panel, without pinning it to a name that could stop deriving
  */
 const stage = async (harness: Harness, except: readonly CropId[] = []): Promise<CropId> => {
   for (const item of rankedForBed().slice(0, PICKER_LIMIT)) {
@@ -137,9 +137,8 @@ describe('finding a plant by name', () => {
 
 describe('how much of the ranking is on screen', () => {
   /**
-   * The box is one flag in the store and no longer one piece of component state per list. A
-   * closed step is taken out of the document, so the answer used to go with it: check the box,
-   * leave the step, come back for a strawberry seen earlier and the list is back to six herbs
+   * The box is one flag in the store, shared by every list, so the answer outlives a closed step:
+   * checking the box, leaving the step and coming back for a strawberry seen before still finds it
    */
   it('writes the store and reads it back, so the answer outlives this panel', async () => {
     const harness = await mount(<PlantsPanel />)
@@ -286,9 +285,9 @@ describe('a crop the ranking excluded', () => {
 
 describe('the sow day', () => {
   /**
-   * A phone walk read "Sow day for hot pepper 88" and couldn't say what 88 was. The draft asks
-   * for a month and a day the way the rows above it do, and the day of the year the derivation
-   * keys on is read out underneath rather than typed into
+   * A bare day of the year, as in "Sow day for hot pepper 88", gives no way to tell what 88 is. The
+   * draft asks for a month and a day the way the rows above it do, and the day of the year the
+   * derivation keys on is read out underneath and never typed into
    */
   it('is chosen as a date, with the day of the year read out under it', async () => {
     const harness = await mount(<PlantsPanel />)
@@ -328,7 +327,7 @@ describe('the sow day', () => {
 describe('the same sowing chosen again', () => {
   /**
    * The same crop sown the same day is the planting already in the bed, and the store adds to it
-   * rather than replacing it. The sentence says so before the press, because a reader who adds
+   * without replacing it. The sentence says so before the press, because a reader who adds
    * one and reads eighteen on the row has to be told where the eighteen came from
    */
   it('says it adds to the planting already there, and does', async () => {

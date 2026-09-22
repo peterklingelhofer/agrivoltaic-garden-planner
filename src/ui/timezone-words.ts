@@ -1,9 +1,9 @@
 /**
  * A zone computed from the longitude alone (the last-resort fallback, where even the nearest
  * zone.tab city was unknown) is an `Etc/GMT` label, whose sign runs the POSIX way round:
- * `Etc/GMT-10` is ten hours ahead of UTC. A gardener in Melbourne read it as ten hours behind, so
- * it's printed as the offset it means, with what it does and doesn't know. An IANA name is
- * printed as it is, and a name read off the nearest zone.tab city says so rather than claiming
+ * `Etc/GMT-10` is ten hours ahead of UTC. A gardener in Melbourne would read it as ten hours
+ * behind, so it's printed as the offset it means, with what it does and doesn't know. An IANA
+ * name is printed as it is, and a name read off the nearest zone.tab city says so, without claiming
  * the weather service named it
  */
 export const timezoneWords = (

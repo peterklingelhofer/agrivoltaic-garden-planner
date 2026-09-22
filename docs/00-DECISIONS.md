@@ -1,252 +1,252 @@
-# Agrivoltaic Garden Designer: Reconciled Decision Record
+# Decision record
 
-Authoritative. Where a research report conflicts with this file, this file wins.
-Source reports: `02-agrivoltaics-science.md`, `03-solar-engineering.md`,
-`04-horticulture.md`, `05-tek-agroecology.md`.
+The modeling decisions behind the app, and what each one rests on. Where another document in `docs/`
+disagrees with this file, this file wins. Every source named here has an entry in the citation corpus,
+`docs/CITATIONS.md`, with its machine-readable record in `docs/CITATIONS.csl.json`.
 
-## 0. Gate
-
-Product does not exist. Nearest analogs are B2B/utility-scale (Spade, Serida, NREL InSPIRE,
-PVsyst agrivoltaic templates). No consumer tool combines 3D design + PV shade physics +
-location-based plant recommendation. Proceed.
-
-## 1. Product decisions (user-selected)
+## 1. Scope
 
 | Axis | Decision |
 |---|---|
-| Architecture | Static frontend + thin Cloudflare Worker proxy/cache |
-| Geo scope | Global |
-| Light sim | Full annual DLI map |
-| v1 scope | 3D canvas, plant recommender, auto-layout optimizer. Reports deferred to v1.1. Superseded: the optimizer went with the dock in Record 17, the layout search of 10c stands |
+| Architecture | Static frontend plus a thin Cloudflare Worker for proxying and caching |
+| Geography | Global |
+| Light simulation | Full annual DLI map |
+| Design scale | One garden: beds, a few dozen panels, a single site |
+| Surfaces | 3D canvas, plant recommender, the layout search of record 10c |
 
-## 2. Conflicts resolved
+## 2. Physics and model choices
 
-### 2.1 Ground shading model: polygon projection, not `infinite_sheds`
+### 2.1 Ground shading: per-panel polygon projection
 
-the solar geometry document proposed the analytic 2-D infinite-row view factor. the agrivoltaics document rejects it because at garden
-scale edge rows dominate and finite arrays need explicit polygon projection (Zainali et al. 2023,
-Applied Energy 339:120981, R^2 0.99-1.00 vs PVsyst, 0.3% daily error).
+Explicit per-panel polygon projection along the solar vector is the production ground model, because
+edge rows dominate at garden scale and a finite array needs the explicit projection: Zainali et al. 2023
+(Applied Energy 339:120981) validate it at R^2 0.99-1.00 against PVsyst, 0.3% daily error.
+`pvlib.bifacial.infinite_sheds.vf_ground_sky_2d` is a unit-test oracle for the degenerate infinite-row
+case and reaches no user path.
 
-RESOLUTION: explicit per-panel polygon projection along the solar vector is the production
-model. `pvlib.bifacial.infinite_sheds.vf_ground_sky_2d` is a **unit-test oracle only**, valid
-solely for the degenerate infinite-row case. Do not ship the 2-D form on any user path.
+The PV chain is a separate surface and does ship infinite-row formulations on the user path:
+`rearPoaWM2` takes the unshaded ground fraction as `1 - GCR` (Marion et al. 2017), where GCR is the ground coverage ratio, and
+`rowSelfShadeFraction` shades every row alike. A three-row array is nearly all edge, so both understate
+rear-side gain and overstate row-shading loss. The overstated row shading costs 0.13% of the year on the
+shipped default array at its wide 9 m pitch, and the understated rear gain is unquantified, a known
+limit.
 
-SCOPE, added later because the sentence above reads wider than it is: this governs the **ground**
-light map, which is what the sentence was about, and there `vf_ground_sky_2d` is an oracle only. The
-**PV chain** is a separate surface and does still ship infinite-row formulations on the user path:
-`rearPoaWM2` takes the unshaded ground fraction as `1 - GCR` (Marion et al. 2017) and
-`rowSelfShadeFraction` shades every row alike, front row included. Both approximations lean the same
-way at garden scale, and it is the unflattering way: a three-row array is nearly all edge, so the
-true rear-side gain is **understated** and the true row-shading loss **overstated**. Measured on the
-shipped default array the second is negligible (0.13% of the year at a 9 m pitch, which is very
-open), the first is not quantified and is a known limitation, not a resolved decision.
+### 2.2 Ray tracing: a validation reference only
 
-### 2.2 Ray tracing rejected
+`bifacial_radiance` takes 12.7 to 88 h against 2 to 4 min for view factors, with no gain in
+annual-aggregate accuracy (Grommes et al. 2023, EPJ PV 14:11). Radiance and Ladybug are validation
+references and stay out of the runtime.
 
-`bifacial_radiance` measured 12.7-88 h vs 2-4 min for view-factor with no annual-aggregate
-accuracy gain (Grommes et al. 2023, EPJ PV 14:11). Radiance/Ladybug are validation references,
-never runtime dependencies.
+### 2.3 One sky model for the PV plane and the ground
 
-### 2.3 Sky model shared between PV plane and ground
+Perez et al. 1990 (`allsitescomposite1990`) transposes irradiance to the plane of array, chosen
+because it's the sky model behind Radiance `gendaymtx`. PV yield and the ground DLI map read one sky
+radiance distribution.
 
-Perez 1990 (`allsitescomposite1990`) for plane-of-array transposition, chosen because it is the
-same sky model behind Radiance `gendaymtx`. PV yield and the ground DLI map must read one sky
-radiance distribution, not two.
+### 2.4 Solar position: NREL SPA, with SunCalc for UI chrome
 
-### 2.4 Solar position: NREL SPA in sim, SunCalc in UI only
+SPA (Reda & Andreas 2008, NREL/TP-560-34302) is ported from `pvlib/spa.py` (BSD-3) and validated to
+under 0.001 deg. Accuracy is the justification: a 0.05 deg declination error moves a 4 m structure's
+shadow tip about 0.4 m at 5 deg elevation, three cells on a 12 cm raster. One SPA evaluation costs about
+6 us, so a year of 8760 takes about 51 ms, baked once into a Float32Array.
 
-SPA (Reda & Andreas, NREL/TP-560-34302) ported from `pvlib/spa.py` (BSD-3), validated to
-<0.001 deg. Justification is accuracy, not dogma: 0.05 deg declination error moves a 4 m
-structure's shadow tip ~0.4 m at 5 deg elevation = 3 cells on a 12 cm raster. Cost is 3-8 ms
-for 8760 evaluations baked into a Float32Array.
+SunCalc covers sunrise, sunset, twilight and moon chrome only, exposing no air mass, radius vector or
+refraction control. Geometric elevation (shadow casting) and refracted elevation (horizon UI) stay
+separate values, and azimuth uses the `atan2` form, which keeps afternoon shadows on the correct side.
 
-SunCalc is permitted for sunrise/sunset/twilight/moon chrome only. It exposes no air mass,
-radius vector, or refraction control.
+### 2.5 Decomposition as an optional adapter
 
-Keep geometric elevation (shadow casting) and refracted elevation (horizon UI) as separate
-values. Azimuth must use the `atan2` form or afternoon shadows mirror.
-
-### 2.5 Decomposition is an optional adapter
-
-Open-Meteo, PVGIS, NSRDB and CAMS all ship GHI+DNI+DHI. Implement DIRINT (hourly), Engerer2
-with Bright & Engerer 2019 coefficients (sub-hourly), Erbs (fallback) behind an adapter that is
+Open-Meteo, PVGIS, NSRDB and CAMS all ship GHI, DNI and DHI (global horizontal, direct normal and
+diffuse horizontal irradiance). DIRINT (Perez et al. 1992) covers hourly input, Engerer2 with Bright
+& Engerer 2019 coefficients covers sub-hourly, and Erbs et al. 1982 is the fallback. The adapter is
 inert when the source provides all three components.
 
-### 2.6 Primary plant filter is DLI, not hardiness zone
+### 2.6 DLI as the primary plant filter
 
-the horticulture document's core claim, accepted. USDA zones encode winter minimum temperature only and are a
-category error for annual vegetables. Hardiness gates perennials, chill gates fruit, GDD-vs- season
-gates annuals, **DLI gates everything** and is the discriminating variable this product uniquely
-computes.
+USDA zones encode winter minimum temperature alone, a category error for annual vegetables.
+Hardiness gates perennials, chill gates fruit, and growing degree days against season length gate
+annuals. DLI gates everything, and it's the discriminating variable this app computes.
 
-### 2.7 Under-panel air and soil temperature: not modeled, and that is the finding
+### 2.7 Under-panel air and soil temperature: not modeled
 
-A common expectation is that beds under an array run hotter with fewer frost cycles,
-warm enough to grow crops the region cannot otherwise support. The mechanism behind half of that is
-real and is now shipped as a qualitative reading (§2.7a), the conclusion is not, and the temperature
-model it would need is deliberately absent.
+No under-panel air or canopy temperature is derived, and no crop gate reads one. The measured effects
+are about a degree and differ in shape by site.
 
-RESOLUTION: no under-panel air or canopy temperature is derived, and no crop gate reads one. Doc
-02 §3.2 is the reason. The measured air-temperature effects are about a degree and **differ in
-shape by site**: ~1 °C cooler by day and ~0.5 °C warmer at night in semi-arid Arizona
-(Barron-Gafford et al. 2019), daily means about 1.1 °C lower across both years in temperate
-Germany, with warmer readings on 7 days in 2017 and 18 in 2018 (Weselek et al. 2021, corrected
-2026-09-20 from a reading that had this sentence backward), significantly different but
-"magnitudes smaller" than simulations predicted in Oregon (Hassanpour Adeh et al. 2018). The one
-consistent result is **soil cooling in summer**, which is the opposite sign to the expectation that
-prompted this, and the quantity that does flip sign by site is soil moisture. A one-degree effect
-whose shape changes by site, measured at three sites and badly simulated at one of them, is not a
-model this app can put behind a planting date.
+| Site | Air temperature under the array |
+|---|---|
+| Arizona, semi-arid | about 1 C cooler by day, 0.5 C warmer at night (Barron-Gafford et al. 2019) |
+| Germany, temperate | daily mean about 1.1 C lower both years, most in summer, higher on 7 days in 2017 and 18 in 2018 (Weselek et al. 2021) |
+| Oregon, temperate | significant at 1.2 m and 2.0 m, while "magnitudes smaller" than the 3 to 5 C some simulations predicted (Hassanpour Adeh et al. 2018) |
 
-Two consequences a reader is likely to get backward, recorded because they are the reasons this
-is not merely "not done yet":
+Soil cooling in summer is the one consistent result. The effect on soil water changes sign by site,
+which Weselek attributes to the Arizona and Oregon sites being irrigated. An effect of about a
+degree whose shape changes by site can't stand behind a planting date.
 
-- **Shade cuts daytime warming as surely as it cuts night-time cooling.** A heat-and-light-limited
-  crop is limited by accumulated degree-days and DLI, and an array reduces both. "Fewer frosts"
-  therefore does not mean "a longer, warmer season", and it emphatically does not mean a
-  region can now finish a crop it could not finish before. The frost reading in
-  `src/recommend/frost.ts` is worded and tested to refuse that inference.
-- **Milder nights reduce chill accumulation.** `chillGate` gates perennials on the site's chill,
-  and any "panels keep it warmer" adjustment would extend the season and quietly fail the fruit
-  trees. The direction is stated in the frost caveat and is asserted in `frost.test.ts`.
+Two consequences run against intuition. An array cuts daytime warming along with night-time cooling,
+reducing degree-days and DLI together. So fewer frosts don't buy a longer, warmer season or let any
+region finish a crop it couldn't finish before. `src/recommend/frost.ts` is worded and tested to
+refuse that inference. Milder nights also reduce chill, which `chillGate` reads for perennials, so a
+"panels keep it warmer" adjustment would quietly fail the fruit trees. A measured frost-margin or
+degree-day figure for a bed under an array would change this, and no accessible source gives one, in
+degrees or in damage incidence.
 
-What would change this: a measured frost-margin or degree-day figure for a bed under an array. Doc
-02 §3.6 searched and found none in any accessible source, in degrees or in damage incidence.
+### 2.7a Sky view factor: reported, with nothing derived from it
 
-### 2.7a Sky view factor is reported, nothing is derived from it but words
+The bake (the annual light simulation over the ground grid) computes a per-cell sky view factor for
+the diffuse light and the ground-to-module inter-reflection. It's aggregated onto `BedLight` and
+read by `src/recommend/frost.ts`, whose on-screen sentence states the geometry and names the
+direction: less sky in view is less longwave loss on a still clear night, the mechanism Oke 1981
+establishes for street canyons and the one a frost cloth uses. That sentence says explicitly that
+this is no help against advective frost (Snyder & de Melo-Abreu 2005) and claims no temperature.
+Site frost dates, degree-days and chill are untouched.
 
-The bake has computed a per-cell sky view factor from the beginning, for the diffuse light and the
-ground-to-module inter-reflection. It is now aggregated onto `BedLight` and read by
-`src/recommend/frost.ts`, which states the geometry and names the direction: less sky in view is
-less longwave loss on a still clear night, the mechanism Oke 1981 establishes for street canyons
-and the one a frost cloth uses. It says explicitly that this is no help against advective frost
-(Snyder & de Melo-Abreu 2005) and it claims no temperature. Site frost dates, degree-days and
-chill are untouched.
+### 2.8 Electrical and grid modeling: out of scope
+
+No grid, inverter-sizing or interconnection model is built. The energy side stops at the PV chain's
+annual yield and at the electricity term of the land equivalent ratio (LER), whose formulation
+follows Dupraz et al. 2011.
+
+That term's denominator is stated verbatim in `REFERENCE_DEFINITION` (`src/sim/pv/ler.ts`): a
+sole-use monoculture-equivalent fixed-tilt plant on the same land, GCR 0.40 with 0.35-0.45 as band
+width, equator-facing, tilt equal to site latitude clamped to 10-35 deg, DC:AC 1.20, and modules,
+inverter and loss stack identical to the agrivoltaic array, with numerator and denominator both in
+annual AC kWh per m2 of land, where land is module aperture over GCR. Identical hardware isolates
+the design decision of pitch, tilt, clearance and tracking.
 
 ## 3. Physics constants and formulas
 
-- PAR fraction of GHI: 0.45 by energy, user-adjustable 0.42-0.50 (Meek 1984, Britton & Dodd 1976,
-  Jacovides 2004 measured 0.451-0.456, to 0.501 hourly overcast).
-- Photon conversion: 4.57 umol/J in-band, ~2.06 umol/J composite on broadband.
+- PAR fraction of GHI: 0.45 by energy, user-adjustable 0.42-0.50 (Meek et al. 1984, Britton & Dodd
+  1976, Jacovides et al. 2004 measured 0.451-0.456, to 0.501 hourly under overcast).
+- Photon conversion: 4.57 umol/J in-band (McCree 1971), about 2.06 umol/J composite on broadband.
 - `DLI (mol/m2/d) ~= GHI (MJ/m2/d) x 2.06`, or `x 7.4` for kWh/m2/d.
-- Inter-reflection (only material for white backsheets, 3-8% in the shade strip):
-  `E / (1 - rho_g (1 - SVF) rho_m)`.
-- Penumbra: derived from geometry, with no citation to make. Across the ray the width is `d * tan(0.533 deg)` at
-  slant distance `d`, the Sun's mean angular diameter being the full limb-to-limb angle, so
-  nothing is doubled: 3.72 cm at 4 m overhead, 7.4 cm at the 8 m slant of a 4 m edge at 30 deg
-  elevation, which is the solar geometry document's 7.5 cm. On the ground along the sun's azimuth the same edge's
-  penumbra is `h * tan(0.533 deg) / sin^2(alpha)`, 14.9 cm at 30 deg. Under the 12 cm cell near
-  noon and past it below about 33 deg, where the hours carry little energy, so annual DLI ignores
-  it. A note here of 2026-07-30 called the 7.5 cm figure doubled, having read it as the overhead
-  case at 4 m. Withdrawn 2026-09-20, see `the verification document` 5a.
-- Inter-reflection 3-8% for white backsheets: **UNVERIFIABLE.** The radiosity formula itself is
-  valid two-surface theory, but no PV paper states it and the 3-8% figure appears nowhere.
-  Marion 2017 was checked and is NOT the source. Mark unsourced in the UI or drop the range.
+- Module-to-ground inter-reflection: `E / (1 - rho_g (1 - SVF) rho_m)`, an instance of the two-surface
+  enclosure radiosity result `B = (I - rho F)^-1 E`. The mathematics is standard and the form is this
+  app's own derivation: pvlib's `infinite_sheds`, Marion et al. 2017, the Sandia PVPMC ground-reflected
+  page and PVsyst all carry single-bounce terms only. The 3-8% magnitude quoted for white backsheets is
+  unverifiable and labeled as such, since no source states it and the published figures that resemble
+  it measure other quantities.
+- Penumbra, derived from geometry with no citation to make. Across the ray the width is `d *
+  tan(0.533 deg)` at slant distance `d`, and 0.533 deg, the Sun's mean angular diameter (31.99
+  arcmin, 0.524-0.542 deg over the year), is the full limb-to-limb angle, so the formula takes no
+  factor of 2. The width is 3.72 cm at 4 m overhead, 7.4 cm at the 8 m slant of a 4 m edge at 30 deg
+  elevation. On the ground along the sun's azimuth it is `h * tan(0.533 deg) / sin^2(alpha)`, which
+  at h = 4 m gives 3.7 cm at the zenith, 4.5 at 65 deg, 9.0 at 40 and 14.9 at 30. That sits under
+  the 12 cm cell near noon and exceeds one cell below about 33 deg, where the hours carry little
+  energy, so annual DLI ignores it. Ignoring the penumbra is valid for the annual integral only, and
+  any instantaneous or edge-detail rendering needs it.
 
 ## 4. Resolution requirements
 
-- Timestep <= 15 min, 5-10 min preferred. Beam shadow bands sweep ~0.25 deg/min, hourly steps smear
-  cell-level extremes.
-- Ground grid <= 0.25 m cross-row, 0.1 m at bed scale.
-- Weather input must be a **TMY**, never a single year. The sign of the shade effect flips between
-  normal and drought years (Weselek 2021 potato -20% to +11%, Amaducci 2018 corn gains only under
-  rainfed stress).
+- Timestep 15 min or finer, 5-10 min preferred. Beam shadow bands sweep about 0.25 deg/min, and
+  hourly steps smear cell-level extremes.
+- Ground grid 0.25 m or finer cross-row, 0.1 m at bed scale.
+- Weather input is a **TMY** (typical meteorological year), because the sign of the shade effect
+  flips between normal and drought years and a single year carries one sign. Weselek et al. 2021
+  measured potato at -18.2% (p = 0.005) and winter wheat at -18.7% (p = 0.03) in 2017, against a
+  potato gain of +11% (p = 0.034) and a wheat gain of +2.7% that is not significant (p = 0.78) in
+  the 2018 drought year. Amaducci et al. 2018 found corn gains only under rainfed stress.
 
 ## 5. GPU pipeline
 
-Cumulative-sky daylight coefficients (Radiance/Ladybug method): factorize time-invariant
+Cumulative-sky daylight coefficients, the Radiance and Ladybug method, factorize time-invariant
 visibility from space-invariant weather.
 
-- Reinhart MF:2 = 577 sky patches. The Tregenza 145-patch dome stays in `skydome.ts` for tests
-  that run coarse.
-- Separate sun direction set. **Never bin the beam into 6 deg patches.**
-- Dedupe 8760 h x 4 sub-steps onto a 2 deg grid -> ~600-900 unique directions.
-- MEASURED, superseding the 0.55 s estimate: at 0.12 m cells (284x299 = 84,916 cells, 40 panels,
-  MF:2, 4 sub-steps) the real pass count is **2146** (1569 binned sun directions + 577 patches), not
-  ~1300, giving ~429 ms GPU and **~0.9-1.0 s** total. Two causes, both in the source docs: 2 deg
-  binning at 15-min sub-steps over a full year yields 1569 unique sun directions, not the solar geometry document's
-  predicted 600-900, and a full SPA costs ~6 us/sample in JS, so 8760 evaluations take ~51 ms, not
-  the 3-8 ms the agrivoltaics document claims. Raising binning to 3 deg or dropping to n_sub=2 brings it back into
-  range. Treat 0.55 s as aspirational, ~1 s as real.
-- 512^2 RGBA32F accumulation. 12 monthly targets are nearly free.
-- WebGPU compute ray casting where available (~30 ms), WebGL2 shadow maps as the baseline.
+- Reinhart MF:2 gives 577 sky patches. The Tregenza 1987 145-patch dome stays in `skydome.ts` for
+  tests that run coarse.
+- The sun directions are a separate set, and the beam is never binned into 6 deg patches.
+- 8760 h x 4 sub-steps dedupe onto a 2 deg grid, which yields 1569 unique directions.
+- At 0.12 m cells (284 x 299 = 84,916 cells, 40 panels, MF:2, 4 sub-steps) the pass count is 2146,
+  those 1569 directions plus 577 patches, for about 429 ms on the GPU and 0.9-1.0 s in total. A 3 deg
+  bin or `n_sub = 2` brings the total toward 0.55 s. One second is the figure to plan against.
+- 512^2 RGBA32F accumulation, where twelve monthly targets are nearly free.
+- WebGPU compute ray casting where available, about 30 ms, with WebGL2 shadow maps as the baseline.
 
-## 5b. Corrections found during implementation
+## 5b. Pipeline formulas and disclosed approximations
 
-- **The solar geometry document section 3.2 backtracking formula is wrong.** It is written
-  `acos(min(1, (P/W) cos psi))`. Deriving the shade-free criterion from the same section's
-  shadow-width expression gives **`sin psi`**, which matches pvlib's `cos(tracker rotation)`
-  since rotation = 90 - psi. `sin psi` is what is implemented. Do not "fix" it back.
-- **Tracking arrays are baked at their peak-elevation pose.** The daylight-coefficient
-  factorization requires time-invariant geometry, so fixed tilt is exact and tracking is an
-  approximation. This is a real accuracy limit and must be disclosed in the UI.
-- **Engerer2 currently uses Haurwitz clear-sky GHI** as a v1 placeholder. Ineichen-Perez with
-  Linke turbidity is the v2 upgrade.
-- **`'psa'` and `'grena3'` solar-position modes throw** rather than return unvalidated physics.
-  Only `'nrel-spa'` and `'michalsky'` are real.
+- The shade-free backtracking criterion is `acos(min(1, (P/W) sin psi))`, with P the row pitch, W
+  the collector width and psi the sun's profile angle. Deriving it from the shadow-width expression
+  gives `sin psi`, which matches pvlib's `cos(tracker rotation)` because rotation = 90 - psi. A `cos
+  psi` form fails both checks.
+- Tracking arrays bake at their peak-elevation pose. The daylight-coefficient factorization requires
+  time-invariant geometry, so fixed tilt is exact, tracking is an approximation, and the UI discloses
+  it.
+- Engerer2 reads Haurwitz clear-sky GHI. Ineichen-Perez with Linke turbidity is the upgrade path.
+- `'nrel-spa'` and `'michalsky'` are the real solar-position modes. `'psa'` and `'grena3'` throw,
+  because a throw is safer than unvalidated physics.
 
 ## 6. Crop response model
 
-Drive yield from **season-cumulative relative shade ratio (RSR)**, never instantaneous PPFD, using
-the nine crop-group non-linear curves of Laub et al. 2022 (Agron. Sustain. Dev. 42:51, 58 studies,
-428 points).
+Yield follows season-cumulative relative shade ratio (RSR), through the nine crop-group non-linear
+curves of Laub et al. 2022 (Agron. Sustain. Dev. 42:51, 58 studies, 428 points). Instantaneous PPFD
+never enters the yield term.
 
-- RSR^2 significant (p=0.0015): linear "% shade = % yield loss" is statistically wrong.
-- RSR x crop type p<0.0001: crop group is a required input.
-- Shade type (panels vs cloth vs nets) NOT significant: proxy data from shade-cloth studies is
-  licensed for use.
-- Yield anchors at 40% RSR (all nine groups, from Table S2): berries 114.1%, fruits 113.3%,
-  fruity veg 102.5%, forages 93.2%, leafy veg 85.8%, C3 cereals 61.9%, tubers/root 60.8%,
-  grain legumes 50.4%, corn 45.3%.
-- Shade-benefit optima (verbatim): berries to ~30% RSR, fruits ~25%, fruity veg ~20%, forages
-  benefit to 25% then tolerant, C3 cereals never benefit but tolerate to 50%.
+- RSR^2 is significant (p = 0.0015), so a linear "% shade = % yield loss" is statistically wrong.
+- RSR x crop type is significant (p < 0.0001), so crop group is a required input.
+- Shade type (panels, cloth, nets) isn't significant, which licenses proxy data from shade-cloth
+  studies.
+- Yield at 40% RSR, from Table S2: berries 114.1%, fruits 113.3%, fruity vegetables 102.5%, forages
+  93.2%, leafy vegetables 85.8%, C3 cereals 61.9%, tubers and roots 60.8%, grain legumes 50.4%, corn
+  45.3%.
 
 ### Model form and coefficient provenance
 
-`log10(Y/100) = b1*RSR + b2*RSR^2`, RSR in percent, forced through the origin (0% RSR = 100%
-yield), so **the intercept is structurally zero for every group**. The reduced model in Table 1
-eliminated the RSR2 x crop-type interaction (p=0.3932), so **b2 is shared across all nine
-groups** and only b1 varies by group.
+`log10(Y/100) = b1*RSR + b2*RSR^2`, RSR in percent, forced through the origin so that 0% RSR gives
+100% yield and the intercept is structurally zero for every group. Table 1's reduced model eliminates
+the RSR^2 x crop-type interaction (p = 0.3932), so b2 is shared across all nine groups and only b1
+varies by group.
 
-b2 = -7.3293e-05 per (%RSR)^2. b1 per %RSR: berries +4.35911e-03, fruits +4.28533e-03,
-fruity veg +3.19481e-03, forages +2.16180e-03, leafy veg +1.27197e-03, C3 cereals -2.27979e-03,
-tubers/root -2.47235e-03, grain legumes -4.50551e-03, corn -5.65256e-03.
+b2 = -7.3293e-05 per (%RSR)^2. b1 per %RSR: berries +4.35911e-03, fruits +4.28533e-03, fruity
+vegetables +3.19481e-03, forages +2.16180e-03, leafy vegetables +1.27197e-03, C3 cereals
+-2.27979e-03, tubers and roots -2.47235e-03, grain legumes -4.50551e-03, corn -5.65256e-03.
 
-**These coefficients are DERIVED, not published.** Laub publishes no coefficients anywhere: not in
-the article, the supplement (which contains only the Fig. S1 caption, Table S1 and Table S2), or the
-Zenodo dataset, "Code availability: Not applicable". They were recovered algebraically from the 162
-published Table S2 points plus the verbatim model specification, and reproduce every point to within
-0.07 pp. Independently fitting b2 per group returned -7.33e-05 for all nine, confirming the
-shared-quadratic structure.
+These coefficients are **derived**, cited as derived from Laub et al. 2022, because Laub publishes none in the article, the supplement or the Zenodo dataset. They were recovered
+algebraically from the 162 published Table S2 points plus the verbatim model specification, reproduce
+every point to within 0.07 pp, and an independent per-group fit of b2 returns -7.33e-05 for all nine.
+The data carries this distinction and the UI shows it.
 
-Provenance rule: cite these as **derived from** Laub et al. 2022, never as quoted from it. The
-data must carry this distinction, and the UI must show it.
+### Shade benefit
 
-TRAP: eartharxiv.org/repository/object/7354 is a DIFFERENT paper that merely cites Laub. Its
-equations (e.g. `C3 Cereals Y=106.34-0.44X1`) are NOT Laub's. Do not use them.
-- Any "shade improves yield" pathway is **gated on a water-limitation flag**, because every
-  published gain this corpus holds comes from a hot, dry or irrigated-arid site: Barron-Gafford's
-  Sonoran plot, Amaducci's rainfed drought simulations, Weselek's 2018 drought year. Zhang et al.
-  2025 report the same clustering across 20 countries, that the climates reporting a yield
-  increase "share some main features: hot summers, limited precipitation and (semi-) arid
-  conditions". No published work stratifies a shade-response curve by water status, and none can
-  from this literature: Laub et al. 2022 excluded any trial applying "additional implementation of
-  treatments other than shading, which were not applied to a corresponding control treatment
-  (e.g., reduced irrigation)", so the pooled curves are structurally blind to the interaction. The
-  ceiling is therefore a floor-of-evidence choice and no fitted effect: it declines to predict a
-  gain where the mechanism the literature names is absent, and it claims no size for the gain
-  where it is present. **It also cannot move corn or grain legumes at all**, at any shade level,
-  because neither group's curve reaches 100% for the ceiling to lift, which is what
-  `docs/VALIDATION.md` section 3 measures.
-- The same pathway is also gated on **the shade the bed actually has**, and that third factor was
-  missing until it was caught by a bad example garden. `shadeBenefitBonus` scaled with site heat
-  and the water-limitation index alone, so every shade-tolerant crop collected the full bonus
-  standing in open sun. Measured at Phoenix on a bed reading 42 mol/m2/d at cumulative RSR 0.02,
-  that put **ramps**, an eastern North American woodland ephemeral, at the head of the ranking
-  ahead of okra, cowpea and sorghum, which beat it on climate fit 0.840 to 0.700 and lost the
-  total 0.710 to 0.715 on a 0.114 bonus they could not receive. The bonus now scales with
-  `cumulativeRsr`, which is the axis the Laub curves and `maxDesignRsr` are both written on, so
-  it grows with the shade exactly as the yield response it stands for does.
+`laub.generated.ts` carries two quantities generated from Table S2: `benefitPeakRsrPercent`, the RSR
+of the highest tabulated prediction, and `benefitPhaseEndRsrPercent`, the last level the table
+classes as benefiting. Generating both from the table keeps the paper's prose figure for fruits out
+of either field. The paper's own Table S2 contradicts that figure by five RSR points. C3 cereals
+never benefit and tolerate shade to 50% RSR.
+
+| Group | Peak %RSR | Benefit phase ends at %RSR |
+|---|---|---|
+| Berries | 30 | 55 |
+| Fruits | 30 | 55 |
+| Fruity vegetables | 20 | 40 |
+| Forages | 15 | 25 |
+| Leafy vegetables | 10 | 15 |
+
+Any "shade improves yield" pathway is gated on two flags.
+
+- **Water limitation**, because every published gain in this corpus comes from a hot, dry or
+  irrigated-arid site: Barron-Gafford's Sonoran plot, Amaducci's rainfed drought simulations,
+  Weselek's 2018 drought year. Zhang et al. 2025 find the same clustering across 20 countries, where
+  the climates reporting an increase "share some main features: hot summers, limited precipitation
+  and (semi-) arid conditions". No published work stratifies a shade-response curve by water status,
+  and none can be built from this literature, since Laub et al. 2022 excluded every trial that gave
+  the shaded plot a second treatment the control didn't get, reduced irrigation included. The pooled
+  curves are blind to the interaction, so the 100% yield ceiling on a site without water limitation
+  is the cautious choice this evidence supports: it predicts no gain where the mechanism the
+  literature names is absent, and claims no size for the gain where it's present. The ceiling can do
+  nothing for corn or grain legumes at any shade level, because neither curve reaches 100%, a
+  property `docs/VALIDATION.md` section 3 measures.
+- **The shade the bed has.** `shadeBenefitBonus` scales with `cumulativeRsr`, the axis the Laub
+  curves and `maxDesignRsr` are both written on, so the bonus grows with the same measure of shade
+  as the yield response it stands for. Scaling on site heat and the water-limitation index alone
+  would hand the full bonus to every shade-tolerant crop standing in open sun.
+
+### The fruity-vegetables curve is three studies
+
+Bell pepper under nets, sweet pepper under cloth, both subtropical, and squash. No tomato is in it
+and none of the three is under panels, so the +8% it predicts at 20% RSR for a tomato is an analogy.
+The field trials in the corpus measured the other direction: Mata et al. 2026 at Bridgeton found
+yield lower in every row nearest the array, and Ben Naim et al. 2025 found a significant tomato
+yield loss at 16.5% and 19.3% season shading with none at 8.6% and 11.9%. The catalog's tomato,
+pepper and cucumber rows carry that as their caveat.
 
 ### DLI thresholds (mol/m2/d, min -> target, max design RSR)
 
@@ -266,1783 +266,994 @@ equations (e.g. `C3 Cereals Y=106.34-0.44X1`) are NOT Laub's. Do not use them.
 | C3 cereals | - | - | <=15% |
 | Corn / C4 | - | - | <=10% |
 
-Strawberry is split out from Laub's lumped berry group on the authority of Widmer et al.'s
-21-site Swiss study, the only source expressing agrivoltaic limits directly as DLI.
+Strawberry is split from Laub's lumped berry group on the authority of Widmer et al. 2026, a 21-site
+Swiss study and the only source expressing agrivoltaic limits directly as DLI.
 
-**Amendment, 2026-09-20, from an audit against the sources.** Five things in this record were
-wrong or unstated, and the shipped data now reads as follows.
+The 20% ceiling on Solanaceae and cucurbits rests at Tier B on Zhang et al. 2025, whose segmented
+regression finds no statistically significant yield difference from the control below 20% shading
+(p = 0.084), lower yield from 20% to 30% (p < 0.01), and recommends shading from PV "preferably not
+exceed 20%". That regression pools crops, and its crop-resolved fits are corn, beans and lettuce, so it
+supports a design figure across crops and resolves no Solanaceae of its own.
 
-- **The fruity-vegetables curve is three studies**, bell pepper under nets, sweet pepper under
-  cloth (both subtropical) and squash. No tomato is in it and none of the three is under panels,
-  so the +8% it predicts at 20% RSR for a tomato is an analogy. The field trials in the corpus
-  measured the other direction: Mata et al. 2026 at Bridgeton found yield lower in every row
-  nearest the array, and Ben Naim et al. 2025 found a significant tomato yield loss at 16.5% and
-  19.3% season shading with none at 8.6% and 11.9%. The tomato, pepper and cucumber rows carry
-  that as their caveat.
-- **Weselek's temperate trial measured cooling**: daily mean air temperature
-  significantly lower by about 1.1 C in both years, most prevalent in summer. The warming sentence
-  this project quoted is Weselek reporting Marrou et al. 2013b as a contrast to their own result.
-  The contradiction with the Arizona and Oregon sites is in soil water, where Weselek measured a
-  decrease, in winter and the shoulder seasons, which they attribute to those other sites being
-  irrigated.
-- **The 2017 figures are the significant ones**: potato -18.2% (p = 0.005) and winter wheat
-  -18.7% (p = 0.03). The 2018 drought-year potato gain is +11% (p = 0.034) and the wheat gain is
-  +2.7% and not significant (p = 0.78). The -7% and -8% this project carried for 2017 are
-  two-year averages.
-- **The shade-benefit optimum was two quantities in one field.** `laub.generated.ts` now carries
-  `benefitPeakRsrPercent`, the RSR of the highest tabulated prediction (berries 30, fruits 30,
-  fruity vegetables 20, forages 15, leafy vegetables 10), beside `benefitPhaseEndRsrPercent`, the
-  last level Table S2 classes benefiting (55, 55, 40, 25, 15). Both are generated from the table,
-  so the paper's own prose sentence for fruits, which its Table S2 contradicts by five RSR points,
-  can no longer be transcribed into either.
-- **The 20% ceiling on Solanaceae and cucurbits has a source now**, at tier B: Zhang et al. 2025's
-  segmented regression finds no statistically significant yield difference from the control below
-  20% shading (p = 0.084) and lower yield from 20% to 30% (p < 0.01), and recommends that "the
-  shading caused by PV systems should preferably not exceed 20%". The regression pools crops, and
-  its three crop-resolved fits are corn, beans and lettuce, so it supports a design figure across
-  crops and resolves no Solanaceae of its own.
+## 7. Uncertainty policy
 
-## 7. Uncertainty policy (product-level, non-negotiable)
+The dominant error is agronomic. Laub's 95% **confidence** interval for fruity vegetables at 40% RSR
+spans 67.2-156.1% around a 102.5% point estimate, so an optics model accurate to 1% feeding it is false
+precision.
 
-The dominant error is agronomic, not optical. Laub's 95% **confidence** interval for fruity
-vegetables at 40% RSR spans 67.2-156.1% around a 102.5% point estimate. An optics model
-accurate to 1% feeding that is false precision.
+Table S2 tabulates 95% confidence intervals. Laub computes prediction intervals and draws them only
+as gray lines in Fig. 3, so this app doesn't hold them, and every band in the UI is labeled a
+confidence interval. The authors' caveat is that plot-scale uncertainty is large and the confidence
+intervals are the more valid estimator at country or continental scale. A single-garden user sits at
+that plot scale, and the UI says so. CIs are symmetric on the log10 scale, so bands interpolate in
+log space.
 
-TERMINOLOGY, do not conflate: Table S2 tabulates 95% CONFIDENCE intervals. Laub computes
-prediction intervals but only draws them as gray lines in Fig. 3 and never tabulates them, so
-we do not have them. Label every band in the UI as a confidence interval. The paper's own
-caveat, verbatim: "uncertainties due to random plot scale effects are large, while at country
-or continental scales the mean response to shading, represented by the confidence intervals,
-is the more valid estimator." A single-garden user is at the plot scale, i.e. the regime the
-authors say is MORE uncertain than the CI implies. Say so in the UI.
+- Every yield number renders with its band.
+- The UI attributes the band to the crop term explicitly.
+- Seasonal cumulative PAR carries +/-10%.
+- Most per-crop DLI values are Tier C inferences. Ordinal ranking is reliable, and the absolutes are
+  provisional and labeled as such.
 
-CIs are symmetric on the log10 scale, so interpolate bands in log space, not linearly.
+### What the DLI gate rests on
 
-- Never render a single-point yield number. Render bands.
-- Attribute the band to the crop term explicitly in the UI.
-- Treat seasonal cumulative PAR as +/-10%.
-- Most per-crop DLI values are Tier C inferences. Ordinal ranking is reliable, absolutes are
-  provisional and must be labeled as such.
+12 of 18 crops checked have no mol/m2/d figure in any accessible peer-reviewed or Extension source:
+all seven temperate tree fruits, plus melon, watermelon, tomatillo, winter squash and pumpkin. Okra
+has a treatment level and no target. Orchard literature gives light only as a percentage of full sun
+or as instantaneous PPFD. Three consequences reach the UI.
 
-### The DLI gate rests on thinner evidence than its central role implies
+1. Those values are class-level inferences, marked Tier C, uncited because no source exists. FAO
+   ECOCROP holds no DLI values, and Faust & Logan 2018, which maps the United States in 5 mol/m2/d
+   bins from 0-5 through 60-65 and reviews crops in prose, holds no per-crop table, so no threshold
+   cites either.
+2. Purdue's 10-15 and 15-20 mol/m2/d ranges (Torres & Lopez, HO-238-W) are greenhouse plug production
+   figures, and the 10-12 minimum traces there too, so they guide no mature garden plant.
+3. Runkle 2011 is the source of the figure of 15 for vine crops that the tomato, pepper and cucumber
+   rows cite, and Runkle 2019 writes "in my opinion, there is no such thing as a DLI requirement",
+   since guidelines are subjective, situational and vary with shade tolerance. DLI is this app's
+   primary gate, so the disclosure is on screen and cites him. Thresholds are design guidance.
 
-A systematic hunt (2026-07-30) for per-crop DLI figures found that **12 of 18 crops checked have
-no mol/m2/d figure anywhere in accessible peer-reviewed or Extension literature**: all seven
-temperate tree fruits (apple, pear, plum, both cherries, apricot, fig), plus melon, watermelon,
-tomatillo, winter squash, pumpkin and hot pepper. Okra has only an experimental treatment
-level, not a target. Orchard literature expresses light as **% of full sun or instantaneous
-PPFD**, never as a daily integral.
+`src/ui/dli.ts` reads the evidence of the applied threshold off the crop's own `Cited` record, so each
+readout marks whether the number that excluded a crop was measured or inferred.
 
-Three consequences, all of which must reach the UI:
+The gate has a floor and almost no ceiling. Lettuce is the only crop with a published upper bound:
+Cornell's CEA handbook reports tipburn as light-limited at 12 to 17 mol/m2/d depending on cultivar
+and airflow (Brechner & Both 2013, Both et al. 1997). The model carries 17 as
+`dliMaxBeforeDisorderMolM2Day`. A season mean above it lowers the light score, and a whole month
+above it is flagged, since monthly light can't test a rule counted in days. No source bounds any
+other crop from above, and none flags a species as shade-requiring. `dliTargetHigh` is a range top:
+tomato's 15/20/30 renders Runkle's "15, preferably >20". A shade-tolerant crop scoring well on a
+bright bed is no error in the light term, and the climate envelope is what rules a woodland
+perennial out of a desert garden. Ramps are the case in point: the USDA National Agroforestry
+Center's forest-farming note (Chamberlain et al. 2014) has them needing sun early in the season and
+liking shade once their season is over, with no DLI figure. The DLI evidence panel shows both
+limits: almost no ceiling on the gate, and a shade plant scoring well on a bright bed.
 
-1. **Those values are class-level inferences, marked Tier C.** They are not cited, because no
-   source exists. Several previously cited FAO ECOCROP, which contains no DLI values at all:
-   that was a false attribution and is fixed.
-2. **The one credible Extension source is transplant-only.** Purdue's 10-15 and 15-20
-   mol/m2/d ranges are for greenhouse plug production, not mature garden plants. Using them as
-   garden targets is a different error from the ReduSystems 22, but still an error.
-3. **The concept itself is contested by Extension.** Erik Runkle (MSU), whose vine-crop figure
-   we now cite for tomato, pepper and cucumber, writes in "DLI Requirements": *"In my opinion,
-   there is no such thing as a DLI requirement"*, because guidelines are subjective, situational
-   and vary with shade tolerance. We use DLI as the primary gate, so this must be disclosed
-   rather than buried. Present DLI thresholds as design guidance, never as physiological limits.
-
-**SHIPPED 2026-07-30: the three consequences above now reach the UI.** `src/ui/dli.ts` derives
-the evidence of whichever threshold the light gate applied (`dli-minimum`,
-`dli-disorder-ceiling`, `max-design-rsr`) from the crop's own `Cited` record, so the tier and the
-`inferred` provenance are read off the data and cannot drift from it. It renders as
-`readout-recommendation-dli-evidence-{cropId}` beside the limiting factor in the ranking and as
-`readout-calendar-dli-evidence-{cropId}` at the calendar's light gate, each carrying
-`data-tier`, `data-provenance` and `data-class-inference` so a crop excluded on an unmeasured
-number is distinguishable from one excluded on a measured one. The full disclosure is
-`panel-dli-evidence` on the sources step, reached inline from the crop step via
-`panel-dli-evidence-inline`. Tone is deliberately calibrated, not apologetic: the ordinal
-ranking is stated as reliable in the same breath as the absolutes are called provisional.
-
-**CITEKEY ADDED 2026-09-20.** Runkle's "DLI 'Requirements'" column (GPN, May 2019), the source of
-"in my opinion, there is no such thing as a DLI requirement", is now `runkle2019-dli-requirements`
-in `CITATIONS.csl.json` and the disclosure cites it for the quote. The live page returns HTTP 403
-to automated fetch and was read through the Internet Archive. Its Table 1 gives fruiting vegetables
-a target of 15+ mol/m2/d under a caption calling its own values "subjective and situational", which
-is the same author and the same figure as the 2011 column this app's vine-crop minimum comes from.
-`runkle2011-vegetable-dli` stays cited for that minimum.
-
-Vendor-marketing origin confirmed for the 22: ReduSystems, "An adult tomato crop requires at
-least 22 mol/m2/d for good productivity", citing no primary literature. Hydroponics and LED
-vendor pages republish 22-30 figures with no citation, which is how it spread.
-- Faust & Logan and Zhang et al. 2025 have now BOTH been retrieved, and both were being
-  misused:
-  - **Faust & Logan contains no per-crop DLI table at all.** The "10-12 minimum" we attributed
-    to it actually traces to Purdue HO-238-W. Re-attribute.
-  - **Zhang et al.'s "tipping point" is ~2 ha of system size, not 50% shade.** The shade result
-    is a segmented regression in a 50-60% band (p<0.05), and the literal 50% figure is Zhang's
-    own citation of Beck et al. 2012, not Zhang's finding.
-
-### RELEASE BLOCKERS
-
-**RESOLVED 2026-07-30: MA SMART downgraded from CHECK to ESTIMATE.** `Verifiability` now has
-the single value `'estimate-only'`, `pass`/`fail` criterion outcomes were renamed
-`meets`/`misses`, a new `approximate` outcome carries a window disclaimer, and
-`ComplianceOutcome` is two-state (`meets-expedited-parameters` /
-`requires-exception-request` / `indeterminate`), so a determination is unrepresentable.
-Citations moved to `ma-225-cmr-28` plus `ma-doer-shading-analysis-tool`.
-`src/ui/compliance-language.test.ts` pins that no rendered string contains compliant,
-non-compliant, pass, fail, approved or rejected, and that every outcome has a label.
-
-Growing Season Hours is implemented as a MONTH restriction (March-October) with the hour
-window disclosed as not applied, because `DliRaster` resolves months, not hours. Resolving
-this properly requires hour-of-day accumulation in the raster.
-
-**Also found and fixed: `nameplateAcKw` was a mislabeled DC quantity**, computed from module
-watt-peak. Renamed to `nameplateDcKw` with a `KilowattsDc` brand. The MA 5 MW **AC** cap and
-the 2:1 DC:AC ratio are now `not-applicable` with the reason "requires an inverter model",
-rather than silently comparing a DC number against an AC threshold. The 7,500 kW DC ceiling
-is a real check. See `the grid document`.
-
-STILL OPEN:
-
-1. **FALSE CITATION.** "at least 22 mol/m2/d" for tomato is verbatim ReduSystems vendor marketing,
-   but carries legitimate Extension citation IDs in `src/data/catalog/citations.ts`. A real source
-   attached to a number that did not come from it is worse than an uncited value. Remove or
-   re-source. Resolved: the vine-crop rows cite `runkle2011-vegetable-dli` at 15 / 20-30 and the 22
-   is deleted, the horticulture document follows (record 23).
-2. **INTERNAL CONTRADICTION on strawberry DLI minimum**: the horticulture document says 10, this record and
-   Widmer say 25. Resolve before either number reaches a filter. Resolved with a source on each
-   side in record 23: the gate uses Widmer's 25, and the horticulture document follows.
-3. Remaining base temperatures and DLI values traceable to trackgdd.com, hydroponics blogs and
-   ReduSystems. Sweet corn 10/30 C is confirmed via NDSU and the cool archetype 4.4 C is
-   defensible, but the horticulture document's 0 C lower bound is unsupported.
+The "at least 22 mol/m2/d" tomato figure is ReduSystems vendor marketing, republished uncited by
+hydroponics and LED vendors, and appears nowhere in the catalog. Some base temperatures still trace to
+secondary sources, while sweet corn's 10/30 C is confirmed against NDSU NDAWN and the cool archetype's
+4.4 C base is defensible.
 
 ## 8. Compliance overlays
 
-**REVISED after primary-source verification. Nothing here is a compliance CHECK. Everything is
-an ESTIMATE.** See `the verification document` for the evidence trail.
+Every overlay is an estimate, and the types make a determination unrepresentable: `Verifiability`
+has the single value `'estimate-only'`, criterion outcomes are `meets` and `misses`, an
+`approximate` outcome carries a window disclaimer, and a regime verdict is
+`meets-expedited-parameters`, `requires-exception-request` or `indeterminate`. A test pins that no
+rendered string says compliant, non-compliant, pass, fail, approved or rejected. Verdicts read
+"meets the expedited design parameters" or "would require an exception request".
 
-Massachusetts SMART, all four numbers confirmed verbatim against primary text (50%, 8 ft fixed
-measured at the lowest panel point, 10 ft tracking measured at horizontal, 5 MW AC) but the
-regime cannot be self-verified, for three independent reasons any one of which is sufficient:
+**Massachusetts SMART 3.0**, 225 CMR 28.00, term of art Dual-use Agricultural STGU (Solar Tariff
+Generation Unit). Parameters verbatim from 28.07(5)(b)3.b:
 
-1. DOER mandates **its own** tool: "Applicants shall use the Shading Analysis Tool provided on
-   the Department's website." Our result has no standing regardless of accuracy.
-2. The test window is **Growing Season Hours**, defined in 225 CMR 28.02 as April-September
-   9 AM to 6 PM and March/October 10 AM to 5 PM. **Our annual DLI map is the wrong aggregation
-   window.** Producing this requires a separate accumulation.
-3. Every parameter is waivable under 28.07(5)(b)3.b.iv, so pass/fail is not a property of
-   geometry.
+| Parameter | Threshold |
+|---|---|
+| Sunlight | at most 50% reduction of baseline field conditions, on every square foot beneath, behind and adjacent to the design, wider than the array footprint |
+| Fixed tilt | 8 ft minimum height at the lowest panel point |
+| Tracking | 10 ft at the horizontal position, 8 ft where the sunlight test is met in all tilt positions and the farm operator controls the tracker |
+| Capacity | 5,000 kW AC, DC at most twice AC and at most 7,500 kW DC |
+| Window | Growing Season Hours (28.02): April to September 9 AM to 6 PM, March and October 10 AM to 5 PM, half-open bounds |
 
-Also corrected: the governing regulation is **225 CMR 28.00** (SMART 3.0, filed August 2025), not
-225 CMR 20.00 which is legacy. "ASTGU" is now "Dual-use Agricultural STGU". The 50% test applies to
-"every square foot of land directly beneath, behind, and in areas adjacent to and within the STGU's
-design", i.e. WIDER than the array footprint. Additional constraints we had missed: 2:1 DC:AC ratio
-and a 7,500 kW DC ceiling, the tracker 10 ft may drop to 8 ft conditionally.
+Three facts each make it an estimate. DOER, the Massachusetts Department of Energy Resources,
+mandates its own Shading Analysis Tool, so an independent engine's result has no standing. The
+regulation leaves open whether the 50% is cumulative over the window or applies at the worst single
+instant. Every parameter is waivable under 28.07(5)(b)3.b.iv, so a miss becomes an exception
+request, and the outcome doesn't follow from geometry alone.
 
-**Required UI output is two-state and must never say compliant/non-compliant:**
-"meets the expedited design parameters" / "would require an exception request".
+The raster accumulates the window at a 15-minute timestep on the local clock, daylight saving included
+where the weather series names the site's zone, and reports the worst cell of the cumulative window. The
+clock basis is an explicit assumption, since the regulation's "9 AM" names a wall clock, and a `'solar'`
+basis measures the other reading. A raster baked without the window falls back to those months with no
+hour restriction, over-counting early and late daylight, and says so. `nameplateDcKw` is a DC quantity
+from module watt-peak, branded `KilowattsDc`: the AC cap and the 2:1 DC:AC ratio are `not-applicable`
+for want of an inverter model, and the 7,500 kW DC ceiling is a real check.
 
-DIN SPEC 91434: all seven of our claims verified correct against the full 26-page text, including
-all three negatives (no light-homogeneity threshold, no GCR cap, no minimum row spacing, clause
-6.4.4 actively disclaims row spacing). One addition: the 2.10 m clearance is **Category I only**,
-Category II has no clearance floor at all.
+**DIN SPEC 91434:2021-05**, against the full 26-page text: 66% of reference yield (5.2.10), 2.10 m
+clearance for Category I only (6.4.2), none for Category II (5.2.2), usable-area loss to structures at
+most 10% Category I and 15% Category II (5.2.3), reference yield a three-year average or three rotation
+cycles for arable rotations (5.2.11). Category I is elevated with crops under the panels, Category II
+near-ground with crops between rows. It sets no numeric light-homogeneity threshold (3.8 is
+qualitative, 5.2.5 asks only for homogeneity "as high as possible"), no GCR cap and no minimum row
+spacing, which 6.4.4 disclaims outright.
 
-Estimate-only (require field agronomy, label as such):
-- Germany DIN SPEC 91434: 66% of reference yield, 2.10 m, <10%/<15% area loss. Contains **no**
-  numeric light-homogeneity threshold, **no** GCR cap, **no** minimum row spacing.
-- Japan MAFF: 80% of regional average yield, 2 m.
-- Italy DM 436/2023: >=70% area agricultural, 2.1 m for crops, 60% producibility ratio (not an
-  LER>1 requirement).
-- France: 90% of a control zone >=5% of area capped at 1 ha, 40% max coverage.
+| Regime | Thresholds |
+|---|---|
+| Japan MAFF | 80% of regional average yield, 2 m clearance |
+| Italy DM 436/2023 | at least 70% of area agricultural, 2.1 m for crops, 60% producibility ratio, with no LER > 1 requirement |
+| France décret 2024-318 | 90% of the yield of a control zone of at least 5% of area capped at 1 ha, 40% maximum coverage |
+
+Every yield threshold here is defined on measured agricultural yield, which geometry can't
+establish, so each such criterion is labeled as requiring field agronomy.
 
 ## 9. Data chain
 
-Browser-direct (CORS verified by live curl 2026-07-29): Open-Meteo (primary, only global, keyless,
-CORS-enabled, CC BY 4.0 commercial source returning GHI+DNI+DHI), NASA POWER, Nominatim (1 req/s +
-UA header), Photon, Overpass.
+Open-Meteo is the primary weather source, the one global, keyless, CC BY 4.0 source returning GHI,
+DNI and DHI. The Worker proxies it, with PVGIS v5.3 (which forbids AJAX by written policy), NREL
+NSRDB (for key secrecy, at `developer.nlr.gov` as GOES TMY v4.0.0), Nominatim, Photon and the EIA
+retail price, and caches weather by latitude and longitude rounded to 0.01 deg. NASA POWER,
+SoilGrids and Overpass stay browser-direct, CORS verified.
 
-Worker-proxied: PVGIS v5.3 (**explicitly forbids AJAX by written policy**), NREL NSRDB PSM3 (key
-secrecy). `developer.nrel.gov` was retired May 29, 2026, and the endpoint is now GOES TMY v4.0.0 on
-`developer.nlr.gov`, PSM v3.2.2 is withdrawn. Cache by lat/lon rounded to 0.01 deg.
-
-Bundled static: OPHZ PRISM-derived hardiness GeoJSON (~450 m, credit USDA-ARS + OSU),
-Beck et al. 2018 Koppen 1 km, FAO ECOCROP (~2568 species), frost normals. No official USDA
+Bundled static, detailed in `docs/STATIC-LAYERS.md`: the official 2023 USDA PRISM hardiness grid, the
+published 5 arcmin Köppen aggregate (Beck et al. 2018), NRCan's 4th edition Canadian zones under the
+Open Government Licence Canada, FAO ECOCROP at about 2568 species, and frost normals. No official USDA
 hardiness API exists.
 
-**Superseded in part, see docs/STATIC-LAYERS.md.** OPHZ traces the 2012 map and is not bundled, the
-official 2023 PRISM grid and the published 5 arcmin Koppen aggregate ship instead. NRCan's 4th
-edition Canadian zones now ship alongside them, under the Open Government Licence Canada.
+PFAF and Permapeople are CC BY-SA, which is viral, so each is isolated behind a boundary or
+excluded, and Trefle is unusable after repeated shutdowns. No open, well-licensed horticultural
+attribute database exists, so the roughly 200-crop table curated from public-domain Extension
+publications is the one data set this app owns.
 
 ### 9a. Hardiness schemes are never crosswalked
 
-A USDA zone is one variable, the mean annual extreme minimum temperature. An NRCan zone is a
-score on a seven-variable index (`ouellet1967-woody-zonation`, reinterpolated by
-`mckenney2001-canada-zones` and `mckenney2025-canada-zones`) that includes frost-free period,
-summer rainfall, maximum snow depth and maximum wind gust. The two disagree in both directions
-depending on which term dominates locally, so no table maps one onto the other and none may be
-written.
+A USDA zone is one variable, the mean annual extreme minimum temperature. An NRCan zone is a score on
+a seven-variable index (Ouellet & Sherk 1967, reinterpolated by McKenney et al. 2001 and 2025) that
+includes frost-free period, summer rainfall, maximum snow depth and maximum wind gust. The two
+disagree in both directions depending on which term dominates locally, so no table maps one onto the
+other and none may be written.
 
-This is enforced by the type rather than by review. `HardinessRating` is a discriminated union:
-`TemperatureHardinessRating` carries `extremeMinTempC`, `CompositeHardinessRating` declares
-`extremeMinTempC?: never` and carries the zone plus the index terms the source supplies.
-Assigning a temperature to an NRCan rating is a compile error, pinned by a `@ts-expect-error` in
-`src/types/contract.test.ts`.
+The type enforces this. `HardinessRating` is a discriminated union where `TemperatureHardinessRating`
+carries `extremeMinTempC` and `CompositeHardinessRating` declares `extremeMinTempC?: never` and carries
+the zone plus the index terms the source supplies, so assigning a temperature to an NRCan rating is a
+compile error, pinned by a `@ts-expect-error` in the type tests.
 
-Deriving a winter minimum from ERA5 for a Canadian point is **not** a crosswalk: it measures the
-quantity USDA measures, from reanalysis, and is what the code already did wherever the PRISM
-grid has no coverage. So a Canadian site carries two independent ratings. The ERA5-derived
-temperature rating gates, because `siteExtremeMinC` reads only temperature schemes. The NRCan
-zone informs and is displayed as its own readout, never blended into a single number, with copy
-saying the two systems are not comparable.
+Deriving a winter minimum from ERA5 for a Canadian point is no crosswalk, because it measures the
+quantity USDA measures, and it's what the code does wherever the PRISM grid has no coverage. So a
+Canadian site carries two independent ratings. The ERA5-derived temperature rating gates, because
+`siteExtremeMinC` reads only temperature schemes. The NRCan zone is shown for information as its own
+readout, with copy saying the two aren't comparable.
 
-Licensing: PFAF and Permapeople are CC BY-SA (viral) and must be isolated behind a boundary or
-excluded. Trefle is unusable (repeated shutdowns). No open, well-licensed horticultural
-attribute DB exists: the ~200-crop curated table from public-domain Extension publications is
-the ownable asset.
+### 9b. Elevation read from the weather record
 
-### 9b. The elevation comes with the weather record
-
-A site's height above sea level is read from the weather record the site already
-fetches. Open-Meteo's archive body names its `elevation`, PVGIS names it under the location it
-echoes back, NASA POWER writes it as the third coordinate of the point it answered for, and an
-NSRDB or uploaded CSV names it in the metadata header, so `elevationOfPayload` reads whichever
-spelling the source used and the record carries the number. Null where a body names none, which
-the site readout says and the solar position answers by working from the sea-level reference. A
-genuine 0 m stays 0 m.
-
-The separate elevation upstream is gone. It was a free DEM API fetched once per site resolve
-alongside the weather and inside the same `Promise.all`, which made it a point of failure for
-every fresh lookup: on 2026-09-20 `api.open-elevation.com` stopped completing a TLS handshake and
-every fresh lookup failed with it, while places looked up earlier kept working off the edge
-cache's year-long copy of their elevation. One fetch carries both numbers now.
+A site's height above sea level comes from the weather record the site already fetches. Open-Meteo's
+archive body names its `elevation`, PVGIS names it under the location it echoes back, NASA POWER
+writes it as the third coordinate of the point it answered for, and an NSRDB or uploaded CSV names
+it in the metadata header, so `elevationOfPayload` reads whichever spelling the source used. It's
+null where a body names none. The site readout then says so, and the solar position falls back to
+the sea-level reference. A genuine 0 m stays 0 m. One fetch carrying the weather and the elevation
+means a fresh lookup needs no elevation service: a separate digital elevation model (DEM) API inside
+the same `Promise.all` as the weather would fail every fresh lookup whenever that one host is
+unreachable.
 
 ## 10. Recommendation pipeline
 
 0. Site resolution (geocode -> lat/lon -> elevation, climate normals, TMY)
-1. Hard climate gate: hardiness (perennials), chill portions (fruit), GDD vs season (annuals)
-2. **Light gate**: per crop x bed x month against the crop's own growing window. Bonus where
-   shade-benefiting AND heat-days high
-3. Soil / water
+1. Hard climate gate: hardiness (perennials), chill portions (fruit), GDD against the season
+   (annuals)
+2. **Light gate**: per crop x bed x month, against the crop's own growing window, with a bonus where
+   a shade-benefiting crop meets many heat days
+3. Soil and water
 4. Mature-footprint fit
-5. Interactions: rotation hard-constraint, companions soft-score
+5. Interactions: rotation as a hard constraint, companions as a soft score
 6. Rank, always exposing the limiting factor
 
-Chill: compute Chilling Hours, Utah Chill Units, and Dynamic Chill Portions separately.
-Luedeling's global comparison shows Dynamic is superior and that the three are **not
-interconvertible** (CH/CP ratio spans 0-34).
+Chilling Hours, Utah Chill Units and Dynamic Chill Portions are computed separately, because
+Luedeling & Brown 2010 find the Dynamic model the strongest and the three not interconvertible, with
+the CH/CP ratio spanning 0 to 34. ECOCROP suitability uses trapezoidal membership with a minimum
+across parameters, which yields the limiting factor for free.
 
-ECOCROP suitability uses trapezoidal membership with min-across-parameters, which yields the
-limiting factor for free.
+### 10b. Crop-vs-crop compatibility and polyculture suggestions
 
-### 10b. Crop-vs-crop compatibility and polyculture suggestion
-
-Stages 1-6 compare one crop against the SITE. Nothing compared two crops proposed for the same
-bed, so the tool would co-plant blueberry with a brassica at pH 6.5-7.0, which is a real
-horticultural error. `src/recommend/compatibility.ts` adds the missing axis. It runs AFTER the
-per-crop pipeline and never re-gates a crop.
-
-Eight terms, each computed from data already held, each carrying its own verdict, citations and
-evidence grade, each reported separately:
+Stages 1 to 6 compare one crop against the site. `src/recommend/compatibility.ts` compares two crops
+proposed for one bed, so the tool won't co-plant blueberry with a brassica at pH 6.5 to 7.0. It runs
+after the per-crop pipeline and never re-gates a crop. Eight terms, each from data already held,
+each with its own verdict, citations and grade:
 
 | Term | Source | Hard conflict when |
 |---|---|---|
-| Soil pH | intersection of the two ECOCROP `soilPh` trapezoids | tolerated ranges disjoint, OR optima disjoint and either crop's absolute span is within `HARD_PH_ENVELOPE_WIDTH` |
-| Water regime | FAO-56 Table 22 depletion fraction `p`, plus `droughtPenaltyFor` | never, one bed, one schedule, so a wide gap is a management warning |
+| Soil pH | the two ECOCROP `soilPh` trapezoids intersected | tolerated ranges disjoint, or optima disjoint and either span within `HARD_PH_ENVELOPE_WIDTH` |
+| Water regime | FAO-56 Table 22 depletion fraction `p`, plus `droughtPenaltyFor` | never: one bed, one schedule, so a wide gap is a management warning |
 | Root stratification | `RootProfile` depth and stratum | never |
-| Canopy tier | `assignCanopyTier`, the same function the optimizer scores stratification with | never |
-| Light overtopping | Beer-Lambert on the taller crop's LAI and k, weighted by its bed area share, against the shorter crop's `dliMin` | the shorter crop falls below its own DLI minimum |
+| Canopy tier | `assignCanopyTier` | never |
+| Light overtopping | Beer-Lambert on the taller crop's LAI and k, by bed area share, against the shorter crop's `dliMin` | the shorter crop falls below its own DLI minimum |
 | Shared pest or pathogen | `RotationConstraint` by family | the shared family carries a rotation constraint |
 | Documented companion | `ScorableCompanionRule`, via `ruleAppliesInContext` and `ruleEffect` | never |
-| Allelopathy | grade C, D and E rules of an allelopathy kind | never: warns, never scores |
+| Allelopathy | grade C, D and E rules of an allelopathy kind | never: it warns without scoring |
 
-The pH rule is the one that needed a decision. Disjoint optimum bands are reconcilable by
-compromising the soil ONLY where both envelopes are preferences. Blueberry's is not: it is the
-only crop of 163 optimizing below pH 6.2 and its absolute span is 4.0-6.0, which section 3 of
-`src/recommend/stages/soil-water.ts` already treats as physiology rather than preference. So
-blueberry beside a brassica is refused outright, and the refusal names the pH 5.7 compromise
-neither crop can actually live at.
+Disjoint optimum bands are reconciled with a compromise soil pH only where both envelopes are
+preferences. Blueberry's envelope is physiology: it's the only crop of 163 optimizing below pH 6.2,
+and section 3 of `src/recommend/stages/soil-water.ts` reads its span of 4.0 to 6.0 that way. So
+blueberry beside a brassica is refused outright, and the refusal names the pH 5.7 compromise neither
+crop can live at.
 
-Suggestion generation (`src/recommend/suggest.ts`) takes required, preferred, avoided and excluded
-crops as a `PreferenceSet` and returns ranked COMBINATIONS. Space is a first-class constraint: every
-crop gets one plant's worth of bed at catalog spacing before anything gets a second, and a
-combination whose floor exceeds the bed is reported as not fitting with the shortfall in square
-meters. It is never silently truncated. A required crop the bed can't grow refuses the whole set
-with its limiting factor rather than being swapped for something else. Yields stay banded
-throughout, only the ranking scalar collapses a band, and `src/ui/point-estimate.test.ts` pins the
-modules allowed to do that.
+`src/recommend/suggest.ts` takes required, preferred, avoided and excluded crops as a
+`PreferenceSet` and returns ranked combinations. Space is a hard constraint: every crop gets one
+plant's worth of bed at catalog spacing before anything gets a second, and a combination whose
+floor exceeds the bed is reported as not fitting, with the shortfall in square meters. A required
+crop the bed can't grow refuses the whole set and names its limiting factor. Yields stay banded,
+only the ranking scalar collapses a band, and `src/ui/point-estimate.test.ts` pins the modules
+allowed to do that.
 
-TEK design rule 1 (vertical stratification, Chagga and Javanese) supplies the canopy-tier term
-and travels with its attribution in the term itself. Rule 7 (portfolio yield, Haudenosaunee and
-Andean) supplies the LER weighting. Neither is merged into an unattributed preset.
+The canopy-tier term carries rule 1 of the traditional ecological knowledge (TEK) rules, with its
+attribution inside the term, and rule 7 supplies the LER weighting (record 12).
 
-### 10c. Array design suggestion (`src/recommend/design.ts`)
+### 10c. Array design suggestion: the layout search
 
-`suggestDesigns(answers)` turns `OnboardingAnswers` into a ranked `ScenarioSet`. It exists because
-tilt, pitch, clearance, row count and tracking were previously hand-set, which a novice cannot do.
+`suggestDesigns(answers)` turns `OnboardingAnswers` into a ranked `ScenarioSet`, because tilt,
+pitch, clearance, row count and tracking are settings a novice has no way to hand-pick.
 
-Geometry is DERIVED, never looked up. Tilt is a per-archetype fraction of the site latitude,
-anchored on the solar geometry document's `beta ~ 0.85 phi` energy optimum and reduced below it where shadow length
-matters (food-first 0.60, balanced 0.75), clamped to the 10-35 deg band already named by
-`REFERENCE_MIN_TILT_DEG`/`REFERENCE_MAX_TILT_DEG`. Azimuth is equator-facing from the hemisphere.
-The shade budget is `AMBITION_SHADE_BUDGET` (leafy 0.45, mixed 0.30, fruiting 0.18, read off the max
-design RSR column of section 6, the fruiting figure set by strawberry) scaled by `SiteExposure`,
-each archetype spends a share of it (0.55 / 0.80 / 1.00), and that projected coverage plus the
-collector width gives the pitch. Rows and row length come from the plot. `maxHeightM` is hard, and
-is spent in the order that costs the grower least: modules up the slope first, then tilt, then
-headroom, with each step named in the candidate's own rationale. Clearance floors are DIN SPEC 91434
-Category I (2.10 m) and the MA expedited 8 ft / 10 ft, taken from `src/sim/compliance.ts` rather
-than restated.
+#### Candidates
 
-> **Corrected 2026-09-01, and the direction reversed.** Everything in this subsection between here
-> and the `energy-first` paragraph was measured against `panelSnapshot` stepping a fixed array's
-> rows perpendicular to the way its modules face, which left them standing shoulder to shoulder and
-> shading almost nothing. See *What holds it up* in `crates/agv-sim/README.md`. The figures below
-> are re-measured where they say so and **void where they do not**, a figure with no date beside it
-> in this subsection came from the broken geometry and must not be quoted.
+Five archetypes in a fixed order: `food-first`, `balanced`, `energy-first`, `vertical-east-west`,
+`no-array-control`. `mounting` filters the offered set and names every archetype it drops, and
+`no-array-control` is always offered. Nothing is swept around the five, because each candidate costs
+a full annual bake: a five-scenario run measures 1.4 s on a 10 x 7 m plot and 3.4 s on 30 x 20 m on
+an M-series GPU, about 4.5 s a candidate on the CPU rasterizer. `ScenarioSet.notConsidered` says so
+in its first line.
 
-> **Superseded 2026-09-11 by Record 21.** Every figure from here to the end of this subsection
-> was read off candidates whose `rowAzimuthDeg` held the surface azimuth, so the rows ran north
-> to south with the panels tilted along their own row. The direction tilt moves the light, and
-> the `food-first` rule built on it, are re-measured in Record 21 and are the other way round.
+#### Derived geometry
 
-**Which way tilt moves the light on the ground, measured 2026-09-01.** The rationale has now been
-wrong about this in both directions, which is worth stating before the answer. It first told the
-grower that going below the energy optimum "shortens the shadow on the ground". That was replaced
-with the opposite, that flattening "does not brighten the ground, it dims it", and that was
-measured against an array that could not exist.
+Geometry is derived from the answers and the plot.
 
-Held at one projected coverage and one row count, season RSR **RISES monotonically as tilt rises**,
-so a **flatter panel leaves more light**: **0.0397 -> 0.0876 -> 0.1223 at 20 N**, **0.0412 ->
-0.0898 -> 0.1251 at 42.4 N**, **0.0436 -> 0.0919 -> 0.1265 at 55 N**, at 10, 23 and 35 degrees.
+- Tilt, clamped to 10 to 35 degrees (`REFERENCE_MIN_TILT_DEG`, `REFERENCE_MAX_TILT_DEG`). `balanced`
+  takes 0.75 of the site latitude, anchored on the energy rule of thumb near 0.85 of latitude and
+  held below it because shadow length matters. `food-first` takes the tilt putting the least panel
+  over the plot from overhead, arithmetic with no simulation in it (`groundLightPlan`, record 21).
+  `energy-first` is the argmax of `runAnnualChain` over whole degrees of the band, so no other
+  archetype can beat it on tilt, and it tracks only when tracking wins. The sweep costs one PV chain
+  run per tilt and no light bake, and ties go to the lower tilt.
+- Azimuth is equator-facing, from the hemisphere. `rowAzimuthDeg` is the direction the rows run
+  (record 21).
+- Shade. `AMBITION_SHADE_BUDGET` is 0.45 leafy, 0.30 mixed and 0.18 fruiting, off the max design RSR
+  column of record 6, the fruiting figure set by strawberry, the tightest class it covers.
+  `SiteExposure` scales it down, since a site already shaded has less to spend on panels. The budget
+  is read as projected ground coverage. Each archetype spends a share, 0.55 food-first, 0.80
+  balanced, 1.00 energy-first, and that coverage with the collector width gives the pitch.
+- Rows and row length come from the plot. `maxHeightM` is a hard limit. A design meets it by giving
+  up, in the order that costs the grower least, modules up the slope, then tilt, then headroom, and
+  the rationale names each step. Lowering the tilt to meet a cap costs winter electricity: on a bare
+  plane at 42.37 N, pvlib puts 35 degrees ahead of 10 degrees by 14% over the year and 48% over
+  December to February, which is what the cap's copy rests on.
+- Clearance floors are DIN SPEC 91434 Category I (2.10 m) and the Massachusetts expedited 8 ft and
+  10 ft, read from `src/sim/compliance.ts`.
 
-The mechanism given for the old claim was also wrong on its own terms, independently of the
-geometry. Pitch is `collectorWidth * cos(tilt) / projected`, so cos falls as tilt rises and it is
-the STEEPER panel that sits closer to its neighbor, not the flatter one. Holding the projected
-coverage fixes how much overhead sky the rows take, so what tilt actually changes is how tall they
-stand: a panel tilted `b` rises `collectorWidth * sin(b)`, and that height is what removes the low
-sky and lengthens every shadow. Two errors that agreed with each other, which is why reading did
-not catch either.
+The budget is spent on the footprint and then checked against the bake. `ScenarioFlags.shade`
+carries the budget, the measured season-cumulative RSR and whether the one is inside the other, and
+the card reports it either way. A projected coverage is an infinite-row figure, so a design sized
+inside its budget can still be flagged on what its plot measures.
 
-Tilt is therefore still a dial at fixed coverage and the food end is now the FLAT end. Pinned by
-`design.test.ts`, which bakes both ends and requires the row count to match so an extra row cannot
-be mistaken for a tilt effect, plus a copy test that forbids **both** of the wrong claims by their
-exact words.
+#### Evaluation
 
-**It does not point in OPPOSITE directions for food and energy anywhere below about 44.4 N, which
-is above every latitude this tool is likely to be used at.** This sentence has now been wrong
-twice. It first claimed the opposition outright. It was then narrowed on 2026-09-07 to say the
-opposition holds at 42.4 N and not at 20 N, and the sweep that narrowing asked for says 42.4 N was
-wrong too: there, steepening costs 19 crops AND 189 kWh, both falling together exactly as at 20 N.
-What survives at every latitude measured is the half that matters to a grower: flat is the food
-end. What does not survive is the idea that the grower is trading anything for it below 44 N.
+Every candidate is baked at `FINAL_OPTIONS`, the quality the editor runs, with the Growing Season
+Hours window as one extra weight vector on the shared direction set, so the Massachusetts figure is
+the regulated quantity. `siteSkyFor` in `src/sim/pipeline.ts` computes the solar positions,
+decomposition and sky set once for all five bakes, and `MAX_RAY_TESTS_PER_DRAW` caps each WebGL2
+draw so no command buffer outlives the GPU watchdog. The discretization, 577 patches, 2 degree sun
+bins and 0.12 m cells, is the one the app uses everywhere it reads light, so a gap the search
+reports is the gap the editor shows and the ranking carries no tie band.
 
-**Re-measured 2026-09-07, coarse settings (tregenza-mf1, one sun sample an hour, 0.5 m cells),
-`balanced`, one row held fixed at both ends:** at 20 N, 141 crops clear the light gate at 10
-degrees against 128 at 35, and annual AC runs 9 050 kWh at 10 degrees against 8 315 at 35
-(`src/recommend/sweep.bench.test.ts`, block 1). RSR at the same two points is 0.0397 and 0.1223,
-matching the figures already given above for this latitude.
+`landEquivalentRatio` is a portfolio sum over a fixed six-crop basket (`DESIGN_BASKET_SIZE`) of the
+scenario's top-ranked admissible crops plus the electricity term, TEK rule 7's convention, and must
+never be rendered as a two-term Dupraz ratio. `GeneratedBed.lostToShade` compares each bed against
+the brightest bed of its own plot, minus that bed's own light-gate refusals, so it needs no second
+bake and works on a hand-drawn garden. `cropsLostToShade` compares against the open-sky control,
+baked first, so a crop the site refuses in full sun is never charged to the panels. `confidence`
+never reaches `high`, because every path rests on the Tier C crop DLI absolutes of record 7, and it
+falls to `low` where a scenario adds an approximation of its own: a tracked array, baked at peak
+elevation, shade past the 40 percent level Laub et al. 2022 tabulate, a water-limited site, or a
+basket whose thresholds are all class inferences.
 
-The claim these figures were meant to support does not hold at 20 N. Crops and annual AC both
-fall as tilt rises here, 141 crops and 9 050 kWh at the flat end against 128 crops and 8 315 kWh
-at the steep end: both move the same way. The mechanism: pitch tracks tilt, so a steeper panel
-closes its own rows up exactly as fast as it stands taller, and at 20 N the extra irradiance from
-facing the sun more directly never catches up with the extra self-shading it buys. Flat is still
-the right tilt for a food-first design at this latitude, and at 20 N it costs nothing in
-electricity either.
+#### Ranking
 
-**Swept 2026-09-07 across the latitudes, same quality, same plot, same one row held at both ends
-(`src/recommend/sweep.bench.test.ts`, block 4), 10 degrees against 35:**
+Four raw terms are min-max normalized across the set and combined with the `DesignObjective` weights
+that the answers set: crop retention with light kept, annual AC kWh, the water the layout's own beds
+save, and structural simplicity. An exact tie goes to the archetype named for the answers
+(`namesakeOf`), then to archetype order. No band is collapsed, so `design.ts` stays off the
+`unsafeBandMidpoint` allowlist.
 
-| Latitude | Crops | Annual AC | Latitude | Crops | Annual AC |
-|---|---|---|---|---|---|
-| 20 N | -13 | -735 kWh | 42.37 N | -19 | -189 kWh |
-| 24 N | -13 | -720 kWh | 44 N | -19 | -44 kWh |
-| 28 N | -13 | -637 kWh | 48 N | -19 | +363 kWh |
-| 32 N | -12 | -453 kWh | 52 N | -19 | +482 kWh |
-| 36 N | -12 | -444 kWh | 56 N | -12 | +607 kWh |
-| 40 N | -19 | -317 kWh | 60 N | -12 | +798 kWh |
+The water term is `1 - under / open`, where each side is the water balance's unirrigated deficit at
+the middle of the soil's available-water range, area-weighted over the placed beds. The deficit
+under the array reads the rain field under the site's rain-hour wind rose and the balance's monthly
+shade factors. A shade proxy would credit spring and autumn shade on ground that is dry in July. The
+term takes no water-limitation weighting, since a low index cancels it and a high one already agrees
+with shade.
 
-Crops fall as tilt rises at every one of the twelve, which is the finding that has now survived
-three re-measurements: **flat is the food end at every latitude on earth this tool serves.**
-Annual AC falls with it everywhere below the sign change, which the block bisects to **between
-44.25 and 44.50 N**. So over the whole band from the tropics to the Canadian border there is no
-trade to make: the flat end is better for food AND better for electricity, and a grower steepening
-an array inside one row count at 42.4 N is giving up both.
+#### Where a bed sits
 
-Two consequences worth keeping. The energy rule of thumb is falsified more sharply than the
-`energy-first` paragraph below already puts it: `0.85 phi` reaches the 35-degree clamp at 41.2 N,
-so at that latitude the rule asks for exactly the tilt this sweep measures as the worse one on
-both axes. And the thing that actually buys electricity by steepening is not tilt, it is the
-row-count step, which the next paragraph measures at roughly double the annual AC for one degree.
-Above 44.4 N tilt starts paying on its own account, because the sun is low enough that facing it
-squarely finally beats the self-shading a closer pitch buys.
+Each bed slides onto the rain the rows shed, one at a time along the cross-row axis, to where the
+balance says its plants would go short least (`slideBeds` in `layout.ts`). It stays within the room
+that its light band, the working margin, the array's feet and its neighbors leave it. A bed keeps
+the place the light gave it unless the move cuts the shortfall by a tenth or more
+(`SLIDE_WORTH_FRACTION`), below which the balance's inputs can't tell two positions apart. The step
+is 0.1 m (`SLIDE_STEP_M`), half a drip strip's width in still air. Each position is scored by the
+water term's own balance on the FAO-56 reference crop, since a bed being placed carries no planting.
+Where a site's rain arrives along the rows, no bed's room reaches a strip. Choosing which piece of a
+shaded band a bed goes in, by the strip that piece holds, isn't built.
 
-**The reversal is the row spacing, not the panel.** A bare plane-of-array calculation with no rows
-in it at all (pvlib, Ineichen clear sky, 42.37 N, south-facing, albedo 0.2) prefers 35 degrees to 10
-by 14% over the year, 2 415 against 2 118 kWh/m2, and by 48% over December to February, 485 against
-327. So the panel's own angle wants to be steep at this latitude, exactly as the rule of thumb says,
-and the annual AC still falls when the array is steepened because the pitch closes up with it. That
-is worth knowing before anyone tries to "fix" the sweep result: it is not a claim that steep panels
-collect less light, it is a claim about what holding the overhead footprint fixed does to the rows.
-It also leaves the height-limit sentence in `design.ts` standing, which tells a grower that
-flattening under a height cap "costs some winter electricity", the winter term is where the tilt
-preference is strongest.
+### 10d. Planting every bed: bed space and what blocks it
 
-**RSR against the projected coverage, re-measured 2026-09-01.** The rationale also claimed the
-measured loss "is smaller than the footprint at garden scale because light leaks in from the
-sides", and this record then said it could go either way. With the geometry fixed it does not:
-across 15 configurations, tilt 10 to 35 on plots from 10 x 40 to 30 x 60 m, the measured plot RSR
-came in **between 0.022 and 0.128 against a footprint of 0.165**, always under it. That is what
-should be expected of the two quantities, since the footprint is a per-pitch figure under an
-infinite-row assumption and the measured ratio is a mean over a finite plot with ends, edges and
-a five meter margin of open ground. Both sentences are still gone from the shipped copy.
+`rankingChain` and `rankingRequirement` in `src/ui/requirement.ts` chain site, beds, light and
+ranking, and `firstUnmet` offers a reader the first thing they can act on. `RequirementNotice` holds
+the sentence and the button that settles it as one element, and the plants step shows it where its
+cards would be while anything in that chain is unmet.
 
-**Open, and worth knowing:** if the footprint is an upper bound in every case, `ScenarioFlags.shade`
-can never refuse a design that was sized inside the budget, which would make that check dead code.
-It has not been swept exhaustively. `design.test.ts` pins the bound rather than the old claim.
+Applying a layout from the search and pressing "Plant every bed" (`plantEveryBed`) both plant
+through one function, `plantBeds` in `src/state/store.ts`. Each bed takes a combination from
+`suggestPolycultures`, sized by `allocateSpace`, the one-plant-each rule of 10b, splitting the
+surplus evenly. A combination whose floor exceeds the bed doesn't fit and reports its shortfall
+(`suggest.test.ts`).
 
-**The shade budget is checked against the bake, not only spent on the footprint.**
-`ScenarioFlags.shade` carries the budget, the measured season-cumulative RSR and whether the one
-is inside the other, and the card says so in both directions. This is not decoration: sizing the
-projected coverage was the ONLY check there was, and it is a different quantity from what the
-grower gets. Pinned twice, once that the verdict follows the measured figure rather than the
-sizing, and once on the case that motivated it: `food-first` forced to 30 deg on a 16 x 12 m plot
-takes a second row, and its measured RSR comes out above its own footprint with that footprint
-still inside the budget.
+The beds are planted in turn, each with the others in view. Among the combinations that fit a
+bed, `plantBeds` takes the one that places the most liked crops no bed holds yet, then the one
+that repeats the fewest crops already growing in another bed, and it passes over a combination
+another bed took while a different one fits. Solving each bed alone would give beds with the same
+light the same crops.
 
-**The row-count step is still a step, and it still matters more than the tilt fraction.** Row
-count is non-decreasing in tilt, because pitch is `collectorWidth * cos(tilt) / projected` and a
-steeper panel closes up until another row fits.
+## 11. Companion planting: evidence grades A to E
 
-**Re-measured 2026-09-07, coarse settings (tregenza-mf1, one sun sample an hour, 0.5 m cells),
-`food-first`, 16 x 12 m plot:** the step sits at 28 degrees, where `fillPlot` admits a second
-row. At 27 degrees, one row, RSR is 0.0522, 140 crops clear the light gate and annual AC is
-5 033 kWh. At 28 degrees, two rows, RSR is 0.1041, 121 crops clear and annual AC is 10 042 kWh
-(`src/recommend/sweep.bench.test.ts`, block 2).
+**A** = multi-site trials or meta-analysis with a characterized mechanism. **B** = replicated
+trials, context-dependent or carrying management preconditions. **C** = single study or lab-only.
+**D** = traditional, plausible, untested. **E** = no evidence, or contradicted.
 
-One degree of tilt here costs 19 crops and roughly doubles both RSR and annual AC. Block 1's
-whole 25-degree band, 10 to 35 within one row count, cost 13 crops over 25 degrees. One degree at
-the step outweighs the whole band.
-
-`food-first` is derived (`groundLightPlan`) and costs no simulation, because two monotonic facts
-settle it and **they now point the same way**. Fewer rows is always less shade, since another row
-is more panel over the same ground. And within one row count a FLATTER panel leaves more light,
-for the reason above. So the answer is simply the flattest tilt in the band, which is both the
-fewest rows and the least shade within a row count, and it is arithmetic rather than a search.
-
-This is the change with the largest user-facing consequence of the whole correction: `food-first`
-had been recommending the STEEPEST tilt its row count allowed, which is the shadiest end of its
-own band, under a name that promises the most light on the ground.
-
-**Rebuilt 2026-09-07, coarse settings (tregenza-mf1, one sun sample an hour, 0.5 m cells),
-`food-first`, 16 x 12 m plot, four latitudes:**
-
-| Latitude | Rule tilt | Rule rows | Rule crops | Rule kWh | Derived crops | Derived kWh |
-|---|---|---|---|---|---|---|
-| 20 N | 12 deg | 1 | 141 | 4 532 | 141 | 4 575 |
-| 30 N | 18 deg | 1 | 140 | 4 771 | 141 | 4 867 |
-| 42.4 N | 25.4 deg | 1 | 140 | 5 049 | 140 | 4 996 |
-| 55 N | 33 deg | 2 | 121 | 11 174 | 140 | 5 273 |
-
-(`src/recommend/sweep.bench.test.ts`, block 3.) The derived tilt is 10 degrees at every latitude
-and always one row, because `groundLightPlan` returns the bottom of the band regardless of where
-the sun is.
-
-The finding survives. At 20, 30 and 42.4 N the rule stays under the 28-degree row-count step this
-plot carries (above), so it costs a food-first grower at most one crop and a few percent of kWh
-either way, sometimes in the rule's favor. At 55 N the rule asks for 33 degrees, past the step, and
-the second row it admits costs 19 crops, 140 down to 121, for 112 percent more electricity a
-food-first design was never asked to generate. The rule reads latitude, the step reads pitch, and
-the two have nothing to do with each other.
-
-Only `balanced` still takes a latitude rule, and that is deliberate: its name promises a middle
-ground rather than an optimum of anything, so there is nothing about it to falsify. It is the one
-archetype whose tilt no measurement is owed.
-
-`energy-first` is the one exception, and it is measured rather than derived (`measuredEnergyPlan`).
-Its name is a promise the figures beside it can falsify, and the rule of thumb falsified it. The kWh
-figures in this paragraph and the next predate the geometry fix and are **void as numbers**, the
-argument they were offered for does not depend on them, since `measuredEnergyPlan` sweeps the band
-on the site's own weather at run time and is right by construction whatever the geometry. On a 16 x
-11 m plot at 42.4 N the array at `0.85 phi` (35 deg after the clamp) made **9 711 kWh** where
-`balanced` at 31.8 deg made **9 872 kWh** on identical hardware: the design called Energy first
-generated less than the one called Balanced. The cause is that pitch here is not independent of
-tilt. The shade budget is written as a PROJECTED ground coverage, so flattening the panels widens
-the rows by exactly as much as it shortens their shadow, and row-to-row shading falls with it. Swept
-a degree at a time the curve is smooth with an interior maximum at **21 deg / 10 027 kWh**, 3.2%
-above the 35 deg figure. Separately, a north-south tracker axis turns the rows across the plot, and
-on a 3.5 x 2.4 m courtyard that halved the modules the plot could hold (1.72 -> 0.86 kWp) and cost
-more than tracking won back.
-
-So `energy-first`'s tilt is the argmax of `runAnnualChain` over whole degrees across the whole
-reference band, and tracking is taken only when it measures better than every fixed tilt. The band
-is every tilt any sibling archetype can be built at, so `energy-first` can no longer be beaten on
-tilt alone. Projected coverage is held fixed across the sweep, so it spends no extra shade: what
-moves is the shape of the shadow, not how much of it there is. Ties go to the lower tilt and the
-order is fixed, so the search stays deterministic. It costs one PV chain run per tilt and NO light
-bake, which is why it is affordable where a whole extra candidate is not. Pinned by
-`design.test.ts` on three plot shapes, including one wider than deep and one deeper than wide.
-
-Five archetypes, and the search is capped there: no sweep runs around them, because each
-candidate costs a full annual bake, and `ScenarioSet.notConsidered` says so in the first line.
-`mounting` filters the offered set and the dropped archetypes are named. `no-array-control` is
-always offered.
-
-Evaluation is `FINAL_OPTIONS`, the same bake the editor runs, Growing Season Hours window included
-(one extra weight vector on the shared direction set, so the MA figure measures the regulated
-quantity instead of the March-October month approximation). The site's solar positions,
-decomposition and sky set are computed once and shared by the five bakes (`siteSkyFor` in
-`src/sim/pipeline.ts`), and each draw of the WebGL2 bake is capped at `MAX_RAY_TESTS_PER_DRAW`
-cell-direction-panel tests so no command buffer runs long enough for the GPU's watchdog to kill
-it. Measured wall clock for a five-scenario run on an M-series GPU: 1.4 s on a 10 x 7 m plot,
-1.4 s on 16 x 11 m, 3.4 s on 30 x 20 m with 51 to 68 panels (the first bake about 450 ms, the
-rest 100 to 650 ms). About 4.5 s a candidate on the CPU rasterizer.
-
-The land equivalent ratio is `landEquivalentRatio`'s PORTFOLIO sum, the same convention as
-`OptimizerResult.portfolio` and TEK rule 7, taken over a fixed six-crop basket
-(`DESIGN_BASKET_SIZE`) of the scenario's own top-ranked admissible crops plus the electricity term.
-It is not a two-term Dupraz ratio and must not be rendered as one. (`OptimizerResult` went with the
-optimizer in Record 17, `landEquivalentRatio` keeps the convention.)
-
-`GeneratedBed.lostToShade` is the per-bed version of the same question, and it is deliberately a
-DIFFERENT comparison: each bed against the brightest bed of its own plot, not against the open-sky
-control. It needs no second bake, it works identically on a garden drawn by hand, and it is the
-question a grower actually asks standing between two beds two meters apart. Subtracting the bright
-bed's own light-gate refusals is what makes it mean "the shade cost this", since a crop the site
-refuses outright is refused in both. What it cannot say is what the plot gave up to carry panels at
-all, that is the plot-level figure below.
-
-`cropsLostToShade` is measured AGAINST the open-sky control, which is baked first: a crop the site
-refuses in full sun is not something the panels cost. `confidence` never reaches `high`, because
-every path rests on the Tier C crop DLI absolutes of section 7, it falls from `moderate` to `low`
-where a scenario adds an approximation of its own (a tracked array, whose pose is baked at peak
-elevation, shade past the 40 percent level where Laub's anchors are tabulated, a water-limited site,
-or a basket in which every light threshold is a class inference).
-
-Ranking is deterministic: four raw terms (crop retention and light kept, annual AC kWh,
-the water balance's unirrigated deficit saved on the layout's own beds, and structural
-simplicity) min-max normalized across the set and combined with the user's own `DesignObjective`
-weights, an exactly equal score going to the archetype named for the answers (`namesakeOf`), then
-archetype order. No band is collapsed anywhere, so `design.ts` is NOT on the `unsafeBandMidpoint`
-allowlist.
-
-**Amended 2026-09-19: the water term is the balance's own figure.** Until then the term was the
-plot's season shade ratio, a proxy for evapotranspiration, so the layout with the most shade took
-the whole of "Using less water". Measured against `waterBalances` on each layout's placed beds at
-the app's own bake settings, on two real Open-Meteo records: at Amherst (985 mm of rain against
-905 mm of reference ET) the proxy's pick, three tilted rows, put four of its eight beds in the
-rows' rain shadow with July shade of 0.05, and those beds need 157 to 215 mm of irrigation against
-156 open to the sky, while its three beds under the rows need none. The shade it was credited for,
-0.35 of the season, is spring and autumn shade on ground that is dry in July. Vertical walls shade
-0.2 in every month and cut their beds' shortfall by two thirds. At Phoenix (200 mm against
-1,986 mm) rain is a rounding error and the balance's figure tracks shade closely. The term is now
-the unirrigated deficit at the middle of the soil's available-water range, area-weighted over the
-placed beds, as `1 - under / open`, computed from the rain field under the site's rain-hour rose
-and the balance's monthly shade factors. It is the point figure the balance already produces, so
-`design.ts` stays off the `unsafeBandMidpoint` allowlist. On the starting plot under the balanced
-preset the pick moves from the three tilted rows to the open-sky control, by 0.044: the rows'
-whole margin had been the proxy's full credit. Under the food and electricity presets nothing
-moves at either site. Weighting the term by the site's water-limitation index was measured and
-dropped: at 0.14 it cancels the term and at 0.87 the term already agrees with shade. A "wet site
-pushes drip strips onto the paths" rule was not built, because the balance carries no harm from
-excess water and the capture claim already sends half of every strip to the path. Cost: an
-evening, one probe at two sites, four tests.
-
-**Amended 2026-09-20: a bed slides onto the rain the rows shed where its plants would go short
-less.** The term above reads each layout's beds where the light put them, and whether a bed stood
-on a row's drip strip was the luck of where the light bands fell: measured on the starting plot at
-Amherst, a bright-gap bed with 0.65 m of room toward a row's low edge went from 191 mm short over
-the year to none across that room, a bed a meter off the strip was never credited, and the search's
-own order moved with the bake's cell size for that reason alone. Each bed now slides, one at a time
-in order along the cross-row axis, within the room its light band, the working margin, the array's
-feet and its neighbors leave it, to the position where the balance says it would go short the
-least (`slideBeds` in `layout.ts`), and stays where the light put it unless the cut is a tenth or
-more (`SLIDE_WORTH_FRACTION`): below that the balance's own inputs, monthly rain normals spread
-over days and a soil's available water read at the middle of its range, cannot tell two positions
-apart. The step is 0.1 m (`SLIDE_STEP_M`), a strip's own width in still air. The judge is the
-balance the term ranks on, at the mid capacity with no irrigation, on the FAO-56 reference crop
-since a bed being placed carries no planting, read on a rain ground built once per candidate. The
-same rain, the same balance, the same rule at every site, because the balance carries no harm from
-water and the strip is credited everywhere. Measured after: at Amherst the energy-first layout's
-term goes from 0.31 to 0.72, two of its beds moving 0.7 m onto a strip, and the food-first
-layout's from 0.26 to 0.57, three beds moving 0.5 to 0.9 m, and under the balanced preset the
-pick moves from the open-sky control back to energy-first, by 0.007. The food and electricity
-presets keep their picks at both sites. At Phoenix nothing moves, and the reason is the wind: its
-rain comes on easterly winds that blow along the east-west rows, so each row's strip stays under
-its low edge inside the shaded band, in the piece south of the row that the bed mix left empty,
-where no bed's room reaches, while Amherst's rain comes from the north and the south, across the
-rows, and the northerly share carries each strip into the bright gap south of its row. Choosing
-which piece of a shaded band takes its bed by the strip it holds is what Phoenix would need, and
-was not built. The search's order at 0.5 and 0.25 m cells agrees on the test plot again. Cost: an
-evening, one probe at two sites before and after, nine tests.
-
-Until 2026-09-17 the search baked at a coarser preview quality and carried a per-run margin,
-measured from how far the preview's light terms moved against the full bake, listing every
-scenario inside it as too close to call: on a 10 x 7 m plot that declared three of the five
-layouts tied with the pick. The search now runs the full bake, the only quality the app has, so
-there is nothing finer to measure a margin against, and the margin, its two constants and its
-measurement harness are gone. The full bake's own discretization (577 patches, 2 degree sun bins,
-0.12 m cells) is the same everywhere the app reads light, so a gap the search reports is the gap
-the editor shows.
-
-### 10d. An applied plan shares the bed, and the block that stops it carries its own press
-
-**Two defects.** The feature gave no visible way to run the optimizer, and when it ran it
-"just planted lingonberries for everything".
-
-**The block.** The sentence read *"Run the layout optimizer on the crop step before a plan can be
-applied"*. There is no step called "crop", the step is *What to plant*, there is no control called
-*the layout optimizer*, the button says *Fill every bed*, and that button is in the next panel's
-header, fifth of five, under a ranked crop list that runs to 163 rows. So the sentence named nothing
-a reader could find, and the reader clicked at random until the grayed-out Apply button woke up.
-`RequirementNotice` already existed for exactly this, and its own docstring says it does: the
-sentence and the press that settles it as one element, because "the pair that drifted apart was
-exactly the failure". There were five requirement builders and no `planRequirement`. There is now,
-chained behind site, beds, light and ranking, so a reader is offered the first thing they can
-actually act on. The ranking panel's own notice was also gated on `phase === 'blocked'`, and `phase`
-is `'off'` whenever the auto-run toggle is off, which meant two dead buttons and no explanation at
-all, it is now gated on there being something in the way.
-
-**The monoculture, which was NOT the optimizer.** `derivePlanting` fills whatever room it is given,
-and `applyPlanToBeds` derived the plan's slots one at a time. So the first slot took the whole bed
-at catalog spacing, sixty-two lingonberry in ten square meters, and every slot after it was
-refused for room. Whatever variety the optimizer found was discarded at the last step. The
-refusals were even printed under the button, where they read as the plan being over-ambitious
-rather than as the applier throwing it away. The comment above the loop claimed the opposite of
-what the code did.
-
-The fix is `allocateSpace`, the rule this repository already states and already tests over in the
-polyculture path: every crop gets one plant's worth of bed at catalog spacing before anything
-gets a second, and the surplus is split evenly. A combination whose floor exceeds the bed does not
-fit, and then the one-at-a-time fill stands and reports the shortfall as before.
-`planting.test.ts` holds it, and that test was checked to fail on the old behavior rather than
-merely to pass on the new one.
-
-**What is NOT fixed, and is a decision rather than a defect.** Beds are still solved in isolation,
-so two beds with the same light still get the same crops. Three things in `optimizeLayout` produce
-that: `yieldBand` (0.4) and `portfolioLer` (0.3) are the same quantity counted twice, because
-`totalLer` contains the same sum of relative yields, `companion` (0.15) is identically zero when
-planning into an empty bed, since `supportingRules` is computed against what is ALREADY in the bed,
-and `stratification` (0.15) is constant for a first pick. So the first crop in every bed is chosen
-by relative yield alone. That yield is *relative* and *per Laub group*, meaning percent of a crop's
-own full-sun yield rather than food, `berries` is the strongest group, and lingonberry is the only
-berry that both passes the light gate at `dliMin` 8 and is small enough (0.126 m² canopy against 1.2
-to 4.9 m² for every other low-DLI berry) to clear the space gate with no crowding penalty. Also
-noted: `requireInsectaryCoverage` is set by the store and never read.
-
-Changing that objective moves every recommendation the app makes, so it is recorded here and left
-for a decision rather than taken quietly.
-
-## 11. Companion planting: evidence grading A-E
-
-A = multi-site trials or meta-analysis with characterized mechanism. B = replicated trials,
-context-dependent or with management preconditions. C = single study or lab-only. D =
-traditional, plausible, untested. E = no evidence or contradicted.
-
-Only A/B contribute to scoring. C renders as "experimental". D/E render only in a clearly
-labeled folklore panel and never affect layout.
+Only A and B score. C renders as "experimental". D and E render only in a clearly labeled folklore
+panel, and never affect layout.
 
 | Claim | Grade | Note |
 |---|---|---|
 | Intercropping LER | A | 1.22-1.32 |
 | Crop rotation | A | |
-| Insectary strips | A (enemy abundance) / B (pest suppression) | |
-| Marigold vs root-knot nematode | A as full-season cover crop / **E** as interplanted individuals | |
-| Push-pull | A outcome, non-transferable | Mechanism revised by **Erdei et al. 2024, eLife 13:e88695, doi 10.7554/eLife.88695**: no adult repellency at all, larvae preferred Desmodium but none survived to pupation, via silica-fortified hooked trichomes. It intercepts and kills, it does not repel |
-| Trap cropping | B | ~10 of ~100 systems commercially successful, retention not attraction is limiting, untended trap crops are pest nurseries |
-| Legume N transfer | B | <15% same-season |
-| Biofumigation | B | only with maceration, <=1% ITC conversion otherwise |
-| Juglone | C | lab yes, landscape evidence weak |
-| "Aromatic herbs repel pests" | **E** | Directly contradicted (Finch & Collier 2003, Uvah & Coaker 1984). Mechanism is green surface area, not smell |
-| Blueberry with lingonberry or the acid guild | **D** | Traditional. The only defensible content is the shared acid envelope, which is already the pH compatibility term, the rule exists so the pairing is not silently upgraded |
-| Sweetfern fixes nitrogen for a neighboring blueberry | **D** | Ziegler & Huser 1963 measure fixation IN THE NODULE and FEIS reports only an apparent effect on neighboring little bluestem. Neither measures transfer to a blueberry, and the Fabaceae transfer figures do not carry across to an actinorhizal shrub |
+| Insectary strips | A for enemy abundance, B for pest suppression | |
+| Marigold against root-knot nematode | A as a full-season cover crop, E as interplanted individuals | |
+| Push-pull | A outcome, non-transferable | Erdei et al. 2024 (eLife 13:e88695) measured no adult repellency, and first-instar larvae preferred *Desmodium* tissue with none surviving to pupation on its silica-fortified hooked trichomes. The mechanism is interception and larval death, scoped to stemborers and fall armyworm. Striga is a different guild and chemistry, so the mechanism doesn't carry across to it |
+| Trap cropping | B | About 10 of some 100 systems succeed commercially, retention is the limiting step, and an untended trap crop is a pest nursery |
+| Legume N transfer | B | Under 15% in the same season |
+| Biofumigation | B | Only with maceration, under 1% ITC conversion otherwise |
+| Juglone | C | Lab yes, landscape evidence weak |
+| "Aromatic herbs repel pests" | E | Contradicted (Finch et al. 2003, Uvah & Coaker 1984). The mechanism is green surface area |
+| Blueberry with lingonberry or the acid guild | D | Traditional. Its defensible content is the shared acid envelope, already the pH term, so the rule adds no second bonus for it |
+| Sweetfern fixes nitrogen for a neighboring blueberry | D | Ziegler & Hüser 1963 measure fixation in the nodule, and Snyder's 1993 FEIS review reports an apparent effect on neighboring little bluestem. Neither measures transfer to a blueberry, and Fabaceae figures don't carry to an actinorhizal shrub |
 
 ## 12. TEK-derived design rules
 
-Encode as named, individually attributed rules. Seven distilled from 20+ documented systems:
+Seven rules of traditional ecological knowledge (TEK) from more than 20 documented systems, each
+named and individually attributed in `src/data/tek.ts`.
 
-1. Vertical stratification: 2-4 explicit canopy tiers keyed to light level under the array
-2. Nurse plants: a data-model role for microclimate-service species distinct from yield crops
-3. Wind/thermal buffering as a first-class microclimate modifier, not just panel shade
-4. Water-harvesting geometry tied to the array drip line and runoff shadow
-5. Shade-schedule-aware temporal succession and relay cropping
-6. Landraces as distinct plantable entities with their own trait annotations
-7. LER-style portfolio yield reporting, not single-crop maximization
+| Rule | What it requires | Attributed to |
+|---|---|---|
+| 1 Vertical stratification | Two to four canopy tiers, each keyed to the modeled DLI at its height | Chagga home gardens of Mt Kilimanjaro and Javanese pekarangan gardens (Fernandes et al. 1984, Kumar & Nair 2004) |
+| 2 Nurse plants | A data-model role of its own for a species grown for the microclimate it provides | Sahelian and Sudanian parkland communities, for Faidherbia albida and its reverse phenology (Roupsard et al. 1999) |
+| 3 Wind and thermal buffering | Adjacent water, stone and hedge sized as first-class microclimate modifiers | Tiwanaku-era and pre-Inca waru waru builders, and the Aymara and Quechua using the revived technique (Kolata & Ortloff 1989) |
+| 4 Water-harvesting geometry | A sunken basin and inert mulch per plant, beds sited on the array's drip line and runoff shadow | Zuni (A:shiwi) waffle gardens and Mossi zai pits, with Yacouba Sawadogo credited for the zai revival (Elamri et al. 2018) |
+| 5 Temporal succession | Each crop growth stage paired against the array's seasonal and diurnal shade | Japanese communities practicing solar sharing, with Akira Nagashima its named inventor (Sekiyama & Nagashima 2019) |
+| 6 Landraces | Named landraces as distinct plantable entities with their own trait annotations | Sidama, Wolaita, Kambata and Gurage peoples of the southern Ethiopian highlands (Mueller 2025) |
+| 7 Portfolio yield | A plan scored on aggregate output and a land-equivalent ratio, labor cost beside it | Haudenosaunee (Iroquois) nations, and Quechua and Aymara communities for the historical vertical archipelago (Mt. Pleasant & Burt 2010) |
 
-**Dehesa/montado analog, CLAIM NARROWED.** "Marcos et al." does not exist and must not be
-cited. The real source is **Montero, Moreno & Bertomeu 2008, Agroforestry Systems 73:233-244**,
-a logistic curve in distance from trunk with R^2 > 0.88, which is genuinely the right shape.
-Its coefficients are paywalled, so the template is not instantiable yet and the gradient ships
-endpoints plus a caveat only. The **soil-moisture half of the claim does not hold**: real
-papers sample 2-30 m but report categorical zones, not a curve. Narrow the claim to LIGHT
-TRANSMISSION only.
+The dehesa and montado distance gradient, the change in light and soil moisture with distance from
+the trunk in these Iberian oak pastures, is a geometry-derived stand-in for modeling by distance
+from a panel edge. Montero, Moreno & Bertomeu 2008 (Agroforestry Systems 73:233-244) fitted
+intercepted light against distance from the trunk as a logistic curve, R^2 above 0.88, with
+radiation constant beyond 20 m. Their coefficients are paywalled, so the paper is cited for the
+shape of the light half alone. Every magnitude is this app's own: the endpoints follow the published
+direction, the ten intermediate samples are interpolated, and `DEHESA_GRADIENT_CAVEAT` says so on
+screen. The soil-moisture half rests on no distance function, since that literature reports discrete
+beneath-canopy and beyond-canopy zones (Moreno & Pulido 2009 and Simionesei et al. 2018 carry the
+endpoints).
 
 ### Attribution rules (hard product constraints)
 
-- Attribute to specifically named peoples. Never generic "indigenous".
-- Distinguish historical/archaeological systems from living practice.
+- Attribute to specifically named peoples.
+- Distinguish a historical or archaeological system from living practice.
 - Credit named individual innovators (Nagashima, Sawadogo, Khan) separately from communities.
-- Never claim community endorsement that was not sought.
-- **Do not ship a merged, unattributed "ancient wisdom presets" feature.** Pan-indigenous
-  generalization is the named failure mode.
-- Published academic literature is citable under normal scholarly norms. CARE Principles and
-  the Nagoya Protocol bind only if we encode community-held seed genetics or ceremonial
-  calendars. We will not.
+- Never claim a community endorsement that wasn't sought.
+- Ship no merged, unattributed "ancient wisdom presets" feature. Pan-indigenous generalization is
+  the named failure mode, and a Zuni water rule and a Chagga tier rule aren't interchangeable.
+- Published literature is citable under normal scholarly norms. The CARE Principles and the Nagoya
+  Protocol bind an app encoding community-held seed genetics or ceremonial calendars. This app holds
+  only published trait descriptions.
 
 ## 13. Stack
 
-three 0.185.1 / @react-three/fiber 9.6.1 (NOT v10, alpha) / @react-three/drei 10.7.7 /
-three-mesh-bvh 0.9.13 / three-bvh-csg 0.0.18 / @turf/turf 7.3.5 / suncalc 2.0.1 / zustand.
-Vite + React 19 + TS strict. Cloudflare Pages + Workers.
+three 0.185.1 / @react-three/fiber 9.6.1 (v10 is alpha) / @react-three/drei 10.7.7 / three-mesh-bvh
+0.9.13 / three-bvh-csg 0.0.18 / suncalc 2.0.1 / zustand 5.0.14 / immer 11.1.15. Vite + React 19 + TS
+strict. One Cloudflare Worker serves the static build as assets and proxies the upstreams. The
+physics is a Rust core compiled to wasm (`crates/agv-sim`), on unless `VITE_RUST_CORE=off`, which
+leaves a build that computes nothing.
 
-`src/sim/` is framework-free: zero three.js and zero React imports, so the physics is unit-
-testable without a GL context. This is a hard architectural boundary.
+`src/sim/` is framework-free: zero three.js and zero React imports, so the physics is unit-testable
+with no GL context. That boundary is hard, and `src/sim/boundary.test.ts` enforces it.
 
-Testing: Vitest for pure math (the bulk of coverage, every commit), `@react-three/test-renderer` for
-scene graph (assert primitives, not object identity, per vitest#4207), Playwright for e2e with
-`--use-gl=swiftshader` on visual-regression projects (GPU rendering is not deterministic across CI
-drivers) and `--use-gl=angle` for functional.
+Testing: `bun test` for pure math, the bulk of coverage, on every commit.
+`@react-three/test-renderer` for the scene graph, asserting primitives because object identity is
+unstable across renders (vitest#4207). Playwright for e2e, naming its GL backend explicitly,
+swiftshader on a CI runner and metal on darwin, since GPU rendering isn't deterministic across
+drivers.
 
-## 14. The simulation mode: the garden run forward
+## 14. The simulation mode of the planner
 
-Decided 2026-09-03, on the audit in `the convergence document`. The designer answers "what is the best
-layout for this site", the simulation answers "what happens if I try this here", one season at a
-time, on years the site actually had. It is a MODE of the designer and not a product beside it, and
-the rule that keeps the two from disagreeing about one garden is that **the simulation calls the
-functions the recommendation calls**, on a `Site` computed for the year (`siteForYear`), with a
-history the ground remembers. `src/simulation/` is the layer. It is pure and sits between
-`recommend` and `state`, `docs/ARCHITECTURE.md` has the boundary.
+The planner answers "what is the best layout for this site", and the simulation, a mode of the
+planner, answers "what happens if I try this here", one season at a time. What keeps the two from
+disagreeing about one garden is that **the simulation calls the functions the recommendation
+calls**, on a `Site` computed for the year (`siteForYear`), with each bed's record of what grew in
+it in earlier seasons. `src/simulation/` is a pure layer between `recommend` and `state`.
 
-### 14.1 A measured year may drive a simulated season
+### 14.1 A measured year drives a simulated season
 
-Section 4 stands for the designer: its input is a TMY and its yield bands come from one. The
-simulation runs on a measured year on purpose, because the sign of the shade effect flips between
-normal and drought years (the evidence section 4 cites), and a mode for practicing has to be able
-to show the drought. The measured years are the ten the TMY was assembled from, kept beside it by
-`normalizeWeather`, with the rain that fell in them. A `SeasonReport` names its year in its
-`YearSummary` and is never a recommendation. Light stays the typical-year bake: a season's shade
-ratio is geometry, and the year varies frost, heat, rain and evaporative demand through
-`siteForYear`.
+Record 4 holds for the planner: its input is a TMY and its yield bands come from one. The
+simulation runs on a measured year, because the sign of the shade effect flips between normal and
+drought years (Weselek et al. 2021 on potato, Amaducci et al. 2018 on corn). The measured years are
+the ten the TMY was assembled from, kept beside it by `normalizeWeather` with the rain that fell in
+them. A `SeasonReport` names its year and is never a recommendation. Light stays the typical-year
+bake, because a season's shade ratio comes from the geometry. The year varies frost, heat, rain and
+evaporative demand through `siteForYear`.
 
-### 14.2 What a season may invent, and what it may not
+### 14.2 What a season may invent
 
-- The realized harvest is a seeded draw inside the crop-response band, section 7's own
-  confidence interval, uniform in log space. No variance is invented, and a garden replays
-  exactly from its seed.
-- Pests: the spatial term is the mechanism recorded under `undersown-cover-host-finding`, that
-  non-host green area dilutes host finding, the year term is the year's degree-days over the typical
-  year's at the same site. The share of a harvest lost at full pressure is the one unsourced number
-  in the mode, declared through `unsourcedClaim` so it stands in the provenance ledger with the
-  other gaps.
-- Water: the designer's own drought penalty, on the year's water index, with the bed's own
-  irrigation.
-- Frost and season length: the year's own two dates and the designer's `siteMaturityDays`,
-  through `seasonAnchors` and `frostHardy`.
-- Rotation: `rotationViolation`, fed a real history, matching by family rather than by crop. A
-  perennial that stood in the same bed last season is standing rather than sown and is not asked, in
-  the season it is first planted it is (decided 2026-09-04).
-- The harvest share is the mean over every planting planned, a refused one counting as zero the
-  same as a frosted one, because the standing it feeds is per bed of ground (decided 2026-09-04).
+- The realized harvest is a seeded draw inside the crop-response band, Record 7's confidence
+  interval, uniform in log space, and a garden replays from its seed. The harvest share is the mean
+  over every planting planned, a refused one counting zero like a frosted one, because the standing,
+  the land equivalent ratio the garden reaches over its seasons, is per bed of ground.
+- Pests: the spatial term is the `undersown-cover-host-finding` mechanism, in which non-host green
+  area dilutes host finding. The year term is the year's degree-days over the typical year's. The
+  share of a harvest lost at full pressure is the mode's one unsourced number, declared through
+  `unsourcedClaim`.
+- Water, frost and season length: the drought penalty uses the year's water index with the bed's
+  irrigation, and the year's two frost dates are checked against the planting's dates and
+  `siteMaturityDays`, through `seasonAnchors` and `frostHardy`.
+- Rotation: `rotationViolation` on a real history, by family. A standing perennial is checked only
+  in the season it is planted.
 - Companions: `ruleAppliesInContext` at every grade. A and B rules apply as measured, minus their
-  competition penalty, C rules do nothing the numbers can see, D and E rules are hypotheses (14.3).
-- An economy, bounded, decided 2026-09-04 on `the economy document`. The prototype's
-  management budget, build cost and connection charge were invented scales and stay out. What may
-  show, each with its source on the row: a build cost as a band across NREL's three crop-mount
-  structures (Horowitz et al. 2020, $1.83 to $2.33 per watt DC, 2020 US dollars, a 500 kW benchmark
-  across eight states, with the caveat that a garden's few kilowatts sit below the bottom of that
-  report's own size curve), a year's electricity value at the residential retail price of the site's
-  US state (EIA Electric Power Monthly 5.6.A, through the proxy with a secret) and a simple
-  undiscounted payback from the two, both null wherever no price reaches, which today is everywhere
-  outside the United States, and labor as a plain count of the applied rules' own
-  `requiresManagement` tasks, never as hours or money. The economy sits below the standing in its
-  own block, never in the verdict and never in a score, and nothing in it is discounted, converted
-  or projected, because no source in the corpus gives a rate.
+  competition penalty. C rules change no number. D and E rules are hypotheses (14.3).
 
-### 14.3 A folklore claim may move a simulated outcome, and nothing else
+The economy sits in its own block below the standing, and neither the verdict nor any score reads
+it. Money is rounded to two significant figures, and nothing is discounted, converted or projected,
+because no source gives a rate. Build cost is a band across the three PV + crops structures Horowitz
+et al. 2020 benchmarks, since nothing here measures which one a garden array is:
 
-Section 11 and `docs/ARCHITECTURE.md` 3.4 stand: grade D and E rules can't move a layout, a score
-or a recommendation, and the types enforce it. The simulation is the one place they act, and only on
-a `PlantingOutcome`, which no score consumes. Whether a claim is true in a garden is a seeded draw
-at even odds, made once and never shown, a contradicted claim is false in every garden, and where a
-claim is true its size is the median measured effect of the A and B rules of the same interaction
+| PV + crops structure | $ per watt DC |
+|---|---|
+| Vertical mount | 1.83 |
+| Tracker stilt mount | 2.09 |
+| Reinforced regular mount | 2.33 |
+
+That's installed cost only, 2020 US dollars, a 500 kW benchmark over eight US states, no financing,
+operations or revenue. Its smallest modeled system is 200 kW and cost per watt rises as size falls,
+so a garden sits below the smallest size on its curve, and costs more per watt by an unstated
+amount. A year's electricity value is the season's AC generation at the residential retail price of
+the site's US state (EIA Electric Power Monthly Table 5.6.A, through the Worker), null wherever no
+price reaches, which is everywhere outside the United States. A grower may type a tariff and an
+installed cost in the currency they name. Payback is the cost divided by one year's electricity
+value, undiscounted, null where either side is missing or the currencies differ. A retail price is a
+buying price, and with net metering, time-of-use rates and export tariffs unmodeled the value
+assumes each kilowatt-hour displaces one bought. Labor is a count of the applied rules'
+`requiresManagement` tasks.
+
+### 14.3 The one place a folklore claim acts
+
+Record 11 and `docs/ARCHITECTURE.md` 3.4 stand: grade D and E rules can't move a layout, a score or
+a recommendation, and the types enforce it. The simulation is the one place they act, and only on a
+`PlantingOutcome`, which no score consumes. Whether a claim is true in a garden is a seeded draw at
+even odds, made once and never shown, and a contradicted claim is false in every garden. Where a
+claim is true, its size is the median measured effect of the A and B rules of the same interaction
 kind, so no effect size is invented. After three seasons of a trial the literature is offered. The
-outcome is labeled a simulated hypothesis wherever it is shown, because a mode that blurs "tested
-here" with "endorsed" is the risk `the port document` section 10 names about traditional knowledge.
-A trial is read against the harvested plantings of the same seasons that didn't run the rule, off
-the reports, and where every bed ran it the panel says so (decided 2026-09-04).
+outcome is labeled a simulated hypothesis wherever it shows, because blurring "tested here" with
+"endorsed" would claim an endorsement nobody sought, which Record 12 forbids. A trial is read
+against the harvested plantings of the same seasons that didn't run the rule, and where every bed
+ran it the panel says so.
 
 ### 14.4 Units and names
 
-A season is a year's growing season. Rotation intervals, trials and the ground's history are all
-counted in seasons. The mode is called the simulation, in code and on screen. `src/sim/` stays the
-physics of one year's light and `src/simulation/` is the garden over years, the two names are kept
-because renaming the physics would cost more than the confusion. The prototype under
-`prototypes/solarpunk/` that this replaces was deleted on 2026-09-03, the day the mode reached the
-screen, `prototypes/light-harness/` was what was kept out of it, until its one measurement moved
-into `src/sim/` as `gap.test.ts` on 2026-09-04, and `prototypes/` is gone.
-
-### 14.5 The picture follows the season, and it is still not a second physics
-
-Decided 2026-09-03. Two things on screen were saying which year it was and neither of them was
-the simulation: the scene's clock, which is the sun scrubber's, and `plantYear`, a slider that
-decides how near its mature size a perennial is drawn. So a drought of 2018 was drawn under this
-year's date, in a garden that stayed one year old however many seasons had been run.
-
-A season now moves the clock, keeping the grower's day and hour, to the year that was run, and a
-reset puts it back. The plants' age is derived where the scene reads it: the greater of the slider's
-year and the seasons run, bounded by `MAX_PLANT_YEAR` (`gardenAge`). It was written by the season
-for a few hours on 2026-09-03 and that made the shipped example, drawn at year 3, a year old on its
-first press, a grown shrub vanished, and every persona who tried it read that as the season killing
-it. What a season does NOT do is re-bake the light, and the distinction is the whole of 14.1: a
-season's shade ratio is geometry off the typical year, so moving the clock is a calendar move and
-not a measurement. The sun over a given day of the year hardly moves between years in any case,
-which is why this is honest to do and would be dishonest to call a per-year sun.
-
-`the convergence document` section 6 listed this as "the year should move the sun", which read as a
-per-year bake and would have contradicted 14.1. This is what it should have said.
-
-Three more things the picture does, added 2026-09-03 after eight personas tried the mode
-(`the convergence document` 7), and the line each one stays behind:
-
-- **A season plays.** Pressing Run sweeps the scene's clock from the year's last spring frost to the
-  day the grower was looking at, over three and a half seconds, and the outcome lands on the plants
-  when it ends (`ui/useSeasonSweep.ts`, the transient `sweeping` flag). The plants grow because they
-  already grow with the day of the year and the sun moves because it already follows the clock,
-  nothing is computed that the press did not compute, and the light is not re-baked.
-  `prefers-reduced-motion` lands the outcome at once, as the overlay playback and the guided tour
-  already do.
-- **The outcome is drawn to be seen.** A frosted planting lies flat and bleached rather than
-  standing small and gray, one the ground refused is not drawn at all, because bare soil is what
-  there is to see, a bed that ran short of water shows paler, warmer topsoil (`driedBy`, the same
-  kind of reading as irrigation darkening it, and like it a rendering choice in size and a fact in
-  direction). Every tint is still a multiplier on a reflectance.
-- **The light overlay is not drawn while the seasons step is open.** It is the designer's answer and
-  the loudest thing on screen, and it buried the plants the season is about. The grower's setting is
-  untouched, the overlay simply waits for another step.
-- **The scene shows the recorded weather, and only on the seasons step.** Once a season has run on a year
-  that happened, the scene shows that year's own hour under the clock: its cloud, read as the
-  clearness index of the measured sun against a clear one (`src/sim/clearness.ts`, Liu and Jordan
-  1960) and drawn on the sky dome and taken off the key light, its rain, as a point cloud over the
-  plot at the hour's own rate, and snow on the ground from that year's own monthly normals through
-  the one snow model. Off the seasons step all three are what they were, and the sky's cloud stays
-  at zero, because the designer's picture makes no claim about any hour's weather and its visual
-  baselines are held to that. The sky dome's old rule, that procedural cloud would be a weather
-  claim the model never made, still holds where the model has not made it, on the seasons step the
-  record has.
-
-## 15. The test runner is `bun test`, and vitest is gone
-
-Vitest ran this suite for the life of the project and was replaced in a day. The
-reason was not speed, and not the two dependencies it saved. It was that the gate had become a
-coin flip.
-
-**What went wrong.** Vitest routes `console.*` from a worker to the reporter over an rpc channel.
-If the worker closes with one still in flight, vitest raises
-`EnvironmentTeardownError: Closing rpc while "onUserConsoleLog" was pending` and counts the
-unhandled rejection as a failed run. Build `f10376f8` reported `Tests 2064 passed | 12 skipped`
-and exited 1. A retry of the identical commit passed and deployed, which is what proved it a race
-rather than a defect: same code, same image, same command, different outcome. It had been seen locally too, and nobody had measured how often it lost.
-
-The prints were eleven `console.log` calls across five agent test files, held-out scoring reports
-somebody reads rather than assertions. Three cheaper fixes were available and are recorded here
-because they were the ones to try first: `disableConsoleIntercept: true`, swapping the eleven to
-`process.stdout.write` (which `sweep.bench.test.ts` already used and which had never raced), or
-putting the reports behind an env flag. The runner move was chosen, which had been wanted
-anyway, and it removes the mechanism rather than the trigger: `bun test` has no worker rpc
-reporter for a print to race against.
-
-**What it cost, honestly.** 175 test files and one harness had their imports rewritten, that part
-was mechanical. Six things were not:
-
-1. **`react-dom` decides once, at module load, whether it is in a browser**, caching the answer in
-   `canUseDOM` and `isInputEventSupported`. Import it before a DOM exists and its change event
-   falls back to a polyfill path that a dispatched `input` event never reaches: every controlled
-   input in the suite renders correctly and silently stops responding to typing. A first-line
-   `import` of the DOM registrar inside the test file is NOT early enough. It has to be a preload,
-   which is why `test/dom.ts` is global rather than per-file where vitest's
-   `// @vitest-environment jsdom` pragma was.
-2. **The five `@react-three/test-renderer` files must NOT have a DOM.** With `HTMLCanvasElement`
-   present, test-renderer patches `getContext` instead of using its own fake canvas, and the
-   camera tests in `useGuidedTour.test.tsx` stop seeing frames. So the suite runs twice:
-   `test:dom` for 170 files and `test:scene` for those five. The split is a glob, not a list.
-3. **Bun fakes timers inside the runtime**, not by swapping `globalThis.setTimeout`. A reference
-   captured before `useFakeTimers` is not a real timer and never fires, so anything that must make
-   progress under fake timers has to ride the microtask queue. See `test/vi.ts`.
-4. **React re-reports an error a boundary has already caught**, through `reportError`. Bun's
-   rethrows, jsdom's does not. `scene.test.tsx` exists to check that `SceneBoundary` swallows an IBL
-   subtree the fake WebGL context cannot draw, so `test/setup.ts` installs a `reportError` that
-   prints. The error stays visible and stops failing a passing test.
-5. **`globalThis` is not the jsdom window.** They are separate event targets, so
-   `globalThis.dispatchEvent(new Event('pointerdown'))` reached nothing and threw on the way. The
-   three `EventTarget` methods are bound across in `test/dom.ts`.
-6. **Bun types `expect(x).toBe(y)` against the type of `x`.** Nearly every id and unit here is
-   branded, so 127 assertions comparing against a plain literal stopped compiling. Vitest typed
-   these `unknown`. `test/bun-test.d.ts` widens three matchers back rather than putting a cast in
-   every assertion, because the brand is a device for the production code and should not decide
-   how a literal is written in a test.
-
-**And a seventh, found by looping the suite rather than by reading it.** The first green run
-proved nothing, so the suite was run twelve times end to end. Eleven passed. One exited 1 with
-zero test failures, which is the signature the whole exercise set out to kill:
-
-```
-panic: Segmentation fault at address 0x3B
-error: a test worker process crashed with SIGSEGV while running src/ui/agent-waiting.test.tsx
-```
-
-Two crashes in seventeen full runs, the same file and the same fault address both times, each one
-aborting every file that had not finished. Bun's own report names a native addon. The cause was
-`@huggingface/transformers`: it exports a `node` condition that `dlopen`s `onnxruntime-node` and
-`sharp`, and a `default` one that is `transformers.web.js` on WASM. Bun takes `node`. Vite takes
-`default`, so the build that ships has never touched the native runtime and only the test process
-did.
-
-What made `agent-waiting.test.tsx` the one to crash is that it does not want a model at all. It
-stubs `fetch` so "the model download answers no", which is true only where the weights are absent,
-with `models/` on disk it loaded a 23 MB ONNX file through a native runtime, in a test about what
-the panel says while a run is pending. That test and `agent-composer.test.tsx` now refuse the
-module, which is what their comments already claimed was happening, and that is what holds on a
-builder. `test/setup.ts` additionally redirects to the web build wherever the weights are absent,
-which is a local clone and nothing else: both builders fetch them, Cloudflare included, since
-`build:deploy` runs `fetch-agent-model` before the suite. The agent's own holdout tests keep the
-native build, because embedding against the real weights is what they are for. The twenty clean runs
-were measured on a machine that has the weights, so they describe the builders' configuration rather
-than a quieter one.
-
-One sharp edge this leaves. `bun test <file> <file>` by hand, without `--parallel`, shares one
-module registry across files, so the panel tests' refusal of the embedding module leaks into
-`embedding.test.ts` and the real model fails to load with "the weights are on disk but did not
-load". Every script in `package.json` passes `--parallel`, which implies `--isolate`, so the suite
-never sees this, an ad-hoc command does, and it reads as a broken model rather than a broken
-command. Both mocks say so where they are written.
-
-A stale claim found on the way, and corrected: `src/agent/model-presence.ts` and the `env` block
-of `.github/workflows/ci.yml` both said Workers Builds "has no `models/`", which was the whole
-worked example for why `REQUIRE_AGENT_MODEL` is opt-in rather than inferred from `CI`. It has
-them: `build:deploy` runs `fetch-agent-model` before the suite. Whether the claim was ever true is
-not checkable. The rule it argued for is kept and
-its reason restated, since "this builder fetches the weights" is still not derivable from "this is
-a builder" and the next builder to set `CI` without fetching would fail on a file nobody asked it
-for. What changed is that the example is now hypothetical rather than live, and a comment whose
-example is false is worse than one with no example at all.
-
-Two approaches were tried and do not work, recorded so nobody spends the afternoon again: a bun
-resolver plugin (its `setup` runs, its `onResolve` is never called for a bare node_modules
-specifier) and a `mock.module` factory returning a promise (not honored, the native build loads
-anyway). An eagerly awaited module in the factory is what bun accepts.
-
-**What it bought.** 2,064 tests, the same count as before, in 31 s. `vitest`, `@vitest/coverage-v8`
-and `vitest.config.ts` are gone, `bun-types` and `@types/jsdom` arrived, and `jsdom` stayed. Both
-flakes were found by looping the suite and counting exit codes, which is the only thing that works
-on a race: the vitest one had gone unmeasured for days, and the bun one would have looked like a
-clean migration after any single run.
-
-## 16. Root depth limits a crop, only a tray-shallow bed refuses it
-
-`stages/space.ts` refused any crop whose `roots.maxEffectiveDepthM` exceeded the
-bed's soil depth plus its raised height. That figure is FAO-56 Table 22's Zr, the effective
-rooting depth the water balance works from, and the table's own note says the smaller values
-apply in restricted soils: it was never a minimum soil depth. Tomatoes grow in 30 cm of soil. Read
-as a minimum it excluded tomato, pepper and most of the fruiting classes from every bed the
-questions place, so a request for tomatoes came back as hops and sorrel.
-
-**The rule.** A bed shallower than Zr LIMITS a crop: `spaceStage` passes it with a `limiting`
-factor (`cause: root-depth`, membership `depth / Zr`, "Roots would reach X m in deep soil and
-this bed offers Y m, so it will need watering more often"), `pipeline.ts` carries that factor
-into the marginal chain beside the light and soil ones, and the plants step's raised-bed remedy
-reads it from a marginal verdict as well as from an exclusion. Below `ROOT_DEPTH_FLOOR_M`
-(0.20 m) the crop is still excluded.
-
-**What it costs.** A shallow bed now ranks a deep-rooted crop as marginal rather than dropping
-it, with the sentence beside it. The water balance already reads the bed's own depth, so the
-more frequent watering the sentence promises is what the seasons then simulate.
-
-## 17. One column: the guided questions are sidebar steps, and the dock is gone
-
-**2026-09-10 to 11.** A walk through the app showed the two flows fighting: the panels step's
-"Suggest a layout" opened the dock at the foot of the 3D view and collapsed the sidebar step, "Use
-this layout and plant it" rewrote the sidebar's open step and left the dock up on "One more choice",
-the dock's plot size and the ground step's plot size were two answers to one question, the light had
-to be asked for by a button after the place was chosen, and the plants step offered three ways to
-plant a bed, one of which (the optimizer, Record 10d) planted eastern teaberry in every bed. Twelve
-scripted runs in a browser harness went through the whole build that night, each from a
-different starting point, and every one of them met the same things, which are the
-basis of what follows.
-
-**The rule.** There is one flow: the sidebar stepper, ten steps whose titles are the questions
-the dock asked, one open at a time, each ending in `Next: <the next question>`. The dock, the
-toolbar's "Guided setup" toggle, the phone's "Guided" tab, the express path and "Don't show this
-again" are deleted. A first visit opens the column on step 1. On a phone the column is the Plan
-tab, the 3D view is the Garden tab, and a pinned strip on Garden says which step Plan is on.
-
-**What runs by itself, and what a press does.** The place resolves when a result is chosen, the
-light runs as the full check after the place resolves and after every settled geometry change
-(`useAutoLight`, Record 15's open question, decided on the ground that it should just happen), the
-ranking follows the light, and holds while the light is being computed so a guided planting is
-ranked once against the full check rather than three times against three lights. A press is never
-silent: a combination prints what it planted or why not beneath its own button. The ranking on
-screen stays up while the next one runs (`ranking` on the slice).
-
-**The plants step is designed for arrival.** Most growers reach it with every bed planted by
-the layout they chose. It leads with one card per bed (the mix in the crops' names, the counts,
-a confidence word, "Try another mix", "Change a plant"), then the chips for what you like to
-eat, then the combinations for the selected bed, then "Pick plants one at a time" and "Every
-crop ranked, and why" behind folds. `plantEveryBed` plants the plot as it stands through the
-same code a guided apply uses, and no bed repeats another bed's combination when a different one
-fits.
-
-**Two model changes that came out of the walk, each its own rule.** Combinations lead with food:
-a seed crop is a food crop (`role === null`), and the answer to "What would you like to grow?" reaches the suggester and
-the ranking as a preference for the classes it names (`ambitionPreferences`). Root depth limits
-rather than excludes (Record 16).
-
-**Plot size has one source**, the plot boundary, the search reads it off the extent. The answers and
-the open step are persisted (schema 4), because a reload that remembered the plot and forgot "mostly
-food" read as the app forgetting.
-
-**What this cost, measured.** The unit suite went from 2,066 tests to 2,032 (the dock's 900-line
-test and the optimizer's tests went, the flow's own tests came in). The e2e suite's dock specs were
-rewritten against the column. First light on a new garden is a full bake, as Record 15 measured.
-
-**What was NOT changed, and is recorded for a later decision.** The layout search still places beds
-only in the bright strips when the plot is narrow, so a class about shade can be handed a plot with
-no shaded bed, the calendar sows brussels sprouts in February and prints two-week harvest windows,
-the frost headline at the 50th percentile reads three weeks earlier than the Extension date growers
-use, and the pair reasoning prints the same soil-pH sentence for nearly every pair. Each is a
-modeling question with the evidence for it on record, and none is a UI question.
-
-## 18. The WebGL2 bake read its panel corners out of the sky directions
-
-**Found in a real Chromium.** With the one-column build open, lowering the
-panels from 3.4 m to 1.5 m dropped them in the 3D view while the DLI map, every
-per-bed figure and the plant cards stayed frozen. Reproduced with
-`scripts/probe-bake-backends.mjs`: the WebGL2 shadow-map backend answered 86 / 57 / 71 percent of
-open sky for the three default beds at every headroom, pitch and tilt tried, and the CPU reference
-answered 94 / 38 / 54 at the default geometry and 98 / 8 / 79 with the panels at 0.6 m. Removing
-the array moved both to 100.
-
-**The defect.** `uploadTexture` in `src/sim/gpu/webgl2.ts` bound its texture on whichever unit was
-active. The chunk loop bound the panel corners on unit 0, then uploaded the direction chunk, which
-bound the direction texture on unit 0 as well before the code moved it to unit 1. So every draw
-read `uPanels` from the direction texture: the "panel corners" were sky directions and weights,
-which is why the shading followed the number of panels (how many texels were read as corners)
-and not where they stood. Uploads now name their unit. The two backends agree to the digit on
-both geometries.
-
-**What this touched.** Every bake in a browser since the backend was written: the editor's light,
-the per-bed light the ranking reads, the compliance checks, the five candidate bakes behind "Show me
-some layouts", and the visual baselines that include the DLI overlay. The shipped example's raster
-was baked by `scripts/bake-example-garden.mjs` outside a browser and was not affected. The parity
-test in `src/sim/gpu/webgl2.test.ts` that would have caught this is skipped wherever WebGL2 is
-absent, which is everywhere the unit suite runs, the probe script is the check until that test has a
-browser to run in.
-
-## 19. A perennial taller than a bed's trellis waits to be asked for
-
-A cold visitor on a phone gave Hadley, kept the default plot, answered "Tomatoes,
-peppers and berries", took the suggested layout, and was handed hops in six of eleven beds ("tomato,
-hops and cucumber", "hot pepper, shallot and hops"). An earlier round had already named
-the same thing on a laptop (hops and hardy kiwi in vegetable beds) and put the cause on the
-stratification term, which rewards a combination for holding a tall tier over a low one. Hops stands
-6 m on a permanent trellis and takes three years to a first harvest, a fruit tree is 4 m and six
-years. Nothing in the suggester distinguished them from a tomato, and the growing answer, which
-leans the ranking toward `cane-bush-berries`, leaned toward them too.
-
-**The rule.** A perennial (life cycle `perennial` or `woody-perennial`) whose typical height is
-above `BED_PERENNIAL_HEIGHT_M` (2 m) is orchard scale: it joins a combination only when the grower
-names it (a `prefer` or `require` entry of their own), and its refusal says so in the list a
-combination card folds ("hops grows to 6 m and stays for years, so it joins a bed only when you ask
-for it"). The growing answer's lean (`ambitionPreferences`) leaves such crops out, so a `prefer`
-entry for one can only be the grower's. Blackberry and aronia (2 m) sit on the line and stay,
-raspberry, strawberry, the currants and gooseberry are under it. Sunflower, sweet corn and pole bean
-are annuals and untouched. The per-crop ranking and "Pick plants one at a time" still rank and offer
-every one of them: an orchard row or an arbor is a design the grower can make, and this rule only
-stops the suggester making it for them.
-
-**What was considered and not done.** `yearsToMature` would have been the more literal test ("does
-it crop this season"), but the catalog defaults every perennial to three years, so chives, thyme
-and mint carry the same figure as hops, height is what the evidence on record actually named. A
-dedicated refusal group in the combinations fold was not added: the reason is one sentence under
-"Incompatible for another reason", and `SuggestionRefusal` would need a new field for the grouping
-to read it without matching the phrasing.
-
-## 20. A fall-harvest crop is dated from the autumn end, and a fruiting annual picks for weeks
-
-**Three things the calendar got wrong.** The catalog had brussels sprouts transplanted
-on April 3 and harvested in the July heat, where every Extension sheet for the northeast sows them
-in late May and transplants in June for October, peppers set out at 13 °C soil, where 65 °F (18 °C)
-is the rule, the tomato harvest closing on September 11, six weeks before the frost, because every
-annual's harvest lasted the fourteen days a head of lettuce does.
-
-**The rules.** A crop marked `fallHarvest` in the catalog (brussels sprouts, whose sprouts form in
-cool weather and sweeten after frost) is dated from the autumn end: its one sowing is the latest
-that finishes its harvest by the first fall freeze at the chosen exceedance, its indoor start counts
-back from that, and no spring sowing is offered. Where the season is too short for that (the fall
-sowing would fall before the spring floor) the spring dates stand and a note says so. Peppers and
-eggplant carry a soil floor of 18 °C of their own (`minSoilTempC`), over the warm archetype's 13 °C,
-which is the tomato rule. And the fruiting annuals carry their weeks of picking as `harvestDays`:
-tomato, the peppers, eggplant, tomatillo and okra 60, summer squash 50, cucumber and pole bean 45,
-cowpea 30, bush bean 21, the harvest of a tender crop is still cut at the first fall freeze, so a
-tomato's now closes at the frost rather than two weeks after its first ripe fruit. The winter
-squashes, melons and pumpkins keep the catalog's default two weeks: they are cut once.
-
-**What was not changed.** Every cool-season crop still shares the archetype's spring offset, so a
-Hadley April still has a dozen jobs on one day, the succession schedule still sows peas into June,
-the heat-supply stretch of days to maturity still puts a melon's harvest in late October. Each is a
-modeling question with the evidence for it on record, and none was a one-line data
-fix.
-
-## 21. The search's rows run the way the scene draws them, and food-first is the least panel overhead
-
-**Panels outside the plot rectangle.** The layout preview drew solar panels standing outside of
-the rectangle the grower had given. Measured with the store handle on a 38.4 by 22.9 m plot: the
-previewed candidate carried `rowLengthM 37.4` (sized for the width) and `rowAzimuthDeg 180`, which
-`arrayLayout` and `sim/geometry.ts` both read as "the rows run north to south". So 37 m of panel ran
-across a 23 m plot, and the search had been measuring the shade of a sawtooth of panels tilted along
-their own row. `tiltedCandidate` had been writing the equator-facing surface azimuth into the row
-direction since the candidates existed, the vertical candidate wrote 90 (east-west rows) under a
-sentence promising north-south walls, and `layout.ts` read the row direction as the offset
-direction, which canceled the first mistake exactly, so the beds ran along the rows for the wrong
-reason and turned across them the moment the rows were right.
-
-**The rules.** `rowAzimuthDeg` is the direction the rows run, everywhere: a fixed row facing
-the equator runs east to west (90), a north-south tracker axis and a vertical east-west-facing
-wall both run north to south (0). The beds are laid across (cos, -sin) of it. Every candidate's
-rows now sit inside the plot (`design.test.ts`, "keeps every row of every candidate inside the
-plot").
-
-**What tilt does, re-measured on rows that run the right way** (CPU reference backend, 42.4 N,
-ground rows, `balanced` tilt injected): at one row count season RSR **falls** as tilt rises, 0.256
--> 0.243 -> 0.218 on 16 by 12 m and 0.267 -> 0.262 -> 0.246 on 40 by 25 m at 10, 20 and 35 degrees,
-on 30 by 60 m the flattest tilt fits four rows at 0.221 where 20 degrees fits five at 0.264. The
-ratio 0.256 / 0.218 is 1.17 against cos(10) / cos(35) of 1.20: each row's overhead footprint,
-`collectorWidth * cos(tilt)`, is nearly the whole of the effect, and the height a steeper panel adds
-is a small term against it. The 2026-09-01 figures in 10c said the opposite and were a faithful
-reading of the sawtooth.
-
-**`groundLightPlan` is now a minimization, still with no simulation in it.** The panel over the plot
-from overhead is `rows(tilt) * cos(tilt)`, and it is not monotonic: rows fall with a flatter tilt
-(the pitch opens) while each row widens. The band is walked a degree at a time and the least
-overhead wins, the flatter of two equals. On a 40 by 25 m plot two rows fit at every tilt and the
-steepest is chosen, on 30 by 60 m the steepest tilt that still holds four rows. The rationale
-sentences that told the grower "the flattest angle leaves the most light" say what the arithmetic
-does instead, and the measured light figure beside the design is named as the figure to read.
-
-**What was not changed.** The sizing footprint (`GCR * cos(tilt)`, an infinite-row figure) is
-neither an upper nor a lower bound on what a finite plot measures: 0.217 against 0.165 on the 12 m
-test plot, where the second row's shadow reaches past the bare margin. `flags.shade` reads the
-measured ratio and always did, sizing the pitch to hit a measured target rather than a projected one
-is open. The shipped example gardens were authored with `DEFAULT_ROW_GEOMETRY` (90, east-west) and
-baked by the scene's own convention, so their rasters stand.
-
-## 22. Move is a mode, a corner drag keeps the rectangle, and an answer option is a figure
-
-**A drag in the 3D view.** On the garden itself, a hand reaching for the
-camera grabbed a plot corner and reshaped the plot ("that was extremely unintuitive"), which also
-dropped the finished layout search, since `patchBoundary` treats a boundary edit as a size edit.
-The move gizmo on a selected bed was "this little square thing" nobody could name a purpose for.
-The mode this asks for is plain: the camera holds still and what you drag is the garden.
-And on the wants step the translucent array drawn as the pointer crossed the options was "too
-much or something, you don't know why it's doing it", and stayed on screen on
-the panels step for an answer already given.
-
-**The rules.** Four toolbar modes: Select looks around and picks, Move drags beds, panel rows and
-plot corners with the camera holding still (zoom stays), Draw plot and Draw bed as before. The
-plot's corner handles exist only in Move mode. `TransformControls` is gone, with its
-translate/rotate select and the persisted `gizmo` field, a bed and its plants move together
-(`useGroundDrag`), the store is written once on release, and `dragging` still keeps the ground from
-clearing the selection under a drag. A corner drag on a rectangle resizes it with the opposite
-corner held (`movedCorner`), so "This boundary is not a plain rectangle" is now only ever true of a
-shape drawn by hand. The ghost preview, its layer, its store field and the `onPreview` hook on
-`ChoiceGroup` are deleted, each option on the wants step carries "Room for N rows of panels" from
-the same `candidatesFor` the search starts with (`option-rows.ts`). The selected bed wears a white
-outline, and the bed labels hide whichever of them would print over a nearer one (`BedLabels`).
-
-**What was not changed.** Rows are still one array: dragging a single row apart from its neighbors
-is not offered, on the assumption that a row wants its symmetry kept. Rotating a bed by
-hand went with the gizmo, the array's row azimuth field remains.
-
-## 23. A Tier C light figure cites the class methodology, and the four Tier A rows went looking for their trials
-
-A pass over the crop catalog's provenance
-found 112 rows citing `fao-ecocrop` for their daily light integral, five more citing it by name, and
-the schema default carrying it too, weeks after record 7 had called that attribution false and
-fixed. ECOCROP holds no light integral, its light field is a descriptor. The rows' own comments and
-section 3.6 of the horticulture document say where every Tier C class came from: the crop's conventional garden sun
-label, converted into a band by this app's own arithmetic in section 3.3. Every Tier C row was
-moved onto the `C` citation set, which is Purdue HO-238-B-W and VCE SPES-720NP, the schema default
-dropped ECOCROP, and the inferred record's basis says in one sentence that the class is the app's
-own reading of the sun label. The UI sentence "nothing was measured for this crop" became "no
-cited work measured it for this crop", because for spinach the first was untrue.
-
-**Withdrawn 2026-09-20, by an audit against the sources.** This record said "the only work behind a
-Tier C figure is the class-range methodology (Purdue HO-238-B-W and VCE SPES-720NP)", and neither
-document is a class-range methodology: both are per-crop tables, and the conversion in the horticulture document
-section 3.3 is behind no row in the catalog. Reading both documents against all 182 rows puts
-every row in one of three states.
-
-1. **The figure is printed for this crop.** Six rows: tomato and cucumber carry VCE Table 3's own
-   "Tomato 20-30" and "Cucumber 20-30", spinach its "Spinach 14-20", both peppers Purdue's
-   Capsicum bands, and raspberry Widmer's 15. Each cites the document that prints it, alone, and
-   the row comment names the row or the band it came from.
-2. **The figure is printed nowhere.** 168 rows, which is most of the catalog. They cite nothing
-   for their light figures and carry one sentence: "This app's own figure, set by analogy with the
-   crops in its class for which a published DLI exists. No cited work measured it for this crop,
-   and the sources step lists it as a gap. Trust the ordering it gives, and treat the number
-   itself as provisional." The sources step lists each of them, so the claim in that sentence is
-   true of itself.
-3. **The figure contradicts the document the row cited.** Three rows: cilantro carries 10 to 16
-   where VCE prints 15 to 20, summer squash 18 to 25 where VCE prints "Zucchini 20-30", and
-   parsley 10 to 16 where VCE prints 10 to 15. The numbers stay, the citation goes, and each row
-   comment names the difference, because a citation that does not hold the number survives a spot
-   check by a reader who does not open the PDF.
-
-Two tiers moved with the sweep. Strawberry is B: Widmer et al. 2026 is a four-year study of 21
-cases stating its figure in this app's own unit. Carrot, beet and kale drop to C: they cited a
-potato shade trial and the meta-analysis for daily light integrals neither work prints. Potato
-keeps B, and its record now says in words that its tier stands on the shade evidence and that the
-12 and the 18 to 25 are this app's own band.
-
-**The four Tier A rows.** Lettuce (leaf and head), spinach and basil carried tier A while citing
-that same methodology, which `rows.ts` itself says cannot support an A. Per-crop trials were found
-and each verified against Crossref before it was added: Both, Albright, Langhans, Reiser and Vinzant
-1997 (Acta Horticulturae 418: 45-52, the origin of Cornell's 17 mol/m2/d, the figure read from the
-Cornell CEA Hydroponic Lettuce Handbook by Brechner and Both because the abstract is served to no
-automated fetch), Kelly, Choe, Meng and Runkle 2020 (Scientia Horticulturae 272: 109565, lettuce at
-6.9, 10.4 and 15.6), Pennisi et al. 2020 (Scientia Horticulturae 272: 109508, lettuce and basil at
-5.8 to 17.3, optimum 14.4, the DOI this work was first handed, 10.1038/s41598-020-71399-8, resolves
-to a chinchilla paper and was not used), Dou, Niu, Gu and Masabni 2018 (HortScience 53(4): 496-503,
-basil at 9.3 to 17.8, 12.9 suggested for production), Walters and Currey 2018 (HortScience 53(9):
-1319-1325, basil at 7 or less against about 15), Gao, He, Ji, Zhang and Zheng 2020 (Agronomy 10:
-1082, spinach at 11.5 to 20.2, optimum 17.3).
-
-None of the trials places a failure point, so a Tier A minimum here is the lowest level at which a
-cited trial still grew the crop, or the level a trial recommends for production, and the row carries
-that definition on the record as the verbatim caveat (`dliCaveat`), which the UI prints beside the
-number. Lettuce is 5.8 / 14.4-17 on both rows (Pennisi's floor, Pennisi's optimum, Cornell's
-target), basil is 12.9 / 14.4-17.8 (Dou's production level, Pennisi's optimum, the top of Dou's
-range). Spinach went to Tier C: Gao's lowest level is a plant-factory setting and bounds nothing a
-garden bed offers in spring, so the row keeps its sun-label 6 / 14-20 and cites the class
-methodology, with the trial recorded in the corpus and in the horticulture document. The catalog is now 3 A, 4 B and
-167 C of 174 rows, and the polyculture engine's measured floor moved from 6 to 5.8 with lettuce.
-
-**Tomato and strawberry in the horticulture document.** The table's tomato row still read 14 / 22-30 A and its
-strawberry row 10 / 17-22 A/B, against shipped rows of 15 / 20-30 C (Runkle 2011) and 25 / 25-30 C
-(Widmer 2026). The table now follows the rows for tomato, both peppers, cucumber, lettuce, spinach,
-basil, strawberry and raspberry. The strawberry 10-versus-25 blocker of record 7 is closed with a
-source on each side: the Ohio State Kubota Lab's greenhouse guidance (`kubota-osu-strawberry-dli`,
-url-verified) recommends 12 as a greenhouse-productivity minimum and 20-25 as the optimum, and
-reports stress above 30, Widmer's 25 is the level that maintains trial-average yield under
-agrivoltaic cover. They are different quantities. The gate uses Widmer's because it is the
-agrivoltaic one, the OSU 30 is the top of the row's band, and the horticulture document's 10 was a sun-hour guess that
-resembled neither. The OSU page is also the first strawberry light ceiling located, wiring it needs
-a cited ceiling in the schema, which today carries only the lettuce tipburn rule, and is left for a
-later change.
-
-**Study counts on the yield band.** Each Laub group already carried its study count in
-`laub.generated.ts`, the band's attribution never said it. It now reads "dominated by crop response:
-the leafy vegetables curve, 4 studies (Laub et al. 2022)", from `cropResponseLabel`, on the yield
-band and in `formatYieldEstimate`.
-
-**Constants with no source.** The water model's basal coefficient is FAO-56 chapter 9 (equations 97
-and 98) with one departure, the catalog's per-habit extinction coefficient in place of FAO-56's
-0.7, the comment on `canopyCoverFromLai` says so, and the per-habit leaf area index and extinction
-coefficient are declared through `unsourcedClaim` (`HABIT_CANOPY_CLAIM`) so they appear in the
-sources step's ledger. The ranking weights (light 0.35, climate 0.25, soil 0.15, interaction 0.1,
-competition 0.1, preference 0.05) carry a comment saying what each term is and why the order, and
-`WEIGHTS_CLAIM` puts them on the same ledger under a new `model-constant` area.
-
-**Eleven tropical and subtropical staples.** Cassava, taro, greater yam, plantain, upland rice,
-lemon, mango, papaya, pigeon pea, sesame and moringa, chickpea was on the list and was already in
-the catalog. Every envelope is transcribed from the crop's ECOCROP data sheet, which the FAO app
-now serves at `dataSheet?id=<EcoPort code>`, the code named in each row, `coldC` is the sheet's
-killing temperature during rest and is omitted where the sheet has none, the Köppen list is the
-sheet's climate zones read through a stated Trewartha table (Ar is Af and Am, and so on), which
-brought Af into the catalog without touching the archetype lists. Growth figures name their sheet:
-UF/IFAS for mango, papaya and lemon, NC State's plant toolbox for cassava, taro, plantain and lemon
-dimensions, Duke's handbook at Purdue NewCROP for cassava and rice, the Wisconsin and Minnesota
-Alternative Field Crops Manual for sesame, the USDA NRCS plant guide for pigeon pea, WARDA's upland
-rice handbook, CTAHR HGV-18 for taro, Wilson's IRETA yam guide and two UC ANR notes for moringa.
-Rooting depths for cassava, rice, sesame, plantain and lemon are FAO-56 Table 22 midpoints, read
-from the chapter itself. Native ranges were computed from the WCVP archive with the generator's own
-matching rules (11 of 11 matched, lemon is native nowhere, as a cultigen is) and spliced into
-`native-ranges.generated.ts` by hand, because the generator also rewrites `public/data` and its
-manifest, which this change had no reason to touch. Three figures are the app's own and their
-comments say so: papaya's 3 m picking height, moringa's 3 m pruned height and sesame's 0.3 m spread.
-
-**Twenty corpus entries were added**, every DOI verified against Crossref before use, every URL
-fetched and read, and none invented, the count stands at 212.
-
-## 24. Apache-2.0, a site's own season and clock, a global weather cache, and no figure sharper than its evidence
-
-**A pass over everything before sharing** the app with researchers, growers and
-gardeners anywhere: a night of measurement found it solid and honest as
-a prototype, and short of that in a list of specific ways. Every item on the list was fixed the same
-night. GitHub CI, which the account's billing had stopped on 2026-09-09, runs again since the
-repository went public on 2026-09-12, deploy is Workers Builds on push.
+A season is a year's growing season, and rotation intervals, trials and the ground's history are
+counted in seasons. The mode is called the simulation, in code and on screen. `src/sim/` is the
+physics of one year's light and `src/simulation/` is the garden over years, and both names stay
+because renaming the physics would cost more than the confusion.
+
+### 14.5 The picture follows the season
+
+A season moves the scene's clock to the year that was run, keeping the grower's day and hour, and a
+reset puts it back. The plants' age is the greater of the `plantYear` slider and the seasons run,
+bounded by `MAX_PLANT_YEAR` and derived where the scene reads it (`gardenAge`). A season leaves the
+light alone, as 14.1 sets out: its shade ratio comes from the geometry and the typical year, so
+moving the clock is a calendar move that computes no new light. The sun over a given day hardly
+moves between years, so the calendar move is a small approximation.
+
+Pressing Run sweeps the clock from the year's last spring frost to the day the grower was on, over
+three and a half seconds, and the outcome lands when it ends (`ui/useSeasonSweep.ts`). Nothing is
+re-baked, and `prefers-reduced-motion` lands the outcome at once. The light overlay is hidden while
+the seasons step is open, because it buries the plants, and the grower's setting is untouched. The
+scene draws the outcome: a frosted planting lies flat and bleached, a refused one isn't drawn, and a
+bed short of water shows paler, warmer topsoil (`driedBy`), every tint a multiplier on a
+reflectance.
+
+The scene shows the recorded weather, and only on the seasons step. After a season has run, the
+scene shows that year's own hour: its cloud, read as the clearness index of the measured sun against
+a clear one (`src/sim/clearness.ts`), drawn on the sky dome and taken off the key light's intensity,
+its rain as a point cloud at the hour's own rate, and snow from that year's monthly normals. Off the
+step all three revert and the sky's cloud stays at zero, because the planner's picture claims
+nothing about an hour's weather.
+
+## 15. The test runner and the rules it imposes
+
+`bun test` runs the suite, and every `package.json` script passes `--parallel`, which implies
+`--isolate`: without it one module registry is shared, so the panel tests' refusal of the embedding
+module leaks into `embedding.test.ts`. `test:dom` preloads `test/dom.ts`, because react-dom caches
+at module load whether it's in a browser, and a late import leaves controlled inputs silently
+ignoring typing. The preload also binds the jsdom window's three `EventTarget` methods onto
+`globalThis`. The `src/scene/` tests run in a second pass with no DOM, because
+`@react-three/test-renderer` patches `getContext` wherever `HTMLCanvasElement` exists. Under bun's
+fake timers a reference captured before `useFakeTimers` never fires, so progress rides the microtask
+queue (`test/vi.ts`). `test/setup.ts` prints through `reportError`, since bun rethrows what a React
+boundary caught, and redirects `@huggingface/transformers` to the web build wherever the weights are
+absent, since its `node` condition dlopens native addons. The two agent panel tests stub
+`@huggingface/transformers` with a module that throws, and the holdout tests keep the native build.
+`test/bun-test.d.ts` widens three matchers, since bun types `expect(x).toBe(y)` against the type of
+`x` and the ids here are branded. `REQUIRE_AGENT_MODEL` is opt-in and never inferred from `CI`.
+
+## 16. Root depth limits a crop
+
+`roots.maxEffectiveDepthM` is FAO-56 Table 22's Zr (Allen et al. 1998), the effective rooting depth
+the water balance works from, whose note says the smaller values apply in restricted soils. It's no
+minimum soil depth, so a bed shallower than Zr limits a crop: `spaceStage` passes it with a
+`limiting` factor (`cause: root-depth`, membership `depth / Zr`, "Roots would reach X m in deep soil
+and this bed offers Y m, so it will need watering more often"), and `pipeline.ts` carries that
+factor into the marginal chain beside the light and soil ones. The plants step's raised-bed remedy
+reads a marginal verdict as well as an exclusion. Below `ROOT_DEPTH_FLOOR_M` (0.20 m) the crop is
+excluded.
+
+## 17. One column of guided questions
+
+There's one flow: the sidebar stepper, ten steps whose titles are the questions, one open at a time,
+each ending in `Next: <the next question>`, and a first visit opens on step 1. On a phone the column
+is the Plan tab, the 3D view is the Garden tab, and a pinned strip on Garden says which step Plan is
+on. A second surface over the same garden would give a second answer to the same question.
+
+The place resolves when a result is chosen. The light computation runs after the place resolves and
+after every settled geometry change (`useAutoLight`). The ranking follows the light and holds while
+one is computing, so a guided planting is ranked once, against the finished light. A combination
+prints what it planted, or why it planted nothing, beneath its own button, and the old ranking stays
+up while the next one runs (`ranking` on the slice).
+
+Most growers reach the plants step with every bed planted, so it leads with one card per bed (the
+mix, the counts, a confidence word and two buttons), then the chips for what you like to eat, the
+combinations for the selected bed, and folds for "Pick plants one at a time" and "Every crop ranked,
+and why". `plantEveryBed` plants the plot through the code a guided apply uses, and no bed repeats
+another's combination.
+
+Combinations lead with food: the crop each combination starts from is a food crop (`role === null`),
+and the answer to "What would you like to grow?" reaches the suggester and the ranking as a
+preference for the classes it names (`ambitionPreferences`). Plot size has one source, the plot
+boundary. The answers and the open step persist with the design.
+
+Known limits: the layout search places beds only in the bright strips when the plot is narrow, so a
+plot can come back with no shaded bed. The frost headline at the 50th percentile reads three weeks
+earlier than the extension date growers use. The pair reasoning prints the same soil-pH sentence for
+nearly every pair.
+
+## 18. A bake upload names its texture unit
+
+`uploadTexture` in `src/sim/gpu/webgl2.ts` names the unit it binds on. Binding on whichever unit is
+active would let sky directions be read as `uPanels`, so the shading would follow the panel count.
+The WebGL2 and CPU backends agree to the digit. The parity test in `src/sim/gpu/webgl2.test.ts` is
+skipped wherever WebGL2 is absent, so `scripts/probe-bake-backends.mjs` is the check after any
+change to the GPU path.
+
+## 19. A tall perennial waits to be asked for
+
+A perennial (life cycle `perennial` or `woody-perennial`) whose typical height is above
+`BED_PERENNIAL_HEIGHT_M` (2 m) is orchard scale. It joins a combination only when the grower names
+it, through a `prefer` or `require` entry, and its refusal says so where a card folds ("hops grows
+to 6 m and stays for years, so it joins a bed only when you ask for it"). The growing answer's lean
+(`ambitionPreferences`) leaves such crops out, so a `prefer` entry can only be the grower's. Without
+this rule, the stratification term would reward a combination for holding a tall tier over a low
+one, and hops stands 6 m on a permanent trellis, three years to a first harvest. Blackberry and
+aronia (2 m) stay, the smaller berries fall under the line, and sunflower, sweet corn and pole bean
+are annuals and untouched. The per-crop ranking and the one-at-a-time picker still offer them all.
+Height is the test because `yearsToMature` can't answer: the catalog defaults every perennial to
+three years, so chives and mint match hops.
+
+## 20. Fall-harvest dating, and weeks of picking
+
+A crop marked `fallHarvest` in the catalog (brussels sprouts) is dated from the autumn end. Its
+one sowing is the latest that finishes its harvest by the first fall freeze at the chosen
+exceedance, the indoor start counts back from that, and no spring sowing is offered. Where the fall
+sowing would land before the earliest spring planting date, the spring dates stand and a note says
+so. Peppers and eggplant carry their own soil floor of 18 °C (`minSoilTempC`), which overrides the
+warm archetype's 13 °C. The fruiting annuals carry their weeks of picking as `harvestDays`: tomato,
+the peppers, eggplant, tomatillo and okra 60, summer squash 50, cucumber and pole bean 45, cowpea
+30, bush bean 21. A tender crop's harvest is cut at the first fall freeze, so a tomato's closes at
+the frost. The winter squashes, melons and pumpkins keep the catalog's default two weeks: they're
+cut once.
+
+Known limits: every cool-season crop shares the archetype's spring offset, so an April in a cold
+climate has a dozen jobs on one day. The succession schedule sows peas into June. Where the heat
+supply stretches days to maturity, a melon's harvest can land in late October.
+
+## 21. Row azimuth is the direction the rows run
+
+`rowAzimuthDeg` is the direction the rows run, everywhere. A fixed row facing the equator runs east
+to west (90). A north-south tracker axis and a vertical east-west-facing wall both run north to
+south (0). The beds are laid across (cos, -sin) of it. Every candidate's rows sit inside the plot
+(`design.test.ts`).
+
+Measured on the CPU reference backend at 42.4 N with ground rows, season RSR falls as tilt rises at
+a fixed row count: 0.256, 0.243 and 0.218 on 16 by 12 m at 10, 20 and 35 degrees. On 30 by 60 m, the
+flattest tilt fits four rows at 0.221, and 20 degrees fits five at 0.264. Each row's overhead
+footprint, `collectorWidth * cos(tilt)`, is nearly the whole of the effect, and the height a steeper
+panel adds is a small term.
+
+`groundLightPlan` minimizes that overhead, with nothing simulated. The panel over the plot from
+overhead is `rows(tilt) * cos(tilt)`, and it's not monotonic: the row count falls with a flatter
+tilt as the pitch opens, while each row widens. The band is walked a degree at a time and the least
+overhead wins, with ties going to the flatter tilt. The rationale sentences say what the arithmetic
+does, and the figure to read is the measured light beside the design.
+
+The sizing footprint (`GCR * cos(tilt)`, an infinite-row figure) bounds nothing a finite plot
+measures, from either side: the 12 m test plot measures 0.217 against a footprint of 0.165.
+`flags.shade` reads the measured ratio, and sizing the pitch to a measured target isn't built.
+
+## 22. Move is a mode, and an option carries a figure
+
+Four toolbar modes: Select looks around and picks, Move drags beds, panel rows and plot corners with
+the camera holding still (zoom stays), and Draw plot and Draw bed draw the plot boundary and a bed.
+The plot's corner handles exist only in Move mode, because a hand reaching for the camera can grab a
+corner, and `patchBoundary` reads a boundary edit as a size edit, dropping a finished layout search.
+A bed and its plants move together (`useGroundDrag`), the store is written once on release, and
+`dragging` keeps a drag from clearing the selection. A corner drag on a rectangle resizes it with
+the opposite corner held (`movedCorner`), so "This boundary is not a plain rectangle" is only ever
+true of a hand-drawn shape. The selected bed wears a white outline, and a bed label hides behind a
+nearer one (`BedLabels`).
+
+Each option on the wants step carries "Room for N rows of panels" from the `candidatesFor` the
+search starts with (`option-rows.ts`). Rows are one array, so dragging a single row apart from its
+neighbors isn't offered, and nor is rotating a bed by hand.
+
+## 23. What every light figure in the catalog rests on
+
+ECOCROP holds no daily light integral, its light field being a descriptor, so no row cites
+`fao-ecocrop` for one and the schema default cites nothing. Against Torres et al. 2010 (Purdue
+HO-238-B-W) and Stallknecht 2025 (Virginia Cooperative Extension, VCE SPES-720NP), each of the 177 Tier C rows is in one of three
+states. The three Tier A and two Tier B rows cite work on the crop itself and are set out under the
+tiers below.
+
+1. **Printed for this crop**, six rows: tomato and cucumber on VCE Table 3's "Tomato 20-30" and
+   "Cucumber 20-30", spinach on its "Spinach 14-20", both peppers on Purdue's Capsicum bands,
+   raspberry on the 15 that Widmer et al. 2026 print. Spinach cites VCE alone and raspberry cites
+   Widmer alone. Tomato and both peppers cite VCE, Purdue and Runkle 2011, and cucumber cites VCE
+   and Runkle: the 15 at the foot of all four is Runkle's figure for vine crops as a group, and the
+   peppers' 20 to 30 is the range VCE prints for tomato. Every row but hot pepper carries a comment
+   naming the row or the band.
+2. **Printed nowhere**, 168 rows. They cite nothing for light and carry one sentence: "This app's
+   own figure, set by analogy with the crops in its class for which a published DLI exists. No cited
+   work measured it for this crop, and the sources step lists it as a gap. Trust the ordering it
+   gives, and treat the number itself as provisional." The sources step lists every one, as the
+   sentence says.
+3. **Contradicting the cited document**, three rows: cilantro at 10 to 16 where VCE prints 15 to 20,
+   summer squash at 18 to 25 where VCE prints "Zucchini 20-30", parsley at 10 to 16 where VCE prints
+   10 to 15. Each row keeps its number and drops the VCE citation, and its comment names the
+   difference, since a citation that doesn't hold its number fails any spot check.
+
+On screen an inferred figure reads "no cited work measured it for this crop", because "nothing was
+measured for this crop" would be untrue of spinach.
+
+**The tiers.** 3 A, 2 B and 177 C, and a Tier C figure is never shown as a measurement. A is leaf
+lettuce, head lettuce and basil, on per-crop trials: Both et al. 1997 for Cornell's 17 mol/m2/d,
+read in Brechner and Both 2013, Kelly et al. 2020 (lettuce at 6.9, 10.4, 15.6), Pennisi et al. 2020
+(lettuce and basil 5.8 to 17.3, optimum 14.4), Dou et al. 2018 (basil 9.3 to 17.8, 12.9 for
+production), Walters and Currey 2018 (basil at about 7 against about 15). None places a failure
+point, so a Tier A minimum is the lowest level at which a cited trial still grew the crop, or the
+level one of those trials recommends for production, carried on the row as its verbatim caveat
+(`dliCaveat`) beside the number. Lettuce is 5.8 / 14.4-17 on both rows, basil 12.9 / 14.4-17.8, and
+the polyculture engine's measured floor is lettuce's 5.8.
+
+Spinach is C at 6 / 14-20 on VCE alone: Gao et al. 2020's 11.5 to 20.2 with an optimum at 17.3 is a
+plant-factory range that bounds nothing a spring bed offers, so the 6 is this app's own. B is potato
+and strawberry. Potato rests on Weselek et al. 2021 at about 30 percent shade and the tuber curve of
+Laub et al. 2022, neither printing a light integral, so its 12 and 18 to 25 are this app's own band.
+Strawberry is at 25 / 25-30 on Widmer et al. 2026, four years and 21 cases in the row's unit.
+Strawberry's two sources measure different quantities: the Ohio State Kubota Lab's greenhouse
+guidance gives 12 as a greenhouse-productivity minimum, 20 to 25 as the optimum and stress above 30,
+and Widmer's 25 maintains trial-average yield under agrivoltaic cover. The gate takes Widmer's for
+being the agrivoltaic one, and the OSU 30 tops the band.
+
+The yield band names its study count beside the citation, "dominated by crop response: the leafy
+vegetables curve, 4 studies (Laub et al. 2022)", from `cropResponseLabel`, so a reader sees 61
+greens sitting on a four-study curve without opening a file.
+
+**Constants with no source.** The water model's basal coefficient is FAO-56 chapter 9 equations 97
+and 98 (Allen et al. 1998), with one departure: the catalog's per-habit extinction coefficient
+replaces FAO-56's single 0.7. That coefficient and the per-habit leaf area index reach the sources
+ledger through `HABIT_CANOPY_CLAIM`, and the ranking weights (light 0.35, climate 0.25, soil 0.15,
+companion interaction 0.1, crowding 0.1, preference 0.05), which sum to 1, reach it through
+`WEIGHTS_CLAIM`.
+
+**Tropical and subtropical staples.** Cassava, taro, greater yam, plantain, upland rice, lemon,
+mango, papaya, pigeon pea, sesame and moringa. Every envelope is transcribed from the crop's ECOCROP
+data sheet at `dataSheet?id=<EcoPort code>`, the code named in the row. `coldC` is the sheet's
+killing temperature during rest, omitted where the sheet has none, and the Köppen list is the
+sheet's zones read through a stated Trewartha table (Ar is Af and Am, and so on). Each row names the
+extension sheet its growth figures come from, among UF/IFAS, NC State, Purdue NewCROP, the
+Alternative Field Crops Manual, USDA NRCS, WARDA, CTAHR, IRETA and UC ANR. Rooting depths for
+cassava, rice, sesame, plantain and lemon are FAO-56 Table 22 midpoints, and native ranges come from
+the WCVP archive (Govaerts et al. 2021). Three figures are this app's own and say so: papaya's 3 m
+picking height, moringa's 3 m pruned height, sesame's 0.3 m spread.
+
+## 24. License, the site's own season and clock, banded figures
 
 **License.** Code is Apache-2.0, docs and data CC BY 4.0, third-party data under its own terms
-(`LICENSE`, `LICENSE-DOCS`, `NOTICE`, `CITATION.cff`). Open core stays possible under it: the author
-holds the copyright and can sell a closed tier on top, what the choice decides is that a competitor
-may host the public part closed, and that outside contributions arrive usable without a contributor
-agreement. The one consequence in code: the Dynamic chill model had been ported from chillR, which
-is GPL-3, so it was rewritten from Fishman, Erez and Couvillon 1987 with the paper's symbols and
-checked bit for bit against the old output on 206 series.
+(`LICENSE`, `LICENSE-DOCS`, `NOTICE`, `CITATION.cff`). Open core stays possible, since the copyright
+holder can sell a closed tier on top. The choice also lets a competitor host the public part closed,
+and lets outside contributions arrive usable without a contributor agreement. Its one consequence in
+code: the Dynamic chill model is written from Fishman, Erez and Couvillon 1987 with the paper's own
+symbols, so no GPL-3 port of chillR sits in the tree.
 
-**The season is the site's.** The bed-light word, the plan's shade figures and the app's own
-compliance estimates read a fixed April to September (`SIM_GROWING_WINDOW`), so a Melbourne
-garden was summarized over its winter. They now read `growingWindowFor(site, percentile)`: the
-months from the last spring frost to the first autumn frost at the chosen exceedance
-percentile, wrapping the year end in the south, the whole year where the record holds no
-frost, the three warmest months where no frost-free stretch exists. The layout search reads the
-same window. Regimes with statutory months (Massachusetts, March to October) keep their own. The
-fixed window survives only as the fallback before a site resolves. Amherst's window moved from
-April to September to May to October at the default percentile, so figures on the example moved
-with it.
+**The season and the clock are the site's.** The bed-light word, the plan's shade figures, the
+compliance estimates and the layout search read `growingWindowFor(site, percentile)`: last spring
+frost to first autumn frost at the chosen exceedance percentile, wrapping the year end in the south,
+the whole year where the record holds no frost, the three warmest months where no frost-free stretch
+exists. Regimes with statutory months (Massachusetts, March to October) keep their own, and a fixed
+April to September (`SIM_GROWING_WINDOW`) is the fallback only before a site resolves, since a fixed
+northern window would summarize a Melbourne garden over its winter. The daily normals request asks
+Open-Meteo for `timezone=auto`, which also aggregates daily minima by local day, and the IANA name
+it answers with is the site's zone. `utcOffsetMinutesAt` reads the offset for each instant through
+`Intl`, cached per day, in the water balance, the skydome windows and the compliance clock. A
+longitude rounded to whole hours is half an hour out in India and an hour or more across Spain,
+France and western China, so it stands only where no zone is known. The Rust decomposition takes one
+standard offset at its boundary.
 
-**The clock is the site's.** The timezone was `round(longitude / 15)` with an `Etc/GMT` label: wrong
-by half an hour in India and by an hour or more across Spain, France and western China, and blind to
-daylight saving. The daily normals request now asks Open-Meteo for `timezone=auto`, which also
-aggregates daily minima by local day, and the IANA name it answers with is the site's zone,
-`utcOffsetMinutesAt` reads the offset for each instant through `Intl`, cached per day, in the water
-balance, the skydome windows and the compliance clock. The longitude rule remains only where no zone
-is known. The Rust decomposition still takes one standard offset at its boundary.
+**A default says it is one.** A failed SoilGrids lookup returns pH 6.5 loam whose source is
+`'default'`, and the bed panel reads "Assumed pH 6.5 loam: the soil map has no answer for this place
+yet." Hardiness computed from the weather record reads "USDA-style, computed from the weather
+record".
 
-**A default says it is one.** A failed SoilGrids lookup returned pH 6.5 loam stamped `'user'`, which
-the bed panel hides, so a default read as the gardener's own soil test. The default's source is
-`'default'` and the panel says "Assumed pH 6.5 loam: the soil map has no answer for this place yet."
-Hardiness ratings computed from the weather record read "USDA-style, computed from the weather
-record" rather than "(USDA)".
-
-**Normals have a fallback and the cache is global.** One Open-Meteo 429 on the daily normals failed
-the whole site resolve even when the hourly leg had succeeded, the normals now fall to NASA POWER
-daily data from the visitor's own browser, named as the source. Behind the Worker, Open-Meteo's
-allowance is pooled across every visitor (about 600 weighted calls per fresh place, 10,000 a day),
-and the edge cache was per data center, a KV namespace (`WEATHER_CACHE`) is now the second tier,
-written only on a 2xx that reached the upstream, so one town costs the allowance once for the whole
-deployment. NSRDB was a dead fallback because the upstream requires an email the client never sent,
-the Worker injects `NSRDB_EMAIL` the way it injects the key. The proxy refuses more than 120
-requests a minute from one address, and four security headers ride every response and
+**Normals fall back and the cache is global.** Where the daily normals fail, they fall to NASA POWER
+daily data from the visitor's own browser, named as the source, so a successful hourly leg is kept.
+Open-Meteo's allowance is pooled across every visitor behind the Worker: about 600 weighted calls
+per fresh place, against 10,000 a day. An edge cache is per data center, so a KV namespace
+(`WEATHER_CACHE`) is the second tier, written only on a 2xx that reached the upstream. One town then
+costs the allowance once for the whole deployment. The NSRDB upstream needs an email the client
+never sends, so the Worker injects `NSRDB_EMAIL` the way it injects the key. The proxy refuses more
+than 120 requests a minute from one address, and four security headers ride every response and
 `public/_headers`.
 
-**The picture is the plot.** The light overlay was a plane over the bake's extent, which was the
-panels and beds plus five meters and never the plot ring, so the map spilled past the plot and
-missed its edges. The extent now unites the plot ring, and the overlay is the plot's own shape with
-UVs into the raster, discarded where the raster has nothing. Nothing tells a visitor whose browser
-lacks WebGL2 or WebAssembly what is wrong, a preflight now does, in the canvas's place, and a
-boundary around the whole app replaces a blank page with a sentence and a Reload button. The canvas
-has a name a screen reader can say, the mode buttons say which is pressed, arrow keys nudge the
-selected bed or row in Move mode, and a rectangular bed has width and length fields.
+**The picture is the plot.** The bake's extent takes in the whole plot ring, and the overlay is the
+plot's own shape with UVs into the raster, discarded where the raster has nothing, so the map covers
+the plot's edges and spills past none. A preflight replaces the canvas where a browser lacks WebGL2
+or WebAssembly, and an error boundary replaces a blank page with a sentence and a Reload button. The
+canvas is named for a screen reader, the mode buttons say which is pressed, arrow keys nudge a
+selection in Move mode, and a rectangular bed takes width and length.
 
-**No figure sharper than its evidence.** The seasons step printed a land equivalent ratio to
-two decimals from a sum of means while the same quantity was banded on every other surface, a
-harvest to the percent from a random draw, and energy to the kilowatt-hour. The ratio is a band
-built from the per-planting published bands, harvests read "about 60% of full yield" beside
-their published range, and energy and money read to two significant figures. The yield band
-names the Laub group's study count beside the citation, because a professor should see that 61
-greens sit on a four-study curve without opening a file. Record 23 covers the catalog side.
-Electricity prices exist only for US states, so a typed tariff and currency (and, outside US
-dollars, a typed installed cost, since the cost benchmark on file is in 2020 US dollars) now
-carry the economy block anywhere, stamped `'user'` like a typed pH.
+**No figure sharper than its evidence.** The land equivalent ratio is a band built from the
+per-planting published bands, harvests read "about 60% of full yield" beside their published range,
+and energy and money read to two significant figures. Electricity prices exist only for US states,
+so a typed tariff and currency carry the economy block anywhere. Outside US dollars the installed
+cost is typed too, since the cost benchmark on file is in 2020 US dollars. Each typed figure is
+stamped `'user'` like a typed pH. The app is in English only, and it has no field validation against
+a real garden.
 
-**Not done.** Translation into other languages, a field validation against a real garden, which the
-README still says has not happened, and the shipped examples, which are re-baked when the catalog
-settles.
+## 25. Surroundings dim the light, and a place reports itself
 
-## 25. What is around the space reaches the light, a plant of cold winters is refused one that has none, and a place says how it grows
+**The surroundings answer dims the light every bed is judged by.** One table serves both the bed
+light and the layout search (`src/recommend/surroundings.ts`): a space shaded part of the day loses
+three tenths of the open-sky light before any panel does, one in shade most of the day six tenths.
+Both are this app's own reading of a three-answer question, declared unsourced on the sources step.
+Every bed's under-array figures are dimmed by that share, the open-sky reference is left alone so
+the relative shade ratio compounds by itself, the layout search judges its candidates on the same
+dimmed light, and the ranking re-runs when the answer changes. The light step says what was taken
+off, and that the ground map shows the panels' shade alone. The search's shade budget is scaled by
+one minus the same share.
 
-Three cold visitors on real weather (Nairobi, Mumbai, Sydney) each got a ranked crop
-list in five presses and about fifteen seconds, and the list they got was temperate in judgment:
-eastern teaberry and western wild ginger, North American woodland perennials, headed the shaded bed
-in Nairobi and in Mumbai as Recommended, the answer to "What is already around the space?" changed
-nothing in the ranking, the starting array faced south in Sydney, and no sentence anywhere said
-whether a place as a whole was one most of the catalog could live in. Each was fixed the same day,
-with the measurement that found it.
+**A plant recorded wild only where winters are cold needs a cold winter.** Ramps, western wild
+ginger and eastern teaberry carry `coldWinterOnly` on their recorded ranges (Chamberlain et al.
+2014, FEIS, WCVP), and a gate refuses them where the coldest month averages above 7.2 C, the top of
+the chilling band and the figure the chilling-hours metric counts under. Their cool-perennial
+envelope is met every month at a highland tropical site, and the hardiness gate asks only whether
+winter is too cold. The gate runs last, so a desert July still refuses ramps on the envelope, and
+the winter is named only where the envelope would have admitted the plant anyway. The place step's
+verdict counts these under "colder winters".
 
-**The surroundings answer dims the light every bed is judged by.** The answer reached only the
-layout search, which spent less of the shade budget on panels for a shaded space, the bake holds no
-house, fence or tree, and the ranking read the bake. One table now serves both readers
-(`src/recommend/surroundings.ts`): a space shaded part of the day loses three tenths of the open-sky
-light before any panel does, one in shade most of the day six tenths, both this app's own reading of
-a three-answer question and declared unsourced on the sources step. Every bed's under-array figures
-are dimmed by that share when a bake lands and when the answer moves, the open-sky reference is left
-alone so the relative shade ratio compounds by itself, the layout search judges its candidates'
-crops on the same dimmed light, and the ranking re-runs when the answer changes. The light step says
-what was taken off and that the map on the ground shows the panels' shade alone. The shade budget
-the search spends is unchanged in number: it is now written as one minus the same share.
-
-**A plant recorded wild only where winters are cold needs a cold winter.** Ramps, western wild ginger and
-eastern teaberry carry a cool-perennial envelope whose growing-season temperatures a highland
-tropical site meets in every month, and nothing in the envelope says they need the winter they
-come from: the hardiness gate asks only whether winter is too cold. The three rows carry
-`coldWinterOnly`, on their recorded ranges (Chamberlain 2014, FEIS, WCVP), and a gate refuses
-them where the coldest month averages above the top of the chilling band, 7.2 C, the same
-figure the chilling-hours metric counts under. The gate runs last, so a desert July still
-refuses ramps on the envelope, as before, and the winter is named only where the envelope would
-have admitted the plant. The place step's verdict counts these under "colder winters".
-
-**A climate fit under the marginal line holds a crop back on its own.** The total is a weighted sum,
-so a bed that lit and drained western wild ginger well carried it to Recommended at Mumbai on a
-climate fit of 0.05: the hottest month sat a fraction inside the envelope, the gate passed, and
-light and soil outvoted the climate. Liebig's law already decides the gate, it now decides the
-verdict too, and the row reads Limited with the limb of the envelope that bites.
-
-**Equal scores are ordered by their evidence.** At a frost-free site twenty-odd crops of the kind a
-grower asked for fit the light, the climate and the soil and tie on score. The tie note already said
-so, among equals the crops whose light threshold was measured now come before the class-level
-inferences, and the note says that too.
-
-**The starting array faces the equator.** Only the layout search set an array equator-facing, the
-starting array faced south everywhere, which in Sydney is away from the sun. A place that resolves
-south of the equator turns an array still on one of the two starting directions, and never one
-somebody pointed by hand.
+**A weak climate fit holds a crop back on its own.** The score is a weighted sum, so on its own it
+would let light and soil outvote a climate fit of 0.05 and carry a crop to Recommended. Liebig's law
+sets both the gate and the verdict: the row reads Limited and names the limb of the envelope that
+limits the crop. Where crops tie on score, the ones whose light threshold was measured come before
+the class-level inferences, and the tie note says so.
 
 **A place says how it grows.** Under the frost sentence on the place step, two sentences from
-figures the app already had: how much of the catalog passes the climate gate (graded most,
-about half, few, with the count and what the rest would need), and rain against what a garden
-would use, from the FAO-56 balance. Light isn't in it, because light is a fact about a bed.
+figures the app already has: how much of the catalog passes the climate gate, graded most, about
+half or few, with the count and what the rest would need, and rain against what a garden would use,
+from the FAO-56 balance. Light isn't in it, because light is a fact about a bed. The starting array
+faces south, so when a place resolves south of the equator, an array still facing due south or due
+north, the two starting directions, is turned to face the equator. An array somebody pointed by hand
+keeps its direction.
 
-**Eight staples the catalog lacked.** Pearl millet, grain sorghum, mung bean, teff, olive,
-avocado, arabica coffee and dessert banana, transcribed from their FAO ECOCROP sheets at Tier C like
-the other tropical rows. A verified public copy of the ECOCROP table stood in for the FAO service,
-whose data sheets answered with a server error that day, the catalog's own cassava row matched
-that copy figure for figure.
+**Eight more staples.** Pearl millet, grain sorghum, mung bean, teff, olive, avocado, arabica coffee
+and dessert banana, transcribed from their FAO ECOCROP sheets at Tier C like the other tropical
+rows. Olive carries a chill figure of 150 hours, cited to De Melo-Abreu et al. 2004 and Sahli et al.
+2012.
 
-**The fallback clock, the soil map's edge, two rainy seasons, and a window that is the whole year.**
-Where the weather service names no zone, the clock is the nearest tzdb zone to the point, within the
-country the geocoder named where it named one, rather than the longitude rounded to whole hours,
-which put Nairobi an hour out, tzdb records one point for all of India, so without the country the
-nearest point to Mumbai is Karachi's. The place step says which basis the clock has. Where SoilGrids
-answers nothing at the point, which is the center of nearly every town, a ring of four points three
-kilometers out is asked, then six, and the reading says how far away it was taken. The rainy-season
-sentence names every run of wet months, so Nairobi's two rains are both named. A sowing window that
-spans the year reads "any time of year" rather than a pair of dates.
+**Where a service has no answer.** Where the weather service names no zone, the clock is the nearest
+tzdb zone to the point, inside the country the geocoder named where it named one: tzdb holds one
+point for all of India, so without the country the nearest point to Mumbai is Karachi's. The place
+step says which basis the clock has. Where SoilGrids answers nothing at the point, as at the center
+of nearly every town, a ring of four points three kilometers out is asked, then a ring six
+kilometers out, and the reading says how far away it was taken. The rainy-season sentence names
+every run of wet months, so Nairobi's two rains are both named, and a sowing window spanning the
+year reads "any time of year". The store's lookup carries a token and drops an answer that lands
+after a later lookup began, so two lookups in flight can't leave one town's ground under another's
+weather.
 
-**A later lookup wins.** Found while photographing the fixes: two place lookups in flight at
-once (the boot lookup of the example's town and a search typed within seconds of opening) had
-no guard, so whichever finished last was the place on screen, and the soil ring made the boot
-lookup slow enough to lose. A visitor who typed Mumbai quickly got Amherst's ground under
-Mumbai's weather. The store's lookup carries a token now, and an answer that lands after a
-later lookup began is dropped.
+## 26. Houses and trees shade the bake
 
-**Not done.** Nothing of this list any more: the house and the tree that replace the
-three-answer share are Record 26, built. The olive row now carries a chill figure, 150 hours, cited to De Melo-Abreu
-et al. 2004 and Sahli et al. 2012, and the three example gardens were re-baked against the 182-row
-catalog: Amherst's beds 2 and 4 gained teff, and Bergen's bed 3 traded sorrel for good king
-henry.
+A flat surroundings share is wrong in sign and in season. A house north of the beds shades nothing
+in the northern hemisphere and would still cost them a third of their light, and a house south of
+them shades in winter and little while crops are in the ground: at Amherst a 6 m eave throws 13 m at
+noon in December and 2 m in June, where a flat share takes 30% off June. So what stands around a
+garden is drawn on the ground, and the bake shades with it.
 
-## 26. A house or a tree is drawn on the ground, and the bake shades with it
-
-**Decided 2026-09-13, the house and the tree built 2026-09-14.** The three-answer surroundings share
-of Record 25 dims every bed by the same fraction whatever stands where. It stood in for what the
-bake did not hold: the house next door, the shed, the tree at the fence. A flat share is wrong in
-sign and in season. A house north of the beds shades nothing in the northern hemisphere and still
-cost them a third of their light, a house south of them shades in winter and hardly at all while
-crops are in the ground (at Amherst a 6 m eave throws 13 m at noon in December and 2 m in June), and
-the share took 30% off June instead. This record fixes what replaces it.
-
-**What is drawn.** Two kinds of obstruction, each a box. A house is a rectangle on the ground with a
-wall height, opaque. A tree is a crown box between a canopy base height and a top, on a trunk the
-bake ignores, with one transmittance in leaf and another leafless, and a switch for a tree that
-keeps its leaves. A box may stand anywhere on the 240 m ground the scene draws, inside the boundary
-or outside it, because the building that shades a garden is mostly next door. Both are added from
-the ground step beside the surroundings question ("Add a house", "Add a tree"), then moved in Move
-mode the way a bed is, a corner drag keeping the rectangle (Record 22), nudged with the arrow keys,
-or placed by typing the center, the two sides, the heights and the turn on the same step. The
-defaults, this app's own: a house 10 by 8 m and 6 m to the eaves, drawn 2 m outside the boundary on
-the side that faces the equator so its shadow crosses the plot when the sun is low, a tree with a
-crown 5 by 5 m from 2 m up to 7 m, deciduous, 8 m east of the house's spot, its two figures the
-cited defaults below and editable on the card with the source beside them.
+**What is drawn.** Two kinds of obstruction, each a box. A house is an opaque ground rectangle with
+a wall height. A tree is a crown box between a canopy base height and a top, on a trunk the bake
+ignores, with one transmittance in leaf, another leafless, and a switch for a tree that keeps its
+leaves. A box may stand anywhere on the scene's 240 m ground, inside the boundary or outside it,
+because the building that shades a garden is mostly next door. Both are added from the ground step
+beside the surroundings question, then moved in Move mode the way a bed is, corner-dragged as a
+rectangle (Record 22), nudged with arrow keys, or typed as a center, two sides, heights and a turn.
+The defaults are this app's own: a house 10 by 8 m and 6 m to the eaves, 2 m outside the boundary on
+the equator-facing side so its shadow crosses the plot when the sun is low, and a crown 5 by 5 m
+from 2 m up to 7 m, deciduous, 8 m east of it.
 
 **How the bake sees it.** A house becomes five quads, the top and four walls (`houseQuads` in
-`src/sim/obstruction.ts`), appended to the list the panels already travel in, which is typed as what
-a kernel reads off a panel: four corners and nothing else (`Occluder`). The CPU reference kernel,
-the Rust kernel it is held to and the WebGL2 shader's ray-quad loop shade with it unchanged: both
-backends already treat a panel as opaque (the kernel's transmittance argument is passed 0 everywhere
-the app calls it), so a house needed no new physics and no shader change. The sky-view factor and
-the diffuse term read the same visibility test as the beam, so a wall darkens all three at once. The
-open-sky reference stays the closed form over no occluders: the house's shade lands in the
-under-array layer only, the shade ratio compounds house and panels the way Record 25's share
-compounded, and the shade budget then checks the crop's total shade against its tolerance, which is
-the accounting Record 25's scaled budget approximated with a table. A reference baked over the house
-alone was considered and refused: it would have made the bed bands and the yield curve blind to the
-house's shade. The layout search sees the house because it reads the baked raster, and every
-candidate plot the search bakes carries it. The tree is the one new thing in the kernels: every quad
-may carry a transmittance, a blocked sample keeps the smallest transmittance among the quads that
-block it, and a ray through both faces of one crown counts once. A crown is six faces with the
-tree's pair on each, and the trunk is ignored. Panels and house faces carry 0, so nothing already
-measured moves: the min rule collapses to the old test wherever every quad is opaque. The leafless
-season is a set of months, because the bake accumulates by month: a deciduous crown is in leaf where
-the Growing Season Index of Jolly, Nemani and Running 2005 (`src/sim/phenology.ts`) averages above
-0.5. The index is the product of three daily indicators, each running 0 to 1: the day's minimum
-temperature, 0 at -2 C and 1 at 5 C, its vapor pressure deficit, 1 at 900 Pa and 0 at 4100 Pa, and
-its day length, 0 at 10 hours and 1 at 11, from the same declination the solar geometry already
-carries. A drawn tree reads the index with the deficit term held at 1: the paper takes dry air as a
-surrogate for soil water natural vegetation cannot reach, and a garden tree stands where the beds
-are watered. On one real year at Seville the full index read a tree bare in July and August, the
-months its shade decides a bed's summer, and held at 1 the same year reads in leaf from February to
-October, at Amherst the two readings agree, April to October, and at Melbourne, September to April.
-A month counts as in leaf where the index's 21-day mean, centered on each day so the paper's rule
-gains no added lag, passes 0.5 on the month's 15th, and each month's light is accumulated from the
-crown's in-leaf figure or its bare one, the annual being the sum of the months. The sky-view factor
-and the time windows read the in-leaf figure whatever the month, a declared approximation: the one
-window shipped is the growing season, which the leaf-on months follow closely. The CPU backend runs
-a second visibility pass with the bare figures only when a deciduous tree is drawn, the WebGL2
-shader carries both figures in a fifth texture row, keeps two running minima in one loop, picks the
-month's variant by a bitmask, and leaves the path without a season byte for byte as it was, the Rust
-kernel takes a per-quad transmittance slice beside its scalar.
+`src/sim/obstruction.ts`), appended to the list the panels already travel in, which is typed as four
+corners and nothing else (`Occluder`). All three kernels, the CPU reference, the Rust one it is held
+to and the WebGL2 ray-quad loop, already treat a panel as opaque, so a house needs no new physics.
+Beam, diffuse and sky-view factor share one visibility test, so a wall darkens all three at once.
+The open-sky reference stays the closed form over no occluders: a house's shade lands in the
+under-array layer, the shade ratio compounds house and panels, and the shade budget checks the
+crop's total shade against its tolerance. The layout search sees a house because it reads the baked
+raster.
 
-**What it replaces.** While a plot has no house and no tree the share of Record 25 applies as
-before. Once one is drawn the share is not applied anywhere, the drawn geometry being the answer:
-every reader of the answer goes through `exposureInForce`, which returns the open answer while
-anything stands, so the bed light, the layout search and the shade budget agree. The question is
-disabled on the ground step with a sentence saying why, the light step's note names what was drawn,
-and the plan card says so. The question stays: it is the answer for anyone who won't draw, and the
-share table with its unsourced claim stays declared on the sources step. A house keeps beds and rows
-out: the layout search never places a bed or a candidate row inside one, and a hand placement that
-overlaps gets a sentence on the check step, drags are never blocked. A tree restricts no placement: a bed may stand under a crown.
+A crown's transmittance is the one new thing in the kernels. Every quad may carry one, a blocked
+sample keeps the smallest transmittance among the quads that block it, and a ray through both faces
+of one crown counts once. A crown is six faces carrying the tree's pair. Panels and house faces
+carry 0, so the min rule collapses to the opaque test wherever every quad is opaque.
 
-**Where it lives.** `GardenPlot.obstructions`, schema 4 to 5 with an empty list for every saved
-garden and for the three shipped examples, a decoder that admits a four-corner house with a positive
-height or a tree with a crown above its base and two figures between 0 and 1 (a tree is a second
-kind inside the same list, so it needed no schema step), and `lightGeometryKey` and the worker's
-memo key carrying the list so a moved or altered obstruction re-bakes by itself. The ground step's
-controls are `ObstructionsSection`, the scene's `HouseMesh` and `TreeMesh` draw the same boxes the
-bake shades with, so the picture holds nothing the bake does not (Record 14.5). The house casts the
-scene's live shadow the way a panel does, the crown's opacity is one minus the transmittance the
-bake applies in the month the scene clock shows, and its shadow is dithered to the same density,
-since a shadow map casts all or nothing. The three example gardens ship none, so their rasters,
-`exampleGridMatches` and the overlay baseline stay where they are.
+**When a crown is in leaf.** The bake accumulates by month, so the leafless season is a set of
+months. A deciduous crown is in leaf where the Growing Season Index of Jolly, Nemani and Running
+2005 (`src/sim/phenology.ts`) averages above 0.5. The index is the product of three daily
+indicators, each running 0 to 1: the day's minimum temperature, 0 at -2 C and 1 at 5 C, its vapor
+pressure deficit, 1 at 900 Pa and 0 at 4100 Pa, and its day length, 0 at 10 hours and 1 at 11, from
+the declination the solar geometry already carries. A drawn tree holds the deficit term at 1,
+because the paper takes dry air as a surrogate for soil water that natural vegetation can't reach,
+and a garden tree stands where the beds are watered. A month is in leaf where the index's 21-day
+mean, centered on each day so the paper's rule gains no added lag, passes 0.5 on the month's 15th.
+Each month's light takes the crown's in-leaf figure or its bare one, and the annual is the sum of
+the months. The sky-view factor and the time windows read the in-leaf figure whatever the month, a
+declared approximation, since the one window shipped is the growing season. All three backends carry
+the seasonal pair, and a bake with no crown in it runs the opaque test alone.
 
-**The figures and their sources.** A house has no figure. A tree's two defaults are 0.033 in leaf
-and 0.46 leafless, the midpoints of what Konarska et al. 2014 measured under five street trees in
-Göteborg (Theoretical and Applied Climatology 117:363-376): "Average transmissivity of direct solar
-radiation through the foliated and defoliated tree crowns ranged from 1.3 to 5.3 % and from 40.2 to
-51.9 %, respectively." Heisler 1986 (Urban Ecology 9:337-359) is the cross-check: a mid-sized sugar
-maple cut the irradiance on a wall in its shade by about 80% in leaf and nearly 40% leafless, a wall
-figure that also counts sky and reflected light and so reads higher than a crown's own
-transmittance. Canham et al. 1994 (Canadian Journal of Forest Research 24:337-349) is the
-closed-canopy comparison, under 2% of full sun beneath beech and hemlock and over 5% beneath red oak
-and ash, lower than a lone tree as expected. The figures are direct-beam transmissivity applied here
-to beam, diffuse and sky view alike through a solid box, which the entries' caveats say. The months
-a crown is in leaf now come from the Growing Season Index itself, Jolly, Nemani and Running 2005,
-cited on the tree's card, three choices in reading it are this app's own, that the 15th of the month
-stands for the whole month, that the 21-day mean centers on each day rather than lagging behind it,
-and that the deficit term is held at its moist value for a watered garden tree, which the card says.
-The months-in-leaf gap has left the sources step.
+**What it replaces.** With no house and no tree, the surroundings share of Record 25 applies. Once
+one is drawn the share applies nowhere, the drawn geometry being the answer: every reader goes
+through `exposureInForce`, so the bed light, the layout search and the shade budget agree. The
+question is disabled with a sentence saying why, the light step's note names what was drawn, and the
+plan card says so. The question stays for anyone who won't draw, and the share table keeps its
+unsourced claim. A house keeps beds and rows out: the layout search places neither inside one, and a
+hand placement that overlaps gets a sentence on the check step, with drags never blocked. A tree
+restricts no placement: a bed may stand under a crown.
 
-**How it is checked.** A house fixture in `rust-geometry-parity.test.ts` holds the TypeScript and
-Rust kernels to the same shadow cell for cell with a wall in the grid, and `webgl2.test.ts` carries
-the same house for the shader where a browser runs it. `obstruction.test.ts` reads a 6 m house's
-shadow on the side away from the sun out to the height-over-tangent throw and clear past it, and its
-sky-view factor lower a meter from a wall than clear of the house, where it equals having none. A
-pipeline case bakes the same plot with and without a house: the open-sky layer is identical and the
-bed beside the wall darker. The memo the worker answers repeat bakes from is keyed on the house too:
-`probe-bake-backends.mjs`, run against a preview build with a 12 m house a meter south of the first
-bed, first read the houseless field back on both backends because that key lacked the house while
-the staleness key had it, with the key fixed, the WebGL2 and CPU backends agree to the digit on all
-three geometries (87, 42 and 54% of open sky bare, 29, 24 and 52% with the house). `house.spec.ts`
-draws a 10 m house a meter south of the example's bed 1: its light falls from 99% of open sky and
-32.9 mol/m²/d to 38% and 17.4, tomato leaves Recommended for Not suited, the house survives a reload
-at schema 5, and removing it gives the surroundings question back. Persisted gardens at schema 4
-round-trip with an empty list. The tree's checks: `phenology.test.ts` holds the Growing Season Index
-itself to five synthetic years, a temperate north site in leaf a contiguous stretch that holds July
-and excludes January, its southern mirror six months over, a humid tropical site in leaf all twelve,
-a tropical site whose dew point sits 30 C below the temperature for five months bare in those months
-on the paper's full index and in leaf all year as a watered garden tree, and a site whose minimum
-never clears -2 C never in leaf, a crown at 0.3 directly over a panel reads 0 on the ground beneath
-both and 0.3 where only the crown shades, and a ray through two faces of one crown reads 0.3 once,
-with July in leaf and January bare, the CPU backend's July beam under the crown is the in-leaf
-figure times the open one and January's the bare figure times it, and the annual beam equals the sum
-of the twelve months, the parity fixture carries the crown at 0.3 through both kernels with the
-per-quad slice, and the WebGL2 fixture carries it with half the months bare, the pipeline case pins
-a leaf-on month's ratio under the crown below a bare month's, the Rust crate has its own min-rule
-test, the memo key changes when a tree is added, its figure edited or its evergreen switch flipped,
-a tree round-trips through storage and one whose top is below its base is refused, the crown's
-opacity in the scene reads the in-leaf figure in a July hour and the bare one in a January hour,
-`tree.spec.ts` draws a 12 m crown over the ground south of the example's bed 1 and reads its light
-falling, the note naming the tree, the tree surviving a reload and Remove giving the question back.
-The probe's fourth geometry, a 12 m crown over the default plot's first bed, reads 59, 33 and 51% of
-open sky on both backends (58 on the first bed while the calendar was the frost window, the index
-puts April in leaf at Amherst and that month moved it one point), eight real bakes posted. The
-overlap rule has its own cases: two rectangles that touch along an edge do not overlap, a plus sign
-of two thin rectangles does, a placement inside a house is skipped and named, a candidate whose rows
-run through a house is dropped and the search says so, and the check step prints the sentence for a
-bed inside a house. Four scripted runs drove a preview build on stubbed Amherst weather (a laptop
-and a phone, a garden with an old maple in it, and a run that checked every figure against the
-sources): all four found "Add a house" and "Add a tree" under "What shades it" unaided, read the
-disabled question's sentence as clear, and got figures that hold up. The run against the sources
-matched the tree's 3% and 46% to the paper's own range. What the runs found and what changed: the
-disabled radios still looked bright and checked, so a disabled group now fades, a selected house or
-tree in the 3D view showed only a tint, so its card on the ground step lights up, and "show this
-work in Sources" from a card on another step left the reader at the top of the list, because the
-stepper holds the opened step's header in place for a moment and undid the jump's scroll, so the
-jump now settles that landing before it scrolls (`landing.ts`). The measured figures and the assumed
-leaf calendar sat side by side on the tree's card with a citation on the figures alone, so the card
-said the calendar was this app's own reading, it now cites the Growing Season Index instead. Two of
-the four guessed which way north ran in the 3D view while typing where a house stood, so a compass
-at the view's right edge now turns with the camera (`Compass.tsx` writes the heading straight to the
-element the way the tooltip writes its position, and `compass.spec.ts` sees the heading change
-through an orbit drag, halfway down the edge because every corner is taken at some width or moment,
-the cold open included). The phone visitor's taps at a bed landed on the ground beside it two times
-in three, so on a touch screen a tap within a finger's half-width of a bed selects the nearest one
-(`Ground.tsx`). The distance is measured on the screen, each bed's footprint projected to pixels and
-the finger's 24 px read against that outline: a first version measured it on the ground, and a phone
-visitor who tapped the label floating over bed 1 got bed 2, because the tap's ray passed the label,
-met the ground behind the bed, and the nearest bed in plan meters to that point was the next one
-north. A mouse click and a finger 5 m from any bed still clear the selection, and the label tap on a
-two-bed plot selects the bed under the label, pinned in `scene.test.tsx`. Measured with
-`scripts/tap-grid.mjs` on a 375 by 812 screen at the garden's opening framing, forty taps scattered
-within 20 px of each bed's center: bed 1 went from 18 selecting it to 21, bed 2 from 7 to 22, and
-bed 3, which no tap on a 15 by 24 grid had reached, to 19. The taps still missing land on the panel
-rows standing over the beds, which keep their own press. A source jump from a card on a phone is a
-smooth scroll across some 30,000 px of the Sources list, over a second of other rows going past
-before the highlighted one arrives, so a jump further than three screens is instant and the
-highlight has its whole time on the row (`SourcesPanel.tsx`).
+**Where it lives.** `GardenPlot.obstructions` (schema 5) holds both kinds in one list, and it's
+empty for every garden saved at schema 4 and for the three shipped examples. A house needs four
+corners and a positive height, and a tree needs a crown above its base and two figures between 0 and
+1. `lightGeometryKey` and the worker's memo key both carry the list, so a moved or altered box
+re-bakes by itself. `HouseMesh` and `TreeMesh` draw the boxes the bake shades with (Record 14.5), a
+house casting the scene's live shadow like a panel, and a crown's opacity is one minus the
+transmittance the bake applies in the month the scene clock shows, dithered to that density because
+a shadow map casts all or nothing.
 
-**Cost.** One day for both, against the four to five estimated: the house needed a type and five
-quads, a schema step, one function every reader of the answer goes through, a card of six fields and
-one mesh on the bed's pattern, the tree needed the per-quad figure in three kernels, the seasonal
-split in two backends, the citation pull, a second card and a translucent mesh, the overlap rule
-needed one polygon test and two filters.
+**The figures and their sources.** A house has no figure. A tree's defaults, editable on its card
+with the source beside them, are 0.033 in leaf and 0.46 leafless, the midpoints of Konarska et al.
+2014's five street trees in Göteborg, at 1.3 to 5.3 percent foliated and 40.2 to 51.9 percent
+defoliated. Heisler 1986 cross-checks them: a mid-sized sugar maple cut the irradiance on a wall in
+its shade by about 80% in leaf and nearly 40% leafless, a wall figure that also counts sky and
+reflected light. Canham et al. 1994 is the closed-canopy comparison, under 2% of full sun beneath
+beech and hemlock and over 5% beneath red oak and ash. The figures are direct-beam transmissivity
+applied to beam, diffuse and sky view alike through a solid box, which the entries' caveats say.
+Three readings of the index are this app's own and the card says so: the 15th standing for the whole
+month, the 21-day mean centered on each day, and the deficit term held at its moist value.
 
-## 27. The interface is set in Ubuntu Sans, served from the origin
+A compass at the view's right edge turns with the camera, and on a touch screen a tap within 24
+screen px of a bed's projected footprint selects the nearest bed, measured on the screen so a tap on
+a bed's floating label selects the bed under it.
 
-The interface and its figures are set in Ubuntu Sans and Ubuntu Sans Mono, the
-faces Ubuntu 24.04 ships, in place of each platform's own stack, so a screenshot from a Mac, a
-Windows laptop and a phone read as one product. The files are served from this origin under the
-Ubuntu Font Licence (`public/fonts/`), the same stance the rendered docs already take on
-third-party requests. The latin subset is preloaded and latin-ext loads only where a source's
-author needs it. The bed names in the view are drawn onto their textures once the face has
-loaded (`BedLabel.tsx`). The classic Ubuntu face was passed over for its missing 600 weight.
+## 27. The interface is set in Ubuntu Sans
 
-**Cost.** An hour, four files and a license.
+The interface and its figures are set in Ubuntu Sans and Ubuntu Sans Mono, the faces Ubuntu 24.04
+ships, so screenshots from a Mac, a Windows laptop and a phone read as one product. The files are
+served from this origin under the Ubuntu Font Licence (`public/fonts/`), the same stance the
+rendered docs take on third-party requests. The latin subset is preloaded, and latin-ext loads only
+where a source's author needs it. Bed names in the view are drawn onto their textures once the face
+has loaded (`BedLabel.tsx`). The classic Ubuntu face was passed over for its missing 600 weight.
 
-## 28. Rain follows the array's plan geometry, a tracker lies flat in it, and a bed keeps half of its drip strip
+## 28. Rain follows the array's plan geometry
 
-The share of rain a bed loses to the panels and the water the drip lines bring it
-are computed from the array's plan geometry (`src/recommend/rain.ts`), in place of the bed's solar
-relative shade ratio standing in for both. A fixed row keeps its tilt and drips from its low edge.
-A tracker is taken lying flat in rain, its night stow, and sheds to both long edges half each. The
-site's mean wind in rain hours, applied from every direction because the record carries none,
-moves each panel's shadow by its height times the wind over a raindrop's fall speed and widens each
-drip strip by what a drip drifts as it falls (Elamri et al. 2018, Gunn and Kinzer 1949). A plain
-bed keeps half of the water its strip brings and a bed with a basin or swale along the strip keeps
-four fifths, both declared modeling assumptions. The free "catches the rain running off the
-panels" switch is gone: whether a bed catches a strip is the geometry's answer, and the bed's
-switch now adds the basin. The ground overlay gained the field as a channel, and every bed's water
-panel names the row that drips on it and the side it drips along. Rotating a tracker out of the
-rain, Elamri's remedy, is a schedule no tracker here runs, and a note says so. The water term in
-the layout search was measured and built on 2026-09-19 (10c, amended): the balance's own deficit
-saving on the placed beds, unweighted by the site's water limitation, which canceled it at both
-sites measured. Since 2026-09-20 each bed the search places slides onto a strip within the room its
-light band leaves it, where the same balance says its plants would go short less (10c, amended
-again).
+The share of rain a bed loses to the panels and the water the panels' drip lines bring it are
+computed from the array's plan geometry (`src/recommend/rain.ts`), because the bed's solar relative
+shade ratio stands for neither. A fixed row keeps its tilt and drips from its low edge. A tracker is
+taken lying flat in rain, its night stow, and sheds to both long edges, half each. Rotating a
+tracker out of the rain, Elamri's remedy, is a schedule no tracker here runs, and a note says so.
 
-**Cost.** An evening: the field and its memo, the split, the overlay channel, the bed switch,
-twelve citations and thirteen tests.
+**The rose and the projection.** The weather record carries the direction the wind blows from
+(`windDirectionDeg`, from Open-Meteo, NASA POWER, PVGIS and NSRDB alike). The rain field, the rain
+reaching each ground cell as a multiple of open ground, runs on the site's rain-hour wind rose:
+twelve 30 degree bins, each weighted by the rain that fell with the wind from it and carrying that
+rain's mean speed. A record with no direction falls back to the equal twelve-way rose at the
+rain-hour mean, a special case of the same model. Each panel is projected to the ground along each
+bin's rain, every corner by its own height times the rain's angle off vertical (Elamri et al. 2018
+Eq. 1: tan αR is the wind speed over a raindrop's fall speed). The projected quad is the panel's
+rain shadow in that bin and its area is the panel's catchment, their Eq. 4 in geometric form: a row
+facing the rain intercepts more than its plan area, one turned from it less, and a tilted row's high
+edge throws further. The panel's mid-height wind carries every corner, a declared approximation
+within about 13 percent of an integrated lagged fall for a row 2.5 to 5 m up.
 
-**Amended the same night: the wind's direction, the projected shadow, and a corrected reading of
-the paper.** The weather record now carries the direction the wind blows from (`windDirectionDeg`,
-from Open-Meteo, NASA POWER, PVGIS and NSRDB alike), and the rain field runs on the site's
-rain-hour wind rose: twelve 30 degree bins, each weighted by the rain that fell with the wind from
-it and carrying that rain's mean speed. Each panel is projected to the ground along each bin's
-rain, every corner by its own height times the rain's angle off vertical (Elamri et al. 2018 Eq.
-1, after Van Hamme 1992: tan αR is the wind speed over a raindrop's fall speed, taken that night at a 2 mm drop's 6.5 m/s and corrected the next morning). The
-projected quad is the panel's rain shadow in that bin and its area is the panel's catchment
-(their Eq. 4 in geometric form): a row facing the rain intercepts more than its plan area, one
-turned from it less, and because a tilted row's high edge is higher its shadow reaches further on
-that side, which the old mid-height shift could not show. The drip strip is moved downwind by the
-drift, 0.2 m wide, in place of being widened by it. A record with no direction (a source without
-it, or a year cached before the column was asked for) falls back to the equal twelve-way rose at
-the rain-hour mean, which is the model as first shipped, so the fallback is a special case of the
-model rather than a second one. The still-air width had been justified as "Elamri's 20 cm
-outlet", and that was a misreading: their 20 cm is the width of the outlet along the edge (below
-5 degrees of tilt about 90 percent of a 1 m module's water leaves through 20 cm of its edge), a
-fact about how beaded a flat panel's strip is, which the tracker note now carries. The width
-across the edge is derived instead from their Eq. 5: the runoff film leaves the edge at under 0.2
-m/s (Manning n of 0.01 on glass), so from a garden-height edge the drops land within a hand's
-width of the edge's vertical. The drift keeps a 4 mm drip at 8.8 m/s that morning, near the mass-carrying mode of the 1.4 and
-3.8 mm drops they measured falling from a panel, where their own reference case took 1.5 mm. The paper gives its anemometer's height and its collectors' readings only in figures,
-so the model is compared with it rather than fitted: a test rebuilds their rig (2 m panels 5 m
-up, rows 6.4 m apart, flat) and checks that the ground under a row is dry, the ground between rows
-open, and a 0.3 m collector at the drip line reads between their 11-fold peak in one collector
-and that peak spread along the edge by the outlet, the two bounds the paper supports. The field is
-computed only where it is looked at (the rain channel, the water panel, a bed's panel) and its
-cell coarsens past 3,000 m² of extent (0.2 m at a hectare), with the strip never narrower than a
-cell so no water is lost to the grid. Cost: a night and twenty tests.
+**The rain's own drops.** The field sizes its drops from the hourly rain rate through Best 1950's
+distribution (its Eq. 3) and reads their fall speed from Gunn and Kinzer 1949. Best's distribution
+is the water held in the air, and the rain reaching the ground weights every size by its own fall
+speed, so the field builds that flux-weighted distribution, splits it into three equal thirds and
+gives each third the harmonic mean of its own fall speeds, 3.3, 5.5 and 6.9 m/s at 2 mm/h. Three
+thirds carry the mean shift exactly, and five would cut the edge-step error by about two points for
+seventy percent more quads. The wind-speed spread inside a 30 degree bin is the larger unresolved
+source. Each third projects its own shadow, so a shadow's downwind edge is soft.
 
-**Amended twice after a closer reading of the sources: the rain sized by
-the hour, three thirds of the ground's rain, the drip's whole fall, and the NSRDB's 2 m wind.** A
-second pass over the sources found the model short of them in four places, and a line-by-line
-re-reading of that pass against the papers, then a second round on the four points it left
-open, corrected two of the four and confirmed the rest.
+**The drip strip.** 0.2 m wide in still air, moved downwind by the drift. The width is this app's
+own derivation from Elamri et al. 2018 Eq. 5, since the paper gives no landing width: the runoff
+film leaves the low edge at under 0.2 m/s at a Manning n of 0.01 on glass, so from a garden-height
+edge the drops land within a hand's width of the edge's vertical. Elamri et al.'s own 20 cm is the
+width of the outlet along the edge. Below 5 degrees of tilt about 90 percent of a 1 m module's water
+leaves through 20 cm of it. That figure says how concentrated a flat panel's strip is, and the
+tracker note carries it. The drift is computed for a 3.8 mm drop, the mass mode of the drops the
+paper measured leaving a panel edge, with its fall speed read off Gunn and Kinzer's Table 2,
+integrated from rest under quadratic drag along the drop's velocity relative to the wind, through
+the site's own wind profile: 0.059 m at 1 m/s, 0.24 m at 3, 0.69 m at
+6. Gunn and Kinzer measured their largest drops reaching terminal speed only after about 12 m, and
+Wang and Pruppacher 1977 put the fall to 99 percent of terminal at 9.5 m for a 2 mm drop and 14 m
+for a 4 mm one, and a test checks the drip's fall from rest against those distances.
 
-The rain had been one 2 mm drop at 6.5 m/s, which is the median drop of a 13 mm/h downpour. AVrain
-sizes its drops from the rain rate through Best 1950's distribution (the paper's Eq. 3) and reads
-their fall speed from Gunn and Kinzer 1949, and at the hourly rates a typical year carries the
-median drop is 1.1 to 1.6 mm across, so the shadow had been moving 13 to 33 percent short. Best's
-distribution is the water held in the air, and the rain reaching the ground weights every size by
-its own fall speed, which the audit caught: the field now builds that flux-weighted distribution,
-splits it into three equal thirds and gives each third the harmonic mean of its own fall speeds
-(3.3, 5.5 and 6.9 m/s at 2 mm/h, where reading one drop at each sextile of the air's distribution
-gave 2.9, 4.9 and 6.5 and ran 4 to 15 percent long). Three thirds carry the mean shift exactly,
-which is why the count stays at three: five would cut the remaining edge step by about two points
-for seventy percent more projected quads, and the wind-speed spread inside a 30 degree bin is the
-larger unresolved source. Each third projects its own shadow, so a shadow's downwind edge is soft.
+**The wind's height.** The NSRDB's wind is MERRA-2's 2 m surface wind where every other source
+reports 10 m. NREL's own NSRDB builder documents `wind_speed` as "Wind speed at 2 meters above the
+surface", computed from MERRA-2's U2M and V2M. An NSRDB typical year matches MERRA-2's own 2 m wind
+hour by hour at a correlation of 0.994, so the record is scaled up to 10 m at ingest by the same
+FAO-56 profile that ET0 uses to bring 10 m wind down to 2 m. Over cells the reanalysis treats as
+forest, that 2 m wind runs near zero, Amherst averaging 0.16 m/s with 4,649 of 8,760 hours at
+exactly 0 where PVGIS reads 2.1 m/s at the same point, so a year whose mean falls under 1 m/s takes
+FAO-56's own default of 2 m/s and says so on its label.
 
-The drip's drift had been the small-time limit of its fall from rest, within 7 percent of the full
-fall at 0.78 m/s and 38 percent short at 3 m/s from a 2.5 m edge. It is now integrated from rest
-under quadratic drag along the drop's velocity relative to the wind, through the site's own wind
-profile rather than one wind held at the edge's height, which the audit measured as another 9 to
-10 percent: 0.059 m at 1 m/s, 0.24 m at 3, 0.69 m at 6. Gunn and Kinzer measured their largest
-drops reaching terminal speed only after about 12 m, and Wang and Pruppacher 1977, added to the
-citations, put the fall to 99 percent of terminal at 9.5 m for a 2 mm drop and 14 m for a 4 mm one,
-which is now a test. The drip's diameter is the 3.8 mm mode the paper measured, read off Gunn and
-Kinzer's Table 2, and the code's own table was labeled Table 1 until the audit read the page: that
-paper's Table 1 is indexed by the drop's log mass.
+**What a bed keeps.** A plain bed keeps half of the water its strip brings, and a bed with a basin
+or swale along the strip keeps four fifths, both declared modeling assumptions with Elamri et al.'s
+event 07 as the nearest anchor: the top meter under the drip edge held 6.7 of the 24.0 mm that
+landed on it. A flat tracker's half to each long edge is the expected value over an unknown lean,
+since the paper says a nominally flat panel sends all of it to one outlet, so the notes say the
+strip is either twice what the field draws or nothing. Whether a bed catches a strip is the
+geometry's answer, and the bed's own switch adds the basin. The ground overlay carries the field as
+a channel, and every bed's water panel names the row that drips on it and the side it drips along.
+In the layout search the water term is the balance's own deficit saving on the placed beds,
+unweighted by the site's water limitation, which canceled it at both sites measured, and each bed
+slides onto a strip within the room its light band leaves it, where the balance says its plants
+would go short less (Record 10c).
 
-The NSRDB's wind is MERRA-2's 2 m surface wind where every other source reports 10 m. NREL's own
-NSRDB builder documents it (`wind_speed` is "Wind speed at 2 meters above the surface", computed
-from MERRA-2's U2M and V2M) and an hour-by-hour comparison of an NSRDB TMY with MERRA-2's own 2 m
-wind matches at a correlation of 0.994, so the record is scaled to 10 m at ingest by the same
-FAO-56 profile ET0 runs the other way. That exposed a second fault: over cells the reanalysis
-treats as forest its 2 m wind runs near zero (Amherst averages 0.16 m/s with 4,649 of 8,760 hours
-at exactly 0, where PVGIS reads 2.1 m/s at the same point), so a year whose mean falls under 1 m/s
-now takes FAO-56's own default of 2 m/s and says so on its label.
-
-Measured on the starting plot at a 3 m/s rose from every direction, the middle bed's sheltered
-share went from 91 percent before this pass to 77 after it, and its neighbors from 3 and 13 to 10
-and 21. The field costs 6 to 7 ms on the starting plot.
-
-Also fixed, from the audit: a panel at zero clearance made the drip integration return NaN and laid
-no water at all, a strip drifting past the field's 3 m margin had its water dropped silently (the
-margin now comes from the rose's own largest drift, which at 14 m/s was losing 64 percent of a tall
-row's runoff), a non-finite hour poisoned the pooled rose, and `rainHourWindMS` was dead code.
-
-Declared, after checking: the panel's mid-height wind for every corner of its shadow, which holds
-because a raindrop's sideways speed lags the wind it falls through by about its fall speed over
-gravity, meters of falling, so the wind near the panel is what carries it (within about 13 percent
-of an integrated lagged fall for a row 2.5 to 5 m up, further off a meter up, where a column mean
-over the fall would be 20 percent low). A flat tracker sheds half to each long edge, where the
-paper says a nominally flat panel sends all of it to one outlet and its event 07 measured exactly
-that: half each is the expected value over an unknown lean, and the notes now say the
-strip is either twice what the field draws or nothing. The 0.2 m still-air width stays this app's
-own derivation from the paper's Manning n, since the paper gives no width. The capture fractions
-stay declared, with the paper's own event 07 as the nearest anchor: the top meter under the drip
-edge held 6.7 of the 24.0 mm that landed on it.
-
-Where the audit read the literature outward, nothing contradicted a choice. Blocken and Carmeliet's
-review of wind-driven rain, added to the citations, carries the same physics from Lacy's relation
-(which ISO 15927-3 codifies), defines the flux-weighted distribution the audit corrected the field
-to, and recommends Gunn and Kinzer's own drag coefficients over sphere formulas, which is what the
-drip's drag is matched to. Nine sentences across the citations were corrected for over-reading: the
-paper's 1.5 mm reference is "for simplicity" and not "by count", its 9.3 mm mode "might be" an
-artifact, its 11-fold collector sat in the zone it labels F4 beside the drip line, its two
-coefficients of variation are two different events, its collectors are 0.3 m in diameter, its
-anemometer's height is absent, and its Eq. 2 is a drag balance where the field reads the measured
-table.
-
-Every number the field takes from a paper now lives in `src/recommend/rain-sources.ts` with its
-citation, its locator and the sentence the bibliography uses for it, and a test holds the three
-together, which is the check that would have caught the Table 1 label at declaration. The tests
-also hold the equations themselves: Eq. 4's catchment identity over random tilts and bearings,
-Best's round trip, the drip's weak-wind limit against the closed form, Wang and Pruppacher's fall
-distances, and Lacy's 4.5 m/s for the rain's own mean fall speed. Cost: a morning and 37 tests in the rain file.
+**What it costs, and where the numbers live.** The field is built only where it's looked at, the
+rain channel, the water panel and a bed's panel. Its cell coarsens past 3,000 m² of extent, 0.2 m at
+a hectare, with the strip never narrower than a cell so no water is lost to the grid, and its margin
+comes from the rose's own largest drift, so a tall row's runoff is never dropped off the edge. The
+field costs 6 to 7 ms on the starting plot. Every number it takes from a paper lives in
+`src/recommend/rain-sources.ts` with its citation, its locator and the sentence the bibliography
+uses for it, and a test holds the three together, alongside tests of Eq. 4's catchment identity,
+Best's round trip and Lacy's 4.5 m/s mean fall speed. Elamri et al. give their anemometer's height
+and their collectors' readings only in figures, so the model is compared with their rig and no
+parameter is fitted to it. Blocken and Carmeliet 2004 carry the same physics from Lacy's relation,
+which ISO 15927-3 codifies. They define the flux-weighted distribution the field uses, and they
+recommend Gunn and Kinzer's own drag coefficients over sphere formulas. The drip's drag is matched
+to those coefficients.

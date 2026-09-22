@@ -11,7 +11,7 @@ const memo = <T extends BufferGeometry>(key: string, build: () => T): T => {
 }
 
 /**
- * Texel density is baked into the UVs rather than set as a texture repeat, because a post and a
+ * Texel density is baked into the UVs, because a post and a
  * thirteen-meter torque tube are the same galvanized steel and would otherwise have to be two
  * textures to be two densities. `metersPerTile` is the world size one tile of the surface covers
  */

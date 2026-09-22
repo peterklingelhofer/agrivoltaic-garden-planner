@@ -143,7 +143,7 @@ export const backtrackRotationDeg: (
   collectorWidthM: Meters,
   profileAngleRad: Radians,
 ) => Degrees = (trueRotationDeg, pitchM, collectorWidthM, profileAngleRad) => {
-  // the solar geometry document section 3.2 writes cos(psi); that is a doc slip, sin(psi) is the algebraically correct form
+  // sin(psi) is the algebraically correct form here. cos(psi) looks plausible and is wrong
   const correctionRad = Math.acos(
     clamp((pitchM / collectorWidthM) * Math.sin(profileAngleRad), -1, 1),
   )
@@ -177,12 +177,11 @@ export const panelSnapshot: (
     // tracker's torque tube lies along, which is why `ArrayPanel` seeds `axisAzimuthDeg` from it.
     //
     // `a` is therefore the along-row direction, which modules are laid end to end along, and `u`
-    // is the across-row direction, which the rows step along one pitch at a time. These two were
-    // exchanged until 2026-09-01. The consequence wasn't subtle: it left every panel edge on to
-    // the direction its own row stepped, so a tilted array had zero width across its pitch, its
-    // rows stood shoulder to shoulder instead of behind one another, and the modules of one row
-    // overlapped each other threefold. Rows in that pose shade almost nothing, and the bake
-    // reported about 23% more light under an array than reaches it
+    // is the across-row direction, which the rows step along one pitch at a time. Swap the two
+    // and every panel edge faces the direction its own row steps: a tilted array gets zero width
+    // across its pitch, its rows stand shoulder to shoulder, and the modules of one row overlap
+    // each other threefold. Rows in that pose shade almost nothing, and the bake reports about
+    // 23% more light under an array than reaches it
     const ax = sinDeg(geometry.rowAzimuthDeg)
     const ay = cosDeg(geometry.rowAzimuthDeg)
     const ux = cosDeg(geometry.rowAzimuthDeg)

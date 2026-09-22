@@ -161,7 +161,7 @@ test('row azimuth and tracking mode reach the panel', async ({ page }) => {
   await expect(page.getByTestId('control-array-tilt')).toBeVisible()
   await expect(page.getByTestId('control-array-max-rotation')).toHaveCount(0)
 
-  // with no array left the panel says so rather than rendering an empty form
+  // with no array left the panel says so, without rendering an empty form
   await page.getByTestId('action-array-remove').click()
   await expect(page.getByTestId('control-array-select').locator('option')).toHaveCount(1)
   await page.getByTestId('action-array-remove').click()
@@ -223,8 +223,8 @@ test('the energy panel reports a whole chain and stays internally consistent', a
   // rounded specific-yield and nameplate readouts can express
   expect(Math.abs(specific - annual / dc) / specific).toBeLessThan(0.05)
 
-  // the loss stack names every component, and the two the panel derives rather than
-  // assumes are called out with the geometry they came from
+  // the loss stack names every component, and the two the panel derives directly are called out
+  // with the geometry they came from
   await expect(page.getByTestId('list-energy-losses').locator('li').first()).toBeVisible()
   await expect(page.getByTestId('readout-energy-loss-row-shading')).toContainText(
     /pitch, tilt and profile angle/i,
@@ -246,8 +246,8 @@ test('the energy panel reports a whole chain and stays internally consistent', a
   )
   await expect(page.getByTestId('list-energy-contributions').locator('li').first()).toBeVisible()
 
-  // the crop term belongs to a planting, so the panel says this is the electricity term on its
-  // own rather than presenting it as the whole ratio
+  // the crop part belongs to a planting, so the panel points to each combination for it and
+  // never presents the electricity part as the whole ratio
   await expect(page.getByTestId('readout-energy-ler-crops-unavailable')).toContainText(
     /The crop part of the ratio belongs to a planting/i,
   )
@@ -293,7 +293,7 @@ test('spreading the rows lowers the electricity term of the LER', async ({ page 
   const denseLand = await readNumber(page.getByTestId('readout-energy-land'))
   expect(dense[0]).toBeGreaterThan(0)
 
-  // an array edit invalidates the electricity term rather than keeping a stale one
+  // an array edit invalidates the electricity term. A stale value is never kept
   await panels(page)
   await page.getByTestId('control-array-pitch').fill('12')
   await panels(page)
@@ -336,11 +336,11 @@ test('turning the array away from the equator costs annual output', async ({ pag
   expect(await annualKwh(page)).toBeGreaterThan(back)
 })
 
-/*
- * The app looks the site up by itself now, so "no site" is a failed lookup rather than one that
- * never happened. The refusal is the energy panel's OWN, and stays that way: the Check step
- * waits on nothing, because the panels on it each know what they're missing and one of them,
- * the saved design, isn't about the garden at all and must never be locked away behind it
+/**
+ * The app looks the site up by itself, so "no site" always means the lookup failed. The refusal is
+ * the energy panel's OWN, and the panels step it sits on waits on nothing. The Check step is the
+ * same, because the panels on it each know what they're missing and one of them, the saved design,
+ * isn't about the garden at all and must never be locked away behind the site
  */
 test('the energy chain refuses to run without a site rather than inventing one', async ({
   page,

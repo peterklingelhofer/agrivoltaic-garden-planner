@@ -55,8 +55,7 @@ export interface ActContext {
  * Recording that this question now has an answer.
  *
  * It doesn't advance anything. Moving the conversation on is the caller's job, because what to
- * ask next depends on everything that has been answered rather than on what was answered last:
- * see `agent/conversation.ts` for the session that made that obvious
+ * ask next depends on everything that has been answered: see `agent/conversation.ts`
  */
 const noted = (step: OnboardingStep): Utterance => ({ kind: 'noted', step })
 
@@ -66,10 +65,9 @@ const blocked = (need: BlockedNeed, offer: readonly IntentId[] = []): AgentReply
 /**
  * What to say when the light bake hasn't produced what the question needs: start it.
  *
- * It used to say "ask me to design it and I will run the sun over it first", which isn't true of
- * asking for a design. `applyDesign` clears `compliance` and nothing re-bakes it, so a played
- * session designed a garden, applied it, filled the beds, got an electricity figure back, and was
- * STILL told the sun hadn't been run when it asked whether the thing was legal. A dead end
+ * Asking for a design is no answer here: `applyDesign` clears `compliance` and nothing re-bakes it,
+ * so a garden can be designed, applied and its beds filled, an electricity figure returned, and the
+ * question of whether it's legal is STILL answered as though the sun hadn't been run. A dead end
  * worded as a next step is worse than a refusal, because it sends somebody round the loop again.
  *
  * So it starts the run, exactly the way `ask-energy` starts the annual one, and says so. Not
@@ -133,13 +131,12 @@ const darkestBedIds = (state: AppState): readonly BedId[] => {
 /**
  * The crops the ranking currently puts at the top, for a bed or beds.
  *
- * Deliberately drawn from `sets` rather than recomputed. The ranking is the product's own answer
- * to "what can I grow here", it's already gated on this bed's measured light, and a second
- * opinion assembled in the agent layer would be a second answer to the one question the whole
- * app exists to answer. `bedIds` of `null` means every bed with a ranking, which is what a plain
- * "what can I grow" asks. An excluded verdict is left out everywhere, because a crop the ranking
- * rules out isn't a top pick, and showing it beside the ones that are read as an arbitrary,
- * truncated list rather than a filtered one
+ * Deliberately drawn from `sets`, as is. The ranking is the product's own answer to "what can I
+ * grow here", it's already gated on this bed's measured light, and a second opinion assembled in
+ * the agent layer would be a second answer to the one question the whole app exists to answer.
+ * `bedIds` of `null` means every bed with a ranking, which is what a plain "what can I grow" asks.
+ * An excluded verdict is left out everywhere, because a crop the ranking rules out isn't a top
+ * pick, and showing it beside the top picks reads as an arbitrary, truncated list
  */
 const rankedCropsForBeds = (
   state: AppState,
@@ -191,7 +188,7 @@ const arrayAssumptions = (state: AppState): ArrayAssumptions | null => {
 }
 
 /**
- * What is worth asking about right now, read off the store rather than said blankly.
+ * What is worth asking about right now, read off the store.
  *
  * A session with no plot yet has nothing to grow, spend or plant, and offering those anyway would
  * have the `no-reason` fallback inventing answers of its own. `sources` is always there: the
@@ -213,7 +210,7 @@ const yearLabelOf = (state: AppState): string => {
   return last?.year.label ?? state.simulation.yearChoice
 }
 
-/** The raster's own methods, read off the run that actually produced it rather than the request */
+/** The raster's own methods, read off the run that actually produced it */
 const rasterMethodsOf = (
   state: AppState,
 ): { skyModel: string; sunDirectionCount: number; cellSizeM: number; backend: string } | null =>
@@ -483,7 +480,7 @@ const setPlace = async (
 }
 
 /**
- * Wanting and not wanting a crop, as the SOFT pair rather than the hard one.
+ * Wanting a crop, or not, as the SOFT pair.
  *
  * `PreferenceKind` offers both: `prefer`/`avoid` carry the grower's own strength and the ranking
  * may still overrule them, `require`/`exclude` are constraints it may not trade away. A router
@@ -536,7 +533,7 @@ const propose = async (context: ActContext): Promise<AgentReply> => {
  * Which of the five a sentence was pointing at.
  *
  * A named archetype wins. Otherwise the recommendation does. Defaulting to the recommendation
- * rather than to the first card matters: "yes, do that" said after the agent has just described
+ * here matters: "yes, do that" said after the agent has just described
  * what it suggests means the thing it suggested, and answering with a different design would be
  * the agent doing something nobody asked for while appearing to agree
  */
@@ -586,13 +583,13 @@ const planPlanting = async (context: ActContext): Promise<AgentReply> => {
   /*
     And what became of the crops they actually asked for.
 
-    A played session said "I want tomatoes and courgettes", filled the beds, and was handed a
-    garden of lingonberry with six lines about blueberries and coreopsis that nobody had mentioned
-    and not one word about the tomatoes. The preference leans the ranking rather than fixing it,
-    which is right and is said out loud when it's recorded; what was missing is the other end of
-    that sentence. Asked afterward, the ranking answered instantly -- "the soil here is not deep
-    enough for its roots". So the answer was there all along and only the asking was left to a
-    grower who had no reason to think there was anything to ask about
+    Say "I want tomatoes and courgettes" and fill the beds: the garden that comes back can be
+    lingonberry, with six lines about blueberries and coreopsis that nobody mentioned, and no
+    word about the tomatoes. The preference leans the ranking without fixing it, which is right
+    and is said out loud when it's recorded. What was missing is the other end of that sentence.
+    Asked afterward, the ranking answers instantly: "the soil here is not deep enough for its
+    roots". So the answer was there all along and only the asking was left to a grower who had
+    no reason to think there was anything to ask about
   */
   const wanted = after.preferences.entries
     .filter((entry) => entry.kind === 'prefer' || entry.kind === 'require')
@@ -610,7 +607,7 @@ const planPlanting = async (context: ActContext): Promise<AgentReply> => {
   const named = new Set(
     explained.flatMap((utterance) => (utterance.kind === 'verdict' ? [utterance.cropId] : [])),
   )
-  // and the rest are said plainly rather than left out. Nothing is recorded about why they're not
+  // and the rest are said plainly. Nothing is recorded about why they're not
   // there, and a grower who asked for them is owed the fact even where there's no reason to give
   const unexplained = missing.filter((cropId) => !named.has(cropId))
   return reply(
@@ -740,7 +737,7 @@ const companionsFor = (state: AppState, cropId: CropId): Companions => {
   return {
     cropIds: matched.map((entry) => entry.id),
     // deduplicated, because one work commonly backs several of these pairs and a reader wants the
-    // set of works rather than one marker per rule that happened to match
+    // set of works, without a separate marker per rule that happened to match
     citations: [
       ...new Set(matched.flatMap((entry) => entry.rules.flatMap((rule) => rule.citations))),
     ],
@@ -774,7 +771,7 @@ export const act = async (
         "What will still grow in the SHADE under the panels" is a different question from "what
         can I grow", and answering it from every bed at once is how a reply about a bright bed
         landed on somebody who had just planted the dim one. The per-bed light already sitting on
-        `bedLight` is what "under the panels" means, measured rather than guessed
+        `bedLight` is what "under the panels" means, measured
       */
       const shaded = asksAboutShade(slots.subject)
       const bedIds = shaded ? darkestBedIds(state) : null
@@ -840,11 +837,10 @@ export const act = async (
         surface the form can't do at all.
       
         "I want tomatoes and courgettes" typed while the growing question is on screen is an answer
-        to that question -- `slotFilled` says so, and it's right -- and it used to record
-        "vegetables" and drop both names on the floor. A played session then filled the beds with
-        lingonberry and never mentioned the tomatoes, because by then nothing knew they had been
-        asked for. The wizard's growing step is a list of categories. Naming a crop is precisely
-        what somebody types a sentence in order to do
+        to that question, and `slotFilled` rightly says so. Recording only "vegetables" would drop
+        both names, and the beds could then fill with lingonberry and never mention the tomatoes.
+        The wizard's growing step is a list of categories. Naming a crop is precisely what somebody
+        types a sentence in order to do
       */
       const known = new Set(cropNames(state))
       const usable = slots.crops.filter((id) => known.has(id))
@@ -957,10 +953,9 @@ export const act = async (
       const plot = state.plot
       if (plot === null || plot.arrays.length === 0) return blocked('designs', ['propose-designs'])
       /*
-        `runEnergy` runs the PV chain in place rather than scheduling it on a worker, so the
-        result is already sitting in the store the instant it returns. Promising to answer once it
-        "lands" and then never checking is the fault this used to have: a run that failed sat
-        behind that sentence forever, because nothing ever looked at what `runEnergy` actually did
+        `runEnergy` runs the PV chain in place, without scheduling it on a worker, so the result is
+        already sitting in the store the instant it returns. It's read back at once, and a run that
+        failed is reported as a failure
       */
       state.runEnergy()
       const after = context.state()
@@ -1029,7 +1024,7 @@ export const act = async (
       const plot = state.plot
       if (plot === null) return blocked('plot')
       /*
-        Placed by `makeBed`'s own geometry rather than by anything computed here. Where a bed
+        Placed by `makeBed`'s own geometry, with nothing computed here. Where a bed
         should go is a question about the light, which is the design search's job. What this does
         is give the grower one more bed to put something in, in the row the defaults lay out
       */
@@ -1103,7 +1098,7 @@ export const act = async (
       state.clearDesign()
       return reply([{ kind: 'started-over' }], { did: ['cleared'], offer: ['set-place'] })
     case 'ask-sources':
-      // opened rather than summarized: it's the reference shelf and it's already on a step
+      // opened directly: it's the reference shelf and it's already on a step
       state.setSidebarStep('sources')
       state.setSurface('edit')
       return reply([{ kind: 'sources' }])

@@ -4,17 +4,17 @@ import type { Fraction } from './units'
  * What is lying on the ground under and between the panels.
  *
  * This is a horticultural decision and an electrical one at the same time, which is the whole
- * reason it is a stored field rather than a hidden constant. The ground's shortwave reflectance
- * is a term in three separate places in this app: the ground-reflected component of the
- * plane-of-array irradiance, the rear-side irradiance of a bifacial module, and the light that
- * bounces off the ground back up onto the underside of the panels and down again. Held at one
- * number, as it was, a grower who mulched with straw and a grower who left bare soil were told
- * the same annual figure, and the two are about a tenth of a year's generation apart.
+ * reason it is a stored field and never a hidden constant. The ground's shortwave reflectance is a
+ * term in three separate places in this app: the ground-reflected component of the plane-of-array
+ * irradiance, the rear-side irradiance of a bifacial module, and the light that bounces off the
+ * ground back up onto the underside of the panels and down again. Held at one number, it would tell
+ * a grower who mulched with straw and a grower who left bare soil the same annual figure, and the
+ * two are about a tenth of a year's generation apart.
  *
- * The values live here rather than beside their citations in `src/data/albedo.ts` because
+ * The values live here, because
  * `src/sim` may not import `src/data` (see docs/ARCHITECTURE.md) and the simulation needs the
  * number. `src/data/albedo.ts` wraps each of these with the source it came from and the words a
- * grower reads; it never restates the figure
+ * grower reads. It never restates the figure
  */
 export type GroundCover = 'bare-soil' | 'grass' | 'wood-chip' | 'straw-mulch' | 'light-gravel'
 
@@ -29,7 +29,7 @@ export const GROUND_COVERS: readonly GroundCover[] = [
 /**
  * Mid-morning-to-mid-afternoon shortwave albedo, dry, seen from above.
  *
- * `grass` is 0.20 rather than a prettier number on purpose: 0.20 is the ground reflectance
+ * `grass` is 0.20, deliberately plain: 0.20 is the ground reflectance
  * PVWatts v5 assumes when nothing better is known, and it's what every figure this app has ever
  * printed was computed against. Making the default cover carry it exactly means introducing this
  * choice moves nobody's existing answer by a single kilowatt-hour
@@ -50,9 +50,8 @@ export const groundAlbedoOf = (cover: GroundCover): Fraction => GROUND_COVER_ALB
  * Snow, a cover the weather lays on top of whichever ground cover the grower chose, for part of
  * the year.
  *
- * Old settled snow rather than fresh, because a seasonal weighting off monthly normals is
- * describing the lying snowpack and not the morning after a storm. `src/data/albedo.ts` carries
- * where it came from
+ * Old settled snow, because a seasonal weighting off monthly normals describes
+ * the lying snowpack across whole months. `src/data/albedo.ts` carries where it came from
  */
 export const SNOW_ALBEDO = 0.7 as Fraction
 

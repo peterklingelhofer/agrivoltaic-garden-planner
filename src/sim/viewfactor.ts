@@ -89,8 +89,8 @@ export const vfGroundSky2dOracle: (
   return result
 }
 
-// two-surface enclosure, E / (1 - rho_g (1 - SVF) rho_m); the geometric series is already summed
-// so no iteration is needed (the solar geometry document section 7.3, Decision Record section 3)
+// two-surface enclosure, E / (1 - rho_g (1 - SVF) rho_m). The geometric series is already summed
+// so no iteration is needed (Decision Record section 3)
 export const interreflectionGain: (
   skyViewFactor: Fraction,
   groundAlbedo: Fraction,

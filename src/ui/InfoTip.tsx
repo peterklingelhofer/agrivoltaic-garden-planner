@@ -25,8 +25,8 @@ const clamp = (value: number, low: number, high: number): number =>
  * the pointer is already in, so traveling into it doesn't close it), and persistent (it closes
  * only on an explicit gesture).
  *
- * `aria-describedby` rather than a label: the trigger's own name is already the field beside it,
- * and a screen reader that announced "more about row spacing" as the NAME would have replaced
+ * This uses `aria-describedby` over a label: the trigger's own name is already the field beside
+ * it, and a screen reader that announced "more about row spacing" as the NAME would have replaced
  * the field's name with a description of the button. Described-by reads it after, which is what
  * it is: a footnote on the control.
  *
@@ -35,12 +35,11 @@ const clamp = (value: number, low: number, high: number): number =>
  * experience level hides is detail, and that a caveat is never detail. A definition of a term
  * goes in here. A limit on what the app knows doesn't.
  *
- * The bubble is positioned in the viewport rather than inside the sidebar, and that is the whole
- * of the fix for the audit's defect 14. The sidebar is a scroll box, so an absolutely positioned
- * bubble beside a row near its top or its foot was clipped by the box: the fifteen year old
- * pressed the ⓘ beside "DLI", watched the icon turn green, scrolled for the sentence and never
- * found it. Measured off the trigger when it opens, and again on any scroll or resize while it's
- * open, since a fixed element doesn't move with the box it was measured against
+ * The bubble is positioned in the viewport, outside the sidebar, because the sidebar is a scroll
+ * box: an absolutely positioned bubble beside a row near its top or its foot would be clipped by
+ * the box, hiding the very sentence it was opened to show. Measured off the trigger when it
+ * opens, and again on any scroll or resize while it's open, since a fixed element doesn't move
+ * with the box it was measured against
  */
 export const InfoTip = ({
   label,
@@ -54,11 +53,11 @@ export const InfoTip = ({
 }): ReactElement => {
   const id = useId()
   /**
-   * Three ways to be open, kept apart, because folding them into one toggle was the other half
-   * of the audit's defect 14. A pointer press arrives as pointerenter and then click: the enter
-   * opened the bubble and the click toggled it shut again, so a press never showed anything and
-   * only a hover did. Now the hover, the focus and the press each hold the bubble open on their
-   * own. The press pins it so it survives the pointer leaving, and a second press unpins it
+   * Three ways to be open, kept apart, because folding them into one toggle breaks on a pointer
+   * press: it arrives as pointerenter and then click, so the enter would open the bubble and the
+   * click would toggle it shut again, and only a hover would ever show anything. The hover, the
+   * focus and the press each hold the bubble open on their own. The press pins it so it survives
+   * the pointer leaving, and a second press unpins it
    */
   const [hovered, setHovered] = useState(false)
   const [focused, setFocused] = useState(false)
@@ -94,7 +93,7 @@ export const InfoTip = ({
 
   /**
    * Measured the moment the bubble exists and before the browser paints, so it's never seen at
-   * the wrong place. A callback ref rather than an effect: React runs it during the commit, which
+   * the wrong place. This is a callback ref over an effect: React runs it during the commit, which
    * is the one point where the element has been laid out and nothing has been painted yet
    */
   const holdBubble = useCallback(
@@ -123,8 +122,8 @@ export const InfoTip = ({
 
   /**
    * Escape closes it wherever the focus is, which is the dismissible half of 1.4.13. Bound to the
-   * document rather than to the button, because the pointer can open this without ever moving
-   * focus to the button, and a key handler on an unfocused button never runs
+   * document, because the pointer can open this without ever moving focus to the button, and a
+   * key handler on an unfocused button never runs
    */
   useEffect(() => {
     if (!open) return

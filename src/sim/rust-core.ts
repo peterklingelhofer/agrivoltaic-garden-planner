@@ -1,14 +1,14 @@
 /**
  * The JavaScript half of the Rust physics core.
  *
- * Deliberately takes an already-instantiated `WebAssembly.Instance` rather than loading one. The
+ * Deliberately takes an already-instantiated `WebAssembly.Instance`, and never loads one itself. The
  * two callers load it differently: a test reads a file, a browser fetches a URL. Putting
  * either of those in here would drag `node:fs` or `fetch` into `src/sim`, which
  * `src/sim/boundary.test.ts` exists to prevent and which would follow the module into the browser
  * bundle. So this file is arithmetic and pointers and nothing else.
  *
- * See `crates/agv-sim/src/wasm.rs` for the other side of this ABI, and `the port document` for
- * why the crate exists at all
+ * See `crates/agv-sim/src/wasm.rs` for the other side of this ABI, and `crates/agv-sim/README.md`
+ * for why the crate exists at all
  */
 
 import type { PvChainOptions } from '../types/energy'
@@ -338,8 +338,8 @@ const BYTES_PER_F64 = 8
  * A fresh view every time, because it's invalid the moment the allocator grows linear memory.
  *
  * This is the classic wasm footgun: a `Float64Array` captured before an `agv_alloc_f64` that
- * triggers `memory.grow` points into a detached buffer, and reads come back as zeros rather than
- * as an error. Two allocations happen below, so the view is taken after both
+ * triggers `memory.grow` points into a detached buffer, and reads silently come back as zeros.
+ * Two allocations happen below, so the view is taken after both
  */
 const view = (exports: CoreExports): Float64Array => new Float64Array(exports.memory.buffer)
 
@@ -347,7 +347,7 @@ const view = (exports: CoreExports): Float64Array => new Float64Array(exports.me
  * The count every field of a decomposition series must agree on.
  *
  * A short field would otherwise be read as zeros through `at`, and zero is a legitimate
- * irradiance, so the mistake would arrive as a plausibly dark year rather than as an error. This
+ * irradiance, so the mistake would arrive as a plausibly dark year. This
  * is the one place it can still be caught cheaply
  */
 const decompositionCount = (series: RustDecompositionSeries): number => {
@@ -395,7 +395,7 @@ export const rustCore = (instance: WebAssembly.Instance): RustCore => {
         observer.temperatureC,
         outPointer,
       )
-      // copied out of linear memory rather than returned as a view of it, because the very next
+      // copied out of linear memory, because the very next
       // statement frees the allocation the view would point into
       return view(exports).slice(outPointer / BYTES_PER_F64, outPointer / BYTES_PER_F64 + outCount)
     } finally {
@@ -529,7 +529,7 @@ export const rustCore = (instance: WebAssembly.Instance): RustCore => {
     utcOffsetHours: number,
   ): RustIrradianceSeries => {
     /*
-      Refused here rather than left to the Rust, which fills the output with NaN for a code it
+      Refused here: the Rust fills the output with NaN for a code it
       doesn't know. That guard is still worth having, for a genuine version skew where this side
       knows a model the compiled crate doesn't. It can't cover this case: a name absent from the
       map reads as `undefined`, and an `undefined` crossing into a wasm i32 parameter arrives as

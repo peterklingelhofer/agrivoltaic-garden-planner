@@ -96,9 +96,9 @@ describe('frost exceedance curves', () => {
   })
 
   /**
-   * Pune: no day of the thirty years at or below the threshold. The pick used to land on the
-   * two sentinel days and print as "frost ends around Jan 1 and returns around Dec 31", so a
-   * percentile whose pick is the sentinel pair is marked instead of read as two frosts
+   * Pune: no day of the thirty years at or below the threshold. The pick lands on the two sentinel
+   * days, which would print as "frost ends around Jan 1 and returns around Dec 31", so a percentile
+   * whose pick is the sentinel pair is marked `frostFree`
    */
   it('marks every percentile frost free where no year crossed the threshold', () => {
     const curve = frostExceedanceCurve(dailyMinimaFixture(16, 8, false), 0 as Celsius)

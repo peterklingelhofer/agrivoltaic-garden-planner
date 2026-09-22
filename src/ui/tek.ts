@@ -8,13 +8,13 @@ import type { TekDesignRule } from '../types/tek'
  * taken from a named people is being applied to somebody's garden, so the people are named on the
  * suggestion that applies it.
  *
- * A plain module rather than exports beside the panel, because a file that exports both
- * components and helpers breaks the fast-refresh boundary, and because this is vocabulary rather
- * than rendering
+ * A plain module. It holds no exports beside the panel: a file that exports both
+ * components and helpers breaks the fast-refresh boundary, and because this is vocabulary,
+ * kept separate from rendering
  */
 
 /**
- * The one line here that is a caveat rather than a credit: it records that nobody asked the
+ * The one line here is a caveat: it records that nobody asked the
  * people whose practice this is whether they wanted it in a piece of software. Said once so that
  * rewording one copy can never quietly soften the other
  */

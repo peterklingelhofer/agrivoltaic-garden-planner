@@ -119,7 +119,7 @@ describe('the size of the plot, typed rather than redrawn', () => {
     const replaced = rectangleOf(exterior())
     expect(replaced?.widthM).toBeCloseTo(4, 6)
     expect(replaced?.depthM).toBeCloseTo(12, 6)
-    // over the middle of the shape it replaced rather than over the origin
+    // over the middle of the shape it replaced. Never over the origin
     expect(replaced?.center.xM).toBeCloseTo(5, 6)
     expect(replaced?.center.yM).toBeCloseTo(6, 6)
     expect(harness.find('status-plot-shape')).toBeNull()

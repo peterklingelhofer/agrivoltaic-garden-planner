@@ -29,10 +29,9 @@ const GLOSSED: readonly (readonly [OverlayChannel, readonly string[]])[] = [
 
 describe('the editor explains its own vocabulary where the vocabulary appears', () => {
   /**
-   * The gloss moved from a standing paragraph into the info tip beside the channel control: it's
-   * a definition of a term, which is the one kind of thing that may be asked for rather than
-   * always shown. What must not change is that it's still THERE and still says the same words,
-   * so this opens the tip rather than deleting the assertion
+   * The gloss sits in the info tip beside the channel control: it's a definition of a term, which
+   * is the one kind of thing that may stay hidden until asked for. What must hold is that it is
+   * THERE and says the same words, so this opens the tip and asserts them
    */
   it('says what the selected overlay channel measures, in words, when asked', async () => {
     for (const [channel, terms] of GLOSSED) {
@@ -42,7 +41,7 @@ describe('the editor explains its own vocabulary where the vocabulary appears', 
       await harness.click('info-overlay-channel')
       const help = harness.get('info-overlay-channel-bubble').textContent ?? ''
       for (const term of terms) expect(help, `${channel}: ${term}`).toContain(term)
-      // the acronym is kept rather than replaced: an expert is entitled to recognize it
+      // the acronym is kept: an expert is entitled to recognize it
       expect(harness.get('control-overlay-channel').textContent).toContain('Daily light integral')
       await harness.unmount()
     }
@@ -53,7 +52,7 @@ describe('the editor explains its own vocabulary where the vocabulary appears', 
    * table, so the panel has no controls for them and says in a sentence what the run does. This
    * asserts the sentence is there and that the controls aren't.
    *
-   * The quick check went the same way on 2026-09-09, and for the same reason one rung up: it was
+   * The quick check went the same way, and for the same reason one rung up: it was
    * a second answer offered beside the one to trust, and a grower had to choose between them
    * without being told the choice could move a crop in or out of their plan. So the button is
    * gone and the panel offers one light check, which is asserted here
@@ -83,7 +82,7 @@ describe('the editor explains its own vocabulary where the vocabulary appears', 
  * pitch", "Close polygon" and "Backend: WebGL2 shadow maps (baseline)". One product, two voices,
  * and the second one is the half a beginner is left alone with.
  *
- * This asserts the rule rather than the wording, the way the tests above do: a control's LABEL is
+ * This asserts the rule. It doesn't assert the wording, the way the tests above do: a control's LABEL is
  * in the reader's words, and the trade term it replaced is still somewhere on the panel for
  * whoever came with specs to copy from. Deleting the terms would have been the other failure
  */

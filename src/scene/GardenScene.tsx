@@ -61,7 +61,7 @@ export const GardenScene = (): ReactElement => {
     [plot],
   )
   /**
-   * How far the ground grid reaches, from the plot rather than from the plane it is drawn on.
+   * How far the ground grid reaches, from the plot.
    *
    * A garden is a few tens of meters, and a grid that fades at a fixed 110 m puts a 32 by 24 m plot
    * in a hundred meters of one-meter squares, so the whole frame reads as a CAD sheet. Half the
@@ -122,13 +122,12 @@ export const GardenScene = (): ReactElement => {
         so the two were exactly coplanar and every grid fragment was contesting a depth value with
         a ground fragment. That's worth not doing on its own merits.
 
-        It was added believing it would fix a flicker reported on Firefox, and it didn't. Measured
-        afterward, rather than assumed: Firefox hands out a 24-bit depth buffer on Apple silicon,
-        where the smallest resolvable depth difference around this camera distance is about half a
-        millimeter, so the two planes were already four quanta apart and coplanarity can't have
-        been what was on screen. The Firefox flicker is still open.
+        Firefox hands out a 24-bit depth buffer on Apple silicon, where the smallest resolvable
+        depth difference around this camera distance is about half a millimeter, so the lift puts
+        the two planes four quanta apart. The grid flicker seen on Firefox is explained in the
+        `infiniteGrid` note below.
 
-        A lift rather than the `polygonOffset` `DliOverlay` uses one file over, because that
+        A lift here, a different approach from the `polygonOffset` `DliOverlay` uses one file over, because that
         material is ours and takes the prop directly while this one is drei's and would have to be
         reached by prop piercing that races the material it pierces
       */}
@@ -152,11 +151,11 @@ export const GardenScene = (): ReactElement => {
         sky and this grid are what is left
       */}
       {/*
-        The fade is tied to the garden rather than to the plane it is drawn on. At the fixed 110 m
-        it had, a 32 by 24 m plot sat in the middle of a hundred meters of one-meter squares and
-        the first thing anybody saw was a CAD sheet: the grid is a ruler for the beds, so it
-        reaches a little past the longest side of the plot and stops. The bounded 120 m plane
-        underneath it doesn't change, because that is the flicker fix above
+        The fade is tied to the garden itself, whatever plane it is drawn on. At a fixed 110 m, a 32
+        by 24 m plot sits in the middle of a hundred meters of one-meter squares and the first thing
+        anybody sees is a CAD sheet. The grid is a ruler for the beds, so it reaches a little past
+        the longest side of the plot and stops. The bounded 120 m plane underneath it doesn't
+        change, because that is the flicker fix above
       */}
       <Grid
         position={[0, 0.002, 0]}
@@ -228,10 +227,10 @@ export const GardenScene = (): ReactElement => {
       */}
       {/*
         `onChange` marks the frame structural, and drei already calls `invalidate()` for us on the
-        same event, so this adds the reason rather than the request. It's needed because the
-        shadow cascades track the camera frustum and the occlusion estimate is screen-space, so
-        both are stale the moment the camera moves, and a frame that didn't know it was the
-        camera moving would reuse them and smear
+        same event, so this adds only the reason: the request itself already happened. It's needed
+        because the shadow cascades track the camera frustum and the occlusion estimate is
+        screen-space, so both are stale the moment the camera moves, and a frame that didn't know
+        it was the camera moving would reuse them and smear
       */}
       <OrbitControls
         makeDefault

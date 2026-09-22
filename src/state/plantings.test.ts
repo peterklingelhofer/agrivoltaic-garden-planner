@@ -69,9 +69,8 @@ describe('planting actions', () => {
   /**
    * The same crop sown the same day is the same planting, so adding it again is more of it.
    *
-   * It used to replace: a second press added one cucumber to the
-   * example's Bed 1, which already carried seventeen sown on the same day, and sixteen of them
-   * left the picture. That reads as the app taking plants away
+   * Replacing it would let adding one cucumber to a bed already carrying seventeen sown the same
+   * day wipe out sixteen of them, which reads as the app taking the plants
    */
   it('adds to the planting already there when the same sowing is added twice', () => {
     const bed = firstBed()

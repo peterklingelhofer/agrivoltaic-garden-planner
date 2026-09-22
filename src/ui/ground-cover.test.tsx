@@ -8,10 +8,9 @@ import { mount, type Harness } from './testkit'
 
 /**
  * Ground cover is the one design decision in this app that changes the growing answer and the
- * electrical answer at the same time, and until it was asked for it was a constant 0.2 buried in
- * three separate places. These check the wiring rather than the physics: that the control writes
- * the plot, that the scene's ground follows it, and that a light field computed for a different
- * ground is marked stale instead of being left standing
+ * electrical answer at the same time. These check the wiring: that the control writes the plot,
+ * that the scene's ground follows it, and that a light field computed for a different ground is
+ * marked stale. It's never left standing
  */
 
 beforeEach(() => {

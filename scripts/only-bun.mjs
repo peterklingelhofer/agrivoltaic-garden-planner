@@ -1,5 +1,5 @@
 // An npm or yarn install here silently replaces bun's node_modules with a different tree, leaving
-// no resolvable binaries, so guard the install rather than debugging it again
+// no resolvable binaries, so guard the install and avoid debugging it again
 const agent = process.env.npm_config_user_agent ?? ''
 const manager = agent.split('/')[0]
 

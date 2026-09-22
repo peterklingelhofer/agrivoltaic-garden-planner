@@ -14,8 +14,7 @@ env:
   BUN_VERSION: '1.4.2'
   # The agent tests refuse to skip where this is set, and it's set here and in `build:deploy`.
   # Deliberately not inferred from `CI`: a builder that sets `CI` without fetching the weights
-  # would fail on a file nobody asked it for. Cloudflare Workers Builds was the example until
-  # 2026-09-09, when it turned out to fetch them too. See src/agent/model-presence.ts
+  # would fail on a file nobody asked it for. See src/agent/model-presence.ts
   REQUIRE_AGENT_MODEL: '1'
 
 jobs:
@@ -34,11 +33,10 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
       - run: bun install --frozen-lockfile
 
-      # The agent's sentence-embedding weights: 58 MB, gitignored, and not optional here. `bun
-      # run test` now hard-fails without them rather than skipping eight tests in silence (see
-      # `src/agent/model-presence.ts`), and the e2e webServer builds with `VITE_AGENT=on` on
-      # purpose, so an absent model is six failing specs and a suite that takes five times as
-      # long. Cached because the alternative is depending on huggingface.co on every run
+      # The agent's sentence-embedding weights: 58 MB, gitignored, and required here. With
+      # `REQUIRE_AGENT_MODEL` set, `bun run test` hard-fails without them (see
+      # `src/agent/model-presence.ts`). Cached because the alternative is depending on
+      # huggingface.co on every run
       - name: Cache the agent model
         id: agent-model
         uses: actions/cache@v4
@@ -51,7 +49,7 @@ jobs:
       - name: Generated artifacts match their sources
         run: |
           bun run generate
-          # the whole crate source directory rather than each generated table by name: `bun run
+          # the whole crate source directory: `bun run
           # generate` is the only thing that has run, so anything it changed in there is its own
           # output, and a table added later is covered without anyone remembering to come back
           # here. `data/` is the neutral crop catalog, which has the same drift risk
@@ -64,10 +62,9 @@ jobs:
       - run: bun run lint
       - name: Format and import order
         run: bunx biome check .
-      # The physics core isn't optional any more: the TypeScript implementations were deleted, so
-      # `bun run test` and `bun run build` both fail without a built wasm rather than
-      # degrading. Both scripts run `bun run rust:wasm` themselves; the toolchain is what CI
-      # has to supply
+      # The Rust physics core is the only implementation, so `bun run test` and `bun run build` both
+      # fail hard without a built wasm. Both scripts run `bun run rust:wasm` themselves, so the
+      # toolchain is what CI has to supply
       - run: rustup target add wasm32-unknown-unknown
       - run: bun run test
         env:
@@ -122,10 +119,10 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
       - run: bun install --frozen-lockfile
 
-      # No agent model here any more. The webServer stopped building with `VITE_AGENT=on` on
-      # 2026-09-07, so nothing in this job loads the weights: `agent.spec.ts` skips itself and
-      # the agent halves of `a11y` and `contrast` are guarded. Put this step back, with the
-      # cache, when the flag goes back on; `playwright.config.ts` says so at the flag
+      # No agent model here. The webServer builds without `VITE_AGENT=on`, so nothing in this job
+      # loads the weights: `agent.spec.ts` skips itself and the agent halves of `a11y` and
+      # `contrast` are guarded. If the flag is turned on, this job needs the model step and its
+      # cache from `checks`, as `playwright.config.ts` says at the flag
       - id: playwright
         run: echo "version=$(bunx playwright --version | cut -d' ' -f2)" >> "$GITHUB_OUTPUT"
       - id: browsers

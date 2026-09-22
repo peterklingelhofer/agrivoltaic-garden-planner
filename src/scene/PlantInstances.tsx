@@ -176,7 +176,7 @@ export const PlantInstances = ({ bedId, atYear }: PlantInstancesProps): ReactEle
   // the end: applying the outcome look mid-sweep would show frost damage before the frost itself
   const sweeping = useAppStore((s) => s.sweeping)
 
-  // One clock for every canopy in the scene. It runs here rather than in the rig because a
+  // One clock for every canopy in the scene. It runs here, because a
   // garden with nothing planted in it shouldn't be paying for wind
   useFrame(({ clock }) => {
     WIND_TIME.value = clock.elapsedTime
@@ -193,7 +193,7 @@ export const PlantInstances = ({ bedId, atYear }: PlantInstancesProps): ReactEle
         The season's outcome, on the plants themselves (Decision Record 14). A frosted bed is
         drawn gray and collapsed, a starved one sallow and small, an eaten one leaning toward
         the color of a bed that pests are winning. The rule is `outcomeLook`, beside the rest of
-        the scene arithmetic, and it reads the report the store kept rather than recomputing
+        the scene arithmetic, and it reads the report the store kept, without recomputing
       */
       const look = sweeping
         ? UNTOUCHED_LOOK
@@ -253,7 +253,7 @@ export const PlantInstances = ({ bedId, atYear }: PlantInstancesProps): ReactEle
   if (!bed) return null
 
   return (
-    // on the group rather than on each instanced mesh: r3f bubbles a click up the object graph,
+    // on the group, because r3f bubbles a click up the object graph,
     // and nothing between here and the canopies stops one
     <group
       name={`plants-${bedId}`}

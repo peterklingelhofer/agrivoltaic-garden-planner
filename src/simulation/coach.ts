@@ -31,9 +31,9 @@ export const percent = (value: number): string => `${String(Math.round(value * 1
 
 /**
  * A harvest share to the nearest five percent. A season's harvest is one random draw inside a
- * published band, and "62%" read as a measurement of something; "about 60%" reads as the draw
- * it is, with the band beside it. Here rather than in the panel's formatting because the season
- * says its own share out loud too, in the explanation it writes and the verdict it gives
+ * published band, and "62%" reads as a measurement of something. "about 60%" reads as the draw it
+ * is, with the band beside it. The rounding is shared here so the panel's formatting, the
+ * explanation the season writes and the verdict it gives all agree
  */
 export const nearestFivePercent = (value: number): number => Math.round(value * 20) * 5
 
@@ -93,9 +93,9 @@ export const approxKwh = (value: number): string =>
  * One season, in one line, for the record of every season run.
  *
  * The same three facts the readouts give for the newest season, so a grower comparing season 4
- * against season 1 is comparing like with like, and the tail names what went wrong rather than
- * how much: a count of what didn't come in, and the commonest reason, which is the thing a
- * changed layout is supposed to move
+ * against season 1 is comparing like with like, and the tail names what went wrong: a count of
+ * what didn't come in, and the commonest reason, which is the thing a changed layout is
+ * supposed to move
  */
 export const seasonLine = (report: SeasonReport): string => {
   const lost = report.outcomes.filter((outcome) => outcome.kind !== 'harvested')
@@ -119,7 +119,7 @@ export const seasonLine = (report: SeasonReport): string => {
 }
 
 /**
- * One sentence about what to do next, read off the season rather than scripted.
+ * One sentence about what to do next, read off the season itself.
  *
  * A scripted tutorial goes stale the first time the rules move and then teaches the previous
  * game. Every branch here names a state that is true of the season just run, so when a rule

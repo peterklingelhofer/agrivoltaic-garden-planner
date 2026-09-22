@@ -4,10 +4,9 @@ import { bedLightFixture } from './testkit'
 import { frostReading, OPEN_SKY_ABOVE, SHELTERED_BELOW, shelterOf } from './frost'
 
 /**
- * The app computed a sky view factor per ground cell from the first bake and spent it on a debug
- * overlay and a sub-one-percent optical term. It's the same geometry that decides how much heat
- * a bed loses to the sky at night, and the agrivoltaics document section 3.6 had already computed both that this
- * follows and what may honestly be said about it.
+ * Every bake computes a sky view factor per ground cell. It's the same geometry that decides how
+ * much heat a bed loses to the sky at night. Oke's result for street canyons is why the mechanism
+ * holds, and it draws the line for what may be said about frost here.
  *
  * So these test restraint as much as they test wiring. The dangerous failure here is a number: a
  * degree of frost margin, a shifted planting date, a longer season. None of
@@ -52,8 +51,8 @@ describe('the sentence a sheltered bed gets', () => {
   /**
    * The failure this guards against is the one a reader is most likely to invent for themselves:
    * fewer frosts must mean a longer, warmer season, so the heat-loving crop that never ripens
-   * here would ripen under a panel. Shade cuts daytime warming too, and the agrivoltaics document section 3.2 finds
-   * soil cooling under panels to be the consistent temperature result
+   * here would ripen under a panel. Shade cuts daytime warming too, and Weselek et al. 2021 and
+   * Amaducci et al. 2018 find soil cooling under panels to be the consistent temperature result
    */
   it('promises no degrees, no dates and no extra season anywhere in it', () => {
     const text = `${reading.claim.value} ${reading.claim.caveat ?? ''}`

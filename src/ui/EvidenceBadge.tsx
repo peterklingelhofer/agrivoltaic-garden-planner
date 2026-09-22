@@ -18,7 +18,7 @@ export const EvidenceBadge = ({
   </span>
 )
 
-/** A null tier is the unsourced case, which must read as weaker than C rather than as blank */
+/** A null tier is the unsourced case, which must always read as weaker than C */
 export const TierBadge = ({
   tier,
   testId,

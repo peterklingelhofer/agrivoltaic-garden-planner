@@ -44,7 +44,7 @@ interface Manifest {
       readonly shipped: string | null
       readonly published?: string
       // the botanical layer alone records where it probed, because its source is vector and the
-      // test re-asks the question at that point rather than trusting the recorded answer
+      // test re-asks the question at that point
       readonly latitudeDeg?: number
       readonly longitudeDeg?: number
     }[]
@@ -168,7 +168,7 @@ describe('the bundled Koppen grid', () => {
  * The one grid written in the 16-bit variant of the format, because 369 botanical countries don't
  * fit in the byte per cell every climate layer uses. Worth its own test for exactly that
  * reason: `decodeClassGrid` grew a second branch to read it, and a bug in that branch would
- * silently mis-file every plant's native range rather than failing loudly
+ * silently mis-file every plant's native range
  */
 describe('the bundled botanical region grid', () => {
   it.each([
@@ -190,7 +190,7 @@ describe('the bundled botanical region grid', () => {
   })
 
   /**
-   * The high indices, sampled rather than counted.
+   * The high indices, spot-checked by sample.
    *
    * An assertion that the largest index exceeds 254 would prove nothing: that is `classes.length -
    * 1`, true of any array that long. A sampler that tested for BOTH sentinels regardless of cell
@@ -218,7 +218,7 @@ describe('the bundled botanical region grid', () => {
    * `source` is computed by `scripts/fetch-plant-traits.mjs` from the published polygons by
    * point-in-polygon, with no raster anywhere in it, so agreeing with it here is the scan
    * conversion and the decoder both being right about a place. This is precisely what would have
-   * caught the 255 sentinel on its own, which is why the probe set is required to keep
+   * caught the 255 sentinel by itself, which is why the probe set is required to keep
    * containing an area whose class index needs the wide format and a point that is on no land
    * at all
    */
@@ -432,12 +432,12 @@ describe('an absent, truncated or corrupt asset', () => {
   })
 
   /**
-   * A run length is a varint, and it used to be accumulated with `|=`, which is a 32-bit SIGNED
-   * operation: a crafted fifth byte set the sign bit, `run` went negative, `written + run` sailed
-   * under the bound meant to catch it, and `TypedArray.fill` clamps negative bounds instead of
-   * throwing. The result was a fully populated grid of an attacker's chosen class rather than the
-   * null every other malformed input gets, and for the botanical layer a wrong answer is a claim
-   * about where a plant grows wild
+   * A run length is a varint. If it were accumulated with `|=`, which is a 32-bit SIGNED operation,
+   * a crafted fifth byte would set the sign bit, `run` would go negative, `written + run` would
+   * sail under the bound meant to catch it, and `TypedArray.fill` clamps negative bounds without
+   * throwing. The result would be a fully populated grid of an attacker's chosen class, where every
+   * other malformed input gets null, and for the botanical layer a wrong answer is a claim about
+   * where a plant grows wild
    */
   it('refuses a run length crafted to go negative rather than decoding it', () => {
     const table = [3, 0x42, 0x42, 0x42]

@@ -5,7 +5,8 @@ import handler from './index'
 import { PROXY_PREFIX } from './routes'
 
 /**
- * The helper route, driven through `dispatch` rather than through `handleHelper` directly.
+ * The helper route, driven through `dispatch`. Calling `handleHelper` directly would skip the
+ * routing this file exists to test.
  *
  * The registration is half of what this file is holding. The proxy answers 405 to anything that
  * is not a GET, and the helper is the one route here that has to be POSTed to, so a route that

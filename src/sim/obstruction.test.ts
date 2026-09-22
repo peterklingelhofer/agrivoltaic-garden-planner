@@ -97,8 +97,8 @@ describe('houseQuads beam shadow', () => {
       rows: 48,
     }
     const sun = sunUnitVector(45 as Degrees, 180 as Degrees)
-    // due south by this codebase's convention: the vector toward the sun points south
-    // (negative y, +y being north) and up, rather than assuming which sign means which
+    // due south by this codebase's convention: the vector toward the sun points south (negative y,
+    // +y being north) and up, and the check below confirms that sign before the test relies on it
     expect(sun.y).toBeLessThan(0)
 
     const visibility = beamVisibilityRaster(grid, houseQuads(house), sun, 0 as Fraction, 1)

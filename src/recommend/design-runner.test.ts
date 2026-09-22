@@ -23,9 +23,9 @@ const direct = vi.hoisted(() => ({ calls: 0 }))
 
 /*
   copied into a fresh object before the mock is installed: bun's mock.module mutates the shared
-  module object in place rather than swapping in a new one, so a bare `await import(...)` here
+  module object in place, so a bare `await import(...)` here
   would alias the very thing being replaced and `actual.runSimulation` below would recurse into
-  the mock instead of reaching the real bake
+  the mock
 */
 const actual = { ...(await import('../sim/pipeline')) }
 mock.module('../sim/pipeline', () => ({
@@ -41,7 +41,7 @@ const actualRun = async (...args: Parameters<SimulationRunner>): ReturnType<Simu
 }
 
 /**
- * Vertical bifacial offers two archetypes rather than five, on the smallest plot the layout
+ * Vertical bifacial offers two archetypes on the smallest plot the layout
  * still fills: this file is about which runner is called and what it reports, so it buys none
  * of the bake time the measured tests in `design.test.ts` need
  */
@@ -107,7 +107,7 @@ describe('the bake every candidate costs is injectable', () => {
 
   /**
    * Running through the client means running through its memo, and every candidate differs from
-   * its siblings in array geometry alone. Tilt lives in the tracker rather than in `RowGeometry`,
+   * its siblings in array geometry alone. Tilt lives in the tracker,
    * so this is really asking whether the key reads it: it does, through the tracker it stringifies
    */
   it('gives every candidate a cache key of its own, so no two share one bake', async () => {

@@ -239,7 +239,7 @@
       "evidenceTier": "A",
       "backsClaims": [
         "clubroot resting spores survive up to 20 years with a sharp early decline",
-        "crop rotation as a hard constraint rather than a soft companion score"
+        "crop rotation as a hard constraint in place of a soft companion score"
       ],
       "caveat": "The full text is behind annualreviews.org and unread. The open abstract says only that resting spores 'persist in the soil for several years'. The '20 years with a sharp early decline' figure is common in extension literature and is NOT confirmed anywhere in this review's accessible text. This entry stands for the review's existence and carries no 20-year number until someone reads the full text."
     }
@@ -377,14 +377,14 @@
         ]
       ]
     },
-    "note": "17 pp. PDF at https://extension.oregonstate.edu/sites/extd8/files/catalog/auto/EM9305.pdf (retrieved 2026-07-30, HTTP 200, read in full). OSU Extension labels it 'Peer reviewed (Gray level)'. Published January 2021, Reviewed 2025, (c) 2021 Oregon State University. Croptime platform: https://smallfarms.oregonstate.edu/croptime ; calculator: http://uspest.org/dd/model?mdt=veg . Funded by USDA-WSARE SW12-037.",
+    "note": "17 pp. PDF at https://extension.oregonstate.edu/sites/extd8/files/catalog/auto/EM9305.pdf (retrieved 2026-07-30 and read in full). OSU Extension labels it 'Peer reviewed (Gray level)'. Published January 2021, Reviewed 2025, (c) 2021 Oregon State University. Croptime platform at https://smallfarms.oregonstate.edu/croptime , calculator at http://uspest.org/dd/model?mdt=veg . Funded by USDA-WSARE SW12-037.",
     "custom": {
       "group": "horticulture",
       "verification": "url-verified",
       "accessLevel": "public-domain",
       "evidenceTier": "B",
       "backsClaims": [
-        "OSU Croptime coverage, verbatim: 'Croptime currently hosts 29 vegetable DD models and three summer annual weed models', closing the the horticulture document gap 6 / ledger A16 enumeration question",
+        "OSU Croptime coverage, verbatim: 'Croptime currently hosts 29 vegetable DD models and three summer annual weed models', which is the count behind ledger row A16",
         "published lower and upper development thresholds for six vegetables: broccoli 32/70 F, cucumber 50/90 F, snap bean 40/90 F, sweet corn 44 F fresh market or 50 F processing with an 86 F upper, sweet pepper 52/100 F, tomato 45/92 F",
         "cultivar-level degree-days to named growth stages and to harvest, with per-cultivar model accuracy in days and the number of data sets behind each",
         "the case for GDD-based maturity over fixed days-to-maturity: 'Arcadia' broccoli in Aurora, Oregon ranged 66-103 days to maturity, a 20-32 day spread within a season by planting date",
@@ -579,7 +579,7 @@
       "backsClaims": [
         "chiltepin pepper total fruit production was three times greater under the PV panels of the agrivoltaic system",
         "cherry tomato total fruit production was twice as great under the PV panels",
-        "jalapeno total fruit production was nearly EQUAL between treatments, attained with 65% less transpirational water loss; jalapeno water use efficiency was 157% greater",
+        "jalapeno total fruit production was nearly EQUAL between treatments, attained with 65% less transpirational water loss, and jalapeno water use efficiency was 157% greater",
         "soil moisture +15% under panels at an arid site",
         "daytime air-temperature cooling under panels in a hot arid climate"
       ],
@@ -717,7 +717,7 @@
       "accessLevel": "paywalled",
       "evidenceTier": null,
       "backsClaims": [
-        "PSA algorithm, accuracy <=0.5 arcmin; candidate rejected in favor of SPA"
+        "PSA algorithm, accuracy <=0.5 arcmin, rejected in favor of SPA"
       ],
       "caveat": null
     }
@@ -875,7 +875,7 @@
       "evidenceTier": null,
       "backsClaims": [
         "the governing framework behind the product's TEK attribution rules",
-        "decision 12: CARE binds only if we encode community-held seed genetics or ceremonial calendars, which we will not"
+        "decision 12: CARE binds only on an app that encodes community-held seed genetics or ceremonial calendars, which this app doesn't"
       ],
       "caveat": null
     }
@@ -925,7 +925,7 @@
       "accessLevel": "open-access",
       "evidenceTier": null,
       "backsClaims": [
-        "practical operationalization of CARE alongside FAIR for our data model"
+        "practical operationalization of CARE alongside FAIR for this app's data model"
       ],
       "caveat": null
     }
@@ -1256,7 +1256,7 @@
       "accessLevel": "open-access",
       "evidenceTier": null,
       "backsClaims": [
-        "the livestock counterpart to DIN SPEC 91434; out of scope for a garden tool but recorded for completeness"
+        "the livestock counterpart to DIN SPEC 91434, out of scope for a garden tool and recorded for completeness"
       ],
       "caveat": null
     }
@@ -1450,7 +1450,7 @@
         ]
       ]
     },
-    "note": "Read from the live table page on 2026-09-04, which carried data for June 2026 and names its own source as 'U.S. Energy Information Administration, Form EIA-861M (formerly EIA-826), Monthly Electric Power Industry Report'. The same series is served by the EIA API v2 route electricity/retail-sales, which is what this app calls through its Worker proxy; the route metadata and an annual residential query were both exercised on 2026-09-04 and returned price in cents per kilowatt-hour under facets stateid and sectorid.",
+    "note": "Read from the live table page on 2026-09-04, which carried data for June 2026 and names its own source as 'U.S. Energy Information Administration, Form EIA-861M (formerly EIA-826), Monthly Electric Power Industry Report'. The same series is served by the EIA API v2 route electricity/retail-sales, which is what this app calls through its Worker proxy. The route metadata and an annual residential query were both exercised on 2026-09-04 and returned price in cents per kilowatt-hour under facets stateid and sectorid.",
     "custom": {
       "group": "software",
       "verification": "url-verified",
@@ -1717,7 +1717,7 @@
         ]
       ]
     },
-    "note": "Crossref records the version of record as 2024-03-13, article e88695, CC BY 4.0. Reviewed preprint 2023; bioRxiv 2022.03.08.482778. eLife assessment rates strength of evidence 'solid'.",
+    "note": "Crossref records the version of record as 2024-03-13, article e88695, CC BY 4.0. Reviewed preprint 2023, bioRxiv 2022.03.08.482778. eLife assessment rates strength of evidence 'solid'.",
     "custom": {
       "group": "horticulture",
       "verification": "crossref-verified",
@@ -1725,7 +1725,7 @@
       "evidenceTier": "B",
       "backsClaims": [
         "NO ADULT REPELLENCY: in wind-tunnel oviposition assays gravid female Spodoptera frugiperda laid equal numbers of egg batches on corn with and without Desmodium odor",
-        "the terpenoids previously reported as repellent were barely detectable in Desmodium intortum headspace across greenhouse and field, with and without soil microbes, and rose only marginally after herbivory; 50 field headspace samples from Tanzania and Uganda",
+        "the terpenoids previously reported as repellent were barely detectable in Desmodium intortum headspace across greenhouse and field, with and without soil microbes, and rose only marginally after herbivory, across 50 field headspace samples from Tanzania and Uganda",
         "first-instar larvae PREFERRED Desmodium leaf tissue over corn in choice assays, but development stagnated and no larvae survived to pupation",
         "proposed mechanism: dense silica-fortified uncinate (hooked) trichomes physically wound larvae",
         "the revised functional description: Desmodium acts as a trap crop that intercepts and kills larvae, which replaces the older account of a volatile repellent of adults",
@@ -1838,7 +1838,7 @@
         ]
       ]
     },
-    "note": "ecocrop.fao.org is dead. ECOCROP is now served through the GAEZ v4 portal: search at /pages/ecocrop-search, taxon lookup at /pages/ecocrop-find-plant, bulk dataset at https://data.apps.fao.org/catalog/dataset/ecocrop. As of 2026-09-11 a crop's data sheet is served directly at https://ecocrop.apps.fao.org/ecocrop/srv/en/dataSheet?id=<EcoPort code>; the tropical rows of Decision Record 23 name their EcoPort codes and were transcribed from those sheets. ECOCROP holds no daily light integral: its light field is a descriptor (very bright, clear skies, cloudy skies, light shade, heavy shade) and is cited for no DLI figure.",
+    "note": "ecocrop.fao.org is dead. ECOCROP is now served through the GAEZ v4 portal: search at /pages/ecocrop-search, taxon lookup at /pages/ecocrop-find-plant, bulk dataset at https://data.apps.fao.org/catalog/dataset/ecocrop. As of 2026-09-11 a crop's data sheet is served directly at https://ecocrop.apps.fao.org/ecocrop/srv/en/dataSheet?id=<EcoPort code>. The tropical rows of Decision Record 23 name their EcoPort codes and were transcribed from those sheets. ECOCROP holds no daily light integral: its light field is a descriptor (very bright, clear skies, cloudy skies, light shade, heavy shade) and is cited for no DLI figure.",
     "custom": {
       "group": "software",
       "verification": "url-verified",
@@ -1884,9 +1884,9 @@
       "accessLevel": "paywalled",
       "evidenceTier": "A",
       "backsClaims": [
-        "the reciprocal-yield competition model that the horticulture document misattributed to Holliday"
+        "the reciprocal-yield competition model of plant density and crop yield, commonly cited under Holliday's name"
       ],
-      "caveat": "Recorded expressly to correct the horticulture document's misattribution."
+      "caveat": "Nature 217:289-290 (1968), 'Plant Competition and Crop Yield', is by Farazdaghi and Harris. It circulates widely under Holliday's name, whose own paper is Nature 186:22-24 (1960), holliday1960-population-yield."
     }
   },
   {
@@ -1929,7 +1929,7 @@
       ],
       "caveat": "The ASHS page draws the article in with its own JavaScript, so the paper is open to read and absent from the raw HTML. The paper contains no per-crop DLI table. It's a narrative review organized by crop group, so it can't back any per-crop DLI minimum. The '10-12 mol/m2/d minimum' often attributed to it originates in Purdue HO-238-W (torres-lopez-purdue-dli), scoped there to shade-intolerant floriculture crops at the finish stage. The closest thing to a threshold in Faust & Logan is a worked example: 'If 5 mol/m2/d is considered to be the lowest acceptable DLI for a greenhouse crop...'. The paper uses 4.48 umol/J where Decision Record 6 uses McCree's in-band 4.57. The composite 2.06 umol/J figure is ambiguous until it names the constant it derives from."
     },
-    "note": "Full text retrieved 2026-07-30 from https://journals.ashs.org/view/journals/hortsci/53/9/article-p1250.xml by rendering in a JS-executing browser. Plain HTTP clients receive an empty SPA shell.",
+    "note": "Full text retrieved 2026-07-30 from https://journals.ashs.org/view/journals/hortsci/53/9/article-p1250.xml . The article text is drawn in by the page's own JavaScript, so it's absent from the raw HTML.",
     "accessed": {
       "date-parts": [
         [
@@ -2684,7 +2684,7 @@
         ]
       ]
     },
-    "note": "Retrieved 2026-07-30, HTTP 200. OSU Extension labels it 'Peer reviewed (Gray level)', Published April 2013, Reviewed 2024. The table is the classic Harrington reference originally produced in the Department of Vegetable Crops, University of California, Davis; the OSU page is a currently-live university host of it.",
+    "note": "Retrieved 2026-07-30. OSU Extension labels it 'Peer reviewed (Gray level)', Published April 2013, Reviewed 2024. The table is the classic Harrington reference originally produced in the Department of Vegetable Crops, University of California, Davis, and the OSU page is a currently-live university host of it.",
     "custom": {
       "group": "horticulture",
       "verification": "url-verified",
@@ -3045,7 +3045,7 @@
         ]
       ]
     },
-    "note": "DOI resolved through Crossref on 2026-09-04 and the returned title, authors, type and 2020 issue date compared against what the economy document claims. The canonical NREL URL above does not resolve from this build environment: NREL became the National Laboratory of the Rockies and the same report is served at docs.nlr.gov/docs/fy21osti/77811.pdf. The full text behind the figures below was read for the economy document from a solargrazing.org mirror of the same PDF, not from the URL recorded here.",
+    "note": "Crossref confirms the title, authors, type and 2020 issue date. The canonical NREL URL above doesn't resolve: NREL became the National Laboratory of the Rockies and the same report is served at docs.nlr.gov/docs/fy21osti/77811.pdf. The full text behind the figures below was read from a solargrazing.org mirror of the same PDF.",
     "custom": {
       "group": "agrivoltaics",
       "verification": "crossref-verified",
@@ -3082,7 +3082,7 @@
         ]
       ]
     },
-    "note": "Official 24-page PDF verified. Published in Gazzetta Ufficiale February 13, 2024, in force February 14, 2024. GSE program page https://www.gse.it/servizi-per-te/attuazione-misure-pnrr/sviluppo-agrivoltaico returns 403 to automated fetch.",
+    "note": "Official 24-page PDF verified. Published in Gazzetta Ufficiale February 13, 2024, in force February 14, 2024. The GSE program page https://www.gse.it/servizi-per-te/attuazione-misure-pnrr/sviluppo-agrivoltaico refuses requests and wasn't read.",
     "custom": {
       "group": "standards",
       "verification": "url-verified",
@@ -3441,7 +3441,7 @@
       "accessLevel": "paywalled",
       "evidenceTier": "A",
       "backsClaims": [
-        "on-farm replicated evidence for push-pull; the source the agroecology document cites only as 'Field Crops Research 106(3)'"
+        "on-farm replicated evidence for push-pull, Field Crops Research 106(3)"
       ],
       "caveat": null
     }
@@ -3906,7 +3906,7 @@
         "Balinese subak as a self-organizing water and cropping-calendar institution",
         "attribution to Balinese farming communities, developed by the 9th century CE"
       ],
-      "caveat": "The agroecology document cites the 1991 first edition. The Crossref-registered record is the 2007 reissue."
+      "caveat": "The Crossref-registered record is the 2007 reissue. The first edition is 1991."
     }
   },
   {
@@ -3992,7 +3992,7 @@
         ]
       ]
     },
-    "note": "Open-access full text confirmed at https://d-nb.info/1265367027/34 (13 pp). Analysis performed in SAS 9.4 PROC GLIMMIX; the article states 'Code availability: Not applicable'.",
+    "note": "Open-access full text confirmed at https://d-nb.info/1265367027/34 (13 pp). Analysis performed in SAS 9.4 PROC GLIMMIX. The article states 'Code availability: Not applicable'.",
     "custom": {
       "group": "agrivoltaics",
       "verification": "crossref-verified",
@@ -4044,7 +4044,7 @@
         ]
       ]
     },
-    "note": "Retrieved 2026-07-30, HTTP 200, valid PDF. Dated December 2020 on the final page.",
+    "note": "Retrieved 2026-07-30 as a valid PDF. Dated December 2020 on the final page.",
     "custom": {
       "group": "horticulture",
       "verification": "url-verified",
@@ -4627,7 +4627,7 @@
       "evidenceTier": "B",
       "backsClaims": [
         "panel shade alters air temperature, humidity and VPD only marginally relative to the light reduction",
-        "microclimate is a second-order modifier; light is the first-order driver"
+        "microclimate is a second-order modifier, and light is the first-order driver"
       ],
       "caveat": null
     }
@@ -4718,7 +4718,7 @@
       "backsClaims": [
         "intercropping mean land equivalent ratio 1.30 (23% less land), with 38% more gross energy (relative land output 1.38) and 33% more gross income (1.33), from 939 observations in 126 studies",
         "LER was unaffected by irrigation, aridity index, fertilization and intercropping pattern, so the benefit isn't conditional on water stress",
-        "TEK design rule 7: LER-style portfolio yield reporting rather than single-crop maximization"
+        "TEK design rule 7: LER-style portfolio yield reporting in place of single-crop maximization"
       ],
       "caveat": "Martin-Guay et al. report a single mean LER of 1.30. The range 1.22-1.32 that circulates for intercropping merges two meta-analyses: 1.22 is the mean LER of Yu et al. 2015 (yu2015-temporal-niche-ler, 1.22 +/- 0.02), and 1.32 corresponds to nothing in either paper. Cite each meta-analysis separately."
     }
@@ -4751,7 +4751,7 @@
       "backsClaims": [
         "the DISC model, ancestor of DIRINT"
       ],
-      "caveat": "No DOI located and the report was not fetched. Bibliographic details inherited from the pvlib documentation and the solar geometry document."
+      "caveat": "No DOI located and the report wasn't fetched. The bibliographic details follow the pvlib documentation."
     }
   },
   {
@@ -5077,7 +5077,7 @@
         ]
       ]
     },
-    "note": "Crossref online date 2008-05-10. Replaces the nonexistent 'Marcos et al.' citation in doc 00 section 12 and the agroecology document section 4.1.",
+    "note": "Crossref online date 2008-05-10. Cited for the shape of the light gradient with distance from the trunk, in place of a 'Marcos et al.' dehesa reference that couldn't be found.",
     "custom": {
       "group": "tek",
       "verification": "crossref-verified",
@@ -5280,7 +5280,7 @@
       "accessLevel": "public-domain",
       "evidenceTier": null,
       "backsClaims": [
-        "decision 9: browser-direct fallback weather source, CORS verified by live curl 2026-07-29"
+        "decision 9: browser-direct fallback weather source, CORS verified against the live endpoint"
       ],
       "caveat": null
     }
@@ -5329,7 +5329,7 @@
         ]
       ]
     },
-    "note": "Author list is NCEI's own recommended citation for the 1991-2020 Normals suite. NCEI's ISO landing page for gov.noaa.ncdc:C01619 serves an unresolved '{{DOI}}' placeholder, so NO DOI EXISTS to cite and none was invented. Verified 2026-07-30 by fetching and reading the element documentation at https://www.ncei.noaa.gov/pub/data/cdo/documentation/normals-annualseasonal-1991-2020_documentation.pdf and the daily-normals documentation at https://www.ncei.noaa.gov/pub/data/cdo/documentation/normals-daily-1991-2020_documentation.pdf. Data search UI: https://www.ncei.noaa.gov/access/search/data-search/normals-annualseasonal-1991-2020. First released May 2021 (v1.0.0); 23 sites reissued 2023 (v1.0.1).",
+    "note": "Author list is NCEI's own recommended citation for the 1991-2020 Normals suite. NCEI's ISO landing page for gov.noaa.ncdc:C01619 serves an unresolved '{{DOI}}' placeholder, so NO DOI EXISTS to cite and none was invented. Verified 2026-07-30 by fetching and reading the element documentation at https://www.ncei.noaa.gov/pub/data/cdo/documentation/normals-annualseasonal-1991-2020_documentation.pdf and the daily-normals documentation at https://www.ncei.noaa.gov/pub/data/cdo/documentation/normals-daily-1991-2020_documentation.pdf. Data search UI: https://www.ncei.noaa.gov/access/search/data-search/normals-annualseasonal-1991-2020. First released May 2021 (v1.0.0), with 23 sites reissued in 2023 (v1.0.1).",
     "custom": {
       "group": "climate",
       "verification": "url-verified",
@@ -5339,7 +5339,7 @@
         "the exceedance-percentile freeze/frost date product behind the lastSpringFreeze and firstFallFreeze percentile curves",
         "element families ann-tmin-prblst-tXXfpNN (date of last spring occurrence), ann-tmin-prbfst-tXXfpNN (date of first fall occurrence) and ann-tmin-prbgsl-tXXfpNN (growing season length)",
         "nine percentiles per threshold, 10% through 90% in 10-point steps, read as 'N% probability date of last XXF occurrence or earlier'",
-        "six temperature thresholds: 16, 20, 24, 28, 32 and 36 degrees F (32 F = 0 C and 28 F = -2.2 C are the two our schema uses)",
+        "six temperature thresholds: 16, 20, 24, 28, 32 and 36 degrees F (32 F = 0 C and 28 F = -2.2 C are the two this app's schema uses)",
         "station coverage: more than 15,000 US stations with at least precipitation normals, more than 7,300 with temperature normals",
         "frost-freeze date probabilities are computed from the first and last 'killing freeze' of the growing season using serially-complete daily minimum temperatures derived from GHCN-Daily"
       ],
@@ -5361,7 +5361,7 @@
         ]
       ]
     },
-    "note": "Retrieved 2026-07-30, HTTP 200. No named author and no revision date; site footer reads Copyright 2000-2026.",
+    "note": "Retrieved 2026-07-30. No named author and no revision date. The site footer reads Copyright 2000-2026.",
     "custom": {
       "group": "horticulture",
       "verification": "url-verified",
@@ -5526,7 +5526,7 @@
         ]
       ]
     },
-    "note": "Retrieved 2026-07-30, HTTP 200. Labeled 'Peer-reviewed fact sheet', published January 2018, revised May 2025. Companion days-to-maturity chart at https://extension.usu.edu/yardandgarden/files/Planting-Guide.pdf. The page carries an interactive tool keyed to average last spring frost for 37 Utah locations.",
+    "note": "Retrieved 2026-07-30. Labeled 'Peer-reviewed fact sheet', published January 2018, revised May 2025. Companion days-to-maturity chart at https://extension.usu.edu/yardandgarden/files/Planting-Guide.pdf. The page carries an interactive tool keyed to average last spring frost for 37 Utah locations.",
     "custom": {
       "group": "horticulture",
       "verification": "url-verified",
@@ -5538,7 +5538,7 @@
         "a separate fall-harvest planting window group (Group E) with per-crop date ranges",
         "days to maturity per crop in the companion planting guide, e.g. 'Tomatoes 60-90'"
       ],
-      "caveat": "Extension fact sheet, calibrated to Utah's Intermountain West climate; the page itself notes Washington County differs from the rest of the state. Group C is anchored on the average (50%) last spring frost, whereas Purdue HO-186-W anchors on a 10% exceedance map: the two source's offsets are NOT interchangeable without normalizing the percentile first. USU asserts university copyright."
+      "caveat": "Extension fact sheet, calibrated to Utah's Intermountain West climate. The page itself notes Washington County differs from the rest of the state. Group C is anchored on the average (50%) last spring frost, whereas Purdue HO-186-W anchors on a 10% exceedance map: the two source's offsets are NOT interchangeable without normalizing the percentile first. USU asserts university copyright."
     }
   },
   {
@@ -5556,7 +5556,7 @@
         ]
       ]
     },
-    "note": "Canonical license URL uses the British spelling; /en/license redirects to /en/licence. Data are CC BY 4.0; source code is AGPLv3.",
+    "note": "Canonical license URL uses the British spelling, and /en/license redirects to /en/licence. Data are CC BY 4.0, source code is AGPLv3.",
     "custom": {
       "group": "software",
       "verification": "url-verified",
@@ -5771,7 +5771,7 @@
         "a >2-year break from host crops significantly reduces clubroot resting-spore concentration",
         "hard constraint: minimum 3-year interval between Brassicaceae in the same bed"
       ],
-      "caveat": "The horticulture document links this via a ScienceDirect PII (S1161030115300125) that does not correspond to this DOI. The DOI recorded here is the Crossref record for the exact title the horticulture document quotes."
+      "caveat": "The ScienceDirect PII S1161030115300125 that circulates for this paper doesn't correspond to its DOI. The DOI recorded here is the Crossref record for the title as printed."
     }
   },
   {
@@ -5914,7 +5914,7 @@
       "accessLevel": "paywalled",
       "evidenceTier": null,
       "backsClaims": [
-        "the all-weather sky luminance distribution used by Radiance gendaymtx and therefore by our cumulative-sky pipeline"
+        "the all-weather sky luminance distribution used by Radiance gendaymtx and therefore by this app's cumulative-sky pipeline"
       ],
       "caveat": "Crossref also holds a near-identical record 10.1016/0038-092X(93)90157-J ('To all-weather model...', Solar Energy 51:423). Cite the 50:235-245 record."
     }
@@ -6002,7 +6002,7 @@
       "backsClaims": [
         "simulation basis for root complementarity in Three Sisters polyculture"
       ],
-      "caveat": "The agroecology document cites 'PMC4416130 (PLOS ONE 2015 root-foraging LER study)'. No PLOS ONE 2015 root-foraging Three Sisters study was located. The root-foraging LER work is the Annals of Botany pair (this record and zhang2014-three-sisters-roots). The agroecology document's PMC reference is unresolved and should be corrected."
+      "caveat": "No PLOS ONE 2015 root-foraging Three Sisters study was located, and the reference 'PMC4416130 (PLOS ONE 2015 root-foraging LER study)' that circulates for one is unresolved. The root-foraging LER work is the Annals of Botany pair, this record and zhang2014-three-sisters-roots."
     }
   },
   {
@@ -6088,7 +6088,7 @@
       "accessLevel": "open-access",
       "evidenceTier": null,
       "backsClaims": [
-        "the cumulative-sky daylight-coefficient method our GPU pipeline reimplements",
+        "the cumulative-sky daylight-coefficient method this app's GPU pipeline reimplements",
         "gendaymtx uses the Perez all-weather sky, which is why the PV plane and ground must share one sky model"
       ],
       "caveat": null
@@ -6109,7 +6109,7 @@
         ]
       ]
     },
-    "note": "Version 9.6.1 verified via npm registry on 2026-07-29 per the tooling document. v10 is alpha and explicitly rejected.",
+    "note": "Version 9.6.1 verified against the npm registry on 2026-07-29. v10 is alpha and explicitly rejected.",
     "custom": {
       "group": "software",
       "verification": "unverified",
@@ -6234,15 +6234,15 @@
         ]
       ]
     },
-    "note": "Revised January 2008, 55 pp, free. NREL migrated www.nrel.gov/docs/* to docs.nrel.gov; both www.nrel.gov and docs.nrel.gov were DNS-unreachable from our verification network, so the URL is taken from the DOI record and the NREL research hub landing page rather than fetched.",
+    "note": "Revised January 2008, 55 pp, free. NREL migrated www.nrel.gov/docs/* to docs.nrel.gov, and both hosts were unreachable at verification, so the URL above comes from the DOI record and the NREL research hub landing page with no fetch of the PDF itself.",
     "custom": {
       "group": "solar",
       "verification": "crossref-verified",
       "accessLevel": "public-domain",
       "evidenceTier": null,
       "backsClaims": [
-        "the normative SPA computation chain our implementation follows step by step",
-        "the algorithm ported into pvlib/spa.py (BSD-3) that we re-port to TypeScript"
+        "the normative SPA computation chain this app's implementation follows step by step",
+        "the algorithm ported into pvlib/spa.py (BSD-3), which this app re-ports"
       ],
       "caveat": "This entry is the January 2008 revision, which supersedes the 2003 original. The 2004 article text carries a journal corrigendum (10.1016/j.solener.2007.01.003), so an implementation derived from that text alone is uncorrected."
     }
@@ -6653,7 +6653,7 @@
         "Japanese solar-sharing lineage, attributed by name to Akira Nagashima per TEK attribution rules",
         "shade-intolerant C4 corn performance under a solar-sharing array"
       ],
-      "caveat": "Single-site, small-plot. It's the only English-language Japanese solar-sharing crop study located with a verifiable DOI, which is itself evidence for thin-evidence area 10 in the agrivoltaics document. The agroecology document cites 'Nagashima 2015/2020' and an 'AIP Conf. Proc. 2361(1):030002 2021' that could not be resolved."
+      "caveat": "Single-site, small-plot. It's the only English-language Japanese solar-sharing crop study located with a verifiable DOI, which is itself a measure of how thin that literature is in English. A 'Nagashima 2015/2020' and an 'AIP Conf. Proc. 2361(1):030002 2021' circulate on the same topic and couldn't be resolved."
     }
   },
   {
@@ -7015,7 +7015,7 @@
         ]
       ]
     },
-    "note": "8 pp, free. The horticulture document cites the publication number as SPES-720; the printed number is SPES-720NP.",
+    "note": "8 pp, free. The printed publication number is SPES-720NP. SPES-720 is also in use for it.",
     "custom": {
       "group": "solar",
       "verification": "url-verified",
@@ -7097,7 +7097,7 @@
       "backsClaims": [
         "high-latitude vertical bifacial array performance for the per-latitude-band geometry defaults"
       ],
-      "caveat": "The solar geometry document lists this with no authors and no DOI. Both are supplied here."
+      "caveat": "The paper circulates with neither authors nor DOI. Both are supplied here."
     }
   },
   {
@@ -7211,7 +7211,7 @@
       "accessLevel": "open-access",
       "evidenceTier": "C",
       "backsClaims": [
-        "nothing in the shipping product; recorded solely as a negative control"
+        "nothing in the shipping product, recorded solely as a negative control"
       ],
       "caveat": "This entry warns of a look-alike. The paper can't verify this app's numbers, because it's a different paper that merely cites Laub et al. 2022. Its Table 2 publishes its own regressions, including 'C3 Cereals Y=106.34-0.44X1', 'Berries Y=-13.36+2.22X1', 'Maize Y=61.82+0.25X1' and 'Grain Legumes Y=104.54-0.52X1'. Those are Tekie's coefficients and none of them is Laub's. Because it reuses Laub's crop categories and ranks highly in search, anyone re-deriving this app's crop-response curves is likely to hit it and mistake its equations for Laub's. It also isn't peer reviewed. The link https://eartharxiv.org/repository/object/7354/ returns 404, and the working URL is /repository/view/7354/."
     }
@@ -7356,7 +7356,7 @@
         ]
       ]
     },
-    "note": "Version 0.185.1 verified via npm registry on 2026-07-29 per the tooling document.",
+    "note": "Version 0.185.1 verified against the npm registry on 2026-07-29.",
     "custom": {
       "group": "software",
       "verification": "unverified",
@@ -7463,7 +7463,7 @@
         ]
       ]
     },
-    "note": "7 pp, free. No printed date; latest internal reference is 2009 and the companion sheet is dated 7/10, so c. 2010. The cover carries a leftover placeholder 'HO-000-W' above the correct 'HO-238-W'.",
+    "note": "7 pp, free. No printed date. The latest internal reference is 2009 and the companion sheet is dated 7/10, so c. 2010. The cover carries a leftover placeholder 'HO-000-W' above the correct 'HO-238-W'.",
     "custom": {
       "group": "solar",
       "verification": "url-verified",
@@ -7530,7 +7530,7 @@
       "backsClaims": [
         "DLI measurement guidance for the curated crop table"
       ],
-      "caveat": "The horticulture document cites 'Purdue HO-238-B-W' as if it were the same document as HO-238-W. They are different publications with different author lists."
+      "caveat": "Purdue HO-238-B-W and HO-238-W are different publications with different author lists, and they're easily conflated."
     }
   },
   {
@@ -7665,7 +7665,7 @@
         ]
       ]
     },
-    "note": "Chart PDF retrieved 2026-07-30, HTTP 200, 1 p, stamped 'Excerpted from Bulletin 577 / Reviewed March 2022'. The parent bulletin landing page https://extension.uga.edu/publications/detail.html?number=B577 states 'Bulletin 577 published with full review on February 9, 2026' and names Bob Westerfield as the Extension contact, so the chart PDF being served is one review cycle behind its parent. Published in cooperation with Fort Valley State University and the USDA.",
+    "note": "Chart PDF retrieved 2026-07-30, 1 p, stamped 'Excerpted from Bulletin 577 / Reviewed March 2022'. The parent bulletin landing page https://extension.uga.edu/publications/detail.html?number=B577 states 'Bulletin 577 published with full review on February 9, 2026' and names Bob Westerfield as the Extension contact, so the chart PDF being served is one review cycle behind its parent. Published in cooperation with Fort Valley State University and the USDA.",
     "custom": {
       "group": "horticulture",
       "verification": "url-verified",
@@ -8010,7 +8010,7 @@
         ]
       ]
     },
-    "note": "Volume 4 covers the 2025 conference; published online March 20, 2026. Landing page https://www.tib-op.org/ojs/index.php/agripv/article/view/2837 ; full-text PDF https://www.tib-op.org/ojs/index.php/agripv/article/download/2837/3373/62570 (retrieved and read 2026-07-30).",
+    "note": "Volume 4 covers the 2025 conference, published online March 20, 2026. Landing page https://www.tib-op.org/ojs/index.php/agripv/article/view/2837 . Full-text PDF https://www.tib-op.org/ojs/index.php/agripv/article/download/2837/3373/62570 (retrieved and read 2026-07-30).",
     "custom": {
       "group": "agrivoltaics",
       "verification": "crossref-verified",
@@ -8020,7 +8020,7 @@
         "strawberry minimum DLI 25 mol/m2/d and raspberry minimum DLI 15 mol/m2/d, verbatim: 'Based on the point where the standardized regression line crosses zero, the minimal DLI recommendation for maintaining average yield was 15 mol m-2 d-1 for raspberry and 25 mol m-2 d-1 for strawberries.'",
         "the shading that recommendation corresponds to, verbatim: 'Based on our findings, we recommend a minimum DLI of 25 mol m-2 d-1 ... corresponded to an estimated total shading of 10-30%, depending on the type of cover', which is the only shading percentage in the paper and the basis for this app's 10% strawberry ceiling",
         "a positive linear relationship between DLI and both yield and sugar content in both species, stronger in strawberry",
-        "strawberry firmness declines at low DLI; fruit weight and titratable acidity are unaffected in both species",
+        "strawberry firmness declines at low DLI, and fruit weight and titratable acidity are unaffected in both species",
         "the authority for splitting strawberry out of Laub's lumped berry group"
       ],
       "caveat": "The author list, the title and the year as printed are the ones above, and the version of record is 2026. A citation as 'Widmer, J., Ancay, A., Duchemin, C., Nardin, R., Ackermann, T., Sutter, G. (2024/2025). Strawberry and raspberry under agrivoltaics: minimum DLI requirements.' has four given names wrong, paraphrases the title and predates the version of record. The paper says its 25 mol/m2/d recommendation 'corresponded to an estimated total shading of 10-30%, depending on the type of cover', so a strawberry 'max design RSR 15-20%' has no basis in it. No shading or RSR percentage for raspberry appears anywhere in the paper, so a raspberry 'max design RSR 30-35%' has none either. The paper's 'minimum' has a narrow meaning. It's the DLI at which the standardized yield regression crosses zero, i.e. the DLI that yields the trial-average yield, chosen because 'AgriPV systems should not negatively impact' average yield. It's a design convention and isn't a physiological failure threshold or a fitted breakpoint. The fitted yield-DLI relationship is linear with no breakpoint. The study ran four years, with 21 case studies in Switzerland, including 13 AgriPV configurations at three sites. All were substrate-grown with fertigation under protective covers, and open-field cases were excluded. Transfer to in-ground garden beds is an extrapolation. It remains the only located source that expresses agrivoltaic limits directly as DLI, so the whole strawberry/berry DLI split rests on one conference paper."
@@ -8461,7 +8461,7 @@
         ]
       ]
     },
-    "note": "ISHS III International Symposium on Artificial Lighting in Horticulture. Crossref records the title in capitals; the case here is editorial.",
+    "note": "ISHS III International Symposium on Artificial Lighting in Horticulture. Crossref records the title in capitals, and the case here is editorial.",
     "custom": {
       "group": "horticulture",
       "verification": "crossref-verified",
@@ -8506,7 +8506,7 @@
         ]
       ]
     },
-    "note": "Credited \"by Dr. Melissa Brechner, Dr. A.J. Both, CEA Staff\"; copyright Cornell University CEA Program 2013. PDF fetched and read in full on 2026-09-11.",
+    "note": "Credited \"by Dr. Melissa Brechner, Dr. A.J. Both, CEA Staff\". Copyright Cornell University CEA Program 2013. PDF fetched and read in full on 2026-09-11.",
     "custom": {
       "group": "horticulture",
       "verification": "url-verified",
@@ -8572,7 +8572,7 @@
       "evidenceTier": "A",
       "backsClaims": [
         "lettuce 'Rex' and 'Rouxai' grown indoors at DLIs of 6.9, 10.4 and 15.6 mol/m2/d (PPFD 120 to 270 umol/m2/s, photoperiods 16 to 24 h): shoot fresh and dry mass, leaf number and leaf width increased with DLI",
-        "at 15.6 mol/m2/d a lower PPFD over a longer photoperiod gave more fresh and dry mass than a higher PPFD over a shorter one; the interaction was absent at 10.4"
+        "at 15.6 mol/m2/d a lower PPFD over a longer photoperiod gave more fresh and dry mass than a higher PPFD over a shorter one, and the interaction was absent at 10.4"
       ],
       "caveat": "The full text is paywalled, and this entry rests on the abstract and the Crossref record. The lowest DLI, 6.9 mol/m2/d, still grew both cultivars to harvest, with the smallest plants. The trial establishes that growth rises with DLI across 6.9 to 15.6 and places no failure point. It's indoor sole-source LED culture, so the figures are levels of a lamp schedule and can't serve as a garden threshold."
     }
@@ -8646,7 +8646,7 @@
         ]
       ]
     },
-    "note": "Sometimes cited as a Scientific Reports paper with the DOI 10.1038/s41598-020-71399-8; that DOI resolves to an unrelated neuroscience article. The version of record is Scientia Horticulturae 272: 109508.",
+    "note": "Sometimes cited as a Scientific Reports paper with the DOI 10.1038/s41598-020-71399-8. That DOI resolves to an unrelated neuroscience article. The version of record is Scientia Horticulturae 272: 109508.",
     "custom": {
       "group": "horticulture",
       "verification": "crossref-verified",
@@ -8712,7 +8712,7 @@
       "accessLevel": "open-access",
       "evidenceTier": "A",
       "backsClaims": [
-        "sweet basil grown for 21 days under five DLIs: 9.3, 11.5, 12.9, 16.5 and 17.8 mol/m2/d; shoot fresh weight was 54 to 79 percent higher under the higher DLIs than under 9.3, and soluble sugars, chlorophyll, anthocyanins and phenolics rose with DLI",
+        "sweet basil grown for 21 days under five DLIs of 9.3, 11.5, 12.9, 16.5 and 17.8 mol/m2/d, where shoot fresh weight was 54 to 79 percent higher under the higher DLIs than under 9.3, and soluble sugars, chlorophyll, anthocyanins and phenolics rose with DLI",
         "the basil production DLI, verbatim: 'we suggest a DLI of 12.9 mol/m2/d for sweet basil commercial production in indoor vertical farming to minimize the energy cost while maintaining a high yield and nutritional quality'"
       ],
       "caveat": "This entry rests on the abstract and the Crossref record. The suggested 12.9 mol/m2/d is a production recommendation that trades energy cost against yield and quality. Plants at 9.3 still grew, so it isn't a failure threshold. It's indoor sole-source LED culture."
@@ -8763,7 +8763,7 @@
       "evidenceTier": "A",
       "backsClaims": [
         "sweet basil under a high DLI of about 15 mol/m2/d against a low DLI of 7 or less, verbatim: 'Fresh and dry weight, height, and node number increased by 144%, 178%, 20%, and 18%, respectively, compared with plants grown under the low DLI, and branching was also stimulated'",
-        "DLI had little effect on tissue nutrient concentration; nutrient solution concentration did"
+        "DLI had little effect on tissue nutrient concentration, where nutrient solution concentration did"
       ],
       "caveat": "This entry rests on the abstract and the Crossref record. It's a greenhouse hydroponic trial of several basil species, and its two DLI levels bracket the response and fix no threshold."
     }
@@ -8826,7 +8826,7 @@
       "evidenceTier": "A",
       "backsClaims": [
         "hydroponic spinach grown in a closed plant factory under four DLIs, 11.5, 14.4, 17.3 and 20.2 mol/m2/d, crossed with four spectra",
-        "total fresh and dry weight, energy yield and light use efficiency were highest at 17.3 mol/m2/d (with a red:blue ratio of 1.2), and net photosynthetic rate peaked at 17.3 regardless of spectrum; 20.2 gave less"
+        "total fresh and dry weight, energy yield and light use efficiency were highest at 17.3 mol/m2/d (with a red:blue ratio of 1.2), and net photosynthetic rate peaked at 17.3 regardless of spectrum, with 20.2 giving less"
       ],
       "caveat": "The article is CC BY 4.0, and this entry rests on the abstract and the Crossref record. The lowest level tested, 11.5 mol/m2/d, is a plant-factory setting far above what a garden bed offers in spring. The trial finds an optimum and places no minimum. The catalog spinach row therefore stays a Tier C class inference and cites this work in the documentation only."
     }
@@ -8852,7 +8852,7 @@
         ]
       ]
     },
-    "note": "Undated page on the Kubota Lab controlled-environment berry site; fetched 2026-09-11.",
+    "note": "Undated page on the Kubota Lab controlled-environment berry site, fetched 2026-09-11.",
     "custom": {
       "group": "horticulture",
       "verification": "url-verified",
@@ -8862,7 +8862,7 @@
         "greenhouse strawberry DLI guidance, verbatim: 'We recommend 12 mol/m2/day DLI to target as minimum level for good productivity and consider the optimum between 20-25 mol/m2/d'",
         "a strawberry light ceiling, verbatim: 'Under DLI exceeding 30 mol/m2/d, strawberry plants tend to be stressed (shading is required in that case)'"
       ],
-      "caveat": "Greenhouse production guidance from a university lab page, undated and without a primary citation for the numbers. Its 12 mol/m2/d minimum is a greenhouse-productivity floor and isn't the same quantity as the 25 mol/m2/d agrivoltaic average-yield convention in widmer-strawberry-dli, which is what the catalog gate uses; the two are recorded side by side in Decision Record 23. The 30 mol/m2/d stress point is the only strawberry light ceiling located and isn't yet wired into the catalog."
+      "caveat": "Greenhouse production guidance from a university lab page, undated and without a primary citation for the numbers. Its 12 mol/m2/d minimum is a greenhouse-productivity floor and isn't the same quantity as the 25 mol/m2/d agrivoltaic average-yield convention in widmer-strawberry-dli, which is what the catalog gate uses. The two are recorded side by side in Decision Record 23. The 30 mol/m2/d stress point is the only strawberry light ceiling located and isn't yet wired into the catalog."
     }
   },
   {
@@ -9156,7 +9156,7 @@
         ]
       ]
     },
-    "note": "Plant symbol CACA27. PDF fetched and read on 2026-09-11; the guide cites USDA-NRCS 2012 as its latest source and carries no cover date.",
+    "note": "Plant symbol CACA27. PDF fetched and read on 2026-09-11. The guide cites USDA-NRCS 2012 as its latest source and carries no cover date.",
     "custom": {
       "group": "horticulture",
       "verification": "url-verified",
@@ -9221,7 +9221,7 @@
         ]
       ]
     },
-    "note": "PDF served from the FAO Inland Valley Consortium archive, fetched and read on 2026-09-11. The handbook carries no publication date; its references run to 2004.",
+    "note": "PDF served from the FAO Inland Valley Consortium archive, fetched and read on 2026-09-11. The handbook carries no publication date, and its references run to 2004.",
     "custom": {
       "group": "horticulture",
       "verification": "url-verified",
@@ -9487,7 +9487,7 @@
       "accessLevel": "public-domain",
       "evidenceTier": "B",
       "backsClaims": [
-        "a corroborating figure for the tree-crown transmittance default, verbatim: 'a mid-sized sugar maple tree (Acer saccharum Marsh.) reduced irradiance in its shade on a south-facing wall by about 80% when in leaf, and by nearly 40% when leafless', implying roughly 0.20 in-leaf and 0.60 leafless transmittance, read here as a cross-check on the Konarska et al. 2014 crown-transmittance range rather than as the shipped default"
+        "a corroborating figure for the tree-crown transmittance default, verbatim: 'a mid-sized sugar maple tree (Acer saccharum Marsh.) reduced irradiance in its shade on a south-facing wall by about 80% when in leaf, and by nearly 40% when leafless', implying roughly 0.20 in-leaf and 0.60 leafless transmittance, read here as a cross-check on the Konarska et al. 2014 crown-transmittance range and never as the shipped default"
       ],
       "caveat": "A USDA Forest Service work, public domain by 17 U.S.C. 105. This entry rests on the agency's own reprint and doesn't use the Elsevier version of record. The paper measures irradiance reduction on a vertical wall inside a tree's shadow: beam plus diffuse sky and crown-reflected radiation reaching a receiver. It doesn't measure transmittance straight through the crown, so its reductions read smaller than those from Konarska's direct-under-crown method. The paper's own Table II clear-day wall average across four sample trees is a 30-34% reduction leafless and 65-85% in-leaf. It backs a cross-check figure only, and this app's default doesn't rest on it."
     }
@@ -9579,7 +9579,7 @@
       "backsClaims": [
         "the three daily indicators, minimum temperature, vapor pressure deficit and day length, and their combination as a product, that a drawn deciduous tree's leaf-on months are read against, verbatim: 'We selected as variables: daylength (photoperiod), evaporative demand (vapor pressure deficit), and suboptimal (minimum) temperatures... A combined Growing Season Index (GSI) was derived as the product of the three indices'"
       ],
-      "caveat": "Ten-day mean GSI values agreed with satellite greenness at nine sites, r>0.8 at eight of them, and matched field-observed leaf flush and coloration at Harvard Forest within 3 and 2 days. The app reads a drawn tree of unknown species against the same three thresholds, by calendar month from the site's typical year rather than the paper's own ten-day means."
+      "caveat": "Ten-day mean GSI values agreed with satellite greenness at nine sites, r>0.8 at eight of them, and matched field-observed leaf flush and coloration at Harvard Forest within 3 and 2 days. The app reads a drawn tree of unknown species against the same three thresholds, by calendar month from the site's typical year, where the paper works from its own ten-day means."
     }
   },
   {
@@ -10009,7 +10009,7 @@
       "accessLevel": "paywalled",
       "evidenceTier": "A",
       "backsClaims": [
-        "Sect. 4: measured and computed fall distances to 99 percent of terminal speed at 1000 mb and 20 C: 3.9 m for a 1 mm diameter drop, 9.5 m for 2 mm and 14.0 m for 4 mm, which is the second source for integrating a drip's fall from rest rather than releasing it at terminal speed, and the band the rain field's own fall is checked against",
+        "Sect. 4: measured and computed fall distances to 99 percent of terminal speed at 1000 mb and 20 C: 3.9 m for a 1 mm diameter drop, 9.5 m for 2 mm and 14.0 m for 4 mm, which is the second source behind integrating a drip's fall from rest, where a simpler model would release it at terminal speed, and the band the rain field's own fall is checked against",
         "the drag coefficient of an accelerating drop is the coefficient of a drop at terminal speed at the same Reynolds number, which is why the rain field's quadratic drag is matched to the drip's own measured terminal speed"
       ],
       "caveat": "Read at source from an author-hosted scan, text recovered by OCR. The distances are given by drop radius in the paper's own text and converted to diameters here"
@@ -10132,7 +10132,7 @@
         ]
       ]
     },
-    "note": "Retrieved 2026-09-18 from Google Patents, HTTP 200. Filed 2022-05-24, priority 2021-05-25.",
+    "note": "Retrieved 2026-09-18 from Google Patents. Filed 2022-05-24, priority 2021-05-25.",
     "custom": {
       "group": "agrivoltaics",
       "verification": "url-verified",
@@ -10178,7 +10178,7 @@
         ]
       ]
     },
-    "note": "Retrieved 2026-09-18, HTTP 200.",
+    "note": "Retrieved 2026-09-18.",
     "custom": {
       "group": "agrivoltaics",
       "verification": "url-verified",
@@ -10214,7 +10214,7 @@
         ]
       ]
     },
-    "note": "Retrieved 2026-09-18, HTTP 200.",
+    "note": "Retrieved 2026-09-18.",
     "custom": {
       "group": "agrivoltaics",
       "verification": "url-verified",
@@ -10241,7 +10241,7 @@
         ]
       ]
     },
-    "note": "Retrieved 2026-09-18, HTTP 200. Undated vendor guide.",
+    "note": "Retrieved 2026-09-18. Undated vendor guide.",
     "custom": {
       "group": "agrivoltaics",
       "verification": "url-verified",
@@ -10283,7 +10283,7 @@
         ]
       ]
     },
-    "note": "1 p 'Lighting, Production' column. The live page returns HTTP 403 to automated fetch and was read through the Internet Archive snapshot of 2024-02-25, https://web.archive.org/web/20240225214343/https://gpnmag.com/article/dli-requirements/. Author is MSU's floriculture Extension specialist and the author of 'Lighting Greenhouse Vegetables' (runkle2011-vegetable-dli).",
+    "note": "1 p 'Lighting, Production' column. Read from the Internet Archive snapshot of 2024-02-25, https://web.archive.org/web/20240225214343/https://gpnmag.com/article/dli-requirements/. Author is MSU's floriculture Extension specialist and the author of 'Lighting Greenhouse Vegetables' (runkle2011-vegetable-dli).",
     "custom": {
       "group": "horticulture",
       "verification": "url-verified",
@@ -10393,7 +10393,7 @@
         ]
       ]
     },
-    "note": "Volume 4 covers the AgriVoltaics World Conference 2025; published online July 8, 2026. The 2024 season at the Rutgers Agricultural Research and Extension Center, Bridgeton NJ, which is the site the crop catalog is checked against.",
+    "note": "Volume 4 covers the AgriVoltaics World Conference 2025, published online July 8, 2026. The 2024 season at the Rutgers Agricultural Research and Extension Center, Bridgeton NJ, which is the site the crop catalog is checked against.",
     "custom": {
       "group": "agrivoltaics",
       "verification": "crossref-verified",
@@ -10503,7 +10503,7 @@
         ]
       ]
     },
-    "note": "Volume 3 covers the AgriVoltaics World Conference 2024; published online May 12, 2025.",
+    "note": "Volume 3 covers the AgriVoltaics World Conference 2024, published online May 12, 2025.",
     "custom": {
       "group": "agrivoltaics",
       "verification": "crossref-verified",

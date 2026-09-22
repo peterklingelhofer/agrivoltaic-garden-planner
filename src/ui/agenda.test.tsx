@@ -41,8 +41,8 @@ const JUNE_21 = Date.UTC(2024, 5, 21, 16, 0, 0)
 const seed = async (ids: readonly string[], site: Site = siteFixture()): Promise<void> => {
   const crops = await Promise.all(ids.map(need))
   const bed: Bed = bedFixture('bed-a', { areaM2: 200 as SquareMeters })
-  // matches the site's own light rather than Amherst's, so a site override (Pune, say) gets
-  // dates computed against its own DLI rather than a mismatched default
+  // matches the site's own light. Not Amherst's: a site override (Pune, say) gets
+  // dates computed against its own DLI. Never a mismatched default
   const light = bedLightFixture('bed-a', 0, 36, site.normals.monthlyMeanDliMolM2Day)
   const calendars = [bedCalendar(site, light, crops, 20)]
   const plantings = crops.flatMap((crop) => {

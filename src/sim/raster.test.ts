@@ -116,7 +116,7 @@ describe('DLI raster assembly', () => {
     expect(
       at(white.annualUnderArrayMolM2Day, 0) / at(base.annualUnderArrayMolM2Day, 0),
     ).toBeCloseTo(gain, 6)
-    // 3-8% for a white backsheet over grass, per the solar geometry document section 7.3
+    // 3-8% for a white backsheet over grass
     expect(gain).toBeGreaterThan(1.03)
     expect(gain).toBeLessThan(1.08)
     expect(white.quality.interreflectionApplied).toBe(true)

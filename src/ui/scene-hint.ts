@@ -3,13 +3,11 @@ import type { EditorMode } from '../state/slices'
 /**
  * What each drawing mode is waiting for, and the gestures that end it.
  *
- * Naming the finishing gesture is the whole point. A usability pass drew four corners of a bed
- * and then had nowhere to go: pressing Enter did nothing, double-clicking did nothing, and the
- * only way to turn the corners into a bed was a button called "Close polygon" sitting inside a
- * collapsed accordion in the sidebar. All three of these are true now, and said on the surface
- * the drawing is happening on rather than in a panel the drawer isn't looking at.
+ * Naming the finishing gesture is the whole point. Enter and a double-click on the last corner both
+ * close a shape, and Esc starts over, all said on the surface the drawing is happening on, where
+ * the drawer is already looking.
  *
- * Kept beside the component rather than in it for the reason `cold-open.ts` is: what a surface
+ * Kept beside the component, in its own module, for the reason `cold-open.ts` is: what a surface
  * says can be read, and tested, without a store or a canvas behind it
  */
 export type DrawMode = Exclude<EditorMode, 'select' | 'move'>
@@ -22,7 +20,7 @@ export const DRAW_HINT: Readonly<Record<DrawMode, string>> = {
 }
 
 /**
- * The same, for a finger. "Double-click... press Enter... Esc" is the desktop hint, on a screen
+ * The same, for a finger. The desktop hint reads "Double-click... press Enter... Esc" on a screen
  * with no mouse and no keys. The gestures here are the ones a touch screen has, and the two
  * presses beside the hint are what close and abandon a shape whatever the pointer
  */

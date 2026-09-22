@@ -5,8 +5,7 @@
 //! could only approximate. `TrackerConfig` there is a discriminated union of four interfaces with
 //! partly-overlapping fields, and reading `tracker.axisTiltDeg` requires the compiler to have
 //! narrowed the union first. Here it is an `enum` with the fields inside the variants, so a
-//! rotation rule can't read an axis tilt off a fixed-tilt array at all. That's the argument in
-//! `the port document` section 5 made concrete rather than asserted
+//! rotation rule can't read an axis tilt off a fixed-tilt array at all
 
 use crate::geom::{Extent2D, GridSpec, Vec2M, Vec3M};
 use crate::math::{clamp, cos_deg, normalize_degrees, sin_deg, RAD_TO_DEG};
@@ -20,8 +19,8 @@ pub enum Tracker {
     },
     /// Both `single-axis-horizontal-ns` and `single-axis-tilted`. They differ only in the
     /// reference tilt, which is the axis tilt for the tilted one and zero for the horizontal one,
-    /// so `horizontal_ns` carries that one distinction rather than a second variant that would
-    /// duplicate every field
+    /// so `horizontal_ns` carries that one distinction alone. No second variant duplicates every
+    /// field
     SingleAxis {
         horizontal_ns: bool,
         axis_tilt_deg: f64,
@@ -238,8 +237,9 @@ pub fn tracker_rotation_deg(
 
 /// Backtracking: rotate back until the row no longer shades the one behind it.
 ///
-/// The solar geometry document section 3.2 writes `cos(psi)`. That's a slip in the doc; `sin(psi)` is the
-/// algebraically correct form and is what both implementations use
+/// The shade-free criterion takes `sin(psi)`: deriving it from the shadow-width expression gives
+/// `sin(psi)`, which matches pvlib's `cos(tracker rotation)`, and a `cos(psi)` form fails both
+/// checks
 pub fn backtrack_rotation_deg(
     true_rotation_deg: f64,
     pitch_m: f64,
@@ -252,8 +252,8 @@ pub fn backtrack_rotation_deg(
         1.0,
     )
     .acos();
-    // Math.sign, which is 0 at 0 rather than 1; f64::signum is 1.0 at +0.0 and would rotate a
-    // level tracker by the whole correction
+    // Math.sign is 0 at 0. f64::signum is 1.0 at +0.0 instead, and would rotate a level tracker
+    // by the whole correction
     let sign = if true_rotation_deg > 0.0 {
         1.0
     } else if true_rotation_deg < 0.0 {
@@ -284,13 +284,9 @@ pub fn panel_snapshot(
         // direction, which modules are laid end to end along, and `u` is the across-row
         // direction, which the rows step along one pitch at a time.
         //
-        // These two were exchanged until 2026-09-01, in this file and in `src/sim/geometry.ts`
-        // together, which is why the parity test between them never noticed: it holds the two
-        // implementations to EACH OTHER and both carried it. The pose it produced left every
-        // panel edge on to the direction its own row stepped, so a tilted array had zero width
-        // across its pitch and its rows stood shoulder to shoulder rather than behind one
-        // another. Rows like that shade almost nothing, and the bake reported about 23% more
-        // light under an array than reaches it
+        // Getting the two swapped collapses a tilted array's width across its pitch and lines its
+        // rows up shoulder to shoulder. The parity test only checks this file against
+        // `src/sim/geometry.ts`, so a swap made in both files passes it
         let ax = sin_deg(g.row_azimuth_deg);
         let ay = cos_deg(g.row_azimuth_deg);
         let ux = cos_deg(g.row_azimuth_deg);

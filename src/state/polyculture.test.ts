@@ -179,9 +179,9 @@ describe('refusing to run beats running on invented inputs', () => {
   })
 
   /**
-   * With no panels there is no electricity, and the term is a zero band rather than a missing
-   * one: the search's own no-array control scores on the same, and a garden with no panels is
-   * still a garden that can be planted
+   * With no panels there is no electricity, and the term is a zero band: the search's own
+   * no-array control scores on the same, and a garden with no panels is still a garden that can
+   * be planted
    */
   it('scores a plot with no panels on a zero electricity term rather than refusing', () => {
     useAppStore.setState({ energy: { status: 'idle' } })

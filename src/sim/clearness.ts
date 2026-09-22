@@ -1,5 +1,5 @@
 /**
- * How cloudy an hour was, read off the record rather than invented.
+ * How cloudy an hour was, read off the record.
  *
  * The clearness index is the measured global horizontal irradiance over the extraterrestrial
  * irradiance on the same horizontal plane (Liu and Jordan 1960): 1 would be no atmosphere at

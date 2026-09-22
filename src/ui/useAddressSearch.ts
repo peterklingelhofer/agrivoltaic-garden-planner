@@ -33,18 +33,18 @@ export const useAddressSearch = (inputRef: RefObject<HTMLInputElement | null>): 
   const [activeIndex, setActiveIndex] = useState(0)
   const lastRequest = useRef(0)
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
-  // the place the garden is at, so a name shared by seven towns lists the near one first: a
-  // child in Amherst, Massachusetts was handed the list of every Amherst in the country and
-  // built a garden in Virginia
+  // the place the garden is at, so a name shared by seven towns lists the near one first:
+  // without it, a common town name lists every match nationwide in no useful order, and the
+  // wrong one is an easy pick
   const near = useAppStore((s) => (s.site.status === 'ready' ? s.site.value.location : null))
 
   useEffect(() => () => (timer.current ? clearTimeout(timer.current) : undefined), [])
 
   const search = useCallback((): void => {
-    // Pressing Enter on one or two letters is a natural first gesture, not a mistake, and it
-    // used to return here in silence: no hits, no error, nothing distinguishing it from a
-    // search that legitimately found nothing. Routed through the same `error` channel every
-    // other failure here uses, rather than a field of its own for this one case
+    // Pressing Enter on one or two letters is a natural first gesture, and returning here in
+    // silence, with no hits and no error, would look like a search that legitimately found nothing.
+    // Routed through the same `error` channel every other failure here uses, with no field of its
+    // own for this one case
     if (query.trim().length < MIN_QUERY_LENGTH) {
       setError('Type at least three letters to search')
       return

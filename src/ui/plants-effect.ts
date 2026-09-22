@@ -12,7 +12,7 @@ export const CHOICES_EFFECT_TOP_N = 8
 
 /**
  * What a wildlife switch or a like, must-have or never pick changed on a bed's own ranking, said
- * once the change has landed rather than left for a visitor to notice by comparing two screens.
+ * once the change has landed, without leaving it for a visitor to notice by comparing two screens.
  *
  * `cause` is already the sentence's own opening clause ("Flowers for bees on", "Prefer tomato"),
  * computed from whichever input actually changed; this only ever compares the two id lists it

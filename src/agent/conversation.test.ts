@@ -11,11 +11,10 @@ describe('what to ask next', () => {
   })
 
   /**
-   * The session that made this necessary. A visitor opened with "I want to grow some vegetables",
-   * which is a perfectly good answer to the question about ambition, and the agent replied by
-   * asking whether the beds should lean toward native planting -- having never established where
-   * the garden was or how big it is. They typed "Amherst, Massachusetts" into a question about
-   * natives and were told it didn't follow
+   * A visitor says "I want to grow some vegetables", a perfectly good answer to the question about
+   * ambition, and an agent asking in table order replies by asking whether the beds should lean
+   * toward native planting, having never established where the garden is or how big it is.
+   * "Amherst, Massachusetts" typed into a question about natives is then told it didn't follow
    */
   it('asks for what is still missing, not for whatever follows in the table', () => {
     expect(nextQuestion(answered('growing'))).toBe('location')

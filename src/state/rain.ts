@@ -9,7 +9,7 @@ let lastField: RainField | null = null
 
 /**
  * The plot's rain field, cached on the identity of the last (plot, weather) pair so the ground
- * overlay, its legend, the water balance and the bed panel share one computation instead of
+ * overlay, its legend, the water balance and the bed panel share one computation, without
  * walking the same panel geometry four times over in a single render
  */
 export const rainFieldOf = (

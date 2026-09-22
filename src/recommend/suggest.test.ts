@@ -424,11 +424,10 @@ describe('an inference never passes for a measurement', () => {
    * fails: no measured figure says that either. What it refuses to do is present the survivor as
    * the equal of the numbers it outlived
    *
-   * The band used to be 72 percent and the survivor used to be ramps, which is no longer
-   * admissible at Phoenix at any shade: the climate gate now judges a perennial on the July it
-   * stands through rather than on its March-to-May window alone, so a woodland ephemeral is ruled
-   * out of a desert bed on temperature before light is ever consulted. That's the outcome
-   * `dli.ts` promises the user on screen; this test's subject was always the inference, not ramps
+   * Ramps, whose shade ceiling is past 0.6, aren't admissible at Phoenix at any shade: the climate
+   * gate judges a perennial on the July it stands through as well as its March-to-May window, so a
+   * woodland ephemeral is ruled out of a desert bed on temperature before light is ever consulted.
+   * That's the outcome `dli.ts` promises the user on screen. This test's subject is the inference
    */
   it('names the inference a deep shade band rests on, and the figures it overrode', () => {
     const { set } = atPhoenix(0.55)
@@ -437,7 +436,7 @@ describe('an inference never passes for a measurement', () => {
     if (best === undefined) return
     expect(best.cropIds).toContain('claytonia' as CropId)
     // the crops are in the order the combination was built in, so the admission is found by
-    // name rather than taken as the first
+    // matching its name
     const admission = best.confidence.inferredLightAdmissions.find(
       (entry) => entry.cropId === ('claytonia' as CropId),
     )

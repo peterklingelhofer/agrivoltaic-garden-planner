@@ -25,21 +25,17 @@ import {
  * The project runs on SwiftShader for a software rasterizer that is stable across
  * machines. Two determinism rules, both learned by leaving this red:
  *
- * A. a snapshot may not contain a model output. The overlay legend snapshot used to be
- *    the whole `figure`, which prints the raster's minimum, midpoint and MAXIMUM DLI.
- *    That maximum was 39.43 mol/m2/d on one bake and different on the next, so the image
- *    changed with no product change: the snapshot was pinning exactly the kind of
- *    absolute DLI value the rest of this suite is forbidden to assert. It's now the
- *    `.legend-ramp` gradient alone, which is the part carrying meaning no attribute
- *    carries; the numbers are asserted from `data-min` and `data-max`, where a number
- *    belongs.
- * B. a snapshot's BOX may not be content-derived. `.cal-legend` is a wrapping flex row
- *    whose height is a sum of line boxes: it measured 36 device pixels when the baseline
- *    was recorded and 37 afterward, and a one pixel size difference is a hard mismatch
- *    that no `maxDiffPixelRatio` can absorb. The month axis was a fourth snapshot and was
- *    dropped for exactly this. Rather than drop a second one, `pinned` fixes the
- *    element's own box before the shot, so the wrap is decided at a known width and the
- *    image is the same size on every run and every machine
+ * A. a snapshot may not contain a model output. The overlay legend's whole `figure` prints the
+ * raster's minimum, midpoint and MAXIMUM DLI, and that maximum differs from one bake to the next,
+ * so a snapshot of it would change with no product change and pin exactly the kind of absolute DLI
+ * value the rest of this suite is forbidden to assert. The snapshot is the `.legend-ramp` gradient
+ * alone, which is the part carrying meaning no attribute carries, and the numbers are asserted from
+ * `data-min` and `data-max`, where a number belongs. B. a snapshot's BOX may not be
+ * content-derived. `.cal-legend` is a wrapping flex row whose height is a sum of line boxes, which
+ * can differ by a device pixel from one run to the next, and a one pixel size difference is a hard
+ * mismatch that no `maxDiffPixelRatio` can absorb. `pinned` fixes the element's own box before the
+ * shot, so the wrap is decided at a known width and the image is the same size on every run and
+ * every machine
  */
 
 interface Box {
@@ -54,7 +50,7 @@ interface Box {
  * The agenda sits above the calendar legend on the same step and settles a moment after the step
  * opens, so the legend is still traveling up the column while everything a spec would normally
  * wait for is already true. `pinned` below fixes an element's SIZE and can do nothing about its
- * position. Two consecutive equal boxes, rather than a timeout, so it costs one frame when the
+ * position. Two consecutive equal boxes decide it, so it costs one frame when the
  * page is already still
  */
 const stillFor = async (target: Locator): Promise<void> => {
@@ -89,7 +85,7 @@ const pinned = async (target: Locator, box: Box): Promise<void> => {
      * with `position: fixed` lands it over the app header, and both have a transparent
      * background, so the header's title and buttons print straight through the swatches: a
      * baseline recorded that way is a picture of two things at once. It also captures a 340x14
-     * element as exactly 14 px rather than the 15 px the recorded fractional offset produces,
+     * element as exactly 14 px, against the 15 px the recorded fractional offset produces,
      * so it can't be adopted without re-recording. Settle the layout instead
      */
   }, box)
@@ -105,20 +101,16 @@ const LEGEND_BOX: Box = { width: 340, height: 44 }
 const RAMP_BOX: Box = { width: 340, height: 14 }
 
 /**
- * Both legends used to sit low in a scrolling sidebar, under lists that keep growing after the
- * thing each test waited for is already done, and a screenshot of an element that is still
- * moving fails on stability rather than on any pixel. The overlay legend is pinned over the
- * canvas now rather than filed in the sidebar, which took it out of that flow entirely, but the
- * calendar legend is still one panel among several on the Calendar step, and the crop picker
- * that used to sit above it in `panel-bed` now lives behind a fold on the plants step and
- * can't move it; these two waits are kept anyway, as the settle conditions for the async
- * loads the automatic ranking kicks off, which neither `status-simulation` nor `status-autorun`
- * covers:
+ * A screenshot of an element that is still moving fails on stability. The overlay legend is pinned
+ * over the canvas, out of the sidebar's flow entirely. The calendar legend is one panel among
+ * several on the Calendar step, and the crop picker sits behind a fold on the plants step and
+ * can't move it. These waits are the settle conditions for the async loads the automatic ranking
+ * kicks off, which neither `status-simulation` nor `status-autorun` covers:
  *
  * - the crop picker fills from the catalog fetch
  * - the DLI evidence lands on every recommendation row
  *
- * stated as conditions rather than as sleeps. Attached rather than visible, because the picker
+ * stated as conditions. It's attached, because the picker
  * sits inside the closed "Pick plants one at a time" fold and the condition is that it has
  * filled, which the document knows whether or not the fold is open
  */
@@ -127,13 +119,12 @@ const catalogSettled = async (page: Page): Promise<void> => {
 }
 
 /*
-  The rows themselves, rather than the DLI evidence one of them may carry.
-  This waited on `readout-recommendation-dli-evidence-*` and stopped being a settle condition
-  twice over. A row only renders that note when its limiting factor IS a light gate, so whether
-  any row has one is a fact about which crops the bake happened to rank first, and the panel now
-  pages its ranking, so the first page can legitimately contain no light-limited crop at all.
-  Every ranked row carries `item-recommendation-`, whatever held it back, which is what makes it
-  the condition this was always reaching for: the ranking has landed in the sidebar
+  The rows themselves, without the DLI evidence one of them may carry. A row only renders that note
+  when its limiting factor IS a light gate, so whether any row has one is a fact about which crops
+  the bake happened to rank first, and the panel pages its ranking, so the first page can
+  legitimately contain no light-limited crop at all. Every ranked row carries
+  `item-recommendation-`, whatever held it back, so its presence is the condition: the ranking has
+  landed in the sidebar
 */
 const rankingSettled = async (page: Page): Promise<void> => {
   await expect(page.locator('[data-testid^="item-recommendation-"]').first()).toBeAttached({

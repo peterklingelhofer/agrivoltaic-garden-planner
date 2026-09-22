@@ -418,7 +418,7 @@ describe('a bed that is already planted', () => {
     expect(again.ok).toBe(false)
     expect(again.ok ? '' : again.reason).toContain('is full')
     // 'room' is how the panel knows to bring its replace select up where a reader can reach it,
-    // rather than sniffing the wording of a reason meant for a person, not a switch statement
+    // matched as a value a switch statement compares directly
     expect(again.ok ? undefined : again.cause).toBe('room')
   })
 

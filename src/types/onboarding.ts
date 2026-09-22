@@ -56,7 +56,7 @@ export type CandidateArchetype =
   | 'vertical-east-west'
   | 'no-array-control'
 
-/** A proposed array, with the reasoning that produced it rather than a bare geometry */
+/** A proposed array, carrying the reasoning that produced it along with the geometry */
 export interface ArrayCandidate {
   readonly archetype: CandidateArchetype
   readonly label: string

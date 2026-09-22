@@ -59,7 +59,7 @@ export const viridisRamp = (): DataTexture => {
 }
 
 /**
- * The field itself, normalized to the legend's range. Half float rather than a byte because the
+ * The field itself, normalized to the legend's range. Half float here, because the
  * iso-lines are drawn from this value and 256 levels across the range would step them. It's
  * also filterable in core WebGL2, which a 32-bit float texture isn't
  */
@@ -95,7 +95,7 @@ export const fieldUv = (xM: number, yM: number, extent: Extent2D): readonly [num
 
 /**
  * The overlay's outline, drawn in plot meters, with each vertex's texture coordinate taken from
- * where it stands rather than from the shape: `ShapeGeometry` writes the raw x and y as UVs
+ * where it stands: `ShapeGeometry` writes the raw x and y as UVs
  */
 export const fieldUvsOnto = (geometry: BufferGeometry, extent: Extent2D): BufferGeometry => {
   const position = geometry.getAttribute('position')
@@ -154,8 +154,8 @@ void main() {
 }`
 
 /**
- * `fwidth` gives the line a constant width on screen rather than in the field, so it stays one
- * line from any camera distance instead of thickening into a band when the overlay is far away.
+ * `fwidth` gives the line a constant width on screen, so it stays one
+ * line from any camera distance, and never thickens into a band when the overlay is far away.
  *
  * It also says when there's no line to draw. Where the field is steep or the ground is raked
  * away from the camera, a pixel spans more than one interval and the lines land closer together

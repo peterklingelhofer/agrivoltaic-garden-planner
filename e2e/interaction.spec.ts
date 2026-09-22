@@ -54,11 +54,10 @@ const wrap = (day: number): number => ((day % DAYS_PER_YEAR) + DAYS_PER_YEAR) % 
  *
  * The scene draws a planting at its growth stage, so an annual outside its season isn't
  * in the ground and one just sown is a seedling. A drawing-buffer comparison taken on whatever day
- * the app happened to open on would be comparing two bare beds and proving nothing, which is
- * exactly how this spec broke; taken just after sowing it compares two sub-pixel plants, which is
- * how the first repair of it broke. At harvest the plant is at full size whatever its sow day is.
- * The window is read off the row rather than assumed, and a missing attribute fails here rather
- * than silently becoming day zero through `Number(null)`
+ * the app happened to open on would be comparing two bare beds and proving nothing, and one taken
+ * just after sowing compares two sub-pixel plants. At harvest the plant is at full size whatever
+ * its sow day is. The window is read off the row. A missing attribute fails here, and stays a
+ * failure: it never silently becomes day zero through `Number(null)`
  */
 const scrubToHarvest = async (page: Page, row: Locator): Promise<number> => {
   const dayAttribute = async (name: string): Promise<number> => {
@@ -90,7 +89,7 @@ const scrubToHarvest = async (page: Page, row: Locator): Promise<number> => {
  * that can add a bed is the conversational agent, which ships switched off, so without
  * `action-bed-add` a basic capability of the editor would hang on a feature nobody has turned on.
  *
- * Driven from the keyboard rather than by clicking the new control, because a control that
+ * Driven from the keyboard throughout, because a control that
  * exists and can't be reached this way would pass a test that clicked it and still be no use
  * to the person this is for. Shaping the bed afterward still wants a pointer
  */
@@ -112,7 +111,7 @@ test('a bed can be added without ever touching the ground', async ({ page }) => 
   await expect(
     page.getByTestId('list-bed-strip').locator('.bed-card[data-selected="true"]'),
   ).toHaveCount(1)
-  // and it's a bed of its own rather than a second copy of one that is already there
+  // and it's a bed of its own, distinguishable from every bed already there
   const labels = await strip.allInnerTexts()
   expect(new Set(labels).size).toBe(labels.length)
 })
@@ -251,8 +250,8 @@ test('a plant can be placed from the ranked picker, edited, seen in the scene an
   const top = picker.getByRole('option').first()
   await expect(top).toHaveAttribute('data-verdict', /recommended|marginal/)
   /*
-   * And where the leading crops are level it says so, on the list a grower picks from rather than
-   * only on the ranking panel above it. `rank.ts` breaks a score tie on crop id so two runs agree,
+   * And where the leading crops are level it says so, on the list a grower picks from.
+   * `rank.ts` breaks a score tie on crop id so two runs agree,
    * which is a determinism guarantee that reads on screen as a ranking: without this the top of an
    * open bed's list is alphabetical order wearing one. Asserted as "either tied and said, or not
    * tied", because whether this bed's own leaders are level is a property of the fixture's light
@@ -396,12 +395,12 @@ const automaticRunsOff = async (page: Page): Promise<void> => {
 
 /**
  * Cancels the light run the press starts, which is the one way to a garden with no light of its
- * own now that the first run comes by itself: a cancel is an answer rather than a pause, so the
+ * own now that the first run comes by itself: a cancel is a final answer, so the
  * arrangement is left alone afterward until it changes.
  *
- * On the CPU reference backend, and that is not a detail. Since the WebGL2 bake was fixed on
- * 2026-09-11 it finishes in tens of milliseconds on a real GPU, measured at 27 ms for the
- * starting plot, which is less time than a press takes to land: a cancel aimed at it hit a run
+ * On the CPU reference backend, and that is not a detail. It finishes in tens of milliseconds
+ * on a real GPU, measured at 27 ms for the starting plot, which is less time than a press takes
+ * to land: a cancel aimed at it hit a run
  * that was already over. The CPU reference takes tens of seconds for the same plot, which is the
  * one run a person could ever interrupt, and canceling alone is what is under test here. The
  * select sits behind the light step's "How the light was computed" fold
@@ -544,7 +543,7 @@ test('a baked raster drives the channel, the monthly slice, the opacity and the 
 /**
  * The bake that follows a drawn bed starts by itself, so nothing is pressed here: the state is
  * read off the root, which carries it for whatever waits on a bake from a step that is not the
- * light step, and the steps are switched while it runs. Recorded rather than watched, because
+ * light step, and the steps are switched while it runs. Recorded after the fact, because
  * on a real GPU the whole run is over in tens of milliseconds and a poll can miss it
  */
 test('switching steps mid-bake keeps the canvas mounted and finishes the run', async ({ page }) => {
@@ -612,7 +611,7 @@ test('canceling a bake returns the app to idle and leaves it usable', async ({ p
 
   const status = page.getByTestId('status-simulation')
   const cancel = page.getByTestId('action-sim-cancel')
-  // nothing to cancel: the press is absent rather than dead
+  // nothing to cancel: the press is absent entirely
   await expect(cancel).toHaveCount(0)
   await expect(page.getByTestId('action-sim-final')).toBeVisible()
 

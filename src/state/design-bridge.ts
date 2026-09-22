@@ -18,8 +18,8 @@ export const DESIGN_UNAVAILABLE = `guided setup unavailable: the design engine d
 
 /**
  * What the store already holds and the engine would otherwise fetch again. Passing the
- * resolved site and its weather keeps one location resolution behind the whole app rather
- * than a second one behind the wizard
+ * resolved site and its weather keeps one location resolution behind the whole app, the wizard
+ * included
  */
 export interface DesignInputs {
   readonly site?: Site
@@ -102,7 +102,7 @@ const isScenario = (value: unknown): boolean => {
   )
 }
 
-/** Refuses a shape the results view can't render rather than rendering half a scenario */
+/** Refuses a shape the results view can't render, without rendering half a scenario */
 export const normalizeSet = (value: unknown): ScenarioSet | null => {
   const set = asRecord(value)
   if (set === null || !Array.isArray(set.scenarios) || set.scenarios.length === 0) return null

@@ -17,7 +17,7 @@ import { decodePng, pixelAt, type Bitmap } from './fixtures/png.ts'
  *
  * `sky-occlusion.spec.ts` measures the diffuse half and can't measure this one: it samples open
  * ground, where the diffuse term is nearly all of the surface, so the specular share is inside its
- * error rather than beside it. `ambientOcclusion.ts` also occludes `indirectSpecular`, clearcoat
+ * error margin. `ambientOcclusion.ts` also occludes `indirectSpecular`, clearcoat
  * and sheen, copied from three's own `aomap_fragment`, and no figure had ever been put on those
  * three lines. This is that figure.
  *
@@ -28,11 +28,11 @@ import { decodePng, pixelAt, type Bitmap } from './fixtures/png.ts'
  * actually put there, switched by one control, and never by reaching into a material.
  *
  * Wetting also darkens the soil, by `WET_SHARE`, and that is why every claim here is a RATIO of
- * occluded to unoccluded rather than a luminance: albedo multiplies the direct and the indirect
+ * occluded to unoccluded, with one exception, a luminance: albedo multiplies the direct and the indirect
  * terms alike, so it cancels out of the ratio, and what doesn't cancel is the specular.
  *
- * Measured on the shipped build, re-taken 2026-09-18 from the lowered and zoomed pose the test
- * stands in, three rounds, repeating to five decimal places:
+ * Measured on the shipped build from the lowered and zoomed pose, three rounds, repeating to
+ * five decimal places:
  *
  * | bed | dry, roughness 1, no clearcoat | wetted, roughness 0.55, clearcoat 0.7 |
  * |---|---|---|
@@ -47,18 +47,16 @@ import { decodePng, pixelAt, type Bitmap } from './fixtures/png.ts'
  * handed and falls away fastest at low roughness. That asymmetry is the reason this could never
  * have been read off the diffuse measurement.
  *
- * Round to round the readings repeat to five decimal places, so the margins below are wide
- * against the spread and not against nothing. Between 2026-09-11 and 2026-09-18 they didn't:
- * the drag that lowers the view left the controls' damping creeping the camera by under a pixel
- * over the next hundred frames, every toggle let a little of it through, and a few hundred edge
- * pixels of panel and grid line then counted as soil beside the few hundred the whole-plot
- * framing gave a bed. The open bed's shares of 0.04 to 0.15 from that week were that noise, and
- * so were two failures under eight parallel workers. The creep is now spent before the first
- * shot and the camera brought in to half the distance. The two notes in the body have the
- * figures.
+ * Round to round the readings repeat to five decimal places, so the margins below are wide against
+ * the spread itself. The drag that lowers the view leaves the controls' damping creeping the camera
+ * by under a pixel over the next hundred frames, and every toggle lets a little of it through. A
+ * few hundred edge pixels of panel and grid line would then count as soil, as many as the
+ * whole-plot framing gives a bed, and that noise is enough to flake under eight parallel workers.
+ * So the creep is spent before the first shot and the camera brought in to half the distance. The
+ * two notes in the body have the figures.
  *
- * Re-posed on 2026-09-11, when a visitor's plot started being framed whole from 42 degrees up.
- * The test lowers the view by 18 degrees with a drag before it shoots, back to the old declared
+ * The app frames a visitor's plot whole from 42 degrees up by default, so the test lowers the
+ * view by 18 degrees with a drag before it shoots, back to the old declared
  * pose, and asserts the share on the bed that shows it most: from the framed bearing the bed
  * under the middle row reads within 0.01 of zero (its mirror direction is the row above it).
  * From 42 degrees, brought in the same way, the front bed reads a share of 0.083 and the bed
@@ -66,7 +64,7 @@ import { decodePng, pixelAt, type Bitmap } from './fixtures/png.ts'
  * which the blackout bound below refuses. So the pose stays lowered
  */
 
-/** The bed's soil is found rather than located by pixel: see `respondingCells` */
+/** The bed's soil is found by where wetting changed it: see `respondingCells` */
 const CHANGED_BY_WETTING = 12
 
 /** Well above the round-to-round spread of 0.00005 at worst, and the front bed reads 0.015 */
@@ -89,8 +87,8 @@ const median = (values: number[]): number =>
   values.length === 0 ? 0 : (values.slice().sort((a, b) => a - b)[values.length >> 1] ?? 0)
 
 // the frame a toggle asks for, and the tail of the drag's glide before the first one, both land
-// before the shot: the picture is read until it stops changing rather than after a fixed time
-// that a shared GPU can outrun
+// before the shot: the picture is read until it stops changing. There's no fixed timer
+// a shared GPU could outrun
 const shoot = async (page: Page): Promise<Bitmap> => decodePng(await settledCanvas(page))
 
 const lumOver = (image: Bitmap, cells: readonly (readonly [number, number])[]): number =>
@@ -100,7 +98,7 @@ const lumOver = (image: Bitmap, cells: readonly (readonly [number, number])[]): 
  * A bed's soil is exactly the pixels that its OWN irrigation moved, which is a physical criterion.
  * `sky-occlusion.spec.ts` has to state its band in canvas pixels,
  * which makes it a claim about one camera as well as one geometry. This finds its subject instead,
- * so a change to the default framing moves the sample with it rather than off it
+ * so a change to the default framing moves the sample along with it
  */
 const respondingCells = (dry: Bitmap, wet: Bitmap): (readonly [number, number])[] => {
   const cells: (readonly [number, number])[] = []
@@ -136,12 +134,12 @@ test('a wetted surface loses more to the sky occlusion than the same surface dry
   // glossy surface to measure at all
   await page.getByTestId('control-overlay-lighting').selectOption('high')
   /*
-    A visitor's plot has been framed whole from 42 degrees up since 2026-09-11, and a wet
-    clearcoat reflects little sky toward a camera that steep (the Fresnel term falls away from
-    grazing). The figures in the header were taken from the old declared pose, 24 degrees up, so
-    the view is lowered to that by a drag before anything is shot. OrbitControls turns a full
-    circle per canvas height, so 18 degrees is 18/360 of it. The drag also latches the automatic
-    framing off, which is what keeps the pose for the run
+    A visitor's plot is framed whole from 42 degrees up by default, and a wet clearcoat reflects
+    little sky toward a camera that steep (the Fresnel term falls away from grazing). The figures
+    in the header were taken from a pose 24 degrees up, so the view is lowered to that by a drag
+    before anything is shot. OrbitControls turns a full circle per canvas height, so 18 degrees is
+    18/360 of it. The drag also latches the automatic framing off, which is what keeps the pose for
+    the run
   */
   const box = await canvas(page).boundingBox()
   if (box === null) throw new Error('no canvas to pose')
@@ -159,7 +157,7 @@ test('a wetted surface loses more to the sky occlusion than the same surface dry
     `frameloop="demand"` those frames only happen when something asks for one. Every toggle
     below asks for one, and the creep it lets through flips a few hundred edge pixels across the
     panels and the grid lines, which then read as "moved by wetting" beside the soil that did.
-    Measured on 2026-09-18: an occlusion toggle pair at the framed pose changes 0 pixels, and
+    An occlusion toggle pair at the framed pose changes 0 pixels, and
     straight after the drag 645, falling to 35 sixty frames later. So the creep is spent here
     on that same pair, ten frames at a time, until two pictures agree. It takes about eleven
     rounds
@@ -227,7 +225,7 @@ test('a wetted surface loses more to the sky occlusion than the same surface dry
     const wetRatio = lumOver(wetOccluded, cells) / lumOver(wetUnoccluded, cells)
     const where = `bed ${String(index)}, ${String(cells.length)} cells`
 
-    // it stays an estimate of a view factor rather than a blackout: a panel overhead doesn't
+    // it stays an estimate of a view factor, except at a blackout: a panel overhead doesn't
     // switch off the sky, and a wet surface isn't darker than a black one
     expect(wetRatio, `${where}: the wetted surface was blacked out`).toBeGreaterThan(0.03)
     expect(dryRatio, `${where}: the dry surface moved past total`).toBeLessThanOrEqual(
@@ -239,11 +237,11 @@ test('a wetted surface loses more to the sky occlusion than the same surface dry
   expect(measured, 'no bed offered a surface to measure').toBeGreaterThan(0)
   /*
     The specular lines reach the picture: a glossy surface keeps LESS of its sky than the same
-    surface dry. Without them, both surfaces would be occluded by the diffuse term alone and the
-    two ratios would land on top of each other. Asserted on the bed that shows it most rather
-    than on every bed: a wet surface mirrors one direction toward the camera, and the bed under
-    the middle row reads within 0.01 of zero from the framed bearing at every elevation tried on
-    2026-09-11 (its mirror direction is the row above it), where the open beds read 0.04 to 0.15
+    surface dry. Without them, both surfaces would be occluded by the diffuse term alone and the two
+    ratios would land on top of each other. Asserted on the bed that shows it most: a wet surface
+    mirrors one direction toward the camera, and the bed under the middle row reads within 0.01 of
+    zero from the framed bearing at every elevation tried (its mirror direction is the row above
+    it), where the open beds read 0.04 to 0.15
   */
   expect(Math.max(...shares), 'the specular occlusion reached nothing').toBeGreaterThan(
     MIN_SPECULAR_SHARE,

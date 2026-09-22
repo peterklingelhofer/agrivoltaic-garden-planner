@@ -1,11 +1,9 @@
 # Citation corpus
 
 241 sources (171 crossref-verified, 1 datacite-verified, 16 unverified, 53 url-verified). Machine-readable companion: [`CITATIONS.csl.json`](./CITATIONS.csl.json) (CSL-JSON).
-Verification pass completed 2026-07-30 against the Crossref REST API, the DataCite REST API, and direct
-fetches of authoritative publisher, standards-body and government URLs.
-Eight sources were added on 2026-09-20 the same way: five verified against Crossref, three by fetching
-the publisher's own page, one of those through the Internet Archive because the live page refuses
-automated fetches.
+A record enters this corpus verified against the Crossref REST API, against the DataCite REST API,
+or by a fetch of the authoritative publisher, standards-body or government URL, with an Internet
+Archive snapshot standing in where a live page withholds its text.
 
 ## How to read this
 
@@ -15,20 +13,20 @@ This says how the *bibliographic record* was checked. It says nothing about whet
 
 | Status | Meaning |
 |---|---|
-| `crossref-verified` | The DOI resolves in Crossref and the returned title, authors, year, journal, volume and pages were compared against what our research docs claim. Any discrepancy is written into the caveat. |
+| `crossref-verified` | The DOI resolves in Crossref and the returned title, authors, year, journal, volume and pages match the entry as it stands here. Any discrepancy is written into the caveat. |
 | `datacite-verified` | Same, via the DataCite API. Used for Zenodo and other dataset DOIs. |
-| `url-verified` | No DOI exists. An authoritative URL (publisher, standards body, government, extension service) was fetched on 2026-07-30 and the document identity confirmed from the page itself. |
-| `unverified` | Neither a resolvable DOI nor a successfully fetched authoritative URL. The bibliographic details are inherited from our research docs or from secondary citation and may be wrong. |
+| `url-verified` | No DOI exists. An authoritative URL (publisher, standards body, government, extension service) was fetched and the document identity confirmed from the page itself. |
+| `unverified` | Neither a resolvable DOI nor a successfully fetched authoritative URL. The bibliographic details are unconfirmed, taken from a secondary citation, and may be wrong. |
 
-A `crossref-verified` record can still carry a loud caveat. Verification confirms the *citation*, not the *claim*.
-Several entries here are Crossref-verified but were paywalled to full-text fetch, meaning we confirmed the paper exists
-and is what we say it is, but never read its numbers.
+A `crossref-verified` record can still carry a loud caveat. Verification confirms the *citation* and
+says nothing about the *claim*. Several entries here are Crossref-verified and paywalled to full-text
+fetch: the record is right about what the paper is, and the paper's own numbers are unread.
 
 ### Access level
 
 `open-access` (a CC license is registered or the publisher serves it freely) | `paywalled` |
 `public-domain` (government, national-lab or extension output) | `standard-purchase` (must be bought from a standards body).
-Where a Crossref `license` field was present, the access level is taken from it rather than guessed.
+Where a Crossref `license` field was present, the access level comes from that field.
 
 ### Evidence tier
 
@@ -103,7 +101,7 @@ Barron-Gafford, Greg A.; Pavao-Zuckerman, Mitchell A.; Minor, Rebecca L.; Sutter
 - Backs:
   - chiltepin pepper total fruit production was three times greater under the PV panels of the agrivoltaic system
   - cherry tomato total fruit production was twice as great under the PV panels
-  - jalapeno total fruit production was nearly EQUAL between treatments, attained with 65% less transpirational water loss; jalapeno water use efficiency was 157% greater
+  - jalapeno total fruit production was nearly EQUAL between treatments, attained with 65% less transpirational water loss, and jalapeno water use efficiency was 157% greater
   - soil moisture +15% under panels at an arid site
   - daytime air-temperature cooling under panels in a hot arid climate
 - **Caveat:** The study is dryland-specific. This app gates every 'shade improves yield' pathway behind a water-limitation flag, because these gains don't transfer to temperate gardens. The temperate Heggelbach site (Weselek 2021) found effects in the opposite direction on both temperature and soil moisture. The full text (https://www.osti.gov/servlets/purl/1567040) puts the 3x on chiltepin and the 2x on cherry tomato. Jalapeno showed no yield gain at all: 'total fruit production was nearly equal between treatments... but this was attained with 65% less transpirational H2O loss'. Its cumulative CO2 uptake was 11% lower under the panels. A jalapeno yield gain has no support in this paper.
@@ -322,7 +320,7 @@ Marrou, Hélène; Guilioni, Lydie; Dufour, Lydie; Dupraz, Christian; Wery, Jacqu
 - Verification: Crossref-verified | Access: paywalled, evidence tier **B**
 - Backs:
   - panel shade alters air temperature, humidity and VPD only marginally relative to the light reduction
-  - microclimate is a second-order modifier; light is the first-order driver
+  - microclimate is a second-order modifier, and light is the first-order driver
 
 #### `marrou2013-water-flows`
 
@@ -413,7 +411,7 @@ Sekiyama, Takashi; Nagashima, Akira. (2019). *Solar Sharing for Both Food and Cl
 - Backs:
   - Japanese solar-sharing lineage, attributed by name to Akira Nagashima per TEK attribution rules
   - shade-intolerant C4 corn performance under a solar-sharing array
-- **Caveat:** Single-site, small-plot. It's the only English-language Japanese solar-sharing crop study located with a verifiable DOI, which is itself evidence for thin-evidence area 10 in the agrivoltaics document. The agroecology document cites 'Nagashima 2015/2020' and an 'AIP Conf. Proc. 2361(1):030002 2021' that could not be resolved.
+- **Caveat:** Single-site, small-plot. It's the only English-language Japanese solar-sharing crop study located with a verifiable DOI, which is itself a measure of how thin that literature is in English. A 'Nagashima 2015/2020' and an 'AIP Conf. Proc. 2361(1):030002 2021' circulate on the same topic and couldn't be resolved.
 
 #### `tekie2024-drought-index-preprint`
 
@@ -422,7 +420,7 @@ Tekie, Sultan; Zainali, Sebastian; Zidane, Tekai Eddine Khalil; Ma Lu, Silvia; G
 - DOI: [10.31223/X5KT33](https://doi.org/10.31223/X5KT33)
 - Verification: Crossref-verified | Access: open-access, evidence tier **C**
 - Backs:
-  - nothing in the shipping product; recorded solely as a negative control
+  - nothing in the shipping product, recorded solely as a negative control
 - **Caveat:** This entry warns of a look-alike. The paper can't verify this app's numbers, because it's a different paper that merely cites Laub et al. 2022. Its Table 2 publishes its own regressions, including 'C3 Cereals Y=106.34-0.44X1', 'Berries Y=-13.36+2.22X1', 'Maize Y=61.82+0.25X1' and 'Grain Legumes Y=104.54-0.52X1'. Those are Tekie's coefficients and none of them is Laub's. Because it reuses Laub's crop categories and ranks highly in search, anyone re-deriving this app's crop-response curves is likely to hit it and mistake its equations for Laub's. It also isn't peer reviewed. The link https://eartharxiv.org/repository/object/7354/ returns 404, and the working URL is /repository/view/7354/.
 
 #### `trommsdorff2021-heggelbach`
@@ -478,7 +476,7 @@ Widmer, Jocelyn; Ançay, André; Duchemin, Mathilde; Nardin, Gaël; Ackermann, M
   - strawberry minimum DLI 25 mol/m2/d and raspberry minimum DLI 15 mol/m2/d, verbatim: 'Based on the point where the standardized regression line crosses zero, the minimal DLI recommendation for maintaining average yield was 15 mol m-2 d-1 for raspberry and 25 mol m-2 d-1 for strawberries.'
   - the shading that recommendation corresponds to, verbatim: 'Based on our findings, we recommend a minimum DLI of 25 mol m-2 d-1 ... corresponded to an estimated total shading of 10-30%, depending on the type of cover', which is the only shading percentage in the paper and the basis for this app's 10% strawberry ceiling
   - a positive linear relationship between DLI and both yield and sugar content in both species, stronger in strawberry
-  - strawberry firmness declines at low DLI; fruit weight and titratable acidity are unaffected in both species
+  - strawberry firmness declines at low DLI, and fruit weight and titratable acidity are unaffected in both species
   - the authority for splitting strawberry out of Laub's lumped berry group
 - **Caveat:** The author list, the title and the year as printed are the ones above, and the version of record is 2026. A citation as 'Widmer, J., Ancay, A., Duchemin, C., Nardin, R., Ackermann, T., Sutter, G. (2024/2025). Strawberry and raspberry under agrivoltaics: minimum DLI requirements.' has four given names wrong, paraphrases the title and predates the version of record. The paper says its 25 mol/m2/d recommendation 'corresponded to an estimated total shading of 10-30%, depending on the type of cover', so a strawberry 'max design RSR 15-20%' has no basis in it. No shading or RSR percentage for raspberry appears anywhere in the paper, so a raspberry 'max design RSR 30-35%' has none either. The paper's 'minimum' has a narrow meaning. It's the DLI at which the standardized yield regression crosses zero, i.e. the DLI that yields the trial-average yield, chosen because 'AgriPV systems should not negatively impact' average yield. It's a design convention and isn't a physiological failure threshold or a fitted breakpoint. The fitted yield-DLI relationship is linear with no breakpoint. The study ran four years, with 21 case studies in Switzerland, including 13 AgriPV configurations at three sites. All were substrate-grown with fertigation under protective covers, and open-field cases were excluded. Transfer to in-ground garden beds is an extrapolation. It remains the only located source that expresses agrivoltaic limits directly as DLI, so the whole strawberry/berry DLI split rests on one conference paper.
 
@@ -540,7 +538,7 @@ Blanco-Muriel, Manuel; Alarcón-Padilla, Diego C.; López-Moratalla, Teodoro; La
 - DOI: [10.1016/S0038-092X(00)00156-0](https://doi.org/10.1016/S0038-092X(00)00156-0)
 - Verification: Crossref-verified | Access: paywalled
 - Backs:
-  - PSA algorithm, accuracy <=0.5 arcmin; candidate rejected in favor of SPA
+  - PSA algorithm, accuracy <=0.5 arcmin, rejected in favor of SPA
 
 #### `bright2019-engerer2-global`
 
@@ -762,7 +760,7 @@ Maxwell, Eugene L.. (1987). *A Quasi-Physical Model for Converting Hourly Global
 - Verification: UNVERIFIED | Access: public-domain
 - Backs:
   - the DISC model, ancestor of DIRINT
-- **Caveat:** No DOI located and the report was not fetched. Bibliographic details inherited from the pvlib documentation and the solar geometry document.
+- **Caveat:** No DOI located and the report wasn't fetched. The bibliographic details follow the pvlib documentation.
 
 #### `mccree1971-action-spectrum`
 
@@ -841,7 +839,7 @@ Perez, Richard; Seals, Robert; Michalsky, Joseph. (1993). *All-weather model for
 - DOI: [10.1016/0038-092X(93)90017-I](https://doi.org/10.1016/0038-092X(93)90017-I)
 - Verification: Crossref-verified | Access: paywalled
 - Backs:
-  - the all-weather sky luminance distribution used by Radiance gendaymtx and therefore by our cumulative-sky pipeline
+  - the all-weather sky luminance distribution used by Radiance gendaymtx and therefore by this app's cumulative-sky pipeline
 - **Caveat:** Crossref also holds a near-identical record 10.1016/0038-092X(93)90157-J ('To all-weather model...', Solar Energy 51:423). Cite the 50:235-245 record.
 
 #### `radiance-gendaymtx`
@@ -851,7 +849,7 @@ Ward, Greg. (n.d.). *gendaymtx - generate an annual Perez sky matrix from a weat
 - URL: <https://www.radiance-online.org/learning/documentation/manual-pages/pdfs/gendaymtx.pdf>
 - Verification: URL-verified | Access: open-access
 - Backs:
-  - the cumulative-sky daylight-coefficient method our GPU pipeline reimplements
+  - the cumulative-sky daylight-coefficient method this app's GPU pipeline reimplements
   - gendaymtx uses the Perez all-weather sky, which is why the PV plane and ground must share one sky model
 
 #### `reda2004-spa`
@@ -880,8 +878,8 @@ Reda, Ibrahim; Andreas, Afshin. (2008). *Solar Position Algorithm for Solar Radi
 - DOI: [10.2172/15003974](https://doi.org/10.2172/15003974)
 - Verification: Crossref-verified | Access: public-domain
 - Backs:
-  - the normative SPA computation chain our implementation follows step by step
-  - the algorithm ported into pvlib/spa.py (BSD-3) that we re-port to TypeScript
+  - the normative SPA computation chain this app's implementation follows step by step
+  - the algorithm ported into pvlib/spa.py (BSD-3), which this app re-ports
 - **Caveat:** This entry is the January 2008 revision, which supersedes the 2003 original. The 2004 article text carries a journal corrigendum (10.1016/j.solener.2007.01.003), so an implementation derived from that text alone is uncorrected.
 
 #### `reindl1990-tilted-surface`
@@ -950,7 +948,7 @@ Szarek, Kamil; Jouttijärvi, Sami; Karttunen, Ville; Hynnä, Aleksi. (2026). *Pe
 - Verification: Crossref-verified | Access: open-access
 - Backs:
   - high-latitude vertical bifacial array performance for the per-latitude-band geometry defaults
-- **Caveat:** The solar geometry document lists this with no authors and no DOI. Both are supplied here.
+- **Caveat:** The paper circulates with neither authors nor DOI. Both are supplied here.
 
 #### `thevenard2006-ground-reflectivity`
 
@@ -983,7 +981,7 @@ Torres, Ariana P.; Currey, Christopher J.; Lopez, Roberto G.; Faust, James E.. (
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - DLI measurement guidance for the curated crop table
-- **Caveat:** The horticulture document cites 'Purdue HO-238-B-W' as if it were the same document as HO-238-W. They are different publications with different author lists.
+- **Caveat:** Purdue HO-238-B-W and HO-238-W are different publications with different author lists, and they're easily conflated.
 
 #### `tregenza1987-sky-subdivision`
 
@@ -1015,7 +1013,7 @@ Adhikary, Dinesh; Islam, Md. Rashidul; Adhikari, Bikram; Chapara, Venkata. (2025
 - Verification: Crossref-verified | Access: open-access, evidence tier **A**
 - Backs:
   - clubroot resting spores survive up to 20 years with a sharp early decline
-  - crop rotation as a hard constraint rather than a soft companion score
+  - crop rotation as a hard constraint in place of a soft companion score
 - **Caveat:** The full text is behind annualreviews.org and unread. The open abstract says only that resting spores 'persist in the soil for several years'. The '20 years with a sharp early decline' figure is common in extension literature and is NOT confirmed anywhere in this review's accessible text. This entry stands for the review's existence and carries no 20-year number until someone reads the full text.
 
 #### `allen1998-fao56`
@@ -1035,7 +1033,7 @@ Andrews, Nick; Coop, Leonard; Stoven, Heather; Noordijk, Heidi; Heinrich, Aaron.
 - URL: <https://extension.oregonstate.edu/catalog/pub/em9305>
 - Verification: URL-verified | Access: public-domain, evidence tier **B**
 - Backs:
-  - OSU Croptime coverage, verbatim: 'Croptime currently hosts 29 vegetable DD models and three summer annual weed models', closing the the horticulture document gap 6 / ledger A16 enumeration question
+  - OSU Croptime coverage, verbatim: 'Croptime currently hosts 29 vegetable DD models and three summer annual weed models', which is the count behind ledger row A16
   - published lower and upper development thresholds for six vegetables: broccoli 32/70 F, cucumber 50/90 F, snap bean 40/90 F, sweet corn 44 F fresh market or 50 F processing with an 86 F upper, sweet pepper 52/100 F, tomato 45/92 F
   - cultivar-level degree-days to named growth stages and to harvest, with per-cultivar model accuracy in days and the number of data sets behind each
   - the case for GDD-based maturity over fixed days-to-maturity: 'Arcadia' broccoli in Aurora, Oregon ranged 66-103 days to maturity, a 20-32 day spread within a season by planting date
@@ -1185,7 +1183,7 @@ Dou, Haijie; Niu, Genhua; Gu, Mengmeng; Masabni, Joseph G.. (2018). *Responses o
 - DOI: [10.21273/HORTSCI12785-17](https://doi.org/10.21273/HORTSCI12785-17)
 - Verification: Crossref-verified | Access: open-access, evidence tier **A**
 - Backs:
-  - sweet basil grown for 21 days under five DLIs: 9.3, 11.5, 12.9, 16.5 and 17.8 mol/m2/d; shoot fresh weight was 54 to 79 percent higher under the higher DLIs than under 9.3, and soluble sugars, chlorophyll, anthocyanins and phenolics rose with DLI
+  - sweet basil grown for 21 days under five DLIs of 9.3, 11.5, 12.9, 16.5 and 17.8 mol/m2/d, where shoot fresh weight was 54 to 79 percent higher under the higher DLIs than under 9.3, and soluble sugars, chlorophyll, anthocyanins and phenolics rose with DLI
   - the basil production DLI, verbatim: 'we suggest a DLI of 12.9 mol/m2/d for sweet basil commercial production in indoor vertical farming to minimize the energy cost while maintaining a high yield and nutritional quality'
 - **Caveat:** This entry rests on the abstract and the Crossref record. The suggested 12.9 mol/m2/d is a production recommendation that trades energy cost against yield and quality. Plants at 9.3 still grew, so it isn't a failure threshold. It's indoor sole-source LED culture.
 
@@ -1208,7 +1206,7 @@ Erdei, Anna L.; David, Aneth B.; Savvidou, Eleni C.; Dzemedzionaite, Vaida; Chak
 - Verification: Crossref-verified | Access: open-access, evidence tier **B**
 - Backs:
   - NO ADULT REPELLENCY: in wind-tunnel oviposition assays gravid female Spodoptera frugiperda laid equal numbers of egg batches on corn with and without Desmodium odor
-  - the terpenoids previously reported as repellent were barely detectable in Desmodium intortum headspace across greenhouse and field, with and without soil microbes, and rose only marginally after herbivory; 50 field headspace samples from Tanzania and Uganda
+  - the terpenoids previously reported as repellent were barely detectable in Desmodium intortum headspace across greenhouse and field, with and without soil microbes, and rose only marginally after herbivory, across 50 field headspace samples from Tanzania and Uganda
   - first-instar larvae PREFERRED Desmodium leaf tissue over corn in choice assays, but development stagnated and no larvae survived to pupation
   - proposed mechanism: dense silica-fortified uncinate (hooked) trichomes physically wound larvae
   - the revised functional description: Desmodium acts as a trap crop that intercepts and kills larvae, which replaces the older account of a volatile repellent of adults
@@ -1232,8 +1230,8 @@ Farazdaghi, H.; Harris, P. M.. (1968). *Plant Competition and Crop Yield*. Natur
 - DOI: [10.1038/217289a0](https://doi.org/10.1038/217289a0)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **A**
 - Backs:
-  - the reciprocal-yield competition model that the horticulture document misattributed to Holliday
-- **Caveat:** Recorded expressly to correct the horticulture document's misattribution.
+  - the reciprocal-yield competition model of plant density and crop yield, commonly cited under Holliday's name
+- **Caveat:** Nature 217:289-290 (1968), 'Plant Competition and Crop Yield', is by Farazdaghi and Harris. It circulates widely under Holliday's name, whose own paper is Nature 186:22-24 (1960), holliday1960-population-yield.
 
 #### `fiedler2007-insectary`
 
@@ -1274,7 +1272,7 @@ Gao, Wei; He, Dongxian; Ji, Fang; Zhang, Sen; Zheng, Jianfeng. (2020). *Effects 
 - Verification: Crossref-verified | Access: open-access, evidence tier **A**
 - Backs:
   - hydroponic spinach grown in a closed plant factory under four DLIs, 11.5, 14.4, 17.3 and 20.2 mol/m2/d, crossed with four spectra
-  - total fresh and dry weight, energy yield and light use efficiency were highest at 17.3 mol/m2/d (with a red:blue ratio of 1.2), and net photosynthetic rate peaked at 17.3 regardless of spectrum; 20.2 gave less
+  - total fresh and dry weight, energy yield and light use efficiency were highest at 17.3 mol/m2/d (with a red:blue ratio of 1.2), and net photosynthetic rate peaked at 17.3 regardless of spectrum, with 20.2 giving less
 - **Caveat:** The article is CC BY 4.0, and this entry rests on the abstract and the Crossref record. The lowest level tested, 11.5 mol/m2/d, is a plant-factory setting far above what a garden bed offers in spring. The trial finds an optimum and places no minimum. The catalog spinach row therefore stays a Tier C class inference and cites this work in the documentation only.
 
 #### `garbuzov2014-attractiveness`
@@ -1406,7 +1404,7 @@ Kelly, Nathan; Choe, Daegeun; Meng, Qingwu; Runkle, Erik S.. (2020). *Promotion 
 - Verification: Crossref-verified | Access: paywalled, evidence tier **A**
 - Backs:
   - lettuce 'Rex' and 'Rouxai' grown indoors at DLIs of 6.9, 10.4 and 15.6 mol/m2/d (PPFD 120 to 270 umol/m2/s, photoperiods 16 to 24 h): shoot fresh and dry mass, leaf number and leaf width increased with DLI
-  - at 15.6 mol/m2/d a lower PPFD over a longer photoperiod gave more fresh and dry mass than a higher PPFD over a shorter one; the interaction was absent at 10.4
+  - at 15.6 mol/m2/d a lower PPFD over a longer photoperiod gave more fresh and dry mass than a higher PPFD over a shorter one, and the interaction was absent at 10.4
 - **Caveat:** The full text is paywalled, and this entry rests on the abstract and the Crossref record. The lowest DLI, 6.9 mol/m2/d, still grew both cultivars to harvest, with the smallest plants. The trial establishes that growth rises with DLI across 6.9 to 15.6 and places no failure point. It's indoor sole-source LED culture, so the figures are levels of a lamp schedule and can't serve as a garden threshold.
 
 #### `khan2008-push-pull-economics`
@@ -1425,7 +1423,7 @@ Khan, Zeyaur R.; Midega, Charles A. O.; Amudavi, David M.; Hassanali, Ahmed; Pic
 - DOI: [10.1016/j.fcr.2007.12.002](https://doi.org/10.1016/j.fcr.2007.12.002)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **A**
 - Backs:
-  - on-farm replicated evidence for push-pull; the source the agroecology document cites only as 'Field Crops Research 106(3)'
+  - on-farm replicated evidence for push-pull, Field Crops Research 106(3)
 
 #### `khan2010-push-pull`
 
@@ -1457,7 +1455,7 @@ Kubota Lab, The Ohio State University. (n.d.). *Environment*. Controlled Environ
 - Backs:
   - greenhouse strawberry DLI guidance, verbatim: 'We recommend 12 mol/m2/day DLI to target as minimum level for good productivity and consider the optimum between 20-25 mol/m2/d'
   - a strawberry light ceiling, verbatim: 'Under DLI exceeding 30 mol/m2/d, strawberry plants tend to be stressed (shading is required in that case)'
-- **Caveat:** Greenhouse production guidance from a university lab page, undated and without a primary citation for the numbers. Its 12 mol/m2/d minimum is a greenhouse-productivity floor and isn't the same quantity as the 25 mol/m2/d agrivoltaic average-yield convention in widmer-strawberry-dli, which is what the catalog gate uses; the two are recorded side by side in Decision Record 23. The 30 mol/m2/d stress point is the only strawberry light ceiling located and isn't yet wired into the catalog.
+- **Caveat:** Greenhouse production guidance from a university lab page, undated and without a primary citation for the numbers. Its 12 mol/m2/d minimum is a greenhouse-productivity floor and isn't the same quantity as the 25 mol/m2/d agrivoltaic average-yield convention in widmer-strawberry-dli, which is what the catalog gate uses. The two are recorded side by side in Decision Record 23. The 30 mol/m2/d stress point is the only strawberry light ceiling located and isn't yet wired into the catalog.
 
 #### `lai2022-legume-cereal-n`
 
@@ -1521,7 +1519,7 @@ Martin-Guay, Marc-Olivier; Paquette, Alain; Dupras, Jérôme; Rivest, David. (20
 - Backs:
   - intercropping mean land equivalent ratio 1.30 (23% less land), with 38% more gross energy (relative land output 1.38) and 33% more gross income (1.33), from 939 observations in 126 studies
   - LER was unaffected by irrigation, aridity index, fertilization and intercropping pattern, so the benefit isn't conditional on water stress
-  - TEK design rule 7: LER-style portfolio yield reporting rather than single-crop maximization
+  - TEK design rule 7: LER-style portfolio yield reporting in place of single-crop maximization
 - **Caveat:** Martin-Guay et al. report a single mean LER of 1.30. The range 1.22-1.32 that circulates for intercropping merges two meta-analyses: 1.22 is the mean LER of Yu et al. 2015 (yu2015-temporal-niche-ler, 1.22 +/- 0.02), and 1.32 corresponds to nothing in either paper. Cite each meta-analysis separately.
 
 #### `morra2002-isothiocyanate-release`
@@ -1595,7 +1593,7 @@ Olsen, Shawn. (2018). *Suggested Vegetable Planting Dates for Utah*. Utah State 
   - a worked frost-anchored table mapping average last spring frost to a concrete Group A-D planting date for 37 named locations, demonstrating the offset method in practice
   - a separate fall-harvest planting window group (Group E) with per-crop date ranges
   - days to maturity per crop in the companion planting guide, e.g. 'Tomatoes 60-90'
-- **Caveat:** Extension fact sheet, calibrated to Utah's Intermountain West climate; the page itself notes Washington County differs from the rest of the state. Group C is anchored on the average (50%) last spring frost, whereas Purdue HO-186-W anchors on a 10% exceedance map: the two source's offsets are NOT interchangeable without normalizing the percentile first. USU asserts university copyright.
+- **Caveat:** Extension fact sheet, calibrated to Utah's Intermountain West climate. The page itself notes Washington County differs from the rest of the state. Group C is anchored on the average (50%) last spring frost, whereas Purdue HO-186-W anchors on a 10% exceedance map: the two source's offsets are NOT interchangeable without normalizing the percentile first. USU asserts university copyright.
 
 #### `oplinger1990-sesame-afcm`
 
@@ -1620,7 +1618,7 @@ Peng, Gary; Pageau, Denis; Strelkov, Stephen E.; Gossen, Bruce D.. (2015). *A >2
 - Backs:
   - a >2-year break from host crops significantly reduces clubroot resting-spore concentration
   - hard constraint: minimum 3-year interval between Brassicaceae in the same bed
-- **Caveat:** The horticulture document links this via a ScienceDirect PII (S1161030115300125) that does not correspond to this DOI. The DOI recorded here is the Crossref record for the exact title the horticulture document quotes.
+- **Caveat:** The ScienceDirect PII S1161030115300125 that circulates for this paper doesn't correspond to its DOI. The DOI recorded here is the Crossref record for the title as printed.
 
 #### `pennisi2020-lettuce-basil-ppfd`
 
@@ -1642,7 +1640,7 @@ Postma, Johannes A.; Lynch, Jonathan P.. (2012). *Complementarity in root archit
 - Verification: Crossref-verified | Access: paywalled, evidence tier **B**
 - Backs:
   - simulation basis for root complementarity in Three Sisters polyculture
-- **Caveat:** The agroecology document cites 'PMC4416130 (PLOS ONE 2015 root-foraging LER study)'. No PLOS ONE 2015 root-foraging Three Sisters study was located. The root-foraging LER work is the Annals of Botany pair (this record and zhang2014-three-sisters-roots). The agroecology document's PMC reference is unresolved and should be corrected.
+- **Caveat:** No PLOS ONE 2015 root-foraging Three Sisters study was located, and the reference 'PMC4416130 (PLOS ONE 2015 root-foraging LER study)' that circulates for one is unresolved. The root-foraging LER work is the Annals of Botany pair, this record and zhang2014-three-sisters-roots.
 
 #### `rollings2019-garden-flowers`
 
@@ -1855,7 +1853,7 @@ Walters, Kellie J.; Currey, Christopher J.. (2018). *Effects of Nutrient Solutio
 - Verification: Crossref-verified | Access: open-access, evidence tier **A**
 - Backs:
   - sweet basil under a high DLI of about 15 mol/m2/d against a low DLI of 7 or less, verbatim: 'Fresh and dry weight, height, and node number increased by 144%, 178%, 20%, and 18%, respectively, compared with plants grown under the low DLI, and branching was also stimulated'
-  - DLI had little effect on tissue nutrient concentration; nutrient solution concentration did
+  - DLI had little effect on tissue nutrient concentration, where nutrient solution concentration did
 - **Caveat:** This entry rests on the abstract and the Crossref record. It's a greenhouse hydroponic trial of several basil species, and its two DLI levels bracket the response and fix no threshold.
 
 #### `weston2013-sorghum-allelopathy`
@@ -2032,7 +2030,7 @@ Heisler, Gordon M.. (1986). *Effects of individual trees on the solar radiation 
 - DOI: [10.1016/0304-4009(86)90008-2](https://doi.org/10.1016/0304-4009(86)90008-2)
 - Verification: Crossref-verified | Access: public-domain, evidence tier **B**
 - Backs:
-  - a corroborating figure for the tree-crown transmittance default, verbatim: 'a mid-sized sugar maple tree (Acer saccharum Marsh.) reduced irradiance in its shade on a south-facing wall by about 80% when in leaf, and by nearly 40% when leafless', implying roughly 0.20 in-leaf and 0.60 leafless transmittance, read here as a cross-check on the Konarska et al. 2014 crown-transmittance range rather than as the shipped default
+  - a corroborating figure for the tree-crown transmittance default, verbatim: 'a mid-sized sugar maple tree (Acer saccharum Marsh.) reduced irradiance in its shade on a south-facing wall by about 80% when in leaf, and by nearly 40% when leafless', implying roughly 0.20 in-leaf and 0.60 leafless transmittance, read here as a cross-check on the Konarska et al. 2014 crown-transmittance range and never as the shipped default
 - **Caveat:** A USDA Forest Service work, public domain by 17 U.S.C. 105. This entry rests on the agency's own reprint and doesn't use the Elsevier version of record. The paper measures irradiance reduction on a vertical wall inside a tree's shadow: beam plus diffuse sky and crown-reflected radiation reaching a receiver. It doesn't measure transmittance straight through the crown, so its reductions read smaller than those from Konarska's direct-under-crown method. The paper's own Table II clear-day wall average across four sample trees is a 30-34% reduction leafless and 65-85% in-leaf. It backs a cross-check figure only, and this app's default doesn't rest on it.
 
 #### `jolly2005-growing-season-index`
@@ -2043,7 +2041,7 @@ Jolly, William M.; Nemani, Ramakrishna; Running, Steven W.. (2005). *A generaliz
 - Verification: Crossref-verified | Access: paywalled, evidence tier **B**
 - Backs:
   - the three daily indicators, minimum temperature, vapor pressure deficit and day length, and their combination as a product, that a drawn deciduous tree's leaf-on months are read against, verbatim: 'We selected as variables: daylength (photoperiod), evaporative demand (vapor pressure deficit), and suboptimal (minimum) temperatures... A combined Growing Season Index (GSI) was derived as the product of the three indices'
-- **Caveat:** Ten-day mean GSI values agreed with satellite greenness at nine sites, r>0.8 at eight of them, and matched field-observed leaf flush and coloration at Harvard Forest within 3 and 2 days. The app reads a drawn tree of unknown species against the same three thresholds, by calendar month from the site's typical year rather than the paper's own ten-day means.
+- **Caveat:** Ten-day mean GSI values agreed with satellite greenness at nine sites, r>0.8 at eight of them, and matched field-observed leaf flush and coloration at Harvard Forest within 3 and 2 days. The app reads a drawn tree of unknown species against the same three thresholds, by calendar month from the site's typical year, where the paper works from its own ten-day means.
 
 #### `konarska2014-urban-tree-transmissivity`
 
@@ -2096,7 +2094,7 @@ Palecki, Michael; Durre, Imke; Applequist, Scott; Arguez, Anthony; Lawrimore, Ja
   - the exceedance-percentile freeze/frost date product behind the lastSpringFreeze and firstFallFreeze percentile curves
   - element families ann-tmin-prblst-tXXfpNN (date of last spring occurrence), ann-tmin-prbfst-tXXfpNN (date of first fall occurrence) and ann-tmin-prbgsl-tXXfpNN (growing season length)
   - nine percentiles per threshold, 10% through 90% in 10-point steps, read as 'N% probability date of last XXF occurrence or earlier'
-  - six temperature thresholds: 16, 20, 24, 28, 32 and 36 degrees F (32 F = 0 C and 28 F = -2.2 C are the two our schema uses)
+  - six temperature thresholds: 16, 20, 24, 28, 32 and 36 degrees F (32 F = 0 C and 28 F = -2.2 C are the two this app's schema uses)
   - station coverage: more than 15,000 US stations with at least precipitation normals, more than 7,300 with temperature normals
   - frost-freeze date probabilities are computed from the first and last 'killing freeze' of the growing season using serially-complete daily minimum temperatures derived from GHCN-Daily
 - **Caveat:** It's a government dataset with no DOI, and the DOI field on NCEI's own landing page is an unfilled template placeholder. The dataset is wider than it's often described: it gives 10-90% in 10-point steps at six thresholds. A description of the Normals as dates at the 50, 40, 30, 20 and 10 percent levels covers five percentiles at one threshold. It covers US and US-territory stations only, and no equivalent dataset exists for the rest of the world. Any non-US frost percentile this app renders is therefore an Open-Meteo-derived estimate. Normals carry completeness flags: 'standard' above 80% data availability, 'representative' at 10+ years, and 'provisional' where neighbors can't fill the record. A station-level frost date isn't uniformly reliable.
@@ -2170,7 +2168,7 @@ Wang, P. K.; Pruppacher, H. R.. (1977). *Acceleration to terminal velocity of cl
 - DOI: [10.1175/1520-0450(1977)016<0275:ATTVOC>2.0.CO;2](https://doi.org/10.1175/1520-0450(1977)016<0275:ATTVOC>2.0.CO;2)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **A**
 - Backs:
-  - Sect. 4: measured and computed fall distances to 99 percent of terminal speed at 1000 mb and 20 C: 3.9 m for a 1 mm diameter drop, 9.5 m for 2 mm and 14.0 m for 4 mm, which is the second source for integrating a drip's fall from rest rather than releasing it at terminal speed, and the band the rain field's own fall is checked against
+  - Sect. 4: measured and computed fall distances to 99 percent of terminal speed at 1000 mb and 20 C: 3.9 m for a 1 mm diameter drop, 9.5 m for 2 mm and 14.0 m for 4 mm, which is the second source behind integrating a drip's fall from rest, where a simpler model would release it at terminal speed, and the band the rain field's own fall is checked against
   - the drag coefficient of an accelerating drop is the coefficient of a drop at terminal speed at the same Reynolds number, which is why the rain field's quadratic drag is matched to the drip's own measured terminal speed
 - **Caveat:** Read at source from an author-hosted scan, text recovered by OCR. The distances are given by drop radius in the paper's own text and converted to diameters here
 
@@ -2217,7 +2215,7 @@ Carroll, Stephanie Russo; Garba, Ibrahim; Figueroa-Rodríguez, Oscar L.. (2020).
 - Verification: Crossref-verified | Access: open-access
 - Backs:
   - the governing framework behind the product's TEK attribution rules
-  - decision 12: CARE binds only if we encode community-held seed genetics or ceremonial calendars, which we will not
+  - decision 12: CARE binds only on an app that encodes community-held seed genetics or ceremonial calendars, which this app doesn't
 
 #### `carroll2021-care-fair`
 
@@ -2226,7 +2224,7 @@ Carroll, Stephanie Russo; Herczog, Edit; Hudson, Maui; Russell, Keith; Stall, Sh
 - DOI: [10.1038/s41597-021-00892-0](https://doi.org/10.1038/s41597-021-00892-0)
 - Verification: Crossref-verified | Access: open-access
 - Backs:
-  - practical operationalization of CARE alongside FAIR for our data model
+  - practical operationalization of CARE alongside FAIR for this app's data model
 
 #### `chiorese2026-milpa`
 
@@ -2317,7 +2315,7 @@ Lansing, J. Stephen. (2007). *Priests and Programmers: Technologies of Power in 
 - Backs:
   - Balinese subak as a self-organizing water and cropping-calendar institution
   - attribution to Balinese farming communities, developed by the 9th century CE
-- **Caveat:** The agroecology document cites the 1991 first edition. The Crossref-registered record is the 2007 reissue.
+- **Caveat:** The Crossref-registered record is the 2007 reissue. The first edition is 1991.
 
 #### `mirez2025-waru-waru-model`
 
@@ -2456,7 +2454,7 @@ Yuan, Zhengjie; Xu, Jie; Shen, Le. (2022). *Valuation of Ecosystem Services for 
 - URL: <https://www.dinmedia.de/en/technical-rule/din-spec-91492/379601163>
 - Verification: URL-verified | Access: open-access
 - Backs:
-  - the livestock counterpart to DIN SPEC 91434; out of scope for a garden tool but recorded for completeness
+  - the livestock counterpart to DIN SPEC 91434, out of scope for a garden tool and recorded for completeness
 
 #### `france-decret-2024-318`
 
@@ -2584,7 +2582,7 @@ Yuan, Zhengjie; Xu, Jie; Shen, Le. (2022). *Valuation of Ecosystem Services for 
 - URL: <https://power.larc.nasa.gov/docs/services/api/>
 - Verification: UNVERIFIED | Access: public-domain
 - Backs:
-  - decision 9: browser-direct fallback weather source, CORS verified by live curl 2026-07-29
+  - decision 9: browser-direct fallback weather source, CORS verified against the live endpoint
 
 #### `nominatim-policy`
 
@@ -2677,51 +2675,52 @@ Yuan, Zhengjie; Xu, Jie; Shen, Le. (2022). *Valuation of Ecosystem Services for 
 ## Unsourced and weakly-sourced claims
 
 The honest-provenance ledger. Every entry is a claim that currently reaches, or could reach, a user-visible
-surface without solid peer-reviewed backing. This list is meant to be complete rather than flattering.
+surface without solid peer-reviewed backing. Completeness is the only test this list is held to.
 Each item names what would close it.
 
 ### A. Load-bearing claims with NO verifiable peer-reviewed backing
 
 | # | Claim | Where | Status | What would close it |
 |---|---|---|---|---|
-| A1 | Dehesa field studies measure light transmission and soil moisture as a function of distance from the oak trunk, reusable as an empirical template for distance-from-panel-edge modeling | doc 00 §12; the agroecology document §4.1 | Attributed only to 'Marcos et al., dehesa radiation transmission'. NOT LOCATED. This is called the highest-value analog in the decision record and rests on an unresolvable citation. | Find the actual paper, or drop the distance-from-edge empirical template and model it from geometry alone |
-| A2 | Wind reduction percentages under a panel array | the agrivoltaics document thin-evidence 7 | Rests on trade-press coverage, not primary papers. No peer-reviewed source located. | A primary micrometeorology paper, or remove the numeric wind modifier and keep only the qualitative rule |
-| A3 | Frost protection and dew formation under panels | the agrivoltaics document thin-evidence 6; doc 00 §12 rule 3 | Mechanistically plausible, entirely unquantified. No source. | Any field study with quantified frost/dew deltas |
-| A4 | VPD and relative-humidity deltas under panels | the agrivoltaics document thin-evidence 5 | Directionally consistent across reports but no numbers were extractable from any accessible source. | Extract the numbers from Marrou 2013b full text, which we hold a verified DOI for but did not read |
-| A5 | The 'Beck et al. 2012' 50%-shade threshold | the horticulture document gap 3 | Cited *within* agrivoltaic reviews. Primary reference NOT LOCATED and may not exist as described. Not to be confused with Beck et al. 2018 Köppen-Geiger, which is verified. | Trace it, or cite Zhang et al. 2025 for the tipping point instead and delete the Beck 2012 attribution |
-| A6 | Desmodium intercepts and kills stemborer larvae rather than repelling adults | doc 00 §11 | Attributed to 'eLife' with no article, authors or DOI. NOT LOCATED. | Find the eLife paper, or state the mechanism revision without a specific citation |
-| A7 | Penumbra at 4 m clearance is ~7.5 cm and can be ignored for annual DLI | doc 00 §3 | No source given anywhere. It is a defensible geometric calculation but it is presented as a physics constant. | Show the derivation inline, or cite a source |
-| A8 | Inter-reflection formula E / (1 - rho_g (1 - SVF) rho_m), material only for white backsheets at 3-8% in the shade strip | doc 00 §3 | No source given. The 3-8% magnitude in particular is unattributed. | Cite the derivation source; Marion 2017 is the likely candidate but does not state these numbers |
-| A9 | Beam shadow bands sweep ~0.25 deg/min, therefore timestep must be <=15 min | doc 00 §4 | No source. Arithmetically checkable but the 15 min threshold and the 'hourly steps smear cell-level extremes' claim are unattributed. | Show a convergence study; this is cheap to generate ourselves |
-| A10 | Per-crop shade-response functions conditional on climate | the horticulture document gap 8 | Do not exist in the literature in usable form. The product ships a two-context hot/arid vs cool/humid approximation that no source supports. | Label the two-context split as a product heuristic, not a finding |
-| A11 | Japanese solar-sharing crop science | the agrivoltaics document thin-evidence 10 | Nearly absent in English despite a decade of deployment and a legally binding 80% yield rule. Only sekiyama2019-solar-sharing was located. | Japanese-language literature search, or state the gap in the UI wherever the Japan overlay appears |
-| A12 | Nagashima 2015/2020 and AIP Conf. Proc. 2361(1):030002 (2021) | the agroecology document §3.1 | Neither citation resolves. The AIP volume 2361 record found at Crossref is a different paper (Hudelson & Lieth, article 080001). | Correct or drop; sekiyama2019-solar-sharing already carries the Nagashima attribution |
-| A13 | PMC4416130, described as a 'PLOS ONE 2015 root-foraging LER study' | the agroecology document Americas source list | No such study located. The root-foraging LER work is Zhang et al. 2014 and Postma & Lynch 2012, both in Annals of Botany. | Replace the PMC reference with the two verified Annals of Botany DOIs |
-| A14 | Base temperatures and DLI values sourced from trackgdd.com, hydroponics blogs and ReduSystems | the horticulture document gap 9 | Secondary web sources with no provenance. The horticulture document itself flags that every value reaching a hard filter must be traced first. DLI side closed 2026-09-11 (decision record 23): every Tier C figure cites the class methodology, the three Tier A rows cite per-crop trials, and no ECOCROP entry backs a light integral. Base temperatures remain. | Trace each base temperature to a primary or extension source before release; this is a release blocker, not a nice-to-have |
-| A17 | Leaf area index and light extinction coefficient per plant habit (`HABITS` in `src/data/catalog/schema.ts`) | water model basal coefficient; crop-versus-crop shading | Declared through `unsourcedClaim` as `HABIT_CANOPY_CLAIM` and listed on the sources step (record 23). FAO-56 chapter 9 fixes one extinction coefficient, 0.7, for every crop; the per-habit values are the app's own. | A source tabulating leaf area index or extinction by canopy form, or adopt FAO-56's single 0.7 and drop the per-habit column |
-| A18 | Crop ranking weights: light 0.35, climate 0.25, soil 0.15, interaction 0.1, competition 0.1, preference 0.05 | `src/recommend/stages/rank.ts` | Declared through `unsourcedClaim` as `WEIGHTS_CLAIM` and listed on the sources step (record 23). A design choice; the comment on `DEFAULT_WEIGHTS` says what each term is and why the order. | Nothing in the literature calibrates these terms for a garden bed; a sensitivity study of the ranking against the weights would say how much they matter |
-| A15 | Soil data sources (SoilGrids, SSURGO) license terms and resolution | the horticulture document gap 5 | Not researched at all. Stage 3 of the recommendation pipeline depends on them. | Do the research before designing stage 3 |
-| A16 | OSU Croptime crop and cultivar coverage | the horticulture document gap 6 | Not enumerated; the search budget ran out. GDD-based scheduling is designed around it. | Enumerate which vegetables have published GDD models |
+| A1 | A dehesa distance gradient giving light transmission and soil moisture as a function of distance from the oak trunk, reused as an empirical template for distance-from-panel-edge modeling | Decision Record 12, the distance-from-edge light model | The light half has its SHAPE only. Montero, Moreno & Bertomeu 2008 fit intercepted light against distance as a logistic curve, R^2 above 0.88 and radiation constant beyond 20 m, and their coefficients are behind the Springer paywall. The template was therefore never instantiated: the endpoints follow the published direction, the ten intermediate samples are interpolated, every magnitude is this app's own, and DEHESA_GRADIENT_CAVEAT says so on screen. The soil-moisture half rests on no distance function at all, since that literature reports discrete beneath-canopy and beyond-canopy zones (Moreno & Pulido 2009 and Simionesei et al. 2018 carry the endpoints). No dehesa paper by Marcos et al. exists, and none is cited. | The full text of Montero et al. 2008 for the fitted coefficients, and a dehesa study that fits soil moisture as a continuous function of distance |
+| A2 | Wind reduction percentages under a panel array | microclimate under panels | Rests on trade-press coverage, not primary papers. No peer-reviewed source located. | A primary micrometeorology paper, or remove the numeric wind modifier and keep only the qualitative rule |
+| A3 | Frost protection and dew formation under panels | Decision Record 12, rule 3 | Mechanistically plausible, entirely unquantified. No source. | Any field study with quantified frost/dew deltas |
+| A4 | VPD and relative-humidity deltas under panels | microclimate under panels | Directionally consistent across reports but no numbers were extractable from any accessible source. | Extract the numbers from Marrou 2013b full text, whose DOI is verified here and whose body is unread |
+| A5 | The 'Beck et al. 2012' 50%-shade threshold | the shade ceiling in the design guidance | Cited *within* agrivoltaic reviews. Primary reference NOT LOCATED and may not exist as described. Not to be confused with Beck et al. 2018 Köppen-Geiger, which is verified. | Trace it, or cite Zhang et al. 2025 for the tipping point instead and delete the Beck 2012 attribution |
+| A6 | Desmodium intercepts and kills stemborer larvae, a revision of the older repels-adults mechanism | Decision Record 11, the companion-planting rules | Attributed to 'eLife' with no article, authors or DOI. NOT LOCATED. | Find the eLife paper, or state the mechanism revision without a specific citation |
+| A7 | Penumbra at 4 m clearance is ~7.5 cm and can be ignored for annual DLI | Decision Record 3 | No source given anywhere. It is a defensible geometric calculation but it is presented as a physics constant. | Show the derivation inline, or cite a source |
+| A8 | Inter-reflection formula E / (1 - rho_g (1 - SVF) rho_m), material only for white backsheets at 3-8% in the shade strip | Decision Record 3 | No source given. The 3-8% magnitude in particular is unattributed. | Cite the derivation source. Marion 2017 is the likely candidate, but it does not state these numbers |
+| A9 | Beam shadow bands sweep ~0.25 deg/min, therefore timestep must be <=15 min | Decision Record 4 | No source. Arithmetically checkable but the 15 min threshold and the 'hourly steps smear cell-level extremes' claim are unattributed. | Show a convergence study, which is cheap to generate in-repo |
+| A10 | Per-crop shade-response functions conditional on climate | the two-context hot/arid and cool/humid split | Do not exist in the literature in usable form. The product ships a two-context hot/arid vs cool/humid approximation that no source supports. | Label the two-context split as a product heuristic, not a finding |
+| A11 | Japanese solar-sharing crop science | the Japan compliance overlay | Nearly absent in English despite a decade of deployment and a legally binding 80% yield rule. Only sekiyama2019-solar-sharing was located. | Japanese-language literature search, or state the gap in the UI wherever the Japan overlay appears |
+| A12 | Nagashima 2015/2020 and AIP Conf. Proc. 2361(1):030002 (2021) | Japanese solar-sharing sources | Neither citation resolves. The AIP volume 2361 record found at Crossref is a different paper (Hudelson & Lieth, article 080001). | Correct or drop, since sekiyama2019-solar-sharing already carries the Nagashima attribution |
+| A13 | PMC4416130, described as a 'PLOS ONE 2015 root-foraging LER study' | Three Sisters root-foraging sources | No such study located. The root-foraging LER work is Zhang et al. 2014 and Postma & Lynch 2012, both in Annals of Botany. | Replace the PMC reference with the two verified Annals of Botany DOIs |
+| A14 | Base temperatures and DLI values sourced from trackgdd.com, hydroponics blogs and ReduSystems | the catalog's base temperatures and DLI rows (`src/data/catalog/rows.ts`) | Secondary web sources with no provenance. Every value reaching a hard filter must be traced first. The DLI side is closed (decision record 23): 171 of the 177 Tier C figures cite nothing and say so, the other six cite the greenhouse guidance or trial their numbers come from, the three Tier A rows cite per-crop trials, and no ECOCROP entry backs a light integral. Base temperatures remain. | Trace each base temperature to a primary or extension source before release. This is a release blocker. |
+| A17 | Leaf area index and light extinction coefficient per plant habit (`HABITS` in `src/data/catalog/schema.ts`) | water model basal coefficient, crop-versus-crop shading | Declared through `unsourcedClaim` as `HABIT_CANOPY_CLAIM` and listed on the sources step (record 23). FAO-56 chapter 9 fixes one extinction coefficient, 0.7, for every crop. The per-habit values are the app's own. | A source tabulating leaf area index or extinction by canopy form, or adopt FAO-56's single 0.7 and drop the per-habit column |
+| A18 | Crop ranking weights: light 0.35, climate 0.25, soil 0.15, interaction 0.1, competition 0.1, preference 0.05 | `src/recommend/stages/rank.ts` | Declared through `unsourcedClaim` as `WEIGHTS_CLAIM` and listed on the sources step (record 23). A design choice, and the comment on `DEFAULT_WEIGHTS` says what each term is and why the order. | Nothing in the literature calibrates these terms for a garden bed. A sensitivity study of the ranking against the weights would say how much they matter |
+| A15 | Soil data sources (SoilGrids, SSURGO) license terms and resolution | stage 3 of the recommendation pipeline | Not researched at all. Stage 3 of the recommendation pipeline depends on them. | Do the research before designing stage 3 |
+| A16 | OSU Croptime crop and cultivar coverage | GDD-based scheduling | Not enumerated. GDD-based scheduling is designed around it. | Enumerate which vegetables have published GDD models |
 
 ### B. Claims backed only by paywalled or secondary sources
 
-These have verified bibliographic records. Nobody on this project has read the numbers.
+These have verified bibliographic records. The numbers behind them are unread here, except where a row says
+otherwise.
 
 | # | Claim | Source | Status |
 |---|---|---|---|
-| B1 | US ambient DLI map contours; any per-crop DLI table inside the paper | `faust2018-dli-maps` | ASHS returns 403 to automated fetch. Crossref-verified record, full text never read. Decision 7: must not reach a hard filter. |
-| B2 | The ~50% shade tipping point; shade-tolerant vs shade-sensitive groupings; their effect sizes and CIs | `zhang2025-tipping-points` | Paywalled to automated fetch when the horticulture document was written. Corroborated only from reviews and pv-magazine. Decision 7: must not reach a hard filter. |
-| B3 | Massachusetts SMART: >=50% sunlight at every square foot, 8 ft / 10 ft clearance, 5 MW AC cap | `ma-smart-astgu-guideline`, `ma-225-cmr-20` | mass.gov returns 403 to every automated fetch. Corroborated only from a UMass Extension fact sheet. **This is the one regime the product claims to CHECK rather than estimate**, so a human must read the DOER text before the checker ships. |
-| B4 | Germany 66% reference yield / 2.10 m / <10% and <15% area loss; and the negative claims that DIN SPEC 91434 contains no light-homogeneity threshold, no GCR cap and no minimum row spacing | `din-spec-91434-2021` | The standard is a free download and its bibliographic record is verified, but the text was not read. The three NEGATIVE claims are the load-bearing ones and are the easiest to get wrong. |
-| B5 | Italy >=70% agricultural area, 2.1 m, 60% producibility ratio | `italy-dm-436-2023` | Official PDF confirmed to exist; thresholds carried over from the agrivoltaics document, not extracted. |
-| B6 | France 90% of a control zone >=5% of area capped at 1 ha, 40% max coverage | `france-decret-2024-318` | Legifrance URL corrected and confirmed; thresholds carried over from the agrivoltaics document, not extracted. |
-| B7 | Japan 80% of regional average yield, 2 m | `japan-maff-solar-sharing` | Guideline PDF confirmed, but the served text is the 2025-amended version, not the March 25, 2024, notice our docs cite. |
+| B1 | US ambient DLI map contours, and any per-crop DLI table inside the paper | `faust2018-dli-maps` | The full text has been read. The paper gives DLI as a national map contoured in 5 mol/m2/d bins and reviews crops in prose, so it closes no per-crop gap and backs no per-crop DLI minimum. Decision 7: must not reach a hard filter. |
+| B2 | The ~50% shade tipping point, the shade-tolerant and shade-sensitive groupings, and their effect sizes and CIs | `zhang2025-tipping-points` | Paywalled. Corroborated only from reviews and pv-magazine. Decision 7: must not reach a hard filter. |
+| B3 | Massachusetts SMART: >=50% sunlight at every square foot, 8 ft / 10 ft clearance, 5 MW AC cap | `ma-smart-astgu-guideline`, `ma-225-cmr-20` | No mass.gov URL serves its text outside a browser session. Corroborated only from a UMass Extension fact sheet. **The product claims a CHECK for this one regime, and an estimate everywhere else**, so a human must read the DOER text before the checker ships. |
+| B4 | Germany 66% reference yield / 2.10 m / <10% and <15% area loss, and the negative claims that DIN SPEC 91434 contains no light-homogeneity threshold, no GCR cap and no minimum row spacing | `din-spec-91434-2021` | The standard is a free download and its bibliographic record is verified, but the text was not read. The three NEGATIVE claims are the load-bearing ones and are the easiest to get wrong. |
+| B5 | Italy >=70% agricultural area, 2.1 m, 60% producibility ratio | `italy-dm-436-2023` | Official PDF confirmed to exist. The thresholds are secondhand and were never extracted from it. |
+| B6 | France 90% of a control zone >=5% of area capped at 1 ha, 40% max coverage | `france-decret-2024-318` | Legifrance URL confirmed. The thresholds are secondhand and were never extracted from it. |
+| B7 | Japan 80% of regional average yield, 2 m | `japan-maff-solar-sharing` | Guideline PDF confirmed. The text served is the 2025-amended version, where the commonly cited notice is the one of March 25, 2024. |
 | B8 | Allium white rot sclerotia survive 20-40 years and rotation does not work | `hoanghua2024-white-rot` | The paper covers bait crops. The survival figure and the 'rotation is impractical' conclusion come from UC IPM, UMass and RHS extension pages that were not fetched. |
-| B9 | Juglone landscape-scale evidence is weak | `jose-juglone` | The Springer chapter is verified but paywalled. The horticulture document's skeptical framing leans on a ResearchGate copy and a WSU Extension fact sheet, neither peer reviewed nor verified. |
-| B10 | Light saturation point 25-60% of maximum sunlight at canopy level for C3 crops | Pang et al. 2019 and Carrier et al. 2019 | Cited by the agrivoltaics document only as secondary citations *inside* Laub et al. 2022 §4.3. Neither primary paper was located or verified. |
-| B11 | NREL SPA report text and the developer.nrel.gov -> developer.nlr.gov migration | `reda2008-spa-report`, `nrel-nsrdb-psm3` | nrel.gov and docs.nrel.gov were DNS-unreachable from the verification network. The DOI record is Crossref-verified; the PDF and the migration notice were not fetched. |
+| B9 | Juglone landscape-scale evidence is weak | `jose-juglone` | The Springer chapter is verified and paywalled. The skeptical framing leans on a ResearchGate copy and a WSU Extension fact sheet, neither peer reviewed nor verified. |
+| B10 | Light saturation point 25-60% of maximum sunlight at canopy level for C3 crops | Pang et al. 2019 and Carrier et al. 2019 | Reachable only as secondary citations *inside* Laub et al. 2022 §4.3. Neither primary paper was located or verified. |
+| B11 | NREL SPA report text and the developer.nrel.gov -> developer.nlr.gov migration | `reda2008-spa-report`, `nrel-nsrdb-psm3` | nrel.gov and docs.nrel.gov were DNS-unreachable from the verification network. The DOI record is Crossref-verified. The PDF and the migration notice were never read. |
 
-### C. The Laub 2022 crop-response model: what is ours and what is theirs
+### C. The Laub 2022 crop-response model: what is this app's and what is theirs
 
 The single most load-bearing source in the product, and the one with the most delicate provenance.
 
@@ -2729,15 +2728,14 @@ The single most load-bearing source in the product, and the one with the most de
    (Fig. S1 caption, Table S1 = the 58 publications, Table S2 = predictions), not in MOESM2 (raw dataset),
    not in Zenodo record `10.5281/zenodo.5716091` (two xlsx files). The article states "Code availability:
    Not applicable". The analysis was run in SAS 9.4 PROC GLIMMIX.
-2. **Our coefficients are derived, not cited.** They were recovered algebraically from the 162 published
+2. **This app's coefficients are derived.** They were recovered algebraically from the 162 published
    Table S2 points plus the verbatim model specification, and validated to within 0.07 percentage points.
    They must never be presented as Laub's published coefficients.
-3. **Documentation error to fix.** `00-DECISIONS.md` §7, `02-agrivoltaics-science.md` (§2.1 table, §2.2
-   point 1, §5) and `ARCHITECTURE.md` all describe the 67.2-156.1% range for fruity vegetables at 40% RSR
-   as a *prediction interval*. It is a 95% **confidence** interval: Table S2's caption and the main text
-   both say so. Prediction intervals exist in the paper but are only drawn as gray lines in Fig. 3 and are
-   never tabulated, so `LaubCurve.anchors` cannot be interpolating them. Correct the wording in all four
-   documents and in any UI copy that inherited it.
+3. **The interval is a confidence interval.** The 67.2-156.1% range for fruity vegetables at 40% RSR is a
+   95% **confidence** interval: Table S2's caption and the main text both say so. Prediction intervals
+   exist in the paper but are only drawn as gray lines in Fig. 3 and are never tabulated, so
+   `LaubCurve.anchors` cannot be interpolating them. Any wording that calls the range a prediction
+   interval is wrong, in the decision record and in UI copy alike.
 4. **Sample sizes.** berries n=5, fruits n=7, fruity vegetables n=3, leafy vegetables n=4, C3 cereals n=10,
    corn n=10, tubers/root crops n=2, grain legumes n=14, forages n=11. Totals 428 data points (340
    excluding controls), 58 studies, 38 crop species. **Tubers/root crops at n=2 is the weakest group in the
@@ -2745,77 +2743,79 @@ The single most load-bearing source in the product, and the one with the most de
    three thinnest.
 5. **Scale caveat, verbatim from the authors:** "uncertainties due to random plot scale effects are large,
    while at country or continental scales the mean response to shading, represented by the confidence
-   intervals, is the more valid estimator." Our users are single gardens. That is precisely the plot scale
-   the authors describe as MORE uncertain, so the confidence intervals we render are, if anything,
+   intervals, is the more valid estimator." This app's users are single gardens. That is precisely the plot
+   scale the authors describe as MORE uncertain, so the confidence intervals it renders are, if anything,
    optimistic for a single-garden prediction.
-6. **Do not verify our numbers against EarthArXiv 7354.** `tekie2024-drought-index-preprint` is a different,
+6. **Do not verify this app's numbers against EarthArXiv 7354.** `tekie2024-drought-index-preprint` is a different,
    non-peer-reviewed paper that merely cites Laub and publishes its own regressions using Laub's crop
    categories, e.g. `C3 Cereals Y=106.34-0.44X1`, `Berries Y=-13.36+2.22X1`, `Maize Y=61.82+0.25X1`,
-   `Grain Legumes Y=104.54-0.52X1`. Those are not Laub's coefficients. It ranks highly in search and is the
-   most likely way a future reader gets this wrong.
+   `Grain Legumes Y=104.54-0.52X1`. Those are Tekie's coefficients and none of them is Laub's. It ranks
+   highly in search and is the most likely way a future reader gets this wrong.
 
-### D. The agrivoltaics document thin-evidence areas, mapped to this corpus
+### D. Thin-evidence areas in the agrivoltaics literature, mapped to this corpus
 
-| # (the agrivoltaics document §7) | Area | Covered by |
+| # | Area | Covered by |
 |---|---|---|
 | 1 | Tubers/root crops n=2, fruity vegetables n=3, leafy vegetables n=4 in Laub | Section C item 4. The garden-relevant groups have the weakest support in the whole meta-analysis. |
-| 2 | No DLI threshold exists for brassicas, root crops, alliums, legumes, most herbs, hops, elderberry, pawpaw or forages | **Open.** Numbers in the decision-record DLI table for these classes are inference, not measurement. Doc 00 §6 already marks root/tuber and allium minima as "none established"; brassica 12-17 is explicitly labeled "inferred". Every other inferred number must be labeled the same way in the UI. |
+| 2 | No DLI threshold exists for brassicas, root crops, alliums, legumes, most herbs, hops, elderberry, pawpaw or forages | **Open.** Numbers in the decision-record DLI table for these classes are inference and no measurement. Decision Record 6 already marks root/tuber and allium minima as "none established", and brassica 12-17 is explicitly labeled "inferred". Every other inferred number must be labeled the same way in the UI. |
 | 3 | Air-temperature effects contradict across climates | `barron-gafford2019-arizona` (cooling, AZ) vs `weselek2021-potato` (warming, Heggelbach). Both verified. **Genuine scientific disagreement, not a citation gap.** The product must not present a single sign. |
 | 4 | Soil-moisture sign also flips | `hassanpour-adeh2018-oregon` (doubled), `barron-gafford2019-arizona` (+15%), `weselek2021-potato` (reduced). Same treatment. |
 | 5 | VPD/RH deltas not extractable as numbers | Gap A4. |
 | 6 | Frost protection and dew formation unquantified | Gap A3. |
 | 7 | Wind-reduction percentages rest on trade press | Gap A2. |
 | 8 | Phenology delay has one number (lettuce 3-7 d) and no cross-crop synthesis | `marrou2013-lettuce-rue` covers the single number. **No cross-crop source exists.** Do not extrapolate the lettuce figure to other crops. |
-| 9 | No published seasonal validation of any analytic ground-PAR model against distributed field PAR sensors | **Open, and it is the largest gap on the physics side.** `zainali2023-viewfactor`'s 0.3% figure is a single clear-sky day. Our whole optical stack inherits this. |
+| 9 | No published seasonal validation of any analytic ground-PAR model against distributed field PAR sensors | **Open, and it is the largest gap on the physics side.** `zainali2023-viewfactor`'s 0.3% figure is a single clear-sky day. This app's whole optical stack inherits it. |
 | 10 | Japanese solar-sharing crop science nearly absent in English | Gaps A11, A12. Only `sekiyama2019-solar-sharing` located. |
 | 11 | Fresh-weight vs dry-weight reporting bias may inflate apparent shade benefit for berries, fruits and fruiting vegetables | **Open.** This bites exactly the three groups where Laub shows shade *benefit* (berries 114%, fruits 113%, fruity veg 102%), which is also the pathway the water-limitation flag gates. Two independent reasons to distrust the same numbers. |
 | 12 | Multi-year accumulation of shade stress in perennials is under-studied | Partly closed by `reher2025-pears`, a multi-year perennial trial showing a consistent yield reduction. Still open for berries and cane fruit. |
 
-### E. The horticulture document known gaps, mapped to this corpus
+### E. Known gaps in the crop and horticulture data, mapped to this corpus
 
-| # (the horticulture document §7) | Gap | Status |
+| # | Gap | Status |
 |---|---|---|
-| 1 | Faust & Logan 2018 full text not retrievable | Gap B1. Still not retrieved. |
+| 1 | No per-crop DLI table in Faust & Logan 2018 | The full text has been read. What is still missing is a per-crop table, which that paper does not contain: its DLI figures are a national map in 5 mol/m2/d bins. See gap B1. |
 | 2 | 2025 agrivoltaics meta-analysis paywalled | Gap B2. Still not read. Now identified as Zhang et al., `10.1007/s13593-025-01060-z`. |
 | 3 | 'Beck et al. 2012' 50%-shade threshold not traced | Gap A5. Still not traced. |
-| 4 | Most DLI values in the horticulture document §3.6 are Tier C inferences | **Confirmed and unchanged.** Ordinal ranking reliable, absolutes provisional. The horticulture document's own suggested fix (a systematic review of shade-cloth trials, convertible to DLI given site radiation) is the highest-value follow-up and would upgrade 20-30 rows from C to B. |
+| 4 | Most per-crop DLI values are Tier C inferences | **Confirmed and unchanged.** Ordinal ranking reliable, absolutes provisional. A systematic review of shade-cloth trials, convertible to DLI given site radiation, is the highest-value follow-up and would upgrade 20-30 rows from C to B. |
 | 5 | Soil data sources not researched | Gap A15. |
 | 6 | OSU Croptime coverage not enumerated | Gap A16. |
-| 7 | PFAF and Permapeople CC BY-SA licensing needs legal review | **Open.** Decision 9 already requires isolation behind a boundary or exclusion. The image terms on PFAF add non-commercial and no-derivatives restrictions on top of the viral CC BY-SA. Not a citation gap, but it is a shipping blocker. |
+| 7 | PFAF and Permapeople CC BY-SA licensing needs legal review | **Open.** Decision 9 already requires isolation behind a boundary or exclusion. The image terms on PFAF add non-commercial and no-derivatives restrictions on top of the viral CC BY-SA. The gap is in the license review, and it blocks shipping. |
 | 8 | Per-crop shade response conditional on climate does not exist in usable form | Gap A10. |
 | 9 | Secondary sources used for base temperatures and DLI values | Gap A14. Release blocker. |
 
-### F. Citation errors found in the research docs
+### F. Citation errors this corpus corrects
 
-Every one of these is a wrong citation shipped in `docs/`. Fix at source.
+Each row is a wrong form that circulates for a source this app cites. The corpus carries the correct
+record, and each entry's caveat repeats it.
 
-| Where | Our docs say | Actually |
-|---|---|---|
-| the horticulture document §8 | Holliday, R. (1968). Plant competition and crop yield. *Nature* 217:289 | **Nature 217:289-290 (1968) is by Farazdaghi & Harris.** Holliday's paper is *Nature* 186:22-24 (1960). Two different papers conflated. See `holliday1960-population-yield` and `farazdaghi1968-competition-yield`. |
-| the horticulture document §8 | Luedeling, E. et al. (2011). The Dynamic Model provides the best description of the chill process. *HortScience* 46(3):420-425 | **HortScience 46(3):420-425 is by Zhang & Taylor**, and it is a single-site pistachio study in Australia, not a global comparison. The global-comparison claim belongs to Luedeling & Brown 2010 (`luedeling2010-chill-comparability`). |
-| the solar geometry document §9 | Patel, M. T. et al. (2018). Ground sculpting to enhance vertical bifacial solar farm output. arXiv:1806.06666 | **Authors are Khan, Sakr, Sun, Bermel & Alam.** No Patel. Version of record is *Applied Energy* 241:592-598 (2019), `10.1016/j.apenergy.2019.01.168`. |
-| the agroecology document Europe | Fabião et al. 2018 (*Water* 10(4):489) | **Water 10(4):489 is by Simionesei, Ramos, Oliveira, Jongen et al.** No Fabião on the author list. |
-| the solar geometry document §9 | INRAE (2023). Assessment of the ground coverage ratio ... hal-04240227 | **Single-authored by Christian Dupraz.** Version of record *Agroforestry Systems* 98:2679-2696 (2024), `10.1007/s10457-023-00906-3`. hal.science blocks automated fetch; use hal.inrae.fr. |
-| doc 00 §11, the horticulture document §4.5 | Finch & Collier (2003) | **Three authors: Finch, Billiald & Collier.** *Ent. Exp. Appl.* 109:183-195. |
-| the agroecology document §1.8 | Armstrong et al. 2022 (*Ecosystems and People* 18(1)) | 2023, volume 19. The 2022 inside the DOI is the acceptance year. |
-| the agroecology document §1.8 | Armstrong et al. 2021 (*Ecology and Society* 26(2):6), no DOI | DOI is `10.5751/ES-12322-260206`. The plausible-looking `10.5751/ES-12160-260206` 404s. |
-| the agroecology document Africa | Fernandes, O'Kting'ati & Maghembe 1985 (*Agroforestry Systems* 2) | 1984, *Agroforestry Systems* 2:73-86. Separate 1985 and 1989 versions exist elsewhere. |
-| the agroecology document Asia/Oceania | Gott 1983 (*Archaeology in Oceania* 18(1)) | No Gott article at that location. The murnong paper is *Australian Aboriginal Studies* 1983(2):2-18 (no DOI); the Crossref-verified Gott record in *Archaeology in Oceania* is 1982, 17:59-67. |
-| the agrivoltaics document §8 | Widmer et al. (2024/2025). Strawberry and raspberry under agrivoltaics: minimum DLI requirements | Title is a paraphrase; four of six given names are wrong; version of record is 2026, *AgriVoltaics Conference Proceedings* 4, `10.52825/agripv.v4i.2837`. |
-| the agrivoltaics document §8 | Doedt, C., Tajima, M., Iida, T. (2022). Agrivoltaics in Japan: a legal framework analysis | Crossref gives issue year 2024 and the short title 'Agrivoltaics in Japan'. |
-| the agrivoltaics document §8, §1.2 | McCree (1972). The action spectrum... *Agricultural Meteorology* 9:191-216 | Crossref issued year is 1971. Volume and pages are correct. Separately, the solar geometry document cites a *different* McCree 1972 paper (*Agric. Meteorol.* 10:443-453) under the same short form; they must not be merged. |
-| the agrivoltaics document §8 | Marcelis et al. (2006), *Acta Horticulturae* 711:97-103 | Pages 97-104. |
-| the horticulture document §4.5 | Theunissen (1994), *Pesticide Science* 42:65-72 | Pages 65-68. |
-| the horticulture document §1.7 | Ouellet & Sherk (1967). Woody ornamental plant zonation indices of winter hardiness | Actual part I title: 'Woody ornamental plant zonation: I. Indices of winterhardiness', *Can. J. Plant Sci.* 47:231-238. Parts II and III also exist; part III carries the map. |
-| the horticulture document §4.11 | Peng et al., ScienceDirect PII S1161030115300125 | That PII does not correspond to the quoted title. Correct DOI: `10.1016/j.eja.2015.07.007`. |
-| the agrivoltaics document §8 | Tekie et al. 2024, https://eartharxiv.org/repository/object/7354/ | URL 404s. Working URL is `/repository/view/7354/`; DOI `10.31223/X5KT33`. See section C item 6 for why this preprint is dangerous. |
-| the agroecology document Americas | PMC4416130 (*PLOS ONE* 2015 root-foraging LER study) | Not located. The root-foraging LER work is Zhang et al. 2014 and Postma & Lynch 2012, both *Annals of Botany*. |
-| the horticulture document §2 | FAO ECOCROP via the land-resources-planning-toolbox URL | Stale stub. ECOCROP now lives at <https://gaez.fao.org/pages/ecocrop>; `ecocrop.fao.org` is dead. |
-| the agrivoltaics document §6.5 | Décret n° 2024-318, no Legifrance id | Correct id is JORFTEXT000049386027. The widely circulated JORFTEXT000049383066 is wrong. |
-| the agroecology document Europe | *Forest Ecology and Management* 2021 (Central European coppice decline) | Ambiguous: two plausible 2021 FEM matches exist (Slach et al. `10.1016/j.foreco.2021.119687` and Johann `10.1016/j.foreco.2021.119129`). Cannot be pinned. |
-| the horticulture document §8 | Purdue HO-238-B-W treated as interchangeable with HO-238-W | Different publications, different author lists. HO-238-B-W adds Currey and Faust. |
-| the horticulture document §8 | Virginia Coop. Ext. SPES-720 | Printed publication number is SPES-720NP; author Eric Stallknecht, 2025. |
+| Wrong form in circulation | Actually |
+|---|---|
+| Holliday, R. (1968). Plant competition and crop yield. *Nature* 217:289 | **Nature 217:289-290 (1968) is by Farazdaghi & Harris.** Holliday's paper is *Nature* 186:22-24 (1960). Two different papers conflated. See `holliday1960-population-yield` and `farazdaghi1968-competition-yield`. |
+| Luedeling, E. et al. (2011). The Dynamic Model provides the best description of the chill process. *HortScience* 46(3):420-425 | **HortScience 46(3):420-425 is by Zhang & Taylor**, and it is a single-site pistachio study in Australia, not a global comparison. The global-comparison claim belongs to Luedeling & Brown 2010 (`luedeling2010-chill-comparability`). |
+| Patel, M. T. et al. (2018). Ground sculpting to enhance vertical bifacial solar farm output. arXiv:1806.06666 | **Authors are Khan, Sakr, Sun, Bermel & Alam.** No Patel. Version of record is *Applied Energy* 241:592-598 (2019), `10.1016/j.apenergy.2019.01.168`. |
+| Fabião et al. 2018 (*Water* 10(4):489) | **Water 10(4):489 is by Simionesei, Ramos, Oliveira, Jongen et al.** No Fabião on the author list. |
+| INRAE (2023). Assessment of the ground coverage ratio ... hal-04240227 | **Single-authored by Christian Dupraz.** Version of record *Agroforestry Systems* 98:2679-2696 (2024), `10.1007/s10457-023-00906-3`. hal.science does not serve it, use hal.inrae.fr. |
+| Finch & Collier (2003) | **Three authors: Finch, Billiald & Collier.** *Ent. Exp. Appl.* 109:183-195. |
+| Armstrong et al. 2022 (*Ecosystems and People* 18(1)) | 2023, volume 19. The 2022 inside the DOI is the acceptance year. |
+| Armstrong et al. 2021 (*Ecology and Society* 26(2):6), no DOI | DOI is `10.5751/ES-12322-260206`. The plausible-looking `10.5751/ES-12160-260206` 404s. |
+| Fernandes, O'Kting'ati & Maghembe 1985 (*Agroforestry Systems* 2) | 1984, *Agroforestry Systems* 2:73-86. Separate 1985 and 1989 versions exist elsewhere. |
+| Gott 1983 (*Archaeology in Oceania* 18(1)) | No Gott article at that location. The murnong paper is *Australian Aboriginal Studies* 1983(2):2-18 (no DOI). The Crossref-verified Gott record in *Archaeology in Oceania* is 1982, 17:59-67. |
+| Widmer et al. (2024/2025). Strawberry and raspberry under agrivoltaics: minimum DLI requirements | Title is a paraphrase, four of six given names are wrong, and the version of record is 2026, *AgriVoltaics Conference Proceedings* 4, `10.52825/agripv.v4i.2837`. |
+| Doedt, C., Tajima, M., Iida, T. (2022). Agrivoltaics in Japan: a legal framework analysis | Crossref gives issue year 2024 and the short title 'Agrivoltaics in Japan'. |
+| McCree (1972). The action spectrum... *Agricultural Meteorology* 9:191-216 | Crossref issued year is 1971. Volume and pages are correct. Separately, a *different* McCree 1972 paper (*Agric. Meteorol.* 10:443-453) circulates under the same short form, and the two must not be merged. |
+| Marcelis et al. (2006), *Acta Horticulturae* 711:97-103 | Pages 97-104. |
+| Theunissen (1994), *Pesticide Science* 42:65-72 | Pages 65-68. |
+| Ouellet & Sherk (1967). Woody ornamental plant zonation indices of winter hardiness | Actual part I title: 'Woody ornamental plant zonation: I. Indices of winterhardiness', *Can. J. Plant Sci.* 47:231-238. Parts II and III also exist, and part III carries the map. |
+| Peng et al., ScienceDirect PII S1161030115300125 | That PII does not correspond to the quoted title. Correct DOI: `10.1016/j.eja.2015.07.007`. |
+| Tekie et al. 2024, https://eartharxiv.org/repository/object/7354/ | URL 404s. Working URL is `/repository/view/7354/`, DOI `10.31223/X5KT33`. See section C item 6 for why this preprint is dangerous. |
+| PMC4416130 (*PLOS ONE* 2015 root-foraging LER study) | Not located. The root-foraging LER work is Zhang et al. 2014 and Postma & Lynch 2012, both *Annals of Botany*. |
+| FAO ECOCROP via the land-resources-planning-toolbox URL | Stale stub. ECOCROP now lives at <https://gaez.fao.org/pages/ecocrop>, and `ecocrop.fao.org` is dead. |
+| Décret n° 2024-318, no Legifrance id | Correct id is JORFTEXT000049386027. The widely circulated JORFTEXT000049383066 is wrong. |
+| *Forest Ecology and Management* 2021 (Central European coppice decline) | Ambiguous: two plausible 2021 FEM matches exist (Slach et al. `10.1016/j.foreco.2021.119687` and Johann `10.1016/j.foreco.2021.119129`). Cannot be pinned. |
+| Purdue HO-238-B-W treated as interchangeable with HO-238-W | Different publications, different author lists. HO-238-B-W adds Currey and Faust. |
+| Virginia Coop. Ext. SPES-720 | Printed publication number is SPES-720NP, author Eric Stallknecht, 2025. |
 
-No DOI in this corpus was invented. Where our docs gave a DOI that resolves to a different paper, both the
+No DOI in this corpus was invented. Where a DOI in circulation resolves to a different paper, both the
 wrong attribution and the correct record are listed above and carried as caveats on the relevant entries.
-Where no DOI could be found, the entry is marked `unverified` rather than given a plausible-looking one.
+Where no DOI could be found, the entry is marked `unverified`, and no plausible-looking one was put in
+its place.

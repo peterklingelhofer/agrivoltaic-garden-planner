@@ -32,8 +32,8 @@ const percent = (value: number): string => `${String(Math.round(value * 100))}%`
 export const SurroundingsStep = (): ReactElement => {
   const exposure = useAppStore((s) => s.answers.exposure)
   const answer = useAppStore((s) => s.answerOnboarding)
-  // a drawn house answers this question itself (Decision Record 26), so the three-answer
-  // share is grayed out rather than read alongside a geometry that already says the same thing
+  // a drawn house or tree answers this question itself (Decision Record 26), so the three answers
+  // are grayed out because a geometry already says the same thing
   const houses = useAppStore((s) => s.plot?.obstructions.length ?? 0)
   return (
     <>
@@ -218,8 +218,8 @@ export const WaterStep = (): ReactElement => {
  *
  * Candidates first and the bake inside them, which is what `DesignProgress` is shaped for: a bar
  * drawn off the bake alone would run to full and reset five times, and five stalls isn't what a
- * run of five bakes looks like from the outside. Guarded rather than trusted, because a bar that
- * ran past its own end or went backward would be worse than no bar
+ * run of five bakes looks like from the outside. Clamped, because a bar that ran past its own
+ * end or went backward would be worse than no bar
  */
 const searchFraction = (progress: DesignProgress): number => {
   const total = progress.candidatesTotal
@@ -236,9 +236,9 @@ const searchBake = (progress: DesignProgress): number => {
 
 /**
  * The wait made legible. `ScenarioComparison` already says in words that this is seconds of real
- * work rather than an instant; what it couldn't say was how many seconds are left, so a visitor
- * had no way to tell a long run from a hung one. Nothing here names an archetype: the search
- * order is the engine's business, and "option 3 of 5" is the part of it that is the visitor's
+ * work. What it can't say is how many seconds are left, and without that a visitor has no way to
+ * tell a long run from a hung one. Nothing here names an archetype: the search order is the
+ * engine's business, and "option 3 of 5" is the part of it that is the visitor's
  */
 export const SearchProgress = (): ReactElement | null => {
   const progress = useAppStore((s) => s.onboarding.progress)
@@ -263,7 +263,7 @@ export const SearchProgress = (): ReactElement | null => {
       >
         <span className="search-progress-fill" style={{ width: percent(done) }} />
       </div>
-      {/* polite rather than assertive: this changes several times a second and must never
+      {/* set to polite: this changes several times a second and must never
           interrupt whatever is being read out about the question itself */}
       <p className="panel-sub" aria-live="polite" data-testid="readout-onboarding-progress">
         {position}

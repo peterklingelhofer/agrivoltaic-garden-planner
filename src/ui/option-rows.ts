@@ -15,13 +15,9 @@ import { plural } from './format'
 /**
  * What an answer option would do to the panels, said in a figure under the option.
  *
- * The wants step used to draw a translucent array in the scene as the pointer crossed the
- * cards. What it was doing there was never obvious to anyone watching it
- * ("you don't know why it's doing it"), it stayed on screen on the panels step for an answer
- * already given, and its shade was unmeasured by design. One sentence does the same job: this
- * choice leaves room for this many rows. It reads the same `candidatesFor` the search starts
- * from, which is arithmetic over the answers, so it costs nothing to compute for every option
- * when a step renders, and it never simulates anything
+ * One sentence does the job: this choice leaves room for this many rows. It reads the same
+ * `candidatesFor` the search starts from, which is arithmetic over the answers, so it costs nothing
+ * to compute for every option when a step renders, and it never simulates anything
  */
 
 export interface OptionRowInputs {

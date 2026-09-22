@@ -18,7 +18,7 @@ export const PHOTON_CONVERSION_UMOL_PER_J = 4.57
 export const BROADBAND_UMOL_PER_J = 2.06
 export const SOLAR_CONSTANT_W_M2 = 1361.1
 
-// diffuse skylight is blue-shifted so it carries more photons per joule (the solar geometry document section 2.6)
+// diffuse skylight is blue-shifted so it carries more photons per joule
 export const BEAM_UMOL_PER_J = 2.0
 export const DIFFUSE_UMOL_PER_J = 2.15
 export const KWH_TO_MJ = 3.6
@@ -42,7 +42,7 @@ export const ppfdTwoBand = (
 export const dliFromPpfdSum = (samples: Float32Array, stepSeconds: Seconds): MolPerM2Day =>
   ((sum(samples) * stepSeconds) / 1e6) as MolPerM2Day
 
-// DLI = GHI(MJ) x 1e6 J/MJ x f_PAR x 4.57 umol/J / 1e6 umol/mol (the agrivoltaics document section 1.3)
+// DLI = GHI(MJ) x 1e6 J/MJ x f_PAR x 4.57 umol/J / 1e6 umol/mol
 export const dliFromDailyGhiMj = (ghi: MegajoulesPerM2Day, parFraction: Fraction): MolPerM2Day =>
   (ghi * parFraction * PHOTON_CONVERSION_UMOL_PER_J) as MolPerM2Day
 

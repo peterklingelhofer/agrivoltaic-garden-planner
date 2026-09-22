@@ -93,7 +93,7 @@ describe('backtrackRotationDeg', () => {
 })
 
 describe('minimumPitchM', () => {
-  it('reproduces the the solar geometry document section 3.2 worked case P = W(cos b + sin b / tan psi_min)', () => {
+  it('reproduces the worked case P = W(cos b + sin b / tan psi_min)', () => {
     const tiltDeg = 30
     const minPsiRad = 20 * DEG_TO_RAD
     const expected =

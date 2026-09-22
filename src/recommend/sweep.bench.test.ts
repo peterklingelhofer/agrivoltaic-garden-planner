@@ -15,9 +15,9 @@ import {
 import { siteFixture, tmyFixture } from './testkit'
 
 /*
-  Re-measures the three VOID figures in Decision Record 10c, left behind by the row-axis fix
-  (the row-axis fix of 2026-09-01; see *What holds it up* in `crates/agv-sim/README.md`). Every configuration below
-  costs a full annual bake, so this is skipped by default. Run it explicitly with
+  Measures three layout-search figures, one per block below (see *What holds it up* in
+  `crates/agv-sim/README.md`). Every configuration below costs a full annual bake, so this is
+  skipped by default. Run it explicitly with
 
     SWEEP=1 bun test src/recommend/sweep.bench.test.ts
 
@@ -73,9 +73,9 @@ describe.skipIf(!RUN)(
         rotationConstraints,
         weather: tmyFixture(),
         backend: 'cpu-reference',
-        // preview subdivision and substep count, at a coarser 0.5 m cell rather than the 0.25 m
-        // preview default: the trade `design.test.ts` already makes for its own tilt-band bakes,
-        // and twelve of them run in this file
+        // the default subdivision and substep count, at a coarser 0.5 m cell, above the 0.12 m
+        // default: the trade `design.test.ts` already makes for its own tilt-band bakes, and twelve
+        // of them run in this file
         targetCellSizeM: meters(0.5),
       }
     }, 300_000)
@@ -131,7 +131,7 @@ describe.skipIf(!RUN)(
      * band at 20 N and found crops and annual AC both falling as tilt rises. Decision Record 10c
      * said the two move in opposite directions at 42.4 N and this block looks in between.
      *
-     * The band runs past 42.4 to 60 N rather than stopping where the record's claim did, because
+     * The band runs past 42.4 to 60 N, because
      * an answer of "it does not turn over by 42.4" is only worth reading beside where it does.
      *
      * Row count is pure geometry here, so it doesn't move with latitude and the comparison stays

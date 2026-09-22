@@ -440,7 +440,8 @@ describe('annual simulation pipeline', () => {
     ).not.toBe(base)
 
     // a house drawn after a bake at this arrangement must miss the memo, and so must the same
-    // house moved or raised: the probe of 2026-09-14 read a houseless field back as the house's
+    // house moved or raised: without the house in the key, a houseless field reads back as the
+    // house's own
     const house: Obstruction = {
       id: obstructionId('house-1'),
       kind: 'house',

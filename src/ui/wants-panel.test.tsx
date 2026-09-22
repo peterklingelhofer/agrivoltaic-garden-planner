@@ -7,7 +7,7 @@ import { WantsPanel } from './WantsPanel'
 /**
  * The third step: what to grow, and whether the sunlight goes mostly to the plants or mostly to
  * the panels. Two questions, each written to the answers the layout search reads, and the four
- * shares of the split together behind one fold rather than two on the face and two behind it
+ * shares of the split are kept together behind one fold, none of them split out to the face
  */
 
 beforeEach(() => {
