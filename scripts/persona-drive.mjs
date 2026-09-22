@@ -3,7 +3,7 @@
 //   node scripts/persona-drive.mjs --dir <dir> serve                  # start Chromium (ANGLE Metal), poll <dir>/cmd.json
 //   node scripts/persona-drive.mjs --dir <dir> <op> [args...]         # send one command, print the result
 //   node scripts/persona-drive.mjs --dir <dir> --weather <wdir> serve # answer the weather archives from <wdir>/{hourly,daily}.json
-//   node scripts/persona-drive.mjs --dir <dir> --phone serve          # a 375x812 touch screen instead of a 1440x900 laptop
+//   node scripts/persona-drive.mjs --dir <dir> --phone serve          # a 375x812 touch screen
 //
 // Ops:
 //   open <url>                 load the page in a fresh context (cold visitor: no saved design)
@@ -42,18 +42,17 @@ if (dirIndex === -1) {
 const dir = argv[dirIndex + 1]
 /*
   `--weather <dir>` answers the two Open-Meteo archive requests from <dir>/hourly.json and
-  <dir>/daily.json instead of the upstream. One site lookup weighs about 600 of Open-Meteo's
-  calls against 600 a minute and 5,000 an hour from one address, and every fresh context here is
-  a fresh lookup: three of six persona visits on 2026-09-05 were spent inside the rate limit
-  instead of the app. Capture the bodies once with curl (the URLs are in src/data/tmy.ts and
-  src/data/static-layers.ts) and every browser gets the same real weather, whatever address it
-  types. Elevation, soil and the place-name search stay live; they are light
+  <dir>/daily.json, so no request reaches the upstream. One site lookup weighs about 600 of
+  Open-Meteo's calls against 600 a minute and 5,000 an hour from one address, and every fresh
+  context here is a fresh lookup, so the rate limit is easy to hit. Capture the bodies once with
+  curl (the URLs are in src/data/tmy.ts and src/data/static-layers.ts) and every browser gets the
+  same real weather, whatever address it types. Elevation, soil and the place-name search stay
+  live; they are light
 */
 const weatherIndex = argv.indexOf('--weather')
 const weatherDir = weatherIndex === -1 ? null : argv[weatherIndex + 1]
 // `--phone` is a 375x812 touch screen that reports itself as a phone, the way the mobile e2e
-// project does, so a persona meets the tab bar and the one-surface layout rather than a narrow
-// laptop window
+// project does, so a persona meets the tab bar and the one-surface layout
 const phoneIndex = argv.indexOf('--phone')
 const phone = phoneIndex !== -1
 const rest = argv.filter(
@@ -151,8 +150,8 @@ const look = () =>
       for (let p = el; p; p = p.parentElement) {
         if (p.hidden || p.getAttribute('aria-hidden') === 'true') return true
         if (p.classList?.contains('visually-hidden')) return true
-        // the body of a closed fold. Chromium keeps a layout box for it (content-visibility
-        // rather than display none), so the rectangle test below let personas read text that was
+        // the body of a closed fold. Chromium keeps a layout box for it (content-visibility,
+        // not display none), so the rectangle test below let personas read text that was
         // behind a summary nobody had pressed
         if (p.tagName === 'DETAILS' && !p.open && !el.closest('summary')) return true
       }

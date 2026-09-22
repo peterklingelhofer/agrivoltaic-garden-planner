@@ -71,8 +71,8 @@ import { landEquivalentRatio } from './yield'
 export type SimulationRunner = typeof runSimulation
 
 /**
- * Where the search has got to, reported per candidate rather than per bake: a bar drawn from
- * the bake alone would restart from zero five times and read as five stalls rather than one run
+ * Where the search has got to, reported per candidate: a bar drawn from
+ * the bake alone would restart from zero five times, reading as five stalls when it is one run
  */
 export interface DesignProgress {
   readonly candidatesDone: number
@@ -204,9 +204,9 @@ export const AMBITION_SHADE_BUDGET: Readonly<Record<GrowingAmbition, number>> = 
 export const shadeBudgetFor = (answers: OnboardingAnswers): Fraction =>
   fraction(AMBITION_SHADE_BUDGET[answers.ambition] * (1 - SURROUNDINGS_SHADE[answers.exposure]))
 
-// the solar geometry document section 3.4: the energy optimum is about 0.85 of the latitude, and agrivoltaic designs
-// run below it to shorten the shadow and lower the structure. `energy-first` no longer takes
-// its tilt from here, because measured against this project's own chain the rule loses to
+// The energy optimum is about 0.85 of the latitude, and agrivoltaic designs run below it to shorten
+// the shadow and lower the structure. `energy-first` takes its fixed tilt from a sweep on the
+// site's own weather, because measured against this project's own chain the rule loses to
 // `balanced`: see `measuredEnergyPlan`
 const TILT_LATITUDE_FACTOR: Readonly<Record<TiltedArchetype, number>> = {
   'food-first': 0.6,
@@ -233,7 +233,7 @@ const MODULES_UP_THE_SLOPE: Readonly<Record<TiltedArchetype, number>> = {
   'energy-first': 2,
 }
 
-// the solar geometry document section 3.3: 2-5 m is the dominant clearance band for elevated agrivoltaics, GCR
+// 2-5 m is the dominant clearance band for elevated agrivoltaics, GCR
 // 0.25-0.50 versus 0.8+ projected for conventional PV
 const APV_MIN_GCR = 0.08
 const APV_MAX_GCR = 0.5
@@ -244,7 +244,7 @@ export const DIN_CATEGORY_I_CLEARANCE_M = 2.1
 const GROUND_ROW_CLEARANCE_M = 0.8
 const MIN_WORKABLE_CLEARANCE_M = 0.5
 
-// the solar geometry document section 3.3, Next2Sun archetype: pitch 8-15 m, bottom edge 0.8-1.0 m, and crops keep
+// The Next2Sun archetype: pitch 8-15 m, bottom edge 0.8-1.0 m, and crops keep
 // at least 75 percent of open-field light at 8 m
 const VERTICAL_MIN_PITCH_M = 8
 const VERTICAL_MAX_PITCH_M = 15
@@ -450,7 +450,7 @@ const tracksFor = (answers: OnboardingAnswers, site: Site, heightRoomM: number |
         (DESIGN_MODULE.heightM * sinDeg(degrees(TRACKER_MAX_ROTATION_DEG))) / 2)
 
 /**
- * How `energy-first` is to be built, measured on the site's own weather rather than asserted.
+ * How `energy-first` is to be built, measured on the site's own weather and never asserted.
  * See `measuredEnergyPlan`
  */
 export interface EnergyPlan {
@@ -514,10 +514,9 @@ const tiltedCandidate = (
   /*
     The direction the rows RUN, which is what `arrayLayout` and `sim/geometry.ts` read it as: a
     fixed row facing the equator runs east to west, and a north-south tracker axis runs north to
-    south. Until 2026-09-11 this held the surface azimuth instead, so every fixed candidate's rows
-    ran north to south with the panels tilted along their own row, 37 m of panel laid across a
-    23 m plot, and the search measured the shade of that sawtooth. A gardener watching the
-    preview said "you've got solar panels outside of the rectangle you said you had"
+    south. Holding the surface azimuth here would turn every fixed candidate's rows
+    north to south with the panels tilted along their own row, 37 m of panel laid across a
+    23 m plot, well outside the plot the grower asked for
   */
   const rowAzimuthDeg = degrees(tracking ? 0 : 90)
   const fill = fillPlot(answers, tracking, pitchM, collectorWidthM * cosDeg(degrees(finalTiltDeg)))
@@ -648,7 +647,7 @@ const controlCandidate = (): ArrayCandidate => ({
  * degrees fits five, and the flattest shades least. So the band is walked a degree at a time and
  * the tilt with the least panel overhead wins, the flatter of two equals.
  *
- * Measured on the rows as they now run (east to west, 2026-09-11) with the CPU reference
+ * Measured on the rows as they run (east to west) with the CPU reference
  * backend at 42.4 N, ground rows: at one row, season RSR FALLS as tilt rises, 0.256 -> 0.243 ->
  * 0.218 on 16 by 12 m and 0.267 -> 0.262 -> 0.246 on 40 by 25 m at 10, 20 and 35 degrees; on
  * 30 by 60 m the flattest tilt is four rows at 0.221 against five rows at 0.264 and 0.254. The
@@ -886,14 +885,14 @@ const annualAcKwhOf = (candidate: ArrayCandidate, shared: Shared): number =>
   ).annualAcKwh
 
 /**
- * How `energy-first` is built, measured on the site's own weather instead of asserted.
+ * How `energy-first` is built, measured on the site's own weather and never asserted.
  *
  * Every other archetype here derives its geometry from a published rule of thumb, and for this
  * one that was not good enough. `energy-first` is the design whose whole promise is that it
  * generates the most, so a rule that puts it below `balanced` does not cost a few percent, it
  * makes the label a lie, and both halves of the rule were measured doing exactly that at 42.4 N
- * on this project's own chain. The solar geometry document section 3.4 puts the bare-panel annual optimum near 0.85
- * of latitude, but pitch here is not free of tilt: the shade budget is fixed as a *projected*
+ * on this project's own chain. The bare-panel annual optimum sits near 0.85 of latitude,
+ * but pitch here is not free of tilt: the shade budget is fixed as a *projected*
  * ground coverage, so flattening the panels widens the rows by exactly as much as it shortens
  * their shadow, and the row-to-row shading falls with it. Swept a degree at a time on a 16 by
  * 11 m plot the curve is smooth with an interior maximum at 21 degrees and 10 027 kWh, falling
@@ -1308,11 +1307,11 @@ const NOT_CONSIDERED_BASE: readonly string[] = [
  * Five candidate geometries, one per archetype, each scored on a full annual light bake
  * and ranked by the grower's own objective weights.
  *
- * The search is deliberately not a sweep. Each candidate costs one annual bake, so the
- * cap is the five archetypes and `notConsidered` says so rather than hiding it. Geometry
- * is derived from the answers: tilt from latitude, row azimuth from hemisphere, pitch from
- * the shade the planting can afford, rows and length from the plot, clearance from the
- * height limit and the applicable floors
+ * The search is deliberately not a sweep. Each candidate costs one annual bake, so the cap is the
+ * five archetypes, and `notConsidered` states it plainly. Geometry is derived from the answers:
+ * tilt per archetype (see `groundLightPlan` and `measuredEnergyPlan`), the panels' facing from
+ * hemisphere, pitch from the shade the planting can afford, rows and length from the plot,
+ * clearance from the height limit and the applicable floors
  */
 export const suggestDesigns = async (
   answers: OnboardingAnswers,
@@ -1354,7 +1353,7 @@ export const suggestDesigns = async (
    * run BEFORE the caller's own "working" state has a chance to paint, so without this yield a
    * visitor pressing the button would get a tenth of a second of nothing.
    *
-   * `setTimeout` rather than a microtask: a resolved promise is drained before paint, so
+   * This waits on `setTimeout`: a resolved promise is drained before paint, so
    * awaiting one would yield to the scheduler without ever letting the browser draw
    */
   await new Promise((resolve) => setTimeout(resolve, 0))
@@ -1387,7 +1386,7 @@ export const suggestDesigns = async (
       bake,
     })
     // reported before the bake starts, so a caller that draws this has something to draw from
-    // the moment the candidate is picked up rather than only once the backend reports a pass
+    // the moment the candidate is picked up
     deps.onProgress(progressOf(null))
     const simulation = await deps.run(
       deps.site,

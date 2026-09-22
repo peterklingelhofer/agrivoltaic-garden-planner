@@ -1,12 +1,9 @@
 /**
  * Whether a build runs the Rust physics core, stated once.
  *
- * **This is on by default now, and the flag only turns it off.** It was the other way round for
- * exactly one day, while the TypeScript still carried its own copy of the physics and the core was
- * a switch to be proved before it was trusted. That copy is gone: `the port document` section 8a's
- * order ends with deleting it, because two implementations and a switch is strictly more to
- * maintain than one implementation, and the switch was only ever the way to get from one to the
- * other safely.
+ * **This is on by default, and the flag only turns it off.** There is no TypeScript physics to
+ * fall back to: two implementations and a switch is more to maintain than one implementation, and
+ * a switch only earns its keep while there really are two.
  *
  * What `off` now means is a build that cannot compute anything, which is useful for exactly one
  * thing: proving that the failure is loud. See `src/sim/core.ts`.

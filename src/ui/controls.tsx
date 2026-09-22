@@ -186,7 +186,7 @@ export interface ChoiceGroupProps<T extends string> {
 }
 
 /**
- * A radio group drawn as cards. Native radios rather than buttons with roles, so the arrow
+ * A radio group drawn as cards. Native radios. Not buttons with roles: the arrow
  * keys, the group semantics and the focus ring are the browser's and not a reimplementation
  */
 export const ChoiceGroup = <T extends string>({
@@ -231,7 +231,7 @@ export interface ActionProps {
   readonly pressed?: boolean
   /**
    * The id of the sentence that says what pressing this costs, for a button whose label cannot
-   * carry it. Read out with the label rather than instead of it, so nothing has to be hunted for
+   * carry it. Read out with the label, always alongside it, so nothing has to be hunted for
    */
   readonly describedBy?: string
   /**

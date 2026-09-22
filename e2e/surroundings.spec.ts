@@ -2,10 +2,10 @@ import { expect, test } from '@playwright/test'
 import { AUTORUN_TIMEOUT_MS, openApp, openFold, SITE_TIMEOUT_MS, step } from './fixtures/app.ts'
 
 /**
- * Two things a cold visitor on real weather found missing on 2026-09-13: nothing on the place
- * step said whether the place as a whole was one most of the catalogue could live in, and the
- * answer to "What is already around the space?" changed nothing in the light or the ranking.
- * Both on the shipped example, whose site resolves at boot on the stubbed weather
+ * Two things real weather can leave silent: the place step not saying whether the place as a whole
+ * is one most of the catalogue could live in, and the answer to "What is already around the space?"
+ * changing nothing in the light or the ranking. Both on the starting plot, whose site resolves at
+ * boot on the stubbed weather
  */
 
 const percentOf = async (text: string | null): Promise<number> => {

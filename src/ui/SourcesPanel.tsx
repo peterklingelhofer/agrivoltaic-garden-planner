@@ -27,9 +27,9 @@ const href = (record: CitationRecord): string | null =>
 export const SourceLink = ({
   id,
   /**
-   * Draw the short marker instead of the full label, for a citation that runs inside a sentence.
+   * Draw the short marker here, for a citation that runs inside a sentence.
    *
-   * One control at two densities rather than two controls: the press, the jump, the highlight and
+   * One control, shown at two densities: the press, the jump, the highlight and
    * the accessible name are identical, and the name is the FULL label either way, so nothing a
    * screen reader hears changes with this
    */
@@ -124,7 +124,7 @@ export const SourcesPanel = (): ReactElement => {
   const records = citations === null ? [] : [...citations.values()]
   const jump = useSourceJump()
   /**
-   * Which jump's highlight has already burned down, rather than which row is lit. Derived state
+   * Which jump's highlight has already burned down. Derived state
    * one way round and stored the other: the timer is the only thing that ever writes here, so a
    * newly arrived jump lights up without an effect having to set state to say so
    */
@@ -134,7 +134,7 @@ export const SourcesPanel = (): ReactElement => {
 
   /**
    * The jump is asked for before this panel exists and before the corpus has loaded, so it waits
-   * on the row it has to land on rather than being served once into an empty list and lost
+   * on the row it has to land on
    */
   useEffect(() => {
     if (jump === null || records.length === 0) return undefined
@@ -169,7 +169,7 @@ export const SourcesPanel = (): ReactElement => {
       }
     })
     // the control that asked for this lived on another tab and the tab change unmounted it, so
-    // focus is sitting on nothing; taking it here restores it rather than steals it, and a reader
+    // focus is sitting on nothing; taking it here restores it, and a reader
     // who asked from a control still on screen keeps the focus they already had
     if (document.activeElement === null || document.activeElement === document.body) {
       row.focus({ preventScroll: true })
@@ -205,8 +205,8 @@ export const SourcesPanel = (): ReactElement => {
       */}
       <p className="panel-sub" data-testid="readout-sources-documents">
         <a href="/docs/">How this works, and where the numbers come from</a>: the modelling
-        documents behind every figure, including the decision record, the verification pass over
-        this project's own riskiest numbers, and the full citation corpus.
+        documents behind every figure, including the decision record, the validation record and the
+        full citation corpus.
       </p>
       {/* said politely and out of the way: the highlight below is the visual half of the same
           message, and neither of them interrupts whatever the reader was doing */}

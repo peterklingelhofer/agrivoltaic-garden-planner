@@ -69,7 +69,7 @@ test('the rendered overlay is the colour its legend advertises', async ({ page }
   const max = Number(await legend.getAttribute('data-max'))
   expect(max).toBeGreaterThan(0)
 
-  // full opacity, so a sampled pixel is the overlay rather than the overlay over lit ground
+  // full opacity, so a sampled pixel is the overlay alone, with no lit ground blended in
   const opacity = page.getByTestId('control-overlay-opacity')
   await opacity.fill('1')
   await expect(opacity).toHaveValue('1')
@@ -121,7 +121,7 @@ test('the rendered overlay is the colour its legend advertises', async ({ page }
   await expect(caption).toContainText('Mean daily light integral,')
   const openingSpan = await caption.innerText()
   const fixedMax = await legend.getAttribute('data-max')
-  // polled rather than timed off the playback interval, so this never encodes the tick length
+  // polled, without timing off the playback interval, so this never encodes the tick length
   await expect(caption).not.toHaveText(openingSpan)
   await expect(caption).toContainText(' to ')
   await expect(legend).toHaveAttribute('data-max', String(fixedMax))

@@ -13,12 +13,12 @@ interface SyntheticYear {
    * dry-season fixture below */
   readonly dewDepressionAt?: (dayOfYear: number) => number
   /** Shifts the annual sinusoid, in days, so a southern-hemisphere fixture can reuse the same
-   * shape six months over rather than a second formula */
+   * shape six months over, needing no second formula */
   readonly phaseShiftDays?: number
 }
 
 /**
- * An 8760-hour typical year built from a formula rather than measured data: hourly temperature
+ * An 8760-hour typical year, entirely formula-built: hourly temperature
  * is an annual sinusoid plus a diurnal swing, dew point a fixed depression below it. Every
  * `TmySeries` field the phenology code never reads (irradiance, wind, pressure) stays zero
  */

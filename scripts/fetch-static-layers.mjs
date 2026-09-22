@@ -68,7 +68,7 @@ const unpackBits = (src, out) => {
 /**
  * Enough of TIFF to read the single-band tiled 8-bit PackBits GeoTIFFs Beck et al.
  * publish. Tiles decode lazily so a probe against the 933-megapixel 1 km raster
- * touches one tile instead of all one hundred
+ * touches one tile
  */
 const openTiff = (buffer) => {
   if (buffer.toString('latin1', 0, 2) !== 'II') throw new Error('expected a little-endian TIFF')
@@ -457,7 +457,7 @@ const readPolygonShapefile = (buffer) => {
  * Inverse of the Lambert conformal conic the shapefile is projected in (EPSG:3978,
  * NAD83 Canada Atlas Lambert, GRS80), Snyder's ellipsoidal two-standard-parallel form.
  * Unprojecting the vertices once lets the raster be built in the lon/lat frame the app
- * samples in, so there is one resampling step rather than two
+ * samples in, so there is one resampling step
  */
 const GRS80_A = 6378137
 const GRS80_F = 1 / 298.257222101
@@ -637,7 +637,7 @@ const downsampleMajority = (fine, factor, classes) => {
 
 /**
  * What NRCan's own map service answers at these points, read from
- * `.../PlantHardiness_en/MapServer/0/query`. Recorded rather than fetched so the build stays
+ * `.../PlantHardiness_en/MapServer/0/query`. Recorded, so the build stays
  * offline-reproducible; it is the published value the shipped grid is judged against
  */
 const NRCAN_PROBES = [
@@ -942,7 +942,7 @@ const NOT_SHIPPED = [
   },
 ]
 
-// merged rather than written, because `scripts/fetch-plant-traits.mjs` keeps its own layer in
+// merged into the existing file, because `scripts/fetch-plant-traits.mjs` keeps its own layer in
 // the same file and rebuilding these three costs a gigabyte of upstream rasters
 const manifest = writeManifest(new URL('manifest.json', OUT), {
   generator: 'scripts/fetch-static-layers.mjs',

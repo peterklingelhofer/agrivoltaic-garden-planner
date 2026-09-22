@@ -99,9 +99,9 @@ export const fetchOpenMeteoTmy = async (request: TmyRequest): Promise<RawTmyPayl
  *
  * | extent | answer |
  * |---|---|
- * | 2021-2024, four years | 200 when first measured, 422 on 2026-09-20 |
+ * | 2021-2024, four years | 422 |
  * | 2020-2024, five years | 422 |
- * | 2016-2018 and 2022-2024, three years | 200 on 2026-09-20, 4.4 MB in 2 s |
+ * | 2016-2018 and 2022-2024, three years | 200, 4.4 MB in 2 s |
  * | 2015-2024, ten years, as CSV | 200 |
  *
  * The window is therefore fetched in chunks and stitched back together, and never shortened.
@@ -109,8 +109,8 @@ export const fetchOpenMeteoTmy = async (request: TmyRequest): Promise<RawTmyPayl
  * every other source would be exactly the kind of unlabelled difference the provenance rules here
  * exist to prevent. CSV would take it in one request and is the other honest fix, at the cost of
  * a second parser for one upstream, where this costs a few extra requests. Two years a request
- * leaves a year of margin under the cap the API moved down to: at four the whole fallback
- * answered 422 on 2026-09-20 and nothing behind Open-Meteo could serve a lookup
+ * leaves a year of margin under the cap: four years already lands on the 422, where nothing
+ * behind Open-Meteo could serve a lookup at all
  */
 const POWER_MAX_YEARS_PER_REQUEST = 2
 
@@ -162,9 +162,9 @@ export const fetchNasaPowerTmy = async (request: TmyRequest): Promise<RawTmyPayl
             RE and not AG, because the community decides the UNITS and the decoder below reads
             irradiance as W/m². Measured against the live API for one July day at Amherst: under
             AG, ALLSKY_SFC_SW_DWN comes back in "MJ/hr" (2.34 at noon); under RE the same hour is
-            "Wh/m^2" (649.85). Read as W/m², the AG figure is a sun 280 times too weak, and that
-            is what ran two seasons of the example garden at 0 kWh from three rows of panels on
-            2026-09-03, after one Open-Meteo 429 sent the lookup down this fallback
+            "Wh/m^2" (649.85). Read as W/m², the AG figure is a sun 280 times too weak, enough to
+            zero out a season of the example garden's panels entirely whenever this fallback
+            engages, such as after an Open-Meteo rate limit
           */
           community: 'RE',
           parameters:
@@ -407,11 +407,10 @@ const numberOf = (raw: unknown): number | null => {
 }
 
 /**
- * Irradiance and dry-bulb temperature are the two series with no honest substitute:
- * absent components fall back to Erbs decomposition, absent humidity and wind to
- * Hargreaves-Samani, absent pressure to the standard atmosphere. So only these two
- * are counted, and a response that does not carry them is refused rather than read
- * as a real 0 W/m2, 0 C year the way the daily normals once were
+ * Irradiance and dry-bulb temperature are the two series with no honest substitute: absent
+ * components fall back to Erbs decomposition, absent humidity and wind to Hargreaves-Samani, absent
+ * pressure to the standard atmosphere. So only these two are counted, and a response that does not
+ * carry them is refused. It is never read as a real 0 W/m2, 0 C year
  */
 const TMY_SUBJECT = 'a typical meteorological year needs'
 
@@ -500,10 +499,10 @@ const fromNasaPower = (body: PowerBody): Stacked => {
         wind: value('WS10M', key),
         pressure: value('PS', key) * 10 || 1013.25,
         // labelled "mm/day" in the hourly product, but the 24 hourly values of a day SUM to the
-        // daily product's figure (measured 2026-09-12 at Melbourne, -37.77 144.96, 2019-06-01:
-        // hourly sum 0.59, daily 0.58), so each is the millimetres that fell in its hour. An
-        // earlier division by 24 here, from a measurement that read the label, left a Melbourne
-        // garden with 24 mm of rain in its driest year against 737 mm in its typical one
+        // daily product's figure (at Melbourne, -37.77 144.96, 2019-06-01: hourly sum 0.59, daily
+        // 0.58), so each is the millimetres that fell in its hour. Dividing by 24, as the label
+        // suggests, would leave a Melbourne garden with 24 mm of rain in its driest year against
+        // 737 mm in its typical one
         precip: value('PRECTOTCORR', key),
         windDirection: value('WD10M', key),
       }
@@ -572,7 +571,7 @@ const CSV_ALIASES: Readonly<Record<keyof Columns, readonly string[]>> = {
   wind: ['wind speed', 'wind_speed_10m', 'ws10m', 'windspeed'],
   pressure: ['pressure', 'surface_pressure', 'sp', 'ps'],
   // read where a CSV carries it, but never reported as present: a typical-year CSV holds one
-  // assembled year, and one year of rain is a sample rather than the record a season is drawn from
+  // assembled year, and one year of rain is a sample of the record a season is drawn from
   precip: ['precipitation', 'prectotcorr', 'rain'],
   windDirection: ['wind direction', 'wind_direction_10m', 'wd10m', 'winddirection'],
 }
@@ -595,7 +594,7 @@ export const parseCsvColumns = (
     /ghi|shortwave|allsky_sfc_sw_dwn|g\(h\)/i.test(line),
   )
   const columns = emptyColumns(HOURS_PER_TMY)
-  // an all-zero year is a fabricated one: refuse the file rather than return the empty columns
+  // an all-zero year is a fabricated one: refuse the file
   if (headerIndex < 0) throw csvHasNoIrradiance(upstream)
   const header = (lines[headerIndex] ?? '').split(',').map((cell) => cell.trim().toLowerCase())
   const indexOf = (key: keyof Columns): number =>
@@ -652,8 +651,7 @@ const csvElevation = (csv: string): number | null => {
  * its own spelling: Open-Meteo puts it at the top of the archive body, PVGIS under its inputs,
  * POWER as the third coordinate of the point, NSRDB in a CSV metadata column. So the one weather
  * fetch a site already makes carries the number, and a lookup depends on no separate elevation
- * service: the free DEM API that used to answer this stopped completing a TLS handshake on
- * 2026-09-20 and every fresh lookup failed with it.
+ * service.
  *
  * Null where a body names none, and 0 stays 0, because sea level is a real elevation
  */
@@ -810,11 +808,11 @@ const NSRDB_NEAR_ZERO_WIND_NOTE = 'wind set to the FAO-56 default, this record c
 /**
  * The typical year, and every measured year it was assembled from.
  *
- * `assembleTypicalYear` used to be the only reader of the stack and the other nine years were
- * dropped on the floor. They are the site's own record of how much a year can differ from the
- * typical one, which is the one thing a typical year cannot say, and a season simulation draws
- * its drought from them rather than from a dial (Decision Record 14). Sources that ship a
- * typical year and nothing else hand back an empty list, which the simulation says out loud
+ * `assembleTypicalYear` builds the typical year from the stack, and the measured years are returned
+ * beside it. They are the site's own record of how much a year can differ from the typical one,
+ * which is the one thing a typical year cannot say, and a season simulation draws its drought from
+ * them (Decision Record 14). Sources that ship a typical year and nothing else hand back an empty
+ * list, which the simulation says out loud
  */
 export const normaliseWeather = (payload: RawTmyPayload, location: LatLon): WeatherRecord => {
   // the longitude's whole-hour guess; `resolveSite` stamps the zone the normals name over it
@@ -901,9 +899,9 @@ export const normaliseTmy = (payload: RawTmyPayload, location: LatLon): TmySerie
  * not. Null where the record is plausible.
  *
  * Exists because the fallback chain below swallows a source's failure and moves on, which is
- * right for a timeout and was catastrophic for a unit: one Open-Meteo 429 on 2026-09-03 sent the
- * lookup to NASA POWER, whose hourly irradiance under the AG community is MJ/hr, and the app ran
- * two persona visits' seasons on a sun 280 times too weak, 0 kWh from three rows of panels and
+ * right for a timeout and catastrophic for a unit: an Open-Meteo rate limit can send the
+ * lookup to NASA POWER, whose hourly irradiance under the AG community is MJ/hr, and reading it
+ * as W/m² runs a season on a sun 280 times too weak, 0 kWh from three rows of panels and
  * 24 metres of rain in the driest year, without a word. A source whose year cannot have happened
  * is a source that failed, and it falls through to the next like any other failure.
  *

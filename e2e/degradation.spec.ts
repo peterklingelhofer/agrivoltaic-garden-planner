@@ -102,7 +102,7 @@ for (const [label, over] of Object.entries(DEGRADED)) {
     expect(result.unexplained, 'rows with no limiting factor').toEqual([])
 
     if (result.recommended === 0) {
-      // nothing is plantable, so the calendar must say so rather than render blank
+      // nothing is plantable, so the calendar must say so, and never renders blank
       await step(page, 'calendar')
       const feasibility = await page.getByTestId(/^status-calendar-feasibility-/).all()
       expect(feasibility.length).toBeGreaterThan(0)

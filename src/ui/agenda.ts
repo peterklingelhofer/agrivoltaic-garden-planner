@@ -60,7 +60,7 @@ export const SUPPLY_LABEL: Readonly<Record<SupplyKind, string>> = {
 
 export const supplyUnit = (kind: SupplyKind): string => (kind === 'seed' ? 'seeds' : 'plants')
 
-/** True when a planting or harvest window covers the whole year rather than a date range within it */
+/** True when a planting or harvest window covers the whole year in full */
 export const windowSpansYear = (day: number, through: number): boolean =>
   (through - day + 365) % 365 >= 364
 
@@ -85,8 +85,8 @@ export const AGENDA_EMPTY =
  * A planting carries its own sow and harvest days and is part of the saved design, so it comes
  * back on a reload. The calendar those days were read off does not: it is derived, deliberately
  * unpersisted, and rebuilt by the ranking. So a returning visitor opens a fully planted garden
- * whose agenda has nothing in it, which is a job list that has not been computed rather than a
- * garden with no jobs
+ * whose agenda has nothing in it, because the job list has not been computed, though the garden
+ * itself is full of jobs
  */
 export const AGENDA_UNDATED =
   "These beds are planted, and their dates haven't been computed for this visit. The plants are saved with the garden. The calendar behind them is computed again from the light and the season"

@@ -38,7 +38,7 @@ export interface HarvestWindow {
   readonly basis: CalendarBasis
 }
 
-// a calendar that does not fit must say so rather than emitting optimistic dates
+// a calendar that does not fit must say so. It never emits an optimistic date
 export type CalendarFeasibility =
   | { readonly kind: 'fits'; readonly slackDays: Days }
   | { readonly kind: 'needs-indoor-start'; readonly weeksBefore: number }

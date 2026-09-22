@@ -25,8 +25,8 @@ export const referenceAzimuthDeg = (latitudeDeg: DegreesLatitude): Degrees =>
 
 /**
  * Same hardware, sole-use layout. Keeping the module identical is deliberate:
- * it makes the ratio isolate the agrivoltaic design decision rather than the
- * module technology, which is what Dupraz et al. 2011 compared
+ * it makes the ratio isolate the agrivoltaic design decision alone, the comparison
+ * Dupraz et al. 2011 make
  */
 export const referenceArray = (array: PvArray, latitudeDeg: DegreesLatitude): PvArray => ({
   ...array,

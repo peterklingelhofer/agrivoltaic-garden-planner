@@ -100,7 +100,7 @@ describe('polygonsOverlap', () => {
   /**
    * Two rectangles flush against each other share a whole edge and no ground: pinned false,
    * because neither ring's vertex sits strictly inside the other and the shared edge is
-   * collinear rather than a transversal crossing. That is the rule: touching alone, at a
+   * collinear. Not a transversal crossing. That is the rule: touching alone, at a
    * corner or along a whole edge, is never overlap on its own
    */
   it('is false for two rectangles that only touch along a shared edge', () => {

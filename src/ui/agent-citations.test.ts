@@ -54,7 +54,7 @@ describe('what the agent cites', () => {
   /**
    * The asymmetry that makes the markers worth having. The agenda's frost anchors and
    * days-to-maturity are curated from land-grant Extension guidance with no entry in the verified
-   * corpus; the reply says exactly that, and says it INSTEAD of a citation rather than beside one
+   * corpus; the reply says exactly that, with no citation attached anywhere
    */
   it('cites nothing on the agenda, whose own caveat says there is nothing to cite', () => {
     const lines = wordsFor(

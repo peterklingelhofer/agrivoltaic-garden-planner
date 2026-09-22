@@ -15,7 +15,7 @@ export interface CascadeEnroller {
  * stock light loop, in which every cascade light adds its full contribution: the scene comes out
  * `cascades` times too bright and the cascade selection never happens.
  *
- * And it *assigns* `onBeforeCompile` rather than composing with it, so a material that patches
+ * And it *assigns* `onBeforeCompile` directly, so a material that patches
  * its own shader loses the patch the moment it is enrolled. The foliage wind is exactly that, and
  * a canopy that quietly stopped moving is not a failure anyone would trace back to here
  */

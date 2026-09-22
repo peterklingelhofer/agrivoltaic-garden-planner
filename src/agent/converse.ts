@@ -39,8 +39,8 @@ export const converse = async (
   const clauses = clausesOf(text, {
     // a half stands alone when the router makes something of it, which is the only honest test
     /*
-      Asked of the LEXICAL router, whichever one is in use, and that is deliberate rather than a
-      limitation. Deciding whether to split has to happen before any routing, an embedding lookup
+      Asked of the LEXICAL router, whichever one is in use, and that is deliberate.
+      Deciding whether to split has to happen before any routing, an embedding lookup
       is asynchronous, and asking the model twice per candidate boundary to decide whether to ask
       it twice is a poor trade for a decision this conservative. The lexical router refusing a
       half is exactly the signal wanted: it means the half is not a sentence anybody would say
@@ -82,7 +82,7 @@ export const converse = async (
   }
   /*
     Merged in order, and the LAST reply's chips win. Each clause was carried out in turn, so what
-    to offer next follows from where the sentence ended rather than from where it started
+    to offer next follows from where the sentence ended
   */
   return {
     reply: {

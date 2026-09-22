@@ -1,14 +1,14 @@
 /**
  * Emits the crop catalogue in a format that is not TypeScript.
  *
- * `the port document` section 8b names this as the step most likely to be skipped, because it is
+ * This is the step most likely to be skipped, because it is
  * the only one with no visible symptom when it is missed: a second consumer transcribes the
  * catalogue, the two copies drift, and nothing fails. This is the same answer the physics tables
  * already got in `generate-rust-tables.mjs`, for the same reason, and it earns the same CI drift
  * check.
  *
  * **The TypeScript stays upstream, and here that is not merely convention.** `rows.ts` carries the
- * evidence trail in its comments, and they are load-bearing rather than decorative: one of them
+ * evidence trail in its comments, and they are load-bearing: one of them
  * records that a DLI figure "was verbatim ReduSystems vendor copy, so it is deleted not
  * re-cited", which is the kind of thing this project treats as a release blocker. JSON has no
  * comments. Moving the catalogue into JSON as the authoring format would delete that reasoning,
@@ -34,7 +34,7 @@ const { CATALOG_PROVENANCE } = await import(new URL('src/data/catalog/provenance
 /**
  * The tuple's column names, in order, from `CropRow` in `schema.ts`.
  *
- * Written out rather than derived, because a positional tuple has no names at runtime and a
+ * Written out, because a positional tuple has no names at runtime and a
  * consumer reading `row[8]` and hoping it is `dliMin` is exactly the fragility this file exists to
  * remove. `columns` ships beside the rows so the format is self-describing, and the length check
  * below fails the build if `CropRow` grows a column and this list does not.

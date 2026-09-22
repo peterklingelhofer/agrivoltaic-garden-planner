@@ -56,7 +56,7 @@ export const EMPTY_LIST: readonly never[] = []
 
 /**
  * The oldest a garden is drawn at. Beyond this every perennial in the catalogue is at full size,
- * so the slider and the seasons both stop counting here rather than at two different numbers
+ * so the slider and the seasons both stop counting at the same number
  */
 export const MAX_PLANT_YEAR = 12
 
@@ -118,8 +118,8 @@ export interface DesignSlice {
   removePlanting(bedId: BedId, plantingId: PlantingId): void
   updatePlanting(bedId: BedId, plantingId: PlantingId, patch: PlantingPatch): void
   /**
-   * Re-derives a planting in another bed, or refuses with the reason. Returns the outcome rather
-   * than writing it to state: a refusal belongs to the gesture that caused it, not to the design
+   * Re-derives a planting in another bed, or refuses with the reason. Returns the outcome,
+   * without writing it to state: a refusal belongs to the gesture that caused it
    */
   movePlanting(plantingId: PlantingId, fromBedId: BedId, toBedId: BedId): Derivation<Planting>
   upsertArray(array: PvArray): void
@@ -143,8 +143,8 @@ export interface LightSlice {
   readonly bedLight: readonly BedLight[]
   readonly compliance: readonly ComplianceCheck[]
   /**
-   * The arrangement of panels and beds that `raster`, `bedLight` and `compliance` were worked
-   * out for, or null when nothing has been computed. Compared against the plot as it stands
+   * The arrangement of panels and beds that `raster`, `bedLight` and `compliance` were
+   * computed for, or null when nothing has been computed. Compared against the plot as it stands
    * by `lightIsStale`; see `state/light-freshness.ts` for why this is a key and not a flag
    */
   readonly lightGeometry: string | null
@@ -178,9 +178,9 @@ export interface RecommendationSlice {
   readonly ranking: boolean
   /**
    * Whether the ranked lists show every crop or the top few. One flag for both lists that offer
-   * the choice, because a tick on the planting panel was lost on leaving the step and coming
-   * back to it, which left six herbs and an unticked box, and because the second box
-   * further down the same step was unticked while the first was ticked, which read as two lists
+   * the choice, because ticking it on the planting panel, leaving the step, and returning for a
+   * strawberry could find six herbs and an unticked box; and because the second box
+   * further down the same step could sit unticked while the first stayed ticked, which read as two lists
    */
   readonly showAllCrops: boolean
   loadCatalog(): Promise<void>
@@ -287,7 +287,7 @@ export type OverlaySlice = MonthIndex | 'annual'
 
 /**
  * The overlay playback's whole state in one field: the month currently drawn, and whether the
- * months elapsed are being accumulated rather than shown one at a time. `from` is the month the
+ * months elapsed are being accumulated or shown one at a time. `from` is the month the
  * run started on, when every month since is to be included; null when each frame stands on its
  * own, which is the original one-month-at-a-time playback
  */
@@ -312,8 +312,8 @@ export interface EffectSettings {
 }
 
 /**
- * What the pointer is over in the 3D, named rather than guessed at from a raycast every reader
- * would have to repeat. It is UI state and not design state: hovering names a thing, it never
+ * What the pointer is over in the 3D, named once here so no reader has to guess it from a raycast
+ * of their own. It is UI state. It is not design state: hovering names a thing, it never
  * changes one, and nothing here is persisted or undoable
  */
 export type HoverTarget =
@@ -325,7 +325,7 @@ export type HoverTarget =
  * The one thing a phone-sized screen is showing.
  *
  * `chat` exists only in a build made with `VITE_AGENT=on`; see `src/agent/flag.ts` for why the
- * default is off. It is a value here rather than behind the flag because a persisted surface has
+ * default is off. It is a plain value here, because a persisted surface has
  * to be a nameable one either way: a design saved from a build that had the agent and restored
  * into one that does not must still describe what it was showing, and `src/state` is not the
  * layer that should know which features a build carries
@@ -447,7 +447,7 @@ export interface UiSlice {
 /**
  * The design is kept in this browser and nowhere else. Only what the grower authored is
  * written: `src/state/persist.ts#PERSISTED_KEYS` is the list, and everything derived is
- * left to be recomputed rather than restored stale
+ * left to be recomputed fresh
  */
 export interface StorageSlice {
   readonly storage: StorageStatus
@@ -459,7 +459,7 @@ export interface StorageSlice {
 /**
  * The questions, for someone who has never heard of a ground cover ratio. Every one asks
  * something answerable without knowing any of this, and the mapping onto geometry is the
- * design engine's job rather than the question's.
+ * design engine's job.
  *
  * These are the AGENT's cursor and nothing else: which question it is waiting on an answer to,
  * advanced through `setOnboardingStep` as answers land. The sidebar asks the same questions on its
@@ -473,34 +473,30 @@ export interface StorageSlice {
 export type OnboardingStep =
   | 'location'
   | 'space'
-  // what is ALREADY standing around the space, which is a fact about the site rather than a
-  // preference, and is therefore asked with the other facts about it
+  // what is ALREADY standing around the space, which is a fact about the site, and is
+  // therefore asked with the other facts about it
   | 'surroundings'
   | 'growing'
-  // after `growing`, deliberately. This asks how much of the sunlight to give the panels rather
-  // than the plants, and nobody can weigh that before they have said what they want to eat
+  // after `growing`, deliberately. This asks how the light should split between the panels and
+  // the plants, and nobody can weigh that before they have said what they want to eat
   | 'objective'
   | 'mounting'
   | 'height'
   | 'water'
-  // the two wildlife questions, at the end of the run. They used to sit fourth and fifth, where a
-  // minute of reading each was what they cost, which is enough to skip
-  // both, and where their answers steered which crops came back. Neither reaches the design
-  // search, so the layouts are computed from everything above and these two are still answered
-  // before any crop is picked, which is the only thing they change
+  // the two wildlife questions, at the end of the run. Neither reaches the design search, so the
+  // layouts are computed from everything above and these two are still answered before any crop is
+  // picked, which is the only thing they change
   | 'natives'
   | 'pollinators'
   | 'results'
   | 'planting'
 
 /**
- * One question per step, and that is the rule rather than an accident of how many there are.
+ * One question per step, and that is the rule.
  *
- * `practical` used to be four of these at once, and its own title admitted it: "A few practical
- * things", the only title in the table that was not a question. It asked what stands around the
- * space, how the panels should sit, whether there is a height limit and whether it can be
- * watered, all on one screen. Four unrelated decisions is the load spike a usability pass found,
- * and splitting it costs four entries in a table and no logic at all
+ * Four unrelated decisions on one screen, such as what stands around the space, how the panels
+ * should sit, whether there is a height limit and whether it can be watered, is the load spike, and
+ * splitting them costs four entries in a table and no logic at all
  */
 export const ONBOARDING_STEPS: readonly OnboardingStep[] = [
   'location',
@@ -523,7 +519,7 @@ export interface OnboardingState {
   /**
    * Where the design search has got to while `designs` is loading, and null at every other
    * moment. It is kept apart from `LightSlice.progress` because it counts a run of five
-   * bakes rather than the editor's one, and both can be on screen at once
+   * bakes, while the editor's is a single one, and both can be on screen at once
    */
   readonly progress: DesignProgress | null
   readonly appliedArchetype: CandidateArchetype | null
@@ -538,12 +534,12 @@ export interface GeneratedBed {
   readonly reason: string
   readonly cropIds: readonly CropId[]
   /**
-   * What standing here rather than in the brightest bed of the same plot costs: the crops the
+   * What standing here costs, measured against the brightest bed of the same plot: the crops the
    * light gate refuses here and admits there. Empty for the brightest bed itself, and for a plot
    * with nothing over it, where every bed reads the same sky.
    *
-   * The comparison is deliberately WITHIN the plot rather than against the open-sky control the
-   * wizard bakes. It is the question a grower actually asks standing in front of two beds two
+   * The comparison is deliberately WITHIN the plot. The open-sky control the wizard bakes plays
+   * no part in it. It is the question a grower actually asks standing in front of two beds two
    * metres apart, it needs no second bake, and it is the same answer on a garden drawn by hand
    * as on one the wizard placed
    */
@@ -579,10 +575,9 @@ export interface GardenGeneration {
   /**
    * The combinations each bed was offered by the run that planted it, first of each applied.
    *
-   * Carried rather than rebuilt: the planting question said "It planted the first of them
-   * already" while showing cards rebuilt from the live state, and the live state had moved (the
-   * ranking re-ran on the applied plot), so the beds held brussels sprouts and no card named
-   * it. What the question shows is now what the run chose from
+   * Carried as is, so what the question shows is what the run chose from. Cards rebuilt from the
+   * live state would drift once the ranking re-ran on the applied plot, and the beds could hold a
+   * crop no card named
    */
   readonly suggestions: readonly GeneratedBedSuggestions[]
 }
@@ -598,7 +593,7 @@ export interface OnboardingSlice {
   readonly onboarding: OnboardingState
   /**
    * What the grower said they want, and how the panels may sit. A slice of its own beside
-   * `wildlife` rather than a field of `onboarding`, because it is theirs and is persisted with
+   * `wildlife`. It is not a field of `onboarding`: it is theirs and is persisted with
    * the design, where the search's state around it is derived and never written
    */
   readonly answers: WizardAnswers
@@ -653,8 +648,8 @@ export type ExampleStatus = 'absent' | 'loading' | 'showing' | 'cleared'
 /**
  * The worked example the app opens on when this browser holds no design of its own. It is a real
  * `PersistedDesign` read through the same decoders as a restored one, with a raster this
- * simulation baked, and it exists so the first thing a visitor sees is the product rather than an
- * empty grid. It is never written to storage: only an edit the visitor authors is
+ * simulation baked, and it exists so the first thing a visitor sees is the finished product.
+ * It is never written to storage: only an edit the visitor authors is
  */
 export interface ExampleSlice {
   readonly example: ExampleStatus
@@ -712,7 +707,7 @@ export interface SimulationSlice {
    * The same year with no panels, for the LAST season that ran: the plot with every array
    * pulled, baked again and run through that season's own science. Never
    * persisted and never written into `simulation`: it carries its own season number, and a
-   * later season run clears it rather than leaving it to describe a season that has moved on
+   * later season run clears it, without leaving it to describe a season that has moved on
    */
   readonly noPanels: AsyncState<NoPanelsComparison>
   runSeason(): void

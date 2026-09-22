@@ -98,7 +98,7 @@ export const STEP_COPY: Readonly<Record<OnboardingStep, StepCopy>> = {
 /**
  * Said once above the combinations. The step before this one measures a layout against the open
  * sky; this one is choosing between crops the same beds can all carry, so what a grower needs
- * naming here is where the combinations came from rather than what they were scored against
+ * naming here is where the combinations came from and what they were scored against
  */
 export const PLANTING_SOURCE_NOTE =
   'These are the combinations the setup computed for your beds, ranked best first'
@@ -177,7 +177,7 @@ export const MOUNTING_OPTIONS: readonly ChoiceOption<MountingPreference>[] = [
 /**
  * The five questions the steps ask in these words. The controls are labelled from this table, so
  * these are not a description of the questions: they ARE the questions, and anything reporting
- * one of these answers back quotes the entry rather than a copy of it that could be reworded on
+ * one of these answers back quotes the entry directly, so no copy of it can be reworded on
  * one side only.
  *
  * Three of them are choices and read as questions; the last two are switches and read as
@@ -196,14 +196,12 @@ export const ANSWER_QUESTIONS: Readonly<
 export type Experience = OnboardingAnswers['experience']
 
 /**
- * A switch that stays in the dock rather than a question asked once and forgotten. It used to be
- * asked on the first card a visitor ever sees, where it competed with "where is the space" and
- * pushed that card's own answers out of sight; what it decides is how much the results show, so
+ * A switch that sits above the layout comparison. What it decides is how much the results show, so
  * it belongs where the results are, live enough to press back the moment it shows too much.
  *
  * Each option is a pill the width of its own label and its effect is visible the moment it is
- * pressed, so none of them carries a help line: the labels say what you get rather than who
- * you are, because what you get is the only thing this changes.
+ * pressed, so none of them carries a help line: the labels say what you get, because what
+ * you get is the only thing this changes.
  *
  * Two of the three `Experience` values, and that is the honest count. `showsFigures` is what
  * every reader of this answer asks, and it splits the three into two: `some` shows a novice's
@@ -235,7 +233,7 @@ export const lightLeftSentence = (meanShadeRatio: Fraction): string =>
 /**
  * The crops lost are measured against the open sky, which is baked first, so the number is
  * what the panels cost and never what the site cannot grow. The control loses nothing by
- * construction, so it says what it is instead of reporting a zero
+ * construction, so it says what it is without reporting a zero
  */
 export const cropSentence = (available: number, lost: number, baseline: boolean): string =>
   baseline
@@ -309,24 +307,22 @@ export const CONFIDENCE_CEILING =
  * Estimate language only. No regime is self-verifiable, so neither of these reads as a
  * determination and neither says whether anything is allowed.
  *
- * The regime is NAMED, which it was not. "Meets the expedited design parameters" is a term of art
- * from the Massachusetts SMART dual-use programme, and it appeared on the card being chosen
- * between with no owner and no gloss: a first-time grower cannot tell whether that is a law, a
- * grant scheme or this tool's own opinion, and a grower outside Massachusetts was being measured
- * against a Massachusetts yardstick without being told. The term of art itself came out on
- * 2026-09-17 (the author's rewrite): what stays is whose rules they are and, in plain words, what
- * kind of rules they are. `CompliancePanel` and `format.ts` still carry the programme's own words
- * for anyone who needs to quote them
+ * The regime is NAMED. "Meets the expedited design parameters" is a term of art from the
+ * Massachusetts SMART dual-use programme. On the card being chosen between, with no owner and no
+ * gloss, it would leave a first-time grower unable to tell whether it is a law, a grant scheme or
+ * this tool's own opinion, and it would measure a grower outside Massachusetts against a
+ * Massachusetts yardstick without saying so. So the term of art is left out: what stays is whose
+ * rules they are and, in plain words, what kind of rules they are. `CompliancePanel` and
+ * `format.ts` carry the programme's own words for anyone who needs to quote them
  */
 export const clearanceNote = (flags: ScenarioFlags): string =>
   flags.meetsExpeditedClearance
     ? 'Panel height meets the Massachusetts fast-track rules for growing under panels'
     : 'Panel height would need an exception request under the Massachusetts fast-track rules for growing under panels'
 
-// the second half of a pair, so it names the regime by reference rather than repeating fifteen
+// the second half of a pair, so it names the regime by reference, without repeating fifteen
 // words of it directly under the line that has just said them. The miss spells out what an
-// exception request is, in the words that made it make sense to the author, who had read the bare
-// term and could not tell what it meant
+// exception request is, in plain words, because the bare term alone does not say what it means
 export const groundLightNote = (flags: ScenarioFlags): string =>
   flags.fiftyPercentEverywhere
     ? 'Ground light meets the same fast-track rules everywhere in the plot'
@@ -335,7 +331,7 @@ export const groundLightNote = (flags: ScenarioFlags): string =>
 const percent = (ratio: number): string => `${String(Math.round(ratio * 100))}%`
 
 /**
- * The one flag here that is about the grower's own answer rather than about a regime. It names
+ * The one flag here that is about the grower's own answer. It names
  * both numbers, because the interesting case is the one where the footprint was sized inside the
  * budget and the measured shade still came out over it, and a grower shown only the verdict would
  * have no way to see how that happened
@@ -351,21 +347,20 @@ export const shadeBudgetNote = (flags: ScenarioFlags): string => {
 /**
  * The sentence that keeps every line above it honest, in words a first-time grower can read.
  *
- * "Estimated from the geometry alone and not a determination: only the programme itself
- * determines anything" is exact and was opaque twice over: "the geometry" is the shapes and the
- * sun, and "the programme" reads as this software rather than as the scheme whose rules are being
- * quoted. The determination clause came out on 2026-09-17 (the author's rewrite); the sentence
- * that still says it, once, for the whole app is `SCOPE_STATEMENT` below, and
- * `compliance-language.test.ts` reads it there
+ * The exact wording, "Estimated from the geometry alone and not a determination: only the programme
+ * itself determines anything", is opaque twice over: "the geometry" is the shapes and the sun, and
+ * "the programme" reads as this software, when it should mean the scheme whose rules are being
+ * quoted. So the determination clause is said once for the whole app, in `SCOPE_STATEMENT` below,
+ * and `onboarding.test.ts` reads it there
  */
 export const NOT_A_DETERMINATION = 'An estimate from the shapes and the sun alone'
 
 /**
- * The one caveat that covers the whole app rather than a single claim in it. Everything else in
- * this file and in `dli.ts` disclaims one figure or one regime; nothing anywhere said, once, that
- * the figures themselves are a model's output and not a professional's. Rendered at the top of
- * Sources, unconditionally: per `showsFigures` above, a caveat is never detail, so it is not
- * behind that gate, not in a `<details>`, and not behind anything else either
+ * The one caveat that covers the whole app. Everything else in this file and in `dli.ts` disclaims
+ * one figure or one regime. This says, once, that the figures themselves are a model's output, for
+ * a professional to check. Rendered at the top of Sources, unconditionally: per `showsFigures`
+ * above, a caveat is never detail, so it is not behind that gate, not in a `<details>`, and not
+ * behind anything else either
  */
 export const SCOPE_HEADLINE = 'Everything here is a planning estimate'
 

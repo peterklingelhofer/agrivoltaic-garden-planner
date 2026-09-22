@@ -53,7 +53,7 @@ export const calendarDate = (
  * carries a day of the year and no year at all, so 29 February is not a date this can be asked
  * for and a leap year would shift every day after it by one.
  *
- * The date is clamped into the month rather than allowed to roll over, which is what
+ * The date is clamped into the month. It is never allowed to roll over, which is what
  * `Date.UTC(2001, 1, 31)` would otherwise do: picking 31 and then picking February should leave a
  * gardener on 28 February, not silently on 3 March
  */
@@ -169,9 +169,9 @@ export const NOTICE_CLASS: Readonly<Record<FeasibilityTone, string>> = {
 }
 
 /**
- * What is in the bed first, then the ranking. The calendar dates every ranked crop, and a
- * plot with peppers and basil just planted used to open it to a first job about a tomato
- * in a bed nobody planted: the crops a grower actually put in are the ones whose dates they
+ * What is in the bed first, then the ranking. The calendar dates every ranked crop, and a bed
+ * planted with peppers and basil could otherwise show a first job about a tomato that was never
+ * in it: the crops a grower actually put in are the ones whose dates they
  * came for, and the rest of the ranking follows them
  */
 export const orderCalendars = (

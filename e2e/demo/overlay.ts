@@ -4,7 +4,7 @@ import { expect, type Locator, type Page } from '@playwright/test'
  * The film crew: a caption bar, a visible pointer, a click flash and a chapter card, drawn over
  * the running app for the demo recording and for nothing else.
  *
- * Everything here is drawn INTO the page rather than composited afterwards, for one reason:
+ * Everything here is drawn INTO the page, for one reason:
  * Playwright's video is a screencast of the page, and a screencast does not include the mouse
  * cursor. A viewer watching a real recording of this app therefore sees controls operating
  * themselves with nothing on screen to say what was pressed. The pointer below is that missing
@@ -67,8 +67,8 @@ const install = (): void => {
 
   const HOST_ID = 'demo-overlay-host'
 
-  /* The app's own accent, dark-scheme variant: it has to read against the dark caption pill
-     rather than against the light page the recording is made in */
+  /* The app's own accent, dark-scheme variant: it has to read against the dark caption pill.
+     The recording itself is made against a light page */
   const STYLE = `
     * { box-sizing: border-box; margin: 0 }
     .layer {
@@ -82,8 +82,8 @@ const install = (): void => {
        The caption. Top by default because the guided setup docks across the foot of the window
        and the dock is usually the thing being talked about; beats about the sidebar move it down.
 
-       Centred on 40 percent rather than on 50, which is the middle of the CANVAS rather than the
-       middle of the window: the sidebar owns the right fifth of the screen, and a caption centred
+       Centred on 40 percent, the middle of the CANVAS. The middle of the window sits
+       elsewhere: the sidebar owns the right fifth of the screen, and a caption centred
        on the window sat under the light legend pinned to the top right of the canvas
     */
     .caption {
@@ -105,8 +105,8 @@ const install = (): void => {
     .caption[data-at="bottom"] { bottom: 46px }
     .caption[data-shown="true"] { opacity: 1; transform: translate(-50%, 0) }
 
-    /* The outline tracks between targets rather than blinking from one to the next, so the eye
-       is carried to the control instead of having to find it again */
+    /* The outline tracks between targets smoothly, so the eye
+       is carried to the control without having to find it again */
     .mark {
       position: absolute; border: 3px solid #2f6f4f; border-radius: 10px;
       box-shadow: 0 0 0 5px rgba(47, 111, 79, 0.22), 0 6px 20px rgba(47, 111, 79, 0.24);
@@ -180,7 +180,7 @@ const install = (): void => {
   }
 
   let parts: Parts | null = null
-  // rebuilt rather than reused if the document it was in has gone, which is what a reload is
+  // rebuilt fresh if the document it was in has gone, which is what a reload is
   const ensure = (): Parts => {
     if (parts?.host.isConnected === true) return parts
     parts = build()
@@ -191,7 +191,7 @@ const install = (): void => {
     caption: (text, at) => {
       const ui = ensure()
       ui.caption.dataset.at = at
-      // empty text retires the bar rather than leaving an empty pill behind
+      // empty text retires the bar, so no empty pill is left behind
       ui.caption.dataset.shown = text === '' ? 'false' : 'true'
       ui.line.textContent = text
     },
@@ -255,7 +255,7 @@ const CARD_MS = 2900
 /**
  * A caption's reading time, in the absence of a voice track.
  *
- * Paced to SPEECH rather than to silent reading, and deliberately: this recording ships with no
+ * Paced to SPEECH, deliberately: this recording ships with no
  * narration, and the timecoded script it emits beside itself exists so a voice can be laid over
  * it later without the picture having to be recut. Silent reading is about twice this fast, so
  * the video is a little slow to read and exactly right to talk over
@@ -320,7 +320,7 @@ export class Director {
 
   private closeCue = (endMs: number): void => {
     if (this.open === null) return
-    // a cue under a second is a flicker rather than a line, and only happens when a beat is cut
+    // a cue under a second is a flicker, and only happens when a beat is cut
     if (endMs - this.open.startMs > 900) {
       this.cues.push({ startMs: this.open.startMs, endMs, text: this.open.text })
     }
@@ -405,13 +405,13 @@ export class Director {
 
   /**
    * Selected and retyped a character at a time, because a field that fills instantly reads as a
-   * stub rather than as somebody using the product.
+   * stub.
    *
    * Selected, and emphatically NOT cleared first. These are controlled number fields with a
    * minimum, so an empty string is not an intermediate state on the way to a number: it is NaN,
    * which the field clamps to its own minimum and then holds against every keystroke that
-   * follows. A recording made that way asked for a 0.6 by 0.5 metre garden, and the engine
-   * correctly refused to place a bed in it, eight minutes into an otherwise good take
+   * follows. Clearing first can leave a plot as small as 0.6 by 0.5 metres, too small for the
+   * engine to place a single bed in
    */
   write = async (target: Locator | string, value: string): Promise<void> => {
     const locator = this.locate(target).first()
@@ -424,7 +424,7 @@ export class Director {
   /**
    * A slow drag across the canvas, which orbits the camera.
    *
-   * Two jobs, both real: it shows the garden as a solid object rather than a picture, and it
+   * Two jobs, both real: it shows the garden as a solid object, and it
    * gives the long waits something to be. The design search runs a year of hourly weather over
    * every candidate layout, and that is tens of seconds of honest work with nothing moving
    */

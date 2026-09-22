@@ -27,9 +27,9 @@ const GEOLOCATION_TIMEOUT_MS = 15_000
 const GEOLOCATION_MAX_AGE_MS = 600_000
 
 /**
- * "usda-2023 6a" is a dataset id; a gardener reads "zone 6a (USDA)". Off the grid the zone is
- * computed here from thirty years of daily minima, and the label says so rather than
- * claiming the map
+ * "usda-2023 6a" is a dataset id; a gardener reads "zone 6a (USDA)". Outside the map's grid the
+ * zone is computed here from thirty years of daily minima, and the label says so and makes no claim
+ * to the map
  */
 const zoneWords = (rating: TemperatureHardinessRating): string =>
   rating.scheme.startsWith('usda')
@@ -84,7 +84,7 @@ export const SitePanel = (): ReactElement => {
   } = useAddressSearch(searchInput)
   // whether the browser refused a location, its own notice and never the search's
   const [geoBlocked, setGeoBlocked] = useState(false)
-  // hidden rather than shown-and-refused: a permission already denied is not worth a press
+  // hidden, since a permission already denied is not worth a press
   const [geoOffered, setGeoOffered] = useState(true)
   // the press is answered while the browser looks: a phone can take seconds to find itself
   const [locating, setLocating] = useState(false)
@@ -276,12 +276,12 @@ export const SitePanel = (): ReactElement => {
         </p>
       )}
       {/*
-        Everything a grower reads once and a specialist reads often, behind one press.
-        The step was measured at reading grade 20, the highest in the app, on the first panel a
-        newcomer meets: two coordinate fields, an exceedance percentile, a Köppen code, a hardiness
-        zone and a water-limitation band, none of which answer the question the step is asking. The
-        search, the place it found and the frost sentence are what stayed; the press that looks up
-        typed coordinates is in here beside the fields it reads
+        Everything a grower reads once and a specialist reads often, behind one press. On the face,
+        two coordinate fields, an exceedance percentile, a Köppen code, a hardiness zone and a
+        water-limitation band would put the first panel a beginner meets at reading grade 20, the
+        highest in the app, and none of them answer the question the step is asking. The search, the
+        place it found and the frost sentence stay on the face, and the press that looks up typed
+        coordinates is in here beside the fields it reads
       */}
       <details className="wizard-advanced" data-testid="details-site-more">
         <summary data-testid="action-site-more">More about this place</summary>
@@ -351,8 +351,7 @@ export const SitePanel = (): ReactElement => {
               value={timezoneWords(resolved.timezone, resolved.timezoneBasis)}
             />
             <Readout id="site-koppen" label="Climate type (Köppen)" value={resolved.koppenCode} />
-            {/* in plain words: "usda-2023 6a" reads here as a
-                dataset id, which it is */}
+            {/* in plain words: "usda-2023 6a" reads as a dataset id, which it is */}
             <Readout
               id="site-hardiness"
               label="Winter hardiness zone"

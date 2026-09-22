@@ -33,7 +33,7 @@ describe('the crop-mount benchmarks', () => {
     expect(CROP_MOUNT_COST_USD_PER_WDC['reinforced-regular'].value).toBe(2.33)
     expect(FIXED_TILT_BASELINE_USD_PER_WDC.value).toBe(1.53)
     // the executive summary's $0.80 top premium is exactly the dearest mount minus the baseline,
-    // which is what makes the two figures a cross-check on each other rather than two quotes
+    // which is what makes the two figures a cross-check on each other
     expect(
       CROP_MOUNT_COST_USD_PER_WDC['reinforced-regular'].value -
         FIXED_TILT_BASELINE_USD_PER_WDC.value,
@@ -82,7 +82,7 @@ describe('buildCostUsdBand', () => {
     expect(cost.derivation).toContain('1000 watts per kilowatt')
     expect(cost.derivation).toContain('$1.83')
     expect(cost.derivation).toContain('$2.33')
-    // the leap the derivation cannot justify is named rather than left to a reader to notice
+    // the leap the derivation cannot justify is named
     expect(cost.caveat).toContain('2020 US dollars')
     expect(cost.caveat).toContain('size curve')
     expect(cost.caveat).toContain('no financing, no operations')

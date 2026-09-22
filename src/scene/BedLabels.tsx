@@ -17,7 +17,7 @@ import { BedLabel } from './BedLabel'
  * hidden until the camera comes close enough for it to have room. Nearest first, because the
  * near bed is the one the pointer is about to reach.
  *
- * Done on the sprites themselves rather than through React state, because it changes with every
+ * Done on the sprites themselves, without going through React state, because it changes with every
  * camera move and a render per frame is what the demand frameloop exists to avoid. The world
  * position is re-read each frame too, with the bed group's own offset added, so a label rides
  * along with a bed that is being dragged in Move mode

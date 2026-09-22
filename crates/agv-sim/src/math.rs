@@ -53,8 +53,8 @@ pub fn through_f32(value: f64) -> f64 {
 ///
 /// `value >= edges[bin]` advances, so a value on an edge belongs to the upper bin, and a value
 /// past the last edge lands one past the end of `edges`. Both the Perez sky-clearness bins and
-/// the four DIRINT indices are selected this way, which is why it lives here rather than beside
-/// either of them.
+/// the four DIRINT indices are selected this way, which is why it lives here, one place both can
+/// reach.
 pub fn edge_bin(value: f64, edges: &[f64]) -> usize {
     let mut bin = 0;
     while bin < edges.len() && value >= edges[bin] {

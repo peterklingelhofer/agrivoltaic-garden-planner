@@ -345,7 +345,7 @@ export const DLI_CLASSES: Readonly<Record<DliClass, DliClassSpec>> = {
     targetLowMolM2Day: null,
     targetHighMolM2Day: null,
     // 0.10 is the conservative end of Widmer's own 10 to 30 percent, and it is the one place
-    // this number is kept: the row carried an override of the same value until 2026-09-20
+    // this number is kept: no row overrides it
     maxDesignRsr: 0.1,
     maxDesignRsrTier: 'B',
     maxDesignRsrCitations: ['widmer-strawberry-dli'],
@@ -430,7 +430,7 @@ export type ShadeFlag = 0 | 1 | 2
 
 export interface CropOverrides {
   readonly life?: LifeCycle
-  /** Set only where the catalogue curates the species for a function rather than a yield */
+  /** Set only where the catalogue curates the species for a function */
   readonly role?: PlantingRole
   /** FAO-56 Table 22 maximum effective rooting depth, midpoint of the published range */
   readonly zr?: number
@@ -478,8 +478,7 @@ export interface CropOverrides {
   readonly qid?: string
   /**
    * Set only where a cited work prints this crop's own figure. Absent is the ordinary case and
-   * means the row cites nothing for its light numbers, which a sweep on 2026-09-20 found true
-   * of 171 of the 182 rows
+   * means the row cites nothing for its light numbers, which is true of 171 of the 182 rows
    */
   readonly dliCitations?: NonEmpty<CitationId>
   /** What the figure is in the cited work, rendered beside the number in place of the default */
@@ -556,10 +555,9 @@ const stratumFor = (depthM: number): 'shallow' | 'medium' | 'deep' =>
 
 /**
  * What a Tier C light figure is (Decision Record 23): the crop's conventional garden sun label,
- * converted into a band by this app's own arithmetic (docs/04 section 3.3) and set beside the
- * crops in its class that do have a published figure. A sweep on 2026-09-20 found the two cited
- * extension documents print a band for five of the 182 rows and for none of the rest, so the
- * rest cite nothing and say so
+ * converted into a band by this app's own arithmetic and set beside the crops in its class that
+ * do have a published figure. The two cited extension documents print a band for five of the
+ * 182 rows and for none of the rest, so the rest cite nothing and say so
  */
 const DLI_CLASS_BASIS =
   'This app’s own figure, set by analogy with the crops in its class for which a published DLI exists. No cited work measured it for this crop, and the sources step lists it as a gap. Trust the ordering it gives, and treat the number itself as provisional'
@@ -628,9 +626,9 @@ export const expandRow = (row: CropRow): Crop => {
   const zr = overrides.zr ?? rootDefault[0]
   const maxDesignRsr = overrides.maxRsr ?? classSpec.maxDesignRsr
   const ceiling = overrides.ceiling ?? null
-  // no default citation. Purdue HO-238-B-W and VCE SPES-720NP stood here until 2026-09-20 and
-  // print a band for five rows of the catalogue, so the rows they cover name them and every
-  // other row names nothing, which is the state a reader can check (Decision Record 23)
+  // no default citation. Purdue HO-238-B-W and VCE SPES-720NP print a band for five rows of
+  // the catalogue, so the rows they cover name them and every other row names nothing, which is
+  // the state a reader can check (Decision Record 23)
   const dliCitations = overrides.dliCitations ?? null
   const dliNote =
     overrides.dliCaveat ?? (dliCitations === null ? DLI_CLASS_BASIS : DLI_PRINTED_BASIS)

@@ -64,8 +64,8 @@ export const measuredEffectLike = (
 
 /**
  * Seasons of a trial before the literature is offered. Three, because a season is a year here
- * and the point is that a grower cannot tell a hypothesis from the weather in one; it is a rule
- * of the mode rather than a measurement, and it is an integer rather than a rate on purpose
+ * and the point is that a grower cannot tell a hypothesis from the weather in one. It is a rule
+ * of the mode, a whole count of seasons chosen on purpose
  */
 export const TRIALS_TO_REVEAL = 3
 
@@ -90,11 +90,11 @@ const meanRealised = (outcomes: readonly PlantingOutcome[]): Fraction =>
 /**
  * What a trial has to compare itself against, read back off the seasons already run.
  *
- * A trial had no control group: every planting the rule concerns runs it, so "the beds trying it
- * made 65% of a full crop" was the whole garden's number with nothing beside it
- * (`the convergence document` 7.1, item 8). Where some beds did not run it, `PlantingOutcome.tried`
- * already says which, and that is the comparison; where all of them did, saying so is the lesson,
- * so an empty control group is reported as a count of zero rather than as null.
+ * Every planting a rule concerns runs it, so "the beds trying it made 65% of a full crop" is the
+ * whole garden's number with nothing beside it unless a control group is built from the same
+ * seasons. Where some beds did not run it, `PlantingOutcome.tried` says which, and that is the
+ * comparison. Where all of them did, saying so is the lesson, and an empty control group is
+ * counted as zero.
  *
  * Harvested on both sides, because `tried` is only ever set on a harvested outcome and a frosted
  * or refused bed on the control side would be answering a different question. Only the seasons

@@ -73,7 +73,7 @@ export const pointInPolygon = (polygon: Polygon2D, x: number, y: number): boolea
 /**
  * True where two segments cross transversally: each one's endpoints land on opposite sides of
  * the other. Touching at a shared endpoint or lying collinear zeroes one of the two products,
- * which reads as no crossing rather than a false positive; the same rule `untangledRing` pins
+ * which reads as no crossing; the same rule `untangledRing` pins
  * for a ring crossing itself
  */
 const segmentsCross = (a1: Vec2M, a2: Vec2M, b1: Vec2M, b2: Vec2M): boolean => {
@@ -111,7 +111,7 @@ const strictlyInside = (polygon: Polygon2D, x: number, y: number): boolean =>
  * True where two footprints share any ground: a vertex of either exterior ring strictly inside
  * the other, or a pair of their exterior edges crossing. Two shapes that only touch, an edge
  * flush against an edge or one corner against another with neither ring's vertex strictly
- * inside the other, read as clear rather than overlapping: the pinned rule is that touching
+ * inside the other, read as clear: the pinned rule is that touching
  * alone is not overlap, only a vertex actually inside or an edge actually crossing is
  */
 export const polygonsOverlap = (a: Polygon2D, b: Polygon2D): boolean => {
@@ -135,7 +135,7 @@ const distanceToSegment = (x: number, y: number, a: Vec2M, b: Vec2M): number => 
 /**
  * How far `(x, y)` sits from the polygon: zero inside it, the distance to the nearest edge of
  * the exterior ring or of any hole otherwise, so a point inside a hole reads by the hole's own
- * edge rather than the exterior's
+ * edge in that case
  */
 export const distanceToPolygonM = (polygon: Polygon2D, x: number, y: number): number => {
   if (pointInPolygon(polygon, x, y)) return 0
@@ -326,7 +326,7 @@ export const untangledRing = (ring: Ring2D): Ring2D => {
 
   // two segments properly cross when each one's endpoints land on opposite sides of the other;
   // a collinear or endpoint-touching case zeroes one of the two products, which reads as no
-  // crossing rather than a false positive
+  // crossing
   const orient = (a: Vec2M, b: Vec2M, c: Vec2M): number =>
     (b.xM - a.xM) * (c.yM - a.yM) - (b.yM - a.yM) * (c.xM - a.xM)
   const properlyCross = (a1: Vec2M, a2: Vec2M, b1: Vec2M, b2: Vec2M): boolean =>

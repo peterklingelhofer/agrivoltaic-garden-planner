@@ -62,11 +62,10 @@ export interface BedOccupancy {
  * How much of a bed its existing plantings already take, at the same catalogue spacing every
  * other placement is measured with.
  *
- * Nothing computed this before, and its absence was a real hole rather than an omission: a bed
- * could be planted to capacity, then planted to capacity again, because `derivePlanting` sized
- * every new planting against the WHOLE bed and only ever checked that the count was at least
- * one. The polyculture path had it right all along in `allocateSpace`; this is the same
- * arithmetic, made available to the one-crop-at-a-time path so there is a single space model.
+ * Without it, a bed could be planted to capacity, then planted to capacity again, because
+ * `derivePlanting` would size every new planting against the WHOLE bed and only check that the
+ * count was at least one. This is the same arithmetic the polyculture path uses in `allocateSpace`,
+ * made available to the one-crop-at-a-time path so there is a single space model.
  *
  * `exceptPlantingId` is how an EDIT differs from an ADD: re-deriving a planting must not count
  * that planting's own area against itself
@@ -144,7 +143,7 @@ export interface PlantingDraft {
   readonly calendar: CropCalendar | undefined
   /** Defaults to the calendar's own recommended day */
   readonly sowDay?: DayOfYear
-  /** A plan slot's harvest end, checked against the derived start rather than trusted */
+  /** A plan slot's harvest end, checked against the derived start */
   readonly harvestEndDay?: DayOfYear
   readonly plantCount?: number
   readonly cultivarId?: CultivarId | null
@@ -197,8 +196,8 @@ export const derivePlanting = (draft: PlantingDraft): Derivation<Planting> => {
   }
   const plantCount = Math.round(draft.plantCount ?? density.value.plantCount)
   if (plantCount < 1) return refuse(`a planting of ${cropId} needs at least one plant`)
-  // refused rather than trimmed to what fits: the grower asked for a number and is owed the
-  // reason it cannot be had, the same way `allocateSpace` reports a shortfall instead of a guess
+  // refused: the grower asked for a number and is owed the
+  // reason it cannot be had, the same way `allocateSpace` reports a shortfall
   if (plantCount > density.value.plantCount) {
     return refuse(
       `${bed.label} has room for ${String(density.value.plantCount)} ${cropId} at ${density.value.areaPerPlantM2.toFixed(2)} m² each, and ${String(plantCount)} was asked for`,

@@ -13,7 +13,7 @@ import type { IntentId } from './intent'
 import type { PanelChange, ScopeTopic } from './vocabulary'
 
 /**
- * What the agent says, as structure rather than as sentences.
+ * What the agent says, as structure.
  *
  * This is the load-bearing decision in the whole feature and it is worth stating plainly: the
  * agent never writes prose. Every word a visitor reads is either a fixed string this app already
@@ -21,7 +21,7 @@ import type { PanelChange, ScopeTopic } from './vocabulary'
  * authored and this passes through untouched, such as a `PlanRefusal.reason`. Nothing is composed
  * here and nothing is paraphrased anywhere.
  *
- * The layering enforces it rather than asking for it. The copy lives in `src/ui/onboarding.ts`
+ * The layering enforces it. The copy lives in `src/ui/onboarding.ts`
  * and `src/agent` may not import `src/ui`, so an utterance physically cannot carry a sentence
  * this layer made up: it carries a step, a crop id, an archetype, a refusal, and the panel words
  * it from the same table the wizard words itself from. A caveat cannot be dropped in translation
@@ -67,7 +67,7 @@ export type Utterance =
       readonly disliked: readonly CropId[]
     }
   | { readonly kind: 'place'; readonly label: string; readonly attribution: string }
-  /** Something has to happen first, and this names which thing rather than refusing blankly */
+  /** Something has to happen first, and this names which thing, without merely refusing blankly */
   | { readonly kind: 'blocked'; readonly need: BlockedNeed }
   | { readonly kind: 'garden'; readonly summary: GardenSummary }
   | {
@@ -78,7 +78,7 @@ export type Utterance =
       readonly bedLabels: readonly string[]
       /** Of `cropIds`, the ones already growing in these same beds, so the two lists can agree */
       readonly plantedHere: readonly CropId[]
-      /** Of `cropIds`, the ones the catalogue carries a cover-crop role for, rather than a main one */
+      /** Of `cropIds`, the ones the catalogue carries a cover-crop role for */
       readonly coverCropIds: readonly CropId[]
     }
   | {
@@ -129,14 +129,14 @@ export type Utterance =
   | {
       readonly kind: 'no-reason'
       readonly subject: string
-      /** What is worth asking about right now, read off the store rather than said blankly */
+      /** What is worth asking about right now, read off the store */
       readonly canAsk: readonly Capability[]
     }
   | { readonly kind: 'undone' }
   /*
     The six below carry things the app already computes. Each is the engine's own value, whole:
     the panel words it with the same helpers the corresponding panel uses, so asking out loud and
-    opening the panel give one answer rather than two
+    opening the panel give one answer
   */
   | {
       readonly kind: 'energy'
@@ -175,16 +175,16 @@ export type Utterance =
        */
       readonly citations: readonly CitationId[]
     }
-  /** The reference shelf, which the agent opens rather than summarises */
+  /** The reference shelf, which the agent opens */
   | { readonly kind: 'sources' }
   | { readonly kind: 'removed'; readonly cropIds: readonly CropId[]; readonly count: number }
   | { readonly kind: 'bed-added'; readonly label: string }
   | { readonly kind: 'started-over' }
   /**
-   * Hello, or thank you. Short, and it puts the pending question back rather than trailing off.
+   * Hello, or thank you. Short, and it puts the pending question back, without trailing off.
    *
-   * `sort` because they are not the same thing said twice: a session that ended with "thanks" was
-   * answered "Hello.", which reads as an agent that heard a noise rather than a person
+   * `sort` because they are not the same thing said twice: answering "thanks" with "Hello."
+   * reads as an agent that heard a noise
    */
   | { readonly kind: 'greeting'; readonly sort: 'hello' | 'thanks' }
   /**
@@ -212,7 +212,7 @@ export type Utterance =
   | { readonly kind: 'out-of-scope'; readonly topic: ScopeTopic }
   /** The plot was reshaped as well as recorded, which only happens once one has been drawn */
   | { readonly kind: 'resized'; readonly widthM: number; readonly depthM: number }
-  /** What this whole application is for, as a fixed definition rather than any store's own text */
+  /** What this whole application is for, as a fixed definition */
   | { readonly kind: 'define' }
   /**
    * The light model's own facts, read off the raster that actually ran, plus what would let a
@@ -251,7 +251,7 @@ export type Utterance =
     }
   /** The comparison has not been run, and the press that runs it is now on screen */
   | { readonly kind: 'panel-cost-run' }
-  /** An upstream or the engine failed, carrying its own message rather than a cheerful one */
+  /** An upstream or the engine failed, carrying its own message */
   | { readonly kind: 'failed'; readonly message: string }
 
 /**
@@ -268,13 +268,13 @@ export interface ArrayAssumptions {
 }
 
 /**
- * What is worth asking about right now, named so the empty-answer fallback can point somewhere
- * instead of only saying it has nothing. Closed, the same way `IntentId` is: a new one has to be
+ * What is worth asking about right now, named so the empty-answer fallback always has somewhere
+ * to point. Closed, the same way `IntentId` is: a new one has to be
  * added here and worded in `agent-words.ts`, so the list on screen can never silently go stale
  */
 export type Capability = 'grow' | 'energy' | 'calendar' | 'sources' | 'season'
 
-/** What is missing, named so the reply can say what to do rather than only that it cannot */
+/** What is missing, named so the reply can say what to do about it */
 export type BlockedNeed =
   | 'location'
   /** The annual energy run is never done by default: there is no default figure to show */
@@ -298,7 +298,7 @@ export type BlockedNeed =
   | 'light-running'
   /**
    * The light is computed and the ranking is not, which is a cheaper, different run: it reads
-   * `bedLight` rather than retracing the sun. Reusing `light-running` here restarted a bake that
+   * `bedLight`, without retracing the sun. Reusing `light-running` here restarted a bake that
    * had already finished, every time a question needed only the ranking that follows it
    */
   | 'ranking-running'

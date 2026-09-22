@@ -16,7 +16,7 @@ const LEAF = '#4f8f3e'
  * sixty of these at once, and the naive version puts about eight thousand rects in the document
  * for a picture nobody can see the pixels of anyway. Merged, a sprite is four paths.
  *
- * Sub-pixel seams are the reason each run is drawn as a closed rectangle path rather than as a
+ * Sub-pixel seams are the reason each run is drawn as a closed rectangle path. Not a
  * stroked line: neighbouring fills of the same colour meet exactly on the integer grid, and a
  * renderer that antialiases a stroke would draw a pale line down the middle of a solid shape
  */
@@ -65,7 +65,7 @@ export interface CropPictureProps {
  *
  * The fallback is not a nicety either. `CROP_SPRITE` is held total against the catalogue by a
  * test, so in a shipped build this never renders; the day somebody adds a crop and not a drawing,
- * the row gets a plainer picture instead of a hole, and the test says so out loud
+ * the row gets a plainer picture, with no hole left behind, and the test says so out loud
  */
 export const CropPicture = ({ cropId, dliClass }: CropPictureProps): ReactElement => {
   const drawn = spriteFor(cropId)
@@ -100,7 +100,8 @@ export const CropPicture = ({ cropId, dliClass }: CropPictureProps): ReactElemen
 }
 
 /**
- * The same picture, for the four lists that hold a crop id and a catalogue rather than a crop.
+ * The same picture, for the four lists that hold a crop id and a catalogue, and look the crop up
+ * from them.
  *
  * The lookup is linear and is done per row, which is what every one of those lists already does
  * to print the crop's name. Nothing renders at all for an id the catalogue does not know, because

@@ -22,8 +22,8 @@ import type { AppState } from './slices'
  * What the bake reads out of the plot, as one comparable string.
  *
  * Plantings are excluded deliberately and they are the only exclusion: light falls on a bed, and
- * what is growing in that bed is downstream of the answer rather than an input to it. Everything
- * else about an array or a bed is included by spreading the object rather than by naming fields,
+ * what is growing in that bed is downstream of the answer. Everything
+ * else about an array or a bed is included by spreading the object, with no field named individually,
  * so a geometry field added later is covered without a second edit here.
  *
  * Key order decides the string, so an object rebuilt in a different order reads as a change that
@@ -62,7 +62,7 @@ export const lightIsStale = (state: AppState): boolean => {
  * A cancelled run stamps `lightGeometry` with the garden it was over (see `cancel`), and that
  * arrangement is then left alone until it changes: a cancel is an answer, not a pause.
  *
- * Beside `lightIsStale` rather than in `useAutoLight`, because the store asks the same question
+ * Beside `lightIsStale`, separate from `useAutoLight`, because the store asks the same question
  * before it plants: a guided planting waits for the full check when either of these is true
  */
 export const lightIsMissing = (s: AppState): boolean =>

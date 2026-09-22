@@ -1,9 +1,9 @@
 //! The agrivoltaic garden designer's physics core.
 //!
 //! One implementation of the numbers, callable from the browser through wasm and from a native
-//! binary directly. `the port document` sets out why this exists: the physics here is the part of
-//! the application worth sharing with anything else built on it, and a second hand-written copy
-//! of the Solar Position Algorithm would be a second thing to be wrong.
+//! binary directly. The physics here is the part of the application worth sharing with anything
+//! else built on it, and a second hand-written copy of the Solar Position Algorithm would be a
+//! second thing to be wrong.
 //!
 //! What is here is the whole light and energy path: solar geometry, beam/diffuse decomposition,
 //! transposition, the array geometry and its shadows, sky view factors, and the PVWatts chain.

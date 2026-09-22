@@ -24,8 +24,8 @@ const dispatch = async (
   ctx: ExecutionContextLike,
 ): Promise<Response> => {
   /*
-    Ahead of the GET-only rule, because the helper is the one route here that is asked a question
-    rather than sent to fetch something: the sentence being read is a body. Everything else stays
+    Ahead of the GET-only rule, because the helper is the one route here that is asked a question,
+    not sent to fetch something: the sentence being read is a body. Everything else stays
     GET, which is what keeps this proxy a cache in front of nine read-only upstreams
   */
   const { pathname } = new URL(request.url)

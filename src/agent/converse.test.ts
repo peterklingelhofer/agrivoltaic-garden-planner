@@ -88,12 +88,12 @@ describe('a reading it will not choose between', () => {
 
 describe('a question, which is never an instruction', () => {
   /**
-   * The worst thing this surface can do, and it did it twice in one played session.
+   * The worst thing this surface can do.
    *
-   * "When do i plant the tomatoes" and "what should i do this month" both reached
-   * `plan-planting`, which shares its whole vocabulary with the questions people ask ABOUT
-   * planting, and both were answered by replanting every bed. The reply that came back was the
-   * planting report, so nothing on screen said the garden had just been rewritten
+   * "When do i plant the tomatoes" and "what should i do this month" can reach `plan-planting`,
+   * which shares its whole vocabulary with the questions people ask ABOUT planting, and there both
+   * would be answered by replanting every bed. The reply that comes back is the planting report, so
+   * nothing on screen says the garden has just been rewritten
    */
   const ASKED = [
     'when do i plant the tomatoes',

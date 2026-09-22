@@ -19,7 +19,7 @@ describe('the sentence-embedding weights', () => {
   })
 
   it.skipIf(MODEL_REQUIRED)('may be absent on a fresh clone, which skips rather than fails', () => {
-    // the local contract, asserted so that it is a decision rather than an accident
+    // the local contract, asserted so that it is a decision made on purpose
     expect(MODEL_REQUIRED).toBe(false)
   })
 })

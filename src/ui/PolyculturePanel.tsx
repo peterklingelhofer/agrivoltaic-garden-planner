@@ -56,7 +56,9 @@ const TERM_ORDER: readonly CompatibilityTermKind[] = [
   'allelopathy',
 ]
 
-/** The two kinds a chip on the plants step cannot say: a constraint rather than a lean */
+/**
+ * The two kinds a chip on the plants step cannot say: Must have and Never, both hard constraints
+ */
 const HARD_KINDS = PREFERENCE_KINDS.filter(
   (entry) => entry.kind === 'require' || entry.kind === 'exclude',
 )
@@ -219,8 +221,8 @@ const FolkloreNotice = ({
  * that nobody asked them, all sit on the card the rule shaped. The full credit and its sources stay
  * on the sources step, which is where somebody auditing all of them at once would look.
  *
- * `TEK_ENDORSEMENT` is imported rather than retyped: it is the one sentence here that is a
- * caveat rather than a credit, and two copies of it is two chances for one to soften
+ * `TEK_ENDORSEMENT` is imported directly: it is the one sentence here that must read as a
+ * caveat, and two copies of it is two chances for one to soften
  */
 const EMPTY_RULES: readonly TekDesignRule[] = []
 
@@ -275,8 +277,8 @@ const SuggestionCard = ({
 }): ReactElement => {
   const applySuggestion = useAppStore((s) => s.applySuggestion)
   /*
-    What the press did, said beside the press. A card that planted nothing used to look exactly
-    like one that planted three crops. Read off the plot rather than remembered, so it stays true
+    What the press did, said beside the press. Without it, a card that planted nothing would look
+    exactly like one that planted three crops. Read off the plot fresh each time, so it stays true
     when the bed is changed elsewhere
   */
   const bed = useAppStore((s) => s.plot?.beds.find((entry) => entry.id === suggestion.bedId))
@@ -333,8 +335,8 @@ const SuggestionCard = ({
           </li>
         ))}
       </ul>
-      {/* plain rather than filled: five cards in a stack were five green buttons, and the fill
-          is reserved for the one press a screen wants most */}
+      {/* plain: five cards in a stack would be five green buttons, and the fill is reserved for
+          the one press a screen wants most */}
       <Action
         testId={`action-polyculture-apply-${index}`}
         disabled={!suggestion.fits}
@@ -623,9 +625,8 @@ export const Combinations = (): ReactElement => {
       <summary data-testid="action-plants-combinations">
         All the combinations for {bed?.label ?? 'this bed'}
       </summary>
-      {/* the one place the word survives: named once so it stays learnable, rather than
-          sprinkled across a step that otherwise says what this does instead of what it is
-          called */}
+      {/* the one place the word survives: named once here so it stays learnable, kept out of
+          the rest of a step that otherwise says what this does without naming it */}
       <p className="panel-sub" data-testid="readout-polyculture-term">
         Growing several crops together like this has a name:{' '}
         <InfoTip label="polyculture" testId="info-polyculture">

@@ -11,10 +11,10 @@
  * brand is a compile-time device for the production code, and it should not decide how a literal
  * is written in a test.
  *
- * Declaration merging ADDS an overload rather than replacing one, so the branded form still
+ * Declaration merging ADDS an overload. It never replaces one, so the branded form still
  * type-checks where a test already uses it.
  */
-/* anchors the augmentation to the real module rather than declaring a new one over the top */
+/* anchors the augmentation to the real module. It never declares a new one over the top */
 import type {} from 'bun:test'
 
 declare module 'bun:test' {

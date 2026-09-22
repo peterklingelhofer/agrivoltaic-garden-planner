@@ -84,7 +84,7 @@ export const Ground = (): ReactElement => {
         /*
           A tap aimed at a bed on a small touch screen lands on the ground beside it as often
           as on the bed itself, so a miss this close still means the bed. The pointer that
-          pressed decides this rather than the `pointer: coarse` media query `coarsePointer`
+          pressed decides this, more specific than the `pointer: coarse` media query `coarsePointer`
           reads, because it is this finger's tap that missed and a mouse plugged into a tablet
           aims as exactly as any mouse
         */
@@ -162,7 +162,7 @@ export const Ground = (): ReactElement => {
   /**
    * Snow is drawn as the surface it is: brighter, and much less rough than bare soil, so the low
    * winter sun rakes across it. The tile underneath is unchanged, which is what keeps the relief
-   * reading as ground with snow lying on it rather than as a flat white plane
+   * reading as ground with snow lying on it
    */
   const tint = surfaceGain(surface, groundAlbedo)
   const roughness = 1 - 0.45 * snowCover

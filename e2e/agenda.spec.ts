@@ -3,7 +3,7 @@ import { AUTORUN_TIMEOUT_MS, BAKE_TIMEOUT_MS, rankedBed, step } from './fixtures
 import { openPlantPicker } from './fixtures/qa.ts'
 
 /**
- * The agenda is the calendar read down the year instead of across one crop, so everything
+ * The agenda is the calendar read down the year across every crop, so everything
  * asserted here is a relationship: that a job is dated, that the date names the rule that
  * produced it, that moving the risk dial moves the dates, and that the list of things to
  * buy follows the plants that are actually in the beds. No absolute figure is asserted
@@ -101,7 +101,7 @@ test('a planted design produces grouped, dated jobs that each name their rule', 
     [...actions].some((action) => action.includes('sow') || action.includes('transplant')),
   ).toBe(true)
 
-  // the caveats the calendar computed reach the reader rather than being dropped in translation
+  // the caveats the calendar computed reach the reader intact
   await expect(page.getByTestId('readout-agenda-note-0')).toContainText('daily normals')
   await expect(page.getByTestId('readout-agenda-model-note')).toContainText(
     'These dates are modelled',

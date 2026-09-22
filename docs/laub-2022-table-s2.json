@@ -11,8 +11,8 @@
   "provenance": {
     "predictions": "verbatim",
     "confidenceIntervals": "verbatim, 95% CONFIDENCE intervals not prediction intervals",
-    "responseClasses": "verbatim, non-monotonic at high RSR as published, not corrected",
-    "coefficients": "DERIVED by algebraic recovery, not published anywhere, cite as derived from"
+    "responseClasses": "verbatim, non-monotonic at high RSR as published",
+    "coefficients": "DERIVED by algebraic recovery from Table S2, cite as derived from"
   },
   "model": {
     "form": "log10(Y/100) = b1*RSR + b2*RSR^2",

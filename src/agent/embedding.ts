@@ -5,7 +5,7 @@ import type { OnboardingStep } from '../state/slices'
 import { EMPTY_SLOTS, type Understander, type Understanding } from './understand'
 
 /**
- * The understander that knows what a sentence MEANS rather than what it looks like.
+ * The understander that knows what a sentence MEANS.
  *
  * 23 MB of `Xenova/all-MiniLM-L6-v2`, INT8, on the WASM backend. Paraphrase is the one thing this
  * fixes: a router that has forgotten which question it asked, or a question the app has no intent
@@ -27,14 +27,14 @@ import { EMPTY_SLOTS, type Understander, type Understanding } from './understand
 export const EMBEDDING_GATE = 0.4
 
 /**
- * And the bar for an intent that destroys work, on this scale rather than the lexical one.
+ * And the bar for an intent that destroys work, on this embedding scale.
  *
  * `DESTRUCTIVE_FLOOR` is 0.75 of a Dice score over character bigrams, which is a different
  * quantity entirely: cosine similarities here run 0.4 to 0.7 for a firm reading and almost never
  * reach 0.75, so borrowing that number meant "pull out the courgettes" could not reach
  * `remove-planting` at all.
  *
- * Chosen from a measured gap rather than picked. Every sentence that must NOT destroy anything
+ * Chosen from a measured gap. Every sentence that must NOT destroy anything
  * scores at most 0.356 against the nearest destructive exemplar -- "thanks" 0.270, "how much
  * will it cost" 0.158, "what about deer" 0.315, "ok" 0.356 -- and every sentence that should
  * scores at least 0.478: "pull out the courgettes" 0.478, "remove the tomatoes" 0.488, "scrap
@@ -44,7 +44,7 @@ export const EMBEDDING_GATE = 0.4
 export const DESTRUCTIVE_EMBEDDING_GATE = 0.42
 
 /**
- * How far the best reading must beat the runner-up before it is acted on rather than offered.
+ * How far the best reading must beat the runner-up before it is acted on.
  *
  * Cosine similarity separates a firm reading from a wrong one by a wide margin -- "dig up the
  * leeks" reads `remove-planting` at 0.614 against 0.323 for the next -- and separates a genuine
@@ -53,7 +53,7 @@ export const DESTRUCTIVE_EMBEDDING_GATE = 0.42
  * Acting on that is a coin flip with consequences; there is nothing to be gained from hiding it.
  *
  * Swept over all three held-out sets at once. Every value from 0.05 to 0.12 beats acting on ties,
- * on all three, so what is being chosen is a point on a plateau rather than a peak: at 0.08 the
+ * on all three, so what is being chosen is a point on a plateau: at 0.08 the
  * router is never confidently wrong on two of the three sets, and asks on roughly a third of what
  * is said. Below 0.05 the ties come back; above 0.12 it only asks more often for no more accuracy
  */
@@ -127,10 +127,10 @@ const rankIntents = (
 /**
  * A reading it will not act on, carrying the candidates for somebody to choose between.
  *
- * `intent` is the head of the offer rather than a separate opinion, so that everything which
+ * `intent` is the head of the offer, so that everything which
  * reads an `Understanding` -- the transcript, the destructive checks in the held-out sets -- sees
  * the same thing the visitor is shown. What makes this different from any other reading is that
- * `alternatives` is not empty, and `converse` offers instead of acting.
+ * `alternatives` is not empty, and `converse` offers without acting.
  *
  * The lexical reading heads the list when there is one. It is frequently right about a fragment
  * the model cannot place -- a misspelling, a two-word answer -- and putting it first costs
@@ -167,7 +167,7 @@ const unsure = (
   }
 }
 
-/** The intents whose whole content is a crop name, which is a closed list rather than a guess */
+/** The intents whose whole content is a crop name, which is a closed list */
 const CROP_PREFERENCE: readonly IntentId[] = ['like-crop', 'dislike-crop']
 
 /** The question an intent belongs to, or null for the ones a grower may say at any time */
@@ -281,13 +281,13 @@ export const createEmbeddingUnderstander = (options: EmbeddingOptions = {}): Und
         context.step !== null &&
         INTENTS.find((intent) => intent.id === lexical.intent)?.step === context.step
       /*
-        And only when it MATCHED, rather than when it fell back.
+        And only when it MATCHED.
 
         And only when the sentence is a bare fragment, or the lexical match is strong on its own
         words. `confidence` is the wrong test and was tried: `STEP_BIAS` lifts a 0.43 match on the
         place intent to 0.58, which beats a correct 0.50 on the agenda and reads as a strong
         answer, so "give me a month by month plan" was sent to the geocoder. `spoken` is that
-        number before the bias, which is the evidence rather than the verdict.
+        number before the bias, the evidence the verdict is built on.
         Fragment length alone was tried too and cost eight points: "things I can put in a stew" is
         six words and is still an answer to the question about what to grow
       */
@@ -309,12 +309,12 @@ export const createEmbeddingUnderstander = (options: EmbeddingOptions = {}): Und
         no idea what is inside the sentence, so a crop named in something routed by cosine
         similarity is found by exactly the same catalogue lookup.
 
-        `understandingFor` returns null for a reading this sentence cannot fill, and that is a
-        hard constraint rather than a low score: "i want tomatoes and courgettes" reads as an
-        ambition at 0.458 and a crop preference at 0.363, but there is no ambition anywhere in it
-        to record, so the ambition is not a candidate at all. Filtering BEFORE the margin is taken
-        rather than after is the whole of it -- taken after, every plain crop request looked like
-        a tie against a reading that could never have been carried out
+        `understandingFor` returns null for a reading this sentence cannot fill, and that is a hard
+        constraint: "i want tomatoes and courgettes" reads as an ambition at 0.458 and a crop
+        preference at 0.363, but there is no ambition anywhere in it to record, so the ambition is
+        not a candidate at all. The filter runs up front, BEFORE the margin is taken, which is the
+        whole of it: run after it, every plain crop request would look like a tie against a reading
+        that could never be carried out
       */
       const ranked = rankIntents(query, vectors, isNegated(text))
       const best = ranked[0]
@@ -352,7 +352,7 @@ export const createEmbeddingUnderstander = (options: EmbeddingOptions = {}): Und
         return lexical
       }
       /*
-        Two ways of not knowing, and both of them ask rather than settling for the phrase table.
+        Two ways of not knowing, and both of them ask, without settling for the phrase table.
 
         Falling back to `lexical` here is the wrong move for the same reason the confidence split
         was: the sentences the model has no opinion about are overwhelmingly the ones the phrase
@@ -388,7 +388,7 @@ export const createEmbeddingUnderstander = (options: EmbeddingOptions = {}): Und
 export const FRAGMENT_WORDS = 4
 
 /**
- * Above this the lexical reading is a certainty rather than a resemblance, and the model is not
+ * Above this the lexical reading is a certainty, and the model is not
  * consulted at all.
  *
  * Effectively "the sentence contains one of the exemplars outright": Dice over character bigrams

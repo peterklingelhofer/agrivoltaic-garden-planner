@@ -82,7 +82,7 @@ const weightedMeanMonthly = (
   const first = weighted[0]
   if (!first || totalDays === 0) return null
   const out = new Float32Array(first.values.length)
-  // the running sum is a plain number rather than a slot in `out`, so twelve months accumulate in
+  // the running sum is a plain number, held separately from a slot in `out`, so twelve months accumulate in
   // double precision and only the finished mean is rounded to float32. Summing into the
   // Float32Array instead rounds twelve times, and it is the difference between agreeing with the
   // raster's own annual field bit for bit and agreeing with it to about a part in a million

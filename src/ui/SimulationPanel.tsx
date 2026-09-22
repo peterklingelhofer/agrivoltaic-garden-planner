@@ -59,13 +59,9 @@ import { RequirementNotice } from './RequirementNotice'
 import { useSeasonSweep } from './useSeasonSweep'
 
 /*
-  Every sentence on this panel is written to the voice the author set on 2026-09-04 after reading
-  the app and finding its text "written in riddles": plain adult English, literal, the real term
-  with one gloss where it first appears, and every citation verbatim (`the voice document`, which wins
-  over the grade 4-5 rewrite this panel used to follow). The figures are unchanged and the
-  science is unchanged; what moved is the words, and the Latin, the bands and their intervals
-  stay behind a "Why?" where the researcher who checked the rewrite can still find every one of
-  them (`the convergence document` 7)
+  Every sentence on this panel keeps to one voice: plain adult English, literal, the real term with
+  one gloss where it first appears, and every citation verbatim. The Latin, the bands and their
+  intervals stay behind a "Why?", where anyone who checks can still find every one of them
 */
 
 const GRADE_LABEL: Readonly<Record<string, string>> = {
@@ -77,10 +73,8 @@ const GRADE_LABEL: Readonly<Record<string, string>> = {
 }
 
 /**
- * The step that owns the fix the advice names. The advice says what to change; this is where
- * it is changed, so "Fix Bed 1" lands on the editor for it rather than lighting a bed in the
- * scene and stopping, which is what "Show me Bed 1" did and what every persona pressed and then
- * did not know what to do with
+ * The step that owns the fix the advice names. The advice says what to change; this is where it is
+ * changed, so "Fix Bed 1" lands on the editor for it
  */
 const STEP_FOR_ADVICE: Readonly<Record<string, SidebarStep>> = {
   refused: 'plants',
@@ -122,13 +116,12 @@ const versusTypical = (value: number, typical: number | null): string => {
  * Whether this year was dry enough for panel shade to pay the plants back, and the plain
  * sentence either way.
  *
- * At a temperate place even the thirstiest year on record can sit below the foot of the
- * designer's own shade-benefit ramp, so the yield gain under panels that this mode exists to
- * show never arrives and a card promising the thirstiest year promises a thirst that never
- * comes (`the convergence document` 7.1, item 8). Decision Record 6 is why: the 2 to 3 times gains
- * measured in Arizona come from relieved water stress, and a well watered garden has none to
- * relieve. Where the line falls is `shadeBenefitScale`'s to say and never a comparison written
- * here, and the line itself is `WATER_LIMITED_INDEX`
+ * At a temperate place even the thirstiest year on record can sit below the foot of this app's own
+ * shade-benefit ramp, so the yield gain under panels that this mode exists to show never arrives
+ * and a card promising the thirstiest year promises a thirst that never comes. Decision Record 6 is
+ * why: the 2 to 3 times gains measured in Arizona come from relieved water stress, and a well
+ * watered garden has none to relieve. Where the line falls is `shadeBenefitScale`'s to say and
+ * never a comparison written here, and the line itself is `WATER_LIMITED_INDEX`
  */
 const thirstLine = (year: YearSummary, subject: string): string =>
   shadeBenefitScale({ index: year.waterIndex }) > 0
@@ -166,10 +159,9 @@ const describeYear = (year: YearSummary, typical: YearSummary | null): string =>
 const EXTREMES: readonly YearChoice[] = ['driest', 'wettest', 'hottest', 'coolest']
 
 /**
- * The year each card names, and its two headline numbers, before any press. A card that said
- * "the hottest year on record here" and no more made it possible to run the hottest and the
- * driest years back to back and get the same season twice, because at this place they are the
- * same year; now the card says so
+ * The year each card names, and its two headline numbers, before any press. A card that said "the
+ * hottest year on record here" and no more could point the hottest and the driest cards at the same
+ * season without saying so, wherever they are the same year
  */
 const cardHelp = (
   choice: YearChoice,
@@ -239,7 +231,7 @@ const versusLast = (report: SeasonReport, previous: SeasonReport | undefined): s
 /**
  * "Without panels this year: about 90%", or what became of the planting instead, for one crop.
  * Both harvests are said to the nearest five, so the gap is read between the two figures on
- * screen rather than between the draws behind them
+ * screen
  */
 const withoutPanelsLine = (real: PlantingOutcome, other: NoPanelsOutcome): string => {
   if (other.kind !== 'harvested') return `Without panels this year: ${OUTCOME_LABEL[other.kind]}.`
@@ -293,8 +285,8 @@ const Outcome = ({
 )
 
 /*
-  The row's own number is the whole garden's: every planting the rule concerns runs it, so there
-  was nothing beside it to read it against until the reveal (`the convergence document` 7.1, item 8).
+  The row's own number is the whole garden's: every planting the rule concerns runs it, so on its
+  own it has nothing beside it to be read against until the published evidence is revealed.
   `trialComparison` reads the other beds of the same seasons off the reports, and where there are
   none the row says so, because a trial that left no bed out is the lesson and not a missing number
 */
@@ -414,9 +406,9 @@ const benchmarkMoney = (amount: number, beside: PriceInUse | null): string => {
 /**
  * Where the money came from, in the words of the sources it came from.
  *
- * The caveats are the data layer's own exported strings rather than the ones hanging off these
- * particular values, so a figure can never reach a reader without the warning that belongs to it:
- * a caveat is a property of the source and not of one season's copy of a number. Each figure
+ * The caveats are the data layer's own exported strings, so a figure can never reach a reader
+ * without the warning that belongs to it: a caveat is a property of the source, held once
+ * there. Each figure
  * brings its own, so a block with no price never says a word about export tariffs, and a typed
  * figure names the grower as its source the way a typed soil pH does
  */
@@ -445,7 +437,7 @@ const whyItCosts = (economy: SeasonEconomy): string =>
  * Below the standing and outside it on purpose (Decision Record 14): none of this is in the
  * verdict and none of it is in a score, because a garden worth having and a garden that pays for
  * itself are two different questions and this app only answers the first. Every figure is the
- * season report's own, and each readout is absent rather than zeroed where its source is missing
+ * season report's own, and each readout is absent where its source is missing
  */
 const WhatItCosts = ({ economy }: { readonly economy: SeasonEconomy }): ReactElement => {
   // a valued year with no payback says why in one sentence, and the sentence is the data layer's
@@ -498,8 +490,8 @@ const WhatItCosts = ({ economy }: { readonly economy: SeasonEconomy }): ReactEle
       </div>
       {economy.buildCostUsd === null ? null : <EconomyFields />}
       {economy.managementTasks.length === 0 ? null : (
-        // a list and not a readout: four tasks in a readout's narrow cell wrapped into a column of
-        // single words, and a task is a sentence to read rather than a figure to compare
+        // a list: a readout's narrow cell would wrap four tasks into a column of single words, and
+        // a task is a sentence to read, where a figure is one to compare
         <div data-testid="readout-seasons-tasks">
           <p>Management tasks the plantings you chose require:</p>
           <ul className="list">
@@ -532,7 +524,7 @@ const WhatItCosts = ({ economy }: { readonly economy: SeasonEconomy }): ReactEle
  * The panel owns no state: what it shows is the reports the store kept. Why a season cannot run
  * is one sentence from `seasonBlocker`, which the store consults before it runs, so the button
  * and the store cannot disagree about it, and the press that settles it is borrowed from the
- * step that owns the fix rather than restated here.
+ * step that owns the fix.
  *
  * The order is the loop the mode is: what this is, what years there are, which one, run it,
  * what happened, every season so far, where that leaves the garden, what it costs, and what it
@@ -664,7 +656,7 @@ export const SimulationPanel = (): ReactElement => {
             {latest.advice.text}
           </p>
           {/* the advice names a bed and a change; the press lands on the step that makes it,
-              with that bed selected, rather than lighting the bed and stopping */}
+              with that bed selected */}
           {latest.advice.bedId === null ? null : (
             <div className="panel-actions">
               <Action

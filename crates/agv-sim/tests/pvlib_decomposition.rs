@@ -27,7 +27,7 @@ fn erbs_matches_the_1982_piecewise_polynomial() {
 }
 
 /// The polynomial is fitted piecewise and the pieces are not constrained to meet, so this is a
-/// property of the published fit rather than of the port. It is worth asserting anyway: a
+/// property of the published fit itself. It is worth asserting anyway: a
 /// transcription error in any one coefficient shows up here as a step.
 #[test]
 fn erbs_is_continuous_across_its_own_boundaries() {
@@ -54,8 +54,8 @@ fn disc_matches_pvlib_within_half_a_watt() {
 ///
 /// Six consecutive hours, because the middle four exercise the neighbour window and the two ends
 /// exercise its mirroring. The pvlib air-mass reference values are quoted to eight decimal places
-/// and this is a step function, which is why the tolerance is a whole watt rather than the half a
-/// watt DISC gets.
+/// and this is a step function, which is why the tolerance here is a whole watt, wider than the
+/// half a watt DISC gets.
 #[test]
 fn dirint_matches_pvlib_within_a_watt() {
     let ghi: Vec<f64> = [100.0, 300.0, 500.0, 700.0, 650.0, 400.0]

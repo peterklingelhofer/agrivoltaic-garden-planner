@@ -48,7 +48,7 @@ export interface SourceJump {
  * Only the open sidebar step has children, so the row a reader asks for does not exist at the
  * moment they ask for it: the request is parked here and the Sources panel claims it once it has
  * rendered the row. Asking from inside the sources step, which the DLI disclosure does, remounts
- * nothing at all, so the panel is told rather than left to notice
+ * nothing at all, so the panel is told directly. It is never left to notice
  */
 let pending: SourceJump | null = null
 let jumps = 0
@@ -65,7 +65,7 @@ export const requestSourceJump = (id: CitationId): void => {
 }
 
 /**
- * Taken rather than read: a jump is owed once. The caller keeps it in its own state afterwards,
+ * Taken. Not read: a jump is owed once. The caller keeps it in its own state afterwards,
  * so leaving the sources step and coming back later does not replay a jump already served
  */
 export const useSourceJump = (): SourceJump | null => {

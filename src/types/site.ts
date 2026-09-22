@@ -33,7 +33,7 @@ export interface FrostExceedanceCurve {
   readonly frostFreeDays: Readonly<Record<ExceedancePercentile, Days>>
   /**
    * True where too few years crossed the threshold for the percentile to name a frost: the pair
-   * above is then the record's two sentinel days rather than dates, `frostFreeDays` is the whole
+   * above then holds the record's two sentinel-day placeholders, `frostFreeDays` is the whole
    * year, and nothing downstream may print the pair
    */
   readonly frostFree: Readonly<Record<ExceedancePercentile, boolean>>
@@ -83,10 +83,10 @@ export interface HardinessIndexTerm {
 }
 
 /**
- * NRCan, whose zone is a score on a composite index rather than a temperature. The optional
+ * NRCan, whose zone is a score on a composite index. The optional
  * `never` is the point of the union: no temperature is recoverable from such a zone, so the
- * field cannot be filled at all and the USDA crosswalk is unrepresentable rather than merely
- * discouraged (Decision Record 9)
+ * field cannot be filled at all, and the USDA crosswalk goes all the way to unrepresentable,
+ * past merely discouraged (Decision Record 9)
  */
 export interface CompositeHardinessRating {
   readonly scheme: 'nrcan'

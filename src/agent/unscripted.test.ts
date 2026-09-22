@@ -34,10 +34,10 @@ import type { OnboardingStep } from '../state/slices'
  * - `wording` -- the right intent exists and the sentence missed it. This is the only class an
  *   embedding model helps with, and it is nine of the twenty-nine.
  * - `overreach` -- it should have said nothing and instead did something. Six of the forty
- *   sentences used to reach an intent that destroys work: "thanks" and "do I need planning
- *   permission" both reached `undo`, and "will this save me money" reached `plan-planting`, which
- *   replaces the plantings in every bed. `DESTRUCTIVE_FLOOR` closed that to zero, and it is the
- *   one class a more confident matcher would have made WORSE rather than better.
+ *   sentences reached an intent that destroys work: "thanks" and "do I need planning permission"
+ *   both reached `undo`, and "will this save me money" reached `plan-planting`, which replaces the
+ *   plantings in every bed. `DESTRUCTIVE_FLOOR` holds that at zero, and it is the one class a more
+ *   confident matcher would only make WORSE.
  */
 const WILD: readonly (readonly [string, OnboardingStep | null, string])[] = [
   // ordinary answers, said the way people talk
@@ -131,13 +131,10 @@ describe('unscripted input', () => {
    *
    * Being wrong is recoverable; being wrong and destructive is not. `DESTRUCTIVE_FLOOR` in
    * `lexical.ts` holds this at zero, and this test is what stops it drifting back
-   *
-   * Held as a list of the known-bad sentences rather than as an assertion that none exist,
-   * because none-exist is the state this has to reach and is not the state it is in
    */
   it('names every unscripted sentence that reaches a destructive intent', () => {
-    // imported rather than restated: the list had already drifted once, and a safety test that
-    // checks a stale copy of the thing it is guarding is worse than no test
+    // imported directly. Not restated, because a safety test that checks a stale copy of the thing
+    // it is guarding is worse than no test
     const destructive = new Set<string>(DESTRUCTIVE)
     const reached = WILD.flatMap(([said, step, want]) => {
       const got = routeLexically(said, { step, catalog })?.intent

@@ -179,7 +179,7 @@ describe('refusing to run beats running on invented inputs', () => {
   })
 
   /**
-   * With no panels there is no electricity, and the term is a zero band rather than a missing
+   * With no panels there is no electricity, and the term is a zero band. It is not a missing
    * one: the search's own no-array control scores on the same, and a garden with no panels is
    * still a garden that can be planted
    */

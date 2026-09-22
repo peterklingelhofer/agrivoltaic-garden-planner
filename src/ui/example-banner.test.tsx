@@ -13,7 +13,7 @@ import { mount } from './testkit'
  * "Clear the example and start my own" was the only way to stop reading a 226px card, so putting
  * the notice away and deleting the garden it described were the same press. On a 360x640 phone
  * that card and the legend covered 88% of the canvas between them and the garden got 47px, which
- * is what made a missing close a real problem rather than a tidiness one.
+ * is what made a missing close a real problem. It was never a tidiness one.
  *
  * The fold itself cannot be tested here: which of the two halves is on screen is a stylesheet
  * decision that differs by width, and jsdom has neither layout nor media queries. What is tested
@@ -34,7 +34,7 @@ beforeEach(() => {
       return Promise.resolve(new Response(shipped(input).toString('utf8')))
     }
     if (input === exampleRasterPath('temperate')) {
-      // a fresh ArrayBuffer rather than a view onto Node's pooled one: `Buffer` may sit on a
+      // a fresh ArrayBuffer. Never a view onto Node's pooled one: `Buffer` may sit on a
       // SharedArrayBuffer, which `Response` does not accept
       const bytes = shipped(input)
       const copy = new ArrayBuffer(bytes.byteLength)

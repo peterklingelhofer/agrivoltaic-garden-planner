@@ -245,8 +245,8 @@ fn bins_are_all_covered() {
 }
 
 /// Each row's air mass has to be Kasten-Young at that row's zenith with no pressure term, because
-/// that is the argument pvlib's `perez` documents and the number its answer was taken at. A row
-/// edited by hand rather than regenerated fails here with a clearer reason than a watt of drift.
+/// that is the argument pvlib's `perez` documents and the number its answer was taken at. A
+/// hand-edited row fails here with a clearer reason than a watt of drift
 #[test]
 fn every_row_carries_the_unpressurised_air_mass_for_its_zenith() {
     for (zenith_deg, .., air_mass, _want) in CASES {
@@ -282,7 +282,7 @@ fn clearness_edges_are_the_published_ones() {
 
 /// pvlib clips the sky-diffuse result at zero and so does this. The horizon-brightening term goes
 /// negative under a bright overcast sky, and at a steep enough tilt it can take the whole sum
-/// with it, which is the one case where the clip is load-bearing rather than defensive.
+/// with it, which is the one case where the clip is load-bearing: a real output depends on it.
 #[test]
 fn the_result_is_never_negative() {
     for tilt in [0.0, 15.0, 30.0, 45.0, 60.0, 90.0] {

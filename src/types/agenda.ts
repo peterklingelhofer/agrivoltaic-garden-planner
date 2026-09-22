@@ -7,7 +7,7 @@ import type { DayOfYear, Days, MonthIndex } from './units'
 
 /**
  * The calendar answers "when is the window for this crop". A gardener asks "what do I do
- * next", which is the same data read down the year instead of across one crop, so every
+ * next", which is the same data read down the year across every crop, so every
  * action here is a `PlantingWindow`, a succession schedule or a `HarvestWindow` the
  * calendar already computed, carrying the basis and citations it computed them with
  */
@@ -45,7 +45,7 @@ export interface AgendaGroup {
 
 /**
  * A crop planted in a bed the calendar refuses to date. It produces no action, which is
- * the point: the reason is shown instead of a cheerful sow date the site cannot deliver
+ * the point: the reason is shown, so the site never promises a sow date it cannot deliver
  */
 export interface AgendaBlock {
   readonly bedId: BedId
@@ -103,7 +103,7 @@ export interface Agenda {
   readonly frostRiskPercentile: ExceedancePercentile
   readonly groups: readonly AgendaGroup[]
   readonly blocked: readonly AgendaBlock[]
-  /** Caveats every dated crop carries, so the panel states them once rather than per row */
+  /** Caveats every dated crop carries, so the panel states them once, covering every row */
   readonly notes: readonly string[]
   readonly shopping: ShoppingList
 }

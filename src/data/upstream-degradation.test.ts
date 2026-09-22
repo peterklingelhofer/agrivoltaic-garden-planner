@@ -301,9 +301,9 @@ describe('the daily normals are aggregated on local days and name their zone', (
 })
 
 /**
- * The hourly weather stays in UTC; what changes is that every series carries the zone the
- * site keeps its clock in, so the readers that split hours into local days read that zone at
- * each instant rather than a whole-hour guess from the longitude
+ * The hourly weather stays in UTC, and every series carries the zone the site keeps its clock in,
+ * so the readers that split hours into local days read that zone at each instant, stamped over the
+ * whole-hour guess from the longitude
  */
 describe('a resolved site keeps the zone its normals were aggregated in', () => {
   it('stamps the IANA zone on the site and on every weather series, at standard time', async () => {
@@ -329,7 +329,7 @@ describe('a resolved site keeps the zone its normals were aggregated in', () => 
     expect(weather.utcOffsetHours).toBe(-5)
     expect(years.length).toBeGreaterThan(0)
     expect(years.every((measured) => measured.weather.timezone === 'America/New_York')).toBe(true)
-    // the soil map was not answered, and the site says so rather than claiming a gardener's test
+    // the soil map was not answered, and the site says so
     expect(site.soil.sourceId).toBe('default')
     expect(site.normals.source).toBe('open-meteo')
   })

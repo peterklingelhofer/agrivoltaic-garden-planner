@@ -81,7 +81,7 @@ export const preferredCropIdsOf = (preferences: PreferenceSet): readonly CropId[
 
 /**
  * Which crop classes each answer to the growing question names. "A bit of everything" names
- * the ordinary vegetable garden rather than nothing: without it the answer changed the shade
+ * the ordinary vegetable garden: without it the answer changed the shade
  * budget of the layout search and not one crop of the beds it placed
  */
 export const AMBITION_CLASSES: Readonly<Record<GrowingAmbition, readonly DliClass[]>> = {
@@ -98,12 +98,12 @@ export const AMBITION_CLASSES: Readonly<Record<GrowingAmbition, readonly DliClas
   ],
 }
 
-/** A lean rather than a demand: half the weight of a crop the grower named themselves */
+/** A lean: half the weight of a crop the grower named themselves */
 export const AMBITION_WEIGHT = 0.5 as Fraction
 
 /**
  * The height above which a perennial is a tree, a vine on a permanent trellis or an orchard
- * row rather than something a garden bed carries, in metres. Hops (6 m), hardy kiwi (5 m),
+ * row, in metres. Hops (6 m), hardy kiwi (5 m),
  * grape, elderberry and every fruit tree in the catalogue sit above it; blackberry and aronia
  * (2 m) sit on it and stay
  */
@@ -121,11 +121,11 @@ export const orchardScale = (crop: Crop): boolean =>
   crop.footprint.heightM.typicalM > BED_PERENNIAL_HEIGHT_M
 
 /**
- * The growing answer as preferences: a `prefer` entry for every food crop in the classes it
- * names. Answering "Tomatoes, peppers and berries" used to come back as three mixes
- * of hops, sorrel and tomatillo, because the answer reached the layout search and
- * never the crops. This is how it reaches them, through the same preference term a named crop
- * moves, so it can lean the ranking and the combinations without ever excluding anything
+ * The growing answer as preferences: a `prefer` entry for every food crop in the classes it names.
+ * Without this, the growing answer would reach the layout search's shade budget alone, so a "mixed
+ * vegetables" answer could still surface hops, sorrel and tomatillo. This is how it reaches them,
+ * through the same preference term a named crop moves, so it can lean the ranking and the
+ * combinations without ever excluding anything
  */
 export const ambitionPreferences = (
   ambition: GrowingAmbition,
@@ -161,7 +161,7 @@ export const withAmbition = (
     : { ...preferences, entries: [...preferences.entries, ...leaned] }
 }
 
-/** -1 to 1. `exclude` never reaches here: it removes the crop rather than weighting it */
+/** -1 to 1. `exclude` never reaches here: it removes the crop */
 export const preferenceSignal = (preferences: PreferenceSet, cropId: CropId): number => {
   const entry = preferences.entries.find((candidate) => candidate.cropId === cropId)
   if (entry === undefined) return 0
@@ -284,7 +284,7 @@ export interface MeasuredLightEnvelope {
 }
 
 /**
- * Read off the loaded catalogue rather than written down, so a single new measured row moves it
+ * Read off the loaded catalogue, and never written down, so a single new measured row moves it
  * and nothing here has to be re-tuned by hand. Today it is 5.8 mol/m2/d, from lettuce, and a
  * 0.5 season-cumulative shade ratio, from potato.
  *
@@ -323,8 +323,7 @@ const dimmestMonthInWindow = (light: BedLight, seasonLight: SeasonLight): number
  *
  * Deeper than that the bed keeps nothing at all. The only ceilings past 0.6 belong to teaberry,
  * wild ginger and ramps, and the climate gate rules all three out of a desert bed on the July they
- * stand through before light is ever consulted, so a 72 percent Phoenix band returns no suggestion
- * rather than the lone ramps it used to.
+ * stand through before light is ever consulted, so a 72 percent Phoenix band returns no suggestion.
  *
  * This is deliberately not an exclusion. Nothing measured says a woodland perennial fails at 72
  * percent shade either, and asserting that it does would fabricate the same confidence in the
@@ -726,14 +725,13 @@ export const suggestPolycultures = (request: SuggestionRequest): SuggestionSet =
   })
 
   /**
-   * The refusals that explain what survived. Where a bed keeps a crop only on an inference past
-   * the measured envelope it has just turned away better-suited crops on figures that WERE
-   * measured, and a caller shown the survivor and not those refusals cannot tell the two apart:
-   * at a 55 percent Phoenix shade band that is five understory greens kept on an inferred 0.6
-   * against sixty-nine crops refused on real ceilings. Only the same threshold is surfaced, so
-   * these are the measured figures the inference actually overrode rather than every refusal the
-   * bed happens to carry, and only when one got through, because otherwise the per-crop pipeline
-   * output already says it
+   * The refusals that explain what survived. Where a bed keeps a crop only on an inference past the
+   * measured envelope, it has just turned away better-suited crops on figures that WERE measured,
+   * and a caller shown the survivor and not those refusals cannot tell the two apart: at a 55
+   * percent Phoenix shade band that is five understory greens kept on an inferred 0.6 against
+   * sixty-nine crops refused on real ceilings. Only the same threshold is surfaced, so these are
+   * the measured figures the inference actually overrode, and only when one got through, because
+   * otherwise the per-crop pipeline output already says it
    */
   const overridden = new Set(
     suggestions.flatMap((entry) =>

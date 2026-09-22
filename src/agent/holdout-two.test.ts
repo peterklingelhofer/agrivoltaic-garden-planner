@@ -20,8 +20,8 @@ import type { Understander } from './understand'
  * `holdout.test.ts` was written before the eight read intents existed and scored 61%. Everything
  * built afterwards was checked against it -- not by copying its sentences, but by reading which
  * ones failed and broadening the vocabulary until they did not -- and it now reads 89%. That is
- * fitting, however carefully it was done, and a number produced that way says nothing about a
- * stranger.
+ * fitting, however carefully it was done, and a number produced that way says nothing about
+ * anybody it has not seen before.
  *
  * So: written in one sitting, after the tuning stopped, without opening `intent.ts`, and
  * deliberately in registers the first two sets did not use -- terse, rambling, misspelt, rude,

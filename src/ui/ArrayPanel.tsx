@@ -261,8 +261,8 @@ export const ArrayPanel = (): ReactElement => {
           {/*
             The rear side, which the energy chain has always modelled (`src/sim/pv/bifacial.ts`
             reads the ground's reflected light through the rear view factor) and nothing let a
-            visitor set. A researcher with a bifacial plot found no place to put that fact. Zero
-            is a one-sided panel; the datasheet figure for a bifacial module is 0.65 to 0.95
+            visitor set. Zero is a one-sided panel; the datasheet figure for a bifacial module is
+            0.65 to 0.95
           */}
           <SliderField
             testId="control-array-bifaciality"
@@ -319,12 +319,11 @@ export const ArrayPanel = (): ReactElement => {
             />
           </div>
           {/*
-            A usability pass found the two ratios above unreadable side by side: both are called
-            GCR, both print a percentage, and nothing said which one was which. The difference is
-            worth a sentence rather than a longer label, because the projected figure is the one
-            that moves when the tilt does and a grower changing the tilt is watching it. That
-            sentence is a definition of a term, not a caveat about what the app knows, so it moved
-            behind the InfoTip rather than sitting on the face as a standing paragraph
+            The two ratios above are unreadable side by side: both are called GCR, both print a
+            percentage, and nothing says which one is which. The difference is worth a sentence. Not
+            a longer label: the projected figure is the one that moves when the tilt does and a
+            grower changing the tilt is watching it. That sentence defines a term and carries no
+            caveat about what the app knows, so it sits behind the InfoTip
           */}
           <InfoTip label="ground cover ratio" testId="info-array-gcr">
             Ground cover ratio (GCR): the panel area divided by the ground the rows stand on. At 40%

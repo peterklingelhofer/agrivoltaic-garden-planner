@@ -2,7 +2,7 @@
  * What this browser can do, asked once before the scene is fetched at all.
  *
  * Without WebAssembly every computation refuses (`requirePhysicsCore`), and without WebGL2
- * three.js cannot draw, so the honest thing is one sentence where the garden would be rather than
+ * three.js cannot draw, so the honest thing is one sentence where the garden would be. Not
  * a boundary showing a stack trace. An OffscreenCanvas is only what the light check's worker
  * draws on: without it the bake still runs, on the slower CPU path (`createBackend`)
  */

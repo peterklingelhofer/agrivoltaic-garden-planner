@@ -4,13 +4,10 @@ import type { Cited } from '../../types/cited'
 /**
  * Every stage of the chain carries its own provenance, and `EnergyPanel` prints all of it.
  *
- * This file used to say, five times over, that Faiman 2008, King et al. 2004 and Dobos 2014 were
- * "not yet in docs/CITATIONS.csl.json" and name pvlib and the Sandia modelling guide as
- * surrogates. All four primaries are in the corpus and were when that sentence was written: it
- * was stale, and being stale it told every reader of the energy panel that this chain was more
- * loosely sourced than it is. The surrogates stay listed beside the primaries, because the
- * coefficient values here were in fact read out of pvlib's implementation rather than off the
- * papers, and that is a different claim from having no paper at all
+ * Every primary reference, Faiman 2008, King et al. 2004 and Dobos 2014 included, is in
+ * `docs/CITATIONS.csl.json`. pvlib and the Sandia modelling guide stay listed beside them as
+ * surrogates, because the coefficient values here were in fact read out of pvlib's implementation,
+ * and that is a different claim from having no paper at all
  */
 /**
  * The human half of a stage's description, without the equation.
@@ -67,8 +64,8 @@ export const PV_CHAIN_PROVENANCE: readonly Cited<string>[] = [
     'B',
     ['marion2017-bifacial', 'pvlib-python'],
     'infinite-shed-rear-poa',
-    // the 3-8% magnitude is the verification document item 4 and the GCR reading is Decision Record 2.1;
-    // the pointers belong here rather than in a sentence somebody reads on a phone
+    // the 3-8% magnitude has no PV-literature source, and the GCR reading is Decision Record 2.1.
+    // The pointers live here so the sentence on a phone stays short
     'The two-surface inter-reflection term it reuses has an unverifiable 3-8% magnitude: the formula is valid theory, and the range appears in no PV publication. The unshaded ground fraction is taken as 1 - GCR, which is the infinite-row case: a garden array is nearly all edge, so this understates the rear-side gain',
   ),
   citedComputed(

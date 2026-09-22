@@ -3,7 +3,7 @@ import type { EpochMillis } from './units'
 /**
  * The storage format, versioned independently of the app. Bump it whenever a persisted
  * shape changes and register the step that carries the old shape forward; a payload whose
- * version cannot be walked to this one is discarded whole rather than half-loaded
+ * version cannot be walked to this one is discarded whole
  */
 export const SCHEMA_VERSION = 5
 

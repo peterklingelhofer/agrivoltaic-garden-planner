@@ -20,7 +20,7 @@ import { useAutoRecommend } from './ui/useAutoRecommend'
 import type { EditorMode } from './state/slices'
 
 /**
- * Everything three.js, loaded after the shell has painted rather than before it.
+ * Everything three.js, loaded after the shell has painted.
  *
  * This one import is all it takes: `scene/SceneCanvas.tsx` is the only module outside `src/scene/`
  * that reaches the 3D stack, so making it dynamic takes three, react-three-fiber and drei out of
@@ -48,8 +48,7 @@ const AgentPanel = __AGENT_ENABLED__
 
 /**
  * Select looks around and picks; Move drags beds, panel rows and plot corners with the camera
- * held still. The split exists because a camera grab used to reshape the
- * plot: "you don't move the camera at all, but you drag stuff"
+ * held still. Move is its own mode so a drag never grabs the camera
  */
 const MODES: readonly (readonly [EditorMode, string])[] = [
   ['select', 'Select'],
@@ -185,8 +184,7 @@ const CheckedScene = (): ReactElement => {
     <>
       <ErrorBoundary label="3D canvas" testId="panel-canvas-failed">
         {/* null, not a spinner: `.canvas-host` already paints the sky gradient the scene
-            arrives over, so the wait looks like a scene loading rather than a hole with a
-            widget in it */}
+            arrives over, so the wait looks like a scene loading */}
         <Suspense fallback={null}>
           <SceneCanvas />
         </Suspense>
@@ -216,9 +214,9 @@ const App = (): ReactElement => {
   /**
    * Which surface is showing, as one attribute the stylesheet can read.
    *
-   * It governs every width now rather than only a narrow one. Below the breakpoint the garden,
-   * the editor and the conversation take turns on the whole screen; above it the garden and the
-   * editor share it, and `chat` is what puts the conversation in the editor's column instead
+   * It governs every width. Below the breakpoint the garden, the editor and the conversation take
+   * turns on the whole screen; above it the garden and the editor share it, and `chat` is what puts
+   * the conversation in the editor's column instead
    */
   const chosen = useAppStore((s) => s.surface)
   const wide = useAppStore((s) => s.widePlan)
@@ -233,7 +231,7 @@ const App = (): ReactElement => {
   /**
    * A crop let go anywhere that is not a bed is a crop put back down.
    *
-   * Ordering is what makes this safe rather than a race: r3f listens on the canvas element, so a
+   * Ordering is what makes this safe: r3f listens on the canvas element, so a
    * release over a bed reaches that mesh's handler first and it clears `carrying` itself on the
    * way to staging the drop. This listener is on `window`, one bubble later, and by then there is
    * nothing left for it to cancel
@@ -282,7 +280,7 @@ const App = (): ReactElement => {
         <Sidebar />
         {/*
           Sharing the sidebar's grid cell, and shown only on the surface that asked for it. It is
-          mounted beside the editor rather than inside it because it is a way IN to the design and
+          mounted alongside the editor, outside it, because it is a way IN to the design and
           not a panel of it: leaving the conversation has to leave every answer where it was put
         */}
         {AgentPanel === null ? null : (

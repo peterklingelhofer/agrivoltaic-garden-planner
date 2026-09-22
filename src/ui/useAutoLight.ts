@@ -11,17 +11,15 @@ import { useAppStore } from '../state/store'
  * answer to "what does this do to my light", which is the question the whole tool exists for.
  * Dragging a row of panels two metres south and watching the ground recolour IS the product.
  *
- * The FIRST light is here too, since 2026-09-10. It was not: `lightIsStale` is false with no
- * raster at all, on purpose, so a grower who had just looked up their town was handed a locked
- * step and a button, and the author asked why the light did not simply follow the place. It does
- * now, once the place has resolved and there is a bed to read the light in. A failed run stays
- * failed rather than retrying on a timer; the light step keeps the press for that.
+ * The FIRST light is here too. `lightIsStale` is false with no raster at all, on purpose, so
+ * without this a grower who had just looked up their town was handed a locked step and a button,
+ * never a light that simply followed the place. It does follow now, once the place has resolved
+ * and there is a bed to read the light in. A failed run stays failed, without retrying on a
+ * timer; the light step keeps the press for that.
  *
- * The FULL check, not the quick one. The quick settings hand back a different crop list
- * (`src/recommend/design.ts` measures the share moving by 0.07 at Bergen), and a rough answer
- * that runs by itself is an answer nobody chose to trust. It costs about 800 ms on a real GPU
- * (`the port document` section 5), which a debounce spends once per settled edit rather than per
- * nudge. The quick settings stay what the layout search bakes its five candidates at.
+ * The FULL check, the one bake quality the app has, which the layout search also uses for its
+ * candidates. It costs about 800 ms on a real GPU, which a debounce spends once per settled edit.
+ * It is never spent per nudge.
  *
  * Not while the layout search is running: its candidate bakes and this one would share the GPU,
  * and the plot on screen is about to be replaced by whichever layout is chosen
@@ -29,7 +27,7 @@ import { useAppStore } from '../state/store'
 
 /**
  * Longer than the ranking's 600 ms, because what it starts is heavier and because a nudge is
- * rarely a grower's last one. The gizmo writes to the store once, on mouse up, rather than
+ * rarely a grower's last one. The gizmo writes to the store once, on mouse up, never
  * continuously through a drag, so this is waiting for the next NUDGE and not for the drag
  */
 export const AUTO_LIGHT_DELAY_MS = 900
@@ -47,7 +45,7 @@ export const useAutoLight = (): void => {
    * stays true through every nudge after, so an effect keyed on it alone sets ONE timer, at the
    * first edit, and fires part-way through a grower's third adjustment. Keyed on the arrangement,
    * each nudge is a new value, which tears down the pending timer and starts another, so the bake
-   * lands after the last change instead of during them
+   * lands after the last change and never during them
    */
   const key = useAppStore((s) => (s.plot === null ? '' : lightGeometryKey(s.plot)))
 

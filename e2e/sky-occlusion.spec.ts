@@ -7,7 +7,7 @@ import { decodePng, pixelAt } from './fixtures/png.ts'
 /**
  * How bright shaded ground is, in scene radiance, read off the pixels a real GPU produced.
  *
- * This is the pass-3 measurement kept as a test. The renderer lights everything the sky reaches
+ * This is the measurement kept as a test. The renderer lights everything the sky reaches
  * from one environment map, and an environment map hands every point the whole hemisphere: under
  * a panel that is not what the point can see, and the picture came out saying deep shade is
  * brighter than the sky model's own diffuse fraction, which is impossible. `ambientOcclusion.ts`
@@ -26,9 +26,7 @@ import { decodePng, pixelAt } from './fixtures/png.ts'
  *    is the usual wiring, fails this one
  *
  * On the shipped build the band reads 0.131 of sunlit with the effect off and 0.069 with it on,
- * against the 0.126 ceiling. Pass 1 measured 0.168 for the same quantity before the pass-2 scene
- * changes and pass 3 read 0.130 and 0.084 at the old framing, so the size of the gap has moved;
- * which side of the ceiling it fell on has not
+ * against the 0.126 ceiling
  */
 
 /**
@@ -43,18 +41,14 @@ const DIFFUSE_TO_GLOBAL = 0.126
  * Ground only: no panel, no bed, no plant is inside it, so the two clusters in it are the same
  * surface lit two ways.
  *
- * Re-cut on 2026-09-11, when a visitor's own plot started being framed whole: the camera stands
- * higher and further off than it did, the noon shadows are a few dozen pixels each, and the old
- * strip (y 490 to 530, x 200 to 700) had come to cross the front row's panels, whose tops are
- * dark and which the sky term never touches. Re-cut again the same evening, when the framing
- * started projecting the plot's corners through the real fov and standing back until all four
- * fit: the plot is smaller in the picture again and the previous strip (y 405 to 445, x 480 to
- * 820) read 1.05 for a shaded cluster that no longer had ground in it. This one sits under the
- * middle row's low end, east of the first bed, across that row's shadow and out over the open
- * ground; measured with a grid search over the two captures `SKY_DUMP` writes, 91 percent of
- * its shaded cluster moves when the occlusion is switched on, which is what says it is ground.
- * The canvas is 900 by 676 at this project's Desktop Chrome viewport, which any re-cut has to
- * measure at: a capture taken at 1920 by 1080 is a different picture
+ * The camera frames the whole plot from high and far off, so the noon shadows are a few dozen
+ * pixels each, and a band has to stay clear of the front row's panels, whose dark tops the sky term
+ * never touches. This one sits under the middle row's low end, east of the first bed, across that
+ * row's shadow and out over the open ground; measured with a grid search over the two captures
+ * `SKY_DUMP` writes, 91 percent of its shaded cluster moves when the occlusion is switched on,
+ * which is what says it is ground. The canvas is 900 by 676 at this project's Desktop Chrome
+ * viewport, which any re-cut has to measure at: a capture taken at 1920 by 1080 is a different
+ * picture
  */
 const BAND = { top: 380, bottom: 420, left: 500, right: 660 }
 

@@ -11,9 +11,9 @@
  *    and `Surface.meanAlbedo` is the exact per-channel mean of those bytes after the decode
  *    the GPU applies. A material can therefore be tinted to a known area-average reflectance
  *    with `neutralGain`, which is what keeps the rendered ground agreeing with the albedo the
- *    simulation assumed instead of merely looking plausible.
+ *    simulation assumed, with nothing left to merely look plausible.
  * 2. roughness and metalness share one map in the glTF channel order, G and B, so a surface
- *    costs three textures rather than four.
+ *    costs three textures
  */
 
 import {
@@ -39,7 +39,7 @@ export const linearToSrgb = (channel: number): number =>
 
 /**
  * The neutral multiplier that carries a surface's authored mean reflectance to the one the
- * model uses. Neutral rather than per-channel on purpose: a per-channel fit would hit the same
+ * model uses. Neutral on purpose: a per-channel fit would hit the same
  * luminance while quietly rewriting the hue the texture was authored with
  */
 export const neutralGain = (meanAlbedo: Rgb, targetAlbedo: number): number => {
@@ -143,7 +143,7 @@ export interface SurfaceOptions {
 
 /**
  * Rasterises a field into the three maps a `MeshStandardMaterial` reads. The normal map is a
- * central difference of the height field rather than a second noise, so the bumps a surface
+ * central difference of the height field, so the bumps a surface
  * shades with are the same bumps its albedo varies over
  */
 export const buildSurface = ({ size, relief, field }: SurfaceOptions): Surface => {

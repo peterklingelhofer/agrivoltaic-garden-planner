@@ -12,7 +12,7 @@ import { DEV_PROXY } from './dev-proxy.ts'
 /**
  * The agent's model weights, served in development and shipped only when the agent is.
  *
- * They live in `models/` at the repo root rather than in `public/`, because `public/` is copied
+ * They live in `models/` at the repo root, kept out of `public/` because `public/` is copied
  * into every build unconditionally: 48 MB of embedder and ONNX runtime went into a `dist` for a
  * build with `VITE_AGENT` unset, which is a build that contains none of the code that would load
  * them. A flag that removes the feature and ships its assets anyway is not a flag.
@@ -59,7 +59,7 @@ const agentModels = (enabled: boolean): Plugin => ({
     `/models/ort/` precisely so that nothing on this page is fetched from a third party, and every
     URL the runtime builds starts from there.
 
-    Dropped by name rather than by size, and only the runtime's own binaries. The e2e that watches
+    Dropped by matching the file name, and only the runtime's own binaries. The e2e that watches
     for a failed request is what would catch this being wrong: a variant the browser asks for and
     does not get fails silently and leaves the agent on the phrase table, looking upgraded
   */
@@ -69,7 +69,7 @@ const agentModels = (enabled: boolean): Plugin => ({
     }
   },
   /*
-    Fails the build rather than warning, now that `bun run deploy` turns the agent on for itself.
+    Fails the build, now that `bun run deploy` turns the agent on for itself.
 
     A build that carries the agent and ships no weights looks fine, 404s its own weights, silently
     falls back to the phrase table and reports itself as working. A build that cannot ship what it
@@ -98,7 +98,8 @@ const RUST_CORE_SHIPPED = join('dist', 'agv-sim.wasm')
  * deleted, so a build without this wasm is a build that cannot compute a garden: it renders the
  * shell and every number refuses. `VITE_RUST_CORE=off` still removes it, which is useful for
  * exactly one thing, proving that the refusal is loud. Everything else builds with it, and a
- * missing file fails the build rather than shipping an app that opens and does nothing.
+ * missing file fails the build: an app that opens and does nothing is worse than one that never
+ * shipped.
  *
  * The same two failures the agent plugin above exists to prevent, in the same order. A build with
  * the flag ON and no wasm would 404 its own core and refuse every number, and a build with the flag
@@ -129,7 +130,7 @@ export default defineConfig(({ command }) => {
     plugins: [react(), agentModels(agent), rustCore(rust)],
     /*
     The agent flag, computed here and injected as a literal so the bundler can fold it and drop
-    the whole feature. `agentEnabled` is imported rather than reimplemented: the rule has one
+    the whole feature. `agentEnabled` is imported: the rule has one
     statement and one set of tests, and this is the only place it is evaluated for a build
   */
     define: {

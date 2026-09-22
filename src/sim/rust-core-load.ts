@@ -1,13 +1,13 @@
 /**
  * Fetching and instantiating the compiled physics core, in a browser or a worker.
  *
- * On unless `VITE_RUST_CORE` is `off` (`rust-core-flag.ts`). Everything here resolves rather
- * than throws, and what a null means is the caller's decision:
+ * On unless `VITE_RUST_CORE` is `off` (`rust-core-flag.ts`). Everything here resolves. It never
+ * throws, and what a null means is the caller's decision:
  *
  * - The fetch does not happen at all when the flag is off, because a 404 writes a console error
  *   on every page load and several e2e specs assert there are none. `stubUpstreams` learned that
  *   lesson for the example garden; this is the same lesson.
- * - The wasm is fetched from a URL rather than imported, so the app's module graph never depends
+ * - The wasm is fetched from a URL, so the app's module graph never depends
  *   on a Rust toolchain having run. `bun run rust:wasm` puts the file in `public/`, and `bun run
  *   build` runs it first.
  * - A failure of any kind resolves to null, and null is no physics at all: the TypeScript

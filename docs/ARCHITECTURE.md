@@ -1,7 +1,6 @@
 # Architecture
 
-Binding on all four build streams. Subordinate to `docs/00-DECISIONS.md`, where this file and the
-Decision Record disagree, the Decision Record wins and this file is wrong and must be fixed.
+Where this file and `docs/00-DECISIONS.md` disagree, the decision record wins.
 
 `src/types/**` is the shared contract. A change there is a change to every module at once, so it is
 made on its own, deliberately, and never slipped into a feature branch.
@@ -80,14 +79,13 @@ Enforcement is doubled, because a lint rule alone is silenceable.
 - `workers/**/*.ts` is standalone and may not reach into `src/`.
 
 Biome's rule has no `allowTypeImports` escape, so `import type { Vector3 } from 'three'` is also an
-error. This replaced the identical eslint `no-restricted-imports` configuration when the repo moved
-to Biome, `biome.jsonc` is where a rule is added.
+error. `biome.jsonc` is where a rule is added.
 
 **Mechanism 2: a source-scanning unit test.** `src/sim/boundary.test.ts` globs every
 non-test file under `src/sim/` with Bun's `Glob`, reads each one with `node:fs`, and asserts the
 extracted import specifiers contain no forbidden package and no upstream layer. It runs on every
 commit with the rest of the unit suite under `bun test` and survives an inline suppression
-comment. Both mechanisms were verified to fail on a planted `import * as THREE from 'three'`.
+comment. Both mechanisms fail on a planted `import * as THREE from 'three'`.
 
 ## 2. Data flow
 
@@ -136,13 +134,13 @@ is `CumulativeSky`.
 RSR and "shade fraction" are the same quantity. The canonical name is RSR,
 `src/sim/units.ts#relativeShadeRatio` is the single definition.
 
-Hop 2 asks four sources in turn, `fetchWeather`: Open-Meteo's ten-year hourly archive, then PVGIS,
-then NASA POWER, then NSRDB. PVGIS comes second because it answers its whole typical year in about
-4 s where POWER's hourly endpoint is three sequential four-year chunks at up to 12 s each; the
-price is a typical year with no measured years behind it, and the season simulation says so. The
-label carries the radiation database PVGIS chose for the place (`PVGIS-ERA5` at Amherst,
-`PVGIS-SARAH3` on the Meteosat disk). A source whose year cannot have happened
-(`implausibleWeather`) counts as failed and the chain moves on.
+Hop 2, `fetchWeather`, asks four sources in turn: Open-Meteo's ten-year hourly archive, then PVGIS,
+then NASA POWER, then NSRDB. PVGIS comes second because it answers its whole typical year in about 4
+s where POWER's hourly endpoint is three sequential four-year chunks at up to 12 s each. The price
+is a typical year with no measured years behind it, and the season simulation says so. The label
+carries the radiation database PVGIS chose for the place (`PVGIS-ERA5` at Amherst, `PVGIS-SARAH3` on
+the Meteosat disk). A source whose year cannot have happened (`implausibleWeather`) counts as failed
+and the chain moves on.
 
 ### Hop 23: what owns the pointer in Move mode, and why `dragging` exists
 
@@ -151,13 +149,13 @@ Two things in the scene take the pointer for a drag: the plot's corner handles i
 `scene/useGroundDrag.ts`, which moves a bed with its plants, a row of panels or a corner across
 the ground while the camera holds still, and writes the store once on release. A corner drag on
 a rectangle holds the opposite corner and resizes (`movedCorner` in `src/state/geom.ts`).
-Decision Record 22 is the walkthrough that replaced the `TransformControls` gizmo with this.
+Decision Record 22 carries the reasons for this over a `TransformControls` gizmo.
 
-The gizmo is why `dragging` exists. r3f's raycast passed straight through its arrows to the
-ground behind, so pressing an arrow reached `Ground.onPointerDown` first, which called
-`selectBed(null)`, which unmounted the gizmo in the same tick it had grabbed the axis. The
-arrows drew, the controls reported the correct axis, and nothing ever moved: fifty-five measured
-drags moved a bed zero times. The vertex handles had the same bug.
+A gizmo shows why `dragging` exists. r3f's raycast passes straight through a gizmo's arrows to the
+ground behind, so pressing an arrow reaches `Ground.onPointerDown` first, which calls
+`selectBed(null)`, which unmounts the gizmo in the same tick it grabbed the axis. The arrows draw,
+the controls report the correct axis, and nothing moves. The corner handles are over that same
+ground.
 
 `AppState.dragging` carries the rule. Three things about it are load-bearing:
 
@@ -172,9 +170,9 @@ drags moved a bed zero times. The vertex handles had the same bug.
 
 `DliRaster`, `BedLight` and the compliance checks are all functions of a particular arrangement of
 panels and beds. Nothing recomputes them when that arrangement changes, so an edit leaves every
-one of them describing a garden that is no longer on screen. That was live for some time: dragging
-a panel moved the panel, left the ground colours, the crop ranking and the checks where they were,
-and the editor went on reporting `Simulation: ready`.
+one of them describing a garden that is no longer on screen. Unguarded, dragging a panel moves
+the panel, leaves the ground colours, the crop ranking and the checks where they were, and the
+editor goes on reporting `Simulation: ready`.
 
 `src/state/light-freshness.ts` is the answer, and its shape is the part worth preserving.
 `lightGeometryKey(plot)` serialises everything hop 13 reads, **excluding plantings only** (light
@@ -182,21 +180,19 @@ falls on a bed, what grows in it is downstream of the answer, so planting a bed 
 grower back to the simulation). A bake stamps that key onto `lightGeometry`, `lightIsStale(state)`
 compares it against the plot as it stands.
 
-Derived, deliberately, and not a `lightStale` flag set by each editing action. Every field on an
-array or a bed joins the key by being spread rather than named, so a geometry field added later is
-covered without a second edit. This project has twice shipped bugs of exactly the flag shape -- a
-one-shot boolean that the next code path forgets to set, failing silently and looking like
-something else entirely.
+The key is derived, deliberately. A `lightStale` flag set by each editing action is the shape to
+avoid: a one-shot boolean that the next code path forgets to set fails silently and looks like
+something else entirely. Every field on an array or a bed joins the key by being spread, so a
+geometry field added later is covered without a second edit.
 
-`src/ui/useAutoLight.ts` closes the loop by re-running the quick bake once the geometry stops
-changing. It debounces on the key rather than on the boolean, for the same reason: a boolean goes
-true on the first nudge and stays true, so a timer keyed on it fires part-way through the third
-adjustment instead of after the last one.
+`src/ui/useAutoLight.ts` closes the loop by re-running the bake once the geometry stops changing. It
+debounces on the key, for the same reason: a boolean goes true on the first nudge and stays true, so
+a timer keyed on it fires part-way through the third adjustment when it should fire after the last
+one.
 
 ## 3. Uncertainty is a type-system requirement
 
-Decision Record 7 says never render a single-point yield number. That is enforced in the types, not
-in review comments.
+Decision Record 7 says never render a single-point yield number. The types enforce that.
 
 `src/types/brand.ts` declares one phantom symbol:
 
@@ -234,7 +230,7 @@ directive that stops erroring is itself a compile error, so the invariants canno
    `const n: number = estimate.relativeYield` does not compile.
 4. `Banded` carries `dominantSource: UncertaintySource` and an itemised `contributions` list. The
    UI formatter `src/ui/format.ts#attributionLabel` consumes it, so Decision Record 7's requirement
-   to attribute the band to the crop term is a field, not a convention.
+   to attribute the band to the crop term is a field on the type.
 5. Collapsing a band is possible only through `unsafeBandMidpoint`, which returns
    `PointEstimate<T>` (a distinct brand). No formatter in `src/ui/format.ts` accepts a
    `PointEstimate`, so a collapsed value has nowhere to be rendered.
@@ -252,12 +248,11 @@ recommender does not hard-code it.
 
 `Banded<T>` carries `intervalKind: 'confidence' | 'prediction' | 'tolerance' | 'range'` and
 `banded()` requires it. `src/ui/format.ts#intervalNoun` is the only place that turns that into
-English, so no renderer can name an interval type in a hardcoded string. This closes the specific
-defect that mislabelled Laub's confidence intervals as prediction intervals in two shipped files.
+English, so no renderer can name an interval type in a hardcoded string. A hardcoded noun is how a
+confidence interval comes to be labelled a prediction interval.
 
 `LaubCurve.intervalKind` goes further and is pinned to the literal `'confidence-95'`: Laub
-tabulates only confidence intervals (Decision Record 7), so the wrong value is unrepresentable
-rather than merely discouraged.
+tabulates only confidence intervals (Decision Record 7), so the wrong value is unrepresentable.
 
 ### 3.2 Provenance: an uncited scientific value is unrepresentable
 
@@ -267,7 +262,7 @@ bibliographic field. No author, title, year, DOI or URL string may be written in
 - `scripts/generate-citations.mjs` (`bun run generate`) reads the CSL-JSON and emits
   `src/types/citation-ids.generated.ts`, a `CITATION_IDS` const array plus
   `type CitationId = (typeof CITATION_IDS)[number]`. `CitationId` is therefore a **literal union
-  of the 153 real citekeys**, not a branded string: a typo is a compile error and a work that
+  of the 153 real citekeys**, so a typo is a compile error and a work that
   does not exist cannot be referenced. `src/data/citations.test.ts` pins the union to the JSON.
 - `src/data/citations.ts` is the single loader. It dynamically imports the CSL-JSON (Vite splits
   it into its own ~37 kB gzipped chunk), validates every id against the generated union and
@@ -282,7 +277,7 @@ discriminated union on `provenance`:
 | `verbatim` | quoted from the source | `citations: NonEmpty<CitationId>` |
 | `derived` | algebraically recovered, e.g. the Laub b1/b2 coefficients | `derivation: string` |
 | `inferred` | Tier C class-level inference, most per-crop DLI values | `basis: string`, `tier` pinned to `'C'` |
-| `computed` | produced by our own model | `model: string` |
+| `computed` | produced by this app's own model | `model: string` |
 | `unsourced` | explicitly acknowledged as having no backing | `justification: string`, `citations: readonly []` |
 
 `NonEmpty<T> = readonly [T, ...T[]]`, so `citations: []` does not compile on any cited variant.
@@ -300,7 +295,7 @@ never be presented as Laub's own published values), and
 `src/data/catalog/schema.ts` maps Decision Record 7 directly onto the type: a Tier C row becomes
 `citedInferred`, and only tier A and B rows may claim `citedVerbatim`.
 
-### 3.3 `unsourced` is loud, not silent
+### 3.3 `unsourced` is loud
 
 Three mechanisms, none of which is a convention:
 
@@ -317,8 +312,8 @@ Three mechanisms, none of which is a convention:
 Companion rules follow the same rule: `ScoreableCompanionRule.citations` is
 `NonEmpty<CitationId>`, so a grade A or B rule that cannot cite a verified work does not typecheck.
 Three rules whose only sources are absent from the corpus (`marigold-cover-nematode`,
-`biofumigation-macerated`, `sorghum-residue-weed-suppression`) were demoted to grade C
-experimental and now appear in the gaps ledger instead of moving scores.
+`biofumigation-macerated`, `sorghum-residue-weed-suppression`) are grade C experimental and appear
+in the gaps ledger, where they move no scores.
 
 ### 3.4 Companion evidence: D and E are unscoreable by construction
 
@@ -352,8 +347,8 @@ always branded, because those are the mixing bugs that actually happen:
 `KgPerM2Season`, and the rest.
 
 Brands are erased at runtime, so `Float32Array` payloads stay plain. Constructors (`degrees(x)`,
-`molPerM2Day(x)`) are unchecked casts by design: validation belongs at the data boundary, not on a
-hot loop. `Radians` and `Degrees` are mutually unassignable, which is the whole reason
+`molPerM2Day(x)`) are unchecked casts by design: validation belongs at the data boundary, where a value
+enters once. `Radians` and `Degrees` are mutually unassignable, which is the whole reason
 `toRadians`/`toDegrees` exist in `src/sim/units.ts`.
 
 Discriminated unions replace optional-field soup throughout: `TrackerConfig` (four variants),
@@ -369,8 +364,9 @@ Two unrelated things are called "worker". They share no code.
 Responsibilities, and nothing else:
 
 1. Proxy **PVGIS v5.3**, which forbids AJAX by written policy (Decision Record 9).
-2. Proxy **NREL NSRDB PSM3**, to keep the API key server-side. Host is an env binding, not a
-   constant, which is what let the `developer.nrel.gov` -> `developer.nlr.gov` retirement of 29 May 2026 be a config change. The PATHS were not a binding and had to be edited: PSM v3.2.2 was replaced by GOES v4.0.0 at the same time.
+2. Proxy **NREL NSRDB**, to keep the API key server-side. Host is an env binding, so a host change
+   such as `developer.nrel.gov` -> `developer.nlr.gov` is a config change. The PATHS are not a
+   binding and have to be edited when the dataset changes. The dataset is GOES TMY v4.0.0.
 3. Proxy **Open-Meteo**, which needs no credential and is here for load.
 4. Cache each of them aggressively at the edge.
 5. Emit CORS headers scoped to the configured origins.
@@ -378,7 +374,7 @@ Responsibilities, and nothing else:
 **Two different reasons, and they must not blur.** PVGIS and NSRDB are here because a browser cannot
 hold the credential or the policy exemption. Open-Meteo is here because it is free,
 unauthenticated, rate limited per IP, and called on **every** site resolve: one developer reloading
-a handful of times in a minute earned a 429, and a lecture hall opening the app at once is thirty
+a handful of times in a minute earns a 429, and a lecture hall opening the app at once is thirty
 identical requests from thirty addresses for a town. Behind the cache that is one upstream request
 per town per year. When adding another upstream, decide which reason applies, routing something
 through for neither burns the free tier for nothing.
@@ -386,10 +382,10 @@ through for neither burns the free tier for nothing.
 The site's height above sea level comes with the weather, from the archive body's own `elevation`
 field, so there is no elevation upstream to proxy at all. Decision Record 9b has the reason.
 
-It does **not** proxy NASA POWER, SoilGrids or Overpass. Those stay browser-direct (CORS
-verified). Nominatim and Photon are proxied and held for a week (`TTL_GEOCODE_SECONDS`): a place
-name is a text search against a live index, so its answer is good for days where a TMY's is good
-for a year, and it carries its own key rather than the coordinate key below.
+It does **not** proxy NASA POWER, SoilGrids or Overpass. Those stay browser-direct (CORS verified).
+Nominatim and Photon are proxied and held for a week (`TTL_GEOCODE_SECONDS`): a place name is a text
+search against a live index, so its answer is good for days where a TMY's is good for a year. A
+place-name lookup carries its own key, separate from the coordinate key below.
 
 It does not transform payloads. Normalisation into `TmySeries` happens in
 `src/data/tmy.ts#normaliseTmy`, in the browser, where it is unit-testable.
@@ -404,31 +400,32 @@ v{schemaVersion}/{upstream}/{lat}/{lon}/{dataset}/{variant}
   `42.3736` and `42.3701` collapse to the same key. At mid-latitudes 0.01 deg is ~1.1 km, well
   inside TMY spatial resolution.
 - `dataset` distinguishes e.g. `tmy` from `seriescalc`, `upstream` is one of the ones above.
-- `variant` is what tells two answers from one dataset apart. It held a year range, which is all
-  PVGIS and NSRDB vary by. **Open-Meteo serves the 1991-2020 climate normals and the 2015-2024
-  hourly record from one path**, `/v1/archive`, distinguished only by `daily=` versus `hourly=`, so
-  a key built from path and location alone would have handed thirty years of daily means to a
-  caller asking for 8,760 hourly records out of a cache that believed it was correct. `Route.variant`
-  folds the query in, **excluding the location**: the coordinates are already in the key, quantised,
-  and folding the raw pair back in would give every visitor an entry of their own and cache nothing.
+- `variant` is what tells two answers from one dataset apart. For PVGIS and NSRDB it holds a year
+  range, which is all they vary by. **Open-Meteo serves the 1991-2020 climate normals and the
+  2015-2024 hourly record from one path**, `/v1/archive`, distinguished only by the `daily=` or
+  `hourly=` parameter, so a key built from path and location alone would hand thirty years of daily
+  means to a caller asking for 8,760 hourly records out of a cache that believes it is correct.
+  `Route.variant` folds the query in, **excluding the location**: the coordinates are already in the
+  key, quantised, and folding the raw pair back in would give every visitor an entry of their own
+  and cache nothing.
 - `schemaVersion` is the manual cache-bust. Bump it when a normaliser changes meaning.
 - The client's URL and the Worker's allowlist are checked against each other in
-  `src/data/http.test.ts`, rather than each against a hardcoded copy. A path that drifted on either
+  `src/data/http.test.ts`, with no hardcoded copy on either side. A path that drifted on either
   side is an outage, and a silent one: nothing in the client can tell a blocked path from a dead
   upstream.
 - Key is materialised as a synthetic `https://cache.invalid/{key}` request for the Cache API.
 
 TTLs: `TTL_TMY_SECONDS` is one year (a TMY for a fixed point does not change), `TTL_ERROR_SECONDS`
 is 60 for a 4xx and `TTL_OUTAGE_SECONDS` is 10 for a 5xx, so an upstream outage does not get pinned
-for a year, or for the minute the client waits before it asks again: held for a minute, a 502
-answered the client's first scheduled retry with the failure it had already read. A 429 is forwarded
-rather than swallowed and is held for the full 60 s, which turns a stampede into one upstream
-request a minute, `withRetry` in `src/data/http.ts` correspondingly does **not** retry a 429,
-because the backoff there is a quarter of a second and a retry spends two more of the requests the
-limit is counting. The client's deadline for the response headers is `RESPONSE_DEADLINE_MS` (12 s)
-on an upstream it reaches itself and `PROXIED_DEADLINE_MS` (20 s) through the Worker, which bounds
-its own wait for an upstream at `UPSTREAM_TIMEOUT_MS` (15 s) and answers 504 past it: the client
-outlasts that and reads whichever it was.
+for a year, or for the minute the client waits before it asks again: held for a minute, a 502 would
+answer the client's first scheduled retry with the failure it had already read. A 429 is forwarded
+and held for the full 60 s, which turns a stampede into one upstream request a minute. `withRetry`
+in `src/data/http.ts` correspondingly does **not** retry a 429, because the backoff there is a
+quarter of a second and a retry spends two more of the requests the limit is counting. The client's
+deadline for the response headers is `RESPONSE_DEADLINE_MS` (12 s) on an upstream it reaches itself
+and `PROXIED_DEADLINE_MS` (20 s) through the Worker, which bounds its own wait for an upstream at
+`UPSTREAM_TIMEOUT_MS` (15 s) and answers 504 past it: the client outlasts that and reads whichever
+it was.
 
 `bun run dev` has no Worker behind it, so `vite.config.ts` sends `/api/proxy/open-meteo/*`
 straight to its upstream. PVGIS and NSRDB can fall back silently when nothing is on `:8787`
@@ -443,7 +440,7 @@ The 0.55 s bake must not block the main thread. `createSimClient()` owns a dedic
 - Protocol is `SimRequest` / `SimResponse` in `src/sim/worker/protocol.ts`, a discriminated union on
   `type`. `run` carries a `cacheKey`, `cancel` carries the request id.
 - Results come back with `Float32Array` buffers in the `transfer` list
-  (`src/sim/raster.ts#rasterTransferables`), not cloned.
+  (`src/sim/raster.ts#rasterTransferables`), which moves each buffer without a copy.
 - Client-side memo key is `src/sim/worker/client.ts#simCacheKey(site, plot, weather, options)`,
   hashing site coordinates, array geometry, bed footprints, TMY provenance and simulation options.
   Moving the camera, changing the month overlay or reranking crops must not invalidate it, changing
@@ -466,15 +463,15 @@ that 550 ms, plus the surrounding one-off costs:
 | Decomposition adapter | `src/sim/decomposition.ts` | 5 ms | 0 ms on Open-Meteo/PVGIS/NSRDB, which ship all three components |
 | Perez transposition, 8760 h | `src/sim/transposition.ts` | 3 ms | ~40 flops per timestep |
 | Sky patch build + cumulative weights + sun binning | `src/sim/skydome.ts` | 25 ms | 577 patches, dedupe to 600-900 directions on a 2 deg grid |
-| Panel polygon generation | `src/sim/geometry.ts` | 4 ms | per snapshot, not per direction |
+| Panel polygon generation | `src/sim/geometry.ts` | 4 ms | once per snapshot |
 | **GPU accumulation** | `src/sim/gpu/webgl2.ts` | **450 ms** | ~1300 passes, 8 ms/frame budget, 40 passes/frame, adaptive on an EMA of submission time, one draw capped by `MAX_RAY_TESTS_PER_DRAW` |
 | Readback + `DliRaster` assembly | `src/sim/raster.ts` | 25 ms | one `readPixels` for the whole bake, ~1 MB at 512^2 |
 | Per-bed aggregation | `src/sim/aggregate.ts` | 15 ms | polygon rasterisation is cached per bed geometry |
 | Compliance | `src/sim/compliance.ts` | 5 ms | one pass over the growing-season raster |
-| Worker transfer | `src/sim/worker/*` | 10 ms | transferables, not clones |
+| Worker transfer | `src/sim/worker/*` | 10 ms | transferables |
 | **Total bake** | | **~550 ms** | matches Decision Record 5 |
 
-Separate budgets, not part of the 550 ms:
+Separate budgets outside the 550 ms:
 
 | Path | Budget | Note |
 |---|---|---|

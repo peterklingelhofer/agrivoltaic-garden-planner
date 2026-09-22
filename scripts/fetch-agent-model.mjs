@@ -2,7 +2,7 @@
 /**
  * Fetches the agent's sentence embedder into `models/` at the repo root.
  *
- * Self-hosted rather than pulled from a CDN at runtime, for the same reason every upstream in
+ * Self-hosted, for the same reason every upstream in
  * `src/data/http.ts` is either allowlisted or proxied: a page that carefully routes nine third
  * parties should not quietly acquire a tenth, and an agent that stops working on a train is not
  * an agent. It also keeps the weights out of git, which is what `scripts/fetch-static-layers.mjs`
@@ -41,7 +41,7 @@ const get = async (name) => {
 }
 
 /**
- * ONNX Runtime's WASM binaries, copied out of node_modules rather than left to their default.
+ * ONNX Runtime's WASM binaries, copied out of node_modules.
  *
  * transformers.js resolves these from a jsDelivr URL unless told otherwise, which would put a
  * third-party fetch back into a page that deliberately has none, and would break the agent for
@@ -63,12 +63,10 @@ const get = async (name) => {
 const ORT_DIR = join(HERE, '..', 'models', 'ort')
 
 /*
-  Resolved THROUGH transformers.js rather than from the project root. Bun hoists, so
-  `node_modules/onnxruntime-web` does happen to exist, but resolving from the package that
-  actually loads the runtime finds exactly the copy it will use rather than a second one this
-  script would have to pin and keep in step. It was written this way under pnpm, which does not
-  hoist and where the root path was simply absent; the reason it survives the move is that
-  depending on a hoisted path is depending on a layout the package manager is free to change
+  Resolved THROUGH transformers.js. Bun hoists, so `node_modules/onnxruntime-web` does happen to
+  exist, but resolving from the package that actually loads the runtime finds exactly the copy it
+  will use, with no second one this script would have to pin and keep in step. Depending on a
+  hoisted path is depending on a layout the package manager is free to change
 */
 const ortDist = () => {
   const fromHere = createRequire(import.meta.url)

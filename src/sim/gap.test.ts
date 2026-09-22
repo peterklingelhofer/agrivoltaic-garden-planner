@@ -1,7 +1,7 @@
 /**
  * The coarse driver against the whole bake, term by term.
  *
- * `testkit.ts` carries a second light model: infinite-row closed forms rather than the shipped
+ * `testkit.ts` carries a second light model: infinite-row closed forms, beside the shipped
  * pipeline's polygon projection onto a raster. This is the test that holds the two together, and
  * it is the only place three things are checked at all:
  *
@@ -9,9 +9,10 @@
  *    array grows, which is the entire claim an infinite-row model makes.
  * 2. **The app's own patch grids against unbiased Monte Carlo**, on the app's own intersection
  *    routine, so a bias in the quadrature cannot hide behind the geometry.
- * 3. **The two horizontal axes, crossed**, which is the shape of the bug of 2026-09-01.
+ * 3. **The two horizontal axes, crossed**, which is the shape of a swapped-row-axis bug in
+ *    `panelSnapshot`.
  *
- * The bake is opened up rather than run through `runSimulation`, purely so the beam and the
+ * The bake is opened up directly, skipping `runSimulation`, purely so the beam and the
  * diffuse can be read apart: the driver approximates them in two completely different ways, so
  * "the shading model is wrong" names two suspects at once, and only the CPU backend's separate
  * `beamWhPerM2` and `diffuseWhPerM2` accumulators can tell them apart.
@@ -43,8 +44,8 @@ import { molPerM2FromWhPerM2 } from './units'
 const PAR_FRACTION = 0.45 as Fraction
 const DAYS_PER_YEAR = 365
 /**
- * Coarse, and that is what makes this affordable in the application suite rather than in a
- * throwaway of its own. Cost is linear in cell count, so these cells are sixteen times cheaper
+ * Coarse, and that is what makes this affordable to run in the application suite, needing no
+ * throwaway harness of its own. Cost is linear in cell count, so these cells are sixteen times cheaper
  * than the 0.5 m ones the prototype used, and the driver-against-bake gap barely moves with cell
  * size: measured -5.5% / -5.1% / -5.1% at 2 m / 1 m / 0.5 m on the smallest array below
  */
@@ -180,7 +181,7 @@ describe('the coarse driver against the full raster bake', () => {
     const tile = coarse.forTile(ARRAY)
 
     /*
-      Measured 2026-09-04 at 2 m cells, interior cells only, mol/m2/day, driver against bake:
+      At 2 m cells, interior cells only, mol/m2/day, driver against bake:
         9 x 18, inset 3     360 cells   total 12.56 (-5.5%)   svf 0.686 (-5.4%)   0.3 s
         15 x 30, inset 8    897 cells   total 11.91 (-0.4%)   svf 0.658 (-1.3%)   1.1 s
         21 x 40, inset 14   1431 cells  total 11.68 (+1.6%)   svf 0.648 (+0.3%)   4.1 s
@@ -278,12 +279,12 @@ describe('the sky view factor, arbitrated', () => {
     const reinhart = byPatches('reinhart-mf2')
     const mc = monteCarloSkyViewFactor((x, y, z) => visible(x, y, z), 20_000, 12_345)
 
-    // Measured 2026-09-04, one ground point at the centre of a 21 x 20 array, one intersection
-    // routine: Tregenza mf1 0.6019 (what the bake reports), Reinhart mf2 0.5931, Monte Carlo
-    // 0.5980 +/- 0.0069 (unbiased). 21 rows is odd, so the centre of the array is directly UNDER
-    // a row, and the number to compare against is the closed form's value there rather than its
-    // mean over the pitch: the exact 2D integral gives 0.5910 under a row and 0.6495 averaged
-    // across one, and the driver uses the mean because a tile is a patch of ground and not a point
+    // one ground point at the centre of a 21 x 20 array, one intersection routine: Tregenza mf1
+    // 0.6019, Reinhart mf2 0.5931 (what the bake reports), Monte Carlo 0.5980 +/- 0.0069
+    // (unbiased). 21 rows is odd, so the centre of the array is directly UNDER a row, and the
+    // number to compare against is the closed form's value there: the exact 2D integral gives
+    // 0.5910 under a row and 0.6495 averaged across one, and the driver uses the mean because a
+    // tile is a patch of ground and not a point
 
     // the claim: `FINAL_OPTIONS` uses Reinhart mf2, and a 577-patch quadrature of this geometry
     // must land on the unbiased estimate, because both are estimating one number
@@ -313,30 +314,29 @@ describe('the sky view factor, arbitrated', () => {
 /**
  * The same array, built so that it can exist.
  *
- * The comparison above spent a day reporting that the driver read 25% dark. It did not:
- * `panelSnapshot` was stepping a fixed array's rows perpendicular to the way its modules face,
- * which left the rows standing shoulder to shoulder, shading almost nothing and hiding almost no
- * sky. That was fixed on 2026-09-01 in `geometry.ts` and `crates/agv-sim/src/geometry.rs`
- * together, and `shading.test.ts` could not have caught it: its fixture set `rowAzimuthDeg` equal
- * to the surface azimuth, which is the one array shape the old code got right.
+ * A row-axis bug in `panelSnapshot` would step a fixed array's rows perpendicular to the way its
+ * modules face, leaving the rows standing shoulder to shoulder, shading almost nothing and hiding
+ * almost no sky. `geometry.ts` and `crates/agv-sim/src/geometry.rs` keep the two axes apart.
+ * `shading.test.ts` can't catch that bug: its fixture sets `rowAzimuthDeg` equal to the surface
+ * azimuth, which is the one array shape such a bug gets right.
  *
  * So this bakes the fixture as written, where `rowAzimuthDeg` 90 means rows running east-west
  * across a southward facing, and then bakes it again with the two axes crossed, which is the
- * shape the bug used to produce. The driver's answer is the same in both, because it only ever
+ * shape that bug produces. The driver's answer is the same in both, because it only ever
  * reads the surface azimuth, so the driver is the fixed point and the bake is what moves.
  *
  * The first row is the claim: a coarse per-tile driver reproduces the full raster bake. The
  * second is what a crossed pair of axes costs, kept because it is the size of the bug.
  */
 describe('the gap, now that the geometry is fixed', () => {
-  // two bakes of the middle array rather than the largest, because this block pays for the
-  // geometry and not for the convergence: 1.1 s each, 2.2 s together
+  // two bakes of the middle array, because this block pays only for the
+  // geometry: 1.1 s each, 2.2 s together
   it('is gone on the fixture as written, and returns if the axes are crossed', async () => {
     const tile = coarse.forTile(ARRAY)
 
     // rowAzimuth 90 is rows across the facing direction, which is correct; 180 is rows along
     // it, the incoherent shape of the bug, whose signature is a sky view factor of 0.840 against
-    // the closed form's 0.649 where the coherent bake measures 1.3% (2026-09-04, 15 x 30, 2 m)
+    // the closed form's 0.649 where the coherent bake measures 1.3% (15 x 30, 2 m)
     for (const rowAz of [90, 180] as const) {
       const baked = await bake(15, 30, 8, rowAz)
       const sky = baked.skyViewFactor / tile.skyViewFactor - 1

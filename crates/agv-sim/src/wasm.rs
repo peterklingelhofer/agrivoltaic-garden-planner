@@ -57,8 +57,8 @@ pub extern "C" fn agv_spa_series_len(count: usize) -> usize {
 
 /// Solar position for a run of UTC instants, one observer.
 ///
-/// Batched rather than one call per instant because a year at four substeps an hour is 35,040
-/// crossings of the boundary, and the arithmetic behind each one is a few hundred nanoseconds.
+/// Batched: a year at four substeps an hour is 35,040 crossings of the boundary, and the
+/// arithmetic behind each one is a few hundred nanoseconds.
 ///
 /// # Safety
 /// `times` must point at `count` readable f64s and `out` at `count * 9` writable ones.
@@ -180,8 +180,8 @@ fn write_components(out: &mut [f64], components: &[IrradianceComponents]) {
 /// reads a neighbour on each side, so a sample has no answer outside the series it belongs to.
 ///
 /// `model` is the wire code in `DecompositionModel::from_code`. An unrecognised one fills `out`
-/// with NaN rather than returning quietly, because the alternative is a garden lit by whatever
-/// the caller's buffer happened to contain.
+/// with NaN: returning quietly would leave a garden lit by whatever the caller's buffer happened
+/// to contain.
 ///
 /// # Safety
 /// `inputs` must point at `count * 8` readable f64s and `out` at `count * 3` writable ones.
@@ -213,7 +213,7 @@ pub unsafe extern "C" fn agv_decompose_series(
 /// upstream of it and make the comparison say less than it appears to.
 ///
 /// Reads `dni` and `dhi` from the same eight-field layout, so there is one input contract here
-/// rather than two.
+/// for both.
 ///
 /// # Safety
 /// `inputs` must point at `count * 8` readable f64s and `out` at `count * 3` writable ones.

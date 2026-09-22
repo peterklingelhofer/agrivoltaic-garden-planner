@@ -5,7 +5,7 @@ import { interreflectionGain, rearSidePoa } from '../viewfactor'
 
 /**
  * Rear-side irradiance for the single-node chain, reusing the existing rear POA
- * and inter-reflection terms rather than a second bifacial model.
+ * and inter-reflection terms, so there is only one bifacial model to maintain.
  *
  * The rear plane sits at 180 - tilt, so its view factor to the sky is
  * (1 - cos tilt) / 2 and the remainder is its view of the ground. Ground
@@ -13,10 +13,10 @@ import { interreflectionGain, rearSidePoa } from '../viewfactor'
  * the infinite-row approximation Marion et al. 2017 formalises.
  *
  * CAVEAT: the inter-reflection term's published 3-8% magnitude for white
- * backsheets is UNVERIFIABLE per the verification document. The two-surface radiosity
- * formula is valid theory, but no PV paper states that range, so the gain here
- * is a modelled quantity and not a sourced one. With the glass-glass default
- * rear reflectance of 0.05 it moves the answer by well under 1%
+ * backsheets is UNVERIFIABLE. The two-surface radiosity formula is valid
+ * theory, but no PV paper states that range, so the gain here is this app's own modelled
+ * quantity. With the glass-glass default rear
+ * reflectance of 0.05 it moves the answer by well under 1%
  */
 export const rearPoaWM2 = (
   ghiWM2: WattsPerM2,

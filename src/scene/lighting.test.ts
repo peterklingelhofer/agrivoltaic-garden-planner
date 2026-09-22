@@ -14,8 +14,8 @@ import {
 
 /**
  * A port of three's `AgXToneMapping` and the sRGB output transfer function, present only so
- * the exposure can be pinned to the rule it claims to follow rather than to a number someone
- * liked. Kept literal against `tonemapping_pars_fragment.glsl.js`
+ * the exposure can be pinned to the rule it claims to follow, with no number chosen by feel.
+ * Kept literal against `tonemapping_pars_fragment.glsl.js`
  */
 const mat3 =
   (c0: readonly number[], c1: readonly number[], c2: readonly number[]) =>
@@ -128,7 +128,7 @@ describe('TONE_MAPPING_EXPOSURE', () => {
     const luminance =
       0.2126 * (rendered[0] ?? 0) + 0.7152 * (rendered[1] ?? 0) + 0.0722 * (rendered[2] ?? 0)
     expect(code(luminance)).toBe(118)
-    // and it is warm rather than neutral, because the beam it is lit by is
+    // and it is warm, because the beam it is lit by is
     expect(rendered.map(code)).toEqual([125, 117, 104])
   })
 
@@ -169,7 +169,7 @@ describe('penumbraWidthM', () => {
 /**
  * The colour the far ground fades into, which has to be the sky's own or the fade shows as a
  * band of the wrong hue where the two meet. Derived from the same Preetham extinction the sky
- * dome is drawn with, so it tracks the sun rather than sitting at a fixed grey
+ * dome is drawn with, so it tracks the sun and never sits at a fixed grey
  */
 describe('the horizon colour the fog takes', () => {
   it('is pale and near-neutral with the sun high, the way a hazy horizon is', () => {
@@ -179,7 +179,7 @@ describe('the horizon colour the fog takes', () => {
       expect(channel).toBeLessThanOrEqual(1)
     }
     /*
-      Warm, and that is the physics rather than a preference: what reaches the eye along a
+      Warm, because that is the physics: what reaches the eye along a
       horizon path is what survived the air, and Rayleigh takes the blue out first, which is
       the same reason a low sun is orange. A high sun leaves it barely warm
     */

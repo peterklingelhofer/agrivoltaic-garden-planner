@@ -116,9 +116,9 @@ const HARVEST_EVENT_MS = 2000
  * "Bed 3: cucumber harvested", for about two seconds, the moment the sweep's clock passes a
  * planting's last harvest day.
  *
- * A crop vanishing from a bed mid-playback read as it having died rather than come in: the plant
+ * Without this cue, a crop vanishing from a bed mid-playback reads as it having died: the plant
  * meshes for a day past their window simply stop being drawn, and nothing else on screen says a
- * harvest happened. One string in local state, derived from the day that just changed rather than
+ * harvest happened. One string in local state, derived from the day that just changed, never
  * written every frame, so playing a season costs no extra store writes
  */
 export const useSeasonEvent = (): string | null => {

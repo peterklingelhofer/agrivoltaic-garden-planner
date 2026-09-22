@@ -101,11 +101,10 @@ const tick = (ms: number): void => {
 
 beforeEach(() => {
   resetAppStore()
-  /*
-    Vitest needed `toFake: ['setInterval', 'clearInterval']` here, because faking React's own
-    scheduling as well stalled `act`. Bun fakes every timer and `act` still flushes, so the
-    narrowing is gone rather than translated
-  */
+  /**
+   * Every timer is faked, React's own scheduling included: under Bun, `act` still flushes with all
+   * of them faked
+   */
   vi.useFakeTimers()
 })
 

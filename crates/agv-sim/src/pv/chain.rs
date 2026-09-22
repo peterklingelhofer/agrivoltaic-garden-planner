@@ -72,7 +72,7 @@ impl Default for PvChainOptions {
 /// Everything about one hour that the chain reads.
 ///
 /// `DecompositionSample` carries the irradiance and the solar geometry already, and reusing it
-/// keeps one field order across the two ABI calls rather than inventing a second.
+/// keeps one field order across the two ABI calls.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct ChainHour {
     pub sample: DecompositionSample,
@@ -141,7 +141,7 @@ pub fn run_annual_chain(
         let solar_azimuth_deg = hour.azimuth_deg;
         let orientation = surface_orientation(array, geometric_elevation_deg, solar_azimuth_deg);
         // snow is the brightest surface the ground ever has and the rear side sees little else,
-        // so this is read per hour rather than once per year
+        // so this is read fresh every hour
         let ground_albedo = match options.snow_cover.get(i) {
             None => options.ground_albedo,
             Some(cover) => albedo_under_snow(options.ground_albedo, f64::from(*cover)),
@@ -151,9 +151,9 @@ pub fn run_annual_chain(
             dhi_wm2: hour.sample.dhi_wm2,
             ghi_wm2,
             zenith_deg: 90.0 - apparent_elevation_deg,
-            // recomputed rather than read off the sample, because the sample carries the
-            // pressure-corrected air mass DIRINT wants and Perez is fitted against the sea-level
-            // one; same formula and same zenith, so the two agree wherever pressure is 1013.25 mb
+            // recomputed here, because the sample carries the pressure-corrected air mass DIRINT
+            // wants and Perez is fitted against the sea-level one; same formula and same zenith,
+            // so the two agree wherever pressure is 1013.25 mb
             relative_air_mass: relative_air_mass(90.0 - apparent_elevation_deg),
             extraterrestrial_normal_wm2: hour.sample.extraterrestrial_normal_wm2,
             surface_tilt_deg: orientation.tilt_deg,

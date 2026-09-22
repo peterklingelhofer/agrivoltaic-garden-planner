@@ -12,8 +12,7 @@ import { CATALOG_PROVENANCE } from './provenance'
  * silently dropped `overrides`, because the committed file and the freshly generated one would
  * agree with each other and disagree with the catalogue.
  *
- * Written against the file on disk rather than by re-running the generator, because what a second
- * consumer reads is the file, not the script.
+ * Written against the file on disk, because the file is what a second consumer reads
  */
 const CATALOG = JSON.parse(readFileSync('data/crop-catalog.json', 'utf8')) as {
   format: string
@@ -54,7 +53,7 @@ describe('the neutral crop catalogue', () => {
       CATALOG.columns.forEach((column, position) => {
         const expected = row[position]
         const got = crop[column]
-        // an absent optional column is omitted rather than written as null, so both sides read
+        // an absent optional column is omitted, so both sides read
         // undefined and this compares equal without a special case
         if (JSON.stringify(expected ?? null) !== JSON.stringify(got ?? null)) {
           mismatched.push(`${String(row[0])}.${column}`)

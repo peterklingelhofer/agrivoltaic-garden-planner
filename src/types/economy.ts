@@ -3,12 +3,12 @@ import type { VerbatimCited } from './cited'
 /**
  * What a kilowatt-hour costs to buy where the garden is, and nothing more.
  *
- * The shape lives here rather than beside the fetch that fills it because a season report carries
+ * The shape lives here, because a season report carries
  * the price it was valued at, and `src/types` is the only layer a report may name: Biome enforces
  * `types -> sim -> data`, so `src/types/simulation.ts` cannot reach into `src/data/retail-price.ts`
  * for it. `src/data/retail-price.ts` re-exports it beside the fetch that fills it.
  *
- * The price is carried as a `Cited` rather than a bare number because the caveat travels with it:
+ * The price is carried as a `Cited` so the caveat travels with the number:
  * EIA publishes what a residential customer PAYS, and this app has no model of what an exported
  * kilowatt-hour EARNS. Every value built on it inherits that
  */
@@ -17,7 +17,7 @@ export interface RetailPrice {
   readonly usdPerKwh: VerbatimCited<number>
   /** USPS two-letter code, which is the facet the EIA series is keyed by */
   readonly stateCode: string
-  /** the calendar year the annual average is for, read off the answer rather than assumed */
+  /** the calendar year the annual average is for, read off the answer and never assumed */
   readonly year: number
   readonly sourceLabel: string
 }

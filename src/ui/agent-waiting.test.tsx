@@ -30,11 +30,10 @@ mock.module('@huggingface/transformers', () => ({
 
 /**
  * The promise this panel makes when it starts a run it cannot answer from yet: "I will answer as
- * soon as it lands." A question about how much electricity the panels would make got
- * this, and then nothing more: `runEnergy` ran in place, failed outright, and nothing
- * was watching for a run to land BADLY. The subscribe in `AgentPanel` only re-checked on a
- * transition to `ready`, so a run that settled into `error` left `waiting` set forever and the
- * turn that promised an answer was the last one anybody saw.
+ * soon as it lands." Asking how much electricity the panels would make can get exactly this promise
+ * and nothing else if `runEnergy` fails outright and nothing watches for a run to land BADLY. A
+ * subscribe that re-checks only on a transition to `ready` leaves `waiting` set forever when a run
+ * settles into `error`, and the turn that promised an answer is the last one anybody sees.
  *
  * `runEnergy` is stubbed here to do nothing on its own, which is what a genuinely pending run
  * looks like from this panel's side, so the store's own later transition is what the panel has

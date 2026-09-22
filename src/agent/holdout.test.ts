@@ -84,14 +84,12 @@ describe('the held-out set', () => {
     console.log(
       `HOLDOUT: ${((ok / HOLDOUT.length) * 100).toFixed(0)}% (${String(ok)}/${String(HOLDOUT.length)})\n${misses.join('\n')}`,
     )
-    /*
-      Reported rather than graded, which is the original note here and still right: a floor near
-      the measured score would create the same pressure to tune against it that spent all three
-      sets. What has been added is not a grade. `COLLAPSE_FLOOR` sits at 60% against a set that
-      scores 87%, far enough below that no honest change approaches it, and it exists because
-      until now this score was printed to a log and asserted nowhere: the router could route
-      every sentence to one intent and this file would still pass
-    */
+    /**
+     * No floor near the measured score, because that would create the same pressure to tune against
+     * it that spent all three sets. `COLLAPSE_FLOOR` sits at 60% against a set that scores 87%, far
+     * enough below that no honest change approaches it. Without it the router could route every
+     * sentence to one intent and this file would still pass
+     */
     expect(HOLDOUT.length).toBeGreaterThan(30)
     expect(ok / HOLDOUT.length).toBeGreaterThan(COLLAPSE_FLOOR)
   })

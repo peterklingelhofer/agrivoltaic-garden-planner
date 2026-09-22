@@ -34,7 +34,7 @@ export const tokens = (text: string): readonly string[] => {
 /**
  * Character bigrams of a normalised string, spaces included.
  *
- * Bigrams rather than whole tokens because the errors this has to survive are typing errors:
+ * Bigrams, because the errors this has to survive are typing errors:
  * "tomatos", "corgette", "brocolli". Whole-token equality scores all three as no match at all,
  * which is precisely the moment a novice decides the thing does not work. A short string yields
  * no bigrams at all, so it is carried as itself and compared whole
@@ -51,7 +51,7 @@ export const bigrams = (text: string): readonly string[] => {
  * Sorensen-Dice over character bigrams, in 0..1.
  *
  * Dice and not Levenshtein for one practical reason: it is length-normalised, so "beans" against
- * "runner bean" scores on what the two share rather than being punished for the seven characters
+ * "runner bean" scores on what the two share, with no punishment for the seven characters
  * one of them has spare. Length-punishing a partial name is wrong here, because a partial name is
  * what people actually type
  */
@@ -113,10 +113,10 @@ export interface Match<T> {
 /**
  * The best of a set of candidates, each of which answers to several phrases, or null.
  *
- * A candidate scores as its BEST phrase rather than its average, because the phrases are
+ * A candidate scores as its BEST phrase, because the phrases are
  * alternative ways of saying one thing and being unlike the other four is not evidence against
  * the one that fits. Ties resolve to the first candidate in the list, which makes the order of
- * `INTENTS` a real tie-break the table can be written to exploit rather than an accident
+ * `INTENTS` a real tie-break the table can be written to exploit, on purpose
  */
 export const bestMatch = <T>(
   query: string,

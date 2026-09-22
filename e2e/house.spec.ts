@@ -31,8 +31,8 @@ test('a house drawn on the ground shades the light and the ranking, and survives
   test.setTimeout(BAKE_TIMEOUT_MS + AUTORUN_TIMEOUT_MS + 60_000)
   const app = await openApp(page, { exampleGarden: true })
   // the example design and raster arrive over the network after the canvas is already up; the
-  // banner is what says they landed, and drawing a house before it does draws on the plot the
-  // app started on rather than the example, which the fetch then overwrites from under it
+  // banner is what says they landed, and drawing a house before it does draws on the plot the app
+  // started on. When the example lands, its fetch overwrites that plot, house and all
   await expect(page.getByTestId('panel-example')).toBeVisible({ timeout: 60_000 })
 
   await step(page, 'light')

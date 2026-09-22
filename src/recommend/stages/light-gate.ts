@@ -42,7 +42,7 @@ const monthValue = (values: readonly number[], month: number): number => values[
 
 /**
  * Season light for one crop in one bed, evaluated against the crop's own
- * growing window rather than the annual mean. Cumulative RSR is the
+ * growing window, above the annual mean. Cumulative RSR is the
  * day-weighted photon deficit across that window, which is the quantity the
  * Laub curves are defined on
  */

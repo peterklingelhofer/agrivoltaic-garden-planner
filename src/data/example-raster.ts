@@ -8,15 +8,15 @@ import { at } from './util'
  *
  * A raster is 27 Float32Arrays plus two more per time window, and at the app's final cell size
  * that is tens of megabytes: far past what a first-paint asset can cost. Three things make it
- * small, and each one is a stated loss rather than a silent one.
+ * small, and each one is a stated loss, above a silent one.
  *
  * 1. **Per-slice quantisation to `CODE_MAX + 1` levels.** Every slice carries its own minimum and
  *    maximum and its cells become codes between them, so the round-trip error is bounded by half
  *    a step of that slice's own range. `quantisationErrorOf` measures the realised error rather
  *    than asserting it, and the generator records what it measured beside the asset.
- * 2. **A raster-order predictor.** A cell is coded against the cell to its left, and the first
- *    cell of a row against the cell above it, so a field that varies smoothly across the shade
- *    band costs a small delta per cell instead of two bytes.
+ * 2. **A raster-order predictor.** A cell is coded against the cell to its left, and the first cell
+ *   of a row against the cell above it, so a field that varies smoothly across the shade band costs
+ *   a small delta per cell, where a raw code takes two bytes.
  * 3. **Zigzag varints with a zero-run escape.** A non-zero delta is `zigzag(delta) + 1`, which is
  *    one byte for anything within 63 steps; a token of 0 introduces a run of unchanged cells and
  *    costs one byte plus its length. That escape is what pays for the format: thirteen of the
@@ -104,10 +104,10 @@ export const rasterSlices = (raster: DliRaster): readonly Float32Array[] => [
 ]
 
 /**
- * The largest absolute round-trip error the encoding introduces, measured by encoding and
- * decoding rather than by predicting: what the generator records beside the asset is then the
- * error a reader actually gets, quantisation and float32 storage together. Returns Infinity if
- * the pair does not round-trip at all, which no caller should ever be able to ship past
+ * The largest absolute round-trip error the encoding introduces, measured by encoding and decoding:
+ * what the generator records beside the asset is then the error a reader actually gets,
+ * quantisation and float32 storage together. Returns Infinity if the pair does not round-trip at
+ * all, which no caller should ever be able to ship past
  */
 export const quantisationErrorOf = (raster: DliRaster): number => {
   const back = decodeExampleRaster(bufferOf(encodeExampleRaster(raster)))
@@ -198,7 +198,7 @@ const byMonthOf = (slices: readonly Float32Array[], from: number): ByMonth<Float
   ) as unknown as ByMonth<Float32Array>
 
 /**
- * Reads what `encodeExampleRaster` wrote, and returns null rather than throwing on anything it
+ * Reads what `encodeExampleRaster` wrote, and returns null on anything it
  * cannot account for: a wrong magic, an unknown version or codec, a header whose lengths overrun
  * the buffer, a metadata block that is not the shape it claims, or a delta stream that does not
  * fill every slice exactly. A visitor whose example asset is missing or mangled gets the starting

@@ -338,7 +338,7 @@ describe('a full five-scenario run', () => {
     )
     if (control === undefined) throw new Error('no control')
     // the two accumulations reach the same numbers by different routes, so they agree to
-    // float32 rounding rather than bit-identically
+    // float32 rounding
     expect(control.light.meanShadeRatio).toBeLessThan(1e-6)
     expect(control.production.annualAcKwh).toBe(0)
     expect(control.production.cropsLostToShade).toEqual([])
@@ -679,12 +679,11 @@ describe('the archetype names have to match the figures beside them', () => {
 
   /**
    * Which way tilt moves the light on the ground, at one row count: a STEEPER row covers less
-   * ground from overhead, and the bake agrees. Measured 2026-09-11 on rows running east to
+   * ground from overhead, and the bake agrees. Measured on rows running east to
    * west: 0.256 -> 0.243 -> 0.218 at 10, 20 and 35 degrees on this 16 by 12 m plot.
    *
-   * This has asserted both directions before, each time as a faithful reading of a broken
-   * array: rows stepped sideways until 2026-09-01, then ran north to south with the panels
-   * tilted along their own row until 2026-09-11. See `groundLightPlan`
+   * A broken array's geometry can make either direction look like the faithful reading: rows
+   * stepped sideways gives one, rows tilted along their own row gives the other. See `groundLightPlan`
    */
   it('leaves more light on the ground the steeper the panels stand, at one row count', async () => {
     const light = async (tiltDeg: number): Promise<{ rsr: number; rows: number }> => {
@@ -798,10 +797,9 @@ describe('the archetype names have to match the figures beside them', () => {
   })
 
   /**
-   * Every candidate's rows lie inside the plot the search was given. They did not until
-   * 2026-09-11: `rowAzimuthDeg` carried the surface azimuth, so 37 m rows sized for the width
-   * ran across the 23 m depth, and a gardener watching the preview said "you've got solar
-   * panels outside of the rectangle you said you had"
+   * Every candidate's rows lie inside the plot the search was given. Holding the surface
+   * azimuth in `rowAzimuthDeg` would size 37 m rows for the width and run them across the
+   * 23 m depth, well outside the plot the grower asked for
    */
   it('keeps every row of every candidate inside the plot', () => {
     const answers = answersFor({ plotWidthM: meters(38.4), plotDepthM: meters(22.9) })
@@ -860,11 +858,11 @@ describe('the archetype names have to match the figures beside them', () => {
    * real plot measures, and every configuration probed comes in under it: 10-35 deg on plots
    * from 10 x 40 to 30 x 60 m, measured 0.022 to 0.128 against a footprint of 0.165.
    *
-   * This asserted the opposite until 2026-09-01 ("a footprint sized inside the budget whose
-   * measured shade lands outside it") and passed, because `panelSnapshot` had its two horizontal
-   * axes exchanged, which turned the array ninety degrees inside its own plot and changed which
-   * of the two plot dimensions the rows were spread across. The flag it guards is still worth
-   * having, and the test above is what holds it: the verdict follows the measured figure
+   * A `panelSnapshot` with its two horizontal axes exchanged would turn the array ninety degrees
+   * inside its own plot, changing which of the two plot dimensions the rows spread across, and
+   * this assertion would read the opposite: "a footprint sized inside the budget whose measured
+   * shade lands outside it." The flag it guards is still worth having, and the test above is
+   * what holds it: the verdict follows the measured figure
    */
   it('reads the measured ratio, which is a different number from the sizing footprint', async () => {
     const answers = answersFor({ mounting: 'ground-rows' })
@@ -883,7 +881,7 @@ describe('the archetype names have to match the figures beside them', () => {
         : found.candidate.groundCoverRatio
     expect(footprint).toBeLessThanOrEqual(shadeBudgetFor(answers) + 1e-9)
     // neither a bound nor a restatement: on a 12 m plot the second row's shadow reaches past
-    // the bare margin, and the bake measured 0.217 against a footprint of 0.165 on 2026-09-11
+    // the bare margin, and the bake measured 0.217 against a footprint of 0.165
     expect(Math.abs(found.flags.shade.measuredRatio - footprint)).toBeGreaterThan(0.01)
     expect(found.flags.shade.withinBudget).toBe(
       found.flags.shade.measuredRatio <= shadeBudgetFor(answers) + 1e-9,
@@ -891,13 +889,9 @@ describe('the archetype names have to match the figures beside them', () => {
   }, 600_000)
 
   /**
-   * The copy has now been wrong in BOTH directions, so this forbids both.
-   *
-   * It first told growers that flattening the panels "shortens the shadow on the ground". That
-   * was replaced with the opposite, "does not brighten the ground, it dims it", which was
-   * measured against an array whose rows stepped sideways to the way they faced and was itself
-   * reversed on 2026-09-01. A claim that has been confidently wrong twice is worth pinning by
-   * its exact words rather than by its direction
+   * Two specific claims about tilt are wrong: that flattening the panels "shortens the shadow on
+   * the ground", and that it "does not brighten the ground, it dims it". Each is pinned by its
+   * exact words
    */
   it('never claims either of the two things it has already got wrong about tilt', async () => {
     const set = await suggestDesigns(answersFor(), deps)

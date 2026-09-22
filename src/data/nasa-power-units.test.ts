@@ -16,14 +16,13 @@ const AMHERST: LatLon = {
 }
 
 /**
- * The magnitudes NASA POWER's hourly product answered for Amherst on 1 July 2016, measured on
- * 2026-09-03 against the live API. Under `community=RE` irradiance is "Wh/m^2" and peaks at
+ * The magnitudes NASA POWER's hourly product answers for Amherst on 1 July 2016, against the
+ * live API. Under `community=RE` irradiance is "Wh/m^2" and peaks at
  * 649.85; under `community=AG` the same hour is "MJ/hr" and reads 2.34. `PRECTOTCORR` is
  * labelled "mm/day" in the hourly product, but its 24 hourly values SUM to the daily product's
- * figure: measured 2026-09-12 against the live API, Amherst 2016-07-01 hourly sum 7.78 against
- * daily 7.78, and Melbourne 2019-06-01 hourly sum 0.59 against daily 0.58. A 2026-09-03 reading
- * had found a rate instead (24 values summing to 50.20 on a 2.09 mm day); the live API no longer
- * answers that way, so each value is the millimetres that fell in its hour. The fixture is one
+ * figure: Amherst 2016-07-01 hourly sum 7.78 against
+ * daily 7.78, and Melbourne 2019-06-01 hourly sum 0.59 against daily 0.58. Each value is the
+ * millimetres that fell in its hour. The fixture is one
  * whole year so the decoder can stack it
  */
 const powerBody = (year: number, noonGhi: number, rainMmPerHour: number): unknown => {
@@ -86,8 +85,8 @@ const openMeteoBody = (years: readonly number[], rainMmPerHour: number): unknown
 
 /**
  * A PVGIS v5.3 TMY answer: 8,760 rows under the column names the live API uses, and the
- * radiation database it chose for the place named in `inputs`, as measured at Amherst on
- * 2026-09-17 (PVGIS-ERA5, since SARAH-3 is the Meteosat disk)
+ * radiation database it chose for the place named in `inputs`, as measured at Amherst
+ * (PVGIS-ERA5, since SARAH-3 is the Meteosat disk)
  */
 const pvgisBody = (noonGhi: number): unknown => ({
   inputs: { meteo_data: { radiation_db: 'PVGIS-ERA5' } },
@@ -168,13 +167,12 @@ describe('a year that cannot have happened is refused, whichever source answered
  * first source failed the way a timeout fails, silently to the caller and loudly in the log
  */
 describe('the fallback chain treats an impossible year as a failed source', () => {
-  /*
-    Vitest hoisted a mock and then reset the module registry so the next import got a fresh
-    `./tmy`. Bun has neither: `mock.module` swaps the module in place, and because ESM bindings
-    are live the `./tmy` already imported at the top of this file starts calling the stub. So
-    the mock goes in, the call is made, and the real module goes back at the end rather than
-    the registry being torn down. NSRDB is fetched as text, so both entry points are stubbed
-  */
+  /**
+   * Bun neither hoists a mock nor resets the module registry: `mock.module` swaps the module in
+   * place, and because ESM bindings are live the `./tmy` already imported at the top of this file
+   * starts calling the stub. So the mock goes in, the call is made, and the real module goes back
+   * at the end. NSRDB is fetched as text, so both entry points are stubbed
+   */
   const run = async (
     answer: (upstream: string) => Promise<unknown>,
     location: LatLon = AMHERST,

@@ -632,7 +632,7 @@ export const TIMEZONE_POINTS: readonly (readonly [
 
 /**
  * The zone.tab zone nearest a point, by equirectangular distance: flat enough at this scale,
- * since all it has to do is rank ~400 named points rather than measure true distance in km. The
+ * since all it has to do is rank ~400 named points. The
  * longitude gap is scaled by the cosine of the mean latitude, so a degree of longitude counts for
  * less near the poles than at the equator, and wrapped into [-180, 180] so the antimeridian is not
  * a false half-world gap. Null only when the table above is empty.

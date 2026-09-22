@@ -5,7 +5,7 @@ import type { CropId } from '../types/ids'
 import { asksAnything, NO_WILDLIFE_PREFERENCE, wildlifeMatch } from './wildlife'
 
 /**
- * Driven off the shipped catalogue and the shipped native ranges rather than fixtures, because
+ * Driven off the shipped catalogue and the shipped native ranges, because
  * the thing worth protecting is the answer a grower gets, not the arithmetic. Phacelia is
  * recorded native to California and the tomato is recorded native to Peru and nowhere else, so
  * with a Californian garden the pair are a real native and a real introduction
@@ -39,7 +39,7 @@ describe('what the wildlife answers do to a crop', () => {
   /**
    * The rule the whole honesty of the native answer rests on. `isNativeIn` returns null for a
    * crop the checklist has no accepted name for and for a garden off the region grid, and a null
-   * term is DROPPED from the mean rather than scored zero. Scoring it zero would sink a plant
+   * term is DROPPED from the mean. Scoring it zero would sink a plant
    * nobody has checked below one that was checked and found introduced, which is the ranking
    * quietly making a claim Kew has not made
    */
@@ -102,7 +102,7 @@ describe('the shipped native ranges', () => {
         }) === null,
     )
     // one binomial matched nothing in the checklist, and it is named here so a second one
-    // appearing is a change somebody has to argue for rather than notice later
+    // appearing is a change somebody has to argue for
     expect(unknown.map((crop) => crop.id as CropId)).toEqual(['nz-spinach'])
   })
 })

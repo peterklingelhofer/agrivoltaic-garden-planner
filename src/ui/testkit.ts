@@ -13,7 +13,7 @@ import { afterEach } from 'bun:test'
  * is not defined` inside React's scheduler, attributed to whichever file happened to be running. It
  * is intermittent, which makes it hard to trace.
  *
- * Registered here rather than asked of each test file, because the failure is invisible in the
+ * Registered here. Not asked of each test file: the failure is invisible in the
  * file that causes it and only appears somewhere else, which is the worst possible thing to leave
  * to a convention
  */

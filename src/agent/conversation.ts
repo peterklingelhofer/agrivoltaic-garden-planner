@@ -3,15 +3,15 @@ import { ONBOARDING_STEPS, type OnboardingStep } from '../state/slices'
 /**
  * Which question to ask next, given what has actually been answered.
  *
- * The agent used to ask whatever came after the last question answered, in table order, and that
- * is wrong the moment somebody volunteers something. A real session went: "I want to grow some
- * vegetables" -- recorded as the ambition, which is right -- and the agent then asked about native
- * planting, having never established where the garden is or how big it is. The visitor typed
- * "Amherst, Massachusetts" into a question about natives and was told it did not follow.
+ * Asking whatever comes after the last question answered, in table order, is wrong the moment
+ * somebody volunteers something. Say "I want to grow some vegetables" (recorded as the ambition,
+ * which is right) and table order asks next about native planting, having never established where
+ * the garden is or how big it is. A visitor typing "Amherst, Massachusetts" into a question about
+ * natives is then told it did not follow.
  *
- * Asking for what is still MISSING rather than for what comes next fixes that class outright, and
- * it is also simply how a person asks: somebody who tells you they want salad has not told you
- * where they live, and you ask them where they live
+ * Asking for what is still MISSING fixes that class outright, and it is also simply how a person
+ * asks: somebody who tells you they want salad has not told you where they live, and you ask them
+ * where they live
  */
 
 /**

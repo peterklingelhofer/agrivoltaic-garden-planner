@@ -142,7 +142,7 @@ describe('TreeMesh', () => {
   /**
    * A deciduous crown's opacity is not fixed: it follows whichever months `leafOnMonthsFor` puts
    * in leaf for the standing site and weather, the same rule the bake applies (Decision Record
-   * 26). The expected months are computed from that function rather than assumed, so this stays
+   * 26). The expected months are computed explicitly from that function, so this stays
    * true whatever the fixture's weather happens to say
    */
   it('takes the in-leaf transmittance in a month the site is in leaf, and the leafless one otherwise', async () => {

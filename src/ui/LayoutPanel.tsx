@@ -18,11 +18,11 @@ import { ScenarioComparison } from './ScenarioComparison'
  * press to stop it
  */
 /**
- * The two dials a lesson is built on, on the face of the step. The one path to
- * "change something about the panels and watch the light change" used to run through the
- * by-hand fold, among tilt, azimuth, bifaciality and "single-node chain": a teacher can drive
- * that panel and a class cannot. These write the same array the fold edits, through the same
- * action, so the light re-runs by itself and the per-bed figures move with it
+ * The two dials a lesson is built on, on the face of the step. What drives "change something about
+ * the panels and watch the light change" also sits inside the by-hand fold, among tilt, azimuth,
+ * bifaciality and "single-node chain": a teacher can drive that panel and a class cannot. These
+ * write the same array the fold edits, through the same action, so the light re-runs by itself and
+ * the per-bed figures move with it
  */
 const MovePanels = (): ReactElement | null => {
   const array = useAppStore((s) => s.plot?.arrays[0] ?? null)

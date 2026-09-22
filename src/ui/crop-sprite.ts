@@ -108,13 +108,13 @@ export type PaletteKey = keyof typeof SPRITE_PALETTES
 /**
  * Every crop in the catalogue, as a form and a palette.
  *
- * Total, and `crop-sprite.test.ts` holds it against `CROP_ROWS` rather than against this file, so
- * a crop added to the catalogue fails here rather than shipping without a picture. Until somebody
+ * Total, and `crop-sprite.test.ts` holds it against `CROP_ROWS` alone, so
+ * a crop added to the catalogue fails here. It never ships without a picture. Until somebody
  * draws it, `CropPicture` falls back to the class silhouette, so a missing entry is a plainer
  * drawing and never a hole.
  *
- * The order follows the catalogue's own, which groups by what a thing is, so anyone can read
- * the two side by side
+ * The order follows the catalogue's own, which groups by what a thing is, so the two are easy
+ * to read side by side
  */
 export const CROP_SPRITE: Readonly<Record<string, readonly [FormKey, PaletteKey]>> = {
   tomato: ['round-fruit', 'tomato'],
@@ -252,7 +252,7 @@ export const CROP_SPRITE: Readonly<Record<string, readonly [FormKey, PaletteKey]
   'wild-ginger': ['leafy-bunch', 'leaf-deep'],
   ramps: ['stalks', 'leaf-bright'],
   enset: ['leafy-bunch', 'leaf-bright'],
-  // the tropical and subtropical staples added 2026-09-12: what each is grown for, in the
+  // the tropical and subtropical staples: what each is grown for, in the
   // form that reads at a glance from the camera's height
   cassava: ['tuber', 'sweet-potato'],
   taro: ['leafy-bunch', 'leaf-deep'],
@@ -265,7 +265,7 @@ export const CROP_SPRITE: Readonly<Record<string, readonly [FormKey, PaletteKey]
   'pigeon-pea': ['pod', 'pod-tan'],
   sesame: ['pod', 'pod-pale'],
   moringa: ['pod', 'pod-green'],
-  // the eight staples added on 2026-09-13, drawn with the forms and palettes of their nearest
+  // the eight staples, drawn with the forms and palettes of their nearest
   // neighbours in the table: the millets and grain sorghum as the ears the cover-crop sorghum
   // and upland rice carry, teff as a grass, the bean as a pod, the two trees as the fruit shapes
   // avocado and olive have, coffee as the red berry cluster its cherries are, banana as plantain

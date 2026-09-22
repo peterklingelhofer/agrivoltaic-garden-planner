@@ -8,9 +8,8 @@
  *
  * So the rule is: download it unasked only where the browser AFFIRMATIVELY says the connection is
  * fast and unmetered, and ask everywhere else. `navigator.connection` is Chromium-only, so "ask"
- * covers every iPhone, which is the right way round: not knowing is a reason to ask rather than a
- * reason to assume. Once somebody says yes it is remembered, so they are asked once and not once
- * a visit
+ * covers every iPhone, which is the right way round: not knowing is a reason to ask.
+ * Once somebody says yes it is remembered, so they are asked just once, ever
  */
 
 /** What `navigator.connection` offers, as much of it as this decision uses */

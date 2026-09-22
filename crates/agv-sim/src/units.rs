@@ -2,8 +2,8 @@
 //!
 //! Daily light integral is the number this whole application exists to compute, so these few
 //! lines sit under every claim it makes about whether a crop can live in a bed. They are short
-//! enough to check by eye against the agrivoltaics document section 1.3, which is why the tests below assert the
-//! published constants rather than agreement with anything.
+//! enough to check by eye against Decision Record section 3, which is why the tests below simply
+//! assert the published constants.
 
 use crate::math::clamp;
 
@@ -13,7 +13,7 @@ pub const PHOTON_CONVERSION_UMOL_PER_J: f64 = 4.57;
 pub const BROADBAND_UMOL_PER_J: f64 = 2.06;
 pub const SOLAR_CONSTANT_W_M2: f64 = 1361.1;
 
-/// Diffuse skylight is blue-shifted, so it carries more photons per joule. The solar geometry document section 2.6.
+/// Diffuse skylight is blue-shifted, so it carries more photons per joule (Meek et al. 1984).
 pub const BEAM_UMOL_PER_J: f64 = 2.0;
 pub const DIFFUSE_UMOL_PER_J: f64 = 2.15;
 
@@ -24,8 +24,8 @@ pub fn ppfd_from_shortwave(irradiance_wm2: f64, par_fraction: f64) -> f64 {
     irradiance_wm2 * par_fraction * PHOTON_CONVERSION_UMOL_PER_J
 }
 
-/// Two bands rather than one broadband fraction, which is the whole reason the two constants above
-/// differ: under an array the diffuse share rises, and a single conversion would miss that.
+/// Two bands, because under an array the diffuse share rises and a single broadband fraction
+/// would miss that. That is the whole reason the two constants above differ.
 pub fn ppfd_two_band(beam_horizontal_wm2: f64, diffuse_horizontal_wm2: f64) -> f64 {
     beam_horizontal_wm2 * BEAM_UMOL_PER_J + diffuse_horizontal_wm2 * DIFFUSE_UMOL_PER_J
 }
@@ -35,7 +35,7 @@ pub fn dli_from_ppfd_sum(samples: &[f32], step_seconds: f64) -> f64 {
     (total * step_seconds) / 1e6
 }
 
-/// `DLI = GHI(MJ) x 1e6 J/MJ x f_PAR x 4.57 umol/J / 1e6 umol/mol`, the agrivoltaics document section 1.3.
+/// `DLI = GHI(MJ) x 1e6 J/MJ x f_PAR x 4.57 umol/J / 1e6 umol/mol` (Decision Record section 3).
 pub fn dli_from_daily_ghi_mj(ghi_mj: f64, par_fraction: f64) -> f64 {
     ghi_mj * par_fraction * PHOTON_CONVERSION_UMOL_PER_J
 }
@@ -62,7 +62,7 @@ pub fn mol_per_m2_from_wh_per_m2(wh_per_m2: f64, par_fraction: f64) -> f64 {
 mod tests {
     use super::*;
 
-    /// The worked example in the agrivoltaics document section 1.3: 20 MJ/m2/day at the default PAR fraction.
+    /// The worked example: 20 MJ/m2/day at the default PAR fraction.
     #[test]
     fn the_daily_light_integral_matches_the_worked_example() {
         let dli = dli_from_daily_ghi_mj(20.0, PAR_FRACTION_DEFAULT);
@@ -77,8 +77,8 @@ mod tests {
         assert!((from_mj - from_kwh).abs() < 1e-12);
     }
 
-    /// Full sun and full shade are the ends of the ratio, and open sky of zero is refused rather
-    /// than dividing.
+    /// Full sun and full shade are the ends of the ratio, and open sky of zero is refused, never
+    /// divided against.
     #[test]
     fn the_shade_ratio_is_bounded_and_refuses_a_dark_sky() {
         assert_eq!(relative_shade_ratio(10.0, 10.0), 0.0);
@@ -93,7 +93,8 @@ mod tests {
     #[test]
     fn diffuse_light_carries_more_photons_than_beam() {
         // a const block, because clippy is right that comparing two constants is decided at
-        // compile time; that is exactly the property worth asserting, so it moves rather than goes
+        // compile time; that is exactly the property worth asserting, so it moves into a `const`
+        // block and stays
         const { assert!(DIFFUSE_UMOL_PER_J > BEAM_UMOL_PER_J) };
         let all_beam = ppfd_two_band(500.0, 0.0);
         let all_diffuse = ppfd_two_band(0.0, 500.0);

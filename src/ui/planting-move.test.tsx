@@ -15,7 +15,7 @@ import { cropName } from './format'
 import { mount, type Harness } from './testkit'
 
 /**
- * Moving a planting between beds DERIVES it in the destination rather than carrying it across.
+ * Moving a planting between beds DERIVES it in the destination, without carrying it across.
  * The destination has its own light field and therefore its own calendar, so a crop that bed
  * cannot support has to come back refused, exactly as it would if the grower had picked it
  * there in the first place. A move that silently kept the old sow day would be the one place
@@ -143,9 +143,9 @@ describe('moving a planting to another bed', () => {
 })
 
 /**
- * The card used to read "Bed 1, 10.5 m², 3 planted", which two adults in the newcomer walk read
- * as three of something and never learned the name of one of. The count is in the bed panel
- * beside every other figure about the bed; a card is where the beds are told apart
+ * A card reading "Bed 1, 10.5 m², 3 planted" says three of something with no way to tell what. The
+ * count is in the bed panel beside every other figure about the bed; a card is where the beds are
+ * told apart
  */
 describe('what a bed card says is in it', () => {
   const cardText = (harness: Harness, id: BedId): string =>

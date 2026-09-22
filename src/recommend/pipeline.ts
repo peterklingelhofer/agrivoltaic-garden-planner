@@ -44,7 +44,7 @@ export interface PipelineInput {
 
 export const DEFAULT_TARGET_YEAR = 5
 
-/** Below this total the crop is reported as marginal rather than recommended */
+/** Below this total the crop is reported as marginal */
 export const MARGINAL_SCORE = 0.45
 
 const excluded = (limiting: LimitingFactor): RecommendationVerdict => ({
@@ -163,7 +163,7 @@ export const runRecommendationPipeline = (input: PipelineInput): readonly Recomm
         /**
          * The strongest thing the grower asked for about this crop, not the sum of them.
          * Naming a crop outright and asking for natives are the same KIND of request, so they
-         * share the one preference weight rather than stacking into a term that could outrank
+         * share the one preference weight, and never stack into a term that could outrank
          * whether the plant can grow in the light it has
          */
         Math.max(
@@ -212,7 +212,7 @@ export const runRecommendationPipeline = (input: PipelineInput): readonly Recomm
               explanation: `The site sits at the edge of this crop's ECOCROP ${climateScore.limitingParameter} envelope`,
             }
           : null
-      // a shallow bed limits a crop rather than excluding it (see `ROOT_DEPTH_FLOOR_M`), so it
+      // a shallow bed limits a crop (see `ROOT_DEPTH_FLOOR_M`), so it
       // joins the chain of what holds a passing crop back
       const limiting =
         lightOutcome.limiting ??

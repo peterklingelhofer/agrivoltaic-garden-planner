@@ -223,7 +223,7 @@ describe('feasibility survives the translation', () => {
     expect(calendar?.plantings).toEqual([])
 
     // the calendar refuses to date it, so the bed is planted by hand to prove the agenda
-    // refuses too rather than relying on the placement having been blocked upstream
+    // refuses too, and does not rely on the placement having been blocked upstream
     const planting: Planting = {
       id: plantingId('bed-a:watermelon'),
       bedId: bed.id,

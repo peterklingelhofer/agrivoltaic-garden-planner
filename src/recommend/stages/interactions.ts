@@ -90,7 +90,7 @@ export const ruleAppliesInContext = (rule: CompanionRule, context: InteractionCo
 /**
  * Rotation is a hard temporal constraint. Where rotation does not work at all,
  * as with allium white rot whose sclerotia survive 20 to 40 years, the crop is
- * excluded indefinitely rather than offered an interval that does not exist
+ * excluded indefinitely: there is no real interval to offer
  */
 export const rotationViolation = (
   context: InteractionContext,

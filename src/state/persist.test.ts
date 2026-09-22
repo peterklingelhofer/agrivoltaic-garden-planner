@@ -89,7 +89,7 @@ const realisticDesign = (): PersistedDesign => ({
   },
   overlay: { visible: false, slice: 7, channel: 'rsr', opacity: 0.4 },
   imageryEnabled: true,
-  // not both defaults, so the round trip is asked to carry an answer rather than a shape
+  // not both defaults, so the round trip is asked to carry an answer
   wildlife: { favourNative: false, favourPollinators: true },
   // and the same for the answers and the open step: what was said, and where they were reading
   answers: {
@@ -316,8 +316,8 @@ describe('schema version', () => {
   })
 
   it('refuses an older version it has no migration for', () => {
-    // 0 rather than `SCHEMA_VERSION - 1`, which stopped meaning "no migration" the moment the
-    // first one was written: the assertion is about a gap in the chain, not about the last step
+    // version 0, because `SCHEMA_VERSION - 1` has a migration of its own: the assertion is about a
+    // gap in the chain
     const result = migrateDesign(0, {})
     expect(result.ok).toBe(false)
     if (!result.ok) expect(result.reason).toContain('no migration')
@@ -424,9 +424,8 @@ describe('schema version', () => {
     expect(loaded.status.message).toContain('newer version')
   })
 
-  // this passes vacuously today, since there is no version below 1 to step from, and that is
-  // the point: it fails the day SCHEMA_VERSION is bumped past 1 without a matching migration
-  // added below, rather than letting loadDesign quietly turn every saved garden into null
+  // it fails the day SCHEMA_VERSION is bumped without a matching migration added below, so
+  // loadDesign never quietly turns a saved garden into null
   it('has a migration registered for every version below the current schema', () => {
     for (let version = 1; version < SCHEMA_VERSION; version += 1) {
       expect(MIGRATIONS[version], `no migration from schema ${String(version)}`).toBeDefined()
@@ -558,7 +557,7 @@ describe('corrupt and partial payloads', () => {
   /**
    * A report saved before a tariff could be typed valued its year under `electricityValueUsd` and
    * carried no typed cost. It is read into the shape a season writes today, so the block on an
-   * older report renders the same way as a new one rather than losing its value line
+   * older report renders the same way as a new one, without losing its value line
    */
   it('reads an older report’s economy into the shape a season writes today', () => {
     const design = realisticDesign()
@@ -608,7 +607,7 @@ describe('corrupt and partial payloads', () => {
   /**
    * Half a pair of switches is worse than none of it: the ranking cannot tell an answer of "no"
    * from an answer that failed to load, so a stored wildlife record that is not two booleans
-   * falls back to both off rather than to whichever half survived
+   * falls back to both off, discarding whichever half survived
    */
   it('drops a wildlife answer that is not a pair of switches', () => {
     const design = realisticDesign()
@@ -660,9 +659,9 @@ describe('quota and availability', () => {
 
   it('feature-detects by writing, so a private mode that throws is detected', () => {
     /*
-      Every test file carries a DOM since the move to bun, so the absence a server render has is
-      made here rather than inherited from the environment. `detectStorage` reads
-      `globalThis.localStorage`, so taking that away IS the absence
+      Every test file carries a DOM, so the absence a server render has is made here directly. It is
+      not inherited from the environment. `detectStorage` reads `globalThis.localStorage`, so taking
+      that away IS the absence
     */
     vi.stubGlobal('localStorage', undefined)
     expect(detectStorage()).toBeNull()
@@ -694,7 +693,7 @@ describe('payload size', () => {
     console.log(`realistic design (1 plot, 2 arrays, 4 beds, 8 plantings): ${bytes} bytes`)
   })
 
-  /** The number behind the decision not to persist `raster`, measured rather than assumed */
+  /** The number behind the decision not to persist `raster`, measured directly */
   it('shows why the light raster cannot go in the same store', () => {
     const cells = 85_000
     const slice = Float32Array.from({ length: cells }, (_, index) =>
@@ -751,7 +750,7 @@ describe('change detection and debouncing', () => {
     vi.advanceTimersByTime(2000)
     expect(cancelled).not.toHaveBeenCalled()
     expect(flushed).toHaveBeenCalledTimes(1)
-    // flushing with nothing pending is a no-op rather than a second write
+    // flushing with nothing pending is a no-op
     b.flush()
     expect(flushed).toHaveBeenCalledTimes(1)
     vi.useRealTimers()

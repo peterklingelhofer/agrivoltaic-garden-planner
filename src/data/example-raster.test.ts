@@ -165,7 +165,7 @@ describe('the example raster codec', () => {
         else readBack += 1
       }
       // a mangled varint either overruns the stream or lands out of the code range; what must
-      // never happen is a throw, and what does happen is recorded rather than asserted away
+      // never happen is a throw, and what does happen is recorded
       expect(refused + readBack).toBeGreaterThan(10)
       expect(refused).toBeGreaterThan(0)
     })

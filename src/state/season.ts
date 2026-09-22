@@ -4,7 +4,7 @@ import type { Planting } from '../types/garden'
 /**
  * Where a planting is in its own season.
  *
- * This lives in `src/state` rather than in `src/scene` because two surfaces read it and they are
+ * This lives in `src/state`, separate from `src/scene`, because two surfaces read it and they are
  * only allowed to meet here: the scene scales a canopy by it, and the bed panel uses it to say in
  * writing that a bed with plants in it is bare today. One function, so the picture and the prose
  * can never disagree about whether something is in the ground.
@@ -23,7 +23,7 @@ export const DORMANT_SCALE = 0.45
  *
  * The window is the planting's own `sowDay`, `harvestStartDay` and `harvestEndDay`, so the scene
  * changes across the year from the same three numbers the calendar and the agenda are built from.
- * Growth runs on a smoothstep rather than a ramp because that is the shape a growth curve has:
+ * Growth runs on a smoothstep, because that is the shape a growth curve has:
  * slow to establish, fast through development, levelling off at harvest.
  *
  * An annual outside its window returns zero and is not drawn at all. That is the honest reading:

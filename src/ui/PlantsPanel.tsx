@@ -133,7 +133,7 @@ type ReplantStatus =
  * press a grower would have made, once the ranking the change started has landed; a bed changed by
  * hand is left alone, and the fill press is offered instead.
  *
- * A store subscription rather than an effect on the key, because the answer depends on the
+ * A store subscription here, because the answer depends on the
  * transition (what the beds held BEFORE the change) and on a later one (the ranking landing),
  * and both are read off consecutive states. Nothing here sets state during a render
  */
@@ -519,13 +519,13 @@ const topIdsOf = (sets: AppState['sets'], bedId: BedId | null): readonly CropId[
 
 /**
  * What a wildlife switch or a pick just did to the selected bed's own ranking, read off the
- * ranking that lands after the change rather than guessed from the input alone: a switch can
+ * ranking that lands after the change: a switch can
  * move nothing. The same wait `useReplantOnLikes` above uses, since both start from "one of the
  * inputs the ranking reads just changed" and need the re-rank it starts to land before there is
  * anything to say; kept separate because one replants beds and the other only reports.
  *
  * The bed's own previous top ids live in a ref keyed by bed id, so switching beds between two
- * changes compares a bed against its own last reading rather than against another bed's
+ * changes compares a bed against its own last reading
  */
 const useChoicesEffect = (): string | null => {
   const [message, setMessage] = useState<string | null>(null)
@@ -594,11 +594,10 @@ const Likes = (): ReactElement => {
   )
   /*
     Every food crop the bed can take, in the groups a gardener already thinks in, each sorted by
-    name. A ranked head of sixteen was alphabetical and stopped at "dill", leaving a tomato with
-    no chip to press in the head of the list, and the box
-    that would have shown it sat under the list with no hint that it was the fix. The group the
-    growing answer asked for comes first; nothing in the order reads the beds, so a press that
-    replants them does not shuffle the chips under the thumb that pressed one
+    name. A ranked head of sixteen, sorted alphabetically, would stop at "dill" and leave a grower
+    looking for tomatoes with no chip for it. The group the growing answer asked for comes first;
+    nothing in the order reads the beds, so a press that replants them does not shuffle the chips
+    under the thumb that pressed one
   */
   const asked = new Set<string>(AMBITION_CLASSES[ambition])
   const groups = LIKE_GROUPS.map((group) => ({
@@ -676,7 +675,7 @@ const Likes = (): ReactElement => {
       )}
       {/*
         What a switch or a pick above just did to this bed's own ranking, said once the re-rank
-        it started has landed rather than left for a visitor to notice by comparing two screens.
+        it started has landed.
         A slot that is always there, the same reason `status-plants-replanted` above is: so the
         sentence landing in it moves nothing else on the step
       */}
@@ -716,7 +715,7 @@ export const PlantsPanel = (): ReactElement => {
     if (fold === null) return
     fold.open = true
     const field = fold.querySelector<HTMLElement>('[data-testid="control-bed-crop-search"]') ?? fold
-    // jsdom has no `scrollIntoView`, and a browser missing it does not scroll rather than throws
+    // jsdom has no `scrollIntoView`, and a browser missing it skips the scroll, without throwing
     if (typeof field.scrollIntoView !== 'function') return
     field.scrollIntoView({ block: 'center', behavior: prefersReducedMotion() ? 'auto' : 'smooth' })
   }

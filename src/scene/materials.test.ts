@@ -25,7 +25,7 @@ import { fbm, luminance, srgbToLinear, type Surface } from './textures'
  * The claim these tests exist for: the ground the camera sees reflects the fraction of light the
  * simulation assumed it reflects. Nothing else in the render is checkable against the model this
  * directly, and a ground that looks darker than its own albedo is the picture disagreeing with
- * the physics rather than a matter of taste.
+ * the physics itself
  */
 
 const SIZE = 32

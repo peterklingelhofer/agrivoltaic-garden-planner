@@ -4,10 +4,10 @@ export const COORDINATE_PRECISION_DEG = 0.01
 export const TTL_TMY_SECONDS = 31_536_000
 export const TTL_ERROR_SECONDS = 60
 /**
- * A 5xx, which is an upstream down or one that outran `UPSTREAM_TIMEOUT_MS`, held for less than
- * the minute a 4xx gets. The client's own retries a quarter of a second apart still land on it,
- * and so does a room asking at once; its scheduled retry a minute later gets a fresh attempt
- * instead of the failure it already read, which held for a minute was what it kept reading
+ * A 5xx, which is an upstream down or one that outran `UPSTREAM_TIMEOUT_MS`, held for less than the
+ * minute a 4xx gets. The client's own retries a quarter of a second apart still land on it, and so
+ * does a room asking at once; its scheduled retry a minute later gets a fresh attempt at the
+ * upstream
  */
 export const TTL_OUTAGE_SECONDS = 10
 

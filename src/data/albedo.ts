@@ -18,14 +18,13 @@ import type { Fraction } from '../types/units'
  */
 export interface GroundCoverOption {
   readonly id: GroundCover
-  /** What it is called on screen, in a grower's words rather than a physicist's */
+  /** What it is called on screen, in the words a grower uses */
   readonly label: string
   /** One line saying what choosing it does to both halves of the design */
   readonly help: string
   readonly albedo: Cited<Fraction>
 }
 
-// the same ranges broken out per surface are in the solar geometry document section 7.1
 const OKE_RANGES =
   "Oke tabulates shortwave albedo by surface: soils span roughly 0.05 for dark wet soil to 0.40 for dry light sand, short grass sits near 0.20-0.26, and dry plant litter is brighter than the living canopy that made it. No source measures a garden's own mulch, so the figure here is a point chosen inside the nearest of those bands and is not a number Oke states"
 

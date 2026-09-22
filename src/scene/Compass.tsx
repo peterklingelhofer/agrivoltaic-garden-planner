@@ -12,9 +12,9 @@ const MIN_DELTA_DEG = 0.25
  * The write goes straight to the element's own style, never through React state or the store:
  * an orbit drag is a stream of frames, and re-rendering the shell on each of them is the cost
  * `SceneTooltip` already turns down for a position that also moves every frame. This is the same
- * trade, on a rotation instead of a translation.
+ * trade, here applied to a rotation.
  *
- * Read off the camera's up axis rather than its forward direction, because forward runs out:
+ * Read off the camera's up axis, because forward runs out:
  * looking straight down, forward has no component on the ground at all, and up still does.
  * OrbitControls holds world +Y as the camera's up throughout an orbit, so the up axis projected
  * onto the ground is exactly the bearing the screen's own "up" is pointing at, which is what the

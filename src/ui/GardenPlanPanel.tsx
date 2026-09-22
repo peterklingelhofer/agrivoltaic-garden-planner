@@ -22,8 +22,8 @@ const ZONE_LABEL: Readonly<Record<GeneratedBed['zone'], string>> = {
   'even-light': 'Even light',
 }
 
-/** `GeneratedBed` keys its id as `bedId`, not `id`, so it gets its own lookup rather than
-    forcing `bedName` in `format.ts` to know about a second bed shape */
+/** `GeneratedBed` keys its id as `bedId`. Not `id`: it gets its own lookup, and `bedName` in
+    `format.ts` never has to know about a second bed shape */
 const generatedBedLabel = (beds: readonly GeneratedBed[], id: BedId): string =>
   beds.find((entry) => entry.bedId === id)?.label ?? (id as string)
 
@@ -43,9 +43,9 @@ const archetypeLabel = (archetype: CandidateArchetype | null): string =>
 const NAMED = 3
 
 /**
- * The before-and-after a generated garden never had. Every bed said what it got; none said what
- * standing there rather than in the brightest bed of the same plot cost it, which is the whole
- * reason one bed gets ramps and another two metres away gets pole beans
+ * Each bed's before-and-after, in `shadeCostNote` below: what standing there costs it, measured
+ * against the brightest bed of the same plot, which is the whole reason one bed gets ramps and
+ * another two metres away gets pole beans
  */
 /**
  * The other half, and a different question. A bed's note compares it with the brightest bed of
@@ -172,16 +172,15 @@ export const GardenPlanPanel = (): ReactElement | null => {
   const experience = useAppStore((s) => s.answers.experience)
   /**
    * What is in each bed NOW, off the plot, because the generation's own list is a snapshot of
-   * the moment it planted. "Try another mix" replaces what is in a bed, and the snapshot
-   * went on showing the old crops here, which reads as a mix that never took
+   * the moment it planted. "Try another mix" replaces what is in a bed, and the snapshot can
+   * hold the old crops for four minutes after, long enough to read as a failed choice
    */
   const plotBeds = useAppStore((s) => s.plot?.beds ?? null)
   /*
-    And the light each bed gets NOW, for the same reason. The three figures under a bed were the
-    layout search's snapshot, and a researcher who put five rows over a bed and re-ran the full
-    check read the same "Daylight lost to shade 1%" and concluded bed light did not respond to
-    the array. `bedLight` is what every run rewrites; the snapshot stands in only for a bed the
-    last run did not cover
+    And the light each bed gets NOW, for the same reason. The layout search's snapshot of the three
+    figures under a bed can go stale and still read the same "Daylight lost to shade 1%" after the
+    array changes, looking as if bed light did not respond to it. `bedLight` is what every run
+    rewrites; the snapshot stands in only for a bed the last run did not cover
   */
   const bedLight = useAppStore((s) => s.bedLight)
   const window = useAppStore(growingWindowOf)

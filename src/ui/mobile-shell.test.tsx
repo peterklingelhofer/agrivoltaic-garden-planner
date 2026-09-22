@@ -81,7 +81,7 @@ describe('the root element the stylesheet reads', () => {
  * The strip across the top of the garden: the one fixed thing on that surface, naming the step
  * the plan is open on and going back to it. A contextual press ("See it in the garden", "Draw
  * bed") is what brings a visitor to the garden, and the tab bar alone did not say that the plan
- * was where they were, and on a phone the tab was the only way back
+ * was where they were, leaving no way back but the tab
  */
 describe('the way back from the garden', () => {
   it('names the open step and returns to the plan', async () => {

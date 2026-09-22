@@ -53,7 +53,7 @@ export interface TmySeries {
   /**
    * Rain in each hour, in millimetres, where the source carries it. Open-Meteo and NASA POWER
    * do; the PVGIS and NSRDB typical years do not. Absent means unknown, never dry: a balance
-   * that finds no series falls back to the thirty-year normals rather than reading zero rain
+   * that finds no series falls back to the thirty-year normals
    */
   readonly precipMm?: Float32Array
   /**

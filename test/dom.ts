@@ -24,7 +24,7 @@ const { window } = new JSDOM('<!doctype html><html><body></body></html>', {
 
 /*
   Bun's own implementations win for everything that is not DOM. Timers first: bun fakes timers
-  inside the runtime rather than by swapping the global, so a jsdom timer copied over the top is
+  inside the runtime. The global is never swapped, so a jsdom timer copied over the top is
   one `useFakeTimers` cannot reach and `advanceTimersByTime` never fires. The rest are runtime
   primitives where bun's are the closer match to what a browser hands the app, and several tests
   stub `fetch` expecting bun's shape
@@ -94,7 +94,7 @@ const DOM_WINS = new Set([
   the target did not. Under vitest's jsdom environment the two were the same object and the
   question never came up.
 
-  These three live on EventTarget.prototype rather than on the window itself, so the copy below
+  These three live on EventTarget.prototype. They are never on the window itself, so the copy below
   would not pick them up in any case
 */
 for (const name of ['addEventListener', 'removeEventListener', 'dispatchEvent'] as const) {

@@ -9,7 +9,7 @@ export const FOG_NEAR_M = 120
 export const FOG_FAR_M = 260
 
 /**
- * The far ground fading into the sky rather than ending in a line.
+ * The far ground fading into the sky, with no line where it ends.
  *
  * `Ground` is a 240 m plane and a camera pointed anywhere near the horizon saw its edge: a
  * straight seam between green and sky, which is the one thing in this scene that read as
@@ -22,11 +22,11 @@ export const FOG_FAR_M = 260
  * shader materials and take no fog at all, so what fades is the ground, the beds, the panels
  * and the plants, and only the ones far enough away to be scenery.
  *
- * `attach="fog"` rather than a write to `scene.fog`, which is what makes this a declaration
- * rather than a mutation of something a hook handed back: the same rule `useGuidedTour` names
+ * `attach="fog"`, which makes this a declaration. A write to `scene.fog` would instead mutate
+ * something a hook handed back: the same rule `useGuidedTour` names
  * beside its own frame callback. It therefore has to be a direct child of the `<Canvas>`, since
  * that is the only place whose parent is the scene, which is why it is mounted in `SceneCanvas`
- * rather than in `GardenScene` with the rest of the sky
+ * on its own, separate from `GardenScene` and the rest of the sky
  */
 export const HorizonFog = (): ReactElement => {
   const location = useAppStore((s) => s.location)

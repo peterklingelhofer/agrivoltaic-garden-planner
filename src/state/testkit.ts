@@ -231,7 +231,7 @@ export const ACID_SOIL = {
 /**
  * A store already carrying everything the polyculture surface reads: a resolved site, one
  * acid bed, its light field, the catalogue, a real ranking and a real calendar. Automatic
- * ranking is off, so a test drives the actions rather than racing a debounce
+ * ranking is off, so a test drives the actions, without racing a debounce
  */
 export const seedRankedStore = async (): Promise<void> => {
   const [catalog, companionRules, rotationConstraints, tekRules] = await Promise.all([

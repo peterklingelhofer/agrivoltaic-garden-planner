@@ -62,11 +62,8 @@ export interface SimulationResult {
   /**
    * Which implementation of the solar geometry and the decomposition produced this.
    *
-   * Recorded rather than assumed, because a build can ship with the compiled core and still not
-   * use it: the wasm may be missing from the host, or fail to instantiate, and both of those
-   * resolve quietly to the TypeScript by design. Somewhere in this codebase every number is
-   * expected to be able to say where it came from, and after this change that provenance has a
-   * second axis nobody had to think about before.
+   * Read off what the bake actually ran. Every number in this codebase is expected to be able to
+   * say where it came from, and this is that provenance for a whole bake.
    */
   readonly physics: PhysicsImplementation
 }
@@ -76,8 +73,8 @@ export const SEASONAL_PAR_HALF_WIDTH = 0.1
 const SCENE_MARGIN_M = 5 as Meters
 const MS_PER_HOUR = 3_600_000
 
-// sub-step the sun geometry inside each hour while holding the hour's irradiance constant
-// (the solar geometry document section 4.3); this removes the pitch-scale banding that hourly sampling produces
+// sub-step the sun geometry inside each hour while holding the hour's irradiance constant.
+// This removes the pitch-scale banding that hourly sampling produces
 const substeppedTimestamps = (utcMillis: Float64Array, substeps: number): Float64Array => {
   const steps = Math.max(1, Math.trunc(substeps))
   if (steps === 1) return utcMillis
@@ -166,8 +163,8 @@ export const runSimulation = async (
 ): Promise<SimulationResult> => {
   const started = Date.now()
   /*
-    Installed here and not only at the page's entry point because the bake runs in a Worker, which
-    has its own copy of every module and so its own empty `core.ts`. Awaited rather than fired off
+    Installed here, as well as at the page's entry point, because the bake runs in a Worker, which
+    has its own copy of every module and so its own empty `core.ts`. This install is awaited,
     because until a core is installed there is no implementation of the physics at all, and
     `requirePhysicsCore` would refuse the solar geometry below
   */

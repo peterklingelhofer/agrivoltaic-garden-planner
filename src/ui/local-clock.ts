@@ -14,11 +14,11 @@ export const localMinutesOfDay = (millis: number, offsetHours: number): number =
  * The clock on the wall where the garden is.
  *
  * The store keeps every instant in UTC and the sun is computed from that, which is right for
- * the physics and was wrong on the screen: a garden in Trenton had its sunrise printed as "09:54
- * UTC", which is the one line that makes a reader stop trusting every figure beside it. The
- * offset is the site's timezone's at that instant once the place is resolved, and before that
- * the fixed one from its longitude (`utcOffsetHoursFor`) with no daylight saving; `zoneLabel`
- * says which, so a reader can see why the sun sits where it does
+ * the physics and wrong on the screen: "Sunrise 09:54 UTC" reads as a foreign time and would make
+ * a reader stop trusting everything else on it. The offset is the site's timezone's at that
+ * instant once the place is resolved, and before that the fixed one from its longitude
+ * (`utcOffsetHoursFor`) with no daylight saving; `zoneLabel` says which, so a reader can see why
+ * the sun sits where it does
  */
 export const localClock = (millis: number, offsetHours: number): string => {
   const minutes = localMinutesOfDay(millis, offsetHours)

@@ -15,12 +15,9 @@ import { capitalizeSentence, soilSampledNote, waitLabel } from './site-notice'
 /**
  * The failure path had no door.
  *
- * Three of the six audit personas spent their whole visit behind one rate limit. What they saw
- * was a red box with no button in it, the same paragraph printed twice, and a "Try again" that
- * gave no sign of trying: no spinner, no changed sentence, the same box after three presses over
- * three minutes. The store schedules its own retry and keeps the clock time, so what is held here
- * is that the message is stated once, that the wait is counted down where it can be watched, and
- * that a reader who will not wait has a press
+ * A rate limit can strand a visit behind it entirely. The store schedules its own retry and keeps
+ * the clock time, so what is held here is that the message is stated once, that the wait is counted
+ * down where it can be watched, and that a reader who will not wait has a press
  */
 
 const UPSTREAM = 'the weather service is busy and is asking for a pause'
@@ -156,7 +153,7 @@ describe('the upstream sentence, capitalised only at the head of a paragraph', (
 /**
  * The shipped example already has its light computed, so a 429 on the background lookup it
  * runs for itself is not a search the visitor asked for and reads wrong as the same red box:
- * three of the six audit personas met it on the very first screen, before pressing anything
+ * it can show up on the very first screen, before anything is pressed
  */
 describe('the same failure on the shipped example', () => {
   const shipped = (path: string): Buffer => readFileSync(`public${path}`)
@@ -168,7 +165,7 @@ describe('the same failure on the shipped example', () => {
         return Promise.resolve(new Response(shipped(input).toString('utf8')))
       }
       if (input === exampleRasterPath('temperate')) {
-        // a fresh ArrayBuffer rather than a view onto Node's pooled one: `Buffer` may sit on a
+        // a fresh ArrayBuffer. Never a view onto Node's pooled one: `Buffer` may sit on a
         // SharedArrayBuffer, which `Response` does not accept
         const bytes = shipped(input)
         const copy = new ArrayBuffer(bytes.byteLength)

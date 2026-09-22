@@ -83,8 +83,8 @@ const CropRow = ({
       data-plantable={String(feasibility.plantable)}
     >
       <header className="cal-head">
-        {/* decorative, and the name is beside it: what it buys is a year of dated jobs that can be
-            scanned for the crop you are looking for rather than read */}
+        {/* decorative, and the name is beside it: what it buys is a year of dated jobs where the
+            crop you are looking for can be picked out by eye, without reading every line */}
         <CropPictureFor catalog={catalog} cropId={entry.cropId} />
         <strong>{cropName(catalog, entry.cropId)}</strong>
         <span

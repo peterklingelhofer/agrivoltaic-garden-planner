@@ -58,7 +58,7 @@ describe('the light geometry key', () => {
 
   /**
    * Plantings are the one exclusion, and it is deliberate: light falls on a bed, and what is
-   * growing in it is downstream of that answer rather than an input to it. Planting a bed must
+   * growing in it is downstream of that answer. Planting a bed must
    * not send a grower back to the simulation
    */
   it('does not move when a bed gains a planting', () => {

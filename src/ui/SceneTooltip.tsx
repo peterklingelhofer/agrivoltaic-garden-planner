@@ -10,7 +10,7 @@ const OFFSET_PX = 14
 /**
  * A label for whatever the pointer is over in the 3D.
  *
- * The position is written straight to the element's own transform rather than held in React
+ * The position is written straight to the element's own transform. It is never held in React
  * state. A pointer move fires at the display's refresh rate, and putting that through a store or
  * a `useState` would re-render the scene's whole subtree on every one of them; the only thing
  * React is asked to re-render here is the text, and only when the target under the pointer

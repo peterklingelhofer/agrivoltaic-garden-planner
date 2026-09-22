@@ -10,8 +10,8 @@ import { openApp, waitForCanvas } from './fixtures/app.ts'
  * cascades at 2048 square, and the colour pass. Measured on a 1280x800 window at device scale 2,
  * that is about 9,400 draw calls a second with nothing happening.
  *
- * Counting draw calls rather than frames per second, and counting them by patching the WebGL
- * context rather than by reading a frame counter, because the defect was never "the frame rate is
+ * Draw calls are counted here, by patching the WebGL
+ * context, because a frame counter would not have caught this: the defect was never "the frame rate is
  * low". The frame rate was perfect. The defect was work being done to produce frames identical to
  * the one before, and a draw call is the unit of that work
  */

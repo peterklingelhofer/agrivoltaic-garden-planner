@@ -44,7 +44,7 @@ export interface ProxyEnv {
   /**
    * Which model the helper asks. Defaults to `DEFAULT_HELPER_MODEL`; the point of the var is that
    * the cheap model and the accurate one are swapped by config, since which is affordable is a
-   * fact about the account rather than about the routing
+   * fact about the account
    */
   readonly HELPER_MODEL?: string
   /**

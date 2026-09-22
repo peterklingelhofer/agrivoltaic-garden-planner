@@ -100,7 +100,7 @@ test('no band is labelled a prediction interval', async ({ page }) => {
 })
 
 /**
- * the verification document item 1: no regime is self-verifiable, so nothing the compliance
+ * No regime is self-verifiable, so nothing the compliance
  * pathway renders may read as a determination. `src/ui/compliance-language.test.ts` pins
  * the label tables; this pins what actually reaches the page, including any regime a
  * second engineer adds

@@ -17,14 +17,14 @@ export interface SkyLightProps {
  * Sky background and the image-based ambient it casts, from one Preetham radiance field.
  *
  * There is no ambient or hemisphere term: shaded ground is lit by the sky itself, which is why
- * it reads blue rather than grey. The disc is switched off in the cube because the key light in
+ * it reads blue. The disc is switched off in the cube because the key light in
  * `SunRig` already carries exactly that irradiance, and a 0.5 deg disc does not survive a
  * 128 px cube face anyway
  */
 export const SkyLight = memo(({ atUtcMillis, quality }: SkyLightProps): ReactElement => {
   const location = useAppStore((s) => s.location)
   // the albedo the ground is DRAWN with, snow included, so the bounce and the picture are two
-  // readings of one surface rather than two numbers that happen to be near each other
+  // readings of one surface, the same number used both times
   const albedo = useAppStore(sceneGroundAlbedo)
   const cloud = useAppStore(sceneCloud)
   const sun = useMemo(() => sunAt(location, atUtcMillis), [location, atUtcMillis])

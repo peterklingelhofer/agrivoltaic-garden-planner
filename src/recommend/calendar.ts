@@ -44,7 +44,7 @@ export const signedDays = (from: number, to: number): number => {
   return forward > DAYS_PER_YEAR / 2 ? forward - DAYS_PER_YEAR : forward
 }
 
-/** Month midpoints, so monthly normals can be read as a curve rather than as twelve steps */
+/** Month midpoints, so monthly normals interpolate into a smooth curve */
 const MONTH_MID_DAY: readonly number[] = MONTH_START_DAY.map(
   (start, index) => start + at(MONTH_LENGTH_DAYS, index) / 2,
 )
@@ -68,7 +68,7 @@ const MONTH_MID_DAY: readonly number[] = MONTH_START_DAY.map(
  * days, and every crop with a frost offset of -14 or -28 days starts before its midpoint.
  *
  * The coldest point of the year is outside both. It is where a garden's year actually turns
- * over, it comes from the site's own monthly normals rather than from a constant, it does not
+ * over, it comes from the site's own monthly normals, it does not
  * move with the risk percentile, and it is defined in the southern hemisphere and the tropics
  * for the same reason it is defined anywhere: some month is the coldest one
  */
@@ -118,7 +118,7 @@ export const seasonAnchors = (site: Site, percentile: ExceedancePercentile): Sea
   return {
     lastSpringFreeze,
     firstFallFreeze,
-    // derived from the pair rather than read off frostFreeDays so a wrapped season is right
+    // derived from the pair, so a wrapped season is right
     frostFreeDays: span === 0 ? DAYS_PER_YEAR : span,
     frostFree,
     frostYears: curve?.frostYears ?? 0,
@@ -196,7 +196,7 @@ const runLabel = (run: MonthRun): string => {
  * month is one whose rain is above the year's monthly mean. Every run of consecutive wet
  * months is named, wrapping past December, where those months together hold at least
  * WET_SEASON_SHARE of the year's rain and number six or fewer; a place with two rainy seasons,
- * such as Nairobi's long and short rains, gets both named rather than only the wetter one
+ * such as Nairobi's long and short rains, gets both named
  */
 export const wetSeasonNote = (monthlyPrecipMm: readonly number[]): string | null => {
   const total = sum(monthlyPrecipMm)

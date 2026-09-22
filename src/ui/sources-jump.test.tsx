@@ -35,8 +35,8 @@ const Both = ({ id }: { readonly id: CitationId }): ReactElement => (
 
 /**
  * `Tabs` renders children for the selected tab alone, so in the editor the panel that has to
- * serve a jump does not exist at the moment the jump is asked for. Rebuilt here rather than
- * mounted through the real sidebar, because that is the whole of the condition being tested
+ * serve a jump does not exist at the moment the jump is asked for. Rebuilt here directly.
+ * Not mounted through the real sidebar: that is the whole of the condition being tested
  */
 const LikeTheSidebar = ({ id }: { readonly id: CitationId }): ReactElement => {
   const tab = useAppStore((s) => s.sidebarStep)
@@ -57,11 +57,11 @@ describe('a source is one control away from the claim that rests on it', () => {
     const registry = await loadCitations()
     const harness = await mount(<Both id={RUNKLE_CITED} />)
     const control = harness.get(`action-source-jump-${RUNKLE_CITED}`)
-    // a button rather than a styled span, so Tab reaches it and Enter presses it for free
+    // a button. Not a styled span: Tab reaches it and Enter presses it for free
     expect(control.tagName).toBe('BUTTON')
     const label = control.textContent ?? ''
     expect(label).toContain(String(registry.get(RUNKLE_CITED)?.year))
-    // the visible words lead the accessible name rather than being replaced by it
+    // the visible words lead the accessible name, without being replaced by it
     expect(control.getAttribute('aria-label')).toBe(`${label}, show this work in Sources`)
 
     expect(useAppStore.getState().sidebarStep).not.toBe('sources')
@@ -109,7 +109,7 @@ describe('a source is one control away from the claim that rests on it', () => {
     await act(async () => {
       await vi.advanceTimersByTimeAsync(5000)
     })
-    // it fades rather than sticking: a permanent tint would read as a state of the work itself
+    // it fades without sticking: a permanent tint would read as a state of the work itself
     expect(row.getAttribute('data-arrived')).toBeNull()
     expect(harness.get('status-source-jump').textContent).toBe('')
 

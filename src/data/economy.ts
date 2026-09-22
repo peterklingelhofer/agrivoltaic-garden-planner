@@ -27,7 +27,7 @@ export const HOROWITZ_BENCHMARK_CAVEAT =
 export type CropMountScenario = 'vertical' | 'tracker-stilt' | 'reinforced-regular'
 
 /**
- * Dollars per watt DC, quoted rather than modelled.
+ * Dollars per watt DC, quoted.
  *
  * Tier B is what this codebase already gives a national-lab engineering benchmark used as
  * published: `src/sim/pv/provenance.ts` carries the PVWatts default loss stack at B on exactly
@@ -61,7 +61,7 @@ export const CROP_MOUNT_COST_USD_PER_WDC: Readonly<
  * The bare-ground fixed-tilt row of the same figure, carried for reference and used by nothing.
  *
  * It is what the three above are a premium over, and it is the only way a reader can see that
- * the crop-mount band is a $0.30 to $0.80 per watt adder rather than the whole cost of solar
+ * the crop-mount band is a $0.30 to $0.80 per watt adder
  */
 export const FIXED_TILT_BASELINE_USD_PER_WDC: VerbatimCited<number> = citedVerbatim(
   1.53,
@@ -82,7 +82,7 @@ export const BUILD_COST_CAVEAT = `${HOROWITZ_BENCHMARK_CAVEAT}. A US benchmark i
  *
  * A band and not a point, because `PvArray` carries the clearance height and tracker mode that
  * would pick one of the three structures, and mapping them would be a modelling choice nothing
- * here has measured. The width IS the open question, so it is shown rather than resolved
+ * here has measured. The width IS the open question, so it is shown
  */
 export const buildCostUsdBand = (nameplateDcKw: KilowattsDc): DerivedCited<Banded<number>> => {
   const watts = nameplateDcKw * WATTS_PER_KILOWATT
@@ -128,7 +128,7 @@ export const currencyOf = (price: PriceInUse): string =>
 /**
  * The price a season values its electricity at: the typed tariff when there is one, otherwise the
  * EIA state average, otherwise nothing. A typed zero is nothing typed, so a cleared field falls
- * back to the state average rather than valuing the year at nothing
+ * back to the state average
  */
 export const priceInUse = (typed: EconomyInputs, retail: RetailPrice | null): PriceInUse | null =>
   typed.perKwh !== null && typed.perKwh > 0
@@ -147,7 +147,7 @@ export const typedCostOf = (typed: EconomyInputs): TypedCost | null =>
  *
  * A plain number, because the price it came from is what the caller already holds and the
  * caveat that matters (`RETAIL_PRICE_CAVEAT`: a kilowatt-hour bought is not a kilowatt-hour
- * exported) belongs on the price, shown beside it, rather than copied onto every product of it
+ * exported) belongs on the price, shown beside it
  */
 export const electricityValue = (energyKwh: KilowattHours, price: PriceInUse): number =>
   energyKwh * perKwhOf(price)

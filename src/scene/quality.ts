@@ -1,5 +1,5 @@
 /**
- * Render quality tiers. Capability-derived rather than name-derived: a GPU allow-list ages
+ * Render quality tiers. Capability-derived: a GPU allow-list ages
  * badly and misreads the software rasteriser the visual suite runs on, which reports plenty
  * of texture memory and should be measured as what it is
  */

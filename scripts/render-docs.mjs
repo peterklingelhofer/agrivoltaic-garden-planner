@@ -8,10 +8,9 @@
  * wants to know where a number came from could not get there, and neither could anything reading
  * the page without executing JavaScript.
  *
- * PUBLISHED is a whitelist and must stay one. `docs/` also holds internal engineering notes:
- * a competitive analysis of other people's products, a work split that describes a team, CI and
- * deploy runbooks. None of that is anybody else's business, and two of them would give a reader a
- * false impression. Adding a file here is a decision to publish it
+ * PUBLISHED is a whitelist and must stay one. `docs/` also holds engineering notes (the
+ * architecture) that a reader of the science has no use for. Adding a file here is a decision to
+ * publish it
  */
 import { mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs'
 import { marked } from 'marked'
@@ -22,16 +21,15 @@ const OUT = new URL('dist/docs/', ROOT)
 const SITE_TITLE = 'Agrivoltaic Garden Designer'
 
 /**
- * What ships, in reading order rather than alphabetical: a reader arriving cold should meet the
- * decision record first and the raw citation corpus last. The blurb is what the index shows, and
+ * What ships, in reading order: a reader arriving cold should meet the decision record first
+ * and the raw citation corpus last. The blurb is what the index shows, and
  * it is the only prose here that is not lifted from the document itself
  */
 const PUBLISHED = [
   {
     file: '00-DECISIONS.md',
     title: 'Decision record',
-    blurb:
-      'The authoritative record. Every modelling decision, what it rests on, and where a research report was overruled',
+    blurb: 'Every modelling decision, what it rests on, and what each figure is allowed to claim',
   },
   {
     file: 'STATIC-LAYERS.md',
@@ -49,7 +47,7 @@ const PUBLISHED = [
     file: 'CITATIONS.md',
     title: 'Citation corpus',
     blurb:
-      'Every source, with its verification status, plus the gaps ledger: the claims this tool cannot yet source and does not present as findings',
+      'Every source with its verification status, and the gaps ledger of the claims this tool cannot yet source',
   },
 ]
 
@@ -58,7 +56,7 @@ const PUBLISHED = [
  * any of them directly from a search result and none of them should be read as a recommendation
  */
 const STANDING_NOTE =
-  'These are working documents for a modelling tool, not peer-reviewed publications. They record what the tool computes and what each figure rests on, including where that is an inference rather than a measurement. Nothing here is agronomic or engineering advice.'
+  'These are the working documents of a modelling tool, and they have not been peer reviewed. They record what the tool computes and what each figure rests on, including where a figure is an inference. Nothing here is agronomic or engineering advice.'
 
 const esc = (text) =>
   text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
@@ -186,7 +184,7 @@ const main = () => {
       <p>The Agrivoltaic Garden Designer models the light a solar array leaves on the ground of a
       garden at a real address, and ranks crops against what it measures there. These are the
       documents behind it. Claims the project cannot source are listed as gaps in the citation
-      corpus rather than presented as findings.</p>
+      corpus.</p>
       <ul class="index">
         ${list}
       </ul>

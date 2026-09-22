@@ -3,7 +3,7 @@ import { join } from 'node:path'
 import { describe, expect, it } from 'bun:test'
 
 /**
- * That the flag actually removes the feature, rather than merely hiding it.
+ * That the flag actually removes the feature, without merely hiding it.
  *
  * This exists because the obvious two ways of writing the check both produced a build that was
  * correct and shipped the agent anyway. `AGENT_ENABLED = agentEnabled(import.meta.env)` is a

@@ -144,7 +144,7 @@ describe('the place the app is already showing gets looked up', () => {
     expect(state().site.status).toBe('ready')
   })
 
-  /** A lookup that fails again ends the search with its own sentence, rather than running twice */
+  /** A lookup that fails again ends the search with its own sentence, without running twice */
   it("fails the search with the lookup's sentence when the place cannot be looked up", async () => {
     resolveSite.mockRejectedValue(new Error('upstream said no'))
     await state().ensureSite()
@@ -286,7 +286,7 @@ describe('a new place is a new sky', () => {
 })
 
 /**
- * The area's own pH is the default a new bed gets. Every new bed starts at
+ * The area's own pH is worth defaulting to. Every new bed starts at
  * `DEFAULT_SOIL`, which nobody chose, so a site resolving is this app finally having an answer
  * of its own; a pH the visitor set, by typing or through an earlier lookup, is a different story
  */
@@ -306,7 +306,7 @@ describe('soil pH from the place', () => {
     await state().resolveSite(DEFAULT_LOCATION, DEFAULT_LOCATION_LABEL)
     const beds = state().plot?.beds ?? []
     expect(beds.length).toBeGreaterThan(0)
-    // rounded to 0.1, and the site's own source rather than a bare 'user' left over
+    // rounded to 0.1, and the site's own source, with no bare 'user' left over
     expect(beds.every((bed) => bed.soil.phUnits === 7.2 && bed.soil.sourceId === 'soilgrids')).toBe(
       true,
     )
@@ -416,9 +416,9 @@ describe('the shipped example through its own lookup', () => {
   })
 
   /**
-   * The example looks its own place up at startup, and `showingExample` knows the example by
-   * the plot object's identity: a pH default that rebuilt the plot took the banner off the
-   * screen and failed thirty e2e tests on 2026-09-11. The assets are the real ones on disk
+   * The example looks its own place up at startup, and `showingExample` knows the example by the
+   * plot object's identity: a pH default that rebuilt the plot would take the banner off the
+   * screen. The assets are the real ones on disk
    */
   it('keeps the plot exactly as shipped, pH included', async () => {
     const realFetch = globalThis.fetch

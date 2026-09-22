@@ -10,14 +10,14 @@ import { createRemoteUnderstander } from './remote'
  *
  * CI cannot run this: it spends the account's free Neurons and needs a Worker with the AI binding
  * listening. It runs only with `HELPER_URL` set, so `bun run test` skips it, and it is the scored
- * script that has to come back clean before the panel goes on. A full pass over
- * both sets is about 160 sentences, which on the 70B is most of a day's allowance; `HELPER_SAMPLE`
- * takes the first N of each set instead.
+ * script needed before the panel goes on. A full pass over both sets is about 160 sentences,
+ * which on the 70B is most of a day's allowance; `HELPER_SAMPLE` takes the first N of each set
+ * instead.
  *
  *   HELPER_URL=http://127.0.0.1:8787 HELPER_SAMPLE=12 bun test src/agent/helper-holdout.live.test.ts
  *
  * The sets stay where they are, as module-private constants in the two held-out test files, so
- * they are read here as text rather than imported: importing a test file runs its suites
+ * they are read here as text, without being imported: importing a test file runs its suites
  */
 const HELPER_URL = process.env.HELPER_URL ?? null
 const SAMPLE = Number(process.env.HELPER_SAMPLE ?? '0')

@@ -42,7 +42,7 @@ const bedFields = async (page: Page): Promise<void> => {
  *
  * The site is fetched again: a site is what dates a sowing, ranks a crop and balances a bed's
  * water, so leaving it idle left a returning visitor looking at a planted garden beside panels
- * that said nothing had been computed. And the light follows it, since 2026-09-10, the moment
+ * that said nothing had been computed. And the light follows it, the moment
  * the place has resolved and there is a bed: a reload with both lands on a garden whose light is
  * ready without a press. The energy report is the one derived slice that waits to be asked for
  */

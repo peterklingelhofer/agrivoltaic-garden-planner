@@ -34,10 +34,10 @@ export const DEV_PROXY = {
    * And the place-name lookup, for the same reason and with one caveat worth writing down.
    *
    * Without this, typing an address under plain `bun run dev` reaches 127.0.0.1:8787, which is
-   * nothing, and the guided path's first question cannot be answered at all. What this leg
-   * CANNOT do is what the proxy exists for: vite forwards the browser's own User-Agent, so a
-   * dev session identifies itself as a browser rather than as this app. That is the deployed
-   * path's job and `bun run dev:worker` is where it can be seen working
+   * nothing, and the guided path's first question cannot be answered at all. What this leg CANNOT
+   * do is what the proxy exists for: vite forwards the browser's own User-Agent, so a dev session
+   * identifies itself with whatever the browser sends. Sending the app's own User-Agent is the
+   * deployed path's job, and `bun run dev:worker` is where it can be seen working
    */
   '/api/proxy/nominatim': {
     target: 'https://nominatim.openstreetmap.org',

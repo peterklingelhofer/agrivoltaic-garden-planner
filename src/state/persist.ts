@@ -63,14 +63,13 @@ export const MODEL_CHOICE_KEY = 'agrivoltaic-garden-designer/agent-model'
  * and cheap to recompute. A stale number presented as current is worse than no number,
  * so all of them come back idle and the grower re-runs them.
  *
- * `sidebarStep` is here again, since 2026-09-10, after being taken out once. It went because a
- * remembered step could be locked on return, every derived slice coming back idle, and because a
- * persisted field is a field whose change schedules a write, so looking around the sidebar after
- * "forget this design" wrote the default design back. Both still hold. What changed is that the
- * questions became sidebar steps: a reload that remembered the plot and forgot that its grower
- * had said "mostly food" and was reading the plants step read as the app forgetting, which is
- * worse than either. A locked step says what it is waiting on and offers the press; the write
- * after a reset costs one status line
+ * `sidebarStep` is here despite two costs. A remembered step can be locked on return, every derived
+ * slice coming back idle, and a persisted field is a field whose change schedules a write, so
+ * looking around the sidebar after "forget this design" writes the default design back. The
+ * questions are sidebar steps, though, and a reload that remembered the plot and forgot that its
+ * grower had said "mostly food" and was reading the plants step would read as the app forgetting,
+ * which is worse than either. A locked step says what it is waiting on and offers the press, and
+ * the write after a reset costs one status line
  */
 export const PERSISTED_KEYS = [
   'location',
@@ -325,7 +324,7 @@ const isTracker = (value: unknown): boolean => {
 }
 
 // pitch and module size divide in the layout and the ground cover ratio, so a stored zero
-// is a division by zero in the scene rather than a merely odd design
+// is a division by zero in the scene
 const isGeometry = (value: unknown): boolean =>
   isRecord(value) &&
   num(value.collectorWidthM) &&
@@ -410,7 +409,7 @@ const isPlot = (value: unknown): boolean =>
   (isGroundCover(value.groundCover) || num(value.groundAlbedo))
 
 /**
- * Area and the derived array metrics are recomputed from the geometry rather than trusted:
+ * Area and the derived array metrics are recomputed from the geometry every time:
  * a build that changes how either is derived must not read back yesterday's number
  */
 const normalisePlot = (plot: GardenPlot): GardenPlot => ({
@@ -441,7 +440,7 @@ const isTrial = (value: unknown): boolean =>
 
 /**
  * A report is checked for its spine and not for every outcome field: a report is what a season
- * said, and a stored one is re-read rather than recomputed, so a field this build no longer knows
+ * said, and a stored one is re-read as is, so a field this build no longer knows
  * is not a reason to drop the grower's whole run
  */
 const isSeasonReport = (value: unknown): boolean =>
@@ -698,7 +697,7 @@ export type DecodedEnvelope =
 /**
  * One versioned payload to a design: parse, migrate, decode. The example garden is read through
  * this and nothing else, so an asset that has drifted from the schema is refused exactly as a
- * stale saved design would be rather than reaching the store half-understood
+ * stale saved design would be, without reaching the store half-understood
  */
 export const decodeEnvelope = (payload: string): DecodedEnvelope => {
   const parsed = attempt<unknown>(() => JSON.parse(payload))
@@ -789,7 +788,7 @@ export interface Debounced {
   pending(): boolean
 }
 
-/** One write after the edits stop, so a slider drag is one payload rather than forty */
+/** One write after the edits stop, so a slider drag is one payload */
 export const debounce = (run: () => void, delayMs: number): Debounced => {
   let timer: ReturnType<typeof setTimeout> | null = null
   const cancel = (): void => {

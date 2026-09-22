@@ -97,7 +97,7 @@ export const PvArrayMesh = ({
   const steelNormalScale = useMemo(() => new Vector2(0.8, 0.8), [])
   const glassNormalScale = useMemo(() => new Vector2(0.25, 0.25), [])
   // half strength on a metal: the frame's own reflectance is high, and a full-strength tint on
-  // top of it clips the red channel rather than reading as selected
+  // top of it clips the red channel and never reads as selected
   const tint = tintedBy(1, selected, 0.55)
 
   if (!array || !layout) return null
@@ -191,8 +191,8 @@ export const PvArrayMesh = ({
       </Instances>
       {/*
         The same plane again, back faces only, so a module seen from underneath or from behind a
-        row is a module rather than a hole with a frame around it. Two instance sets over one
-        geometry rather than one double-sided material: a plane's front and back are never the
+        row is a module. It is not a hole with a frame around it. Two instance sets over one
+        geometry: a plane's front and back are never the
         same pixel from any camera, so this adds a draw call and no overdraw, and it leaves the
         glass in front untouched. It does not cast: the laminate above already casts the whole
         module through its `shadowSide`, and a second caster at the same depth would only pay for

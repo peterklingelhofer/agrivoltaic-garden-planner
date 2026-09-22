@@ -33,7 +33,7 @@ export const trapezoidMembership = <T extends number>(value: T, shape: Trapezoid
 
 /**
  * A season longer than GMAX is never a problem for a garden crop, so the cycle
- * parameter is a rising ramp rather than a symmetric trapezoid. Clearing GMIN
+ * parameter rises as a ramp, with no falling side a symmetric trapezoid would add. Clearing GMIN
  * is feasibility; comfortably exceeding GMAX is a good fit
  */
 export const CYCLE_MEMBERSHIP_AT_GMIN = 0.8
@@ -56,7 +56,7 @@ export const cycleLengthMembership = (
 
 /**
  * Koppen is a coarse plausibility check, so a mismatch degrades the score
- * rather than zeroing it. An empty code list means the crop is unrestricted
+ * and never zeroes it. An empty code list means the crop is unrestricted
  */
 export const koppenMembership = (observed: string, allowed: readonly string[]): Fraction => {
   if (allowed.length === 0) return 1 as Fraction

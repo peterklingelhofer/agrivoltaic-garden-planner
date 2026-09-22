@@ -75,7 +75,7 @@ export interface PlantingOutcome {
   readonly explanation: string
   /**
    * The first fall frost of the year, on a harvested planting whose harvest window ran past it:
-   * the frost cut the picking short rather than taking the crop. Absent on every other outcome
+   * the frost cut the picking short, with some of the crop already picked. Absent on every other outcome
    * and on reports saved before the field existed
    */
   readonly frostCutDay?: DayOfYear
@@ -91,9 +91,9 @@ export interface Advice {
  * What the panels cost, what a year of them was worth, and what the planting asks of you.
  *
  * Bounded on purpose (Decision Record 14): it sits below the standing, it is never in the verdict
- * and never in a score, because a garden that is worth building is not the same question as a
- * garden that pays back. Every field is null where the thing it needs is missing rather than
- * carrying a zero, since "no array" and "an array worth nothing" are different answers.
+ * and never in a score, because a garden that is worth building is a separate question from a
+ * garden that pays back. Every field is null where the thing it needs is missing. It never
+ * carries a zero there, since "no array" and "an array worth nothing" are different answers.
  *
  * Labour is a count of jobs and never a wage: nothing in this corpus prices an hour of a
  * gardener's time, so the rules' own `requiresManagement` sentences are listed and left unpriced
@@ -134,15 +134,15 @@ export interface SeasonReport {
   /**
    * The electricity term of the land equivalent ratio: this garden's AC per square metre of land
    * over the sole-use reference plant's, both from the shipped chain on this year's weather. Null
-   * with no arrays, and a midpoint rather than the band, because a standing is read across seasons
+   * with no arrays, and a single midpoint, because a standing is read across seasons
    */
   readonly energyShare: Fraction | null
   readonly advice: Advice
   /**
    * What it cost, what it earned and what it asks of you.
    *
-   * Optional because a garden saved before this existed has none, and `state/persist.ts` checks a
-   * report's spine rather than every field: an older report reads back and simply shows no
+   * Optional because a garden saved before this existed has none, and `state/persist.ts` checks
+   * only a report's spine: an older report reads back and simply shows no
    * economy block, which is the same thing the panel does for a garden with no arrays
    */
   readonly economy?: SeasonEconomy

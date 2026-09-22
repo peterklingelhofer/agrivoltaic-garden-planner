@@ -26,12 +26,11 @@ export const StoragePanel = (): ReactElement => {
   const saveDesign = useAppStore((s) => s.saveDesign)
   const clearDesign = useAppStore((s) => s.clearDesign)
   /**
-   * Armed, then done: two presses rather than one.
+   * Armed, then done: two presses, deliberately more than one.
    *
-   * It was a single unconfirmed click, styled like every other button on the panel and sitting
-   * immediately beside "Save now", which is the press a grower is reaching for when they are
-   * thinking about their saved design. Component state rather than the store, because arming is
-   * about this rendering of this panel: leaving the step and coming back should find it safe
+   * It sits immediately beside "Save now", which is the press a grower is reaching for when they
+   * are thinking about their saved design. Component state here, because arming is about this
+   * rendering of this panel: leaving the step and coming back should find it safe
    */
   const [armed, setArmed] = useState(false)
 
@@ -58,8 +57,8 @@ export const StoragePanel = (): ReactElement => {
     >
       {/*
         The sentence exists whether or not the confirmation is showing, because `describedBy` on
-        the button points at it: a screen reader is told the cost with the label, rather than only
-        after the press that was supposed to be the safe one
+        the button points at it: a screen reader is told the cost with the label right away. It
+        does not wait until after the press that was supposed to be the safe one
       */}
       <p
         className={armed ? 'notice notice-error' : 'attribution'}

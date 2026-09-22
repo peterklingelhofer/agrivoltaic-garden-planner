@@ -243,7 +243,7 @@ describe('simulation panel', () => {
     expect(rows.some((row) => /harvested, \d+% of full yield/.test(row.textContent ?? ''))).toBe(
       false,
     )
-    // the attribution follows the band's own terms rather than a fixed name
+    // the attribution follows the band's own terms. It is never a fixed name
     expect(
       why.some((node) =>
         /That range is a 95% confidence interval dominated by (crop response \(Laub et al\. 2022\)|seasonal cumulative PAR \(\+\/-10%\)|crowding at this spacing: this app's own figure)\./.test(
@@ -710,7 +710,7 @@ describe('what the season costs', () => {
     await harness.unmount()
   })
 
-  /** Nothing to cost and nothing to do is no block, rather than a heading over a disclaimer */
+  /** Nothing to cost and nothing to do is no block. A heading over a disclaimer is a different case */
   it('says nothing at all about money for a garden with no panels and no tasks', async () => {
     seedGarden()
     const harness = await mount(<SimulationPanel />)

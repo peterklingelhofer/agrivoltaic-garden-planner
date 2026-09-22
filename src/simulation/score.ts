@@ -11,11 +11,10 @@ import type { Fraction } from '../types/units'
 export const SEASONS_TO_STAND = 5
 
 /**
- * The share of a full crop the beds must average for the panels to have SHARED the ground rather
- * than taken it. Without a floor the land equivalent ratio is won by covering every bed, because
- * the electricity term of a dense array outruns any crop it costs (`the port document` 8g measured
- * it at 1.32); with one, the question the mode asks is the agrivoltaic one. Half, as a rule of the
- * mode rather than a claim about anything
+ * The share of a full crop the beds must average for the panels to count as sharing the ground
+ * with them. Without a floor the land equivalent ratio is won by covering every bed: the
+ * electricity term of a dense array alone reaches 1.32, more than any crop costs it. With the
+ * floor, the question the mode asks is the agrivoltaic one. Half, a rule this mode sets by design
  */
 export const FOOD_FLOOR: Fraction = 0.5 as Fraction
 
@@ -154,8 +153,8 @@ const shortfallVerdict = (reports: readonly SeasonReport[]): string => {
  *
  * Read off the reports, never recomputed, and stated in this app's own terms: a crop partial
  * against the same crops unshaded, an electricity partial against a sole-use solar plant on the
- * same land, and their sum. The floor is what makes it a standing rather than a score a solar
- * farm wins by default
+ * same land, and their sum. The floor is what makes this a standing: without it, a solar farm wins
+ * by default just by covering every bed
  */
 export const standingOf = (reports: readonly SeasonReport[]): Standing => {
   const seasons = reports.length
@@ -200,10 +199,9 @@ export const standingOf = (reports: readonly SeasonReport[]): Standing => {
   const foodFloorHeld = food !== null && food >= FOOD_FLOOR
   const complete = seasons >= SEASONS_TO_STAND
   /*
-    Named, numbered and cited, in the voice the author set for the whole app (`the voice document`):
-    the term a reader can search rather than a paraphrase of it, the number beside it, the
-    citation after the number, and the floor named as a rule this application sets, because it is
-    one (see FOOD_FLOOR) and a sentence that hid that would be overclaiming
+    Named, numbered and cited, in this app's own voice: the term a reader can search, the number
+    beside it, the citation after the number, and the floor named as a rule this application sets,
+    because it is one (see FOOD_FLOOR) and a sentence that hid that would be overclaiming
   */
   // says what is still waiting, because a bare "Results are read after 5 seasons" under a year that
   // has just printed its harvest reads as the harvest not counting

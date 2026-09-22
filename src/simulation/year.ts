@@ -78,8 +78,8 @@ const extreme = (
 
 /**
  * Which year a choice names. The extremes are read off the summaries, so "driest" is the year
- * the beds were thirstiest by the site's own water index rather than the year with the least
- * rain, which is the same year at most sites and the more honest one at all of them. `draw` is
+ * the beds were thirstiest by the site's own water index. That is the same year as the one with
+ * the least rain at most sites, and the more honest measure at all of them. `draw` is
  * a seeded number in [0, 1) so a random year replays
  */
 export const chooseYear = (

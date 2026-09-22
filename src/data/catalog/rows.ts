@@ -4,8 +4,8 @@ import type { CropRow } from './schema'
 
 /**
  * The two extension documents, kept apart because they print different things and a row may cite
- * one without the other. A sweep on 2026-09-20 read both for every row: VCE SPES-720NP Table 3
- * prints a band for lettuce, spinach, parsley, cilantro, basil, tomato, cucumber and zucchini,
+ * one without the other. VCE SPES-720NP Table 3 prints a band for lettuce, spinach, parsley,
+ * cilantro, basil, tomato, cucumber and zucchini,
  * and Purdue HO-238-B-W's chart marks bands for Lycopersicon and Capsicum among its greenhouse
  * species. Five rows carry a figure one of them prints for the crop itself, and raspberry
  * carries one Widmer prints. Every other row cites neither, because neither holds its number
@@ -26,7 +26,7 @@ const VINE_CROPS: NonEmpty<CitationId> = [
 ]
 
 /**
- * Per-crop DLI trials read in full or by abstract on 2026-09-11 (Decision Record 23). The
+ * Per-crop DLI trials are read in full or by abstract (Decision Record 23). The
  * Cornell pair is cited together: the 1997 paper is the origin of the 17 mol/m2/d target and
  * its abstract is served to no automated fetch, so the handbook is where the figure was read
  */
@@ -56,7 +56,7 @@ const BASIL_CAVEAT =
  * Tomato, both peppers and cucumber share one record: the numbers come from the same two
  * greenhouse tables and the same trade column, and the trials that have measured these crops
  * under panels all measured losses. Carried as the rows' basis so the UI prints it beside the
- * number (audit of 2026-09-20)
+ * number
  */
 const VINE_CROP_CAVEAT =
   'The 15 is Runkle 2011’s figure for vine crops as a group, "at least 15 (and preferably more than 20)", in a sentence that names no crop, and the lowest band Purdue HO-238-B-W marks acceptable for tomato and pepper is 10 to 12. The 20 to 30 is the range Virginia Cooperative Extension’s Table 3 prints for tomato. Both are greenhouse figures and neither traces to a tomato experiment. The yield curve these rows run on is Laub’s fruity-vegetables group, three studies (bell pepper under nets and sweet pepper under cloth, both subtropical, and squash), none of them tomato and none under panels. The field trials in this corpus (Mata et al. 2026 at Bridgeton, Ben Naim et al. 2025 in Israel) measured yield losses that grew with shading, with no gain measured anywhere'
@@ -82,7 +82,6 @@ const POTATO_CAVEAT =
 /**
  * Where a crop's Laub group is an analogy, its row says in one sentence which fact makes it one.
  * Each reaches the reader as a yield caveat, so the band shows as the extrapolation it is
- * (audit of 2026-09-20)
  */
 const IMMATURE_POD_NOTE =
   'The grain-legume trials in the meta-analysis measured dry seed, and this crop is picked as an immature pod or a green seed, which is a different sink (where the plant sends its sugars)'
@@ -143,11 +142,10 @@ const MEDITERRANEAN_SUBSHRUB_TEMP = [0, 12, 30, 40] as const
  *  archetype, dliMin, dliTargetLow, dliTargetHigh, tier, shade, daysToMaturity,
  *  spacingCm, heightM, widthM, overrides?]
  *
- * DLI figures and evidence tiers are transcribed from the per-crop table in
- * the horticulture document section 3.6. The majority are Tier C inferences from
- * the crop's sun-hour class; they are labelled as such and must never be
- * presented as measurements. Rooting depths marked with an fao56 citation are
- * FAO-56 Table 22 midpoints; the rest fall back to a per-class default
+ * DLI figures and evidence tiers are transcribed per crop. The majority are Tier C inferences
+ * from the crop's sun-hour class, labelled as such and never presented as measurements. Rooting
+ * depths marked with an fao56 citation are FAO-56 Table 22 midpoints. The rest fall back to a
+ * per-class default
  */
 export const CROP_ROWS: readonly CropRow[] = [
   // Fruiting vegetables
@@ -934,8 +932,8 @@ export const CROP_ROWS: readonly CropRow[] = [
     'root-tuber',
     'rosette',
     'cool',
-    // tier C since 2026-09-20: the row cited a potato shade trial and the meta-analysis, and
-    // neither prints a daily light integral for carrot
+    // the row cites a potato shade trial and the meta-analysis, and neither prints a daily
+    // light integral for carrot, so the tier is C
     8,
     14,
     20,
@@ -956,7 +954,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     'root-tuber',
     'rosette',
     'cool',
-    // tier C since 2026-09-20, as carrot: no cited work prints a daily light integral for beet
+    // as carrot: no cited work prints a daily light integral for beet, so the row is tier C
     8,
     14,
     20,
@@ -1194,15 +1192,15 @@ export const CROP_ROWS: readonly CropRow[] = [
       zr: 0.4,
       p: 0.3,
       k: 0.35,
-      // 'alliums' otherwise reads as onion and leek, sown in spring against the LAST spring
-      // freeze like the rest of this dliClass. Garlic is planted the previous autumn instead, so
-      // `window` runs Oct-Jul rather than the spring-to-summer span every other allium here
-      // gets, and `sow` pins the calendar's window directly: see `recommend/calendar.ts`, where
-      // an explicit sow window overrides the spring-freeze anchor and the frost-free-season
-      // check that would otherwise measure a fall-sown, next-summer crop against the wrong
-      // season and either date it in winter or refuse it outright. `frostOffset` is left at the
-      // 'cool' archetype's -14: its only remaining job is its sign, which reads as frost-hardy
-      // and keeps the harvest window from being cut short by this same autumn's first freeze
+      // 'alliums' otherwise reads as onion and leek, sown in spring against the LAST spring freeze
+      // like the rest of this dliClass. Garlic is planted the previous autumn, so its `window` runs
+      // Oct-Jul (every other allium here gets a spring-to-summer span), and `sow` pins the
+      // calendar's window directly: see `recommend/calendar.ts`, where an explicit sow window
+      // overrides the spring-freeze anchor and the frost-free-season check that would otherwise
+      // measure a fall-sown, next-summer crop against the wrong season and either date it in winter
+      // or refuse it outright. `frostOffset` is left at the 'cool' archetype's -14: its only
+      // remaining job is its sign, which reads as frost-hardy and keeps the harvest window from
+      // being cut short by this same autumn's first freeze
       window: [10, 7],
       sow: [280, 296],
     },
@@ -1390,8 +1388,8 @@ export const CROP_ROWS: readonly CropRow[] = [
     'leafy-greens',
     'upright-herb',
     'cool',
-    // tier C since 2026-09-20: the row cited a potato shade trial and the meta-analysis for a
-    // figure neither of them prints for kale
+    // the row cites a potato shade trial and the meta-analysis for a figure neither of them
+    // prints for kale, so the tier is C
     6,
     12,
     18,
@@ -1940,7 +1938,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     'rosette',
     'cool',
     // VCE Table 3 prints "Parsley 10-15" and this row carries 10 to 16, so it cites nothing:
-    // the number is close to the printed one and is not it (audit of 2026-09-20)
+    // the number is close to the printed one and is not it
     5,
     10,
     16,
@@ -2361,12 +2359,12 @@ export const CROP_ROWS: readonly CropRow[] = [
     'cool-perennial',
     // 25 is Widmer 2026 verbatim: the DLI at which the standardised yield regression
     // crosses zero, the level that maintains trial-average yield. It is a design convention
-    // and no physiological failure threshold. The horticulture document's 10 was a sun-hour class guess.
-    // The 30 at the top of the band is where the Ohio State Kubota Lab's greenhouse guidance
-    // says plants tend to be stressed, and the same page gives 12 as a greenhouse-productivity
-    // minimum and 20-25 as the optimum, a different quantity from Widmer's agrivoltaic 25,
-    // which is the one the gate uses (Decision Record 23). Tier B since 2026-09-20: Widmer is
-    // a four-year study of 21 cases and states its figure in the unit this row carries
+    // and no physiological failure threshold. The 30 at the top of the band is where the Ohio
+    // State Kubota Lab's greenhouse guidance says plants tend to be stressed, and the same page
+    // gives 12 as a greenhouse-productivity minimum and 20-25 as the optimum, a different
+    // quantity from Widmer's agrivoltaic 25, which is the one the gate uses (Decision Record
+    // 23). The tier is B: Widmer is a four-year study of 21 cases and states its figure in the
+    // unit this row carries
     25,
     25,
     30,
@@ -2616,9 +2614,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       nfix: true,
       coldC: -40,
       yearsToMature: 3,
-      // FEIS gives "well-drained, dry, acid, sandy or gravelly soils" and publishes no pH
-      // numbers, so the envelope is deliberately uncited rather than attributed to a source
-      // that does not contain it
+      // FEIS gives "well-drained, dry, acid, sandy or gravelly soils" and publishes no pH numbers,
+      // so the envelope is deliberately uncited
       ph: [3.5, 4.5, 6.5, 7.5],
       envCitations: [],
       deciduous: true,
@@ -3878,7 +3875,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     // dliClass, habit and DLI figures as sorghum-sudangrass, grown here for grain, so no cover
     // role. Laub's forages in Table S1 are fescue, perennial grass, clovers, alfalfa and cover
     // crops, all C3 and all cut as biomass, and maize is the only C4 grain group, so a C4 grain
-    // crop reads that curve (audit of 2026-09-20)
+    // crop reads that curve
     'maize-c4',
     'forages-c3-pasture',
     'clumping-grass',
@@ -3915,7 +3912,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     // dliClass, habit, DLI figures, spacing, height and width as pearl-millet above (from
     // sorghum-sudangrass), which is itself the Sorghum x drummondii cover-crop hybrid, where
     // this row is the grain species. It reads the maize curve for the same reason pearl millet
-    // does: a C4 grain crop, and Laub's forages are C3 biomass (audit of 2026-09-20)
+    // does: a C4 grain crop, and Laub's forages are C3 biomass
     'maize-c4',
     'forages-c3-pasture',
     'clumping-grass',
@@ -4134,8 +4131,8 @@ export const CROP_ROWS: readonly CropRow[] = [
     {
       life: 'woody-perennial',
       yearsToMature: 3,
-      // ECOCROP sheet 749 carries no killing temperature; frost kills arabica, so this app sets
-      // its own freezing-point floor rather than leaving the crop with none
+      // ECOCROP sheet 749 carries no killing temperature; frost kills arabica, so this app sets its
+      // own freezing-point floor
       coldC: 0,
       // ECOCROP sheet 749: temperature 10 / 14-28 / 34 C, rainfall 750 / 1400-2300 / 4200 mm,
       // pH 4.3 / 5.5-7 / 8.4, cycle 210 to 330 days

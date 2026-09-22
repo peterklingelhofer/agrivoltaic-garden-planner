@@ -135,7 +135,7 @@ export const BedMesh = ({ bedId, selected }: BedMeshProps): ReactElement | null 
    * does not, and not because anything suppresses it -- the drag STARTS on a button in the
    * sidebar, so `OrbitControls` never sees the pointerdown that would begin an orbit, and by the
    * time the pointer crosses the canvas it is already carrying something. The two gestures are
-   * told apart by where they began rather than by a mode
+   * told apart by where they began, with no mode involved
    */
   const onPointerUp = useCallback(
     (event: ThreeEvent<PointerEvent>) => {

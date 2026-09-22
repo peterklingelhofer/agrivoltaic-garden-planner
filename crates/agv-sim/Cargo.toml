@@ -9,7 +9,7 @@ publish = false
 [lib]
 crate-type = ["cdylib", "rlib"]
 
-# No dependencies, and that is a decision rather than an accident: the boundary this crate
+# No dependencies, and that is deliberate: the boundary this crate
 # exposes is f64 in and f64 out, which the raw wasm ABI expresses without wasm-bindgen. See
 # src/wasm.rs. Nothing here needs a network to build, which is also what keeps CI simple.
 [dependencies]

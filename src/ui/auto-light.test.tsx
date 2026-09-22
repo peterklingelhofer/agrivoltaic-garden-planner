@@ -93,8 +93,8 @@ describe('re-running the light after the garden moves', () => {
   })
 
   /**
-   * The first light follows the place, since 2026-09-10: a looked-up town and a bed are enough,
-   * and nobody has to find a button. The site and weather are stubbed ready with empty values
+   * The first light follows the place: a looked-up town and a bed are enough, and nobody has to
+   * find a button. The site and weather are stubbed ready with empty values
    * because the hook reads their status and nothing else
    */
   it('starts the first bake once the place has resolved and there is a bed', async () => {

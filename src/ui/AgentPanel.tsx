@@ -31,8 +31,8 @@ import { useScrollable } from './useScrollable'
  * did not work.
  *
  * The chips are not a convenience. This router has no generative model behind it, so its recovery
- * from "I did not follow that" is entirely the near misses it offers: two taps instead of a
- * paragraph of apology, which is the difference between a novice carrying on and a novice
+ * from "I did not follow that" is entirely the near misses it offers: two taps. That is the
+ * difference between a novice carrying on and a novice
  * leaving. They are also the whole of the discoverability story, because nothing on screen tells
  * anybody what a garden agent understands
  *
@@ -69,10 +69,10 @@ const write = (key: string, value: string): void => {
  *
  * All three answer the same interface, so nothing below this line can tell which replied. The
  * upgrade is attempted once, in the background, after the surface is already usable: the weights
- * are 23 MB and a visitor who types before they land is served by the lexical router rather than
- * by a spinner. Measured against a held-out set neither has been tuned against, that is the
- * difference between 61% and 82%, and between those two numbers is a working conversation either
- * way
+ * are 23 MB, and a visitor who types before they land waits up to `ROUTER_WAIT_MS` for them, and
+ * the lexical router answers if they don't arrive in time. Measured against a held-out set neither
+ * has been tuned against, that is the difference between 61% and 82%, and between those two numbers
+ * is a working conversation either way
  */
 const lexical = createLexicalUnderstander()
 /**
@@ -99,15 +99,14 @@ const upgrade = (): Promise<void> => {
 }
 
 /**
- * And the reader that costs the browser nothing, asked for beside the weights rather than after
- * them.
+ * And the reader that costs the browser nothing, asked for alongside the weights.
  *
- * It wins where it answers, on two grounds. It reads a sentence with a language model rather than
- * with cosine similarity over a hundred and sixty exemplars, and it is the only one of the three
- * a phone on a metered connection can have at all: the 45 MB the embedding costs is precisely the
- * thing most visitors are right to refuse. Nothing waits on the probe, so a deployment without
- * the binding -- a fresh clone, `wrangler dev` with no login, the e2e build that aborts every
- * proxy request -- is a surface that behaves exactly as it did before this existed
+ * It wins where it answers, on two grounds. It reads a sentence with a language model, going beyond
+ * cosine similarity over a hundred and sixty exemplars, and it is the only one of the three a phone
+ * on a metered connection can have at all: the 45 MB the embedding costs is precisely the thing
+ * most visitors are right to refuse. Nothing waits on the probe, so a deployment without the
+ * binding -- a fresh clone, `wrangler dev` with no login, the e2e build that aborts every proxy
+ * request -- is a surface that runs on the two in-browser routers alone
  */
 const remote = createRemoteUnderstander({ summary: () => summariseForHelper(getAppState()) })
 let probing: Promise<void> | null = null
@@ -122,13 +121,12 @@ const askTheEdge = (): Promise<void> => {
 /**
  * How long a typed sentence waits for the better router before being answered by the other one.
  *
- * The original reasoning was that a visitor who types before the weights land should be served
- * rather than shown a spinner, and that was right when the two routers were close. They are not
- * close any more: measured on held-out sentences the phrase table acts on everything and is right
- * 64% of the time, and the model acts on two thirds and is right 86-100%, asking about the rest.
- * So the first sentence -- the one that decides whether anybody types a second -- is worth a few
- * seconds. Bounded, because a slow connection must not turn into a surface that never answers,
- * and free after the first: `upgrade` memoises, so every later send races an already-kept promise
+ * The two routers are far apart: measured on held-out sentences the phrase table acts on everything
+ * and is right 64% of the time, and the model acts on two thirds and is right 86-100%, asking about
+ * the rest. So the first sentence -- the one that decides whether anybody types a second -- is
+ * worth a few seconds. Bounded, because a slow connection must not turn into a surface that never
+ * answers, and free after the first: `upgrade` memoises, so every later send races an already-kept
+ * promise
  */
 const ROUTER_WAIT_MS = 8000
 
@@ -140,7 +138,7 @@ const readyOrTimeout = async (): Promise<void> => {
       timer = setTimeout(resolve, ROUTER_WAIT_MS)
     }),
   ])
-  // cleared rather than left to fire: a pending eight-second timer outlives the turn that made it
+  // cleared here, so it is never left to fire: a pending eight-second timer outlives the turn that made it
   if (timer !== undefined) clearTimeout(timer)
 }
 
@@ -158,7 +156,7 @@ const LOADING_LINE = `Still loading the part that understands paraphrase, ${Stri
 /**
  * The offer, where the browser has not said the connection is fast and unmetered.
  *
- * It names the size before the press rather than after it, because that is the whole point: this
+ * It names the size up front, because that is the whole point: this
  * surface works without the download, and 45 MB spent silently on a phone is somebody's data plan
  * gone on a feature they had not yet decided they wanted
  */
@@ -168,7 +166,7 @@ const LITERAL_LINE =
 /**
  * What is true of the remote reader, said where the other two say what they cost.
  *
- * It is on screen the whole time that router is in use rather than behind a disclosure, because
+ * It stays on screen the whole time that router is in use, because
  * this is the one state of this surface where something a visitor typed leaves their machine. The
  * second sentence is a claim about the edge and `workers/proxy/helper.ts` is what makes it true:
  * the route holds no store, writes nothing down and returns the reading, so there is no
@@ -185,8 +183,7 @@ const PRIVACY_LINE =
  * whole surface is for, and telling them what they COULD type is not the same as giving them
  * something to press. Each of these dispatches its intent with nothing filled in, which for the
  * ones that need something produces the question that asks for it: pressing "Where the garden
- * is" answers with "Tell me a town or an address", which is a conversation starting rather than
- * a refusal
+ * is" answers with "Tell me a town or an address", which is a conversation starting
  */
 const OPENING: readonly IntentId[] = ['set-place', 'propose-designs', 'list-crops', 'help']
 
@@ -214,7 +211,7 @@ const Sources = ({ ids }: { readonly ids?: readonly CitationId[] }): ReactElemen
 const linesOf = (answer: AgentReply, catalog: readonly Crop[]): readonly Line[] =>
   answer.utterances.flatMap((utterance) => wordsFor(utterance, catalog))
 
-/** An intent dispatched by name rather than read out of a sentence, which is what a chip does */
+/** An intent dispatched by name, which is what a chip does */
 const dispatched = (intent: IntentId, matched: string): Understanding => ({
   intent,
   confidence: 1,
@@ -246,20 +243,6 @@ interface Group {
 }
 
 /**
- * Consecutive lines of the same tone, as one group.
- *
- * It exists for the caveats. The design search reports five of them and every word is worth
- * keeping (what it did not sweep, that slope and buildings were not modelled) but five
- * full-width paragraphs each carrying its own warning rule is a wall, and a wall is read exactly
- * as carefully as no caveat at all.
- *
- * Grouped and NOT folded. `Cited` values in this app carry a caveat and the doctrine is that the
- * only thing ever hidden is detail and a caveat is never detail, so putting these behind a
- * disclosure would be the one shortcut this feature is not allowed to take. Every word stays on
- * screen; what changes is that they read as one qualification of one answer, which is what they
- * are, instead of as six separate alarms
- */
-/**
  * The runs of lines that get a heading of their own, and what it says.
  *
  * Two, and the distinction is the point. A caveat qualifies the answer and may not be skimmed; a
@@ -273,6 +256,20 @@ const BLOCK: Partial<Record<Line['tone'], string>> = {
   provenance: 'How this was computed',
 }
 
+/**
+ * Consecutive lines of the same tone, as one group.
+ *
+ * It exists for the caveats. The design search reports five of them and every word is worth
+ * keeping (what it did not sweep, that slope and buildings were not modelled) but five
+ * full-width paragraphs each carrying its own warning rule is a wall, and a wall is read exactly
+ * as carefully as no caveat at all.
+ *
+ * Grouped and NOT folded. `Cited` values in this app carry a caveat and the doctrine is that the
+ * only thing ever hidden is detail and a caveat is never detail, so putting these behind a
+ * disclosure would be the one shortcut this feature is not allowed to take. Every word stays on
+ * screen; what changes is that they read as one qualification of one answer, which is what they
+ * are, and never as six separate alarms
+ */
 const grouped = (lines: readonly Line[]): readonly Group[] => {
   const groups: Group[] = []
   for (const line of lines) {
@@ -311,7 +308,7 @@ export const AgentPanel = (): ReactElement => {
    * "Amherst", and be told it did not follow that.
    *
    * `onboarding.step` is the right thing to read, and reading it plainly is what makes the wizard
-   * and the agent one conversation rather than two: it starts at `location`, `act`'s `noted`
+   * and the agent a single conversation: it starts at `location`, `act`'s `noted`
    * advances it through the same `setOnboardingStep` the Next control uses, and a grower can
    * answer two questions out loud, tap Show me the questions, and find the form standing exactly
    * where they left off.
@@ -339,7 +336,7 @@ export const AgentPanel = (): ReactElement => {
   /**
    * Which questions this conversation has an answer for.
    *
-   * Held here rather than derived from the wizard's answers, because those carry defaults for
+   * Held here as its own fact, because the wizard's answers carry defaults for
    * everything from the moment the app loads: `DEFAULT_WIZARD_ANSWERS` has a plot size and a
    * mounting preference, so "has an answer" is not a thing the store can be asked. What is being
    * tracked is what was SAID, which is a fact about the conversation and belongs to it
@@ -355,8 +352,8 @@ export const AgentPanel = (): ReactElement => {
   /**
    * Whether it is fair to spend the download on this visitor without asking.
    *
-   * Read once, in the initialiser, because it is a fact about this browser rather than something
-   * that changes while they type, and because deciding it inside the effect would be a setState
+   * Read once, in the initialiser, because it is a fact fixed for this browser, unrelated to
+   * anything that changes while they type, and because deciding it inside the effect would be a setState
    * in an effect body, which is a rule and also the wrong shape. `accept` flips it, and the
    * effect below is what actually starts the fetch either way
    */
@@ -375,7 +372,7 @@ export const AgentPanel = (): ReactElement => {
   const [draft, setDraft] = useState('')
   const [busy, setBusy] = useState(false)
   // seeded from what was restored, so a new key can never collide with a turn already on screen.
-  // In the initialiser rather than during render, which is a rule and also the only correct place
+  // In the initialiser, which is a rule and also the only correct place
   const nextId = useRef(restored.length)
   /** The question the last reply ended on, so the next one is not re-explained from scratch */
   const asked = useRef<OnboardingStep | null>(null)
@@ -433,7 +430,7 @@ export const AgentPanel = (): ReactElement => {
   }, [showing])
 
   /**
-   * Yes, spend it. Remembered, so somebody is asked once rather than once a visit.
+   * Yes, spend it. Remembered, so somebody is asked just once, ever.
    *
    * Focus moves to the box, because the control that had it is about to stop existing: a press
    * that leaves focus on nothing drops a keyboard or screen-reader user back at the top of the
@@ -457,11 +454,10 @@ export const AgentPanel = (): ReactElement => {
   /**
    * One turn. `intent` short-circuits the router, which is what a chip press does.
    *
-   * A chip used to send its own LABEL back through the router, and that was a real bug rather
-   * than an inelegance: "Where the garden is" is a label and not a sentence anybody says, so it
-   * scored against `set-place`'s exemplars about as well as a stranger's would. A control that
-   * names an intent should dispatch that intent; re-deriving it from the words on the button is
-   * a guess about something already known
+   * Sending a chip's own LABEL back through the router would be a real bug: "Where the garden is"
+   * is a label that nobody says as a sentence, so it scores against `set-place`'s exemplars about
+   * as well as any offhand phrase would. A control that names an intent should dispatch that
+   * intent; re-deriving it from the words on the button is a guess about something already known
    */
   const say = useCallback(
     async (text: string, intent?: IntentId): Promise<void> => {
@@ -472,7 +468,7 @@ export const AgentPanel = (): ReactElement => {
       setDraft('')
       setBusy(true)
       try {
-        // the sentence waits for the better router, briefly, rather than the router racing it
+        // the sentence waits briefly for the better router to answer, and is never raced against it
         await readyOrTimeout()
         const context = { step, catalog: known }
         /*
@@ -488,9 +484,10 @@ export const AgentPanel = (): ReactElement => {
           spoken?.reply ??
           (await act(dispatched(intent ?? 'help', trimmed), { state: getAppState }))
         /*
-          A question that had to start a run is remembered, so its answer can arrive rather than
-          being waited for. "Is this legal" starts the sun run and says so, and a visitor with no
-          way of knowing how long a year of light simulation takes was left pressing send again
+          A question that had to start a run is remembered, so its answer can simply arrive, without
+          being waited for. "Is this legal" starts the sun run and says so, and without this a
+          visitor with no way of knowing how long a year of light simulation takes would be left
+          pressing send again
         */
         const asking = intent ?? spoken?.understood[spoken.understood.length - 1]?.intent ?? null
         if (asking !== null && startedARun(answer)) setWaiting(asking)
@@ -508,7 +505,7 @@ export const AgentPanel = (): ReactElement => {
           The same question twice running is asked short. Answering the height question while the
           one about native planting is on screen is normal and allowed, and it leaves that
           question still unanswered, so it comes round again; repeating its explanation word for
-          word reads as a loop rather than as patience
+          word reads as a loop
         */
         const again = ask !== null && ask === asked.current
         if (ask !== null) asked.current = ask
@@ -556,7 +553,7 @@ export const AgentPanel = (): ReactElement => {
   )
 
   /*
-    Answered when the run lands, rather than when somebody presses send again.
+    Answered when the run lands. Nobody has to press send again.
 
     Fired on a TRANSITION and never on every store change: a bake writes progress many times a
     second, and `ask-energy` starts the annual run each time it is blocked, so retrying on every
@@ -655,7 +652,7 @@ export const AgentPanel = (): ReactElement => {
     [],
   )
 
-  // written on every change rather than on unmount, which never runs on a closed tab
+  // written on every change, because unmount never runs on a closed tab
   useEffect(() => {
     if (turns.length === 0) return
     write(TRANSCRIPT_KEY, encodeTranscript(turns))
@@ -704,10 +701,10 @@ export const AgentPanel = (): ReactElement => {
   /*
     The box grows to fit what was put in it, up to the height `.agent-input` stops at.
 
-    One line was measured showing 27% of a 137-character sentence, which is a fair description of
-    a dictated one: speech recognition misheard something, and the sentence has to be readable
-    before it is worth sending. The cap is in the stylesheet rather than here so there is one
-    number, and `scrollHeight` is read after the height is released or it can only ever grow.
+    One line shows 27% of a 137-character sentence, a fair length for a dictated one, and a dictated
+    sentence has to be readable before it is worth sending, in case speech recognition misheard
+    something. The cap lives in the stylesheet, so there is one number, and `scrollHeight` is read
+    after the height is released or it can only ever grow.
 
     `draft` is not read in here and is not meant to be: it is the token that says the text
     changed, so the box is measured again. The same shape as `useScrollable`'s `watch`, and named
@@ -761,7 +758,7 @@ export const AgentPanel = (): ReactElement => {
         data-testid="readout-agent-transcript"
         tabIndex={scroll.scrollable ? 0 : undefined}
         ref={log}
-        // polite rather than assertive: a reply is worth hearing and never worth interrupting
+        // set to polite: a reply is worth hearing and never worth interrupting
         aria-live="polite"
         aria-atomic="false"
       >
@@ -776,7 +773,7 @@ export const AgentPanel = (): ReactElement => {
             {grouped(turn.lines).map((group, index) =>
               // a heading for a run of them, and none for one on its own: "What that answer does
               // not cover" is the design search's list of limits, and it reads as nonsense over a
-              // single sentence saying a preference leans the ranking rather than fixing it
+              // single sentence saying a preference leans the ranking, without fixing it
               BLOCK[group.tone] !== undefined && group.lines.length > 1 ? (
                 <div
                   // the groups of one turn are a fixed list in order, so the index IS the identity
@@ -841,7 +838,7 @@ export const AgentPanel = (): ReactElement => {
       {router === 'embedding' ? null : (
         <div className="agent-status">
           {/*
-            The button is a SIBLING of the live region rather than inside it. A control inside a
+            The button sits beside the live region as a SIBLING, outside it. A control inside a
             `role="status"` is announced again every time the region changes, and this region
             changes the moment the control is pressed
           */}
@@ -907,11 +904,11 @@ export const AgentPanel = (): ReactElement => {
           className="agent-send"
           data-testid="action-agent-send"
           /*
-            `aria-disabled` rather than `disabled`, which is the same choice the chips make and
-            for the same reason: pressing send is what makes it busy, so a real `disabled` takes
-            the focus of whoever just pressed it and drops it on the document body. `say` already
-            refuses an empty draft and refuses to run while busy, so nothing here needs the
-            browser to enforce it
+            This uses `aria-disabled`, so the chips and this control share one choice, for the same
+            reason: pressing send is what makes it busy, so a real `disabled` takes the focus of
+            whoever just pressed it and drops it on the document body. `say` already refuses an
+            empty draft and refuses to run while busy, so nothing here needs the browser to enforce
+            it
           */
           aria-disabled={busy || draft.trim() === ''}
         >

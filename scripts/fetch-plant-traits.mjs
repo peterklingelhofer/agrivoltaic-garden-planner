@@ -74,7 +74,7 @@ const sha256 = (buffer) => createHash('sha256').update(buffer).digest('hex')
 /**
  * The catalogue's id and accepted binomial, read out of the row table itself.
  *
- * Regex over the source rather than an import, because this is a `.mjs` build script and the
+ * Regex over the source, because this is a `.mjs` build script and the
  * catalogue is TypeScript behind a lazy chunk. The shape it depends on is the first three
  * strings of every row, which `CropRow` fixes as id, accepted name and family, and the count is
  * asserted against the row total so a formatting change that broke the match cannot pass quietly
@@ -111,7 +111,7 @@ const eachRow = (buffer, onRow) => {
 /**
  * The catalogue's binomial dropped onto the name the checklist currently accepts.
  *
- * Synonyms are followed rather than skipped, and that is most of the work. WCVP is a living
+ * Synonyms are followed, which is most of the work. WCVP is a living
  * taxonomy: the garden pea is filed under `Lathyrus oleraceus` now, the lentil under
  * `Vicia lens`, the radish as a subspecies of `Raphanus raphanistrum`, and French marigold has
  * been lumped into `Tagetes erecta`. Every one of those is a synonym row pointing at an accepted
@@ -119,8 +119,8 @@ const eachRow = (buffer, onRow) => {
  * Distributions hang off the accepted name only, so following the pointer is also the only way
  * to reach them.
  *
- * Compared on the genus and species columns rather than `taxon_name`, which carries the
- * authority on some rows. The hybrid marker is dropped from the CATALOGUE side only, which is
+ * Compared on the genus and species columns. `taxon_name` carries the authority on some rows,
+ * which an exact match cannot survive. The hybrid marker is dropped from the CATALOGUE side only, which is
  * all that is needed: the checklist keeps `×` in a `species_hybrid` column of its own, so the
  * species column is already bare. The catalogue writes `Fragaria x ananassa` and the two meet at
  * `Fragaria ananassa`
@@ -370,8 +370,8 @@ const PROBES = [
  * nearest half-degree point moves it into a neighbouring botanical country.
  *
  * A disagreement is counted as `adjacentCell` when the vector answer appears in one of the eight
- * cells around the sampled one, which is a border falling inside a cell rather than the wrong
- * region entirely. Ocean is excluded from the denominator: a point with no vector answer has
+ * cells around the sampled one: a border falling inside a neighbouring cell, which is a
+ * quantisation artefact and a milder case than a wrong region entirely. Ocean is excluded from the denominator: a point with no vector answer has
  * nothing to be right or wrong about
  */
 const agreement = (grid, index, step) => {

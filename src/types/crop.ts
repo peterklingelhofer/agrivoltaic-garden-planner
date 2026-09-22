@@ -208,8 +208,8 @@ export interface Crop {
   readonly sowWindow: { readonly earliest: DayOfYear; readonly latest: DayOfYear } | null
   /**
    * Grown to mature into autumn: sown late enough that the crop finishes at the first fall
-   * freeze rather than as early as the spring allows (brussels sprouts, whose sprouts form in
-   * cool weather and sweeten after frost). The calendar dates such a crop from the autumn end
+   * freeze, held back from as early as the spring allows (brussels sprouts, whose sprouts form
+   * in cool weather and sweeten after frost). The calendar dates such a crop from the autumn end
    */
   readonly fallHarvest: boolean
   readonly frostOffsetDays: Days
@@ -246,8 +246,8 @@ export interface LaubCoefficients {
 
 /**
  * Laub tabulates 95 % CONFIDENCE intervals in Table S2 and never tabulates
- * prediction intervals, so the field is pinned to the single correct literal
- * rather than left as a union a caller could get wrong
+ * prediction intervals, so the field is pinned to the single correct literal,
+ * closing off the union a caller could otherwise get wrong
  */
 export type LaubIntervalKind = 'confidence-95'
 

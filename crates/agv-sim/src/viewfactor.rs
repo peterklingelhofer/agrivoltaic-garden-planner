@@ -91,7 +91,7 @@ const VF_GROUND_SKY_2D_MAX_ROWS: i64 = 10;
 
 /// The 2-D infinite-row ground-to-sky view factor, sampled across one pitch.
 ///
-/// An oracle rather than a model: it is what the raster kernel is checked against where the
+/// An oracle: it is what the raster kernel is checked against where the
 /// geometry is regular enough for a closed form to exist.
 pub fn vf_ground_sky_2d_oracle(
     collector_width_m: f64,
@@ -130,8 +130,7 @@ pub fn vf_ground_sky_2d_oracle(
 
 /// Two-surface enclosure, `E / (1 - rho_g (1 - SVF) rho_m)`.
 ///
-/// The geometric series is already summed, so no iteration is needed: the solar geometry document section 7.3 and
-/// Decision Record section 3.
+/// The geometric series is already summed, so no iteration is needed (Decision Record section 3).
 pub fn interreflection_gain(
     sky_view_factor: f64,
     ground_albedo: f64,

@@ -172,8 +172,8 @@ interface Placed {
 }
 
 /**
- * Distance forward from today rather than a raw day number, so a southern-hemisphere
- * season that crosses 31 December orders and groups exactly as a northern one does
+ * Placed by distance forward from today, so a southern-hemisphere season that crosses 31 December
+ * orders and groups exactly as a northern one does
  */
 const place = (item: AgendaItem, today: DayOfYear, daysLeftInMonth: number): Placed => {
   const ahead = forwardDays(today, item.day)

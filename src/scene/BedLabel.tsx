@@ -7,11 +7,10 @@ import { OVERLAY_LAYER } from './layers'
  *
  * Nobody could point at the picture and say "that's Bed 3": the plan column numbered the beds
  * and the garden did not, so a class, a couple or a parent and child talking across the two
- * had nothing to point at, in every round through the build. A sprite with the text
- * drawn on a canvas, rather than a DOM label projected over the scene or an SDF font, because
- * it needs no portal and no layout pass: it is one texture per bed, made once per name in the
- * interface face once that has loaded, and it draws through the panels so a bed under a row
- * keeps its name.
+ * had nothing to point at. A DOM label projected over the scene, or an SDF font, would need a
+ * portal or a layout pass. A sprite with the text drawn on a canvas needs neither: it
+ * is one texture per bed, made once per name in the interface face once that has loaded, and
+ * it draws through the panels so a bed under a row keeps its name.
  *
  * On the overlay layer, because a label is a readout and not geometry: on the scene layer the
  * occlusion pass integrated each quad into its depth buffer and shaded the bed under it

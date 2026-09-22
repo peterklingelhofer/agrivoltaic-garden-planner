@@ -58,7 +58,7 @@ describe('the yield band names its terms', () => {
 describe('estimateYield caveat codes', () => {
   it('never collides the Laub-evidence caveat with the DLI-tier caveat it is merged with', () => {
     // 'fruity-vegetables' is a real weak-evidence group (3 studies, below the threshold), so this
-    // exercises the actual merge path rather than a synthetic curve
+    // exercises the actual merge path, needing no synthetic curve
     const curve = laubCurve('fruity-vegetables')
     expect(curve.studyCount).toBeLessThanOrEqual(WEAK_EVIDENCE_STUDY_COUNT)
 

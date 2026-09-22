@@ -4,16 +4,10 @@
 //   bun run build && bunx vite preview --port 4173 &
 //   node scripts/probe-bake-backends.mjs [--weather <dir>]
 //
-// Written when lowering the panels from 3.4 m to 1.5 m
-// moved the panels in 3D and changed nothing in the light. It reproduced: on this laptop's
-// Chromium (headless shell 151, ANGLE Metal) the WebGL2 shadow-map bake answered 86 / 57 / 71 for
-// the three default beds at every panel height, pitch and tilt tried, while the CPU reference
-// answered 94 / 38 / 54 at the default geometry and 98 / 8 / 79 with the panels at 0.6 m. Removing
-// the array moved both to 100. The cause was in `src/sim/gpu/webgl2.ts`: the direction texture
-// was uploaded onto the texture unit the panels had just been bound to, so the shader read its
-// panel corners out of the sky directions. With that fixed the two backends agree to the digit
-// on both geometries, and the script now checks two more too, with a house drawn and with a
-// tree (Decision Record 26)
+// Checks that `src/sim/gpu/webgl2.ts`'s shadow-map bake and the CPU reference agree on every
+// bed's "% of open sky", at the default geometry, with the panels lowered, with a house, and
+// with a tree (Decision Record 26). The two backends can drift apart silently: nothing throws,
+// a wrong number just gets baked in
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { chromium } from '@playwright/test'
@@ -112,8 +106,8 @@ for (const backend of ['webgl2-shadowmap', 'cpu-reference']) {
   // clears it so the next backend starts from the same bare plot this one did
   await page.getByTestId('action-house-remove-house-1').click()
 
-  // a fourth geometry: a tree standing over bed 1, its crown transmitting some light rather
-  // than blocking it outright the way the house's walls do
+  // a fourth geometry: a tree standing over bed 1, its crown transmitting some light,
+  // not blocking it outright the way the house's walls do
   await page.getByTestId('action-tree-add').click()
   await page.getByTestId('control-tree-width-tree-1').fill('10')
   await page.getByTestId('control-tree-depth-tree-1').fill('10')

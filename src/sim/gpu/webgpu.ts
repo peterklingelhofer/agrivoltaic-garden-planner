@@ -1,7 +1,7 @@
 import type { SkyMatrixBackend } from '../backend'
 
 // lib is ES2023+DOM only so GPUDevice/GPUAdapter types do not exist: detect through a
-// narrow local interface on globalThis rather than referencing the WebGPU lib types
+// narrow local interface on globalThis
 interface NavigatorWithGpu {
   readonly navigator?: { readonly gpu?: unknown }
 }

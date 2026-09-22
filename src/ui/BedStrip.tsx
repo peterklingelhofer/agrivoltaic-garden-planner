@@ -11,9 +11,9 @@ const NAMED_ON_CARD = 3
 /**
  * What is in the bed, in the plants' own names.
  *
- * The card said "10.5 m², 3 planted", which two adults in the newcomer walk read as a number of
- * plants and never learned the name of one of. The count is in the panel beside every other
- * figure about the bed; what a card is for is telling them apart at a glance
+ * A card reading "10.5 m², 3 planted" gives a count of plants without naming any of them. The count
+ * is in the panel beside every other figure about the bed; what a card is for is telling them apart
+ * at a glance
  */
 const plantedOnCard = (bed: Bed, catalog: readonly Crop[]): string => {
   const names = bed.plantings.map((planting) => cropName(catalog, planting.cropId))

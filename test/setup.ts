@@ -6,10 +6,10 @@
  * in place. Bun runs a preload once per isolated test file, which is the same guarantee vitest's
  * `setupFiles` gave, so nothing here may assume it runs only once.
  *
- * Every numeric path in `src/sim` goes through the core now; the TypeScript implementations they
- * used to carry have been deleted, and `requirePhysicsCore` refuses rather than degrading. So a
- * suite without the wasm cannot test the physics at all, and this fails loudly rather than
- * letting three hundred tests report a missing core one confusing assertion at a time.
+ * Every numeric path in `src/sim` goes through the core, with no TypeScript implementation behind
+ * it, and `requirePhysicsCore` refuses outright. So a suite without the wasm cannot test the
+ * physics at all, and this fails loudly, all at once, so three hundred tests do not each report a
+ * missing core as one confusing assertion at a time.
  *
  * Running the tests needs a Rust toolchain. `bun run rust:wasm` is the whole of it, it takes under
  * a second after the first build, and `bun run test` runs it first so nobody has to know.
@@ -49,8 +49,8 @@ import { rustCore } from '../src/sim/rust-core'
 */
 if (!HAVE_MODEL) {
   /*
-    Awaited here rather than inside the factory: a factory that returns a promise is not honoured,
-    and the native build loads anyway. This one was measured, not assumed
+    Awaited here, outside the factory: a factory that returns a promise is not honoured,
+    and the native build loads anyway. This one was measured directly
   */
   const web = await import(
     `${process.cwd()}/node_modules/@huggingface/transformers/dist/transformers.web.js`
@@ -70,10 +70,10 @@ if (!HAVE_MODEL) {
 
 /*
   React reports an error a boundary has ALREADY caught to `reportError`, so that a browser's error
-  console still shows it. Bun treats an unhandled report as a failed test; vitest did not, and
-  jsdom absorbs it into a window error event, which is why only the DOM-less scene run trips over
-  this. `SceneBoundary` swallowing an IBL subtree that the fake WebGL context cannot draw is the
-  behaviour `scene.test.tsx` exists to check, so the report is printed rather than thrown
+  console still shows it. Bun treats an unhandled report as a failed test, and jsdom absorbs it into
+  a window error event, which is why only the DOM-less scene run trips over this. `SceneBoundary`
+  swallowing an IBL subtree that the fake WebGL context cannot draw is the behaviour
+  `scene.test.tsx` exists to check, so the report always prints. It is not thrown
 
   Unconditional, so both halves of the suite behave the same way. Bun ships a `reportError` that
   rethrows and jsdom ships one that does not, and which of the two a file got would otherwise
@@ -86,7 +86,7 @@ globalThis.reportError = (error: unknown): void => {
 const WASM = 'crates/agv-sim/target/wasm32-unknown-unknown/release/agv_sim.wasm'
 
 /*
-  Top-level await rather than `beforeAll`, and the difference is not cosmetic. A preload is
+  This is a top-level await. It is meaningfully different from `beforeAll`: a preload is
   evaluated before the test module is imported, but `beforeAll` hooks run after that import.
   Several suites compute physics at module scope to build a fixture, so with a hook they failed on
   the import line with a missing core, before a single test had run.

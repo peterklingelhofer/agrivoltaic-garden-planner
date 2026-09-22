@@ -325,7 +325,7 @@ describe('the bed count for a plot', () => {
     expect(bedCountFor(8, 6)).toBe(MAX_BEDS)
     expect(bedCountFor(12, 8)).toBe(MAX_BEDS)
     expect(bedCountFor(60, 40)).toBe(BED_CEILING)
-    // and rises between the two rather than jumping
+    // and rises between the two smoothly
     const middling = bedCountFor(30, 20)
     expect(middling).toBeGreaterThan(MAX_BEDS)
     expect(middling).toBeLessThanOrEqual(BED_CEILING)

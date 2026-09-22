@@ -1,8 +1,7 @@
 //! NREL's Solar Position Algorithm, ported from `src/sim/solar.ts`.
 //!
-//! Reda & Andreas 2008, NREL/TP-560-34302. The periodic terms in `spa_tables.rs` are generated
-//! from the TypeScript by `scripts/generate-rust-tables.mjs` rather than retyped, so there is one
-//! copy of 364 lines of coefficients and a drift check on it.
+//! Reda & Andreas 2008, NREL/TP-560-34302. The periodic terms are in `spa_tables.rs`, the only
+//! copy, maintained by hand against the published source.
 //!
 //! The port is deliberately literal. Where the TypeScript reads awkwardly the Rust reads
 //! awkwardly in the same place, because the thing being protected is agreement with an
@@ -198,7 +197,7 @@ pub fn spa_position(utc_millis: f64, observer: &Observer) -> SolarPosition {
             observer.temperature_c,
         );
 
-    // atan2 form is mandatory: the single-argument form mirrors afternoon shadows (the solar geometry document s1.5)
+    // atan2 form is mandatory: the single-argument form mirrors afternoon shadows (Decision Record 2.4)
     let azimuth_deg = normalise_degrees(
         180.0
             + RAD_TO_DEG
@@ -226,9 +225,8 @@ pub fn spa_position(utc_millis: f64, observer: &Observer) -> SolarPosition {
 
 /// The direction of the sun as a unit vector in the site's local frame.
 ///
-/// X east, Y north, Z up, matching `geom.rs`. Returned as a tuple rather than a `UnitVec3` so
-/// this module keeps no dependency on the geometry types: solar position is upstream of geometry
-/// and stays that way.
+/// X east, Y north, Z up, matching `geom.rs`. Returned as a tuple so this module keeps no
+/// dependency on the geometry types: solar position is upstream of geometry and stays that way.
 pub fn sun_unit_vector(elevation_deg: f64, azimuth_deg: f64) -> (f64, f64, f64) {
     let cos_el = cos_deg(elevation_deg);
     (

@@ -2,11 +2,11 @@
 //!
 //! Not a snow model, and the TypeScript says so at length. It reads monthly normals, so it knows
 //! nothing about a particular winter, about melt and refreeze, about drifting, or about snow lying
-//! on the modules rather than under them. It is a smooth seasonal weighting between two surfaces
+//! on the modules as well as under them. It is a smooth seasonal weighting between two surfaces
 //! the site plausibly has.
 //!
-//! It is here rather than in the renderer because the renderer and the PV chain must not disagree
-//! about whether there is snow on the ground: the rear side of a bifacial module sees the ground
+//! It lives here so the renderer and the PV chain read one value about whether there is snow on
+//! the ground: the rear side of a bifacial module sees the ground
 //! and almost nothing else, and treating a snowfield as grass understates the modelled year by
 //! around three percent at Amherst.
 
@@ -14,8 +14,8 @@ use crate::time::utc_day_of_year;
 
 const DAYS_PER_YEAR: f64 = 365.0;
 
-/// Old settled snow rather than fresh, because a seasonal weighting off monthly normals describes
-/// the lying snowpack and not the morning after a storm.
+/// Old settled snow: a seasonal weighting off monthly normals describes how the snowpack lies
+/// after it has had days to settle.
 pub const SNOW_ALBEDO: f64 = 0.7;
 
 /// Below this monthly mean the ground is covered; above it, bare. Between, in between.
@@ -35,7 +35,7 @@ fn clamp01(value: f64) -> f64 {
     value.clamp(0.0, 1.0)
 }
 
-/// Linear between two monthly normals, so the year crosses a season rather than a step.
+/// Linear between two monthly normals, so the year crosses a season as a slope.
 fn monthly_at(monthly: &[f64], day_of_year: f64) -> f64 {
     if monthly.len() != 12 {
         return f64::NAN;
@@ -51,7 +51,7 @@ fn monthly_at(monthly: &[f64], day_of_year: f64) -> f64 {
 ///
 /// Temperature sets whether a cover survives and precipitation sets whether there is one to
 /// survive, because those are the two questions a monthly normal can actually answer. Returns 0
-/// for a site with no normals rather than guessing.
+/// for a site with no normals, and never guesses.
 pub fn ground_snow_cover(
     monthly_mean_temp_c: &[f64],
     monthly_precip_mm: &[f64],
@@ -69,8 +69,8 @@ pub fn ground_snow_cover(
 
 /// One snow fraction per hour, on the timestamps the weather itself carries.
 ///
-/// Per hour rather than per day because the chain reads it per hour; the day is computed once and
-/// carried across the hours that share it, which is the same reason the TypeScript memoises.
+/// Per hour, because the chain reads it per hour; the day is computed once and carried across
+/// the hours that share it, which is the same reason the TypeScript memoises.
 pub fn snow_cover_series(
     monthly_mean_temp_c: &[f64],
     monthly_precip_mm: &[f64],

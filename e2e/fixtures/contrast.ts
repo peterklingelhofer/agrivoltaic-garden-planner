@@ -132,7 +132,7 @@ const audit = ({ within }: { within: string | null }): ContrastReport => {
    * The effective background: composite every ancestor's background-color from the root
    * down, each scaled by the opacity applied to it and everything above it. A gradient
    * still visible behind the text means no single colour is the background, and the
-   * element is reported as unresolved rather than guessed at.
+   * element is reported as unresolved.
    *
    * "Still visible" is the whole subtlety. A fully opaque background-color hides
    * everything painted before it, gradients included, so it clears the flag; a

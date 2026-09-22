@@ -12,7 +12,7 @@ import { formatDli } from './format'
  * and is the output worth trusting, while the mol/m²/d number attached to any one crop is mostly
  * a Tier C class-level inference. So the narration is allowed to say that one of these groups
  * wants more light than another, and is not allowed to promise that either will do well in a
- * particular bed. Naming the group rather than the crop is the same honesty in the words: the
+ * particular bed. Naming the group, and never the crop, is the same honesty in the words: the
  * class is where the evidence actually lives
  */
 export const DLI_CLASS_LABEL: Readonly<Record<DliClass, string>> = {
@@ -56,7 +56,7 @@ const demandSentence = (lower: string, higher: string): string =>
 
 /**
  * Said when the catalogue cannot separate the two beds' plantings by light demand: the ordering
- * is still the thing worth saying, so it is said without naming groups rather than dropped
+ * is still the thing worth saying, so it is said without naming groups. It is never dropped
  */
 const GENERIC_DEMAND =
   'Crops differ in how much light they want, and this design placed them by it.'
@@ -127,10 +127,10 @@ export const COLD_OPEN_TITLE = 'Where a bed is placed in this range impacts what
  *
  * Null is the whole error surface: no light field yet, fewer than two beds with light in them,
  * or a brightest and a dimmest bed that print the same figure. Nothing here is ever a placeholder
- * or a rounded-up guess, because the surface exists to argue that this app measures shade rather
- * than assuming it, and a made-up number on it would refute that argument by itself.
+ * or a rounded-up guess, because the surface exists to argue that this app measures shade and
+ * never assumes it, and a made-up number on it would refute that argument by itself.
  *
- * "The darkest ground" rather than a named colour: `state/colormap.ts` says viridis is used
+ * "The darkest ground," not a named colour: `state/colormap.ts` says viridis is used
  * because its lightness ramp is monotonic, so the dimmest cells are the darkest ones whatever
  * the range the legend is scaled to, and that stays true if the ramp's hues are ever changed
  */

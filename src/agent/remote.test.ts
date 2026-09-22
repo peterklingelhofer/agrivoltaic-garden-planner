@@ -29,7 +29,7 @@ import type { RouteContext } from './understand'
  *
  * The failures worth holding here are the ones where the route is reachable and wrong: a model
  * naming a crop this catalogue has never heard of, an intent the app cannot carry out, a 502
- * that must cost one sentence rather than the conversation. Every one of them ends with the
+ * that must cost one sentence and stop there. Every one of them ends with the
  * phrase table answering the turn, which is what makes an understander that talks to a server
  * safe to put behind a seam nothing else can see
  */
@@ -230,8 +230,8 @@ describe('when the edge cannot answer', () => {
   })
 
   /*
-    The one failure that reaches the panel. A spent allowance is every turn for the rest of the
-    day rather than this one, so the panel says so and stops using this router
+    The one failure that reaches the panel. A spent allowance fails every turn for the rest of the
+    day, this one included, so the panel says so and stops using this router
   */
   it('throws where the day is spent, which the panel answers differently', async () => {
     const helper = answering(() => json(503, { error: 'allowance' }))
@@ -252,7 +252,7 @@ describe('when the edge cannot answer', () => {
  * The drift the arrangement can have, in one test.
  *
  * `workers/proxy/helper.ts` states the intents the model may choose from, and it states them
- * again rather than importing them, because `tsconfig.worker.json` includes only `workers` and
+ * again, by hand, because `tsconfig.worker.json` includes only `workers` and
  * the edge and the browser share no module. A test file may read both, so this is where the two
  * copies are held level: an intent added to `intent.ts` and not to the edge is a label the model
  * is never offered, and one added to the edge alone is a label the browser throws away
@@ -289,7 +289,7 @@ describe('what the model is told about the garden', () => {
   /*
     Sixty crops in one bed is not a garden anybody has, and it is the shape that matters: the
     names are the one part of this summary that grows without limit, and the edge refuses a
-    summary over its cap outright rather than trimming it
+    summary over its cap outright
   */
   it('drops crop names rather than sending a summary the edge refuses', () => {
     const state = getAppState()

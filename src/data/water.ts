@@ -390,7 +390,7 @@ export const stageCalendarFor = (plantingDay: number, seasonDays: number): Stage
 
 /**
  * FAO-56 chapter 9 (allen1998-fao56) derives the basal coefficient from ground cover and
- * height instead of a per-crop table. Its equation 97 turns leaf area index into effective
+ * height. Its equation 97 turns leaf area index into effective
  * cover as 1 - exp(-0.7 LAI), with one extinction coefficient for every crop, and equation 98
  * raises the cover to 1 / (1 + h) before scaling the coefficient. This function is the cover
  * term of equation 97 with the catalogue's per-habit `lightExtinctionK` in place of FAO-56's
@@ -602,7 +602,7 @@ const percent = (value: number): string => `${Math.round(value * 100)}%`
  *
  * It asks for the index alone, so a surface holding a year's index without the
  * whole limitation behind it (a season's `YearSummary`) can ask this same
- * question rather than comparing against the threshold itself
+ * question
  */
 export const shadeBenefitScale = (limitation: Pick<WaterLimitation, 'index'>): number =>
   clamp((limitation.index - WATER_LIMITED_INDEX) / (1 - WATER_LIMITED_INDEX), 0, 1)
@@ -624,7 +624,7 @@ export const describeWaterLimitation = (limitation: WaterLimitation): string =>
   `${limitation.limited ? 'limited' : 'not limited'}, index ${limitation.index.toFixed(2)} (${percent(limitation.band.interval.lower)} to ${percent(limitation.band.interval.upper)}), rainfall ${limitation.rainfallMm.toFixed(0)} mm against ${limitation.referenceEtMm.toFixed(0)} mm reference ET by ${ET0_METHOD_LABEL[limitation.method]}`
 
 /**
- * The agrivoltaics document sections 3.3 to 3.6: the soil-moisture and air-temperature responses
+ * The soil-moisture and air-temperature responses
  * flip sign between arid and temperate sites, and frost, dew and wind shelter
  * have no quantified figure anywhere in the corpus
  */

@@ -200,7 +200,7 @@ describe('the weather, cached at the edge', () => {
   })
 
   /**
-   * A rate limit is forwarded rather than swallowed, and `withCache` holds it for
+   * A rate limit is forwarded to the caller, and `withCache` holds it for
    * `TTL_ERROR_SECONDS`, which turns a stampede into one upstream request a minute
    */
   it('forwards a rate limit as a rate limit', async () => {
@@ -234,7 +234,7 @@ describe('handleRoute upstream construction', () => {
   /**
    * The upstream wants a real address on every request and the client never sends one, so
    * without this the NSRDB leg answered 400 to every caller. Attached the way the key is, and a
-   * caller's own `email` is replaced rather than joined
+   * caller's own `email` is overwritten entirely
    */
   it('injects the nsrdb email server-side and never trusts a client-supplied one', async () => {
     passthroughCaches()
@@ -479,8 +479,8 @@ describe('corsHeaders', () => {
  * Three things this leg exists for, and each has a test below: it identifies the application in
  * the way the OSM usage policy asks and a browser is forbidden from doing; it shares one answer
  * between every visitor asking the same question, which is what "cache where possible" means
- * when the callers are thirty people in a room; and it keys on the words rather than on a point,
- * because a search is the question that produces a point and has none of its own
+ * when the callers are thirty people in a room; and it keys on the words, because a search is
+ * the question that produces a point and has none of its own
  */
 describe('the geocoders, which have a policy rather than a rate limit', () => {
   it('routes the three paths src/data actually builds', () => {
@@ -630,8 +630,8 @@ describe('the geocoders, which have a policy rather than a rate limit', () => {
 })
 
 /**
- * The electricity price, which is the first route here that answers about a state rather than a
- * point, and the second that holds a credential a browser must never see
+ * The electricity price, which is the first route here that answers about a whole state, and
+ * the second that holds a credential a browser must never see
  */
 describe('the retail electricity price', () => {
   it('injects the eia key server-side and never trusts a client-supplied one', async () => {

@@ -1,15 +1,14 @@
 import type { DliClass } from '../types/crop'
 
 /**
- * A picture for every crop, drawn rather than photographed, and keyed on a class rather than on
- * the crop.
+ * A picture for every crop, drawn, and keyed on a class of crop.
  *
  * The gap this closes is the one a beginner names first: choosing vegetables from a list of 182
  * words is the last place this app asks a gardener to read where it could let them look, and it is
  * felt hardest on a phone, where the list IS the screen.
  *
  * Photographs were the obvious answer and are the wrong one here, for a reason that is this
- * project's own rather than a matter of taste. A photograph captioned "cucumber" is a claim about
+ * project's own. A photograph captioned "cucumber" is a claim about
  * a specimen: which cultivar, grown where, at what stage. Nothing in the citation corpus backs
  * that claim, and everything else on these rows traces to something. A silhouette keyed on the
  * DLI class claims only "this is a fruiting vine", which is exactly what `dliClass` already
@@ -20,7 +19,7 @@ import type { DliClass } from '../types/crop'
  * crop already carries, the mapping is total by construction, and its 13 values happen to divide
  * the catalogue almost exactly the way a picture would: a leaf, a root, a pod, a bulb, an ear.
  *
- * Kept beside the component rather than in it, the way `scene-hint.ts` is: what a surface shows
+ * Kept beside the component, the way `scene-hint.ts` is: what a surface shows
  * can be read and tested without mounting anything
  */
 export type GlyphShape =
@@ -43,13 +42,12 @@ export type GlyphShape =
  * Drawn in a 16 by 16 box, in `currentColor`, so a glyph takes the colour of the row it sits in
  * and needs no second version for the dark scheme.
  *
- * Designed for the SILHOUETTE and not for the detail, because 16px is the size these are read at
- * and the job is to be told apart at a glance rather than to be admired. A first pass drew four
- * of the thirteen as a circle with something small on top: strawberry, tomato, onion and cabbage
- * came out as the same blob, which is precisely the failure that makes a picture worth less than
- * the word it sits beside. So the outlines are deliberately spread across shapes: a round fruit,
- * a pointed one, a fan, a fat diagonal, a crescent, a spiral, a tall ear, a cluster of separated
- * circles
+ * Designed for the SILHOUETTE, because 16px is the size these are read at and the job is to be told
+ * apart at a glance. Drawn as a circle with something small on top, strawberry, tomato, onion and
+ * cabbage come out as the same blob, which is precisely the failure that makes a picture worth less
+ * than the word it sits beside. So the outlines are deliberately spread across shapes: a round
+ * fruit, a pointed one, a fan, a fat diagonal, a crescent, a spiral, a tall ear, a cluster of
+ * separated circles
  */
 export const CROP_GLYPH: Readonly<Record<DliClass, readonly GlyphShape[]>> = {
   // a sprig: one stem, two leaves, low and wide
@@ -88,9 +86,8 @@ export const CROP_GLYPH: Readonly<Record<DliClass, readonly GlyphShape[]>> = {
   ],
   /*
     A head with the folds of its leaves, and the folds run TOP TO BOTTOM for a reason: two
-    concentric arcs opening the same way inside a circle draw a face, which is what the first
-    attempt did, and a spiral at this size drew a hook. Outlined rather than solid, which is the
-    other half of telling it from the tomato below
+    concentric arcs opening the same way inside a circle draw a face, and a spiral at this size
+    draws a hook. Left as an outline, which is the other half of telling it from the tomato below
   */
   brassicas: [
     { kind: 'circle', cx: 8, cy: 9.2, r: 4.6 },
@@ -126,7 +123,7 @@ export const CROP_GLYPH: Readonly<Record<DliClass, readonly GlyphShape[]>> = {
     { kind: 'path', d: 'M8 4.8c1.1-1.1 2.1-1.7 3.2-2' },
     { kind: 'path', d: 'M8 4.8C6.9 3.7 5.9 3.1 4.8 2.8' },
   ],
-  // a crescent rather than a lens, because a lens is a leaf, with the seeds showing through it
+  // drawn as a crescent, because a lens shape reads as a leaf, with the seeds showing through it
   'grain-legumes': [
     { kind: 'path', d: 'M3.4 13c0-5.4 4.2-9.2 9.6-9.8.4 5.4-3.6 9.4-9.6 9.8z' },
     { kind: 'circle', cx: 5.6, cy: 11.2, r: 0.85, filled: true },

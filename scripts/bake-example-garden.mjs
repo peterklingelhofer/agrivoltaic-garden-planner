@@ -66,7 +66,7 @@ const RASTER_OUT = join(PUBLIC_DATA, `example-garden-${BAND}.raster`)
 /**
  * 15:30 local (19:30 UTC) on 12 August. Late enough in the afternoon that each row throws a
  * shadow clear of its own footprint, so the alternating band the array actually makes is the
- * subject of the shot rather than a smear directly under the modules; late enough in the season
+ * subject of the shot; late enough in the season
  * that a perennial is at full size and an annual sown in May is in its harvest window
  */
 const SCENE_TIME_UTC_MILLIS = Date.UTC(2024, 7, 12, 19, 30, 0)
@@ -221,11 +221,7 @@ const array = derive.withDerived({
     ...defaults.DEFAULT_ROW_GEOMETRY,
     // rows run east-west and are spaced north-south, which is what the bed northings below are
     // measured against: row centres land on -9, 0 and +9. `rowAzimuthDeg` is the direction the
-    // rows RUN, so east-west is 90; it read 180 until 2026-09-01, when `panelSnapshot` had its
-    // two horizontal axes exchanged and 180 was what produced the arrangement this comment
-    // describes. With that fixed, 180 would space the rows east-west and leave every bed in the
-    // same place relative to them, which is how this was noticed: the four beds came back
-    // within 3.4 mol/m2/day of each other instead of spanning the array
+    // rows RUN, so east-west is 90
     rowAzimuthDeg: degrees(90),
     rowCount: 3,
     pitchM: meters(9),
@@ -415,8 +411,8 @@ if (stray.length > 0) throw new Error(`not persisted keys: ${stray.join(', ')}`)
 const encoded = exampleRaster.encodeExampleRaster(result.raster)
 const quantisationErrorMolM2Day = exampleRaster.quantisationErrorOf(result.raster)
 
-// never defaulted: a build that renamed the constant must fail here rather than stamp a version
-// the app would then happily migrate from
+// never defaulted: a build that renamed the constant must fail here. It must not silently stamp
+// a version the app would then happily migrate from
 if (typeof persistTypes.SCHEMA_VERSION !== 'number') {
   throw new Error('src/types/persist.ts no longer exports SCHEMA_VERSION')
 }

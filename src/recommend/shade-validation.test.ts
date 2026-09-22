@@ -16,19 +16,18 @@ import { laubCentralRelativeYield, laubRelativeYield } from './yield'
 /**
  * Checks this app's shade-to-yield response against published field trials, crop by crop.
  *
- * `src/recommend/yield.ts` has no external oracle of its own: its only test before this file
- * (`yield.test.ts`) checks that the code agrees with itself. This file drives the same functions
- * `season.ts` calls in production (`laubCurve`, `laubCentralRelativeYield`, `laubRelativeYield`)
- * at the shade level a real trial ran at, for the real crop the trial grew, and compares. Where
- * the app agrees with a trial, the assertion says so with both numbers close together. Where it
- * cannot, per Decision Record 6 (the shade-benefit pathway) and Decision Record 14 (a season's
- * realised yield), the test pins the known gap rather than failing red with no explanation: the
- * point is a documented expectation a reader can see the reason for, not a passing assertion that
- * hides a disagreement or a red build that explains nothing
+ * `src/recommend/yield.ts` has no external oracle of its own: its other test (`yield.test.ts`)
+ * checks that the code agrees with itself. This file drives the same functions `season.ts` calls in
+ * production (`laubCurve`, `laubCentralRelativeYield`, `laubRelativeYield`) at the shade level a
+ * real trial ran at, for the real crop the trial grew, and compares. Where the app agrees with a
+ * trial, the assertion says so with both numbers close together. Where it cannot, per Decision
+ * Record 6 (the shade-benefit pathway) and Decision Record 14 (a season's realised yield), the test
+ * pins the known gap: the point is a documented expectation a reader can see the reason for, which
+ * beats both a passing assertion that hides a disagreement and a red build that explains nothing
  *
- * Every number below was checked against the cited primary source. Two trials
+ * Every number below is checked against the cited primary source. Two trials
  * could not be reduced to a single verified shade level or yield ratio and are named in
- * `docs/VALIDATION.md` instead of encoded here: Marrou et al. 2013b's cucumber result (juvenile
+ * `docs/VALIDATION.md`: Marrou et al. 2013b's cucumber result (juvenile
  * growth rate, not a final yield ratio) and Amaducci et al. 2018's rainfed maize gain (real and
  * qualitative, but the paper reports "higher and more stable," not a number this file can pin)
  */
@@ -66,13 +65,13 @@ const closeToPercent = (
 
 describe('the Laub et al. 2022 anchor data, read against the primary paper', () => {
   // laub2022-shade-meta, Agronomy for Sustainable Development 42:51, doi 10.1007/s13593-022-00783-7.
-  // Read directly from the open-access PDF. The
+  // Read directly from the open-access PDF itself. The
   // paper states its own headline numbers in Results section 3.2, rounded to the nearest percent;
   // laub.generated.ts claims these are verbatim Table S2 transcriptions, and this block checks
   // seven of the nine crop groups' 40% RSR figures against the paper's own prose. Two groups
   // (c3-cereals, tubers-root-crops) are not spelled out as prose sentences in the main text, only
-  // in Table S2 itself, which lives in a separate supplementary .docx,
-  // so they are left to the existing derivation rather than claimed as freshly verified here
+  // in Table S2 itself, which lives in a separate supplementary .docx not fetched here,
+  // so they are left to the existing derivation
   const FORTY_RSR_PERCENT: Fraction = 0.4 as Fraction
 
   it.each([
@@ -207,9 +206,9 @@ describe('the Laub et al. 2022 anchor data, read against the primary paper', () 
   it('reproduces the ANOVA table (Table 1, final reduced model) to the decimal the paper prints', () => {
     // Read directly off the printed table: RSR num/den DF 1/33.18, F 0, p 0.9713; RSR-squared
     // 1/31.09, F 12.05, p 0.0015; RSR x crop type 8/55.22, F 7.16, p<.0001. This is the statistic
-    // behind the agrivoltaics document's claim that a linear "% shade = % yield loss" model is empirically wrong and
-    // that crop group has to be a first-class input, so it is worth pinning exactly rather than
-    // trusting the transcription
+    // behind Laub et al. 2022's finding that a linear "% shade = % yield loss" model is
+    // empirically wrong and that crop group has to be a first-class input, so it is worth
+    // pinning exactly
     expect(LAUB_ANOVA.RSR).toEqual({ numDF: 1, denDF: 33.18, F: 0, p: 0.9713 })
     expect(LAUB_ANOVA.RSR2).toEqual({ numDF: 1, denDF: 31.09, F: 12.05, p: 0.0015 })
     expect(LAUB_ANOVA.RSRxCropType).toEqual({
@@ -227,8 +226,8 @@ describe('Marrou et al. 2013 (lettuce, Montpellier FR, irrigated, not water-limi
   // incoming radiation (RSR 50% and 30%). Water and nitrogen were held non-limiting by design
   // (marrou2013-microclimate states this explicitly), so this is the one trial in this file that
   // exercises the gate's OFF position: waterLimited is false. The paper's own headline finding,
-  // corroborated by two independent secondary sources in addition to this
-  // project's own the agrivoltaics document extraction: "the relative lettuce yield at harvest was equal or higher
+  // corroborated by two independent secondary sources, in addition to this project's own
+  // reading of the paper: "the relative lettuce yield at harvest was equal or higher
   // than the available relative radiation, in all cases." That is a falsifiable inequality, not a
   // single number, and it is what this block checks
   it.each([
@@ -251,7 +250,7 @@ describe('Marrou et al. 2013 (lettuce, Montpellier FR, irrigated, not water-limi
   it('is comfortably inside the trial finding rather than sitting right at the edge of it', async () => {
     // The inequality above passes with room to spare: the leafy-vegetables curve predicts a
     // markedly SMALLER loss than the paper's own floor at both tested shade levels, which is a
-    // real point of agreement worth stating rather than leaving as a bare pass. Both are
+    // real point of agreement worth stating. Both are
     // shade-tolerant results in the sense Laub's own three-way classification uses
     const catalog = await catalogPromise
     const lettuce = need(catalog, 'lettuce-head')
@@ -330,7 +329,7 @@ describe('Barron-Gafford et al. 2019 (chiltepin, jalapeno, cherry tomato, Biosph
     const maxUpperBand = Math.max(
       ...RSR_DOMAIN.map((rsr) => laubRelativeYield(curve, rsr, true).interval.upper),
     )
-    const gapMessage = `Barron-Gafford et al. 2019 measured chiltepin at 3x control and cherry tomato at 2x control (both P<0.01). This app's fruity-vegetables curve tops out at ${(maxCentral * 100).toFixed(1)}% central and ${(maxUpperBand * 100).toFixed(1)}% at the top of its own 95% band, across every RSR the app defines. The gap is real: Laub's meta-analysis pools mostly non-desert sites and cannot see the magnitude of relief a semi-arid, irrigated, high-VPD site gets from shade, which is exactly the caveat the agrivoltaics document section 2.2 already carries for this trial`
+    const gapMessage = `Barron-Gafford et al. 2019 measured chiltepin at 3x control and cherry tomato at 2x control (both P<0.01). This app's fruity-vegetables curve tops out at ${(maxCentral * 100).toFixed(1)}% central and ${(maxUpperBand * 100).toFixed(1)}% at the top of its own 95% band, across every RSR the app defines. The gap is real: Laub's meta-analysis pools mostly non-desert sites and cannot see the magnitude of relief a semi-arid, irrigated, high-VPD site gets from shade, the kind of relief Barron-Gafford's own 3x and 2x multiples measure directly`
     expect(maxCentral, gapMessage).toBeLessThan(2)
     expect(maxUpperBand, gapMessage).toBeLessThan(2)
   })
@@ -354,12 +353,11 @@ describe('Barron-Gafford et al. 2019 (chiltepin, jalapeno, cherry tomato, Biosph
 })
 
 describe('Weselek et al. 2021 (potato and wheat, Heggelbach DE, ~30% RSR, drought vs normal year)', () => {
-  // weselek2021-potato, Agron Sustain Dev 41:59. PAR reduced ~30% on average under the array (doc
-  // 02 section 2.2), two growing seasons: 2017 (normal rainfall) and 2018 (hot and dry). This app
+  // weselek2021-potato, Agron Sustain Dev 41:59. PAR reduced ~30% on average under the array,
+  // two growing seasons: 2017 (normal rainfall) and 2018 (hot and dry). This app
   // has no per-site, per-year water-limitation index for Heggelbach in either year (that needs the
   // site's real monthly rainfall and reference ET, which this test does not have and will not
-  // invent), so the correspondence below is an interpretive one stated plainly rather than a
-  // computed one: 2018 is read here as the water-limited season and 2017 as the not-water-limited
+  // invent), so the correspondence below is an interpretive one stated plainly: 2018 is read here as the water-limited season and 2017 as the not-water-limited
   // one, which is the paper's own framing of why the two years disagree in sign.
   //
   // The catalogue carries spring wheat, not winter wheat; Laub's c3-cereals group and this app's

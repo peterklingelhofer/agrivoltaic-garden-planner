@@ -7,7 +7,7 @@
  * The app opens on a worked example, and an example baked at 42 N is the wrong sun for a
  * visitor in Phoenix or Bergen. A browser will not say where it is without asking permission,
  * but it will say its time zone, and tzdb records a coordinate for every zone it defines. So the
- * band is READ from `zone.tab` rather than guessed from the name: "America/Denver" and
+ * band is READ from `zone.tab`: "America/Denver" and
  * "America/Phoenix" share a prefix and six degrees of latitude, and any table written by hand
  * from zone names would get pairs like that wrong.
  *
@@ -124,7 +124,7 @@ ${pointsBody}
 
 /**
  * The zone.tab zone nearest a point, by equirectangular distance: flat enough at this scale,
- * since all it has to do is rank ~400 named points rather than measure true distance in km. The
+ * since all it has to do is rank ~400 named points. The
  * longitude gap is scaled by the cosine of the mean latitude, so a degree of longitude counts for
  * less near the poles than at the equator, and wrapped into [-180, 180] so the antimeridian is not
  * a false half-world gap. Null only when the table above is empty.

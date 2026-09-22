@@ -35,11 +35,11 @@ const kinds = (utterances: readonly Utterance[]): readonly string[] =>
 /**
  * The real actions, captured once before any test can stub one.
  *
- * `resetAppStore` writes `initialData()`, which is the DATA half of the store and not the
- * actions, so an action replaced by `useAppStore.setState({ applyDesign })` survives every reset
- * after it and is still in place for the next test file section. That cost an hour: a later test
- * called the real `applyDesign` name and got a `vi.fn` left behind by an earlier one, and the
- * garden it asserted on was the starting plot rather than the applied design
+ * `resetAppStore` writes `initialData()`, which is the DATA half of the store and not the actions,
+ * so an action replaced by `useAppStore.setState({ applyDesign })` survives every reset after it
+ * and is still in place for the next test file section. Without this capture, a later test that
+ * calls the real `applyDesign` name gets a `vi.fn` left behind by an earlier one, and the garden it
+ * asserts on is still the starting plot
  */
 const REAL = {
   applyDesign: getAppState().applyDesign,
@@ -169,10 +169,10 @@ describe('the one thing the form cannot do', () => {
   })
 
   /**
-   * The growing step is a list of categories. "I want tomatoes and courgettes" typed while it is
-   * on screen is an answer to it, and `slotFilled` says so, and it used to record "vegetables"
-   * and drop both names on the floor. A played session then filled the beds with lingonberry and
-   * never mentioned the tomatoes, because by then nothing knew they had been asked for
+   * The growing step is a list of categories. "I want tomatoes and courgettes" typed while it is on
+   * screen is an answer to it, and `slotFilled` says so, and recording only "vegetables" would drop
+   * both names on the floor. The beds could then fill with lingonberry and never mention the
+   * tomatoes, because by then nothing would know they had been asked for
    */
   it('records the crops a sentence names as well as the category it answers', async () => {
     const answer = await act(
@@ -196,9 +196,9 @@ describe('what became of what they asked for', () => {
   /**
    * The loop this whole surface exists to close.
    *
-   * A played session said "I want tomatoes and courgettes", filled the beds, and got a garden of
-   * lingonberry: six lines about blueberries and coreopsis nobody had mentioned, and not one word
-   * about the tomatoes. Asked afterwards, the ranking answered instantly. The answer was there
+   * Say "I want tomatoes and courgettes" and fill the beds: the garden that comes back can be
+   * lingonberry, six lines about blueberries and coreopsis nobody mentioned, and no word
+   * about the tomatoes. Asked afterwards, the ranking answers instantly. The answer was there
    * the whole time and only the asking was left to somebody with no reason to think there was
    * anything to ask about
    */
@@ -359,7 +359,7 @@ describe('the questions the app could already answer', () => {
 
   /**
    * The annual energy run is never done by default, because there is no default figure. Being
-   * asked for one starts it and says so, rather than reporting a zero
+   * asked for one starts it and says so
    */
   it('starts the energy run when asked for a figure nobody has computed', async () => {
     const runEnergy = vi.fn()
@@ -517,9 +517,8 @@ describe('moving the panels', () => {
 
 describe('the things people say that are not about the garden', () => {
   /**
-   * A real session opened with "hiya" and the agent sent it to the geocoder, because the question
-   * about the place accepts any text as a possible place name. The same session ended with "ta"
-   * and was told it had not been followed
+   * The question about the place accepts any text as a possible place name, so "hiya" reaches the
+   * geocoder as a place guess, and "ta" at the end is told it had not been followed
    */
   it('answers a greeting with the question that was already on the table', async () => {
     const answer = await act(said('greeting'), context)

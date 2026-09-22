@@ -60,9 +60,9 @@ export const useOverlayPlayback = (): {
   }, [playing, setOverlayPlayback])
 
   /**
-   * Where to start is read here rather than inside the effect. Reading it in there would make it
+   * Where to start is read here. Reading it inside the effect instead would make it
    * a dependency, and the effect writes a month back on every tick, so following it would restart
-   * the year twice a second. A suppression comment would have hidden that rather than fixed it
+   * the year twice a second. A suppression comment would have hidden that without fixing it
    */
   const toggle = useCallback(() => {
     setPlaying((was) => {
@@ -76,7 +76,7 @@ export const useOverlayPlayback = (): {
 
   /**
    * Flipping the toggle mid-run must show up on the next paint, not the next tick, so the store
-   * is written here directly rather than left to the interval. Turning it on starts counting from
+   * is written here directly. The interval does not set it: turning it on starts counting from
    * whatever is on screen right now, since there is no earlier month for this run to have shown;
    * turning it off drops back to one month at a time without touching `playing` at all
    */

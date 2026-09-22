@@ -1,8 +1,8 @@
 /**
  * three's AgX, forwards and backwards, so a screenshot can be read as scene radiance.
  *
- * Nothing in the app imports this: it is the instrument, kept beside the pipeline it measures
- * rather than in the test that uses it, because a measurement of the shipped tone curve has to
+ * Nothing in the app imports this: it is the instrument, kept beside the pipeline it measures,
+ * separate from the test that uses it, because a measurement of the shipped tone curve has to
  * move whenever the shipped tone curve does.
  *
  * The renderer's output is display-referred: every pixel has been through the tone curve in

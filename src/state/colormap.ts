@@ -67,7 +67,7 @@ export const contourStep = (min: number, max: number): number => {
 /**
  * What a fully drawn iso-line multiplies the ramp colour under it by, in linear light.
  *
- * A multiple of the ramp colour rather than a colour of its own, so a line is a darker version
+ * A multiple of the ramp colour, so a line is a darker version
  * of the value it marks. `src/scene/colour.test.ts` pins that the result is nowhere near another
  * ramp entry, so no reader can mistake a contour for a lower reading, and
  * `e2e/overlay-colour.spec.ts` looks for exactly this colour in the rendered pixels

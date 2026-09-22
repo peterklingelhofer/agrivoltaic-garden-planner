@@ -1,10 +1,10 @@
 /**
  * Asks the deployed site what it is actually serving.
  *
- * The reason this exists rather than a curl in a runbook: `wrangler.jsonc` sets
+ * Why this is a script: `wrangler.jsonc` sets
  * `not_found_handling: "single-page-application"`, so the Worker answers EVERY unmatched path
- * with `index.html` and a 200. A missing asset is therefore not a 404 and never will be. Checked
- * against the live site on 2026-08-31:
+ * with `index.html` and a 200. A missing asset is therefore not a 404 and never will be. A curl
+ * command in a runbook would read that 200 and call it fine. Checked against the live site:
  *
  *     GET /models/Xenova/all-MiniLM-L6-v2/config.json  ->  200, content-type: text/html
  *     GET /definitely-not-a-real-path-xyz              ->  200, content-type: text/html
@@ -17,10 +17,9 @@
  *     bun run verify-deploy <url>           # somewhere else
  *     AGENT=on bun run verify-deploy        # expect a build that carries the agent
  *
- * The agent is NOT expected by default, because since 2026-09-03 `build:deploy` no longer turns
- * it on: the author tried the deployed chat and found it answered strangely and uselessly, so it
- * is off in production until it is worth someone's time. `AGENT=on` is for checking a deploy
- * somebody deliberately built with `VITE_AGENT=on`
+ * The agent is NOT expected by default, because `build:deploy` leaves it off, and it stays off in
+ * production until it is worth someone's time. `AGENT=on` is for checking a deploy somebody
+ * deliberately built with `VITE_AGENT=on`
  */
 
 const DEFAULT_URL = 'https://agrivoltaic-garden-designer.peterklingelhofer.workers.dev'
@@ -46,7 +45,7 @@ const get = async (path) => {
 const index = await get('/')
 if (index.status !== 200) failures.push(`the site answered ${String(index.status)}`)
 
-// the hashed entry bundle, read out of the served HTML rather than guessed from dist
+// the hashed entry bundle, read out of the served HTML
 const entry = /assets\/index-[A-Za-z0-9_-]+\.js/.exec(index.body)?.[0]
 if (entry === undefined) failures.push('no hashed entry bundle in the served index.html')
 else {

@@ -70,17 +70,16 @@ const warmMonths = (monthlyMeanTempC: readonly number[]): GrowingWindow => {
  * frost-free stretch does not reach three months gives its three warmest months, which is the
  * same rule the summer-only far north and a mountain top land on.
  *
- * Reads the frost curve directly rather than through `seasonAnchors` in
- * `src/recommend/calendar.ts`: this is `src/sim`, which may import only `src/types` (and other
- * `src/sim` modules), never `src/recommend` (`docs/ARCHITECTURE.md`, `biome.jsonc`'s
- * `noRestrictedImports`, enforced again by `src/sim/boundary.test.ts`). The two give the same
- * anchors for a bounded season; `seasonAnchors`' extra `origin` anchor exists only for the
- * frost-free case, where this function already takes the `warmMonths` branch instead.
+ * Reads the frost curve directly, the same calculation `seasonAnchors` in
+ * `src/recommend/calendar.ts` makes for a bounded season: this is `src/sim`, which may import
+ * only `src/types` and other `src/sim` modules (`docs/ARCHITECTURE.md`, `biome.jsonc`'s
+ * `noRestrictedImports`, enforced again by `src/sim/boundary.test.ts`).
+ * `seasonAnchors`' extra `origin` anchor exists only for the
+ * frost-free case, where this function already takes the `warmMonths` branch.
  *
  * The one definition: `src/data/growing-window.ts` re-exports this unchanged for the recommender
- * and the state layer. A drawn deciduous tree's leaf-on months no longer read this: they follow
- * the Growing Season Index instead, off the site's own weather rather than its frost record
- * (`src/sim/phenology.ts`, Decision Record 26)
+ * and the state layer. A drawn deciduous tree's leaf-on months don't read this: they follow the
+ * Growing Season Index, off the site's own weather (`src/sim/phenology.ts`, Decision Record 26)
  */
 export const growingWindowFor = (site: Site, percentile: ExceedancePercentile): GrowingWindow => {
   const curve = site.frost[0]

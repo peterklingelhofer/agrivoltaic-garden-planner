@@ -21,9 +21,9 @@ import type { ClimateNormals } from '../types/weather'
  *
  * What it is NOT, and this has not changed: a snow model. It reads monthly normals, so it knows
  * nothing about a particular winter, about melt and refreeze, about drifting, or about snow
- * lying on the modules rather than under them. It is a smooth seasonal weighting between two
- * surfaces the site plausibly has. The loss stack's own `snow` component, which is about covered
- * MODULES rather than covered ground, is a separate term and is still zero
+ * that settles on the modules themselves. It is a smooth seasonal weighting between two
+ * surfaces the site plausibly has. The loss stack's own `snow` component is a separate term for
+ * covered MODULES, and is still zero
  */
 
 const DAYS_PER_YEAR = 365
@@ -46,7 +46,7 @@ const SNOW_WET_MM = 35
 
 const clamp01 = (value: number): number => Math.min(1, Math.max(0, value))
 
-/** Linear between two monthly normals, so the year crosses a season rather than a step */
+/** Linear between two monthly normals, so the year crosses a season smoothly */
 const monthlyAt = (monthly: readonly number[], dayOfYear: number): number => {
   if (monthly.length !== 12) return Number.NaN
   const position = (wrapDays(dayOfYear - 1) / DAYS_PER_YEAR) * 12 - 0.5
@@ -64,8 +64,8 @@ const monthlyAt = (monthly: readonly number[], dayOfYear: number): number => {
  * -3 C or below reads fully covered where it is also wet enough; +2 C and above reads bare, which
  * is above freezing because a monthly MEAN of zero still has thaw in it.
  *
- * It returns 0 for a site with no normals rather than guessing, so a garden with no resolved site
- * gets summer ground and its unmodified cover albedo rather than an invented snowfield
+ * It returns 0 for a site with no normals, and never guesses, so a garden with no resolved site
+ * gets summer ground and its unmodified cover albedo
  */
 export const groundSnowCover = (
   monthlyMeanTempC: readonly number[],
@@ -90,7 +90,7 @@ const dayOfYearUtc = (millis: number): number => {
 /**
  * One snow fraction per hour of the year, on the timestamps the weather itself carries.
  *
- * Per hour rather than per day because the chain reads it per hour and a branch that recomputed
+ * Computed per hour because the chain reads it per hour, and a branch that recomputed
  * it inside the loop would be doing 8,760 date constructions to answer 365 questions
  */
 export const snowCoverSeries = (normals: ClimateNormals, utcMillis: Float64Array): Float32Array => {

@@ -20,9 +20,9 @@ export interface NoPanelsOutcome {
 
 /**
  * "Compare with no panels": the last season that ran, baked and run again with every array
- * pulled off the plot. Kept beside `simulation` rather than inside it, because it is never
+ * pulled off the plot. Kept beside `simulation`, because it is never
  * persisted, it never touches the real report, and it carries its own season number so a later
- * season leaves it provably out of date rather than silently describing the wrong year
+ * season leaves it provably out of date
  */
 export interface NoPanelsComparison {
   readonly season: number
@@ -43,8 +43,8 @@ export const historyBeforeSeason = (
 ): readonly SeasonRecord[] => history.filter((record) => record.season !== season)
 
 /**
- * The exact year a report ran on, so the comparison bakes against the same weather rather than
- * whatever the year picker currently says. Null only when the report names a measured year that
+ * The exact year a report ran on, so the comparison bakes against the same weather the report
+ * itself used and never drifts with the year picker. Null only when the report names a measured year that
  * is no longer in the record it is checked against, which a site re-resolved since would cause
  */
 export const seasonYearOf = (

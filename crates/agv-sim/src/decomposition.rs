@@ -39,8 +39,8 @@ pub struct DecompositionSample {
     pub extraterrestrial_normal_wm2: f64,
 }
 
-/// GHI as well as the split, because the closure test zeroes all three below the horizon and the
-/// zeroed GHI is an output rather than a detail.
+/// GHI as well as the split, because the closure test zeroes all three below the horizon, and
+/// the zeroed GHI belongs in the output.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct IrradianceComponents {
     pub ghi_wm2: f64,
@@ -121,8 +121,8 @@ pub fn erbs_diffuse_fraction(kt: f64) -> f64 {
 
 /// Maxwell 1987 (SERI/TR-215-3087), transcribed from `pvlib.irradiance._disc_kn`.
 ///
-/// Refused above 87 degrees of zenith rather than extrapolated: the fit has no support there, and
-/// the beam component at that elevation is a rounding error on the day's total anyway.
+/// Refused above 87 degrees of zenith: the fit has no support there, and the beam component at
+/// that elevation is a rounding error on the day's total anyway.
 pub fn disc_dni(
     ghi: f64,
     extraterrestrial_normal: f64,
@@ -160,9 +160,8 @@ pub fn disc_dni(
 
 /// The series DIRINT reads, mirroring `DirintInput` in the TypeScript.
 ///
-/// `precipitable_water_cm` is `None` here and in the TypeScript, which selects the table's
-/// unassigned-water bin. Deriving it from dew point is a v2 upgrade on both sides; until it is
-/// done on both, doing it on one would be a divergence rather than an improvement.
+/// `precipitable_water_cm` is `None` where `decompose` builds this, and `None` selects the table's
+/// unassigned-water bin. Deriving it from dew point is a v2 upgrade
 pub struct DirintInput<'a> {
     pub ghi: &'a [f64],
     pub zenith_deg: &'a [f64],
@@ -321,7 +320,7 @@ fn apparent_solar_time_hours(utc_millis: f64, utc_offset_hours: f64) -> f64 {
 
 /// Haurwitz 1945 clear-sky GHI.
 ///
-/// Ineichen-Perez with Linke turbidity is the v2 upgrade, recorded in the solar geometry document section 2.3.
+/// Ineichen-Perez with Linke turbidity is the v2 upgrade (Decision Record 5b).
 fn haurwitz_clear_sky_ghi(cos_zenith: f64) -> f64 {
     if cos_zenith > 0.0 {
         1098.0 * cos_zenith * (-0.059 / cos_zenith).exp()

@@ -14,7 +14,7 @@
  *   sixteen-sample occlusion pass to move a leaf is most of the frame's cost spent on none of
  *   its content.
  *
- * A module-level flag rather than store state on purpose: this is consumed inside the render
+ * A module-level flag, on purpose: this is consumed inside the render
  * loop, once per frame, and putting it in the store would make every wind tick a React render
  * of everything subscribed to the store. It is written by whatever asked for the frame and read
  * exactly once by `RenderPipeline`, which clears it.

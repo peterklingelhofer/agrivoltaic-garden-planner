@@ -69,7 +69,7 @@ const annualSeries = (perCell: (month: number, cell: number) => number): Float32
 }
 
 // The under-array series is scaled down from the open-sky one so shading is a real,
-// month-varying fraction rather than a constant, which is what a shade band sweeping through the
+// month-varying fraction, which is what a shade band sweeping through the
 // year would actually look like
 const accumulationOf = (scale: number, svf: number): AccumulationResult => ({
   beamWhPerM2: annualSeries((month, cell) => scale * beamOf(month, cell)),

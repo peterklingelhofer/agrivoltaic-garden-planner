@@ -276,7 +276,7 @@ interface FrostDay {
  *
  * A half-year with no frost keeps its sentinel, the first or last day of the rotated year, so
  * the pick has a day number to sort on; a percentile whose pick lands on both sentinels is
- * marked `frostFree` rather than read as a frost on those two days
+ * marked `frostFree`
  */
 export const frostExceedanceCurve = (
   years: readonly Float32Array[],

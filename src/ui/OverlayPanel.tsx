@@ -20,12 +20,12 @@ const CHANNELS: readonly (readonly [OverlayChannel, string])[] = [
 ]
 
 /**
- * The option labels are already words rather than acronyms, and a beginner walk-through found
- * that the words are not enough on their own: nothing on screen said what mol/m²/d counts, what
- * RSR is short for, or what "sky view" is a view of. Said here, beside the control that picks the
- * channel, because that is where the choice is made and there is only one of them on screen at a
- * time. The comparisons are ordinal on purpose: this tool's own disclosure holds that the ranking
- * of crops by light demand is sound while the per-crop numbers are provisional
+ * The option labels are already words, with no acronym in sight, and the words alone are not
+ * enough: nothing on screen says what mol/m²/d counts, what RSR is short for, or what "sky view" is
+ * a view of. Said here, beside the control that picks the channel, because that is where the choice
+ * is made and only one channel is on screen at a time. The comparisons are ordinal on purpose: this
+ * tool's own disclosure holds that the ranking of crops by light demand is sound while the per-crop
+ * numbers are provisional
  */
 const CHANNEL_HELP: Readonly<Record<OverlayChannel, string>> = {
   dli: 'Daily light integral (DLI), counted in mol/m²/d: all the usable light that lands on a patch of ground over one day, added up. The bigger the number, the more a plant there has to work with. Salad leaves get by on far less of it than a tomato does.',
@@ -93,9 +93,8 @@ export const OverlayPanel = (): ReactElement => {
         options={CHANNELS}
         onChange={(channel) => setOverlay({ channel })}
       />
-      {/* a definition of the selected channel, moved behind the InfoTip rather than sitting on
-          the face as a standing paragraph: see the note further down for why it stayed OUT of
-          the overlay canvas legend rather than moving there instead */}
+      {/* a definition of the selected channel, behind the InfoTip: see the note further down
+          for why it stays OUT of the overlay canvas legend */}
       <InfoTip label={channelLabel} testId="info-overlay-channel">
         {CHANNEL_HELP[overlay.channel]}
       </InfoTip>

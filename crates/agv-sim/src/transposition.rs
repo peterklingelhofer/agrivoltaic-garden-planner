@@ -173,7 +173,7 @@ mod tests {
         assert!((isotropic_transposition(&input).sky_diffuse_wm2 - want).abs() < 1e-9);
     }
 
-    /// With no diffuse there is no sky term at all, and Perez short-circuits rather than dividing
+    /// With no diffuse there is no sky term at all, and Perez short-circuits to avoid dividing
     /// by zero.
     #[test]
     fn no_diffuse_means_no_sky_diffuse_and_no_division_by_zero() {

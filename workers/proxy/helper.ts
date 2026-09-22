@@ -21,7 +21,7 @@ export const HELPER_PATH = '/api/proxy/helper'
  * Llama 3.3 70B in its fp8 fast form, which is on Cloudflare's list of models that honour
  * `response_format`. `@cf/meta/llama-3.1-8b-instruct-fast` is the cheap alternative and is about
  * six times less Neurons a turn; `HELPER_MODEL` swaps between them without a code change, because
- * which one is affordable is a fact about the account rather than about the routing
+ * which one is affordable is a fact about the account
  */
 export const DEFAULT_HELPER_MODEL = '@cf/meta/llama-3.3-70b-instruct-fp8-fast'
 
@@ -38,8 +38,8 @@ export const CROP_ID_LIMIT = 60
  * Every intent the agent can carry out, with a line saying what each one means.
  *
  * The ids are the closed list in `src/agent/intent.ts` and the `means` lines are written from
- * that table and from what `act.ts` does with each one. They are duplicated here rather than
- * imported because `tsconfig.worker.json` includes only `workers`, so the edge and the browser
+ * that table and from what `act.ts` does with each one. They are duplicated here, not
+ * imported, because `tsconfig.worker.json` includes only `workers`, so the edge and the browser
  * share no module: `src/agent/remote.test.ts` compares the two lists as sets and fails the moment
  * one grows an intent the other has not heard of, which is the drift this arrangement can have
  */
@@ -132,13 +132,14 @@ const SLOT_NAMES: readonly string[] = [
 ]
 
 /**
- * The shape the answer has to arrive in, handed to the model rather than hoped for.
+ * The shape the answer has to arrive in, handed to the model.
  *
  * JSON mode is what makes a language model usable at this seam at all. The agent's whole design
  * is a closed list of things a sentence can mean, and the failure it guards against is a model
  * inventing a crop, a number or a reassurance; a schema the decoder is constrained to means the
  * model chooses among the same 35 labels the phrase table does. It is still validated on arrival,
- * on both sides, because a constrained decoder is a promise from a service rather than a proof
+ * on both sides, because a constrained decoder is a promise from a service. A service can still
+ * break its promise, so this checks anyway
  */
 export const HELPER_SCHEMA = {
   type: 'object',
@@ -174,7 +175,7 @@ export const HELPER_SCHEMA = {
  * What the model is told about the app before it is shown a sentence.
  *
  * Long, and deliberately so. Every misreading the two local routers ever made came from a missing
- * piece of context rather than from weak language understanding: a sentence about clay soil was
+ * piece of context. The language understanding itself was fine each time: a sentence about clay soil was
  * geocoded because nothing said soil is out of scope, and "Amherst, Massachusetts" reached the
  * compliance check because nothing said a place name is a place name. Stating what the app does,
  * what each label means and what each slot holds is cheaper than tuning around any of that
@@ -291,7 +292,7 @@ const asMember = (value: unknown, allowed: readonly string[]): string | null =>
 /**
  * The model's slots, kept only where they are the type and the value the app can act on.
  *
- * A slot the model got wrong becomes null rather than sinking the whole reading, because the
+ * A slot the model got wrong becomes null, and never sinks the whole reading, because the
  * intent is the load-bearing half and a half-filled reading is the normal, useful case that
  * `Slots` was written for. The crops are the exception worth stating: they are narrowed to the
  * ids this request actually sent, so a plausible invented crop name cannot reach the catalogue
@@ -346,7 +347,7 @@ const readAnswer = (answer: unknown): Record<string, unknown> | null => {
 /**
  * The one failure that is not a fault: the day's Neurons are spent.
  *
- * Cloudflare fails a request outright once the free allowance is gone rather than billing for it,
+ * Cloudflare fails a request outright once the free allowance is gone, and never bills for it,
  * so this arrives as a thrown error with the reason in its message. It is told apart from a
  * genuine model failure because the panel answers them differently: a model failure is one turn
  * read literally, and a spent allowance is every turn for the rest of the day

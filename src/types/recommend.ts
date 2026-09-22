@@ -98,7 +98,7 @@ export interface CropRecommendation {
   readonly light: SeasonLight
   readonly outcome: RecommendationVerdict
   readonly supportingRules: readonly ScoreableCompanionRule[]
-  /** Preconditions from the applied rules' scope, rendered inline per the horticulture document rule 4 */
+  /** Preconditions from the applied rules' scope, rendered inline */
   readonly requiresManagement: readonly string[]
 }
 

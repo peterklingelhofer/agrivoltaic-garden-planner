@@ -104,7 +104,7 @@ test('the water panel says what it modelled, per bed, and discloses every unsour
   )
   await expect(page.getByTestId('list-water-band-basis').locator('li').first()).toBeVisible()
 
-  // the shade pathway states whether it is on and why, rather than silently applying
+  // the shade pathway states whether it is on and why, without silently applying
   const shade = page.getByTestId('readout-water-shade-benefit')
   await expect(shade).toHaveAttribute('data-active', /^(true|false)$/)
   await expect(shade).toHaveAttribute('data-scale', /^[\d.]+$/)
@@ -136,7 +136,7 @@ test('the water panel says what it modelled, per bed, and discloses every unsour
   await expect(page.getByTestId('control-water-bed')).toHaveValue(String(second))
   await expect(page.getByTestId('readout-water-irrigation-open')).not.toBeEmpty()
 
-  // removing a bed removes its balance rather than leaving a stale one behind
+  // removing a bed removes its balance too, leaving nothing stale behind
   await step(page, 'ground')
   await openFold(page, 'details-ground-beds')
   await page.getByTestId('control-bed-select').selectOption(String(second))
@@ -270,7 +270,7 @@ test('compliance says the simulation has not run rather than rendering an empty 
 }) => {
   await openApp(page, { siteUnreachable: true })
   await step(page, 'check')
-  // and offers the bake rather than naming a panel two down the stepper for the visitor to find
+  // and offers the bake here, so the visitor never has to find the light step four steps up
   await expect(page.getByTestId('status-compliance')).toContainText(/hasn't been computed yet/i)
   await expect(page.getByTestId('status-compliance-run')).toBeVisible()
   for (const regime of REGIMES) {

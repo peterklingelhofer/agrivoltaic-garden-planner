@@ -36,7 +36,7 @@ describe('qualityFor', () => {
 
   /**
    * The occlusion is a correction to how bright shaded ground is, not an ornament, so the low
-   * tier gets a blurrier estimate of the same quantity rather than none of it. Off is a choice
+   * tier still gets a blurrier estimate of the same quantity. Off is a choice
    * the grower makes in the panel, and it is the only way to be without it
    */
   it('degrades the sky occlusion rather than dropping it', () => {

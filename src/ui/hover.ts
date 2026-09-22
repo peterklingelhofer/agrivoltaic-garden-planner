@@ -18,7 +18,7 @@ const bedOf = (plot: GardenPlot | null, target: HoverTarget): Bed | undefined =>
  *
  * Nothing here is computed: every figure is read off the design or the catalogue, because a
  * tooltip that derived its own numbers would be a second place for them to disagree with the
- * panel beside it. It returns null for a target that is no longer in the plot rather than
+ * panel beside it. It returns null for a target that is no longer in the plot, never
  * naming something that has been removed
  */
 export const describeHover = (
@@ -47,8 +47,9 @@ export const describeHover = (
   const bed = bedOf(plot, target)
   if (bed === undefined) return null
   if (target.kind === 'bed') {
-    // named rather than counted: a hover flashed "3 plantings" and a walk-through never learned
-    // one of their names. Four is a tooltip's worth; past that the rest are counted, not listed
+    // the plantings are named, because a tooltip that only says "3 plantings" never lets anyone
+    // learn the names. Four is a tooltip's worth; past that the rest are only counted. They are not
+    // listed
     const names = bed.plantings.map((planting) => cropName(catalog, planting.cropId))
     const shown = names.slice(0, 4).join(', ')
     return {

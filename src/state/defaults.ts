@@ -47,23 +47,13 @@ export const DEFAULT_EFFECTS: EffectSettings = {
 }
 
 /**
- * On, both of them, and the argument that had them off is worth stating because it was a good one.
- *
- * It ran: a preference nobody expressed is not a preference, and asking for natives with no answer
- * behind it would reorder a beginner's whole list towards plants the checklist happens to hold an
- * entry for, with no way for them to know why. What that misses is what these two actually do.
- * Neither is a filter. Both nudge the order crops come back in and take nothing off the list, and
- * the guided path asks about each of them in its own step, so a grower who wants neither is two
- * presses from saying so and can see the switch that did it.
- *
- * What is left is which way round to start, and the honest answer is that this application is for
- * growing food under panels alongside the things that live there. Starting with the local plants
- * and the insects that grew up beside them is this tool's own position, stated rather than
- * withheld, and a beginner who never touches either switch gets the garden it would argue for
+ * Off, both of them, for the reason on the value below. Neither is a filter: both nudge the order
+ * crops come back in and take nothing off the list, and the guided path asks about each in its own
+ * step, so a grower who wants either is two presses from switching it on
  */
 export const DEFAULT_WILDLIFE: WildlifeChoices = {
-  // off, both of them. On by default they turn a request for "Tomatoes,
-  // peppers and berries" into hops, sorrel and tomatillo, from two questions that go unread
+  // off, both of them: on by default, a request for "Tomatoes, peppers and berries"
+  // came back as hops, sorrel and tomatillo, from two questions that explain themselves poorly
   favourNative: false,
   favourPollinators: false,
 }
@@ -140,8 +130,8 @@ export const makeArray = (index: number, patch: Partial<PvArray> = {}): PvArray 
  * with the same id. `upsertBed` matches on id, so the agent's `add-bed` would REPLACE the existing
  * Bed 3, plantings and all, and say it had added one.
  *
- * Lowest free rather than highest plus one, so deleting a bed and drawing another gives back the
- * name that was just freed instead of climbing forever
+ * The lowest free number wins over highest plus one, so deleting a bed and drawing another gives back the
+ * name that was just freed, without climbing forever
  */
 export const nextBedIndex = (beds: readonly Bed[]): number => {
   const taken = new Set<string>(beds.map((bed) => bed.id))
@@ -182,7 +172,7 @@ const HOUSE_SETBACK_M = 2
 /**
  * The house `addHouse` draws: 10 by 8 m, 6 m to the eaves, centred on the boundary's east-west
  * centre and standing just outside it on the side the sun crosses at midday, so its shadow falls
- * across the plot rather than away from it (Decision Record 26)
+ * across the plot (Decision Record 26)
  */
 export const makeHouse = (
   index: number,

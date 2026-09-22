@@ -24,7 +24,7 @@ describe('keeping the conversation across a reload', () => {
   })
 
   /**
-   * Decoded rather than cast. What is on the other side of `localStorage` is a string somebody
+   * Decoded, with no cast. What is on the other side of `localStorage` is a string somebody
    * could have written by hand, and a transcript that trusts it renders whatever it is given
    */
   it('discards anything that does not decode, rather than rendering it', () => {

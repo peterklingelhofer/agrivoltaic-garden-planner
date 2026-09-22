@@ -4,9 +4,8 @@ import type { ComplianceCheck, ComplianceOutcome, CriterionResult } from '../typ
 import { wordsFor } from './agent-words'
 import { NOT_A_DETERMINATION } from './onboarding'
 
-// the verification document item 1: no regime is self-verifiable, so no user-visible string may
-// read as a determination. DOER mandates its own tool, the window is Growing Season Hours,
-// and every parameter is waivable
+// No regime is self-verifiable, so no user-visible string may read as a determination. DOER
+// mandates its own tool, the window is Growing Season Hours, and every parameter is waivable
 const FORBIDDEN =
   /\b(compliant|non-compliant|noncompliant|pass|passes|fail|failed|fails|approved|rejected)\b/i
 

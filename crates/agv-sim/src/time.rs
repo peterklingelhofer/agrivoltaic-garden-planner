@@ -41,8 +41,8 @@ pub fn utc_year_month(utc_millis: f64) -> (i64, i64) {
 /// The full civil date: year, month 1 to 12, day of month.
 ///
 /// `utc_year_month` is this with the month zero-based, which is the shape `delta_t_seconds` wants
-/// because it is mirroring JavaScript's `getUTCMonth`. Both come from one algorithm rather than
-/// two, which is the whole reason this is factored out.
+/// because it is mirroring JavaScript's `getUTCMonth`. Both come from one shared algorithm, which
+/// is the whole reason this is factored out.
 pub fn utc_civil(utc_millis: f64) -> (i64, i64, i64) {
     let days = (utc_millis / MS_PER_DAY).floor() as i64;
     // shift the epoch to 0000-03-01 so leap days land at the end of the cycle

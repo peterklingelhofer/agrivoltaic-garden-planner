@@ -30,13 +30,13 @@ type Phase = 'showing' | 'leaving' | 'settled'
  *
  * - it renders only over the EXAMPLE, gated on the same `showingExample` the banner uses, so a
  *   grower who has drawn their own plot is never told what their own beds mean;
- * - it costs zero interactions. `e2e/first-time-user.spec.ts` holds `INTERACTION_BUDGET` at 18
- *   with a persona sitting exactly on it, and a narration that had to be dismissed would spend
- *   one of those on nothing. So there is no close button: it leaves on a timer, and any pointer,
- *   wheel, key or touch ends it immediately, because that gesture means the visitor is driving
- *   now. That is the same event list, from the same module, that stops the guided orbit;
+ * - it costs zero interactions. `e2e/first-time-user.spec.ts` holds `INTERACTION_BUDGET` at 17 with
+ *   no slack left in it, and a narration that had to be dismissed would spend one of those on
+ *   nothing. So there is no close button: it leaves on a timer, and any pointer, wheel, key or
+ *   touch ends it immediately, because that gesture means the visitor is driving now. That is the
+ *   same event list, from the same module, that stops the guided orbit;
  * - it never takes the pointer, for the reason `.scene-tooltip` never does;
- * - when it leaves it becomes `.visually-hidden` rather than unmounting. The sentence is worth
+ * - when it leaves it becomes `.visually-hidden` and is never unmounted. The sentence is worth
  *   the same to somebody reading the page with a screen reader as to somebody looking at it, and
  *   a graphic taking its place on screen is exactly what that class exists for
  */
@@ -89,7 +89,7 @@ export const ColdOpen = (): ReactElement | null => {
 
   return (
     <aside
-      // the whole class is swapped rather than added to, because `.visually-hidden` and
+      // the whole class is swapped outright. It is never added to: `.visually-hidden` and
       // `.cold-open` disagree about position and size and the loser of that would be whichever
       // rule this sheet happened to state last
       className={phase === 'settled' ? 'visually-hidden' : 'cold-open'}
