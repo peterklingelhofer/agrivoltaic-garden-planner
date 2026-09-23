@@ -167,7 +167,7 @@ const scriptOf = (timeline) => {
     .join('\n')
   const minutes = (timeline.durationMs / 60_000).toFixed(1)
   return [
-    `# Agrivoltaic garden model: ${timeline.cut} cut`,
+    `# Agrivoltaic garden planner: ${timeline.cut} cut`,
     '',
     `Recorded run, ${minutes} minutes. Every line below is already burnt into the picture as a`,
     'caption; the timecodes are here so a voiceover can be laid over the finished file without',

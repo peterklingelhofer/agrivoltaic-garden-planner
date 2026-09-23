@@ -1,4 +1,4 @@
-# Agrivoltaic garden model
+# Agrivoltaic garden planner
 
 A site-specific model of the light a solar array leaves on the ground, and of which crops that
 light still supports. Every quantitative claim carries its source, and where a figure rests on an

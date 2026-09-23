@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "agrivoltaic-garden-model",
+      "name": "agrivoltaic-garden-planner",
       "dependencies": {
         "@huggingface/transformers": "^4.2.0",
         "@react-three/drei": "10.7.7",

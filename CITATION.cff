@@ -1,13 +1,13 @@
 cff-version: 1.2.0
 message: If you use this software, cite it with the metadata below.
 type: software
-title: Agrivoltaic garden model
+title: Agrivoltaic garden planner
 authors:
   - family-names: Klingelhofer
     given-names: Peter
 version: 0.0.0
 date-released: '2026-09-12'
-repository-code: https://github.com/peterklingelhofer/agrivoltaic-garden-model
+repository-code: https://github.com/peterklingelhofer/agrivoltaic-garden-planner
 url: https://garden.peterklingelhofer.com
 license: Apache-2.0
 abstract: >-
