@@ -73,7 +73,7 @@ const Toolbar = (): ReactElement => {
   const setWidePlan = useAppStore((s) => s.setWidePlan)
   return (
     <header className="toolbar" data-testid="panel-toolbar">
-      <h1>Agrivoltaic garden model</h1>
+      <h1>Agrivoltaic garden planner</h1>
       <div className="toolbar-modes">
         {MODES.map(([value, label]) => (
           <Action

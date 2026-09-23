@@ -29,7 +29,7 @@ if (host) {
     // page
     createRoot(host).render(
       <StrictMode>
-        <ErrorBoundary label="Agrivoltaic garden model" testId="panel-app-failed">
+        <ErrorBoundary label="Agrivoltaic garden planner" testId="panel-app-failed">
           <App />
         </ErrorBoundary>
       </StrictMode>,
