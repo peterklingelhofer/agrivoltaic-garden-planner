@@ -32,8 +32,6 @@ export const lerp = (a: number, b: number, t: number): number => a + (b - a) * t
 export const HOURS_PER_DAY = 24
 export const DAYS_PER_YEAR = 365
 
-export const dayOfHour = (hour: number): number => Math.floor(hour / HOURS_PER_DAY)
-
 export const monthOfDay = (day: number): number => {
   const cumulative = MONTH_START_DAY
   for (let month = 12; month >= 1; month -= 1) {
@@ -75,17 +73,3 @@ export const monthsInWindow = (startMonth: number, endMonth: number): readonly n
 }
 
 export const wrapDay = (day: number): number => ((day - 1) % DAYS_PER_YEAR) + 1
-
-const MULTIPLIER = 6364136223846793005n
-const INCREMENT = 1442695040888963407n
-const MASK = (1n << 64n) - 1n
-
-export type Rng = () => number
-
-export const createRng = (seed: number): Rng => {
-  let state = BigInt(Math.trunc(seed)) & MASK
-  return () => {
-    state = (state * MULTIPLIER + INCREMENT) & MASK
-    return Number(state >> 11n) / Number(1n << 53n)
-  }
-}

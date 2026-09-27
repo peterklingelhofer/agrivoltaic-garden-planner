@@ -10,13 +10,6 @@ import type {
 import { sinDeg } from '../math'
 import { sunUnitVector } from '../solar'
 
-// these constants document the alternative shadow-map path. The implemented path below is the
-// analytic ray/quad cast, chosen because it matches the CPU oracle exactly and needs no bias to
-// tune
-export const SHADOW_MAP_SIZE = 1024
-export const DEPTH_BIAS_CONSTANT = 2
-export const DEPTH_BIAS_SLOPE = 2.5
-
 export const isWebgl2Available = (): boolean => {
   try {
     if (typeof OffscreenCanvas === 'undefined') return false

@@ -78,7 +78,5 @@ export const RESOLVER_VERIFIED: readonly CitationVerification[] = [
   'datacite-verified',
 ]
 
-export const SCORABLE_GRADES: readonly ScorableGrade[] = ['A', 'B']
-
 export const isScorableGrade = (grade: EvidenceGrade): grade is ScorableGrade =>
   grade === 'A' || grade === 'B'

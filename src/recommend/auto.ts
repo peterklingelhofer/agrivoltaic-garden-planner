@@ -1,6 +1,4 @@
-import { loadCompanionRules, loadRotationConstraints } from '../data/companions'
 import { NO_WILDLIFE_PREFERENCE, type WildlifePreference } from './wildlife'
-import { loadCropCatalog } from '../data/crops'
 import { DEFAULT_FROST_PERCENTILE } from '../data/site'
 import { clamp } from '../data/util'
 import type { BedCalendar, CalendarFeasibility, CropCalendar } from '../types/calendar'
@@ -139,25 +137,3 @@ export const autoRecommend = (input: AutoRecommendInput): GardenPlan => ({
   frostPercentile: input.frostPercentile ?? DEFAULT_FROST_PERCENTILE,
   beds: input.bedLight.map((light) => planBed(input, light)),
 })
-
-export interface AutoRecommendRequest {
-  readonly site: Site
-  readonly plot: GardenPlot
-  readonly bedLight: readonly BedLight[]
-  readonly frostPercentile?: ExceedancePercentile
-  readonly weights?: ScoreWeights
-  readonly preferredCropIds?: readonly CropId[]
-  readonly wildlife?: WildlifePreference
-}
-
-/** The same call with the shipped catalog and rule sets loaded for you */
-export const autoRecommendWithCatalog = async (
-  request: AutoRecommendRequest,
-): Promise<GardenPlan> => {
-  const [catalog, companionRules, rotationConstraints] = await Promise.all([
-    loadCropCatalog(),
-    loadCompanionRules(),
-    loadRotationConstraints(),
-  ])
-  return autoRecommend({ ...request, catalog, companionRules, rotationConstraints })
-}

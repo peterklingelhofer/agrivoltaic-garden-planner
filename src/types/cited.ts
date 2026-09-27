@@ -108,11 +108,3 @@ export const unsourcedClaim = <T>(
 
 export const isUnsourced = <T>(cited: Cited<T>): cited is UnsourcedCited<T> =>
   cited.provenance === 'unsourced'
-
-export const isSourced = <T>(cited: Cited<T>): cited is SourcedCited<T> =>
-  cited.provenance !== 'unsourced'
-
-export const citedValue = <T>(cited: Cited<T>): T => cited.value
-
-export const mapCited = <T, U>(cited: Cited<T>, project: (value: T) => U): Cited<U> =>
-  seal({ ...cited, value: project(cited.value) })

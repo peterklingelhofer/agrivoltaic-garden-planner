@@ -1,5 +1,5 @@
 import { citedComputed, citedInferred, type Cited } from '../types/cited'
-import { GROUND_COVER_ALBEDO, GROUND_COVERS, SNOW_ALBEDO, type GroundCover } from '../types/ground'
+import { GROUND_COVER_ALBEDO, GROUND_COVERS, type GroundCover } from '../types/ground'
 import type { Fraction } from '../types/units'
 
 /**
@@ -91,18 +91,3 @@ export const GROUND_COVER_OPTIONS: readonly GroundCoverOption[] = GROUND_COVERS.
   help: HELP[id],
   albedo: ALBEDO[id],
 }))
-
-export const groundCoverAlbedoClaim = (cover: GroundCover): Cited<Fraction> => ALBEDO[cover]
-
-/**
- * Snow isn't a cover a grower picks, so it's not in the list above, but it's the single
- * largest thing that happens to the ground's albedo in a year and the chain now reads it hour by
- * hour. That ground reflectivity is strongly seasonal wherever snow lies, and that a single
- * annual figure therefore misstates the winter, is the result Thevenard and Haddad set out
- */
-export const SNOW_ALBEDO_CLAIM: Cited<Fraction> = citedInferred(
-  SNOW_ALBEDO,
-  ['thevenard2006-ground-reflectivity', 'oke1987-boundary-layer-climates'],
-  'Settled snowpack, days after a storm. Oke separates fresh snow, near 0.80-0.90, from old and melting snow, which is far darker and spans roughly 0.40-0.70, a smooth seasonal weighting off monthly normals is describing the lying pack across whole months, so it takes the upper part of the old-snow band',
-  'Neither source states 0.70 for this. It is a point inside the old-snow band, chosen so that a modeled winter is not flattered: the fresh-snow figure would have raised the modeled year further still, and the same number is what the renderer draws, so the picture cannot disagree with it',
-)

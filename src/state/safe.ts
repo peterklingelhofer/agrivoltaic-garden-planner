@@ -26,7 +26,5 @@ export const attemptOr = <T>(run: () => T, fallback: () => T): T => {
   return result.ok ? result.value : fallback()
 }
 
-export const UNAVAILABLE = 'simulation unavailable'
-
 export const unavailableMessage = (subsystem: string, message: string): string =>
   `${subsystem} unavailable: ${message}`

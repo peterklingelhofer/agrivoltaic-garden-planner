@@ -35,7 +35,6 @@ export const SHADE_BENEFIT_BONUS_CLAIM = unsourcedClaim(
     heatDaySaturation: HEAT_DAY_BONUS_SATURATION,
   },
   'The shade-benefit bonus (at most 0.15 of the light score, rising as heat days above 30 C go from 30 to 90) is a design choice of this app. Studies report where a shade benefit appears, and no cited study sets its size for a given count of heat days',
-  'It lifts a shade-tolerant crop’s ranking on a hot, water-limited site and never admits a crop a gate refused',
 )
 
 const monthValue = (values: readonly number[], month: number): number => values[month - 1] ?? 0

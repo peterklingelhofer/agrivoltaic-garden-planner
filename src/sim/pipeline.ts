@@ -26,6 +26,7 @@ import {
   annualFromMonthly,
   type CumulativeSkySet,
   cumulativeSkySet,
+  DEFAULT_SUBSTEPS_PER_HOUR,
   DEFAULT_SUN_BINNING_DEG,
   sampleTimeWindows,
 } from './skydome'
@@ -47,7 +48,7 @@ export interface SimulationOptions {
 
 export const FINAL_OPTIONS: Omit<SimulationOptions, 'backend'> = {
   subdivision: 'reinhart-mf2',
-  substepsPerHour: 4,
+  substepsPerHour: DEFAULT_SUBSTEPS_PER_HOUR,
   targetCellSizeM: 0.12 as Meters,
   parFraction: 0.45 as Fraction,
   frameBudgetMs: 8,

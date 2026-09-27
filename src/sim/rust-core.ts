@@ -18,10 +18,6 @@ import type { DecompositionModel } from '../types/weather'
 /** Nine f64s per sample, in the field order `wasm.rs` writes them. Neither side may reorder */
 export const FIELDS_PER_SAMPLE = 9
 
-/** Ten in, four out, per transposed sample. Same rule about ordering */
-export const TRANSPOSITION_INPUTS = 10
-export const POA_FIELDS = 4
-
 /** Eight in, three out, per decomposed sample. Same rule about ordering */
 export const DECOMPOSITION_INPUTS = 8
 export const DECOMPOSITION_OUTPUTS = 3
@@ -37,38 +33,6 @@ export const DECOMPOSITION_MODEL_CODES = {
   engerer2: 2,
   erbs: 3,
 } as const satisfies Record<DecompositionModel, number>
-
-export interface RustSolarSample {
-  readonly geometricElevationDeg: number
-  readonly apparentElevationDeg: number
-  readonly zenithDeg: number
-  readonly azimuthDeg: number
-  readonly declinationDeg: number
-  readonly hourAngleDeg: number
-  readonly earthRadiusVectorAu: number
-  readonly relativeAirMass: number
-  readonly absoluteAirMass: number
-}
-
-export interface RustTranspositionInput {
-  readonly dniWM2: number
-  readonly dhiWM2: number
-  readonly ghiWM2: number
-  readonly zenithDeg: number
-  readonly relativeAirMass: number
-  readonly extraterrestrialNormalWM2: number
-  readonly surfaceTiltDeg: number
-  readonly surfaceAzimuthDeg: number
-  readonly solarAzimuthDeg: number
-  readonly groundAlbedo: number
-}
-
-export interface RustPoaComponents {
-  readonly beamWM2: number
-  readonly skyDiffuseWM2: number
-  readonly groundReflectedWM2: number
-  readonly globalWM2: number
-}
 
 /**
  * The series a decomposition reads, in the shape `src/sim/decomposition.ts` already holds it.
@@ -185,7 +149,6 @@ interface CoreExports {
     temperatureC: number,
     out: number,
   ) => void
-  readonly agv_perez_series: (inputs: number, count: number, out: number) => void
   readonly agv_decompose_series: (
     model: number,
     count: number,
@@ -193,7 +156,6 @@ interface CoreExports {
     inputs: number,
     out: number,
   ) => void
-  readonly agv_enforce_consistency_series: (count: number, inputs: number, out: number) => void
   readonly agv_annual_chain: (
     array: number,
     hours: number,
@@ -228,24 +190,17 @@ interface CoreExports {
 
 export interface RustCore {
   /**
-   * Every field of every sample, flat, in the ABI's own order and its own buffer.
-   *
-   * The shape `solarPositionSeries` wants, and the reason it exists beside `spaSeries`: a year at
-   * four substeps an hour is 35,040 samples, and `spaSeries` would allocate 35,040 objects to
-   * hand back nine numbers each that the caller immediately copies into typed arrays and drops
+   * Every field of every sample, flat, in the ABI's own order and its own buffer. Flat because
+   * a year at four substeps an hour is 35,040 samples, and an object per sample would allocate
+   * 35,040 of them to hand back nine numbers each that the caller copies into typed arrays and
+   * drops
    */
   readonly spaSeriesFlat: (utcMillis: ArrayLike<number>, observer: RustObserver) => Float64Array
-  readonly spaSeries: (
-    utcMillis: readonly number[],
-    observer: RustObserver,
-  ) => readonly RustSolarSample[]
-  readonly perezSeries: (samples: readonly RustTranspositionInput[]) => readonly RustPoaComponents[]
   readonly decomposeSeries: (
     series: RustDecompositionSeries,
     model: DecompositionModel,
     utcOffsetHours: number,
   ) => RustIrradianceSeries
-  readonly enforceConsistencySeries: (series: RustDecompositionSeries) => RustIrradianceSeries
   readonly annualChain: (
     array: PvArray,
     hours: readonly RustChainHour[],
@@ -404,75 +359,7 @@ export const rustCore = (instance: WebAssembly.Instance): RustCore => {
     }
   }
 
-  const spaSeries = (
-    utcMillis: readonly number[],
-    observer: RustObserver,
-  ): readonly RustSolarSample[] => {
-    const count = utcMillis.length
-    if (count === 0) return []
-    const flat = spaSeriesFlat(utcMillis, observer)
-    return Array.from({ length: count }, (_unused, index) => {
-      const at = index * FIELDS_PER_SAMPLE
-      return {
-        geometricElevationDeg: flat[at] ?? Number.NaN,
-        apparentElevationDeg: flat[at + 1] ?? Number.NaN,
-        zenithDeg: flat[at + 2] ?? Number.NaN,
-        azimuthDeg: flat[at + 3] ?? Number.NaN,
-        declinationDeg: flat[at + 4] ?? Number.NaN,
-        hourAngleDeg: flat[at + 5] ?? Number.NaN,
-        earthRadiusVectorAu: flat[at + 6] ?? Number.NaN,
-        relativeAirMass: flat[at + 7] ?? Number.NaN,
-        absoluteAirMass: flat[at + 8] ?? Number.NaN,
-      }
-    })
-  }
-
-  const perezSeries = (
-    samples: readonly RustTranspositionInput[],
-  ): readonly RustPoaComponents[] => {
-    const count = samples.length
-    if (count === 0) return []
-    const inCount = count * TRANSPOSITION_INPUTS
-    const outCount = count * POA_FIELDS
-    const inPointer = exports.agv_alloc_f64(inCount)
-    const outPointer = exports.agv_alloc_f64(outCount)
-    try {
-      const flatIn = new Float64Array(inCount)
-      samples.forEach((sample, index) => {
-        const at = index * TRANSPOSITION_INPUTS
-        flatIn[at] = sample.dniWM2
-        flatIn[at + 1] = sample.dhiWM2
-        flatIn[at + 2] = sample.ghiWM2
-        flatIn[at + 3] = sample.zenithDeg
-        flatIn[at + 4] = sample.relativeAirMass
-        flatIn[at + 5] = sample.extraterrestrialNormalWM2
-        flatIn[at + 6] = sample.surfaceTiltDeg
-        flatIn[at + 7] = sample.surfaceAzimuthDeg
-        flatIn[at + 8] = sample.solarAzimuthDeg
-        flatIn[at + 9] = sample.groundAlbedo
-      })
-      view(exports).set(flatIn, inPointer / BYTES_PER_F64)
-      exports.agv_perez_series(inPointer, count, outPointer)
-      const flat = view(exports).subarray(
-        outPointer / BYTES_PER_F64,
-        outPointer / BYTES_PER_F64 + outCount,
-      )
-      return Array.from({ length: count }, (_unused, index) => {
-        const at = index * POA_FIELDS
-        return {
-          beamWM2: flat[at] ?? Number.NaN,
-          skyDiffuseWM2: flat[at + 1] ?? Number.NaN,
-          groundReflectedWM2: flat[at + 2] ?? Number.NaN,
-          globalWM2: flat[at + 3] ?? Number.NaN,
-        }
-      })
-    } finally {
-      exports.agv_free_f64(inPointer, inCount)
-      exports.agv_free_f64(outPointer, outCount)
-    }
-  }
-
-  /** Both decomposition entry points share an input layout, so they share this too */
+  /** Writes the input layout `agv_decompose_series` reads and copies its output back out */
   const withDecompositionSeries = (
     series: RustDecompositionSeries,
     call: (inPointer: number, count: number, outPointer: number) => void,
@@ -542,11 +429,6 @@ export const rustCore = (instance: WebAssembly.Instance): RustCore => {
       exports.agv_decompose_series(code, count, utcOffsetHours, inPointer, outPointer)
     })
   }
-
-  const enforceConsistencySeries = (series: RustDecompositionSeries): RustIrradianceSeries =>
-    withDecompositionSeries(series, (inPointer, count, outPointer) => {
-      exports.agv_enforce_consistency_series(count, inPointer, outPointer)
-    })
 
   const annualChain = (
     array: PvArray,
@@ -687,10 +569,7 @@ export const rustCore = (instance: WebAssembly.Instance): RustCore => {
 
   return {
     spaSeriesFlat,
-    spaSeries,
-    perezSeries,
     decomposeSeries,
-    enforceConsistencySeries,
     annualChain,
     panelSnapshot,
     beamVisibility,

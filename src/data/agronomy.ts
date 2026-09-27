@@ -98,18 +98,6 @@ export const seasonGdd = (
   }
 }
 
-export const dayGddCrosses = (
-  curve: Float32Array,
-  startDay: DayOfYear,
-  requirement: DegreeDaysC,
-): DayOfYear | null => {
-  const baseline = at(curve, Math.max(startDay, 1) - 1)
-  for (let day: number = startDay; day <= DAYS_PER_YEAR; day += 1) {
-    if (at(curve, day - 1) - baseline >= requirement) return day as DayOfYear
-  }
-  return null
-}
-
 /**
  * The top of the chilling band: an hour counts as chilling when the air is between freezing and
  * this. The same figure marks a winter for `coldWinterGate`, so a place whose coldest month

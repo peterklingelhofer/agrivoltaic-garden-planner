@@ -21,7 +21,6 @@ export const SEASONAL_PAR_HALF_WIDTH: Fraction = 0.1 as Fraction
 export const SEASONAL_PAR_CLAIM = unsourcedClaim(
   SEASONAL_PAR_HALF_WIDTH,
   'The plus or minus 10 percent on a season’s total PAR (the light plants use) is this app’s own figure. No cited source gives an uncertainty for a season’s total light. The relative yield it widens is a ratio of two light totals from the same weather series',
-  'It widens every yield band by a tenth of its midpoint and is named as the dominant term wherever the published interval is narrower',
 )
 
 export const SEASONAL_PAR_CONTRIBUTION: UncertaintyContribution = {

@@ -64,15 +64,6 @@ export const observerFor = (site: Site): SpaObserver => {
 export const extraterrestrialNormal = (earthRadiusVectorAu: number): number =>
   earthRadiusVectorAu > 0 ? SOLAR_CONSTANT_W_M2 / earthRadiusVectorAu ** 2 : 0
 
-export const angleOfIncidenceCos = (
-  zenithRad: Radians,
-  solarAzimuthRad: Radians,
-  surfaceTiltRad: Radians,
-  surfaceAzimuthRad: Radians,
-): number =>
-  Math.cos(zenithRad) * Math.cos(surfaceTiltRad) +
-  Math.sin(zenithRad) * Math.sin(surfaceTiltRad) * Math.cos(solarAzimuthRad - surfaceAzimuthRad)
-
 // tan psi = tan(elevation) / |cos(gamma_s - gamma_c)|, and sigma records which side of the row
 // the sun is on
 export const profileAngle = (

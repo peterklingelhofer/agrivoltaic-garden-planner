@@ -3,7 +3,7 @@ import type { CitationId } from './citation-ids.generated'
 import type { Licensed } from './evidence'
 import type { PlantingRole } from './garden'
 import type { Polygon2D } from './geo'
-import type { CropId, CultivarId } from './ids'
+import type { CropId } from './ids'
 import type { GrowingWindow } from './light'
 import type { ChillMetric } from './site'
 import type {
@@ -217,18 +217,6 @@ export interface Crop {
   readonly harvestDurationDays: Days
   readonly successionIntervalDays: Days | null
   readonly nitrogenFixing: boolean
-  readonly provenance: Licensed
-}
-
-export interface Cultivar {
-  readonly id: CultivarId
-  readonly cropId: CropId
-  readonly name: string
-  readonly isLandrace: boolean
-  readonly regionOfAdaptation: string | null
-  readonly thermal: ThermalRequirement
-  readonly chill: ChillRequirement | null
-  readonly shadeToleranceNote: string | null
   readonly provenance: Licensed
 }
 

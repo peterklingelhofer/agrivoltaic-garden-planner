@@ -3,12 +3,7 @@ import type { Bed, GardenPlot } from '../types/garden'
 import { DEFAULT_GROUND_COVER } from '../types/ground'
 import type { BedId, PlotId, SiteId } from '../types/ids'
 import type { BedLight } from '../types/light'
-import type {
-  ChillAccumulation,
-  ExceedancePercentile,
-  FrostExceedanceCurve,
-  Site,
-} from '../types/site'
+import type { ChillAccumulation, FrostExceedanceCurve, Site } from '../types/site'
 import type {
   ByMonth,
   Celsius,
@@ -354,8 +349,6 @@ export const frostFreeSiteFixture = (overrides: Partial<Site> = {}): Site =>
     },
     ...overrides,
   })
-
-export const percentiles: readonly ExceedancePercentile[] = [10, 20, 30, 40, 50]
 
 const HOURS_PER_TMY = 8760
 
