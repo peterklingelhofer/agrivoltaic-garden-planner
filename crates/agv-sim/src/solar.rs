@@ -223,19 +223,6 @@ pub fn spa_position(utc_millis: f64, observer: &Observer) -> SolarPosition {
     }
 }
 
-/// The direction of the sun as a unit vector in the site's local frame.
-///
-/// X east, Y north, Z up, matching `geom.rs`. Returned as a tuple so this module keeps no
-/// dependency on the geometry types: solar position is upstream of geometry and stays that way
-pub fn sun_unit_vector(elevation_deg: f64, azimuth_deg: f64) -> (f64, f64, f64) {
-    let cos_el = cos_deg(elevation_deg);
-    (
-        cos_el * sin_deg(azimuth_deg),
-        cos_el * cos_deg(azimuth_deg),
-        sin_deg(elevation_deg),
-    )
-}
-
 /// The sun's elevation measured in the plane perpendicular to a row, and which side it is on.
 ///
 /// This is the angle row-to-row shading is decided by: a sun high in the sky but far along the row

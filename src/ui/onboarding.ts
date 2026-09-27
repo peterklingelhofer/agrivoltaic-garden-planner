@@ -95,14 +95,6 @@ export const STEP_COPY: Readonly<Record<OnboardingStep, StepCopy>> = {
   },
 }
 
-/**
- * Said once above the combinations. The step before this one measures a layout against the open
- * sky; this one is choosing between crops the same beds can all carry, so what a grower needs
- * naming here is where the combinations came from and what they were scored against
- */
-export const PLANTING_SOURCE_NOTE =
-  'These are the combinations the setup computed for your beds, ranked best first'
-
 /* ---------------------------------- the answers -------------------------------- */
 
 export const AMBITION_OPTIONS: readonly ChoiceOption<GrowingAmbition>[] = [

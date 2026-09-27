@@ -177,8 +177,3 @@ export const interactionsStage = (
           },
   }
 }
-
-/** Management steps that must be rendered inline with the recommendation */
-export const requiredManagement = (rules: readonly ScorableCompanionRule[]): readonly string[] => [
-  ...new Set(rules.flatMap((rule) => rule.scope.requiresManagement)),
-]

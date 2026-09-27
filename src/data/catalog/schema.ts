@@ -266,7 +266,6 @@ export const HABITS: Readonly<Record<PlantHabit, HabitSpec>> = {
 export const HABIT_CANOPY_CLAIM = unsourcedClaim(
   HABITS,
   'Leaf area index and light extinction coefficient per plant habit are this app’s own figures: FAO-56 chapter 9 derives the basal crop coefficient from leaf area with a single 0.7 extinction coefficient, and no cited source tabulates either value by habit',
-  'They shape the canopy-cover curve of every planting’s water demand and the shade one crop casts on another, the annual water total is set elsewhere',
 )
 
 export interface DliClassSpec {

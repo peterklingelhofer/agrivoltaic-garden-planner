@@ -1,11 +1,8 @@
 import type { ReactElement } from 'react'
-import { WCVP_SCOPE_NOTE } from '../data/static-layers'
 import type { DesignProgress } from '../recommend/design'
 import { useAppStore } from '../state/store'
 import { meters } from '../types/units'
 import { ChoiceGroup, NumberField, Toggle } from './controls'
-import { NATIVE_PREFERENCE_REACH, POLLINATOR_TRAIT_BASIS } from './format'
-import { regionNote } from './region'
 import {
   ANSWER_QUESTIONS,
   EXPERIENCE_OPTIONS,
@@ -56,86 +53,6 @@ export const SurroundingsStep = (): ReactElement => {
           {EXPOSURE_HELP}
         </p>
       )}
-    </>
-  )
-}
-
-/**
- * The two wildlife questions, one switch each and nothing else, asked apart because they're two
- * questions. Whether a plant belongs to the place and whether it works with the insects there
- * sound like one preference and are answered from two different sources, so a single switch
- * would have had to average two answers into a claim neither of them makes.
- *
- * Everything under each switch is a limit on what the answer can do, and none of it is behind a
- * disclosure: the rule beside `showsFigures` is that the only thing hidden is detail
- */
-export const NativesStep = (): ReactElement => {
-  const favorNative = useAppStore((s) => s.wildlife.favorNative)
-  const setWildlife = useAppStore((s) => s.setWildlife)
-  const site = useAppStore((s) => s.site)
-  const region = regionNote(site)
-  return (
-    <>
-      <Toggle
-        testId="control-onboarding-natives"
-        label="Favor plants native to my area"
-        checked={favorNative}
-        onChange={(checked) => setWildlife({ favorNative: checked })}
-      />
-      {/*
-        How far saying yes reaches, one press behind the switch it describes. What folds is the
-        only part of it that is detail. What does NOT fold is below: a caveat about the data is
-        never detail, which is this project's rule and the reason the disclosure stops where it does
-      */}
-      <details className="wizard-advanced" data-testid="panel-onboarding-natives-reach">
-        <summary data-testid="action-onboarding-natives-reach">What saying yes does</summary>
-        <p className="panel-sub" data-testid="readout-onboarding-natives-reach">
-          {NATIVE_PREFERENCE_REACH}
-        </p>
-      </details>
-      {/* the honest state of the answer, not a warning about the switch: with no region there is
-          nothing to be native TO, and a preference that quietly does nothing is indistinguishable
-          from one that worked. Shown whichever way the switch is set, because it's as true
-          before it's pressed as after */}
-      {region === null ? null : (
-        <p className="notice notice-warn" data-testid="status-onboarding-natives-region">
-          {region}
-        </p>
-      )}
-      <p className="panel-sub" data-testid="readout-onboarding-natives-scope">
-        {WCVP_SCOPE_NOTE}
-      </p>
-    </>
-  )
-}
-
-export const PollinatorsStep = (): ReactElement => {
-  const favorPollinators = useAppStore((s) => s.wildlife.favorPollinators)
-  const setWildlife = useAppStore((s) => s.setWildlife)
-  return (
-    <>
-      <Toggle
-        testId="control-onboarding-pollinators"
-        label="Favor plants that feed bees and other pollinators"
-        checked={favorPollinators}
-        onChange={(checked) => setWildlife({ favorPollinators: checked })}
-      />
-      {/* the same fold as the step before it, and for the same reason: this explains what saying
-          yes does, which is detail, while the basis below it is a caveat and stays out */}
-      <details className="wizard-advanced" data-testid="panel-onboarding-pollinators-help">
-        <summary data-testid="action-onboarding-pollinators-help">
-          What a plant offers, and what a crop needs
-        </summary>
-        <p className="panel-sub" data-testid="readout-onboarding-pollinators-help">
-          A plant OFFERS the nectar and pollen its flowers put out, and that is what moves it up the
-          list. A crop NEEDS an insect when its own harvest depends on a visit. A courgette sets
-          almost nothing without one, a lettuce is picked long before it flowers. Both are said
-          beside every crop in the ranking, in their own words.
-        </p>
-      </details>
-      <p className="panel-sub" data-testid="readout-onboarding-pollinators-basis">
-        {POLLINATOR_TRAIT_BASIS}
-      </p>
     </>
   )
 }

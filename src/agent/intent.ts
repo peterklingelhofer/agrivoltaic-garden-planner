@@ -691,6 +691,3 @@ export const isDestructive = (id: IntentId): boolean => DESTRUCTIVE.includes(id)
 export const IRREVERSIBLE: readonly IntentId[] = ['start-over']
 
 export const isIrreversible = (id: IntentId): boolean => IRREVERSIBLE.includes(id)
-
-export const intentById = (id: IntentId): Intent | undefined =>
-  INTENTS.find((intent) => intent.id === id)

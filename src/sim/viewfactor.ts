@@ -1,8 +1,8 @@
 import type { GridSpec } from '../types/geo'
 import type { PanelPolygon } from '../types/pv'
 import type { SkyPatch } from '../types/weather'
-import type { Degrees, Fraction, Meters, WattsPerM2 } from '../types/units'
-import { at, clamp, cosDeg, mean, sinDeg } from './math'
+import type { Degrees, Fraction, Meters } from '../types/units'
+import { at, clamp, cosDeg, sinDeg } from './math'
 import { sunUnitVector } from './solar'
 import { beamVisibilityRaster } from './shading'
 
@@ -30,27 +30,6 @@ export const patchVisibilityRaster: (
   const direction = sunUnitVector(patch.altitudeDeg, patch.azimuthDeg)
   return beamVisibilityRaster(grid, panels, direction, 0 as Fraction, 1)
 }
-
-export const integratePatchRadiance: (
-  visibility: readonly Float32Array[],
-  patches: readonly SkyPatch[],
-  patchRadiance: Float32Array,
-) => Float32Array = (visibility, patches, patchRadiance) => {
-  const cells = visibility[0]?.length ?? 0
-  const result = new Float32Array(cells)
-  patches.forEach((patch, i) => {
-    const v = visibility[i]
-    if (v === undefined) return
-    const weight = sinDeg(patch.altitudeDeg) * patch.solidAngleSr * at(patchRadiance, i)
-    for (let c = 0; c < cells; c += 1) result[c] = at(result, c) + at(v, c) * weight
-  })
-  return result
-}
-
-export const crossedStringsViewFactor: (startZenithRad: number, endZenithRad: number) => number = (
-  startZenithRad,
-  endZenithRad,
-) => (Math.sin(endZenithRad) - Math.sin(startZenithRad)) / 2
 
 const VF_GROUND_SKY_2D_MAX_ROWS = 10
 
@@ -99,15 +78,3 @@ export const interreflectionGain: (
   const loss = groundAlbedo * (1 - clamp(skyViewFactor, 0, 1)) * moduleUndersideReflectance
   return loss >= 1 ? 1 : 1 / (1 - loss)
 }
-
-// the module rear sees the ground through 1 - SVF_rear, the reciprocal of the ground SVF kernel
-export const rearSidePoa: (
-  groundIrradiance: Float32Array,
-  groundAlbedo: Fraction,
-  rearSkyViewFactor: Fraction,
-  bifacialityFactor: Fraction,
-) => WattsPerM2 = (groundIrradiance, groundAlbedo, rearSkyViewFactor, bifacialityFactor) =>
-  (bifacialityFactor *
-    groundAlbedo *
-    mean(groundIrradiance) *
-    (1 - clamp(rearSkyViewFactor, 0, 1))) as WattsPerM2

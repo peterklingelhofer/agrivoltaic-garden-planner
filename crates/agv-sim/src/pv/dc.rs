@@ -1,4 +1,4 @@
-//! The PVWatts v5 DC model, ported from `src/sim/pv/dc.ts`
+//! The PVWatts v5 DC model
 
 /// PVWatts v5 temperature coefficient of power for crystalline silicon, per degree C
 pub const PVWATTS_GAMMA_PDC_PER_C: f64 = -0.0047;

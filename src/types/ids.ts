@@ -24,4 +24,3 @@ export const cropId = asId<CropId>
 export const cultivarId = asId<CultivarId>
 export const plantingId = asId<PlantingId>
 export const ruleId = asId<RuleId>
-export const tekRuleId = asId<TekRuleId>

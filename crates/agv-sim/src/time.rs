@@ -1,4 +1,4 @@
-//! Julian dates and delta-T, ported from `src/sim/time.ts`
+//! Julian dates and delta-T
 
 const MS_PER_DAY: f64 = 86_400_000.0;
 const UNIX_EPOCH_JD: f64 = 2_440_587.5;
@@ -60,21 +60,6 @@ pub fn utc_civil(utc_millis: f64) -> (i64, i64, i64) {
     (if month <= 2 { year + 1 } else { year }, month, day)
 }
 
-fn is_leap_year(year: i64) -> bool {
-    (year % 4 == 0 && year % 100 != 0) || year % 400 == 0
-}
-
-/// Day of the year, 1 for January 1.
-///
-/// The TypeScript computes this as `floor((ms - Date.UTC(year, 0, 1)) / 86400000) + 1`. Same
-/// answer, without a second date algorithm beside `utc_civil`
-pub fn utc_day_of_year(utc_millis: f64) -> i64 {
-    const CUMULATIVE: [i64; 12] = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
-    let (year, month, day) = utc_civil(utc_millis);
-    let leap = i64::from(month > 2 && is_leap_year(year));
-    CUMULATIVE[(month - 1) as usize] + day + leap
-}
-
 /// Horner evaluation of one of the Espenak & Meeus pieces
 fn poly(base: f64, y: f64, coefficients: &[f64]) -> f64 {
     let t = y - base;
@@ -87,9 +72,7 @@ fn poly(base: f64, y: f64, coefficients: &[f64]) -> f64 {
 
 /// Espenak & Meeus polynomial expressions, as ported by `pvlib.spa.calculate_deltat`.
 ///
-/// No memo, unlike the TypeScript, which caches per year-month because it's called once per
-/// timestep in a hot loop over a whole year. This is a handful of multiplications and Rust isn't
-/// paying JavaScript's property-lookup price for them; a cache here would be a `HashMap` on a
+/// No memo: this is a handful of multiplications, and a cache here would be a `HashMap` on a
 /// struct that otherwise has no state
 pub fn delta_t_seconds(utc_millis: f64) -> f64 {
     let (year, month) = utc_year_month(utc_millis);

@@ -398,7 +398,3 @@ export const FRAGMENT_WORDS = 4
 export const LEXICAL_CERTAIN = 0.9
 
 const isFragment = (text: string): boolean => tokens(text).length <= FRAGMENT_WORDS
-
-/** Whether a lexical reading is strong enough that the embedding isn't consulted at all */
-export const isConfidentLexical = (understanding: Understanding | null): boolean =>
-  understanding !== null && understanding.confidence >= CONFIDENT_MATCH

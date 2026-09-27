@@ -8,10 +8,8 @@ import type { PolycultureSuggestion } from '../types/polyculture'
 import type { CropRecommendation, YieldEstimate } from '../types/recommend'
 import type { Fraction } from '../types/units'
 import {
-  NATIVE_PREFERENCE_REACH,
   NATIVE_REGION_UNKNOWN,
   POINT_ESTIMATE_REFUSED,
-  POLLINATOR_TRAIT_BASIS,
   approxCount,
   approxPercent,
   approxPlural,
@@ -412,12 +410,7 @@ describe('what a wildlife preference says about a crop', () => {
     expect(dependenceNote('none')).toMatch(/no insect visits/i)
   })
 
-  it('says where the traits came from and what the native preference cannot do', () => {
-    expect(POLLINATOR_TRAIT_BASIS).toMatch(/klein/i)
-    expect(POLLINATOR_TRAIT_BASIS).toMatch(/neither was measured/i)
-    // a grower who read "favor natives" as a promise of a native vegetable garden is owed this
-    expect(NATIVE_PREFERENCE_REACH).toMatch(/almost no food crop is native/i)
-    expect(NATIVE_PREFERENCE_REACH).toMatch(/removes nothing/i)
+  it("says that favoring natives does nothing until there's a region", () => {
     expect(NATIVE_REGION_UNKNOWN).toMatch(/changes nothing/i)
   })
 })

@@ -8,7 +8,6 @@
 use crate::math::clamp;
 
 pub const PAR_FRACTION_DEFAULT: f64 = 0.45;
-pub const PAR_FRACTION_RANGE: (f64, f64) = (0.42, 0.5);
 pub const PHOTON_CONVERSION_UMOL_PER_J: f64 = 4.57;
 pub const BROADBAND_UMOL_PER_J: f64 = 2.06;
 pub const SOLAR_CONSTANT_W_M2: f64 = 1361.1;

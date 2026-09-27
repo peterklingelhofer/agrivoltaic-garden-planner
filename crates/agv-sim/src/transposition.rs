@@ -1,8 +1,8 @@
 //! Plane-of-array irradiance, ported from `src/sim/transposition.ts`.
 //!
-//! Perez, Ineichen, Seals, Michalsky & Stewart 1990, Solar Energy 44(5) 271-289, with the
-//! isotropic and Hay & Davies 1980 models beside it because the TypeScript keeps all three and
-//! the tests lean on the cheap ones to pin the expensive one at its degenerate tilts.
+//! Perez, Ineichen, Seals, Michalsky & Stewart 1990, Solar Energy 44(5) 271-289, with the isotropic
+//! and Hay & Davies 1980 models beside it because the tests lean on the cheap ones to pin the
+//! expensive one at its degenerate tilts.
 //!
 //! Coefficients come from `perez_tables.rs`, generated from the TypeScript. See `solar.rs` for
 //! why the port is deliberately literal

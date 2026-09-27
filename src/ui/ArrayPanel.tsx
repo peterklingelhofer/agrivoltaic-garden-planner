@@ -259,7 +259,7 @@ export const ArrayPanel = (): ReactElement => {
             }
           />
           {/*
-            The rear side, which the energy chain has always modeled (`src/sim/pv/bifacial.ts`
+            The rear side, which the energy chain has always modeled (`crates/agv-sim/src/pv/bifacial.rs`
             reads the ground's reflected light through the rear view factor) and nothing let a
             visitor set. Zero is a one-sided panel. The datasheet figure for a bifacial module is
             0.65 to 0.95

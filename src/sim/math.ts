@@ -25,13 +25,3 @@ export const cosDeg = (value: number): number => Math.cos(value * DEG_TO_RAD)
 export const tanDeg = (value: number): number => Math.tan(value * DEG_TO_RAD)
 
 export const at = (values: ArrayLike<number>, index: number): number => values[index] ?? 0
-
-export function sum(values: ArrayLike<number>): number {
-  let total = 0
-  for (let i = 0; i < values.length; i += 1) total += at(values, i)
-  return total
-}
-
-export function mean(values: ArrayLike<number>): number {
-  return values.length === 0 ? 0 : sum(values) / values.length
-}

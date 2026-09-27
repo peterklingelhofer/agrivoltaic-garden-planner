@@ -50,8 +50,10 @@ export const groundAlbedoOf = (cover: GroundCover): Fraction => GROUND_COVER_ALB
  * Snow, a cover the weather lays on top of whichever ground cover the grower chose, for part of
  * the year.
  *
- * Old settled snow, because a seasonal weighting off monthly normals describes
- * the lying snowpack across whole months. `src/data/albedo.ts` carries where it came from
+ * Old settled snow, because a seasonal weighting off monthly normals describes the lying
+ * snowpack across whole months. Oke 1987 puts fresh snow near 0.80-0.90, and old and melting snow
+ * at roughly 0.40-0.70. Neither Oke nor Thevenard and Haddad 2006 states 0.70: it's a point at
+ * the top of the old-snow band, chosen so a modeled winter isn't flattered
  */
 export const SNOW_ALBEDO = 0.7 as Fraction
 

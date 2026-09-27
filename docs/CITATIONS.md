@@ -556,7 +556,7 @@ Britton, C. M.; Dodd, J. D.. (1976). *Relationships of photosynthetically active
 - DOI: [10.1016/0002-1571(76)90080-7](https://doi.org/10.1016/0002-1571(76)90080-7)
 - Verification: Crossref-verified | Access: paywalled
 - Backs:
-  - PAR/GHI energy ratio 0.41-0.45, the lower bound of the user-adjustable 0.42-0.50 range
+  - PAR/GHI energy ratio 0.41-0.45, the lower bound of the 0.42-0.50 range the default sits in
 
 #### `cook-mccuen2013-solar-farm-hydrology`
 

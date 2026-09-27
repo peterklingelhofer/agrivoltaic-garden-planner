@@ -100,12 +100,12 @@ Each hop names the module that owns it. No hop is owned by two modules.
 | 4 | 0-3 assembled into one `Site` | `src/data/site.ts` | `resolveSite` |
 | 5 | 8760 timestamps -> solar position, air mass, `E_0` | `src/sim/solar.ts` | `solarPositionSeries` |
 | 6 | GHI-only source -> DNI + DHI (inert when all three present) | `src/sim/decomposition.ts` | `decompose`, `selectDecompositionModel` |
-| 7 | POA transposition for the PV plane | `src/sim/transposition.ts` | `perezTransposition1990` |
+| 7 | POA transposition for the PV plane | `crates/agv-sim/src/transposition.rs`, run inside `agv_annual_chain` | `perez_transposition_1990` |
 | 8 | `PvArray` + tracker + time -> `PanelPolygon[]` | `src/sim/geometry.ts` | `panelSnapshot` |
 | 9 | sky discretization + cumulative weights + sun direction binning | `src/sim/skydome.ts` | `cumulativeSky`, `binSunDirections` |
 | 10 | GPU cumulative-sky accumulation, with each cell's sky view factor | `src/sim/backend.ts` + `src/sim/gpu/*` + `src/sim/cpu.ts` | `SkyMatrixBackend.accumulate` |
 | 11 | beam visibility, polygon shadow projection | `src/sim/shading.ts` | `beamVisibilityRaster`, `projectPanelToGround` |
-| 12 | sky view factor, patch integration, inter-reflection | `src/sim/viewfactor.ts` | `skyViewFactorRaster`, `interreflectionGain` |
+| 12 | inter-reflection between the ground and the module undersides | `src/sim/viewfactor.ts` | `interreflectionGain` |
 | 13 | accumulation -> `DliRaster` (annual + 12 monthly slices) | `src/sim/raster.ts` | `dliRasterFromAccumulation` |
 | 14 | raster -> per-bed per-month `BedLight`, `SeasonLight`, RSR | `src/sim/aggregate.ts` | `bedLight`, `seasonLight` |
 | 15 | geometry-only compliance from the raster | `src/sim/compliance.ts` | `checkMassachusettsSmart` |
@@ -125,8 +125,8 @@ Each hop names the module that owns it. No hop is owned by two modules.
 | 23 | store -> scene graph | `src/scene/*` | `GardenScene` |
 | 24 | store -> panels, band formatting | `src/ui/*` | `formatYieldEstimate` |
 
-Two Perez models exist and must not be collapsed: `perezTransposition1990` in
-`src/sim/transposition.ts` (48-coefficient `allsitescomposite1990` POA transposition) and
+Two Perez models exist and must not be collapsed: `perez_transposition_1990` in
+`crates/agv-sim/src/transposition.rs` (48-coefficient `allsitescomposite1990` POA transposition) and
 `perezSkyRadianceDistribution1993` in `src/sim/skydome.ts` (the sky radiance dome feeding the 577
 patches). Decision Record 2.3 requires PV yield and ground DLI to read one sky, and that shared sky
 is `CumulativeSky`.
@@ -460,7 +460,7 @@ that 550 ms, plus the surrounding one-off costs:
 |---|---|---|---|
 | SPA, 8760 h + 4 sub-steps | `src/sim/solar.ts` | 8 ms | Decision Record 2.4 quotes 3-8 ms, bake to `Float32Array` once per site |
 | Decomposition adapter | `src/sim/decomposition.ts` | 5 ms | 0 ms on Open-Meteo/PVGIS/NSRDB, which ship all three components |
-| Perez transposition, 8760 h | `src/sim/transposition.ts` | 3 ms | ~40 flops per timestep |
+| Perez transposition, 8760 h | `crates/agv-sim/src/transposition.rs` | 3 ms | ~40 flops per timestep |
 | Sky patch build + cumulative weights + sun binning | `src/sim/skydome.ts` | 25 ms | 577 patches, dedupe to 600-900 directions on a 2 deg grid |
 | Panel polygon generation | `src/sim/geometry.ts` | 4 ms | once per snapshot |
 | **GPU accumulation** | `src/sim/gpu/webgl2.ts` | **450 ms** | ~1300 passes, 8 ms/frame budget, 40 passes/frame, adaptive on an EMA of submission time, one draw capped by `MAX_RAY_TESTS_PER_DRAW` |
@@ -520,9 +520,8 @@ Fixed by the Decision Record, and encoded as constants so code review doesn't re
 - `src/sim/skydome.ts`: `REINHART_MF2_PATCH_COUNT = 577`, `TREGENZA_PATCH_COUNT = 145`,
   `DEFAULT_SUBSTEPS_PER_HOUR = 4`, `DEFAULT_SUN_BINNING_DEG = 2`. The beam is never binned into
   sky patches.
-- `src/sim/units.ts`: `PAR_FRACTION_DEFAULT = 0.45` (user-adjustable 0.42-0.50),
-  `PHOTON_CONVERSION_UMOL_PER_J = 4.57`, `BROADBAND_UMOL_PER_J = 2.06`,
-  `SOLAR_CONSTANT_W_M2 = 1361.1`.
+- `src/sim/units.ts`: `PAR_FRACTION_DEFAULT = 0.45`, `PHOTON_CONVERSION_UMOL_PER_J = 4.57`,
+  `BROADBAND_UMOL_PER_J = 2.06`, `SOLAR_CONSTANT_W_M2 = 1361.1`.
 - `src/sim/pipeline.ts`: `FINAL_OPTIONS.targetCellSizeM = 0.12`, the one quality every bake runs
   at.
 - Ground shading is explicit per-panel polygon projection
