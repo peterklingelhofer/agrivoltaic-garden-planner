@@ -36,7 +36,6 @@ export const DEFAULT_WEIGHTS: ScoreWeights = {
 export const WEIGHTS_CLAIM = unsourcedClaim(
   DEFAULT_WEIGHTS,
   'The ranking weights (light 0.35, climate 0.25, soil 0.15, companion interaction 0.1, crowding 0.1, preference 0.05) are a design choice of this app: no study calibrates the relative weight of these terms for a garden bed',
-  'They order the crops that pass every gate and never admit a crop a gate refused',
 )
 
 export const score = (

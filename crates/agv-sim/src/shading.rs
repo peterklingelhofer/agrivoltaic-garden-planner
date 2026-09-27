@@ -188,14 +188,6 @@ pub fn shaded_ground_fraction_infinite_rows(
     shaded.min(1.0)
 }
 
-/// The sun is not a point. Half a degree of angular diameter is 0.0093 radians of half-angle, and
-/// this is the width of the soft edge that produces at a given slant distance.
-const SUN_ANGULAR_RADIUS_RAD: f64 = 0.0093;
-
-pub fn penumbra_width_m(slant_distance_m: f64) -> f64 {
-    SUN_ANGULAR_RADIUS_RAD * slant_distance_m
-}
-
 /// How much of a row its neighbour shades: a loss the array takes.
 pub fn row_self_shade_fraction(
     collector_width_m: f64,

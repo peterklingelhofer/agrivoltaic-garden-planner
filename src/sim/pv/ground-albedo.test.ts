@@ -31,7 +31,7 @@ import { DEFAULT_PV_CHAIN_OPTIONS, runAnnualChain } from './chain'
  * same number.
  *
  * These measure the size of what was being hidden, without asserting a chosen answer: the
- * relationship each one checks follows from the physics in `transposition.ts` and `bifacial.ts`,
+ * relationship each one checks follows from the physics in the core's `transposition.rs` and `pv/bifacial.rs`,
  * and what makes them worth having is that they fail loudly if the cover ever stops reaching the
  * chain again, which is the defect that was actually there
  */

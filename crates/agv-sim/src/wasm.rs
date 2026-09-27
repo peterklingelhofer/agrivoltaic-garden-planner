@@ -9,8 +9,7 @@
 //! Revisit this the moment the boundary needs strings, structs or errors. It does not yet.
 
 use crate::decomposition::{
-    decompose, enforce_component_consistency, DecompositionModel, DecompositionSample,
-    IrradianceComponents,
+    decompose, DecompositionModel, DecompositionSample, IrradianceComponents,
 };
 use crate::geom::{Extent2D, GridSpec, UnitVec3, Vec2M, Vec3M};
 use crate::geometry::{panel_snapshot, ModuleSpec, PvArray, RowGeometry, Tracker};
@@ -20,7 +19,6 @@ use crate::pv::losses::PVWATTS_DEFAULT_LOSSES;
 use crate::pv::temperature::{CellTemperatureModel, FaimanCoefficients, SapmThermalCoefficients};
 use crate::shading::beam_visibility_raster;
 use crate::solar::{spa_position, Observer};
-use crate::transposition::{perez_transposition_1990, TranspositionInput};
 
 /// Nine f64s per sample, in the field order of `SolarPosition`. `src/sim/rust-core.ts` reads them
 /// back in the same order and nothing else may reorder them.
@@ -47,12 +45,6 @@ pub unsafe extern "C" fn agv_free_f64(pointer: *mut f64, count: usize) {
         return;
     }
     drop(Vec::from_raw_parts(pointer, 0, count));
-}
-
-/// How many f64s an output buffer needs for `count` samples.
-#[no_mangle]
-pub extern "C" fn agv_spa_series_len(count: usize) -> usize {
-    count * FIELDS_PER_SAMPLE
 }
 
 /// Solar position for a run of UTC instants, one observer.
@@ -97,48 +89,6 @@ pub unsafe extern "C" fn agv_spa_series(
         out[at + 6] = sample.earth_radius_vector_au;
         out[at + 7] = sample.relative_air_mass;
         out[at + 8] = sample.absolute_air_mass;
-    }
-}
-
-/// Ten f64s in per sample, in the field order of `TranspositionInput`.
-pub const TRANSPOSITION_INPUTS: usize = 10;
-/// Four f64s out per sample, in the field order of `PoaComponents`.
-pub const POA_FIELDS: usize = 4;
-
-/// Plane-of-array irradiance for a run of samples, Perez 1990.
-///
-/// Every sample carries its own sky and geometry, unlike `agv_spa_series` where the observer is
-/// fixed: transposition is called once per timestep per surface, and the surface moves when the
-/// tracker does.
-///
-/// # Safety
-/// `inputs` must point at `count * 10` readable f64s and `out` at `count * 4` writable ones.
-#[no_mangle]
-pub unsafe extern "C" fn agv_perez_series(inputs: *const f64, count: usize, out: *mut f64) {
-    if inputs.is_null() || out.is_null() {
-        return;
-    }
-    let inputs = std::slice::from_raw_parts(inputs, count * TRANSPOSITION_INPUTS);
-    let out = std::slice::from_raw_parts_mut(out, count * POA_FIELDS);
-    for index in 0..count {
-        let at = index * TRANSPOSITION_INPUTS;
-        let poa = perez_transposition_1990(&TranspositionInput {
-            dni_wm2: inputs[at],
-            dhi_wm2: inputs[at + 1],
-            ghi_wm2: inputs[at + 2],
-            zenith_deg: inputs[at + 3],
-            relative_air_mass: inputs[at + 4],
-            extraterrestrial_normal_wm2: inputs[at + 5],
-            surface_tilt_deg: inputs[at + 6],
-            surface_azimuth_deg: inputs[at + 7],
-            solar_azimuth_deg: inputs[at + 8],
-            ground_albedo: inputs[at + 9],
-        });
-        let to = index * POA_FIELDS;
-        out[to] = poa.beam_wm2;
-        out[to + 1] = poa.sky_diffuse_wm2;
-        out[to + 2] = poa.ground_reflected_wm2;
-        out[to + 3] = poa.global_wm2;
     }
 }
 
@@ -204,34 +154,6 @@ pub unsafe extern "C" fn agv_decompose_series(
     };
     let samples = decomposition_samples(inputs, count);
     write_components(out, &decompose(&samples, model, utc_offset_hours));
-}
-
-/// The closure test alone, over the components the caller already has.
-///
-/// Exposed separately from `agv_decompose_series` so it can be held to the TypeScript on its own.
-/// Run at the end of every decomposition path, it would otherwise be able to absorb a divergence
-/// upstream of it and make the comparison say less than it appears to.
-///
-/// Reads `dni` and `dhi` from the same eight-field layout, so there is one input contract here
-/// for both.
-///
-/// # Safety
-/// `inputs` must point at `count * 8` readable f64s and `out` at `count * 3` writable ones.
-#[no_mangle]
-pub unsafe extern "C" fn agv_enforce_consistency_series(
-    count: usize,
-    inputs: *const f64,
-    out: *mut f64,
-) {
-    if inputs.is_null() || out.is_null() {
-        return;
-    }
-    let inputs = std::slice::from_raw_parts(inputs, count * DECOMPOSITION_INPUTS);
-    let out = std::slice::from_raw_parts_mut(out, count * DECOMPOSITION_OUTPUTS);
-    let samples = decomposition_samples(inputs, count);
-    let dni: Vec<f64> = samples.iter().map(|s| s.dni_wm2).collect();
-    let dhi: Vec<f64> = samples.iter().map(|s| s.dhi_wm2).collect();
-    write_components(out, &enforce_component_consistency(&samples, &dni, &dhi));
 }
 
 /// Twenty-one f64s describing one array: its row geometry, its tracker and its module.

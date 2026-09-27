@@ -17,12 +17,7 @@ import type { EvidenceGrade } from '../types/evidence'
 import type { Bed } from '../types/garden'
 import type { BedId } from '../types/ids'
 import type { PolycultureSuggestion } from '../types/polyculture'
-import type {
-  CropRecommendation,
-  LimitingFactor,
-  RecommendationVerdict,
-  YieldCaveat,
-} from '../types/recommend'
+import type { CropRecommendation, LimitingFactor, RecommendationVerdict } from '../types/recommend'
 import type { YieldEstimate } from '../types/recommend'
 import type { Fraction, MolPerM2Day, MonthIndex } from '../types/units'
 import type { WeatherSourceId } from '../types/weather'
@@ -188,12 +183,6 @@ export const formatCelsius = (celsius: number): string => {
 /** Rain and evaporative demand in both units, for the same reason */
 export const formatRainMm = (mm: number): string =>
   `${String(Math.round(mm))} mm (${(mm / 25.4).toFixed(mm >= 254 ? 0 : 1)} in)`
-
-/** Four decimals is ~11 m, enough to tell two same-named places apart in a picker */
-export const formatLatLon = (location: {
-  readonly latitudeDeg: number
-  readonly longitudeDeg: number
-}): string => `${location.latitudeDeg.toFixed(4)}, ${location.longitudeDeg.toFixed(4)}`
 
 export const formatDegrees = (value: number): string => `${value.toFixed(1)}°`
 
@@ -470,8 +459,6 @@ export const tiedLeadingSuggestionCount = (
 export const suggestionTieNote = (tiedCount: number): string =>
   `The top ${String(tiedCount)} combinations here score too close together to rank one above another. Pick whichever you would most like to grow`
 
-export const caveatLabel = (caveat: YieldCaveat): string => caveat.message
-
 // no pass/fail or compliant/non-compliant language: nothing here is a determination
 export const OUTCOME_LABEL: Readonly<Record<ComplianceOutcome, string>> = {
   'meets-expedited-parameters': 'Meets the expedited design parameters',
@@ -493,32 +480,11 @@ export const criterionSummary = (result: CriterionResult): string => {
 /* ---------------------------------- wildlife ----------------------------------- */
 
 /**
- * What favouring natives can and cannot do for a vegetable garden, said before anyone turns it
- * on.
- *
- * Almost nothing anybody eats is native to where they garden: the tomato is Andean, lettuce is
- * Mediterranean, and a grower who read "favour native plants" as a promise of a native garden
- * would be owed an explanation by every row of the ranking. It leans, it never filters, and on
- * this catalogue it leans among a handful of candidates in most regions
- */
-export const NATIVE_PREFERENCE_REACH =
-  "Almost no food crop is native to the place it's grown: the tomato comes from the Andes, lettuce from the Mediterranean. Saying yes moves up whichever crops Kew's World Checklist of Vascular Plants records growing wild in your region and removes nothing, so on most sites it moves a few rows"
-
-/**
  * Said wherever the native answer is, because without a region there is no answer at all and a
  * preference that silently does nothing reads exactly like one that worked
  */
 export const NATIVE_REGION_UNKNOWN =
   "No botanical region has been computed for this garden yet, because the place hasn't been looked up or its coordinates fall outside the region map. Until there is one, favouring natives changes nothing in the order below"
-
-/**
- * The standing of both pollinator traits, in front of every use of them. They are tier C
- * inferences from the plant's family and its harvested part, which is what `catalog/wildlife.ts`
- * says of itself; neither was measured on the crop in your bed, and a class-level inference
- * presented without that is a measurement as far as any reader can tell
- */
-export const POLLINATOR_TRAIT_BASIS =
-  'Both of these are computed from the plant family and what is harvested from it, following Klein et al. 2007 for what a crop needs and counts of flower visitors in gardens for what it offers. Neither was measured on this crop, so read them as typical of plants like it'
 
 /**
  * Whether the checklist records this crop growing wild where the garden is, in words.

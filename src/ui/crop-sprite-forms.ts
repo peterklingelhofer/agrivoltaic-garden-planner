@@ -19,21 +19,6 @@
  * colours; `tomato` and `apple` are the same round fruit, and nobody looking at a 20px list is
  * being asked to tell those two apart by shape
  */
-export type SpriteForm = readonly [
-  string,
-  string,
-  string,
-  string,
-  string,
-  string,
-  string,
-  string,
-  string,
-  string,
-  string,
-  string,
-]
-
 export const SPRITE_FORMS = {
   /** tomato, apple, melon: the round one, with a stem and a leaf */
   'round-fruit': [

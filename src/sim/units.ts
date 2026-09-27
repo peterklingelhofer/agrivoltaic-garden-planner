@@ -1,53 +1,16 @@
-import type {
-  ByMonth,
-  Degrees,
-  Fraction,
-  KwhPerM2Day,
-  MegajoulesPerM2Day,
-  MicromolPerM2Sec,
-  MolPerM2Day,
-  Radians,
-  Seconds,
-  WattsPerM2,
-} from '../types/units'
-import { clamp, DEG_TO_RAD, RAD_TO_DEG, sum } from './math'
+import type { ByMonth, Degrees, Fraction, MolPerM2Day, Radians } from '../types/units'
+import { clamp, DEG_TO_RAD, RAD_TO_DEG } from './math'
 
 export const PAR_FRACTION_DEFAULT = 0.45
-export const PAR_FRACTION_RANGE: readonly [number, number] = [0.42, 0.5]
 export const PHOTON_CONVERSION_UMOL_PER_J = 4.57
 export const BROADBAND_UMOL_PER_J = 2.06
 export const SOLAR_CONSTANT_W_M2 = 1361.1
 
-// diffuse skylight is blue-shifted so it carries more photons per joule
-export const BEAM_UMOL_PER_J = 2.0
-export const DIFFUSE_UMOL_PER_J = 2.15
-export const KWH_TO_MJ = 3.6
 export const SECONDS_PER_HOUR = 3600
 
 export const toRadians = (value: Degrees): Radians => (value * DEG_TO_RAD) as Radians
 
 export const toDegrees = (value: Radians): Degrees => (value * RAD_TO_DEG) as Degrees
-
-export const ppfdFromShortwave = (
-  irradiance: WattsPerM2,
-  parFraction: Fraction,
-): MicromolPerM2Sec => (irradiance * parFraction * PHOTON_CONVERSION_UMOL_PER_J) as MicromolPerM2Sec
-
-export const ppfdTwoBand = (
-  beamHorizontal: WattsPerM2,
-  diffuseHorizontal: WattsPerM2,
-): MicromolPerM2Sec =>
-  (beamHorizontal * BEAM_UMOL_PER_J + diffuseHorizontal * DIFFUSE_UMOL_PER_J) as MicromolPerM2Sec
-
-export const dliFromPpfdSum = (samples: Float32Array, stepSeconds: Seconds): MolPerM2Day =>
-  ((sum(samples) * stepSeconds) / 1e6) as MolPerM2Day
-
-// DLI = GHI(MJ) x 1e6 J/MJ x f_PAR x 4.57 umol/J / 1e6 umol/mol
-export const dliFromDailyGhiMj = (ghi: MegajoulesPerM2Day, parFraction: Fraction): MolPerM2Day =>
-  (ghi * parFraction * PHOTON_CONVERSION_UMOL_PER_J) as MolPerM2Day
-
-export const dliFromDailyGhiKwh = (ghi: KwhPerM2Day, parFraction: Fraction): MolPerM2Day =>
-  dliFromDailyGhiMj((ghi * KWH_TO_MJ) as MegajoulesPerM2Day, parFraction)
 
 // canonical definition of RSR; "shade fraction" is the same quantity (ARCHITECTURE.md section 2)
 export const relativeShadeRatio = (underArray: MolPerM2Day, openSky: MolPerM2Day): Fraction =>

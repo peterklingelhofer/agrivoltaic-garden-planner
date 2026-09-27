@@ -12,6 +12,7 @@ import { runRecommendationPipeline } from '../recommend/pipeline'
 import { DEFAULT_WEIGHTS } from '../recommend/stages/rank'
 import { AMBITION_CLASSES } from '../recommend/suggest'
 import { bedFixture, bedLightFixture, plotFixture, siteFixture } from '../recommend/testkit'
+import { FINAL_OPTIONS } from '../sim/pipeline'
 import { makeArray } from '../state/defaults'
 import { ready } from '../state/slices'
 import { getAppState, resetAppStore, useAppStore } from '../state/store'
@@ -198,6 +199,22 @@ describe('the bed cards', () => {
     expect(getAppState().plot).toBe(before)
     expect(getAppState().generated).toBeNull()
     expect(harness.find('action-plants-undo')).toBeNull()
+    await harness.unmount()
+  })
+})
+
+describe('the light readout after a guided apply', () => {
+  it('is not called rough, even before a raster in the editor has caught up with it', async () => {
+    await seedTwoBeds()
+    // what a guided apply itself leaves behind: bedLight set straight from the search's own
+    // bake, with the raster untouched and still idle
+    useAppStore.setState({ bedLightSubdivision: FINAL_OPTIONS.subdivision })
+    await act(async () => {
+      await getAppState().plantEveryBed()
+    })
+    const harness = await mount(<PlantsPanel />)
+    expect(getAppState().raster.status).toBe('idle')
+    expect(harness.get('readout-plants-status').textContent).toContain('Light: full check done')
     await harness.unmount()
   })
 })

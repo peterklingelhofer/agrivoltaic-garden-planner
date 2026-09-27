@@ -1,13 +1,4 @@
-import type {
-  Celsius,
-  Degrees,
-  EpochMillis,
-  HourOfYear,
-  MetersPerSecond,
-  Millibars,
-  Millimeters,
-  WattsPerM2,
-} from './units'
+import type { Celsius, Degrees, EpochMillis, Millimeters } from './units'
 
 export const HOURS_PER_TMY = 8760
 
@@ -19,18 +10,6 @@ export type WeatherSourceId =
   | 'user-upload'
 
 export type DecompositionModel = 'passthrough' | 'dirint' | 'engerer2' | 'erbs'
-
-export interface TmyHour {
-  readonly hourOfYear: HourOfYear
-  readonly utcMillis: EpochMillis
-  readonly ghiWM2: WattsPerM2
-  readonly dniWM2: WattsPerM2
-  readonly dhiWM2: WattsPerM2
-  readonly dryBulbC: Celsius
-  readonly dewPointC: Celsius
-  readonly windSpeedMS: MetersPerSecond
-  readonly pressureMb: Millibars
-}
 
 export interface TmySeries {
   readonly source: WeatherSourceId

@@ -241,13 +241,3 @@ export const transmissionAtDistance = (
     distanceM,
     (index) => template.samples.value[index]?.transmittedRadiationFraction ?? 1,
   ) as Fraction
-
-export const soilMoistureAtDistance = (
-  template: DistanceGradientTemplate,
-  distanceM: Meters,
-): Fraction =>
-  sampleAt(
-    template,
-    distanceM,
-    (index) => template.samples.value[index]?.relativeSoilMoisture ?? 1,
-  ) as Fraction

@@ -122,6 +122,14 @@ describe('the advanced controls reach the engine', () => {
     expect(useAppStore.getState().preferences.entries[0]?.weight).toBe(0.4)
     await harness.unmount()
   })
+
+  it('clears a never when its chip is pressed', async () => {
+    const harness = await open()
+    await harness.click(`control-polyculture-kind-${BLUEBERRY}-exclude`)
+    await harness.click(`control-plants-like-${BLUEBERRY}`)
+    expect(useAppStore.getState().preferences.entries).toEqual([])
+    await harness.unmount()
+  })
 })
 
 /**

@@ -131,17 +131,3 @@ const SUN_ANGULAR_DIAMETER_RAD = 0.0093
 /** The penumbra's width across the ray at a slant distance; on the ground it is 1/sin(elevation) wider */
 export const penumbraWidthM: (slantDistanceM: Meters) => Meters = (slantDistanceM) =>
   (SUN_ANGULAR_DIAMETER_RAD * slantDistanceM) as Meters
-
-export const rowSelfShadeFraction: (
-  collectorWidthM: Meters,
-  pitchM: Meters,
-  tiltDeg: Degrees,
-  profileAngleRad: Radians,
-  side: -1 | 0 | 1,
-) => Fraction = (collectorWidthM, pitchM, tiltDeg, profileAngleRad, side) => {
-  if (profileAngleRad <= 0) return 0 as Fraction
-  const d =
-    collectorWidthM *
-    Math.abs(cosDeg(tiltDeg) + (side * sinDeg(tiltDeg)) / Math.tan(profileAngleRad))
-  return d <= pitchM ? (0 as Fraction) : ((1 - pitchM / d) as Fraction)
-}

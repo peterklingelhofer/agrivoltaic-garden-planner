@@ -17,9 +17,9 @@ Beam/diffuse decomposition: Erbs, Klein & Duffie 1982; Maxwell's DISC 1987; Pere
 1992 over a 1,260-entry coefficient table; Engerer 2 with both the 2015 Australian and the Bright
 & Engerer 2019 global fits; and the component-closure test every path ends in.
 
-Array geometry and shade: row layout and the four tracker modes, panel snapshots, shadow
-projection onto the ground, the infinite-row closed forms for shaded ground fraction and ground
-sky view factor, crossed-strings view factors, interreflection, rear-side POA, and snow cover.
+Array geometry and shade: row layout and the four tracker modes, panel snapshots, shadow projection
+onto the ground, the infinite-row closed forms for shaded ground fraction, crossed-strings view
+factors, interreflection, rear-side POA, and the albedo of ground under snow.
 
 The PV chain end to end: cell temperature (Faiman and SAPM), PVWatts DC, the loss stack, and the
 inverter with clipping. `agv_annual_chain` takes a whole year across the wasm boundary in one call

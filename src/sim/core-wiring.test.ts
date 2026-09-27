@@ -78,17 +78,10 @@ const weatherFor = (position: SolarPositionSeries): TmySeries => {
 /** A core that answers, and answers wrongly, so a live seam cannot help but show it */
 const WRONG_CORE = {
   spaSeriesFlat: (utcMillis: ArrayLike<number>) => new Float64Array(utcMillis.length * 9).fill(7),
-  spaSeries: () => [],
-  perezSeries: () => [],
   decomposeSeries: (series: { ghiWM2: ArrayLike<number> }) => ({
     ghiWM2: new Float32Array(series.ghiWM2.length).fill(11),
     dniWM2: new Float32Array(series.ghiWM2.length).fill(22),
     dhiWM2: new Float32Array(series.ghiWM2.length).fill(33),
-  }),
-  enforceConsistencySeries: () => ({
-    ghiWM2: new Float32Array(0),
-    dniWM2: new Float32Array(0),
-    dhiWM2: new Float32Array(0),
   }),
 } as unknown as RustCore
 

@@ -1,8 +1,8 @@
 import { citedDerived, citedVerbatim } from '../types/cited'
-import type { Crop, Cultivar, DliClass, LaubCropGroup, LaubCurve } from '../types/crop'
-import type { CropId, CultivarId } from '../types/ids'
+import type { Crop, DliClass, LaubCropGroup, LaubCurve } from '../types/crop'
+import type { CropId } from '../types/ids'
 import type { GrowingWindow } from '../types/light'
-import type { Celsius, Days, DegreeDaysC, Fraction, MolPerM2Day } from '../types/units'
+import type { Fraction, MolPerM2Day } from '../types/units'
 import {
   LAUB_ANOVA,
   LAUB_AUTHOR_CAVEAT,
@@ -73,9 +73,6 @@ export const cropName = (catalogue: readonly Crop[], id: CropId): string => {
   return crop === undefined ? (id as string) : cropLabel(crop)
 }
 
-export const cropsByFamily = (catalogue: readonly Crop[], family: string): readonly Crop[] =>
-  catalogue.filter((crop) => crop.taxonomy.family === family)
-
 export const dliClassLimits = (dliClass: DliClass): DliClassLimits => {
   const spec = DLI_CLASSES[dliClass]
   return {
@@ -129,32 +126,7 @@ export const laubCurve = (group: LaubCropGroup, groupNote: string | null = null)
   }
 }
 
-/**
- * B benefiting, T tolerant, S sensitive, exactly as tabulated. C3 cereals and
- * tubers flip back from S to T at high RSR because the class follows the local
- * slope; that is published behaviour and is deliberately not smoothed
- */
-export const laubResponseClass = (group: LaubCropGroup, rsr: number): 'B' | 'T' | 'S' => {
-  const percent = rsr * 100
-  const classes = LAUB_GROUPS[group].responseClass
-  let best = 0
-  let bestDistance = Number.POSITIVE_INFINITY
-  for (let index = 0; index < LAUB_RSR_LEVELS_PERCENT.length; index += 1) {
-    const distance = Math.abs((LAUB_RSR_LEVELS_PERCENT[index] ?? 0) - percent)
-    if (distance < bestDistance) {
-      bestDistance = distance
-      best = index
-    }
-  }
-  return classes[best] ?? 'T'
-}
-
 export const laubStudyCount = (group: LaubCropGroup): number => LAUB_GROUPS[group].studies
-
-/** Thinnest evidence base of the nine groups, surfaced so the UI can flag them */
-export const LAUB_WEAK_GROUPS: readonly LaubCropGroup[] = (
-  Object.keys(LAUB_GROUPS) as LaubCropGroup[]
-).filter((group) => LAUB_GROUPS[group].studies <= 4)
 
 /** Catalogue growing windows are authored for the northern hemisphere */
 export const mirrorGrowingWindow = (window: GrowingWindow): GrowingWindow => {
@@ -164,61 +136,3 @@ export const mirrorGrowingWindow = (window: GrowingWindow): GrowingWindow => {
 
 export const growingWindowFor = (crop: Crop, latitudeDeg: number): GrowingWindow =>
   latitudeDeg >= 0 ? crop.window : mirrorGrowingWindow(crop.window)
-
-const cultivar = (
-  id: string,
-  cropId: string,
-  name: string,
-  isLandrace: boolean,
-  regionOfAdaptation: string | null,
-  gddToMaturity: number,
-  daysToMaturity: number,
-  note: string | null,
-): Cultivar => ({
-  id: id as CultivarId,
-  cropId: cropId as CropId,
-  name,
-  isLandrace,
-  regionOfAdaptation,
-  thermal: {
-    gddBaseC: 10 as Celsius,
-    gddUpperCutoffC: 30 as Celsius,
-    gddToMaturity: gddToMaturity as DegreeDaysC,
-    daysToMaturity: daysToMaturity as Days,
-    dtmReference: 'transplant',
-  },
-  chill: null,
-  shadeToleranceNote: note,
-  provenance: CATALOG_PROVENANCE,
-})
-
-/**
- * Only cultivars whose behaviour is documented as cultivar-specific are listed,
- * because that distinction changes a recommendation. Inventing trait rows for a
- * general cultivar table would be worse than shipping none
- */
-const CULTIVARS: readonly Cultivar[] = [
-  cultivar(
-    'marigold-nemagold',
-    'marigold-french',
-    'Nemagold',
-    false,
-    null,
-    720,
-    60,
-    'Selected for alpha-terthienyl content. Effective only as a dense full-season stand, some Tagetes cultivars are hosts',
-  ),
-  cultivar(
-    'marigold-single-gold',
-    'marigold-french',
-    'Single Gold',
-    false,
-    null,
-    720,
-    60,
-    'Selected for alpha-terthienyl content. Effective only as a dense full-season stand, some Tagetes cultivars are hosts',
-  ),
-]
-
-export const loadCultivars = (cropId: CropId): Promise<readonly Cultivar[]> =>
-  Promise.resolve(CULTIVARS.filter((entry) => entry.cropId === cropId))

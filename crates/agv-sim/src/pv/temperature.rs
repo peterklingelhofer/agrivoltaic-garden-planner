@@ -1,4 +1,4 @@
-//! Cell temperature, ported from `src/sim/pv/temperature.ts`.
+//! Cell temperature
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct FaimanCoefficients {
@@ -20,18 +20,6 @@ pub const FAIMAN_DEFAULT: FaimanCoefficients = FaimanCoefficients { u0: 25.0, u1
 pub const SAPM_OPEN_RACK_GLASS_GLASS: SapmThermalCoefficients = SapmThermalCoefficients {
     a: -3.47,
     b: -0.0594,
-    delta_t_c: 3.0,
-};
-
-pub const SAPM_CLOSE_MOUNT_GLASS_GLASS: SapmThermalCoefficients = SapmThermalCoefficients {
-    a: -2.98,
-    b: -0.0471,
-    delta_t_c: 1.0,
-};
-
-pub const SAPM_OPEN_RACK_GLASS_POLYMER: SapmThermalCoefficients = SapmThermalCoefficients {
-    a: -3.56,
-    b: -0.075,
     delta_t_c: 3.0,
 };
 

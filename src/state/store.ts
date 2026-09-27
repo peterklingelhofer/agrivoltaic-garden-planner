@@ -237,6 +237,7 @@ const initialData = (): DataOnly<AppState> => ({
   progress: null,
   raster: idle(),
   bedLight: [],
+  bedLightSubdivision: null,
   lightGeometry: null,
   compliance: [],
   energy: idle(),
@@ -310,6 +311,7 @@ const rederiveBedLight = (s: MutableState): void => {
   s.bedLight = s.plot.beds.map((bed) =>
     shadedBySurroundings(bedLightOf(raster, bed.id, bed.footprint), exposure),
   )
+  s.bedLightSubdivision = raster.quality.subdivision
 }
 
 /**
@@ -414,6 +416,7 @@ const runBake = async (
       s.progress = null
       s.raster = failed(message)
       s.bedLight = []
+      s.bedLightSubdivision = null
       s.compliance = []
       s.lightGeometry = null
     })
@@ -430,6 +433,7 @@ const runBake = async (
     // unless the plot this run was handed already carries a house, which answers it instead
     const exposure = exposureInForce(plot.obstructions, s.answers.exposure)
     s.bedLight = bedLight.map((light) => shadedBySurroundings(light, exposure))
+    s.bedLightSubdivision = raster.quality.subdivision
     s.compliance = compliance
     // stamped from the plot this run was handed, not from `s.plot`, which an edit made while the
     // bake was in flight would already have moved on: the answer belongs to the geometry it was
@@ -869,6 +873,7 @@ export const useAppStore = create<AppState>()(
           Object.assign(s, example.design)
           s.raster = ready(example.raster)
           s.bedLight = example.bedLight
+          s.bedLightSubdivision = example.raster.quality.subdivision
           s.compliance = compliance
           // the arrangement the shipped raster was baked over, so an edit to the example reads as
           // stale and is computed again. Left null, the example's light would outlive every change
@@ -899,6 +904,7 @@ export const useAppStore = create<AppState>()(
           Object.assign(s, fresh)
           s.raster = idle()
           s.bedLight = []
+          s.bedLightSubdivision = null
           s.lightGeometry = null
           s.compliance = []
           s.energy = idle()
@@ -948,6 +954,7 @@ export const useAppStore = create<AppState>()(
             s.raster = idle()
             s.progress = null
             s.bedLight = []
+            s.bedLightSubdivision = null
             s.compliance = []
             s.lightGeometry = null
           }
@@ -2152,8 +2159,11 @@ export const useAppStore = create<AppState>()(
           s.draft = []
           s.selectedBedId = null
           // the light each bed was placed in, carried across as is. It is the
-          // search's own bake of this layout
+          // search's own bake of this layout, always run at FINAL_OPTIONS in production, which is
+          // what lets the plants step call this full quality before any raster in the editor
+          // catches up with it
           s.bedLight = layout.beds.map((bed) => bed.light)
+          s.bedLightSubdivision = FINAL_OPTIONS.subdivision
           s.compliance = []
           // captured only when the slot is empty: a second apply before an undo must still
           // restore the grower's own garden, not the first generated layout that a naive
@@ -2240,6 +2250,7 @@ export const useAppStore = create<AppState>()(
           s.generated = null
           s.planRefusals = []
           s.bedLight = []
+          s.bedLightSubdivision = null
           s.lightGeometry = null
           // the light on screen was computed over the layout just undone; back to idle, which
           // is what has `useAutoLight` compute it again over the garden as restored
@@ -2533,26 +2544,6 @@ export const sameHover = (a: HoverTarget | null, b: HoverTarget | null): boolean
       return a.arrayId === (b as { arrayId: ArrayId }).arrayId
   }
 }
-
-/**
- * Whether this bed is the one under the pointer, hovered directly or through a plant growing in
- * it. Returned as a boolean, because a selector that hands back an
- * object hands back a new one every read: see the note above `sceneSnowCover`
- */
-export const bedHovered =
-  (bedId: BedId) =>
-  (state: AppState): boolean =>
-    state.hovered !== null && state.hovered.kind !== 'array' && state.hovered.bedId === bedId
-
-export const plantingHovered =
-  (plantingId: PlantingId) =>
-  (state: AppState): boolean =>
-    state.hovered?.kind === 'planting' && state.hovered.plantingId === plantingId
-
-export const arrayHovered =
-  (arrayId: ArrayId) =>
-  (state: AppState): boolean =>
-    state.hovered?.kind === 'array' && state.hovered.arrayId === arrayId
 
 /** The example's own plot, captured when it loads, for the selector below */
 let examplePlot: GardenPlot | null = null

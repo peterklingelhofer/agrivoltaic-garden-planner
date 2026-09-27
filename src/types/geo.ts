@@ -1,4 +1,4 @@
-import type { Degrees, DegreesLatitude, DegreesLongitude, Meters, SquareMeters } from './units'
+import type { DegreesLatitude, DegreesLongitude, Meters } from './units'
 
 export interface LatLon {
   readonly latitudeDeg: DegreesLatitude
@@ -45,13 +45,4 @@ export interface GridSpec {
   readonly cellSizeM: Meters
   readonly cols: number
   readonly rows: number
-}
-
-export interface AreaSummary {
-  readonly areaM2: SquareMeters
-  readonly perimeterM: Meters
-}
-
-export interface SiteOrigin extends LatLon {
-  readonly northOffsetDeg: Degrees
 }

@@ -787,8 +787,7 @@ export const routeLexically = (text: string, context: RouteContext): Understandi
         (top !== undefined && top.score >= CONFIDENCE_FLOOR ? top : undefined) ??
         (suspectedDestructive(text, context, reading)
           ? undefined
-          : answerToTheQuestion(ranked, context)) ??
-        (reading.cropsAreCertain ? cropNamedAlone(ranked) : undefined))
+          : answerToTheQuestion(ranked, context)))
   if (chosen === undefined) return null
   /*
     Liking and disliking are one intent with a sign, so the SENTENCE decides the sign and the

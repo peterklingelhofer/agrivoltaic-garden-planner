@@ -25,8 +25,8 @@ edge rows dominate at garden scale and a finite array needs the explicit project
 case and reaches no user path.
 
 The PV chain is a separate surface and does ship infinite-row formulations on the user path:
-`rearPoaWM2` takes the unshaded ground fraction as `1 - GCR` (Marion et al. 2017), and
-`rowSelfShadeFraction` shades every row alike. A three-row array is nearly all edge, so both understate
+`rear_poa_wm2` in `crates/agv-sim/src/pv/bifacial.rs` takes the unshaded ground fraction as `1 - GCR` (Marion et al. 2017), and
+`row_self_shade_fraction` in `crates/agv-sim/src/shading.rs` shades every row alike. A three-row array is nearly all edge, so both understate
 rear-side gain and overstate row-shading loss. The overstated row shading costs 0.13% of the year on the
 shipped default array at its wide 9 m pitch, and the understated rear gain is unquantified, a known
 limit.
@@ -113,8 +113,8 @@ tracking.
 
 ## 3. Physics constants and formulas
 
-- PAR fraction of GHI: 0.45 by energy, user-adjustable 0.42-0.50 (Meek et al. 1984, Britton & Dodd
-  1976, Jacovides et al. 2004 measured 0.451-0.456, to 0.501 hourly under overcast).
+- PAR fraction of GHI: 0.45 by energy, inside the 0.42-0.50 the literature gives (Meek et al. 1984,
+  Britton & Dodd 1976, Jacovides et al. 2004 measured 0.451-0.456, to 0.501 hourly under overcast).
 - Photon conversion: 4.57 umol/J in-band (McCree 1971), about 2.06 umol/J composite on broadband.
 - `DLI (mol/m2/d) ~= GHI (MJ/m2/d) x 2.06`, or `x 7.4` for kWh/m2/d.
 - Module-to-ground inter-reflection: `E / (1 - rho_g (1 - SVF) rho_m)`, an instance of the two-surface

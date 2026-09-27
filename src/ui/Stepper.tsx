@@ -37,19 +37,13 @@ export interface StepDefinition<T extends string> {
 export interface StepperProps<T extends string> {
   readonly label: string
   readonly steps: readonly StepDefinition<T>[]
-  /**
-   * The open step, or null for none open at all.
-   *
-   * Null exists for the first load, where the guided dock is asking the same questions across the
-   * foot of the scene. With step one expanded in the sidebar underneath it, the page carried two
-   * address fields three hundred pixels apart, both empty, both asking where the garden is
-   */
-  readonly selected: T | null
+  /** The open step. The sidebar always has one open */
+  readonly selected: T
   /**
    * A key that changes whenever the app itself picks the open step, and should land at the top of
    * the column the way a press does. The guided setup opens the plants step as it hands over
    */
-  readonly landOn?: unknown
+  readonly landOn: string
   onSelect(id: T): void
   renderPanel(id: T): ReactNode
 }
@@ -201,7 +195,7 @@ export const Stepper = <T extends string>({
   /** The step the last press opened, so the effect below can tell a press from the app */
   const pressed = useRef<T | null>(null)
   /** The step last seen open, starting at the mount, which is where the column already was */
-  const seen = useRef<T | null>(selected)
+  const seen = useRef<T>(selected)
   /** The `landOn` key last acted on, starting at the mount's, which a reload does not act on */
   const landed = useRef<unknown>(landOn)
 
@@ -213,13 +207,11 @@ export const Stepper = <T extends string>({
     some route other than its header: "Fix Bed 1" on the seasons step, a plant clicked in the
     scene and a crop dropped on a bed all open the plants step with that bed selected, and none
     of them moved the column, so the ranking panel scrolled its own list for the bed instead and
-    put the planting the press named a screen above the fold. Neither counts while the key is
-    null, which is the questions being open and the dock being where the reader is looking. A
-    press has already landed by the time this runs and is skipped. One effect for both, because
-    the two can arrive in one commit and a landing started twice in a frame is two scrolls
+    put the planting the press named a screen above the fold. A press has already landed by the
+    time this runs and is skipped. One effect for both, because the two can arrive in one commit
+    and a landing started twice in a frame is two scrolls
   */
   useEffect(() => {
-    if (selected === null) return
     const stepChanged = selected !== seen.current
     const byPress = stepChanged && pressed.current === selected
     if (stepChanged) {
@@ -228,7 +220,7 @@ export const Stepper = <T extends string>({
     }
     const keyChanged = landOn !== landed.current
     landed.current = landOn
-    if (landOn === undefined || landOn === null || byPress) return
+    if (byPress) return
     if (!stepChanged && !keyChanged) return
     landing.start(() => buttons.current.get(selected))
     /*

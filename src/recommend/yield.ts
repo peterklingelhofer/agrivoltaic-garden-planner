@@ -21,7 +21,6 @@ export const SEASONAL_PAR_HALF_WIDTH: Fraction = 0.1 as Fraction
 export const SEASONAL_PAR_CLAIM = unsourcedClaim(
   SEASONAL_PAR_HALF_WIDTH,
   'Treating season-cumulative PAR as plus or minus 10 percent is a figure of this app’s own: no source in the corpus gives an uncertainty for a season’s integrated light, and the relative yield it widens is a ratio of two integrals of the same weather series',
-  'It widens every yield band by a tenth of its midpoint and is named as the dominant term wherever the published interval is narrower',
 )
 
 export const SEASONAL_PAR_CONTRIBUTION: UncertaintyContribution = {

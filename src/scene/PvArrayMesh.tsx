@@ -95,6 +95,16 @@ export const PvArrayMesh = ({
   const steel = useMemo(() => galvanisedSurface(size), [size])
   const frameNormalScale = useMemo(() => new Vector2(0.6, 0.6), [])
   const steelNormalScale = useMemo(() => new Vector2(0.8, 0.8), [])
+  // the posts and the torque tubes share one galvanised finish
+  const steelMaterial = {
+    map: steel.map,
+    normalMap: steel.normalMap,
+    normalScale: steelNormalScale,
+    roughnessMap: steel.ormMap,
+    metalnessMap: steel.ormMap,
+    roughness: 1,
+    metalness: 1,
+  }
   const glassNormalScale = useMemo(() => new Vector2(0.25, 0.25), [])
   // half strength on a metal: the frame's own reflectance is high, and a full-strength tint on
   // top of it clips the red channel and never reads as selected
@@ -219,15 +229,7 @@ export const PvArrayMesh = ({
         limit={512}
         castShadow
       >
-        <meshStandardMaterial
-          map={steel.map}
-          normalMap={steel.normalMap}
-          normalScale={steelNormalScale}
-          roughnessMap={steel.ormMap}
-          metalnessMap={steel.ormMap}
-          roughness={1}
-          metalness={1}
-        />
+        <meshStandardMaterial {...steelMaterial} />
         {layout.posts.map((p) => (
           <Instance key={`post-${p.join(':')}`} position={[...p]} />
         ))}
@@ -238,15 +240,7 @@ export const PvArrayMesh = ({
         limit={64}
         castShadow
       >
-        <meshStandardMaterial
-          map={steel.map}
-          normalMap={steel.normalMap}
-          normalScale={steelNormalScale}
-          roughnessMap={steel.ormMap}
-          metalnessMap={steel.ormMap}
-          roughness={1}
-          metalness={1}
-        />
+        <meshStandardMaterial {...steelMaterial} />
         {layout.torqueTubes.map((p) => (
           <Instance
             key={`tube-${p.join(':')}`}

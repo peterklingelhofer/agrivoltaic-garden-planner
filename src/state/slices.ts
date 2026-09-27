@@ -38,6 +38,7 @@ import type {
 import type { StorageStatus } from '../types/persist'
 import type { PvArray } from '../types/pv'
 import type { RecommendationSet } from '../types/recommend'
+import type { SkySubdivision } from '../types/weather'
 import type { LightingQuality } from '../types/render'
 import type { ExceedancePercentile, Site } from '../types/site'
 import type { TekDesignRule } from '../types/tek'
@@ -64,8 +65,6 @@ export const idle = <T>(): AsyncState<T> => ({ status: 'idle' })
 export const loading = <T>(): AsyncState<T> => ({ status: 'loading' })
 export const ready = <T>(value: T): AsyncState<T> => ({ status: 'ready', value })
 export const failed = <T>(message: string): AsyncState<T> => ({ status: 'error', message })
-export const valueOr = <T>(state: AsyncState<T>, fallback: T): T =>
-  state.status === 'ready' ? state.value : fallback
 
 export interface SiteSlice {
   readonly site: AsyncState<Site>
@@ -141,6 +140,15 @@ export interface LightSlice {
   readonly progress: AccumulationProgress | null
   readonly raster: AsyncState<DliRaster>
   readonly bedLight: readonly BedLight[]
+  /**
+   * The sky subdivision `bedLight` was read off, or null with no light at all.
+   *
+   * Kept separate from `raster`: a guided apply carries the search's own per-bed light across
+   * before any raster in the editor has caught up with it, and a raster that goes idle after a
+   * cancelled re-bake leaves an editor reading in place with no `ready` raster left to read a
+   * subdivision off. Set alongside `bedLight` at every one of its call sites
+   */
+  readonly bedLightSubdivision: SkySubdivision | null
   readonly compliance: readonly ComplianceCheck[]
   /**
    * The arrangement of panels and beds that `raster`, `bedLight` and `compliance` were

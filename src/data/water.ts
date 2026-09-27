@@ -359,9 +359,6 @@ const stageOf = (bounds: StageBounds): GrowthStage => {
   return 'late-season'
 }
 
-export const stageAt = (dayIndex: number, calendar: StageCalendar): GrowthStage =>
-  stageOf(stageBounds(dayIndex, calendar))
-
 /**
  * FAO-56 Table 11 tabulates stage lengths per crop and per climate. The crop
  * catalogue carries none of them, so a planting's sow-to-harvest span is split

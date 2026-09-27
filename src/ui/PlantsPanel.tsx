@@ -185,13 +185,12 @@ const StatusLine = (): ReactElement => {
   const generated = useAppStore((s) => s.generated)
   const planted = useAppStore(anythingPlanted)
   const rasterStatus = useAppStore((s) => s.raster.status)
-  // the raster carries the sky subdivision it was run at, which is what tells the full check
-  // from the quick one; `bedLight` alone cannot, since a guided apply carries the search's field
-  const fullCheck = useAppStore(
-    (s) =>
-      s.raster.status === 'ready' &&
-      s.raster.value.quality.subdivision === FINAL_OPTIONS.subdivision,
-  )
+  // bedLightSubdivision carries what bedLight is actually baked at: a guided apply sets bedLight
+  // straight from the search's own bake, always at FINAL_OPTIONS quality, without touching the
+  // raster at all, and a cancelled re-bake leaves the raster idle with the last reading still
+  // standing. The shipped example is the one case this actually catches, since its rasters are
+  // baked coarser
+  const fullCheck = useAppStore((s) => s.bedLightSubdivision === FINAL_OPTIONS.subdivision)
   const hasLight = useAppStore((s) => s.bedLight.length > 0)
   const planting = useAppStore((s) => s.planting)
   const origin = planting
@@ -475,11 +474,7 @@ const BedCards = ({ onEdit }: { onEdit(bedId: BedId): void }): ReactElement => {
  * choices" presses on to avoid the way prefer does, and a never presses back to nothing
  */
 const cycle = (kind: PreferenceKind | null): PreferenceKind | null =>
-  kind === null || kind === 'exclude'
-    ? 'prefer'
-    : kind === 'prefer' || kind === 'require'
-      ? 'avoid'
-      : null
+  kind === null ? 'prefer' : kind === 'prefer' || kind === 'require' ? 'avoid' : null
 
 const kindLabel = (kind: PreferenceKind): string =>
   PREFERENCE_KINDS.find((entry) => entry.kind === kind)?.label ?? kind
