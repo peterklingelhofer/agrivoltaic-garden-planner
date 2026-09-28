@@ -129,7 +129,6 @@ describe('the temperatures a crop actually stands in', () => {
           {
             meanTempC: growingSeasonMeanTempC(crop, site),
             annualRainfallMm: site.normals.monthlyPrecipMm.reduce<number>((a, b) => a + b, 0),
-            soilPh: site.soil.phUnits,
             seasonLengthDays: seasonLengthDays(site, 20),
             koppenCode: site.koppenCode,
           },

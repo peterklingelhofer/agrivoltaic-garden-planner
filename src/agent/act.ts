@@ -5,7 +5,7 @@ import { dayOfYearUtc } from '../state/sun'
 import { waterBalanceView } from '../state/water'
 import type { Agenda } from '../types/agenda'
 import { polygonAreaM2, polygonOf, rectangleRing, vec2 } from '../state/geom'
-import { makeBed, nextBedIndex } from '../state/defaults'
+import { makeBed, nextBedIndex, soilForSite } from '../state/defaults'
 import { OBJECTIVE_PRESETS, plotSizeOf } from '../state/onboarding'
 import type { AppState, OnboardingStep } from '../state/slices'
 import type { CitationId } from '../types/citation-ids.generated'
@@ -1028,7 +1028,9 @@ export const act = async (
         should go is a question about the light, which is the design search's job. What this does
         is give the grower one more bed to put something in, in the row the defaults lay out
       */
-      const bed = makeBed(nextBedIndex(plot.beds))
+      const bed = makeBed(nextBedIndex(plot.beds), {
+        soil: soilForSite(state.site.status === 'ready' ? state.site.value : null),
+      })
       state.upsertBed(bed)
       return reply([{ kind: 'bed-added', label: bed.label }], {
         did: [`added ${bed.label}`],

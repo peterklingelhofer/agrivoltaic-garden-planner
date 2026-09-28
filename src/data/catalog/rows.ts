@@ -504,7 +504,12 @@ export const CROP_ROWS: readonly CropRow[] = [
     'grain-legumes',
     'grain-legumes',
     'vining-trellised',
-    'cool',
+    // frost-tender like the pole bean two rows up: its seed rots in soil that hasn't warmed and
+    // the seedling takes no frost, so it's sown after the last spring frost the same as any
+    // other tender crop. A cool summer helps it set pods, but that is a temperature envelope for
+    // fruit set, and leaves the plant exactly as tender at each end of the season as the bean
+    // beside it
+    'warm',
     12,
     18,
     25,

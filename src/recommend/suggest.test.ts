@@ -1,5 +1,6 @@
 import { beforeAll, describe, expect, it } from 'bun:test'
 import { loadCompanionRules, loadRotationConstraints } from '../data/companions'
+import { isNativeIn } from '../data/catalog/native-ranges'
 import { loadCropCatalog } from '../data/crops'
 import { loadTekRules } from '../data/tek'
 import { banded, interval } from '../types/band'
@@ -28,6 +29,7 @@ import {
   suggestPolycultures,
   withAmbition,
 } from './suggest'
+import type { WildlifePreference } from './wildlife'
 import {
   PHOENIX_OPEN_SKY_DLI,
   bedFixture,
@@ -77,7 +79,11 @@ const ENERGY_RATIO = banded(
   [],
 )
 
-const suggest = (preferenceSet: PreferenceSet, phUnits = 5.4): SuggestionSet => {
+const suggest = (
+  preferenceSet: PreferenceSet,
+  phUnits = 5.4,
+  wildlife?: WildlifePreference,
+): SuggestionSet => {
   const soil = { ...ACID_SOIL, phUnits }
   const bed: Bed = bedFixture('bed-a', { soil })
   const plot = plotFixture([bed])
@@ -108,6 +114,7 @@ const suggest = (preferenceSet: PreferenceSet, phUnits = 5.4): SuggestionSet => 
     tekRules,
     energyRatio: ENERGY_RATIO,
     maxSuggestions: 4,
+    wildlife,
   })
 }
 
@@ -197,7 +204,7 @@ describe('a blueberry anchor', () => {
     expect(set.anchorCropIds).toEqual([])
     expect(set.suggestions).toEqual([])
     const refusal = set.refused.find((entry) => entry.cropId === ('blueberry' as CropId))
-    expect(refusal?.limiting?.cause).toEqual({ kind: 'fao-ecocrop', parameter: 'soil-ph' })
+    expect(refusal?.limiting?.cause).toEqual({ kind: 'soil-ph' })
     expect(refusal?.reason.length).toBeGreaterThan(0)
   })
 })
@@ -341,6 +348,34 @@ describe('preferences move the result', () => {
     )
     for (const suggestion of withTeaberry) {
       expect(suggestion.score.preference).toBeLessThan(1)
+    }
+  })
+})
+
+/**
+ * The wildlife answers reach the combinations the same way a named pick does, through the
+ * preference term: see `askedForSignal`. Before this, `suggestPolycultures` read
+ * `request.preferences` alone, so a grower who asked for natives without naming one saw no
+ * native reach a bed, whatever the checklist said grew wild there
+ */
+describe('the wildlife answers move the combinations', () => {
+  it('lets a native into a combination without it being named', () => {
+    const wildlife: WildlifePreference = {
+      favorNative: true,
+      favorPollinators: false,
+      botanicalArea: 'NWJ',
+    }
+    const withWildlife = suggest(emptyPreferences(), 5.4, wildlife)
+    const native = withWildlife.suggestions.find((entry) =>
+      entry.cropIds.some((cropId) => isNativeIn(cropId, 'NWJ') === true),
+    )
+    expect(native).toBeDefined()
+    if (native === undefined) return
+    expect(native.score.preference).toBeGreaterThan(0)
+
+    const withoutWildlife = suggest(emptyPreferences(), 5.4)
+    for (const suggestion of withoutWildlife.suggestions) {
+      expect(suggestion.score.preference).toBe(0)
     }
   })
 })

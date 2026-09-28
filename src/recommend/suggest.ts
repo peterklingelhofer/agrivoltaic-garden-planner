@@ -34,6 +34,7 @@ import type { PairContext } from './compatibility'
 import { areaPerPlantM2, plantingDensity } from './planting'
 import { scoreOf } from './stages/rank'
 import { assignCanopyTier } from './stages/space'
+import { NO_WILDLIFE_PREFERENCE, wildlifeMatch, type WildlifePreference } from './wildlife'
 import { landEquivalentRatio } from './yield'
 
 export interface SuggestionRequest {
@@ -52,6 +53,11 @@ export interface SuggestionRequest {
   readonly weights?: CompatibilityWeights
   readonly maxCropsPerBed?: number
   readonly maxSuggestions?: number
+  /**
+   * The wildlife answers, together with the site's botanical area, read the same way the
+   * ranking reads them in pipeline.ts. Absent when neither question was asked
+   */
+  readonly wildlife?: WildlifePreference
 }
 
 export const DEFAULT_MAX_CROPS_PER_BED = 4
@@ -175,6 +181,17 @@ export const preferenceSignal = (preferences: PreferenceSet, cropId: CropId): nu
     case 'exclude':
       return -1
   }
+}
+
+/**
+ * The same rule the ranking's preference term uses in pipeline.ts: the strongest thing the
+ * grower asked for about this crop, so a native or a forage plant counts like a named pick in
+ * the combinations too. A named avoid still stands, whatever the wildlife answers say
+ */
+const askedForSignal = (request: SuggestionRequest, crop: Crop): number => {
+  const named = preferenceSignal(request.preferences, crop.id)
+  if (named < 0) return named
+  return Math.max(named, wildlifeMatch(crop, request.wildlife ?? NO_WILDLIFE_PREFERENCE) ?? 0)
 }
 
 /**
@@ -621,7 +638,7 @@ export const suggestPolycultures = (request: SuggestionRequest): SuggestionSet =
     const compatibility =
       pairs.length === 0 ? 0 : pairs.reduce((total, pair) => total + pair.score, 0) / pairs.length
     const preference =
-      crops.reduce((total, crop) => total + preferenceSignal(request.preferences, crop.id), 0) /
+      crops.reduce((total, crop) => total + askedForSignal(request, crop), 0) /
       Math.max(crops.length, 1)
     const stratification = Math.min(tiers.length, TIER_CAP) / TIER_CAP
     // the crop half of the ratio only: the electricity partial is the same for every combination

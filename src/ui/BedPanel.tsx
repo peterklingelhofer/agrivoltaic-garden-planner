@@ -8,7 +8,7 @@ import {
   plantingIdFor,
   type Derivation,
 } from '../recommend/planting'
-import { makeBed, nextBedIndex } from '../state/defaults'
+import { makeBed, nextBedIndex, soilForSite } from '../state/defaults'
 import { extentOf, polygonAreaM2, polygonOf, rectangleOf, rectangleRing, vec2 } from '../state/geom'
 import { prefersReducedMotion } from '../state/motion'
 import { rainFieldOf } from '../state/rain'
@@ -1165,6 +1165,7 @@ export const GroundPanel = (): ReactElement => {
   const hoveredTarget = useAppStore((s) => s.hovered)
   const rainPlot = useAppStore(scenePlot)
   const weather = useAppStore((s) => (s.weather.status === 'ready' ? s.weather.value : null))
+  const site = useAppStore((s) => (s.site.status === 'ready' ? s.site.value : null))
 
   const light = useMemo(
     () => bedLight.find((entry) => entry.bedId === bed?.id) ?? null,
@@ -1237,7 +1238,7 @@ export const GroundPanel = (): ReactElement => {
             disabled={plot === null}
             onClick={() => {
               if (plot === null) return
-              const bed = makeBed(nextBedIndex(plot.beds))
+              const bed = makeBed(nextBedIndex(plot.beds), { soil: soilForSite(site) })
               upsertBed(bed)
               selectBed(bed.id)
             }}

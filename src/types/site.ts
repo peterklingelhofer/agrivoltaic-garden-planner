@@ -114,6 +114,8 @@ export interface SoilProfile {
   readonly sourceId: 'soilgrids' | 'ssurgo' | 'user' | 'default'
   /** Distance in km to the reading when the point itself had none. Absent when the reading is the point's own */
   readonly sampledKm?: number
+  /** Marks the assumed loam that stands in because no SoilGrids request answered at all, so the place step can say the map was out of reach, which is a different fact from a map holding no reading nearby */
+  readonly unreachable?: true
 }
 
 export type SoilTexture =

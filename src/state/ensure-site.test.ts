@@ -344,6 +344,41 @@ describe('soil pH from the place', () => {
     expect(after?.soil.sourceId).toBe('user')
   })
 
+  /** A reading from the town before this one is still a reading nobody typed, so it follows */
+  it("a bed carrying an earlier place's reading follows the new lookup", async () => {
+    const bed = state().plot?.beds[0]
+    if (bed === undefined) throw new Error('no bed to test against')
+    state().upsertBed({ ...bed, soil: { ...bed.soil, phUnits: 4.9, sourceId: 'soilgrids' } })
+
+    resolveSite.mockResolvedValue({
+      site: siteFixture({ soil: soilAt(7.2, 'soilgrids') }),
+      weather: tmyFixture(),
+      years: [],
+    })
+    await state().resolveSite(DEFAULT_LOCATION, DEFAULT_LOCATION_LABEL)
+
+    const after = state().plot?.beds.find((entry) => entry.id === bed.id)
+    expect(after?.soil.phUnits).toBe(7.2)
+    expect(after?.soil.sourceId).toBe('soilgrids')
+  })
+
+  it('leaves a typed 6.5 alone', async () => {
+    const bed = state().plot?.beds[0]
+    if (bed === undefined) throw new Error('no bed to test against')
+    state().upsertBed({ ...bed, soil: { ...bed.soil, phUnits: 6.5, sourceId: 'user' } })
+
+    resolveSite.mockResolvedValue({
+      site: siteFixture({ soil: soilAt(7.2, 'soilgrids') }),
+      weather: tmyFixture(),
+      years: [],
+    })
+    await state().resolveSite(DEFAULT_LOCATION, DEFAULT_LOCATION_LABEL)
+
+    const after = state().plot?.beds.find((entry) => entry.id === bed.id)
+    expect(after?.soil.phUnits).toBe(6.5)
+    expect(after?.soil.sourceId).toBe('user')
+  })
+
   /**
    * The copy-in is the store's own edit. Counted as the visitor's, it would save the design 600 ms
    * after the lookup landed over a garden nobody had touched, and a notice that the browser's old
