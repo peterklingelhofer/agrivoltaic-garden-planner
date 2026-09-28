@@ -27,6 +27,13 @@ describe('how a place grows, before any bed exists', () => {
     expect(total).toBe(catalog.length)
   })
 
+  it('reads the same whatever the site pH is, since soil is scored at the bed', async () => {
+    const catalog = await catalogPromise
+    const home = siteFixture()
+    const acidic = siteFixture({ soil: { ...home.soil, phUnits: 4.9 } })
+    expect(siteVerdict(acidic, catalog, 20)).toEqual(siteVerdict(home, catalog, 20))
+  })
+
   it('refuses the woodland perennials a tropical highland on their winter, and says so', async () => {
     const catalog = await catalogPromise
     const verdict = siteVerdict(nairobi(), catalog, 20)

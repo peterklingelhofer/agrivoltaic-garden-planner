@@ -27,6 +27,7 @@ import { defaultDesign, encodeDesign, STORAGE_KEY } from './persist'
 import { ready } from './slices'
 import { getAppState, resetAppStore, useAppStore } from './store'
 import {
+  ACID_SOIL,
   designCandidateFixture as candidateFor,
   designScenarioFixture as scenarioFor,
   scenarioSetFixture as setFor,
@@ -215,6 +216,16 @@ describe('the space the answers describe', () => {
   it('still produces one bed in a space too small for a row of them', () => {
     const plot = plotFromAnswers(answers(), plotOf(2, 1.5))
     expect(plot.beds.length).toBe(1)
+  })
+
+  /** A layout placed after the lookup carries the place's own pH, the same as a drawn bed */
+  it('gives every placed bed the soil it is passed', () => {
+    const soil = { ...ACID_SOIL, phUnits: 7.2, sourceId: 'soilgrids' } as const
+    const plot = plotFromAnswers(answers(), plotOf(10, 8), null, soil)
+    expect(plot.beds.length).toBeGreaterThan(0)
+    expect(
+      plot.beds.every((bed) => bed.soil.phUnits === 7.2 && bed.soil.sourceId === 'soilgrids'),
+    ).toBe(true)
   })
 })
 

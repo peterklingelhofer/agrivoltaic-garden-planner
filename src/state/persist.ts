@@ -419,7 +419,13 @@ const normalisePlot = (plot: GardenPlot): GardenPlot => ({
   groundCover: isGroundCover(plot.groundCover)
     ? plot.groundCover
     : nearestGroundCover((plot as unknown as { readonly groundAlbedo?: number }).groundAlbedo ?? 0),
-  beds: plot.beds.map((bed: Bed) => ({ ...bed, areaM2: polygonAreaM2(bed.footprint) })),
+  // a design saved before sourceId existed carries no soil source at all, and the copy-in that
+  // decides whether a bed follows a new place's pH reads a missing source as the 'default' it is
+  beds: plot.beds.map((bed: Bed) => ({
+    ...bed,
+    areaM2: polygonAreaM2(bed.footprint),
+    soil: { ...bed.soil, sourceId: bed.soil.sourceId ?? 'default' },
+  })),
   arrays: plot.arrays.map((array: PvArray) => withDerived(array)),
 })
 

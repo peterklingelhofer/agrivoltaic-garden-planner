@@ -116,4 +116,28 @@ describe('soilAt', () => {
     const latOffset = Number(north.get('lat')) - LOCATION.latitudeDeg
     expect(Math.abs(latOffset - 0.02695)).toBeLessThan(0.001)
   })
+
+  // a 503 or an aborted connection on one point of a ring must not read as the whole ring
+  // having no data, when a different point in the same ring answered just fine
+  it("keeps a ring reading when another point's request fails", async () => {
+    let call = 0
+    fetchJson.mockImplementation(async () => {
+      call += 1
+      if (call === 1) return body(null) // the point itself: a plausible answer of no data
+      if (call === 2) throw new Error('503') // north: the request itself fails
+      if (call === 3) return body(65) // east: a plausible pH
+      return body(null) // south, west
+    })
+    const soil = await soilAt(LOCATION)
+    expect(soil.phUnits).toBe(6.5)
+    expect(soil.sourceId).toBe('soilgrids')
+    expect(soil.sampledKm).toBe(3)
+  })
+
+  it('says the map was not reached when no request answered', async () => {
+    fetchJson.mockRejectedValue(new Error('network down'))
+    const soil = await soilAt(LOCATION)
+    expect(soil.sourceId).toBe('default')
+    expect(soil.unreachable).toBe(true)
+  })
 })

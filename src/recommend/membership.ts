@@ -10,7 +10,6 @@ export interface MembershipScore {
 export const ECOCROP_PARAMETERS: readonly EcocropParameter[] = [
   'temperature',
   'rainfall',
-  'soil-ph',
   'cycle-length',
   'koppen',
 ]
@@ -68,7 +67,6 @@ export const koppenMembership = (observed: string, allowed: readonly string[]): 
 export interface EcocropObservation {
   readonly meanTempC: number
   readonly annualRainfallMm: number
-  readonly soilPh: number
   readonly seasonLengthDays: number
   readonly koppenCode: string
 }
@@ -76,7 +74,8 @@ export interface EcocropObservation {
 /**
  * Liebig's law of the minimum across parameters, which hands back the limiting
  * factor for free. Rainfall is disabled when the bed is irrigated: ECOCROP's
- * RMIN and RMAX are calibrated for rain-fed field agriculture
+ * RMIN and RMAX are calibrated for rain-fed field agriculture. Soil pH is left out: it is a fact
+ * about a bed, and `soilWaterStage` scores it against the bed's own soil
  */
 export const ecocropMembership = (
   envelope: EcocropEnvelope,
@@ -88,7 +87,6 @@ export const ecocropMembership = (
     rainfall: irrigationAvailable
       ? (1 as Fraction)
       : trapezoidMembership(observed.annualRainfallMm, envelope.annualRainfallMm),
-    'soil-ph': trapezoidMembership(observed.soilPh, envelope.soilPh),
     'cycle-length': cycleLengthMembership(
       observed.seasonLengthDays,
       envelope.cycleLengthDays.min,

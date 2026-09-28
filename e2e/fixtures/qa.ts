@@ -174,9 +174,9 @@ export const plantedByBed = async (page: Page): Promise<ReadonlyMap<string, read
 /* --------------------------- polyculture suggestions ------------------------ */
 
 /**
- * SoilGrids reports pH in units of 0.1. The climate gate reads the SITE profile and the
- * soil-water stage reads the BED, so an acid-loving anchor needs both moved: this stub for
- * the first, `setBedSoilPh` for the second. Everything but the pH layer is the default body
+ * SoilGrids reports pH in units of 0.1. The site's reading is the pH every bed nobody has typed
+ * starts from, and the soil-water stage scores each bed against its own, so this stub moves the
+ * place and `setBedSoilPh` moves one bed by hand. Everything but the pH layer is the default body
  */
 export const acidSoilBody = (phUnits: number): unknown => ({
   properties: {

@@ -11,10 +11,9 @@ import type { PvArray } from '../types/pv'
 import { degrees, meters, type Fraction, type Meters } from '../types/units'
 import {
   BED_CEILING,
-  bedCountFor,
+  bedLimit,
   evenFootprints,
   BED_GAP_M,
-  MAX_BEDS,
   MIN_BED_DEPTH_M,
   PLOT_MARGIN_M,
   POST_KEEP_CLEAR_M,
@@ -315,25 +314,17 @@ describe('a space with no room for a bed is refused, with the reason', () => {
 })
 
 /**
- * How many beds a plot is cut into.
+ * The most beds a layout ever places.
  *
- * A back garden gets four beds, and a field gets a share of its ground, up to a ceiling set by what
- * a person can read and the engine can rank
+ * A grower's own cap wins wherever they set one, and otherwise the ceiling does, so a big plot
+ * is never stuck at a handful of beds just because nobody asked for a number
  */
-describe('the bed count for a plot', () => {
-  it('keeps four for a garden and gives a field the ceiling', () => {
-    expect(bedCountFor(8, 6)).toBe(MAX_BEDS)
-    expect(bedCountFor(12, 8)).toBe(MAX_BEDS)
-    expect(bedCountFor(60, 40)).toBe(BED_CEILING)
-    // and rises between the two smoothly
-    const middling = bedCountFor(30, 20)
-    expect(middling).toBeGreaterThan(MAX_BEDS)
-    expect(middling).toBeLessThanOrEqual(BED_CEILING)
-  })
-
-  it('never asks for fewer than one bed, whatever the numbers are', () => {
-    expect(bedCountFor(0, 0)).toBe(MAX_BEDS)
-    expect(bedCountFor(-5, 10)).toBe(MAX_BEDS)
+describe('the bed limit', () => {
+  it('gives the ceiling with no cap, a cap under the ceiling as it stands, and never below one', () => {
+    expect(bedLimit(undefined)).toBe(BED_CEILING)
+    expect(bedLimit(8)).toBe(8)
+    expect(bedLimit(0)).toBe(1)
+    expect(bedLimit(20)).toBe(BED_CEILING)
   })
 
   it('places more than four beds on a field-sized plot', () => {
@@ -353,7 +344,7 @@ describe('the bed count for a plot', () => {
     })
     expect(placed.ok).toBe(true)
     if (!placed.ok) return
-    expect(placed.value.beds.length).toBeGreaterThan(MAX_BEDS)
+    expect(placed.value.beds.length).toBeGreaterThan(4)
     // every one still has its own light, so a bigger plot is not a coarser answer
     expect(new Set(placed.value.beds.map((bed) => bed.bedId)).size).toBe(placed.value.beds.length)
   })
@@ -390,9 +381,27 @@ describe('a house on the plot keeps a bed off its footprint', () => {
 
 describe('the bed cap', () => {
   it('caps the geometry-only preview at the number asked for, and never below one', () => {
-    expect(evenFootprints(40, 30)).toHaveLength(bedCountFor(40, 30))
+    expect(evenFootprints(40, 30)).toHaveLength(BED_CEILING)
     expect(evenFootprints(40, 30, 4)).toHaveLength(4)
     expect(evenFootprints(40, 30, 0)).toHaveLength(1)
+  })
+
+  it('agrees with the baked layout on the 30 by 50 ft plot that first showed them differ', () => {
+    // 9.144 by 15.24 m: the old floor capped this plot at four beds while seven 1.2 m beds with
+    // 0.8 m paths actually fit it, and the preview and the bake read one rule to get there now
+    const widthM = 9.144
+    const depthM = 15.24
+    expect(evenFootprints(widthM, depthM)).toHaveLength(7)
+    const placed = placeBeds({
+      plotWidthM: widthM,
+      plotDepthM: depthM,
+      arrays: [],
+      raster: rasterFixture({ widthM, depthM, shadeAt: () => 0 }),
+      window: WINDOW,
+    })
+    expect(placed.ok).toBe(true)
+    if (!placed.ok) return
+    expect(placed.value.beds).toHaveLength(7)
   })
 })
 

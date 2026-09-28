@@ -77,7 +77,7 @@ export interface EcocropEnvelope {
   readonly citations: readonly CitationId[]
 }
 
-export type EcocropParameter = 'temperature' | 'rainfall' | 'soil-ph' | 'cycle-length' | 'koppen'
+export type EcocropParameter = 'temperature' | 'rainfall' | 'cycle-length' | 'koppen'
 
 export interface LightRequirement {
   readonly dliMinMolM2Day: SourcedCited<MolPerM2Day>

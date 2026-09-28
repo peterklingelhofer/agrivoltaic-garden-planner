@@ -792,24 +792,41 @@ const ringPoints = (location: LatLon, km: number): readonly LatLon[] => {
 }
 
 /**
+ * One point's own answer, kept apart from every other point's: a profile on a plausible
+ * reading, null on a plausible answer of no data, undefined where the request itself never
+ * came back at all
+ */
+const fetchSoilPoint = async (location: LatLon): Promise<SoilProfile | null | undefined> => {
+  try {
+    return await fetchSoilProfile(location)
+  } catch {
+    return undefined
+  }
+}
+
+/**
  * SoilGrids masks built-up ground, so the pH layer is null at the centre of nearly every town.
  * Where the point itself has no plausible reading, a ring of four points around it is queried
  * instead, nearest ring first, and the first plausible answer going north, east, south, west
- * stands in for the point
+ * stands in for the point.
+ *
+ * A request can also fail outright: SoilGrids returned 503s and aborted connections for single
+ * points all evening. That is a different thing from a plausible answer of no data, so
+ * `fetchSoilPoint` catches each point on its own and one failed point never sinks a whole ring.
+ * The map counts as unreachable only when every point asked, at the centre and both rings,
+ * never answered at all
  */
 export const soilAt = async (location: LatLon): Promise<SoilProfile> => {
-  try {
-    const own = await fetchSoilProfile(location)
-    if (own !== null) return own
-    for (const km of SOIL_RING_KM) {
-      const readings = await Promise.all(ringPoints(location, km).map(fetchSoilProfile))
-      const hit = readings.find((reading): reading is SoilProfile => reading !== null)
-      if (hit !== undefined) return { ...hit, sampledKm: km }
-    }
-    return DEFAULT_SOIL
-  } catch {
-    return DEFAULT_SOIL
+  const own = await fetchSoilPoint(location)
+  if (own) return own
+  let answered = own === null
+  for (const km of SOIL_RING_KM) {
+    const readings = await Promise.all(ringPoints(location, km).map(fetchSoilPoint))
+    answered ||= readings.some((reading) => reading === null)
+    const hit = readings.find((reading): reading is SoilProfile => Boolean(reading))
+    if (hit !== undefined) return { ...hit, sampledKm: km }
   }
+  return answered ? DEFAULT_SOIL : { ...DEFAULT_SOIL, unreachable: true }
 }
 
 export const staticLayerLicences = (): readonly Licensed[] => [

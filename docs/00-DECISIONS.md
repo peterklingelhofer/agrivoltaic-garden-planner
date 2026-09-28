@@ -442,7 +442,8 @@ would fail every fresh lookup whenever that one host is unreachable.
 Chilling Hours, Utah Chill Units and Dynamic Chill Portions are computed separately, because
 Luedeling & Brown 2010 find the Dynamic model the strongest and the three not interconvertible, with
 the CH/CP ratio spanning 0 to 34. ECOCROP suitability uses trapezoidal membership with a minimum
-across parameters, which yields the limiting factor for free.
+across parameters, which yields the limiting factor for free. Soil pH is left out of that minimum:
+it is a fact about a bed, and the soil stage scores it against the bed's own soil.
 
 ### 10b. Crop-vs-crop compatibility and polyculture suggestions
 
@@ -998,7 +999,8 @@ standard offset at its boundary.
 **A default says it is one.** A failed SoilGrids lookup returns pH 6.5 loam whose source is
 `'default'`, and the bed panel reads "Assumed pH 6.5 loam: the soil map has no answer for this place
 yet." Hardiness computed from the weather record reads "USDA-style, computed from the weather
-record".
+record". The place step goes further, saying whether the map held no reading near the point or was
+never reached at all.
 
 **Normals fall back and the cache is global.** Where the daily normals fail, they fall to NASA POWER
 daily data from the visitor's own browser, named as the source, so a successful hourly leg is kept.

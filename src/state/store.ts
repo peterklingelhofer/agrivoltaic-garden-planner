@@ -60,13 +60,13 @@ import { atCalendarYear, dayOfYearUtc } from './sun'
 import { bedLightSummary } from './bed-light'
 import { historyBeforeSeason, seasonYearOf, withoutPanels } from './counterfactual'
 import {
-  DEFAULT_SOIL,
   defaultSimulation,
   facesStartingDirection,
   makeBed,
   makeHouse,
   makeTree,
   nextBedIndex,
+  soilForSite,
 } from './defaults'
 import { growingWindowOf } from './growing-window'
 import { codeOf, unit } from '../simulation/evidence'
@@ -705,6 +705,7 @@ const plantBeds = (run: PlantingRun, set: Setter, get: () => AppState): void => 
         // combinations, and six of them planted the first over again (measured at 11 beds:
         // 5 cards 324 ms and 6 repeats, 14 cards 750 ms and none)
         maxSuggestions: Math.max(DEFAULT_MAX_SUGGESTIONS, run.beds.length + 3),
+        wildlife: { ...state.wildlife, botanicalArea: site.botanicalArea },
       }),
     )
     if (!suggested.ok) {
@@ -1004,17 +1005,15 @@ export const useAppStore = create<AppState>()(
               measuredSeasonYear(result.value.site, measured),
             )
             /*
-              The area's own pH, for a bed nobody has told otherwise: one still on the assumed
-              'default' soil every new bed starts with. A design saved before that source existed
-              carries the same untouched pH under 'user', and is read the same way. The pH field's
-              own `onChange` stamps 'user' the moment a visitor types a value, which is what keeps
-              a real answer from being overwritten by a later lookup. The source copied onto the
-              bed is the site's own, so a default stays 'default' and a map reading says 'soilgrids'
+              A typed pH is the grower's: the pH field's own `onChange` stamps 'user' the moment a
+              visitor types a value, and that is the only mark this reads as told. Everything else
+              follows the place, an untouched default and an earlier place's own reading alike, so
+              searching a new town does not leave a bed showing the town before it
             */
-            const sitePh = Math.round(result.value.site.soil.phUnits * 10) / 10
-            const untold = (bed: Bed): boolean =>
-              bed.soil.sourceId === 'default' ||
-              (bed.soil.sourceId === 'user' && bed.soil.phUnits === DEFAULT_SOIL.phUnits)
+            const soil = soilForSite(result.value.site)
+            const stale = (bed: Bed): boolean =>
+              bed.soil.sourceId !== 'user' &&
+              (bed.soil.phUnits !== soil.phUnits || bed.soil.sourceId !== soil.sourceId)
             /*
               Never the example's beds: they are a baked design and stay exactly as shipped, and
               `showingExample` knows the example by the plot object's identity, so a plot rebuilt
@@ -1022,18 +1021,14 @@ export const useAppStore = create<AppState>()(
               startup the lookup is under way before the example has
               finished loading. And only when a bed actually changes, for the same reason
             */
-            if (!showingExample(get()) && (s.plot?.beds.some(untold) ?? false)) {
+            if (!showingExample(get()) && (s.plot?.beds.some(stale) ?? false)) {
               patchPlot(s, (plot) => ({
                 ...plot,
                 beds: plot.beds.map((bed) =>
-                  untold(bed)
+                  stale(bed)
                     ? {
                         ...bed,
-                        soil: {
-                          ...bed.soil,
-                          phUnits: sitePh,
-                          sourceId: result.value.site.soil.sourceId,
-                        },
+                        soil: { ...bed.soil, phUnits: soil.phUnits, sourceId: soil.sourceId },
                       }
                     : bed,
                 ),
@@ -1916,6 +1911,7 @@ export const useAppStore = create<AppState>()(
             energyRatio,
             weights: state.compatibilityWeights,
             maxCropsPerBed: state.maxCropsPerBed,
+            wildlife: { ...state.wildlife, botanicalArea: site.value.botanicalArea },
           }),
         )
         set((s) => {
@@ -1995,7 +1991,14 @@ export const useAppStore = create<AppState>()(
             (entry) => entry.candidate.archetype === archetype,
           )
           s.previewPlot =
-            scenario === undefined ? null : plotForScenario(s.answers, s.plot, scenario)
+            scenario === undefined
+              ? null
+              : plotForScenario(
+                  s.answers,
+                  s.plot,
+                  scenario,
+                  soilForSite(s.site.status === 'ready' ? s.site.value : null),
+                )
           s.previewArchetype = scenario === undefined ? null : archetype
         }),
 
@@ -2140,7 +2143,12 @@ export const useAppStore = create<AppState>()(
         const before = state.plot
         // the same builder the scene's preview draws from, so the button cannot write a garden
         // other than the one the grower was just looking at
-        const plot = plotForScenario(state.answers, state.plot, scenario)
+        const plot = plotForScenario(
+          state.answers,
+          state.plot,
+          scenario,
+          soilForSite(state.site.status === 'ready' ? state.site.value : null),
+        )
         state.setPlot(plot)
         set((s) => {
           // the layout is settled, so the agent's cursor moves on to what goes in the beds
@@ -2303,7 +2311,10 @@ export const useAppStore = create<AppState>()(
           if (s.mode === 'draw-plot') {
             patchBoundary(s, (plot) => ({ ...plot, boundary: footprint }))
           } else {
-            const bed = makeBed(nextBedIndex(s.plot.beds), { footprint })
+            const bed = makeBed(nextBedIndex(s.plot.beds), {
+              footprint,
+              soil: soilForSite(s.site.status === 'ready' ? s.site.value : null),
+            })
             patchPlot(s, (plot) => ({ ...plot, beds: [...plot.beds, bed] }))
             s.selectedBedId = bed.id
           }

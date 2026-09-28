@@ -210,7 +210,6 @@ export const monthLabel = (month: MonthIndex): string => MONTH_LABELS[month - 1]
 const ECOCROP_PARAMETER_PLAIN: Readonly<Record<EcocropParameter, string>> = {
   temperature: "the temperature here doesn't suit it",
   rainfall: "the rainfall here doesn't suit it",
-  'soil-ph': "the soil pH here doesn't suit it",
   'cycle-length': 'the growing season here is too short for it',
   koppen: "the climate here isn't the kind it grows in",
 }

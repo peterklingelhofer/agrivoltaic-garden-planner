@@ -263,10 +263,11 @@ export const SitePanel = (): ReactElement => {
       <SiteVerdict />
       {/* said here, where the lookup happened, and again on each bed: an assumed pH surfaced
           only inside a bed would leave the place step saying nothing about it */}
-      {resolved?.soil.sourceId === 'default' ? (
+      {resolved !== null && resolved.soil.sourceId === 'default' ? (
         <p className="notice notice-idle" data-testid="status-site-soil">
-          The soil map has no reading for this spot or within 6 km of it. The map leaves out
-          built-up ground and water. Every bed assumes pH 6.5 loam until you type your own soil.
+          {resolved.soil.unreachable
+            ? "The soil map couldn't be reached, so every bed assumes pH 6.5 loam until you type your own soil or search for the place again."
+            : 'The soil map has no reading for this spot or within 6 km of it. The map leaves out built-up ground and water. Every bed assumes pH 6.5 loam until you type your own soil.'}
         </p>
       ) : null}
       {/* a reading from a few kilometres out is the area's soil: said, with the distance */}
