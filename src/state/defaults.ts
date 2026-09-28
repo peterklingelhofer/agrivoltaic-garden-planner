@@ -6,7 +6,7 @@ import type { GrowingWindow } from '../types/light'
 import { arrayId, bedId, obstructionId, plotId, siteId } from '../types/ids'
 import type { ModuleSpec, PvArray, RowGeometry, TrackerConfig } from '../types/pv'
 import type { SimulationState } from '../types/simulation'
-import type { SoilProfile } from '../types/site'
+import type { Site, SoilProfile } from '../types/site'
 import {
   degrees,
   degreesLatitude,
@@ -103,6 +103,20 @@ export const DEFAULT_SOIL: SoilProfile = {
   organicMatterFraction: fraction(0.04),
   sourceId: 'default',
 }
+
+/**
+ * The soil a bed starts from: the place's own reading once the lookup has landed, the assumed
+ * loam before it. Only the pH and its source are the place's, because what a raised bed is
+ * filled with is nobody's to know
+ */
+export const soilForSite = (site: Site | null): SoilProfile =>
+  site === null
+    ? DEFAULT_SOIL
+    : {
+        ...DEFAULT_SOIL,
+        phUnits: Math.round(site.soil.phUnits * 10) / 10,
+        sourceId: site.soil.sourceId,
+      }
 
 export const makeArray = (index: number, patch: Partial<PvArray> = {}): PvArray =>
   withDerived({

@@ -187,7 +187,6 @@ export const ecocropScore = (
       {
         meanTempC,
         annualRainfallMm: site.normals.monthlyPrecipMm.reduce<number>((a, b) => a + b, 0),
-        soilPh: site.soil.phUnits,
         seasonLengthDays: seasonLengthDays(site, frostPercentile),
         koppenCode: site.koppenCode,
       },

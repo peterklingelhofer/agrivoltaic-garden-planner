@@ -77,21 +77,20 @@ describe('ecocrop membership', () => {
   const observation = {
     meanTempC: 22,
     annualRainfallMm: 1000,
-    soilPh: 6.5,
     seasonLengthDays: 200,
     koppenCode: 'Dfa',
   }
 
   it('is the minimum across parameters', () => {
-    const score = ecocropMembership(envelope, { ...observation, soilPh: 5.5 }, false)
+    const score = ecocropMembership(envelope, { ...observation, meanTempC: 10 }, false)
     const values = ECOCROP_PARAMETERS.map((parameter) => score.byParameter[parameter])
     expect(score.overall).toBeCloseTo(Math.min(...values))
   })
 
   it('names the limiting parameter as the argmin', () => {
-    const score = ecocropMembership(envelope, { ...observation, soilPh: 5.2 }, false)
-    expect(score.limitingParameter).toBe('soil-ph')
-    expect(score.byParameter['soil-ph']).toBeCloseTo(score.overall)
+    const score = ecocropMembership(envelope, { ...observation, meanTempC: 9 }, false)
+    expect(score.limitingParameter).toBe('temperature')
+    expect(score.byParameter.temperature).toBeCloseTo(score.overall)
   })
 
   it('disables the rainfall trapezoid when the bed is irrigated', () => {

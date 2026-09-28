@@ -1,11 +1,5 @@
 import { DEFAULT_MAX_CROPS_PER_BED } from '../recommend/suggest'
-import {
-  BED_DEPTH_M,
-  BED_GAP_M,
-  evenFootprints,
-  MAX_BEDS,
-  PLOT_MARGIN_M,
-} from '../recommend/layout'
+import { evenFootprints } from '../recommend/layout'
 import { exposureInForce } from '../recommend/surroundings'
 import type { Bed, GardenPlot, Irrigation } from '../types/garden'
 import type { LatLon } from '../types/geo'
@@ -20,8 +14,9 @@ import type {
   OnboardingAnswers,
 } from '../types/onboarding'
 import type { PvArray } from '../types/pv'
+import type { SoilProfile } from '../types/site'
 import { meters, millimetersPerYear, type Meters } from '../types/units'
-import { makeArray, makeBed, makePlot } from './defaults'
+import { DEFAULT_SOIL, makeArray, makeBed, makePlot } from './defaults'
 import { withDerived } from './derive'
 import { extentOf, polygonOf, rectangleRing, vec2 } from './geom'
 
@@ -192,10 +187,6 @@ export const answersOf = (
   }
 }
 
-// the bed geometry lives with the placement that produces it: `src/recommend/layout.ts` is
-// the single source, and these are re-exported so the wizard's own callers keep one import
-export { BED_DEPTH_M, BED_GAP_M, MAX_BEDS, PLOT_MARGIN_M }
-
 /**
  * What the grower said about watering, on every bed the wizard writes. It gates the
  * water-limited pathway in the recommender, so answering "no" and being handed drip beds
@@ -224,12 +215,17 @@ export const cropsPerBedFor = (objective: DesignObjective): number =>
  *
  * The boundary is rebuilt as a rectangle of the current plot's extent at the origin, because
  * `design.ts` places every candidate in an origin-centered frame: an off-center or hand-drawn
- * boundary is replaced by the rectangle the search actually laid out in
+ * boundary is replaced by the rectangle the search actually laid out in.
+ *
+ * `soil` is the place's own reading, from `soilForSite`, so a layout placed after the lookup
+ * carries it onto every bed the same way a drawn bed or a press of "Add bed" does. Before it,
+ * every placed bed read the assumed loam until somebody edited it by hand
  */
 export const plotFromAnswers = (
   answers: WizardAnswers,
   current: GardenPlot | null,
   layout: BedLayout | null = null,
+  soil: SoilProfile = DEFAULT_SOIL,
 ): GardenPlot => {
   const base = current ?? makePlot()
   const size = plotSizeOf(current)
@@ -239,10 +235,10 @@ export const plotFromAnswers = (
   const placed: readonly Bed[] =
     layout === null
       ? evenFootprints(widthM, depthM, answers.maxBeds ?? undefined).map((footprint, index) =>
-          makeBed(index + 1, { footprint, irrigation }),
+          makeBed(index + 1, { footprint, irrigation, soil }),
         )
       : layout.beds.map((bed, index) =>
-          makeBed(index + 1, { footprint: bed.footprint, label: bed.label, irrigation }),
+          makeBed(index + 1, { footprint: bed.footprint, label: bed.label, irrigation, soil }),
         )
   return {
     ...base,
@@ -264,9 +260,10 @@ export const plotForScenario = (
   answers: WizardAnswers,
   current: GardenPlot | null,
   scenario: DesignScenario,
+  soil: SoilProfile = DEFAULT_SOIL,
 ): GardenPlot => {
   const layout = scenario.layout
-  const base = plotFromAnswers(answers, current, layout.beds.length === 0 ? null : layout)
+  const base = plotFromAnswers(answers, current, layout.beds.length === 0 ? null : layout, soil)
   return scenario.candidate.archetype === 'no-array-control'
     ? { ...base, arrays: [] }
     : {

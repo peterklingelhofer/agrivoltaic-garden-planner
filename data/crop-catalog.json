@@ -399,7 +399,7 @@
       "laubGroup": "grain-legumes",
       "dliClass": "grain-legumes",
       "habit": "vining-trellised",
-      "archetype": "cool",
+      "archetype": "warm",
       "dliMin": 12,
       "dliTargetLow": 18,
       "dliTargetHigh": 25,

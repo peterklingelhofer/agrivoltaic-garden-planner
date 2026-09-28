@@ -34,8 +34,6 @@ export const BED_DEPTH_M = 1.2
 /** A wheelbarrow and a kneeling adult, which is also the access every bed is guaranteed */
 export const BED_GAP_M = 0.8
 export const PLOT_MARGIN_M = 0.5
-/** The fewest a plot is ever cut into, however small it is, so a back garden is cut into four */
-export const MAX_BEDS = 4
 /**
  * The most, however big it is. Every bed is ranked against the whole catalog, simulated each
  * season and drawn in the scene, so this is a working ceiling, set by what a person can read: a
@@ -43,23 +41,11 @@ export const MAX_BEDS = 4
  */
 export const BED_CEILING = 12
 /**
- * How much plot one bed is worth. A 12 by 8 m garden keeps its four beds and a 60 by 40 m field
- * gets the ceiling: four beds of 1.2 m would cover only a twelfth of 0.6 acres, far too thin a plan
- * for that much ground
+ * The most beds a layout ever places: the grower's own cap where they set one, the readable
+ * ceiling otherwise, and never fewer than one
  */
-export const SQUARE_METERS_PER_BED = 60
-
-/**
- * How many beds a plot of this size is cut into, before the light says where they can go.
- *
- * Area drives the count, because
- * a plot's beds are a share of the whole ground: a long thin
- * plot and a square one of the same area are the same amount of gardening
- */
-export const bedCountFor = (plotWidthM: number, plotDepthM: number): number => {
-  const areaM2 = Math.max(0, plotWidthM) * Math.max(0, plotDepthM)
-  return Math.min(BED_CEILING, Math.max(MAX_BEDS, Math.floor(areaM2 / SQUARE_METERS_PER_BED)))
-}
+export const bedLimit = (maxBeds?: number): number =>
+  Math.max(1, Math.min(BED_CEILING, Math.trunc(maxBeds ?? BED_CEILING)))
 /** Narrower than this is only a verge */
 export const MIN_BED_DEPTH_M = 0.6
 export const MIN_BED_LENGTH_M = 0.6
@@ -596,7 +582,7 @@ const clearOfHouses = (
 /**
  * Deterministic and bounded: one pass over the grid to build the seasonal field, one pass
  * along the cross-row axis to profile it, one exact two-cluster split, then at most
- * `MAX_BEDS` polygon rasterizations. With a judge, each bed is also tried at every
+ * `BED_CEILING` polygon rasterizations. With a judge, each bed is also tried at every
  * `SLIDE_STEP_M` across the room its span and its neighbors leave it, a few dozen balances
  * per bed at most. Still no search, no seed, no iteration limit
  */
@@ -607,10 +593,7 @@ export const placeBeds = (request: LayoutRequest): Derivation<BedLayout> => {
   if (usableCrossM < MIN_BED_DEPTH_M || lengthM < MIN_BED_LENGTH_M) {
     return { ok: false, reason: layoutNeedsRoom(request.plotWidthM, request.plotDepthM) }
   }
-  const limit = Math.max(
-    1,
-    Math.trunc(request.maxBeds ?? bedCountFor(request.plotWidthM, request.plotDepthM)),
-  )
+  const limit = bedLimit(request.maxBeds)
   const halfM = usableCrossM / 2
   const field = seasonField(request.raster, request.window)
   const refusals: string[] = []
@@ -710,9 +693,9 @@ export const evenFootprints = (
   const count = clamp(
     Math.floor((usableDepthM + BED_GAP_M) / (bedDepthM + BED_GAP_M)),
     1,
-    // the same count the baked layout would place, so the geometry-only preview a visitor sees
-    // before anything is baked isn't a different garden from the one they get
-    Math.min(bedCountFor(widthM, depthM), Math.max(1, Math.trunc(maxBeds ?? Infinity))),
+    // the same ceiling `placeBeds` limits its own count by, so the geometry-only preview a
+    // visitor sees before anything is baked isn't a different garden from the one they get
+    bedLimit(maxBeds),
   )
   const spanM = count * bedDepthM + (count - 1) * BED_GAP_M
   const firstM = -spanM / 2 + bedDepthM / 2
