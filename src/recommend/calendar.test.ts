@@ -193,6 +193,58 @@ describe('the season origin', () => {
   })
 })
 
+/**
+ * Seville: a winter mild enough that the last spring freeze, day 17, falls a day after the day 16
+ * origin. A cool-season crop's negative frost offset then reaches back past the origin: unclamped,
+ * pea's -14 days lands on day 3, which reads as 352 days forward from the origin and leaves the
+ * planting window negative
+ */
+describe('a mild-winter site where the frost offset reaches past the origin', () => {
+  const seville = (): ReturnType<typeof siteFixture> =>
+    siteFixture({
+      location: { latitudeDeg: 37.39 as DegreesLatitude, longitudeDeg: -5.99 as never },
+      normals: {
+        ...siteFixture().normals,
+        monthlyMeanTempC: [11, 12.6, 15.4, 17.3, 21, 25.2, 28.2, 28, 25, 20.4, 15.1, 12.2].map(
+          (v) => v as Celsius,
+        ),
+        monthlyMinTempC: [5.7, 6.9, 9.3, 11, 14.3, 18, 20.3, 20.4, 18.5, 14.8, 10, 7.2].map(
+          (v) => v as Celsius,
+        ),
+        monthlyMaxTempC: [16.3, 18.3, 21.8, 23.6, 27.6, 32.5, 36, 35.6, 31.6, 26, 20.2, 17.1].map(
+          (v) => v as Celsius,
+        ),
+      },
+      frost: [
+        {
+          ...siteFixture().frost[0]!,
+          lastSpringFreeze: { 10: 17, 20: 17, 30: 17, 40: 17, 50: 17 } as never,
+          firstFallFreeze: { 10: 365, 20: 365, 30: 365, 40: 365, 50: 365 } as never,
+          frostFreeDays: { 10: 348, 20: 348, 30: 348, 40: 348, 50: 348 } as never,
+        },
+      ],
+      seasonGdd: { base4C: 5500 as DegreeDaysC, base10C: 3400 as DegreeDaysC, percentile: 20 },
+    })
+  const light = bedLightFixture('bed-1', 0, 40, [18, 24, 32, 40, 46, 50, 50, 45, 37, 27, 20, 16])
+
+  it('fits a cool-season crop and plants a hardy perennial in its own spring window', async () => {
+    const catalog = await catalogPromise
+    const site = seville()
+
+    const pea = cropCalendar({ crop: need(catalog, 'pea-garden'), site, light, percentile: 20 })
+    expect(pea.feasibility.kind).toBe('fits')
+    expect(pea.plantings.length).toBeGreaterThan(0)
+
+    const anchors = seasonAnchors(site, 20)
+    const thyme = cropCalendar({ crop: need(catalog, 'thyme'), site, light, percentile: 20 })
+    const transplant = thyme.plantings.find((planting) => planting.method === 'transplant-out')
+    if (transplant === undefined) throw new Error('no transplant window')
+    // thyme's own catalogue window opens in April (day 91, 75 days forward of the origin) once the
+    // clamp stops the frost candidate from outrunning it. Unclamped this lands on day 361
+    expect(forwardDays(anchors.origin, transplant.recommended)).toBeLessThanOrEqual(100)
+  })
+})
+
 describe('dtmReference', () => {
   it('adds the raising period to a direct sow only when the DTM starts at transplant', async () => {
     const catalog = await catalogPromise

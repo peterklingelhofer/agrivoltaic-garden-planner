@@ -6,6 +6,7 @@ import {
   bedFixture,
   bedLightFixture,
   frostFreeSiteFixture,
+  hotDesertSiteFixture,
   plotFixture,
   siteFixture,
 } from '../recommend/testkit'
@@ -157,6 +158,20 @@ describe('agenda panel', () => {
     expect(harness.get('readout-agenda-percentile').textContent).toMatch(/20% frost exceedance/)
     // the product dates a 365 day circle, so the clock's day 173 is read on a common year
     expect(harness.get('readout-agenda-reference').textContent).toMatch(/22 Jun/)
+    await harness.unmount()
+  })
+
+  /**
+   * 1:06 UTC on 29 September is still the evening of 28 September in Phoenix, seven hours behind.
+   * The UTC calendar day would date a job due that evening a year out
+   */
+  it("dates the reference day on the garden's own clock", async () => {
+    useAppStore.setState({
+      site: ready(hotDesertSiteFixture()),
+      todayUtcMillis: epochMillis(Date.UTC(2026, 8, 29, 1, 6)),
+    })
+    const harness = await mount(<AgendaPanel />)
+    expect(harness.get('readout-agenda-reference').textContent).toMatch(/28 Sep/)
     await harness.unmount()
   })
 

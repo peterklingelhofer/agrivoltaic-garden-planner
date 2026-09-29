@@ -72,10 +72,10 @@ const cropIdsOf = (bed: Bed): readonly CropId[] => bed.plantings.map((planting) 
 /**
  * The zone word on a card, read off the bed's own growing-season shade at the thresholds the layout
  * search itself places beds by (under 15% is a gap between rows, over 40% is under one), the same
- * words and thresholds the light step prints
+ * rounded percent and thresholds the light step prints
  */
-const shadeWord = (shadeRatio: number): string =>
-  shadeRatio < 0.15 ? 'sunny' : shadeRatio < 0.4 ? 'part shade' : 'shady'
+const shadeWord = (openSkyPercent: number): string =>
+  openSkyPercent >= 85 ? 'sunny' : openSkyPercent >= 60 ? 'part shade' : 'shady'
 
 const zoneWordOf = (
   bedLight: AppState['bedLight'],
@@ -83,7 +83,9 @@ const zoneWordOf = (
   window: GrowingWindow,
 ): string | null => {
   const light = bedLight.find((entry) => entry.bedId === bed.id)
-  return light === undefined ? null : shadeWord(bedLightSummary(light, window).shadeRatio)
+  if (light === undefined) return null
+  const lost = Math.round(bedLightSummary(light, window).shadeRatio * 100)
+  return shadeWord(100 - lost)
 }
 
 /* ------------------------------- replanting after a chip ------------------------------- */

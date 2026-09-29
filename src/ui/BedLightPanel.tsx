@@ -11,12 +11,12 @@ import { Panel } from './Panel'
 const monthName = (month: number): string => MONTH_NAMES[month - 1] ?? String(month)
 
 /**
- * A bed's light in one word, from the share of open-sky light the panels take off it over the
- * growing season. The same thresholds the plants step uses for its bed cards, so the two steps
- * never call one bed by two names
+ * A bed's light in one word, from the same rounded percent of open-sky light the row prints
+ * beside it. The same thresholds the plants step uses for its bed cards, so the two steps never
+ * call one bed by two names
  */
-const zoneWord = (shadeRatio: number): 'sunny' | 'part shade' | 'shady' =>
-  shadeRatio < 0.15 ? 'sunny' : shadeRatio < 0.4 ? 'part shade' : 'shady'
+const zoneWord = (openSkyPercent: number): 'sunny' | 'part shade' | 'shady' =>
+  openSkyPercent >= 85 ? 'sunny' : openSkyPercent >= 60 ? 'part shade' : 'shady'
 
 /**
  * Each bed's light, live, on the step that computes it.
@@ -87,7 +87,7 @@ export const BedLightPanel = (): ReactElement => {
               }
               const summary = bedLightSummary(light, window)
               const lost = Math.round(summary.shadeRatio * 100)
-              const zone = zoneWord(summary.shadeRatio)
+              const zone = zoneWord(100 - lost)
               // one row a class can read aloud, and the three figures it rests on under it
               return (
                 <li key={bed.id} data-testid={`item-bed-light-${bed.id}`} data-zone={zone}>

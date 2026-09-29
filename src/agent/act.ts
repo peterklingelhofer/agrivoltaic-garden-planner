@@ -1,7 +1,7 @@
 import { buildAgenda } from '../recommend/agenda'
 import { ruleJoinsPair } from '../recommend/compatibility'
 import { geocode } from '../data/geocode'
-import { dayOfYearUtc } from '../state/sun'
+import { dayOfYearAt } from '../state/sun'
 import { waterBalanceView } from '../state/water'
 import type { Agenda } from '../types/agenda'
 import { polygonAreaM2, polygonOf, rectangleRing, vec2 } from '../state/geom'
@@ -642,7 +642,10 @@ const agendaOf = (state: AppState): Agenda | null => {
     calendars: state.calendars.value,
     catalog: state.catalog.value,
     frostRiskPercentile: state.frostPercentile,
-    today: dayOfYearUtc(state.todayUtcMillis),
+    today: dayOfYearAt(
+      state.todayUtcMillis,
+      state.site.status === 'ready' ? state.site.value : null,
+    ),
   })
 }
 

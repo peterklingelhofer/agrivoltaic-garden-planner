@@ -107,7 +107,10 @@ export const waterSentence = (site: Site): string => {
   const use = referenceEtMm.toFixed(0)
   const share = Math.round((rainfallMm / Math.max(referenceEtMm, 1)) * 100)
   if (!limited) {
-    return `Rain here covers what a garden would use over a year: ${rain} mm falls against ${use} mm of use, so watering is a backup.`
+    if (share >= 100) {
+      return `Rain here covers what a garden would use over a year: ${rain} mm falls against ${use} mm of use, so watering is a backup.`
+    }
+    return `Rain here is about ${String(share)}% of what a garden would use over a year: ${rain} mm falls against ${use} mm of use, a gap small enough that watering is a backup.`
   }
   if (share >= 100) {
     return `Rain here matches what a garden would use over a year, ${rain} mm against ${use} mm of use, but it falls in a few months, so plan to water in the dry ones.`

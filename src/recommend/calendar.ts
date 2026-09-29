@@ -557,7 +557,14 @@ const plantingFloor = (input: DatedInput): DatedBasis => {
   const floor = extreme(
     anchors.origin,
     {
-      day: wrapDayOfYear(anchors.lastSpringFreeze + crop.frostOffsetDays),
+      // a negative offset can reach back past the origin: pea's -14 days off Seville's 17 January
+      // freeze is day 3, which reads as 352 days forward from a day 16 origin and closes the
+      // window. Clamped, the earliest this candidate asks for is the origin, and wherever the
+      // offset already lands after it this is the old day
+      day: wrapDayOfYear(
+        anchors.origin +
+          Math.max(0, forwardDays(anchors.origin, anchors.lastSpringFreeze) + crop.frostOffsetDays),
+      ),
       basis: frostBasis('last-spring-freeze', crop.frostOffsetDays, input.percentile),
     },
     candidates,

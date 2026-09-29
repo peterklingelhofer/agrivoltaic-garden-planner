@@ -167,6 +167,19 @@ describe('choosing a result resolves the site', () => {
 })
 
 /**
+ * The name a typed pair of coordinates gets before anything has looked them up, so the top bar and
+ * the place step name the place whose climate they show
+ */
+describe('typing coordinates by hand names the place by them', () => {
+  it('labels the location by the coordinates just typed', async () => {
+    const harness = await mount(<SitePanel />)
+    await harness.type('control-site-latitude', '69.6492')
+    expect(getAppState().locationLabel).toBe('69.6492, -72.5199')
+    await harness.unmount()
+  })
+})
+
+/**
  * The face of the step is the field, the press, the place and the frost sentence. The example
  * garden says whose garden it is where the visitor would otherwise search for a place that is
  * already on screen; a visitor's own garden gets no subtitle at all. The example is the shipped

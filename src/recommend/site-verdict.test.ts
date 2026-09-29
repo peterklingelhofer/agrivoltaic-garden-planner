@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test'
 import { loadCropCatalog } from '../data/crops'
-import type { Celsius } from '../types/units'
+import type { Celsius, MillimetersPerYear } from '../types/units'
 import { climateSentence, siteVerdict, waterSentence } from './site-verdict'
 import { frostFreeSiteFixture, hotDesertSiteFixture, siteFixture } from './testkit'
 
@@ -65,5 +65,20 @@ describe('how a place grows, before any bed exists', () => {
     expect(waterSentence(siteFixture())).toContain('watering is a backup')
     expect(waterSentence(hotDesertSiteFixture())).toContain('about 9%')
     expect(waterSentence(frostFreeSiteFixture())).toContain('plan to water')
+  })
+
+  it('never says rain covers use when it falls short, even where the site is not officially limited', () => {
+    const site = siteFixture({
+      waterLimitation: {
+        ...siteFixture().waterLimitation,
+        rainfallMm: 624 as MillimetersPerYear,
+        referenceEtMm: 902 as MillimetersPerYear,
+        limited: false,
+      },
+    })
+    const sentence = waterSentence(site)
+    expect(sentence).toContain('about 69%')
+    expect(sentence).toContain('watering is a backup')
+    expect(sentence).not.toContain('covers')
   })
 })

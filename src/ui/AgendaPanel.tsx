@@ -2,7 +2,7 @@ import { useMemo, type ReactElement } from 'react'
 import { buildAgenda } from '../recommend/agenda'
 import { EMPTY_LIST } from '../state/slices'
 import { useAppStore } from '../state/store'
-import { dayOfYearUtc } from '../state/sun'
+import { dayOfYearAt } from '../state/sun'
 import type { AgendaBlock, AgendaGroup, AgendaItem, SupplyGroup } from '../types/agenda'
 import type { Crop } from '../types/crop'
 import type { Bed } from '../types/garden'
@@ -224,6 +224,8 @@ export const AgendaPanel = (): ReactElement => {
   // the real day, not the day the sun slider is parked on. Dragging the sun changes what the
   // garden LOOKS like at a moment; it has never been a statement about what needs doing now
   const todayUtcMillis = useAppStore((s) => s.todayUtcMillis)
+  // the garden's own day: an evening west of Greenwich is already tomorrow in UTC
+  const site = useAppStore((s) => (s.site.status === 'ready' ? s.site.value : null))
 
   const agenda = useMemo(
     () =>
@@ -232,9 +234,9 @@ export const AgendaPanel = (): ReactElement => {
         calendars: calendars.status === 'ready' ? calendars.value : EMPTY_LIST,
         catalog: catalog.status === 'ready' ? catalog.value : EMPTY_LIST,
         frostRiskPercentile: frostPercentile,
-        today: dayOfYearUtc(todayUtcMillis),
+        today: dayOfYearAt(todayUtcMillis, site),
       }),
-    [plot, calendars, catalog, frostPercentile, todayUtcMillis],
+    [plot, calendars, catalog, frostPercentile, todayUtcMillis, site],
   )
   const empty = agenda.groups.length === 0 && agenda.blocked.length === 0
   const crops = catalog.status === 'ready' ? catalog.value : EMPTY_LIST

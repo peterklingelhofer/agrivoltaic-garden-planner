@@ -2,8 +2,8 @@ import { loadCompanionRules, loadRotationConstraints } from '../data/companions'
 import { cropById, cropName, loadCropCatalog } from '../data/crops'
 import { growingWindowFor as siteGrowingWindow } from '../data/growing-window'
 import { DEFAULT_FROST_PERCENTILE, resolveSite } from '../data/site'
-import { clamp } from '../data/util'
-import { bedLight as bedLightOf, seasonLight } from '../sim/aggregate'
+import { clamp, mean } from '../data/util'
+import { bedLight as bedLightOf, monthsInWindow, seasonLight } from '../sim/aggregate'
 import type { AccumulationProgress, BackendKind } from '../sim/backend'
 import { detectBackendKind } from '../sim/backend'
 import {
@@ -50,7 +50,7 @@ import type {
 import type { ModuleSpec, PvArray, RowGeometry, TrackerConfig } from '../types/pv'
 import type { CropRecommendation } from '../types/recommend'
 import type { Site } from '../types/site'
-import type { Degrees, Fraction, KilowattHours, Meters } from '../types/units'
+import type { Degrees, Fraction, KilowattHours, Meters, MolPerM2Day } from '../types/units'
 import { degrees, fraction, meters, millimeters, squareMeters, wattsPeak } from '../types/units'
 import type { BedRain, RainField, RainWind } from '../types/water'
 import type { SolarPositionSeries, TmySeries } from '../types/weather'
@@ -1088,6 +1088,11 @@ const evaluate = (
   const light = bedLightOf(raster, bed.id, bed.footprint)
   const window = growingWindowFor(deps.site)
   const season = seasonLight(light, window, null)
+  // the darkest cell each month, averaged over the growing season, the figure the per-bed panel
+  // prints as its darkest spot (`bedLightSummary`)
+  const worstCellDli = mean(
+    monthsInWindow(window).map((month) => light.monthlyMinDliMolM2Day[month] ?? 0),
+  ) as MolPerM2Day
 
   const sets = runRecommendationPipeline({
     site: deps.site,
@@ -1150,7 +1155,7 @@ const evaluate = (
     energyRatio: ratio,
     light: {
       meanGrowingSeasonDli: season.meanDliMolM2Day,
-      worstCellDli: season.minMonthlyDliMolM2Day,
+      worstCellDli,
       meanShadeRatio: season.cumulativeRsr,
       homogeneity: light.homogeneity.minOverMean,
     },
