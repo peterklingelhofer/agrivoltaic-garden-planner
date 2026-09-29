@@ -3,6 +3,7 @@ import { type GeocodeHit, reverseGeocode } from '../data/geocode'
 import { NRCAN_SCHEME_NOTE } from '../data/static-layers'
 import { describeWaterLimitation } from '../data/water'
 import { showingExample, useAppStore } from '../state/store'
+import type { LatLon } from '../types/geo'
 import { degreesLatitude, degreesLongitude } from '../types/units'
 import { isTemperatureHardiness } from '../types/site'
 import type { ExceedancePercentile, TemperatureHardinessRating } from '../types/site'
@@ -56,6 +57,13 @@ const splitLabel = (label: string): readonly [string, string | undefined] => {
     ? [label, undefined]
     : [label.slice(0, comma).trim(), label.slice(comma + 1).trim() || undefined]
 }
+
+/**
+ * What a place typed in as coordinates is called. The label moves with the location it names, so
+ * the top bar and the place step name the place whose climate they show
+ */
+const coordinateLabel = (location: LatLon): string =>
+  `${location.latitudeDeg.toFixed(4)}, ${location.longitudeDeg.toFixed(4)}`
 
 export const SitePanel = (): ReactElement => {
   const site = useAppStore((s) => s.site)
@@ -293,12 +301,13 @@ export const SitePanel = (): ReactElement => {
             unit="deg"
             step={0.0001}
             value={location.latitudeDeg}
-            onChange={(value) =>
-              setLocation(
-                { latitudeDeg: degreesLatitude(value), longitudeDeg: location.longitudeDeg },
-                locationLabel,
-              )
-            }
+            onChange={(value) => {
+              const next = {
+                latitudeDeg: degreesLatitude(value),
+                longitudeDeg: location.longitudeDeg,
+              }
+              setLocation(next, coordinateLabel(next))
+            }}
           />
           <NumberField
             testId="control-site-longitude"
@@ -306,12 +315,13 @@ export const SitePanel = (): ReactElement => {
             unit="deg"
             step={0.0001}
             value={location.longitudeDeg}
-            onChange={(value) =>
-              setLocation(
-                { latitudeDeg: location.latitudeDeg, longitudeDeg: degreesLongitude(value) },
-                locationLabel,
-              )
-            }
+            onChange={(value) => {
+              const next = {
+                latitudeDeg: location.latitudeDeg,
+                longitudeDeg: degreesLongitude(value),
+              }
+              setLocation(next, coordinateLabel(next))
+            }}
           />
         </div>
         <Action

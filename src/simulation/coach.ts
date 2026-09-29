@@ -216,7 +216,7 @@ export const advise = (
         about when the rain fell. The shortfall is in the daily balance between rains, where the
         root zone holds only so much of a downpour and dries out before the next one
       */
-      text: `${bedLabel(plot, thirsty.bedId)} ran short of water in the dry spells between rains. Over the year ${String(Math.round(year.rainfallMm))} mm (${inches(year.rainfallMm)} in) fell against ${String(Math.round(year.referenceEtMm))} mm of evaporative demand, and the soil holds only so much of a downpour, so the bed dried out between them. Water it on the ground step, or move it under the panels, which cut that demand.`,
+      text: `${bedLabel(plot, thirsty.bedId)} ran short of water in the dry spells between rains. Over the year ${String(Math.round(year.rainfallMm))} mm (${inches(year.rainfallMm)} in) of rain fell against ${String(Math.round(year.referenceEtMm))} mm (${inches(year.referenceEtMm)} in) of evaporative demand. The soil holds only so much of a downpour, so the bed dried out between rains. Water it on the ground step, or move it under the panels, which cut that demand.`,
       bedId: thirsty.bedId,
     }
   }

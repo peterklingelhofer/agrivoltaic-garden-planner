@@ -1,7 +1,7 @@
 import { useMemo, type ReactElement } from 'react'
 import { EMPTY_LIST } from '../state/slices'
 import { useAppStore } from '../state/store'
-import { dayOfYearUtc } from '../state/sun'
+import { dayOfYearAt } from '../state/sun'
 import { Action } from './controls'
 import { Panel } from './Panel'
 import { buildPrintSheet } from './print-plan'
@@ -58,7 +58,7 @@ export const PrintPlan = (): ReactElement => {
         catalog,
         calendars,
         reports,
-        today: dayOfYearUtc(todayUtcMillis),
+        today: dayOfYearAt(todayUtcMillis, site),
       }),
     [locationLabel, site, frostPercentile, plot, catalog, calendars, reports, todayUtcMillis],
   )

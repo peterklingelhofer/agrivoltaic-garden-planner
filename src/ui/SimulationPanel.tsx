@@ -151,7 +151,7 @@ const describeYear = (year: YearSummary, typical: YearSummary | null): string =>
       : `Frost-free from ${dayLabel(year.lastSpringFreeze)} to ${dayLabel(year.firstFallFreeze)}, ${String(year.frostFreeDays)} days${versusTypical(year.frostFreeDays, usual?.frostFreeDays ?? null)}.${source}`,
     `${rain}.`,
     water,
-    `${String(year.heatDaysAbove30C)} days above ${formatCelsius(30)}${versusTypical(year.heatDaysAbove30C, usual?.heatDaysAbove30C ?? null)}.`,
+    `${plural(year.heatDaysAbove30C, 'day', 'days')} above ${formatCelsius(30)}${versusTypical(year.heatDaysAbove30C, usual?.heatDaysAbove30C ?? null)}.`,
     thirstLine(year, 'This year'),
   ].join(' ')
 }
@@ -177,7 +177,7 @@ const cardHelp = (
     (other) =>
       other !== choice && chooseYear(other, typical, years, 0).summary.year === chosen.summary.year,
   ).map((other) => YEAR_CHOICE_LABEL[other].toLowerCase())
-  const named = `${String(chosen.summary.year)}: ${String(chosen.summary.heatDaysAbove30C)} days above ${formatCelsius(30)}, ${formatRainMm(chosen.summary.rainfallMm)} of rain.${alsoThe.length > 0 ? ` Also the ${alsoThe.join(' and the ')}.` : ''}`
+  const named = `${String(chosen.summary.year)}: ${plural(chosen.summary.heatDaysAbove30C, 'day', 'days')} above ${formatCelsius(30)}, ${formatRainMm(chosen.summary.rainfallMm)} of rain.${alsoThe.length > 0 ? ` Also the ${alsoThe.join(' and the ')}.` : ''}`
   // only the driest card: it's the one whose promise the ramp can quietly fail to keep
   return choice === 'driest' ? `${named} ${thirstLine(chosen.summary, 'Even this year')}` : named
 }

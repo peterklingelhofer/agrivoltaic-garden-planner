@@ -6,6 +6,7 @@ import {
   partitionCompanionRules,
 } from '../data/companions'
 import { loadCropCatalog } from '../data/crops'
+import { utcOffsetHoursFor } from '../data/geocode'
 import { fetchRetailPrice, usStateOf } from '../data/retail-price'
 import { resolveSite } from '../data/site'
 import { UpstreamError } from '../data/http'
@@ -38,6 +39,7 @@ import { pvEnergyReport } from '../sim/pv/report'
 import { clearnessIndex, cloudCover } from '../sim/clearness'
 import { groundSnowCover } from '../sim/snow'
 import { extraterrestrialNormal, observerFor, spaPosition } from '../sim/solar'
+import { utcOffsetMinutesAt } from '../sim/timezone'
 import { createSimClient, type SimClient } from '../sim/worker/client'
 import type { CompanionRule, PartitionedCompanionRules } from '../types/companion'
 import type { Bed, GardenPlot } from '../types/garden'
@@ -1003,6 +1005,32 @@ export const useAppStore = create<AppState>()(
             s.seasonYears = result.value.years.map((measured) =>
               measuredSeasonYear(result.value.site, measured),
             )
+            /*
+              A garden's wall clock holds its reading across a move: noon at the last place stays
+              noon at this one. Before any place has resolved the clock reads the longitude's own
+              hours, as the time panel prints it, and a lookup of the place already on screen
+              moves nothing, so the example's baked scene time stays where it was baked
+            */
+            const priorOffsetMinutes =
+              current.site.status === 'ready'
+                ? utcOffsetMinutesAt(
+                    current.site.value.timezone,
+                    s.timeUtcMillis,
+                    current.site.value.utcOffsetHours * 60,
+                  )
+                : samePlace
+                  ? null
+                  : utcOffsetHoursFor(current.location) * 60
+            if (priorOffsetMinutes !== null) {
+              const newOffsetMinutes = utcOffsetMinutesAt(
+                result.value.site.timezone,
+                s.timeUtcMillis,
+                result.value.site.utcOffsetHours * 60,
+              )
+              s.timeUtcMillis = epochMillis(
+                s.timeUtcMillis + (priorOffsetMinutes - newOffsetMinutes) * 60_000,
+              )
+            }
             /*
               A typed pH is the grower's: the pH field's own `onChange` stamps 'user' the moment a
               visitor types a value, and that is the only mark this reads as told. Everything else
