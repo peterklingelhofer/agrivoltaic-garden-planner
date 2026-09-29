@@ -6,7 +6,7 @@ import { siteFixture, tmyFixture } from '../recommend/testkit'
 import { citedVerbatim } from '../types/cited'
 import type { LatLon } from '../types/geo'
 import type { SoilProfile } from '../types/site'
-import { degreesLatitude, degreesLongitude } from '../types/units'
+import { degreesLatitude, degreesLongitude, epochMillis } from '../types/units'
 
 const resolveSite = vi.fn()
 const fetchRetailPrice = vi.fn()
@@ -573,5 +573,45 @@ describe('a lookup that lands after a later one', () => {
     await slow
     expect(labelOf()).toBe('Sydney')
     expect(state().location).toEqual(sydney)
+  })
+})
+
+/**
+ * The clock keeps the wall-clock hour it was reading when the place under it changes. Left at the
+ * same UTC instant, a garden read at noon in New York would read 19:00 the moment Nairobi resolved
+ * over it, which is how a scene that opened in daylight opens in the dark for a visitor east of
+ * whichever place was there first
+ */
+describe('the clock across a change of place', () => {
+  it('keeps the same wall-clock reading at the new place', async () => {
+    resolveSite.mockResolvedValueOnce({
+      site: siteFixture({ timezone: 'America/New_York', utcOffsetHours: -4 }),
+      weather: tmyFixture(),
+      years: [],
+    })
+    await state().resolveSite(DEFAULT_LOCATION, DEFAULT_LOCATION_LABEL)
+    expect(state().timeUtcMillis).toBe(epochMillis(Date.UTC(2024, 6, 23, 16, 0)))
+
+    const nairobi = { latitudeDeg: degreesLatitude(-1.29), longitudeDeg: degreesLongitude(36.82) }
+    resolveSite.mockResolvedValueOnce({
+      site: siteFixture({ location: nairobi, timezone: 'Africa/Nairobi', utcOffsetHours: 3 }),
+      weather: tmyFixture(),
+      years: [],
+    })
+    await state().resolveSite(nairobi, 'Nairobi')
+    expect(state().timeUtcMillis).toBe(epochMillis(Date.UTC(2024, 6, 23, 9, 0)))
+  })
+
+  // a town typed before the first lookup has landed: the clock was reading Amherst's longitude
+  // hours, five behind UTC, so 16:00 UTC was 11:00 and stays 11:00 in Nairobi
+  it('reads the longitude hours when no place has resolved yet', async () => {
+    const nairobi = { latitudeDeg: degreesLatitude(-1.29), longitudeDeg: degreesLongitude(36.82) }
+    resolveSite.mockResolvedValueOnce({
+      site: siteFixture({ location: nairobi, timezone: 'Africa/Nairobi', utcOffsetHours: 3 }),
+      weather: tmyFixture(),
+      years: [],
+    })
+    await state().resolveSite(nairobi, 'Nairobi')
+    expect(state().timeUtcMillis).toBe(epochMillis(Date.UTC(2024, 6, 23, 8, 0)))
   })
 })

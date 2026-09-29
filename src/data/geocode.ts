@@ -81,8 +81,21 @@ const fromPhoton = (feature: PhotonFeature): GeocodeHit | null => {
   }
 }
 
-const usable = (hits: readonly (GeocodeHit | null)[]): readonly GeocodeHit[] =>
-  hits.filter((hit): hit is GeocodeHit => hit !== null)
+/**
+ * Null hits dropped, then only the first hit of each label kept. Nominatim answers a town's point
+ * and its boundary under one display_name with different coordinates, and the second reads as a
+ * row a visitor can't tell apart from the first
+ */
+const usable = (hits: readonly (GeocodeHit | null)[]): readonly GeocodeHit[] => {
+  const seen = new Set<string>()
+  const kept: GeocodeHit[] = []
+  for (const hit of hits) {
+    if (hit === null || seen.has(hit.label)) continue
+    seen.add(hit.label)
+    kept.push(hit)
+  }
+  return kept
+}
 
 /**
  * How far around the current place a search leans, in degrees: about the size of New England,

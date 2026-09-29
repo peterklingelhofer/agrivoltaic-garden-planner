@@ -1,7 +1,15 @@
-import { describe, expect, it } from 'bun:test'
+import { describe, expect, it, mock } from 'bun:test'
+import { vi } from '../../test/vi'
 import { standardOffsetHours } from '../sim/timezone'
 import type { LatLon } from '../types/geo'
-import { timezoneFor } from './geocode'
+
+const fetchJson = vi.fn()
+
+/* captured before the mock is installed, so the spread carries the real module */
+const actualHttp = await import('./http')
+mock.module('./http', () => ({ ...actualHttp, fetchJson }))
+
+const { geocode, timezoneFor } = await import('./geocode')
 
 const at = (latitudeDeg: number, longitudeDeg: number): LatLon =>
   ({ latitudeDeg, longitudeDeg }) as LatLon
@@ -42,5 +50,28 @@ describe('timezoneFor reads the nearest zone.tab city rather than rounding the l
   it('reads a standard offset through Intl, half-hour zones included', () => {
     expect(standardOffsetHours('Africa/Nairobi', 0)).toBe(3)
     expect(standardOffsetHours('Asia/Kolkata', 0)).toBe(5.5)
+  })
+})
+
+const place = (displayName: string, lat: string, lon: string): unknown => ({
+  display_name: displayName,
+  lat,
+  lon,
+  address: { country_code: 'ke' },
+})
+
+/**
+ * Nominatim answers a town's point and its boundary under the same display_name, with different
+ * coordinates, so the second row reads as a place a visitor can't tell apart from the first
+ */
+describe('a search that answers the same place twice', () => {
+  it('keeps only the first hit of a repeated label', async () => {
+    fetchJson.mockResolvedValue([
+      place('Nairobi, Nairobi County, Kenya', '-1.2833', '36.8167'),
+      place('Nairobi, Nairobi County, Kenya', '-1.3', '36.75'),
+    ])
+    const hits = await geocode('Nairobi, Kenya', null)
+    expect(hits).toHaveLength(1)
+    expect(hits[0]?.location.latitudeDeg).toBe(-1.2833)
   })
 })

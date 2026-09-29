@@ -1,6 +1,8 @@
 import { getPosition, getTimes } from 'suncalc'
 import { spaPosition } from '../sim/solar'
+import { utcOffsetMinutesAt } from '../sim/timezone'
 import type { LatLon } from '../types/geo'
+import type { Site } from '../types/site'
 import {
   celsius,
   meters,
@@ -15,6 +17,17 @@ import { attempt } from './safe'
 export const dayOfYearUtc = (millis: number): DayOfYear => {
   const start = Date.UTC(new Date(millis).getUTCFullYear(), 0, 1)
   return (Math.floor((millis - start) / 86_400_000) + 1) as DayOfYear
+}
+
+/**
+ * The day of the year on the garden's own clock, which "what to do next" is dated from. The UTC
+ * day runs a day ahead every evening west of Greenwich and a day behind every morning far east of
+ * it. Before a site has resolved there is no zone to read, so it's the UTC day
+ */
+export const dayOfYearAt = (millis: EpochMillis, site: Site | null): DayOfYear => {
+  if (site === null) return dayOfYearUtc(millis)
+  const offsetMinutes = utcOffsetMinutesAt(site.timezone, millis, site.utcOffsetHours * 60)
+  return dayOfYearUtc(millis + offsetMinutes * 60_000)
 }
 
 /**

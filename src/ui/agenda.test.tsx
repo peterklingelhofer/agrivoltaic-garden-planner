@@ -6,6 +6,7 @@ import {
   bedFixture,
   bedLightFixture,
   frostFreeSiteFixture,
+  hotDesertSiteFixture,
   plotFixture,
   siteFixture,
 } from '../recommend/testkit'
@@ -159,6 +160,20 @@ describe('agenda panel', () => {
     )
     // the product dates a 365 day circle, so the clock's day 173 is read on a common year
     expect(harness.get('readout-agenda-reference').textContent).toMatch(/Jun 22/)
+    await harness.unmount()
+  })
+
+  /**
+   * 1:06 UTC on September 29 is still the evening of September 28 in Phoenix, seven hours behind.
+   * The UTC calendar day would date a job due that evening a year out
+   */
+  it("dates the reference day on the garden's own clock", async () => {
+    useAppStore.setState({
+      site: ready(hotDesertSiteFixture()),
+      todayUtcMillis: epochMillis(Date.UTC(2026, 8, 29, 1, 6)),
+    })
+    const harness = await mount(<AgendaPanel />)
+    expect(harness.get('readout-agenda-reference').textContent).toMatch(/Sep 28/)
     await harness.unmount()
   })
 
