@@ -1339,11 +1339,13 @@ const tradeoffOf = (evaluated: Evaluated, catalog: readonly Crop[]): string => {
   const percent = Math.round(Math.abs(saved) * 100)
   const waterText =
     percent === 0
-      ? 'By the water balance its beds go short of about the same water over a year as they would open to the sky'
+      ? "By the water balance, the beds' water shortfall over a year comes out about the same as it would with no panels"
       : saved > 0
-        ? `By the water balance its beds go short of about ${String(percent)} percent less water over a year than they would open to the sky`
-        : `By the water balance its beds go short of about ${String(percent)} percent more water over a year than they would open to the sky, where the rows keep rain off ground they leave in the sun`
-  return `You give up about ${given} percent of your daylight for roughly ${kwh} kWh of electricity a year. ${bedsText}. ${waterText}. ${lostText}. ${patchy ? 'The darkest part of the plot gets less than half the light of the average, so keep the shade-tolerant plants for it' : 'The light is spread evenly enough that you can plant the whole plot much the same way'}`
+        ? `By the water balance, the beds' water shortfall over a year is about ${String(percent)} percent smaller than it would be with no panels`
+        : `By the water balance, the beds' water shortfall over a year is about ${String(percent)} percent larger than it would be with no panels, because the rows keep rain off ground they don't shade`
+  // a layout with no room for a bed has no beds for the water balance to speak of
+  const waterSentence = evaluated.layout.beds.length === 0 ? '' : ` ${waterText}.`
+  return `You give up about ${given} percent of your daylight for roughly ${kwh} kWh of electricity a year. ${bedsText}.${waterSentence} ${lostText}. ${patchy ? 'The darkest part of the plot gets less than half the light of the average, so keep the shade-tolerant plants for it' : 'The light is spread evenly enough that you can plant the whole plot much the same way'}`
 }
 
 const NOT_CONSIDERED_BASE: readonly string[] = [
