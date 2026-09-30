@@ -378,7 +378,7 @@ export const BEATS: readonly Beat[] = [
   },
   {
     caption:
-      'Each option says what it leaves on the ground, what it would generate, how many beds fit the light it leaves, and how confident the tool is about its own answer.',
+      'Each option says what it leaves on the ground, what it would generate, how many beds its panels leave room for, and how confident the tool is about its own answer.',
     cuts: BOTH,
     run: async (d) => {
       const archetype = await recommended(d)
