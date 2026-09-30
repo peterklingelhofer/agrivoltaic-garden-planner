@@ -1,8 +1,12 @@
 import { readFileSync } from 'node:fs'
+import { act, createElement } from 'react'
 import { describe, expect, it } from 'bun:test'
 import { Glob } from 'bun'
 import { OBJECTIVE_PRESETS } from '../state/onboarding'
+import { getAppState, resetAppStore } from '../state/store'
 import { designScenarioFixture } from '../state/testkit'
+import { HeightStep } from './AnswerPanels'
+import { mount } from './testkit'
 import {
   AMBITION_OPTIONS,
   ANSWER_QUESTIONS,
@@ -63,6 +67,28 @@ describe('meters and feet, neither forced on anyone', () => {
     expect(formatBothUnits(6)).toBe('6.0 m (19.7 ft)')
     expect(formatAreaBothUnits(48)).toBe('48.0 m² (517 sq ft)')
   })
+
+  /**
+   * "Tallest it may be" is the one field that showed both units side by side before the switch
+   * was saved with the design. Now it shows one, in whichever unit the rest of the sidebar reads
+   */
+  it('shows the height limit in one unit, following the same stored switch as the plot', async () => {
+    resetAppStore()
+    const harness = await mount(createElement(HeightStep))
+    await harness.click('control-onboarding-height-limit')
+    expect(harness.find('control-onboarding-max-height-m')).not.toBeNull()
+    expect(harness.find('control-onboarding-max-height-ft')).toBeNull()
+
+    await act(async () => {
+      getAppState().setLengthUnit('ft')
+    })
+    expect(harness.find('control-onboarding-max-height-m')).toBeNull()
+    const limitM = getAppState().answers.maxHeightM ?? 0
+    expect((harness.get('control-onboarding-max-height-ft') as HTMLInputElement).value).toBe(
+      String(roundTenth(metersToFeet(limitM))),
+    )
+    await harness.unmount()
+  })
 })
 
 /**
@@ -119,7 +145,8 @@ describe('every question is answerable without knowing any agrivoltaics', () => 
 
   it('keeps the jargon out of every field the questions label', () => {
     const prompts = promptsInSource()
-    expect(prompts.length).toBeGreaterThan(4)
+    // one height field now, in whichever unit is showing, where two once sat side by side
+    expect(prompts.length).toBeGreaterThan(3)
     for (const [where, text] of prompts) expect(text, where).not.toMatch(JARGON)
   })
 

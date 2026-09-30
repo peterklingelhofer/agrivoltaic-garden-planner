@@ -97,6 +97,9 @@ export const PERSISTED_KEYS = [
   // plot size is read off the boundary
   'answers',
   'sidebarStep',
+  // the unit every length field and summary is shown in, kept with the design so a plot sized in
+  // feet reads its feet back on the visit that follows
+  'lengthUnit',
   // what they typed about money: a tariff the app has no source for outside the United States,
   // its currency, and what the panels cost. Theirs to keep, like a typed soil pH
   'economyInputs',
@@ -133,6 +136,7 @@ export const defaultDesign = (): PersistedDesign => ({
   simulation: defaultSimulation(),
   answers: DEFAULT_WIZARD_ANSWERS,
   sidebarStep: 'place',
+  lengthUnit: 'm',
   economyInputs: DEFAULT_ECONOMY_INPUTS,
 })
 
@@ -514,6 +518,7 @@ const MOUNTINGS = ['overhead-canopy', 'ground-rows', 'vertical-bifacial', 'any']
 const EXPERIENCES = ['novice', 'some', 'experienced'] as const
 const OBJECTIVE_KEYS = ['food', 'energy', 'water', 'simplicity'] as const
 const LIGHTING = ['auto', 'low', 'high'] as const
+const LENGTH_UNITS = ['m', 'ft'] as const
 const CHANNELS = ['dli', 'rsr', 'sky-view-factor', 'rain'] as const
 const MONTHS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] as const
 const PREFERENCE_KINDS = ['require', 'prefer', 'avoid', 'exclude'] as const
@@ -610,6 +615,12 @@ const DECODERS: Decoders = {
       },
     ),
   sidebarStep: (value) => when(oneOf(SIDEBAR_STEPS, value), () => asDesign<'sidebarStep'>(value)),
+  // absent is earlier, as with `effects`: a design saved before the unit could be chosen was
+  // always meters, the only unit there was
+  lengthUnit: (value) =>
+    value === undefined
+      ? kept(asDesign<'lengthUnit'>('m'))
+      : when(oneOf(LENGTH_UNITS, value), () => asDesign<'lengthUnit'>(value)),
   // absent is earlier, as with `effects`: a design saved before money could be typed has nothing
   // typed. A figure is null or a finite number, and the currency is three capital letters or the
   // record is dropped whole, since a price in an unreadable currency isn't a price

@@ -13,6 +13,7 @@ import { REFERENCE_DEFINITION } from '../sim/pv/ler'
 import { PVWATTS_DEFAULT_LOSSES } from '../sim/pv/losses'
 import { PV_CHAIN_PROVENANCE } from '../sim/pv/provenance'
 import { banded, interval } from '../types/band'
+import type { Crop } from '../types/crop'
 import type { PvEnergyReport } from '../types/energy'
 import { bedId, cropId } from '../types/ids'
 import type {
@@ -108,9 +109,14 @@ export const bedLayoutFixture = (archetype: CandidateArchetype): BedLayout =>
         refusals: [],
       }
 
-export const designScenarioFixture = (archetype: CandidateArchetype): DesignScenario => ({
+export const designScenarioFixture = (
+  archetype: CandidateArchetype,
+  lightAdequateBeds?: number,
+): DesignScenario => ({
   candidate: designCandidateFixture(archetype),
   layout: bedLayoutFixture(archetype),
+  // every placed bed qualifies by default: pass a lower count to fix the one that doesn't
+  lightAdequateBeds: lightAdequateBeds ?? bedLayoutFixture(archetype).beds.length,
   energyRatio: banded(
     interval(
       fraction(archetype === 'no-array-control' ? 0 : 0.28),
@@ -232,14 +238,19 @@ export const ACID_SOIL = {
  * A store already carrying everything the polyculture surface reads: a resolved site, one
  * acid bed, its light field, the catalog, a real ranking and a real calendar. Automatic
  * ranking is off, so a test drives the actions, without racing a debounce
+ *
+ * `extraCrops` joins the shipped catalog before it's ranked and calendared, which is how a
+ * test reaches a crop the shipped catalog itself can't produce any more, such as one with no
+ * entry in NATIVE_RANGES
  */
-export const seedRankedStore = async (): Promise<void> => {
-  const [catalog, companionRules, rotationConstraints, tekRules] = await Promise.all([
+export const seedRankedStore = async (extraCrops: readonly Crop[] = []): Promise<void> => {
+  const [shipped, companionRules, rotationConstraints, tekRules] = await Promise.all([
     loadCropCatalog(),
     loadCompanionRules(),
     loadRotationConstraints(),
     loadTekRules(),
   ])
+  const catalog = extraCrops.length === 0 ? shipped : [...shipped, ...extraCrops]
   const bed = bedFixture('bed-a', { soil: ACID_SOIL, areaM2: 12 as SquareMeters })
   const plot = plotFixture([bed])
   const light = bedLightFixture('bed-a', 0.2)

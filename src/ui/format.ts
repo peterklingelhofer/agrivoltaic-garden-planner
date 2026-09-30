@@ -19,9 +19,10 @@ import type { BedId } from '../types/ids'
 import type { PolycultureSuggestion } from '../types/polyculture'
 import type { CropRecommendation, LimitingFactor, RecommendationVerdict } from '../types/recommend'
 import type { YieldEstimate } from '../types/recommend'
+import type { LengthUnit } from '../state/slices'
 import type { Fraction, MolPerM2Day, MonthIndex } from '../types/units'
 import type { WeatherSourceId } from '../types/weather'
-import { showsFigures, type Experience } from './onboarding'
+import { metersToFeet, showsFigures, type Experience } from './onboarding'
 
 export const POINT_ESTIMATE_REFUSED =
   'src/ui/format.ts refuses a point estimate: Decision Record 7 requires a band'
@@ -167,6 +168,14 @@ export const formatDli = (value: MolPerM2Day): string => `${num(value)} mol/m²/
 export const formatRsr = (value: Fraction): string => `${Math.round(value * 100)}% shade (RSR)`
 
 export const formatMeters = (value: number): string => `${num(value)} m`
+
+/**
+ * A length in whichever unit the design is stored in, for a readout beside a field that shows the
+ * same unit. `formatMeters` stays what a caller with no unit to read reaches for: a sentence built
+ * from a crop's own root depth, or another figure that isn't the grower's own measurement
+ */
+export const formatLength = (valueM: number, unit: LengthUnit): string =>
+  unit === 'm' ? formatMeters(valueM) : `${num(metersToFeet(valueM))} ft`
 
 /**
  * A temperature in both units, the way every size in this app already prints both meters and

@@ -11,6 +11,7 @@ import type {
   Days,
   DegreeDaysC,
   DegreesLatitude,
+  Millimeters,
   MolPerM2Day,
 } from '../types/units'
 import { autoRecommend, calendarConfidence } from './auto'
@@ -483,17 +484,27 @@ describe('a site with no frost in the record', () => {
     )
   })
 
-  it('sows a crop the whole year suits at the start of the coolest month', async () => {
+  it('sows a crop the whole year suits at the start of the wet season Pune names', async () => {
     const lettuce = need(await catalogPromise, 'lettuce-leaf')
     const calendar = at(lettuce)
     const window = calendar.plantings[0]
     if (window === undefined) throw new Error('no sowing window')
-    // December is the coolest month at Pune, and December 1 is day 335
-    expect(window.recommended).toBe(335)
-    expect(window.earliest).toBe(335)
-    expect(window.latest).toBe(334)
+    // Pune names a wet season, June to October, so the year-round window starts there, on 1
+    // June, day 152. Without it the start would be the coldest month, December 1, day 335
+    expect(window.recommended).toBe(152)
+    expect(window.earliest).toBe(152)
+    expect(window.latest).toBe(151)
     expect(calendar.feasibility).toEqual({ kind: 'fits', slackDays: 364 })
     expect(calendar.successions.length).toBeGreaterThan(20)
+    expect(calendar.notes).toContain(
+      'The rains here fall mostly in June to October, and the sowing dates start with them',
+    )
+    expect(window.basis).toEqual({
+      kind: 'soil-temperature',
+      minSoilTempC: 5,
+      frostFree: true,
+      rains: true,
+    })
   })
 
   it('gives a perennial a dated window rather than "no thermal data"', async () => {
@@ -542,6 +553,70 @@ describe('wetSeasonNote', () => {
   it('names no season where the months above the mean hold under 70% of the rain', () => {
     // seven months above the mean, holding 68% of the year's rain: too diffuse to call a season
     expect(wetSeasonNote([90, 90, 90, 90, 90, 90, 90, 60, 60, 60, 60, 60])).toBeNull()
+  })
+})
+
+/**
+ * A frost-free site's year-round window starts on the coldest month by default, which for
+ * Nairobi is July, deep in its cool dry season, while its rains fall mostly March to May and
+ * November to December. Where a wet season is named, the window starts there instead, at the
+ * wetter of the two, watered or not: the coolest safe day the soil offers is worth less than the
+ * day the rains actually start
+ */
+describe('a frost-free site whose year-round window follows the rains', () => {
+  const nairobiLike = (): ReturnType<typeof frostFreeSiteFixture> =>
+    frostFreeSiteFixture({
+      normals: {
+        ...frostFreeSiteFixture().normals,
+        monthlyPrecipMm: [20, 20, 120, 200, 150, 20, 10, 10, 15, 20, 90, 65].map(
+          (v) => v as Millimeters,
+        ),
+      },
+    })
+
+  it('starts the field window on March 1, the wetter of two named rainy seasons, and still spans the year', async () => {
+    const site = nairobiLike()
+    expect(wetSeasonNote(site.normals.monthlyPrecipMm)).toBe(
+      "The rains here fall mostly in March to May and November to December. This calendar doesn't model them, so sow with the rains as local practice says",
+    )
+    const lettuce = need(await catalogPromise, 'lettuce-leaf')
+    const light = bedLightFixture('bed-a', 0, 36, site.normals.monthlyMeanDliMolM2Day)
+    const calendar = cropCalendar({ crop: lettuce, site, light, percentile: 20 })
+    const window = calendar.plantings[0]
+    if (window === undefined) throw new Error('no sowing window')
+    // March 1 is day 60
+    expect(window.recommended).toBe(60)
+    expect(window.earliest).toBe(60)
+    expect(window.latest).toBe(59)
+    expect(calendar.feasibility).toEqual({ kind: 'fits', slackDays: 364 })
+    expect(calendar.notes).toContain(
+      'The rains here fall mostly in March to May and November to December, and the sowing dates start with the March to May rains, the wettest of them',
+    )
+    expect(window.basis).toEqual({
+      kind: 'soil-temperature',
+      minSoilTempC: 5,
+      frostFree: true,
+      rains: true,
+    })
+  })
+
+  it('keeps the coldest-month start where a frost-free site names no wet season', async () => {
+    const site = frostFreeSiteFixture({
+      normals: {
+        ...frostFreeSiteFixture().normals,
+        monthlyPrecipMm: new Array(12).fill(60).map((v) => v as Millimeters),
+      },
+    })
+    expect(wetSeasonNote(site.normals.monthlyPrecipMm)).toBeNull()
+    const lettuce = need(await catalogPromise, 'lettuce-leaf')
+    const light = bedLightFixture('bed-a', 0, 36, site.normals.monthlyMeanDliMolM2Day)
+    const calendar = cropCalendar({ crop: lettuce, site, light, percentile: 20 })
+    const window = calendar.plantings[0]
+    if (window === undefined) throw new Error('no sowing window')
+    // December is the coldest month at Pune, and December 1 is day 335
+    expect(window.recommended).toBe(335)
+    expect(calendar.notes.some((note) => note.includes('sowing dates start with'))).toBe(false)
+    expect(window.basis).toEqual({ kind: 'soil-temperature', minSoilTempC: 5, frostFree: true })
   })
 })
 

@@ -58,6 +58,8 @@ import { placeBeds } from './layout'
 import { houseFootprints, housesOf, overlapsAHouse, rowsFootprint } from './overlap'
 import { runRecommendationPipeline } from './pipeline'
 import { rainGround, rainOnBed, rainWind, type RainGround } from './rain'
+import { climateGate } from './stages/climate-gate'
+import { lightGate } from './stages/light-gate'
 import { DEFAULT_WEIGHTS, scoreOf } from './stages/rank'
 import { SURROUNDINGS_SHADE, shadedBySurroundings } from './surroundings'
 import { bedShortfallMm, waterBalanceShared, waterBalances } from './water'
@@ -817,6 +819,28 @@ const basketOf = (ranked: readonly CropRecommendation[]): readonly CropRecommend
     )
     .slice(0, DESIGN_BASKET_SIZE)
 
+/** Crops the site's climate alone admits, at the percentile every evaluated scenario reads light at */
+const climatePassingCrops = (catalog: readonly Crop[], site: Site): readonly Crop[] =>
+  catalog.filter((crop) => climateGate(crop, site, DEFAULT_FROST_PERCENTILE).passed)
+
+/**
+ * A placed bed only gets counted as getting enough light once some crop the climate alone would
+ * admit also clears lightGate on that bed's own light. `placeBeds` draws a bed wherever the layout
+ * has room for one, so a ground-row strip sitting at 15 to 22 percent of open sky still gets a bed.
+ * Without this check the card would credit that bed with light nothing on the plant list can use
+ * (Phoenix's energy-first layout placed 6 beds this way, 4 of them in strips too dark for anything)
+ */
+export const lightAdequateBedCount = (
+  climatePassing: readonly Crop[],
+  site: Site,
+  layout: BedLayout,
+): number =>
+  layout.beds.filter((placement) =>
+    climatePassing.some(
+      (crop) => lightGate(crop, placement.light, site, DEFAULT_FROST_PERCENTILE).passed,
+    ),
+  ).length
+
 interface Evaluated {
   readonly candidate: ArrayCandidate
   readonly light: ScenarioLight
@@ -827,6 +851,8 @@ interface Evaluated {
   readonly energyRatio: Banded<Fraction>
   readonly lightExcluded: readonly CropId[]
   readonly tierCShare: number
+  /** Of `layout.beds`, how many get enough light for at least one climate-admitted crop to grow */
+  readonly lightAdequateBeds: number
 }
 
 /** A plot with no room for a bed still gets a scenario: it just gets no beds, and says why */
@@ -1148,6 +1174,9 @@ const evaluate = (
     shortfallMm,
   })
   const resolvedLayout = layout.ok ? layout.value : refusedLayout(layout.reason)
+  // computed once per candidate and read for every placed bed below: the climate gate doesn't
+  // read the bed at all, so it answers the same way for all of them
+  const climatePassing = climatePassingCrops(deps.catalog, deps.site)
 
   return {
     candidate,
@@ -1187,6 +1216,7 @@ const evaluate = (
     }),
     lightExcluded: lightGateExcluded(ranked),
     tierCShare: basket.length === 0 ? 1 : tierC / basket.length,
+    lightAdequateBeds: lightAdequateBedCount(climatePassing, deps.site, resolvedLayout),
   }
 }
 
@@ -1274,6 +1304,23 @@ export const roughKwh = (value: number): string => {
   return String(rounded).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 }
 
+/**
+ * The bed-count sentence in the tradeoff line, on its own so it can be tested against every count
+ * directly: a placed bed can sit too deep in a row's shade for anything on the plant list to grow
+ * there, and this is what a grower who drew four beds reads before the layout is even applied.
+ * Singular subjects take "fits", plural ones "fit"
+ */
+export const bedsFitSentence = (beds: number, adequate: number): string => {
+  if (adequate >= beds) {
+    return `${String(beds)} bed${beds === 1 ? '' : 's'} fit${beds === 1 ? 's' : ''} the light it leaves`
+  }
+  if (beds === 1) {
+    return "1 bed fits, and it doesn't get enough light for anything on the plant list to grow"
+  }
+  const share = adequate === 0 ? 'none of them' : `only ${String(adequate)} of them`
+  return `${String(beds)} beds fit, and ${share} get enough light for anything on the plant list to grow`
+}
+
 const tradeoffOf = (evaluated: Evaluated, catalog: readonly Crop[]): string => {
   const { candidate, light, production } = evaluated
   if (candidate.archetype === 'no-array-control') {
@@ -1287,10 +1334,7 @@ const tradeoffOf = (evaluated: Evaluated, catalog: readonly Crop[]): string => {
       ? 'Nothing on the plant list drops out at this shade level'
       : `${String(lost.length)} plant${lost.length === 1 ? '' : 's'} drop off the list at this shade level: ${listOf(catalog, lost)}`
   const patchy = light.homogeneity < 0.5
-  const beds = evaluated.layout.beds.length
-  // said before the layout is applied, so a grower who drew four beds sees up front that it fits
-  // only two
-  const bedsText = `${String(beds)} bed${beds === 1 ? '' : 's'} fit the light it leaves`
+  const bedsText = bedsFitSentence(evaluated.layout.beds.length, evaluated.lightAdequateBeds)
   const saved = evaluated.water.deficitSavedFraction
   const percent = Math.round(Math.abs(saved) * 100)
   const waterText =
@@ -1454,6 +1498,7 @@ export const suggestDesigns = async (
       flags: entry.flags,
       layout: entry.layout,
       energyRatio: entry.energyRatio,
+      lightAdequateBeds: entry.lightAdequateBeds,
       score:
         weights.food * (food[index] ?? 0) +
         weights.energy * (energy[index] ?? 0) +

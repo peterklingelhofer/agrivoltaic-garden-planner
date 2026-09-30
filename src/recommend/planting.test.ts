@@ -12,6 +12,7 @@ import {
   calendarFor,
   calendarSowDay,
   derivePlanting,
+  feasibilityWords,
   plantingDensity,
   plantingIdFor,
 } from './planting'
@@ -207,7 +208,7 @@ describe('deriving a planting', () => {
     })
     expect(derived.ok).toBe(false)
     if (derived.ok) return
-    expect(derived.reason).toContain(barren.feasibility.kind)
+    expect(derived.reason).toContain(feasibilityWords(barren.feasibility.kind))
   })
 
   it('refuses a plan slot whose harvest ends before the calendar says the crop is ready', () => {

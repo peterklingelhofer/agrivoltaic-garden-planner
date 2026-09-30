@@ -97,7 +97,7 @@ export const runRecommendationPipeline = (input: PipelineInput): readonly Recomm
 
     for (const crop of input.catalog) {
       const climate = climateGate(crop, input.site, input.frostPercentile)
-      const lightOutcome = lightGate(crop, light, input.site)
+      const lightOutcome = lightGate(crop, light, input.site, input.frostPercentile)
       const base: Omit<CropRecommendation, 'outcome'> = {
         cropId: crop.id,
         cultivarId: null,

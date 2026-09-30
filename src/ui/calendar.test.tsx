@@ -93,6 +93,12 @@ describe('basis and feasibility', () => {
     expect(basisLabel({ kind: 'soil-temperature', minSoilTempC: 10, frostFree: true })).toBe(
       'no frost here: dated by soil temperature only, soil at or above 10 °C (50 °F)',
     )
+    // a frost-free site whose year-round window starts at a named wet season instead: the
+    // soil-temperature reading alone would still say "dated by soil temperature only", which
+    // stops being the actual reason for the date
+    expect(
+      basisLabel({ kind: 'soil-temperature', minSoilTempC: 10, frostFree: true, rains: true }),
+    ).toBe('no frost here: dated from the start of the rains, soil at or above 10 °C (50 °F)')
     expect(basisLabel({ kind: 'light-window', firstAdequateMonth: 4 })).toContain('Apr')
     expect(basisLabel({ kind: 'days-to-maturity', backedOffDays: days(75) })).toContain('75 days')
     expect(basisLabel({ kind: 'catalog-window' })).toContain('catalog')

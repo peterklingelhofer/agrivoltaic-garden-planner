@@ -1,12 +1,13 @@
 import { growingWindowFor } from '../../data/crops'
 import { unsourcedClaim } from '../../types/cited'
-import { clamp, MONTH_LENGTH_DAYS, monthsInWindow } from '../../data/util'
+import { at, clamp, MONTH_LENGTH_DAYS, MONTH_START_DAY, monthsInWindow } from '../../data/util'
 import { shadeBenefitStatusOf } from '../../data/water'
 import type { Crop } from '../../types/crop'
-import type { BedLight, SeasonLight } from '../../types/light'
+import type { BedLight, GrowingWindow, SeasonLight } from '../../types/light'
 import type { LimitingFactor } from '../../types/recommend'
-import type { Site } from '../../types/site'
+import type { ExceedancePercentile, Site } from '../../types/site'
 import type { Fraction, MolPerM2Day, MonthIndex } from '../../types/units'
+import { forwardDays, seasonAnchors, wrapDayOfYear } from '../calendar'
 
 export interface LightGateOutcome {
   readonly passed: boolean
@@ -40,14 +41,52 @@ export const SHADE_BENEFIT_BONUS_CLAIM = unsourcedClaim(
 const monthValue = (values: readonly number[], month: number): number => values[month - 1] ?? 0
 
 /**
- * Season light for one crop in one bed, evaluated against the crop's own
- * growing window, above the annual mean. Cumulative RSR is the
- * day-weighted photon deficit across that window, which is the quantity the
- * Laub curves are defined on
+ * The months of the crop's catalog window that reach at least one day into the site's own season
+ * for this crop: from the last spring freeze, brought forward for a crop hardy enough to be sown
+ * before it (a negative `frostOffsetDays`, the same sign `plantingFloor` in `calendar.ts` reads),
+ * to the first fall freeze. Membership is a forward distance from the season's own start, so a
+ * season that crosses December 31, a southern-hemisphere site, still reads right. A frost-free site
+ * skips nothing, since no month here is being measured against a frost that never comes, and a
+ * window the season would empty entirely is read whole, so no crop is refused on a check with
+ * nothing left in it
  */
-export const seasonLightFor = (crop: Crop, light: BedLight, site: Site): SeasonLight => {
-  const window = growingWindowFor(crop, site.location.latitudeDeg)
+const seasonMonthsFor = (
+  crop: Crop,
+  site: Site,
+  window: GrowingWindow,
+  percentile: ExceedancePercentile,
+): readonly number[] => {
   const months = monthsInWindow(window.startMonth, window.endMonth)
+  const anchors = seasonAnchors(site, percentile)
+  if (anchors.frostFree) return months
+  const seasonStart = wrapDayOfYear(anchors.lastSpringFreeze + Math.min(0, crop.frostOffsetDays))
+  const span = forwardDays(seasonStart, anchors.firstFallFreeze)
+  const touchesSeason = (month: number): boolean => {
+    const first = at(MONTH_START_DAY, month - 1) + 1
+    const last = first + at(MONTH_LENGTH_DAYS, month - 1) - 1
+    for (let day = first; day <= last; day += 1) {
+      if (forwardDays(seasonStart, day) <= span) return true
+    }
+    return false
+  }
+  const kept = months.filter(touchesSeason)
+  return kept.length === 0 ? months : kept
+}
+
+/**
+ * Season light for one crop in one bed, evaluated against only the months of the crop's own
+ * growing window that the site's own season actually reaches (`seasonMonthsFor`). Cumulative RSR
+ * is the day-weighted photon deficit across those months, which is the quantity the Laub curves
+ * are defined on
+ */
+export const seasonLightFor = (
+  crop: Crop,
+  light: BedLight,
+  site: Site,
+  percentile: ExceedancePercentile,
+): SeasonLight => {
+  const window = growingWindowFor(crop, site.location.latitudeDeg)
+  const months = seasonMonthsFor(crop, site, window, percentile)
   const ceiling = crop.light.dliMaxBeforeDisorderMolM2Day?.value ?? null
 
   let weightedDli = 0
@@ -135,14 +174,21 @@ export const shadeBenefitBonus = (crop: Crop, site: Site, seasonLight: SeasonLig
 
 const asMonth = (month: number): MonthIndex => month as MonthIndex
 
-export const lightGate = (crop: Crop, light: BedLight, site: Site): LightGateOutcome => {
-  const seasonLight = seasonLightFor(crop, light, site)
+export const lightGate = (
+  crop: Crop,
+  light: BedLight,
+  site: Site,
+  percentile: ExceedancePercentile,
+): LightGateOutcome => {
+  const seasonLight = seasonLightFor(crop, light, site, percentile)
   const minimum = crop.light.dliMinMolM2Day.value
   const target = crop.light.dliTargetMolM2Day.value
   const ceiling = crop.light.dliMaxBeforeDisorderMolM2Day?.value ?? null
   const fit = dliFit(seasonLight, minimum, target, ceiling)
   const bonus = shadeBenefitBonus(crop, site, seasonLight)
-  const months = monthsInWindow(seasonLight.window.startMonth, seasonLight.window.endMonth)
+  // the same months `seasonLight` was built from, so the minimum check below and the ceiling
+  // search further down read exactly what the fit was scored on
+  const months = seasonMonthsFor(crop, site, seasonLight.window, percentile)
 
   for (const month of months) {
     if (monthValue(light.monthlyMeanDliMolM2Day, month) < minimum) {

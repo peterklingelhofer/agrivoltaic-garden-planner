@@ -158,6 +158,12 @@ export interface DesignScenario {
   readonly flags: ScenarioFlags
   /** Beds placed against this candidate's own baked ground light */
   readonly layout: BedLayout
+  /**
+   * Of `layout.beds`, how many get enough light for at least one crop the site's climate admits:
+   * a bed placed in a row's deep shade still gets drawn, and this is what tells it apart from one
+   * that can actually grow something
+   */
+  readonly lightAdequateBeds: number
   /** The electricity partial this scenario was scored on, carried so nothing recomputes it */
   readonly energyRatio: Banded<Fraction>
   readonly score: number

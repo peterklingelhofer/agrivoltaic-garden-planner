@@ -3,6 +3,7 @@ import { EMPTY_LIST } from '../state/slices'
 import { scenePlot, useAppStore } from '../state/store'
 import type { Crop } from '../types/crop'
 import { describeHover } from './hover'
+import { useLengthUnit } from './length-units'
 
 /** Clear of the cursor, so the thing being named is never under the label naming it */
 const OFFSET_PX = 14
@@ -23,6 +24,7 @@ export const SceneTooltip = (): ReactElement | null => {
     s.catalog.status === 'ready' ? s.catalog.value : (EMPTY_LIST as readonly Crop[]),
   )
   const setHovered = useAppStore((s) => s.setHovered)
+  const unit = useLengthUnit()
   const ref = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
@@ -54,7 +56,7 @@ export const SceneTooltip = (): ReactElement | null => {
   const lastReport = useAppStore(
     (s) => s.simulation.reports[s.simulation.reports.length - 1] ?? null,
   )
-  const named = hovered === null ? null : describeHover(plot, catalog, hovered, lastReport)
+  const named = hovered === null ? null : describeHover(plot, catalog, hovered, unit, lastReport)
 
   return (
     <div

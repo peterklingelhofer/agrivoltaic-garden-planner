@@ -15,7 +15,8 @@ import { ErrorBoundary } from './ErrorBoundary'
 import { FolklorePanel } from './FolklorePanel'
 import { LayoutPanel } from './LayoutPanel'
 import { plural } from './format'
-import { AMBITION_OPTIONS } from './onboarding'
+import { showLength } from './length-units'
+import { AMBITION_OPTIONS, roundTenth } from './onboarding'
 import { OverlayPanel } from './OverlayPanel'
 import { PlantsPanel } from './PlantsPanel'
 import { SimPanel } from './SimPanel'
@@ -104,7 +105,8 @@ const summaryOf = (s: AppState, id: SidebarStep): string | null => {
     case 'ground': {
       if (s.plot === null) return null
       const size = plotSizeOf(s.plot)
-      return `${size.widthM.toFixed(1)} x ${size.depthM.toFixed(1)} m, ${plural(beds.length, 'bed', 'beds')}`
+      const unit = s.lengthUnit
+      return `${showLength(size.widthM, unit, roundTenth).toFixed(1)} x ${showLength(size.depthM, unit, roundTenth).toFixed(1)} ${unit}, ${plural(beds.length, 'bed', 'beds')}`
     }
     case 'panels': {
       // rows, counted across every array: one array holds several rows, and "1 row of panels"
@@ -216,6 +218,8 @@ export const Sidebar = (): ReactElement => {
       requirementKey(s),
       // and the rest of what the closed-step summaries print
       s.locationLabel,
+      // the ground step's own summary prints the plot size in this unit
+      s.lengthUnit,
       s.plot === null
         ? ''
         : `${String(plotSizeOf(s.plot).widthM)}x${String(plotSizeOf(s.plot).depthM)}`,

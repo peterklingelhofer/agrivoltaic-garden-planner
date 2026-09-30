@@ -5,8 +5,9 @@ import { useAppStore } from '../state/store'
 import type { PvArray, TrackingMode } from '../types/pv'
 import { degrees, fraction, meters, wattsPeak } from '../types/units'
 import { Action, NumberField, SelectField, SliderField } from './controls'
-import { formatDegrees, formatMeters } from './format'
+import { formatDegrees, formatLength } from './format'
 import { InfoTip } from './InfoTip'
+import { lengthStep, showLength, showLimit, toMeters, useLengthUnit } from './length-units'
 import { roundTenth } from './onboarding'
 import { Panel, Readout } from './Panel'
 
@@ -108,6 +109,7 @@ const TrackerFields = ({
 
 export const ArrayPanel = (): ReactElement => {
   const plot = useAppStore((s) => s.plot)
+  const unit = useLengthUnit()
   const selectedArrayId = useAppStore((s) => s.selectedArrayId)
   const selectArray = useAppStore((s) => s.selectArray)
   const upsertArray = useAppStore((s) => s.upsertArray)
@@ -172,31 +174,37 @@ export const ArrayPanel = (): ReactElement => {
             <NumberField
               testId="control-array-pitch"
               label="Row spacing, center to center"
-              unit="m"
-              min={0.5}
-              step={0.1}
-              value={roundTenth(array.geometry.pitchM)}
-              onChange={(value) => patchGeometry({ pitchM: meters(Math.max(0.5, value)) })}
+              unit={unit}
+              min={showLimit(0.5, unit)}
+              step={lengthStep(unit, 0.1)}
+              value={showLength(array.geometry.pitchM, unit, roundTenth)}
+              onChange={(value) =>
+                patchGeometry({ pitchM: meters(Math.max(0.5, toMeters(value, unit))) })
+              }
             />
             <NumberField
               testId="control-array-collector-width"
               label="Width of one row"
-              unit="m"
-              min={0.5}
-              step={0.1}
-              value={roundTenth(array.geometry.collectorWidthM)}
-              onChange={(value) => patchGeometry({ collectorWidthM: meters(Math.max(0.5, value)) })}
+              unit={unit}
+              min={showLimit(0.5, unit)}
+              step={lengthStep(unit, 0.1)}
+              value={showLength(array.geometry.collectorWidthM, unit, roundTenth)}
+              onChange={(value) =>
+                patchGeometry({ collectorWidthM: meters(Math.max(0.5, toMeters(value, unit))) })
+              }
             />
           </div>
           <div className="row">
             <NumberField
               testId="control-array-clearance"
               label="Headroom underneath"
-              unit="m"
+              unit={unit}
               min={0}
-              step={0.1}
-              value={roundTenth(array.geometry.clearanceHeightM)}
-              onChange={(value) => patchGeometry({ clearanceHeightM: meters(value) })}
+              step={lengthStep(unit, 0.1)}
+              value={showLength(array.geometry.clearanceHeightM, unit, roundTenth)}
+              onChange={(value) =>
+                patchGeometry({ clearanceHeightM: meters(toMeters(value, unit)) })
+              }
             />
             <NumberField
               testId="control-array-row-azimuth"
@@ -305,7 +313,7 @@ export const ArrayPanel = (): ReactElement => {
             <Readout
               id="array-max-height"
               label="Height at the top of a row"
-              value={formatMeters(derived?.maxHeightM ?? 0)}
+              value={formatLength(derived?.maxHeightM ?? 0, unit)}
             />
             <Readout
               id="array-nameplate"

@@ -11,6 +11,7 @@ import type { House, Tree } from '../types/garden'
 import type { Ring2D } from '../types/geo'
 import { meters, type Fraction } from '../types/units'
 import { Action, NumberField, Toggle } from './controls'
+import { lengthStep, showLength, showLimit, toMeters, useLengthUnit } from './length-units'
 import { SourceLink } from './SourcesPanel'
 
 const round2 = (value: number): number => Math.round(value * 100) / 100
@@ -40,6 +41,7 @@ const HouseCard = ({
 }): ReactElement => {
   const upsertObstruction = useAppStore((s) => s.upsertObstruction)
   const removeObstruction = useAppStore((s) => s.removeObstruction)
+  const unit = useLengthUnit()
   const ring = house.footprint.exterior
   const [a, b, c] = ring
   const widthM = a && b ? Math.hypot(b.xM - a.xM, b.yM - a.yM) : 0
@@ -61,31 +63,37 @@ const HouseCard = ({
         <NumberField
           testId={`control-house-width-${house.id}`}
           label="Width"
-          unit="m"
-          min={1}
-          step={0.5}
-          value={round2(widthM)}
-          onChange={(value) => writeRing(resizedRectangle(ring, Math.max(1, value), depthM))}
+          unit={unit}
+          min={showLimit(1, unit)}
+          step={lengthStep(unit, 0.5)}
+          value={showLength(widthM, unit, round2)}
+          onChange={(value) =>
+            writeRing(resizedRectangle(ring, Math.max(1, toMeters(value, unit)), depthM))
+          }
         />
         <NumberField
           testId={`control-house-depth-${house.id}`}
           label="Depth"
-          unit="m"
-          min={1}
-          step={0.5}
-          value={round2(depthM)}
-          onChange={(value) => writeRing(resizedRectangle(ring, widthM, Math.max(1, value)))}
+          unit={unit}
+          min={showLimit(1, unit)}
+          step={lengthStep(unit, 0.5)}
+          value={showLength(depthM, unit, round2)}
+          onChange={(value) =>
+            writeRing(resizedRectangle(ring, widthM, Math.max(1, toMeters(value, unit))))
+          }
         />
       </div>
       <div className="row">
         <NumberField
           testId={`control-house-height-${house.id}`}
           label="Height to eaves"
-          unit="m"
-          min={1}
-          step={0.5}
-          value={round2(house.heightM)}
-          onChange={(value) => upsertObstruction({ ...house, heightM: meters(Math.max(1, value)) })}
+          unit={unit}
+          min={showLimit(1, unit)}
+          step={lengthStep(unit, 0.5)}
+          value={showLength(house.heightM, unit, round2)}
+          onChange={(value) =>
+            upsertObstruction({ ...house, heightM: meters(Math.max(1, toMeters(value, unit))) })
+          }
         />
         <NumberField
           testId={`control-house-turn-${house.id}`}
@@ -102,18 +110,18 @@ const HouseCard = ({
         <NumberField
           testId={`control-house-east-${house.id}`}
           label="Center east"
-          unit="m"
-          step={0.5}
-          value={round2(center.xM)}
-          onChange={(value) => writeRing(translateRing(ring, value - center.xM, 0))}
+          unit={unit}
+          step={lengthStep(unit, 0.5)}
+          value={showLength(center.xM, unit, round2)}
+          onChange={(value) => writeRing(translateRing(ring, toMeters(value, unit) - center.xM, 0))}
         />
         <NumberField
           testId={`control-house-north-${house.id}`}
           label="Center north"
-          unit="m"
-          step={0.5}
-          value={round2(center.yM)}
-          onChange={(value) => writeRing(translateRing(ring, 0, value - center.yM))}
+          unit={unit}
+          step={lengthStep(unit, 0.5)}
+          value={showLength(center.yM, unit, round2)}
+          onChange={(value) => writeRing(translateRing(ring, 0, toMeters(value, unit) - center.yM))}
         />
       </div>
       <Action
@@ -140,6 +148,7 @@ const TreeCard = ({
 }): ReactElement => {
   const upsertObstruction = useAppStore((s) => s.upsertObstruction)
   const removeObstruction = useAppStore((s) => s.removeObstruction)
+  const unit = useLengthUnit()
   const ring = tree.footprint.exterior
   const [a, b, c] = ring
   const widthM = a && b ? Math.hypot(b.xM - a.xM, b.yM - a.yM) : 0
@@ -157,45 +166,49 @@ const TreeCard = ({
         <NumberField
           testId={`control-tree-width-${tree.id}`}
           label="Crown width"
-          unit="m"
-          min={1}
-          step={0.5}
-          value={round2(widthM)}
-          onChange={(value) => writeRing(resizedRectangle(ring, Math.max(1, value), depthM))}
+          unit={unit}
+          min={showLimit(1, unit)}
+          step={lengthStep(unit, 0.5)}
+          value={showLength(widthM, unit, round2)}
+          onChange={(value) =>
+            writeRing(resizedRectangle(ring, Math.max(1, toMeters(value, unit)), depthM))
+          }
         />
         <NumberField
           testId={`control-tree-depth-${tree.id}`}
           label="Crown depth"
-          unit="m"
-          min={1}
-          step={0.5}
-          value={round2(depthM)}
-          onChange={(value) => writeRing(resizedRectangle(ring, widthM, Math.max(1, value)))}
+          unit={unit}
+          min={showLimit(1, unit)}
+          step={lengthStep(unit, 0.5)}
+          value={showLength(depthM, unit, round2)}
+          onChange={(value) =>
+            writeRing(resizedRectangle(ring, widthM, Math.max(1, toMeters(value, unit))))
+          }
         />
       </div>
       <div className="row">
         <NumberField
           testId={`control-tree-base-${tree.id}`}
           label="Crown base"
-          unit="m"
+          unit={unit}
           min={0}
-          step={0.5}
-          value={round2(tree.crownBaseM)}
+          step={lengthStep(unit, 0.5)}
+          value={showLength(tree.crownBaseM, unit, round2)}
           onChange={(value) =>
-            upsertObstruction({ ...tree, crownBaseM: meters(Math.max(0, value)) })
+            upsertObstruction({ ...tree, crownBaseM: meters(Math.max(0, toMeters(value, unit))) })
           }
         />
         <NumberField
           testId={`control-tree-top-${tree.id}`}
           label="Top"
-          unit="m"
-          min={tree.crownBaseM + 0.5}
-          step={0.5}
-          value={round2(tree.heightM)}
+          unit={unit}
+          min={showLimit(tree.crownBaseM + 0.5, unit)}
+          step={lengthStep(unit, 0.5)}
+          value={showLength(tree.heightM, unit, round2)}
           onChange={(value) =>
             upsertObstruction({
               ...tree,
-              heightM: meters(Math.max(tree.crownBaseM + 0.5, value)),
+              heightM: meters(Math.max(tree.crownBaseM + 0.5, toMeters(value, unit))),
             })
           }
         />
@@ -216,18 +229,18 @@ const TreeCard = ({
         <NumberField
           testId={`control-tree-east-${tree.id}`}
           label="Center east"
-          unit="m"
-          step={0.5}
-          value={round2(center.xM)}
-          onChange={(value) => writeRing(translateRing(ring, value - center.xM, 0))}
+          unit={unit}
+          step={lengthStep(unit, 0.5)}
+          value={showLength(center.xM, unit, round2)}
+          onChange={(value) => writeRing(translateRing(ring, toMeters(value, unit) - center.xM, 0))}
         />
         <NumberField
           testId={`control-tree-north-${tree.id}`}
           label="Center north"
-          unit="m"
-          step={0.5}
-          value={round2(center.yM)}
-          onChange={(value) => writeRing(translateRing(ring, 0, value - center.yM))}
+          unit={unit}
+          step={lengthStep(unit, 0.5)}
+          value={showLength(center.yM, unit, round2)}
+          onChange={(value) => writeRing(translateRing(ring, 0, toMeters(value, unit) - center.yM))}
         />
       </div>
       <Toggle

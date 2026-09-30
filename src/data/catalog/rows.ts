@@ -1586,7 +1586,7 @@ export const CROP_ROWS: readonly CropRow[] = [
   ],
   [
     'nz-spinach',
-    'Tetragonia tetragonioides',
+    'Tetragonia tetragonoides',
     'Aizoaceae',
     'New Zealand spinach',
     'leafy-vegetables',

@@ -3,13 +3,12 @@ import type { DesignProgress } from '../recommend/design'
 import { useAppStore } from '../state/store'
 import { meters } from '../types/units'
 import { ChoiceGroup, NumberField, Toggle } from './controls'
+import { lengthStep, showLength, showLimit, toMeters, useLengthUnit } from './length-units'
 import {
   ANSWER_QUESTIONS,
   EXPERIENCE_OPTIONS,
   EXPOSURE_HELP,
   EXPOSURE_OPTIONS,
-  feetToMeters,
-  metersToFeet,
   MOUNTING_OPTIONS,
   roundTenth,
 } from './onboarding'
@@ -23,6 +22,7 @@ import {
  */
 
 const DEFAULT_HEIGHT_LIMIT_M = 3
+const MIN_HEIGHT_LIMIT_M = 0.5
 
 const percent = (value: number): string => `${String(Math.round(value * 100))}%`
 
@@ -74,6 +74,7 @@ export const MountingStep = (): ReactElement => {
 
 export const HeightStep = (): ReactElement => {
   const limit = useAppStore((s) => s.answers.maxHeightM)
+  const unit = useLengthUnit()
   const answer = useAppStore((s) => s.answerOnboarding)
   return (
     <>
@@ -86,26 +87,19 @@ export const HeightStep = (): ReactElement => {
         }
       />
       {limit === null ? null : (
-        <div className="row">
-          <NumberField
-            testId="control-onboarding-max-height-m"
-            label="Tallest it may be"
-            unit="m"
-            min={0.5}
-            step={0.1}
-            value={roundTenth(limit)}
-            onChange={(value) => answer({ maxHeightM: meters(Math.max(0.5, value)) })}
-          />
-          <NumberField
-            testId="control-onboarding-max-height-ft"
-            label="Tallest it may be"
-            unit="ft"
-            min={2}
-            step={0.5}
-            value={roundTenth(metersToFeet(limit))}
-            onChange={(value) => answer({ maxHeightM: meters(Math.max(0.5, feetToMeters(value))) })}
-          />
-        </div>
+        <NumberField
+          testId={
+            unit === 'm' ? 'control-onboarding-max-height-m' : 'control-onboarding-max-height-ft'
+          }
+          label="Tallest it may be"
+          unit={unit}
+          min={showLimit(MIN_HEIGHT_LIMIT_M, unit)}
+          step={lengthStep(unit, 0.1)}
+          value={showLength(limit, unit, roundTenth)}
+          onChange={(value) =>
+            answer({ maxHeightM: meters(Math.max(MIN_HEIGHT_LIMIT_M, toMeters(value, unit))) })
+          }
+        />
       )}
     </>
   )
