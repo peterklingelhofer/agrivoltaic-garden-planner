@@ -579,27 +579,30 @@ describe('a placed bed only counts as getting enough light when a crop can grow 
 })
 
 describe('the bed-count sentence reads right at every count', () => {
-  it('uses "fits" for one bed and "fit" for any other count, when every bed qualifies', () => {
-    expect(bedsFitSentence(1, 1)).toBe('1 bed fits the light it leaves')
-    expect(bedsFitSentence(6, 6)).toBe('6 beds fit the light it leaves')
-    expect(bedsFitSentence(0, 0)).toBe('0 beds fit the light it leaves')
+  it('says how many beds the panels leave room for when every bed qualifies', () => {
+    expect(bedsFitSentence(1, 1)).toBe('These panels leave room for 1 bed')
+    expect(bedsFitSentence(6, 6)).toBe('These panels leave room for 6 beds')
+  })
+
+  it('says in words that there is no room for a bed', () => {
+    expect(bedsFitSentence(0, 0)).toBe('These panels leave no room for a bed')
   })
 
   it('names the one bed directly when it is placed and does not qualify', () => {
     expect(bedsFitSentence(1, 0)).toBe(
-      "1 bed fits, and it doesn't get enough light for anything on the plant list to grow",
+      "These panels leave room for 1 bed, and it doesn't get enough light for anything on the plant list to grow",
     )
   })
 
   it('says none of them when nothing placed qualifies', () => {
     expect(bedsFitSentence(6, 0)).toBe(
-      '6 beds fit, and none of them get enough light for anything on the plant list to grow',
+      'These panels leave room for 6 beds, and none of them get enough light for anything on the plant list to grow',
     )
   })
 
   it('names the count that qualifies when it is somewhere in between', () => {
     expect(bedsFitSentence(6, 4)).toBe(
-      '6 beds fit, and only 4 of them get enough light for anything on the plant list to grow',
+      'These panels leave room for 6 beds, and only 4 of them get enough light for anything on the plant list to grow',
     )
   })
 })
