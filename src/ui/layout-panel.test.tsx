@@ -203,6 +203,30 @@ describe('the comparison', () => {
     await expert.unmount()
   })
 
+  /**
+   * A placed bed can sit too deep in a row's shade for anything on the plant list to grow, so the
+   * count of beds that "get enough light" reads lower than the number of beds actually placed
+   */
+  it('reads "U of N" when a placed bed is too dark for the plant list, plain N when none are', async () => {
+    const set = scenarioSetFixture()
+    const tooDark = {
+      ...set,
+      scenarios: set.scenarios.map((scenario) =>
+        scenario.candidate.archetype === 'balanced'
+          ? { ...scenario, lightAdequateBeds: 1 }
+          : scenario,
+      ),
+    }
+    const harness = await showResults(tooDark)
+    expect(harness.get('readout-onboarding-beds-balanced').textContent).toBe('1 of 2')
+    await harness.unmount()
+
+    // the default fixture places 2 beds and credits both with enough light
+    const allLit = await showResults(set)
+    expect(allLit.get('readout-onboarding-beds-balanced').textContent).toBe('2')
+    await allLit.unmount()
+  })
+
   it('shows the garden from the card, on the surface the garden lives on', async () => {
     const harness = await showResults()
     await act(async () => {

@@ -2,11 +2,13 @@ import { useEffect, useRef, useState, type KeyboardEvent, type ReactElement } fr
 import { roughKwh } from '../recommend/design'
 import { usStateOf } from '../data/retail-price'
 import { OBJECTIVE_PRESETS, presetMatching } from '../state/onboarding'
+import type { LengthUnit } from '../state/slices'
 import { useAppStore } from '../state/store'
 import type { CandidateArchetype, DesignScenario } from '../types/onboarding'
 import { Action } from './controls'
 import { lerWords } from '../simulation/score'
-import { formatDli, formatMeters } from './format'
+import { formatDli, formatLength } from './format'
+import { useLengthUnit } from './length-units'
 import { AsyncNotice, Readout } from './Panel'
 import {
   beatenBy,
@@ -25,6 +27,16 @@ import {
 } from './onboarding'
 
 const CONTROL: CandidateArchetype = 'no-array-control'
+
+/**
+ * The plain count when every placed bed gets enough light for something on the plant list, "U of
+ * N" when fewer do: a bed can sit deep enough in a row's shade to be placed and still grow nothing
+ */
+const bedsReadout = (scenario: DesignScenario): string => {
+  const total = scenario.layout.beds.length
+  const adequate = scenario.lightAdequateBeds
+  return adequate >= total ? String(total) : `${String(adequate)} of ${String(total)}`
+}
 
 /**
  * The tabs, in the order a reader who came for panels wants them: the pick first, then the other
@@ -50,6 +62,7 @@ interface CardProps {
   readonly scenario: DesignScenario
   readonly recommended: boolean
   readonly experience: Experience
+  readonly unit: LengthUnit
   /**
    * Whether the site is in Massachusetts, whose SMART programme the two regime flags quote.
    * Anywhere else, a Massachusetts-specific line would read as though the app had the wrong
@@ -72,6 +85,7 @@ const ScenarioCard = ({
   scenario,
   recommended,
   experience,
+  unit,
   massachusetts,
   beaten,
   onApply,
@@ -128,7 +142,7 @@ const ScenarioCard = ({
         <Readout
           id={`onboarding-beds-${archetype}`}
           label="beds get enough light"
-          value={String(scenario.layout.beds.length)}
+          value={bedsReadout(scenario)}
         />
       </div>
 
@@ -218,7 +232,7 @@ const ScenarioCard = ({
             <Readout
               id={`onboarding-clearance-${archetype}`}
               label="Room under the panels"
-              value={formatMeters(candidate.geometry.clearanceHeightM)}
+              value={formatLength(candidate.geometry.clearanceHeightM, unit)}
             />
           </div>
         ) : null}
@@ -300,6 +314,7 @@ const TAB_KEY: Readonly<Record<string, number>> = { ArrowRight: 1, ArrowLeft: -1
 
 export const ScenarioComparison = (): ReactElement | null => {
   const designs = useAppStore((s) => s.onboarding.designs)
+  const unit = useLengthUnit()
   /**
    * Which layout is showing, by name, or null until the visitor picks one.
    *
@@ -461,6 +476,7 @@ export const ScenarioComparison = (): ReactElement | null => {
           scenario={shown}
           recommended={shown.candidate.archetype === set.recommendedArchetype}
           experience={answers.experience}
+          unit={unit}
           massachusetts={massachusetts}
           beaten={beatenSentence(
             beatenBy(shown, set.scenarios),

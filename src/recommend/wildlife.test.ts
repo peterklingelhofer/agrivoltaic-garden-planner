@@ -19,6 +19,12 @@ const cropBy = async (id: string): Promise<Crop> => {
   return crop as Crop
 }
 
+// no entry in NATIVE_RANGES answers for this id, standing in for the checklist-miss case now that
+// the binomial fix means no real catalogue crop reaches it any more
+const UNMATCHED = 'unmatched-crop' as CropId
+
+const unmatchedCrop = async (): Promise<Crop> => ({ ...(await cropBy('tomato')), id: UNMATCHED })
+
 describe('what the wildlife answers do to a crop', () => {
   it('says nothing at all when neither question was answered yes', async () => {
     const borage = await cropBy('borage')
@@ -44,7 +50,7 @@ describe('what the wildlife answers do to a crop', () => {
    * quietly making a claim Kew has not made
    */
   it('drops an unanswerable native term instead of scoring it against the crop', async () => {
-    const unknown = await cropBy('nz-spinach')
+    const unknown = await unmatchedCrop()
     const offGrid = { favourNative: true, favourPollinators: false, botanicalArea: null }
     // no region, so there is no native term at all and nothing else was asked
     expect(wildlifeMatch(unknown, offGrid)).toBeNull()
@@ -59,7 +65,7 @@ describe('what the wildlife answers do to a crop', () => {
   })
 
   it('scores an unnameable crop on the pollinator half alone rather than halving it', async () => {
-    const unknown = await cropBy('nz-spinach')
+    const unknown = await unmatchedCrop()
     const both = { favourNative: true, favourPollinators: true, botanicalArea: CALIFORNIA }
     // the native term is dropped, so this is the forage score on its own and not an average
     // with a zero standing in for "not checked"
@@ -91,7 +97,7 @@ describe('what the wildlife answers do to a crop', () => {
 })
 
 describe('the shipped native ranges', () => {
-  it('records a range for all but one of the catalogue, and never an empty one', async () => {
+  it('records a range for every crop in the catalogue, and never an empty one', async () => {
     const catalog = await loadCropCatalog()
     const unknown = catalog.filter(
       (crop) =>
@@ -101,8 +107,8 @@ describe('the shipped native ranges', () => {
           botanicalArea: CALIFORNIA,
         }) === null,
     )
-    // one binomial matched nothing in the checklist, and it is named here so a second one
-    // appearing is a change somebody has to argue for
-    expect(unknown.map((crop) => crop.id as CropId)).toEqual(['nz-spinach'])
+    // every catalogue binomial now matches an accepted name in the checklist, so this list is
+    // empty, and a crop appearing here is a change somebody has to argue for
+    expect(unknown.map((crop) => crop.id as CropId)).toEqual([])
   })
 })

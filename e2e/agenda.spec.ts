@@ -75,6 +75,14 @@ test('a planted design produces grouped, dated jobs that each name their rule', 
   page,
 }) => {
   test.setTimeout(BAKE_TIMEOUT_MS + 240_000)
+  /*
+    The agenda drops a harvest whose own sowing has not come round again yet, so the "harvests
+    as well as sowings" check below needs a day no catalogue crop has already been sown for at
+    Amherst. Ramps open the earliest field window, day 76. 1 March, day 60, sits ahead of every
+    one of them with room to spare. Set before the app loads, so the store's own boot-time read
+    of the clock (`todayMillis` in state/store.ts) picks it up
+  */
+  await page.clock.setFixedTime(new Date('2025-03-01T12:00:00Z'))
   const app = await rankedBed(page)
   const crops = await plantedGarden(page)
   await step(page, 'calendar')

@@ -82,17 +82,12 @@ export const GrowingStep = (): ReactElement => {
 export const ObjectiveStep = (): ReactElement => {
   const objective = useAppStore((s) => s.answers.objective)
   const answer = useAppStore((s) => s.answerOnboarding)
-  const inputs = useOptionRowInputs()
   const preset: ObjectivePresetId | '' = presetMatching(objective) ?? ''
-  const presets = useMemo(
-    () =>
-      OBJECTIVE_PRESETS.map((entry) => ({
-        value: entry.id as ObjectivePresetId | '',
-        label: entry.label,
-        help: withRows(entry.help, panelRowsFor({ field: 'objective', value: entry.id }, inputs)),
-      })),
-    [inputs],
-  )
+  const presets = OBJECTIVE_PRESETS.map((entry) => ({
+    value: entry.id as ObjectivePresetId | '',
+    label: entry.label,
+    help: entry.help,
+  }))
   // the shares the search reads, which is what the four dials come to between them
   const shares = normaliseObjective(objective)
   return (

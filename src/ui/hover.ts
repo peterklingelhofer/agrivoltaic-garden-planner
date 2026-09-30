@@ -1,9 +1,9 @@
 import { approxPercent, OUTCOME_LABEL } from '../simulation/coach'
-import type { HoverTarget } from '../state/slices'
+import type { HoverTarget, LengthUnit } from '../state/slices'
 import type { Crop } from '../types/crop'
 import type { Bed, GardenPlot } from '../types/garden'
 import type { SeasonReport } from '../types/simulation'
-import { approxPlural, cropName, formatMeters, plural } from './format'
+import { approxPlural, cropName, formatLength, plural } from './format'
 
 export interface HoverLabel {
   readonly title: string
@@ -25,6 +25,8 @@ export const describeHover = (
   plot: GardenPlot | null,
   catalog: readonly Crop[],
   target: HoverTarget,
+  /** The unit every length on the plot now follows, saved with the design */
+  unit: LengthUnit,
   /** The last season run, so a plant can say what happened to it; the report is read, not recomputed */
   lastReport: SeasonReport | null = null,
 ): HoverLabel | null => {
@@ -41,7 +43,7 @@ export const describeHover = (
        * the one surface a beginner meets without having opened a panel at all, so it is the last
        * place to keep either
        */
-      detail: `${plural(rowCount, 'row', 'rows')} of ${plural(modulesPerRow, 'panel', 'panels')}, ${formatMeters(pitchM)} apart`,
+      detail: `${plural(rowCount, 'row', 'rows')} of ${plural(modulesPerRow, 'panel', 'panels')}, ${formatLength(pitchM, unit)} apart`,
     }
   }
   const bed = bedOf(plot, target)

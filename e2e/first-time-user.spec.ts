@@ -274,6 +274,15 @@ for (const persona of PERSONAS) {
   test(`${persona.name} gets a plantable garden out of the questions`, async ({ page }) => {
     test.setTimeout(DESIGN_TIMEOUT_MS + 300_000)
     test.info().annotations.push({ type: 'persona', description: persona.who })
+    /*
+      The agenda drops a harvest whose own sowing has not come round again yet, so the
+      first-harvest check below needs a day no catalogue crop has already been sown for at
+      Amherst, whichever place the persona ends up naming (every persona lands on `LABEL`).
+      Ramps open the earliest field window, day 76. 1 March, day 60, sits ahead of every one of
+      them with room to spare. Set before the app loads, so the store's own boot-time read of
+      the clock (`todayMillis` in state/store.ts) picks it up
+    */
+    await page.clock.setFixedTime(new Date('2025-03-01T12:00:00Z'))
     const app = await openIn(page, 'light', { geocode: geocodeListBody(HITS) })
     const user = hands(page)
     await expect(page.getByTestId('panel-step-place'), persona.who).not.toHaveAttribute(

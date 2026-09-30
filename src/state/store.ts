@@ -693,6 +693,7 @@ const plantBeds = (run: PlantingRun, set: Setter, get: () => AppState): void => 
         light: placement.light,
         site,
         catalog,
+        frostPercentile: state.frostPercentile,
         recommendations,
         preferences,
         companionRules:
@@ -804,6 +805,33 @@ const generateGarden = async (
  */
 const zoneOf = (summary: BedLightSummary, arrays: number): LightZoneKind =>
   arrays === 0 ? 'even-light' : summary.shadeRatio < 0.15 ? 'bright-gap' : 'shaded-band'
+
+/** North by the same sign `growingWindowFor` in `data/crops.ts` mirrors a crop's own window on */
+const isNorth = (latitudeDeg: number): boolean => latitudeDeg >= 0
+
+/**
+ * Six calendar months from this instant, read as a wall clock and moved whole months so the day
+ * of the month survives it: July to December go back six months and January to June go forward
+ * six, so the year this is ever asked to move within never changes. Where the target month is too
+ * short for the day this started on, the day clamps to the target month's own last day: 31 August
+ * moves to 29 February in a leap year, the last day `Date.UTC` would otherwise roll past
+ */
+const sixMonthsOn = (millis: number): number => {
+  const date = new Date(millis)
+  const year = date.getUTCFullYear()
+  const month = date.getUTCMonth()
+  const targetMonth = month >= 6 ? month - 6 : month + 6
+  const lastDayOfTargetMonth = new Date(Date.UTC(year, targetMonth + 1, 0)).getUTCDate()
+  return Date.UTC(
+    year,
+    targetMonth,
+    Math.min(date.getUTCDate(), lastDayOfTargetMonth),
+    date.getUTCHours(),
+    date.getUTCMinutes(),
+    date.getUTCSeconds(),
+    date.getUTCMilliseconds(),
+  )
+}
 
 export const useAppStore = create<AppState>()(
   immer((rawSet, get) => {
@@ -1012,6 +1040,12 @@ export const useAppStore = create<AppState>()(
               hours, as the time panel prints it, and a lookup of the place already on screen
               moves nothing, so the example's baked scene time stays where it was baked
             */
+            const priorLocation =
+              current.site.status === 'ready'
+                ? current.site.value.location
+                : samePlace
+                  ? null
+                  : current.location
             const priorOffsetMinutes =
               current.site.status === 'ready'
                 ? utcOffsetMinutesAt(
@@ -1022,15 +1056,31 @@ export const useAppStore = create<AppState>()(
                 : samePlace
                   ? null
                   : utcOffsetHoursFor(current.location) * 60
-            if (priorOffsetMinutes !== null) {
+            if (priorLocation !== null && priorOffsetMinutes !== null) {
+              /*
+                A place across the equator from the last one opens the scene in its own summer.
+                DEFAULT_TIME is 23 July, midwinter south of the equator, and the scene draws every
+                planting at its growth stage for the date, so a garden resolving there would
+                otherwise open bare
+              */
+              const crossedEquator =
+                isNorth(priorLocation.latitudeDeg) !==
+                isNorth(result.value.site.location.latitudeDeg)
+              // the wall clock reading right now, before the date moves: what the prior zone's
+              // clock said at this instant, which the date move must still read afterwards
+              const priorLocalMillis = s.timeUtcMillis + priorOffsetMinutes * 60_000
+              const movedLocalMillis = crossedEquator
+                ? sixMonthsOn(priorLocalMillis)
+                : priorLocalMillis
               const newOffsetMinutes = utcOffsetMinutesAt(
                 result.value.site.timezone,
-                s.timeUtcMillis,
+                // the moved date's own offset: a zone's daylight saving differs between July and
+                // January, and reading the offset for the date this move started from would land
+                // the clock an hour off exactly when the seasons actually differ
+                crossedEquator ? movedLocalMillis : s.timeUtcMillis,
                 result.value.site.utcOffsetHours * 60,
               )
-              s.timeUtcMillis = epochMillis(
-                s.timeUtcMillis + (priorOffsetMinutes - newOffsetMinutes) * 60_000,
-              )
+              s.timeUtcMillis = epochMillis(movedLocalMillis - newOffsetMinutes * 60_000)
             }
             /*
               A typed pH is the grower's: the pH field's own `onChange` stamps 'user' the moment a
@@ -1930,6 +1980,7 @@ export const useAppStore = create<AppState>()(
             light,
             site: site.value,
             catalog: catalog.value,
+            frostPercentile: state.frostPercentile,
             recommendations,
             preferences: withAmbition(state.preferences, state.answers.ambition, catalog.value),
             companionRules:
@@ -2315,6 +2366,11 @@ export const useAppStore = create<AppState>()(
       setSidebarStep: (step) =>
         set((s) => {
           s.sidebarStep = step
+        }),
+
+      setLengthUnit: (unit) =>
+        set((s) => {
+          s.lengthUnit = unit
         }),
 
       pushDraftVertex: (point) =>

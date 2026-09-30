@@ -192,20 +192,28 @@ const runLabel = (run: MonthRun): string => {
 }
 
 /**
- * One sentence naming the wet season, where the calendar has no sowing model for it: a wet
- * month is one whose rain is above the year's monthly mean. Every run of consecutive wet
- * months is named, wrapping past December, where those months together hold at least
- * WET_SEASON_SHARE of the year's rain and number six or fewer; a place with two rainy seasons,
- * such as Nairobi's long and short rains, gets both named
+ * Months above the year's mean rain, wrapped into runs past December, where those months
+ * together hold at least WET_SEASON_SHARE of the year's rain and number six or fewer: the
+ * definition of a named wet season, shared by the note below and the frost-free calendar's
+ * rain-anchored start. Empty wherever no season earns the name
  */
-export const wetSeasonNote = (monthlyPrecipMm: readonly number[]): string | null => {
+const wetSeasonRuns = (monthlyPrecipMm: readonly number[]): readonly MonthRun[] => {
   const total = sum(monthlyPrecipMm)
   const threshold = mean(monthlyPrecipMm)
   const wetMonths = monthlyPrecipMm.flatMap((value, month) => (value > threshold ? [month] : []))
-  if (total <= 0 || wetMonths.length === 0 || wetMonths.length > 6) return null
+  if (total <= 0 || wetMonths.length === 0 || wetMonths.length > 6) return []
   const wetTotal = sum(wetMonths.map((month) => at(monthlyPrecipMm, month)))
-  if (wetTotal < WET_SEASON_SHARE * total) return null
-  const rains = monthRuns(wetMonths).map(runLabel).join(' and ')
+  return wetTotal < WET_SEASON_SHARE * total ? [] : monthRuns(wetMonths)
+}
+
+/**
+ * One sentence naming the wet season, where the calendar has no sowing model for it. A place
+ * with two rainy seasons, such as Nairobi's long and short rains, gets both named
+ */
+export const wetSeasonNote = (monthlyPrecipMm: readonly number[]): string | null => {
+  const runs = wetSeasonRuns(monthlyPrecipMm)
+  if (runs.length === 0) return null
+  const rains = runs.map(runLabel).join(' and ')
   return `The rains here fall mostly in ${rains}. This calendar doesn't model them, so sow with the rains as local practice says`
 }
 
@@ -806,16 +814,60 @@ export const maturityDaysFrom = (
   return null
 }
 
+const monthsOfRun = (run: MonthRun): readonly number[] =>
+  Array.from({ length: run.length }, (_, step) => (run.start + step) % 12)
+
+const runRainMm = (run: MonthRun, monthlyPrecipMm: readonly number[]): number =>
+  sum(monthsOfRun(run).map((month) => at(monthlyPrecipMm, month)))
+
+/** The run holding the most rain, where a site names more than one */
+const wettestRun = (runs: readonly MonthRun[], monthlyPrecipMm: readonly number[]): MonthRun =>
+  runs.reduce((best, run) =>
+    runRainMm(run, monthlyPrecipMm) > runRainMm(best, monthlyPrecipMm) ? run : best,
+  )
+
+/**
+ * The first day of the wet run holding the most rain, where a frost-free site names a wet
+ * season: the day its year-round window moves its start to, watered or not. Null wherever no
+ * season is named, so the coldest-month start `dayRuns` picks on its own stands
+ */
+const wetSeasonStart = (monthlyPrecipMm: readonly number[]): DayOfYear | null => {
+  const runs = wetSeasonRuns(monthlyPrecipMm)
+  return runs.length === 0 ? null : firstDayOfMonth(wettestRun(runs, monthlyPrecipMm).start + 1)
+}
+
+/**
+ * Where the rains move a frost-free crop's start, "this calendar doesn't model them" stops
+ * being true. This says the sowing dates start with them instead, naming the wettest run where
+ * the site names more than one, since that is the run the dates actually follow. It never claims
+ * a position of its own, such as "below": the fold this prints in changes, and a place claim
+ * would not always land true
+ */
+const wetSeasonStartNote = (monthlyPrecipMm: readonly number[]): string | null => {
+  const runs = wetSeasonRuns(monthlyPrecipMm)
+  if (runs.length === 0) return null
+  const rains = runs.map(runLabel).join(' and ')
+  if (runs.length === 1) {
+    return `The rains here fall mostly in ${rains}, and the sowing dates start with them`
+  }
+  const wettest = runLabel(wettestRun(runs, monthlyPrecipMm))
+  return `The rains here fall mostly in ${rains}, and the sowing dates start with the ${wettest} rains, the wettest of them`
+}
+
 /**
  * One crop in one bed where the record holds no frost at this percentile. No date is measured from
  * a frost: a sowing goes in on any run of days whose soil proxy meets the crop's minimum and, where
  * the archetype carries a heat cutoff, stays below it. The bed's own light can still close a month.
- * The marker is the start of the longest run
+ * The marker is the start of the longest run, unless that run is the whole year and the site names
+ * a wet season: then the marker moves to the first day of the wettest run of it
  */
 const frostFreeCalendar = (input: CalendarInput, anchors: SeasonAnchors): CropCalendar => {
   const { crop, site, light, percentile } = input
   const means = site.normals.monthlyMeanTempC
-  const notes = withWetSeason(site, FROST_FREE_NOTE)
+  const precip = site.normals.monthlyPrecipMm
+  const notes: string[] = [FROST_FREE_NOTE]
+  const withWet = (wet: string | null): readonly string[] =>
+    wet === null ? notes : [...notes, wet]
   const thermal = crop.thermal
   const short = (shortfallDays: number): CropCalendar =>
     barren(
@@ -823,7 +875,7 @@ const frostFreeCalendar = (input: CalendarInput, anchors: SeasonAnchors): CropCa
       anchors,
       percentile,
       { kind: 'season-too-short', shortfallDays: Math.max(shortfallDays, 1) as Days },
-      notes,
+      withWet(wetSeasonNote(precip)),
     )
   const unlit = (): CropCalendar =>
     barren(
@@ -831,7 +883,7 @@ const frostFreeCalendar = (input: CalendarInput, anchors: SeasonAnchors): CropCa
       anchors,
       percentile,
       { kind: 'light-limited', month: brightestMonth(crop, site, light) },
-      notes,
+      withWet(wetSeasonNote(precip)),
     )
   if (adequateLightWindow(crop, site, light) === null) return unlit()
 
@@ -842,16 +894,38 @@ const frostFreeCalendar = (input: CalendarInput, anchors: SeasonAnchors): CropCa
   }
   const bright = (day: DayOfYear): boolean =>
     at(light.monthlyMeanDliMolM2Day, monthOfDay(day - 1) - 1) >= crop.light.dliMinMolM2Day.value
-  const soil = dayRuns(warm, means)
-  const runs = dayRuns((day) => warm(day) && bright(day), means)
+  // the whole year is what `dayRuns` hands back when nothing narrows it, and it is the only run a
+  // named wet season is allowed to move: a run a heat cutoff or the bed's own light already
+  // narrowed keeps the start that narrowing gave it
+  const wetStart = wetSeasonStart(precip)
+  const withStart = (list: readonly DayRun[]): readonly DayRun[] =>
+    wetStart === null
+      ? list
+      : list.map((run) =>
+          run.days === DAYS_PER_YEAR
+            ? { start: wetStart, end: wrapDayOfYear(wetStart - 1), days: DAYS_PER_YEAR }
+            : run,
+        )
+  const soil = withStart(dayRuns(warm, means))
+  const runs = withStart(dayRuns((day) => warm(day) && bright(day), means))
   const longest = runs[0]
   if (longest === undefined)
     return soil.length === 0 ? short(thermal?.daysToMaturity ?? 1) : unlit()
+  // true only for the run `wetStart` actually moved, so a barren result never claims dates it
+  // never gave, and a light- or heat-narrowed run never borrows a season it didn't use
+  const rainAnchored = (run: DayRun): boolean => wetStart !== null && run.days === DAYS_PER_YEAR
   // a bound is the bed's light only where shade moved it off the start of its soil run
   const basisOf = (run: DayRun): CalendarBasis =>
     soil.some((candidate) => candidate.start === run.start)
-      ? { kind: 'soil-temperature', minSoilTempC: crop.minSoilTempC, frostFree: true }
+      ? {
+          kind: 'soil-temperature',
+          minSoilTempC: crop.minSoilTempC,
+          frostFree: true,
+          ...(rainAnchored(run) ? { rains: true as const } : {}),
+        }
       : { kind: 'light-window', firstAdequateMonth: monthOfDay(run.start - 1) }
+  const wetNoteFor = (run: DayRun): string | null =>
+    rainAnchored(run) ? wetSeasonStartNote(precip) : wetSeasonNote(precip)
 
   if (thermal === null) {
     // a perennial: no maturity date can be computed and none is invented, as on a frosted site
@@ -870,7 +944,7 @@ const frostFreeCalendar = (input: CalendarInput, anchors: SeasonAnchors): CropCa
       },
       feasibility: { kind: 'fits', slackDays: (longest.days - 1) as Days },
       frostRiskPercentile: percentile,
-      notes,
+      notes: withWet(wetNoteFor(longest)),
     }
   }
 
@@ -915,7 +989,7 @@ const frostFreeCalendar = (input: CalendarInput, anchors: SeasonAnchors): CropCa
     harvest: harvestWindow(crop, anchors, first.start, fieldDays),
     feasibility: { kind: 'fits', slackDays: forwardDays(first.start, latestIn(first)) as Days },
     frostRiskPercentile: percentile,
-    notes,
+    notes: withWet(wetNoteFor(first)),
   }
 }
 

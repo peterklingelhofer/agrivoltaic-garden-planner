@@ -60,6 +60,22 @@ describe('a rectangular bed sized by two numbers', () => {
     expect(sides(stored(bed))[0]).toBeCloseTo(32, 9)
   })
 
+  /**
+   * A bed's own precision is a hundredth of a metre, finer than the tenth every length field
+   * settled on when the unit switch was added: folding it onto one decimal would round 1.25 to
+   * 1.3, and the browser could flag 1.25 as a step mismatch against a step of 0.1. The display
+   * check lives in plot-size.test.tsx, where the bed is read live off the store and a typed value
+   * actually re-renders. Mounted alone here, `bed` is a fixed prop and never does
+   */
+  it('keeps a typed hundredth of a metre in the stored geometry, 1.25 m included', async () => {
+    const bed = makeBed(1, { footprint: polygonOf(rectangleRing(vec2(0, 0), 8, 1.4)) })
+    await act(async () => getAppState().upsertBed(bed))
+    const harness = await mount(<BedSizeFields bed={stored(bed)} />)
+    await harness.type('control-bed-width', '1.25')
+    expect(sides(stored(bed))[0]).toBeCloseTo(1.25, 9)
+    await harness.unmount()
+  })
+
   it('shows nothing for a bed drawn by hand', async () => {
     const bed = makeBed(1, {
       footprint: polygonOf([vec2(0, 0), vec2(8, 0), vec2(9, 5), vec2(2, 6), vec2(-1, 3)]),

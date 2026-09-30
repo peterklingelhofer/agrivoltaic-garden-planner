@@ -99,7 +99,12 @@ describe('stage 1: hard climate gate', () => {
 describe('stage 2: light gate', () => {
   it('excludes a crop whose own window falls below its minimum DLI', async () => {
     const catalog = await catalogPromise
-    const outcome = lightGate(need(catalog, 'tomato'), bedLightFixture('bed-a', 0.8), siteFixture())
+    const outcome = lightGate(
+      need(catalog, 'tomato'),
+      bedLightFixture('bed-a', 0.8),
+      siteFixture(),
+      20,
+    )
     expect(outcome.passed).toBe(false)
     expect(outcome.limiting?.cause.kind).toBe('dli-minimum')
   })
@@ -108,8 +113,8 @@ describe('stage 2: light gate', () => {
     const catalog = await catalogPromise
     const light = bedLightFixture('bed-a', 0.35)
     const site = siteFixture()
-    expect(lightGate(need(catalog, 'sweet-corn'), light, site).passed).toBe(false)
-    expect(lightGate(need(catalog, 'lettuce-leaf'), light, site).passed).toBe(true)
+    expect(lightGate(need(catalog, 'sweet-corn'), light, site, 20).passed).toBe(false)
+    expect(lightGate(need(catalog, 'lettuce-leaf'), light, site, 20).passed).toBe(true)
   })
 
   it('reports the maximum design RSR as the limiting factor when light alone is adequate', async () => {
@@ -118,6 +123,7 @@ describe('stage 2: light gate', () => {
       need(catalog, 'sweet-corn'),
       bedLightFixture('bed-a', 0.3, 90),
       siteFixture(),
+      20,
     )
     expect(outcome.passed).toBe(false)
     expect(outcome.limiting?.cause.kind).toBe('max-design-rsr')
@@ -129,6 +135,7 @@ describe('stage 2: light gate', () => {
       need(catalog, 'lettuce-leaf'),
       bedLightFixture('bed-a', 0.25),
       siteFixture(),
+      20,
     )
     expect(outcome.light.cumulativeRsr).toBeCloseTo(0.25, 5)
     expect(outcome.light.window).toEqual(need(catalog, 'lettuce-leaf').window)

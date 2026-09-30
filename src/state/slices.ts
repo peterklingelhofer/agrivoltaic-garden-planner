@@ -340,6 +340,12 @@ export type HoverTarget =
  */
 export type Surface = 'garden' | 'edit' | 'chat'
 
+/**
+ * The unit every length field and summary in the sidebar is shown in. Saved with the design, the
+ * way `sidebarStep` is: a plot sized in feet should read its feet back on the next visit
+ */
+export type LengthUnit = 'm' | 'ft'
+
 export interface UiSlice {
   /**
    * What the pointer is over, or null. Selection is a click and stays until the next click;
@@ -373,6 +379,11 @@ export interface UiSlice {
   readonly surface: Surface
   /** Persisted with the design, so a reload lands on the step the grower was reading */
   readonly sidebarStep: SidebarStep
+  /**
+   * Persisted with the design, like `sidebarStep`. The switch lives on the plot's own size
+   * question and every other length field and summary in the sidebar reads and writes through it
+   */
+  readonly lengthUnit: LengthUnit
   readonly draft: readonly Vec2M[]
   readonly overlay: OverlaySettings
   /** The grower's own override of `overlayOffOnSeasons`; not persisted, and off by default */
@@ -434,6 +445,7 @@ export interface UiSlice {
   setMode(mode: EditorMode): void
   setSurface(surface: Surface): void
   setSidebarStep(step: SidebarStep): void
+  setLengthUnit(unit: LengthUnit): void
   pushDraftVertex(point: Vec2M): void
   moveDraftVertex(index: number, point: Vec2M): void
   undoDraftVertex(): void

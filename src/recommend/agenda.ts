@@ -44,6 +44,41 @@ const PERENNIAL_LIFE_CYCLES: ReadonlySet<Crop['lifeCycle']> = new Set([
 export const fieldWindow = (calendar: CropCalendar): PlantingWindow | undefined =>
   calendar.plantings.find((planting) => planting.method !== 'start-indoors')
 
+/** Whether, walked forward from `from`, today arrives at or before `to` */
+const withinForward = (from: DayOfYear, to: DayOfYear, today: DayOfYear): boolean =>
+  forwardDays(from, today) <= forwardDays(from, to)
+
+/**
+ * The forward distance to this crop's own next chance to go in the ground: the nearest of its
+ * field windows (`fieldWindow`, plus any further one, such as a fall sowing), zero where one is
+ * already open today
+ */
+const nextFieldSowingAhead = (calendar: CropCalendar, today: DayOfYear): number => {
+  let nearest = Number.POSITIVE_INFINITY
+  for (const window of calendar.plantings) {
+    if (window.method === 'start-indoors') continue
+    const ahead = withinForward(window.recommended, window.latest, today)
+      ? 0
+      : forwardDays(today, window.recommended)
+    nearest = Math.min(nearest, ahead)
+  }
+  return nearest
+}
+
+/**
+ * A harvest dated from a sowing that has not come round again yet reads as ready before it was
+ * ever planted: the shape a garden made mid-season opens with otherwise, a harvest at the top of
+ * the list from a sowing that passed before the garden existed. Dropped here, so the same dates
+ * return once this crop's own sowing is next. A harvest already under way today came from a
+ * passed sowing the same way, which `withinForward` alone would not always catch once both dates
+ * wrap into the recent past, so it is asked directly
+ */
+const harvestIsPremature = (calendar: CropCalendar, today: DayOfYear): boolean => {
+  const { start, end } = calendar.harvest
+  if (withinForward(start, end, today)) return true
+  return forwardDays(today, start) <= nextFieldSowingAhead(calendar, today)
+}
+
 /**
  * Bought once as a plant, raised under cover from seed, or sown where it grows. The life
  * cycle settles a perennial before the method is even asked, because a shrub is nursery
@@ -282,6 +317,23 @@ const shoppingList = (dated: readonly Entry[]): ShoppingList => {
   return { groups, refusals }
 }
 
+const HARVEST_ACTIONS: ReadonlySet<AgendaItem['action']> = new Set([
+  'first-harvest',
+  'harvest-ends',
+])
+
+/** A crop's own harvest items, dropped where they come from a sowing not yet due again */
+const itemsAfterSowing = (
+  entry: Entry,
+  shared: ReadonlySet<string>,
+  today: DayOfYear,
+): readonly AgendaItem[] => {
+  const items = itemsFor(entry, shared)
+  return harvestIsPremature(entry.calendar, today)
+    ? items.filter((item) => !HARVEST_ACTIONS.has(item.action))
+    : items
+}
+
 export const buildAgenda = (input: AgendaInput): Agenda => {
   const entries = entriesOf(input)
   const shared = sharedNotes(entries)
@@ -298,7 +350,7 @@ export const buildAgenda = (input: AgendaInput): Agenda => {
     referenceDay: input.today,
     frostRiskPercentile: input.frostRiskPercentile,
     groups: groupsOf(
-      dated.flatMap((entry) => itemsFor(entry, shared)),
+      dated.flatMap((entry) => itemsAfterSowing(entry, shared, input.today)),
       input.today,
     ),
     blocked,

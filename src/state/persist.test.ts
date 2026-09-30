@@ -193,6 +193,15 @@ describe('what is persisted', () => {
     expect(back.sidebarStep).toBe('plants')
   })
 
+  /**
+   * A plot sized in feet should read its feet back on the visit that follows, and every other
+   * length field in the sidebar follows the same stored choice
+   */
+  it('restores the length unit exactly as chosen', () => {
+    expect(roundTrip(realisticDesign()).lengthUnit).toBe('m')
+    expect(roundTrip({ ...realisticDesign(), lengthUnit: 'ft' }).lengthUnit).toBe('ft')
+  })
+
   it('drops a half-read set of answers, or a step this build has no such step for', () => {
     const design = realisticDesign()
     const storage = memoryStorage()
@@ -526,6 +535,29 @@ describe('corrupt and partial payloads', () => {
     const loaded = loadedFrom(JSON.stringify(raw))
     expect(loaded.status.outcome).toBe('restored')
     expect(loaded.design?.effects).toEqual(defaultDesign().effects)
+  })
+
+  /**
+   * A design saved before the unit could be chosen was always metres, the only unit there was:
+   * absent is earlier, the same rule `effects` follows above
+   */
+  it('restores a design written before the length unit could be chosen onto metres', () => {
+    const design = realisticDesign()
+    const raw = JSON.parse(encodeDesign(design, AT)) as { design: Record<string, unknown> }
+    delete raw.design.lengthUnit
+    const loaded = loadedFrom(JSON.stringify(raw))
+    expect(loaded.status.outcome).toBe('restored')
+    expect(loaded.design?.lengthUnit).toBe('m')
+  })
+
+  it('drops a length unit that is neither metres nor feet', () => {
+    const design = realisticDesign()
+    const raw = JSON.parse(encodeDesign(design, AT)) as { design: Record<string, unknown> }
+    raw.design.lengthUnit = 'furlongs'
+    const loaded = loadedFrom(JSON.stringify(raw))
+    expect(loaded.status.outcome).toBe('repaired')
+    expect(loaded.status.message).toContain('lengthUnit')
+    expect(loaded.design?.lengthUnit).toBe('m')
   })
 
   /** Money typed in is the grower's, like a typed pH: absent is earlier, malformed is dropped whole */

@@ -1,4 +1,5 @@
 import { partitionCompanionRules } from '../data/companions'
+import { cropLabel } from '../data/crops'
 import { clamp, monthsInWindow } from '../data/util'
 import { banded, interval, unsafeBandMidpoint } from '../types/band'
 import type { Banded } from '../types/band'
@@ -26,7 +27,7 @@ import type {
 import type { GrowingAmbition } from '../types/onboarding'
 import type { PvArray } from '../types/pv'
 import type { LimitingFactor, RecommendationSet, YieldEstimate } from '../types/recommend'
-import type { Site } from '../types/site'
+import type { ExceedancePercentile, Site } from '../types/site'
 import type { TekDesignRule, TekRuleKey } from '../types/tek'
 import type { Fraction, SquareMeters } from '../types/units'
 import { DEFAULT_COMPATIBILITY_WEIGHTS, evaluatePair } from './compatibility'
@@ -43,6 +44,8 @@ export interface SuggestionRequest {
   readonly light: BedLight
   readonly site: Site
   readonly catalog: readonly Crop[]
+  /** The same frost-risk setting the ranking reads light at, so a pairing term reads one season */
+  readonly frostPercentile: ExceedancePercentile
   /** The per-crop pipeline output for this bed. Suggestions never re-gate a crop */
   readonly recommendations: RecommendationSet
   readonly preferences: PreferenceSet
@@ -208,7 +211,7 @@ export const allocateSpace = (crops: readonly Crop[], bedAreaM2: SquareMeters): 
     if (spacing === null) {
       refusals.push({
         cropId: crop.id,
-        reason: `${crop.id as string} carries no usable spacing in the catalogue, so its share of the bed cannot be derived`,
+        reason: `${cropLabel(crop)} carries no usable spacing in the catalogue, so its share of the bed cannot be derived`,
       })
       continue
     }
@@ -536,7 +539,7 @@ export const suggestPolycultures = (request: SuggestionRequest): SuggestionSet =
       if (!orchardScale(crop) || named.has(crop.id as string)) return true
       refused.push({
         cropId: crop.id,
-        reason: `${crop.taxonomy.commonNames[0] ?? (crop.id as string)} grows to ${String(crop.footprint.heightM.typicalM)} m and stays for years, so it joins a bed only when you ask for it`,
+        reason: `${cropLabel(crop)} grows to ${String(crop.footprint.heightM.typicalM)} m and stays for years, so it joins a bed only when you ask for it`,
         conflictsWithCropId: null,
         limiting: null,
         termKind: null,
@@ -557,6 +560,7 @@ export const suggestPolycultures = (request: SuggestionRequest): SuggestionSet =
       tekRules: request.tekRules,
       weights,
       canopyShareByCropId: canopyShares(space, request.bed.areaM2),
+      percentile: request.frostPercentile,
     }
     return evaluatePair(a, b, context)
   }
@@ -608,6 +612,7 @@ export const suggestPolycultures = (request: SuggestionRequest): SuggestionSet =
       tekRules: request.tekRules,
       weights,
       canopyShareByCropId: shares,
+      percentile: request.frostPercentile,
     }
     const pairs: PairCompatibility[] = []
     for (let index = 0; index < crops.length; index += 1) {

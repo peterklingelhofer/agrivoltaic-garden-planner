@@ -30,7 +30,7 @@ mock.module('./design-bridge', () => ({
   runDesignSuggestions: vi.fn(() => Promise.resolve({ ok: false, message: 'not the subject' })),
 }))
 
-const { resetAppStore, showingExample, useAppStore } = await import('./store')
+const { DEFAULT_TIME, resetAppStore, showingExample, useAppStore } = await import('./store')
 const { DEFAULT_LOCATION, DEFAULT_LOCATION_LABEL } = await import('./defaults')
 const { lightGeometryKey } = await import('./light-freshness')
 const { ACID_SOIL } = await import('./testkit')
@@ -599,7 +599,14 @@ describe('the clock across a change of place', () => {
       years: [],
     })
     await state().resolveSite(nairobi, 'Nairobi')
-    expect(state().timeUtcMillis).toBe(epochMillis(Date.UTC(2024, 6, 23, 9, 0)))
+    /*
+      Nairobi is at -1.29, south of the equator by the rule `growingWindowFor` mirrors crop
+      windows on, so the move also carries the date six months, from 23 July to 23 January (see
+      `describe('a place across the equator opens the scene in its own season')` below). Nairobi
+      keeps the same offset all year, so the hour this test was already asserting, 9 o'clock, is
+      untouched by the date moving under it
+    */
+    expect(state().timeUtcMillis).toBe(epochMillis(Date.UTC(2024, 0, 23, 9, 0)))
   })
 
   // a town typed before the first lookup has landed: the clock was reading Amherst's longitude
@@ -612,6 +619,109 @@ describe('the clock across a change of place', () => {
       years: [],
     })
     await state().resolveSite(nairobi, 'Nairobi')
-    expect(state().timeUtcMillis).toBe(epochMillis(Date.UTC(2024, 6, 23, 8, 0)))
+    // Amherst (DEFAULT_LOCATION) is north and Nairobi is south, so this move also carries the
+    // date to 23 January, exactly as the two-step move above does
+    expect(state().timeUtcMillis).toBe(epochMillis(Date.UTC(2024, 0, 23, 8, 0)))
+  })
+})
+
+/**
+ * A place across the equator from the last one opens the scene in its own summer. DEFAULT_TIME is
+ * 23 July, midwinter south of the equator, and the scene draws every planting at its growth stage
+ * for the date, so a garden resolving there would otherwise open bare
+ */
+describe('a place across the equator opens the scene in its own season', () => {
+  const christchurch = {
+    latitudeDeg: degreesLatitude(-43.53),
+    longitudeDeg: degreesLongitude(172.64),
+  }
+  const sydney = { latitudeDeg: degreesLatitude(-33.87), longitudeDeg: degreesLongitude(151.21) }
+
+  it('moves 23 July to 23 January crossing from New York to Christchurch, and keeps the hour', async () => {
+    resolveSite.mockResolvedValueOnce({
+      site: siteFixture({ timezone: 'America/New_York', utcOffsetHours: -4 }),
+      weather: tmyFixture(),
+      years: [],
+    })
+    await state().resolveSite(DEFAULT_LOCATION, DEFAULT_LOCATION_LABEL)
+    expect(state().timeUtcMillis).toBe(epochMillis(Date.UTC(2024, 6, 23, 16, 0)))
+
+    resolveSite.mockResolvedValueOnce({
+      site: siteFixture({
+        location: christchurch,
+        timezone: 'Pacific/Auckland',
+        utcOffsetHours: 12,
+      }),
+      weather: tmyFixture(),
+      years: [],
+    })
+    await state().resolveSite(christchurch, 'Christchurch')
+    /*
+      New York was reading local noon (16:00 UTC, -4 in July), and Christchurch is 13 hours ahead
+      in January (NZDT): noon on the 23rd there is 23:00 UTC on the 22nd, since 22:00 + 13:00
+      rolls into the next day. The zone's own clock still reads noon on the 23rd, which is the
+      hour and the date this test is about. The UTC calendar day is simply a different way of
+      naming the same instant
+    */
+    expect(state().timeUtcMillis).toBe(epochMillis(Date.UTC(2024, 0, 22, 23, 0)))
+  })
+
+  it("doesn't move the date again between two places on the same side of the equator", async () => {
+    resolveSite.mockResolvedValueOnce({
+      site: siteFixture({
+        location: christchurch,
+        timezone: 'Pacific/Auckland',
+        utcOffsetHours: 12,
+      }),
+      weather: tmyFixture(),
+      years: [],
+    })
+    await state().resolveSite(christchurch, 'Christchurch')
+    expect(state().timeUtcMillis).toBe(epochMillis(Date.UTC(2024, 0, 22, 22, 0)))
+
+    resolveSite.mockResolvedValueOnce({
+      site: siteFixture({ location: sydney, timezone: 'Australia/Sydney', utcOffsetHours: 10 }),
+      weather: tmyFixture(),
+      years: [],
+    })
+    await state().resolveSite(sydney, 'Sydney')
+    // Christchurch and Sydney are both south, so only the wall-clock hour carries across the
+    // move, exactly as it does between two places on the same side of the equator. The date
+    // stays in January
+    expect(state().timeUtcMillis).toBe(epochMillis(Date.UTC(2024, 0, 23, 0, 0)))
+  })
+
+  /** The example's own lookup of its own town moves nothing, the date included */
+  it("doesn't move the date for a lookup of the place already on screen", async () => {
+    state().setLocation(christchurch, 'Christchurch')
+    resolveSite.mockResolvedValueOnce({
+      site: siteFixture({
+        location: christchurch,
+        timezone: 'Pacific/Auckland',
+        utcOffsetHours: 12,
+      }),
+      weather: tmyFixture(),
+      years: [],
+    })
+    await state().resolveSite(christchurch, 'Christchurch')
+    expect(state().timeUtcMillis).toBe(DEFAULT_TIME)
+  })
+
+  /**
+   * `sixMonthsOn` moves the day of the month across, and a day the target month is too short for
+   * clamps to that month's own last day, so it stays in that month: 31 August lands on
+   * 29 February. Nairobi keeps the same offset all year, so
+   * the hour this test already knows how to read is a plain check that only the date moved
+   */
+  it('clamps the day where the target month is shorter, landing on 29 February', async () => {
+    const nairobi = { latitudeDeg: degreesLatitude(-1.29), longitudeDeg: degreesLongitude(36.82) }
+    useAppStore.setState({ timeUtcMillis: epochMillis(Date.UTC(2024, 7, 31, 17, 0)) })
+    resolveSite.mockResolvedValueOnce({
+      site: siteFixture({ location: nairobi, timezone: 'Africa/Nairobi', utcOffsetHours: 3 }),
+      weather: tmyFixture(),
+      years: [],
+    })
+    await state().resolveSite(nairobi, 'Nairobi')
+    expect(state().timeUtcMillis).toBe(epochMillis(Date.UTC(2024, 1, 29, 9, 0)))
   })
 })

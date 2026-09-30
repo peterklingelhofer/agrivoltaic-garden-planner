@@ -1,11 +1,12 @@
 import { act } from 'react'
 import { beforeEach, describe, expect, it } from 'bun:test'
 import { isNativeIn } from '../data/catalog/native-ranges'
-import { cropById } from '../data/crops'
+import { cropById, loadCropCatalog } from '../data/crops'
 import { siteFixture } from '../recommend/testkit'
 import { ready } from '../state/slices'
 import { getAppState, resetAppStore, useAppStore } from '../state/store'
 import { ACID_SOIL, seedRankedStore } from '../state/testkit'
+import type { Crop } from '../types/crop'
 import type { CropId } from '../types/ids'
 import { dependenceNote, forageNote, nativeNote } from './format'
 import { PlantsPanel } from './PlantsPanel'
@@ -18,9 +19,18 @@ import { mount } from './testkit'
  */
 
 const TOMATO = 'tomato' as CropId
-// the one catalogue crop native-ranges.generated.ts carries an explicit null entry for, so
-// isNativeIn returns null however the region comes out: the third state this file exists to pin
-const UNMATCHED = 'nz-spinach' as CropId
+// every shipped crop now matches an entry in native-ranges.generated.ts, so the checklist-miss
+// case needs a crop invented for it: a clone of a real one with an id NATIVE_RANGES has never
+// heard of, so isNativeIn returns null however the region comes out. The third state this file
+// exists to pin
+const UNMATCHED = 'unmatched-crop' as CropId
+
+/** A clone of the tomato fixture under an id no NATIVE_RANGES entry answers for */
+const unmatchedCropFixture = async (): Promise<Crop> => {
+  const tomato = cropById(await loadCropCatalog(), TOMATO)
+  if (tomato === undefined) throw new Error('tomato is not in the catalogue')
+  return { ...tomato, id: UNMATCHED }
+}
 
 /**
  * Moves the seeded site to a botanical region without rebuilding anything else `seedRankedStore`
@@ -210,7 +220,7 @@ describe('a ranked row and the wildlife question', () => {
    * be mistaken for the region-unknown case below
    */
   it('never reads a crop with no checklist match as "not native"', async () => {
-    await seedRankedStore()
+    await seedRankedStore([await unmatchedCropFixture()])
     await setBotanicalArea('PER')
     const harness = await mount(<PlantsPanel />)
     await harness.click('control-recommendation-all')

@@ -73,3 +73,22 @@ export const monthsInWindow = (startMonth: number, endMonth: number): readonly n
 }
 
 export const wrapDay = (day: number): number => ((day - 1) % DAYS_PER_YEAR) + 1
+
+const clampDayOfYear = (day: number): number =>
+  Math.min(DAYS_PER_YEAR, Math.max(1, Math.round(day) || 1))
+
+/**
+ * A day of the year the way a gardener reads it, "27 Dec".
+ *
+ * Both `recommend` and `ui` say a date out loud: `recommend` in the reason a planting was
+ * refused, `ui` on every calendar bar and agenda line. So it lives here, below both layers, the
+ * same reason `cropLabel` lives in `crops.ts`. It is built from `monthOfDay`, because a day of the
+ * year carries no year to build a `Date` from.
+ * `monthOfDay` counts from 0, so it takes the clamped day minus one, same as every other caller
+ */
+export const dayLabel = (day: number): string => {
+  const clamped = clampDayOfYear(day)
+  const month = monthOfDay(clamped - 1)
+  const date = clamped - at(MONTH_START_DAY, month - 1)
+  return `${date} ${(MONTH_NAMES[month - 1] ?? '').slice(0, 3)}`
+}

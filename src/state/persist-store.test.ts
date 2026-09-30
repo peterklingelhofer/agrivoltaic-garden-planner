@@ -70,6 +70,16 @@ describe('the store writes the design and only the design', () => {
     expect(Object.keys(design()).sort()).toEqual([...PERSISTED_KEYS].sort())
   })
 
+  /**
+   * A plot sized in feet should read its feet back on the next visit, and so should every other
+   * length field: one stored unit, saved with the design like any other durable choice
+   */
+  it('saves the length unit with the design, for the reload that follows', () => {
+    useAppStore.getState().setLengthUnit('ft')
+    vi.advanceTimersByTime(WRITE_DELAY_MS)
+    expect(design().lengthUnit).toBe('ft')
+  })
+
   it('saves immediately when the grower asks, without waiting out the debounce', () => {
     useAppStore.getState().setMaxCropsPerBed(6)
     useAppStore.getState().saveDesign()

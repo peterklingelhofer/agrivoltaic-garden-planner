@@ -33,6 +33,7 @@ import {
   tiedLeadingSuggestionCount,
   weakestScoreTerm,
   formatCelsius,
+  formatLength,
   formatRainMm,
   rootDepthRemedy,
   ROOT_DEPTH_RAISE_CAP_M,
@@ -435,6 +436,22 @@ describe('temperature and rain, in both units', () => {
     expect(formatRainMm(1098)).toBe('1098 mm (43 in)')
     expect(formatRainMm(25.4)).toBe('25 mm (1.0 in)')
     expect(formatRainMm(0)).toBe('0 mm (0.0 in)')
+  })
+})
+
+/**
+ * A readout beside a field the grower has switched to feet reads in feet too, and one beside a
+ * field with no unit to follow reads in metres exactly as `formatMeters` always did
+ */
+describe('a length readout in whichever unit is showing', () => {
+  it('reads in metres exactly like formatMeters', () => {
+    expect(formatLength(0.6, 'm')).toBe('0.60 m')
+    expect(formatLength(12, 'm')).toBe('12.0 m')
+  })
+
+  it('converts to feet at the same magnitude-scaled precision', () => {
+    expect(formatLength(1, 'ft')).toBe('3.28 ft')
+    expect(formatLength(50, 'ft')).toBe('164 ft')
   })
 })
 

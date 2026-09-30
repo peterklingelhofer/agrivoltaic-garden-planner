@@ -40,7 +40,7 @@ import {
   cropTieNote,
   explainLimitingFactor,
   formatDli,
-  formatMeters,
+  formatLength,
   formatRsr,
   limitingFactorOf,
   plural,
@@ -52,8 +52,9 @@ import {
   weakestScoreTerm,
 } from './format'
 import { SurroundingsStep, WaterStep } from './AnswerPanels'
+import { lengthStep, showLength, toMetres, useLengthUnit } from './length-units'
 import { ObstructionsSection } from './ObstructionsSection'
-import { feetToMetres, formatAreaBothUnits, metresToFeet, roundTenth } from './onboarding'
+import { formatAreaBothUnits, roundTenth } from './onboarding'
 import { Panel, Readout } from './Panel'
 
 const IRRIGATION: readonly (readonly [Bed['irrigation']['method'], string])[] = [
@@ -327,6 +328,7 @@ const PlantingSection = ({
   rankingReady,
 }: PlantingSectionProps): ReactElement => {
   const plot = useAppStore((s) => s.plot)
+  const unit = useLengthUnit()
   const planRefusals = useAppStore((s) => s.planRefusals)
   const experience = useAppStore((s) => s.answers.experience)
   const timeUtcMillis = useAppStore((s) => s.timeUtcMillis)
@@ -714,8 +716,9 @@ const PlantingSection = ({
               ranking a moment behind, and `useAutoRecommend` is what brings it up to date */}
           {rootDepthIssue === null || rootDepthIssue.shortfallM <= 0 ? null : raiseToM === null ? (
             <p className="notice notice-idle" data-testid="status-bed-raise-for-root-depth">
-              Raising a bed adds up to {formatMeters(ROOT_DEPTH_RAISE_CAP_M)} here, and this crop
-              needs {formatMeters(rootDepthIssue.shortfallM)} more depth than the bed has now
+              Raising a bed adds up to {formatLength(ROOT_DEPTH_RAISE_CAP_M, unit)} here, and this
+              crop needs {formatLength(rootDepthIssue.shortfallM, unit)} more depth than the bed has
+              now
             </p>
           ) : (
             <Action
@@ -725,8 +728,8 @@ const PlantingSection = ({
               {/* the height the sides stand above the ground, which is what the field on the
                   ground step sets. "to 0.50 m" beside "0.95 m deep" reads as the app
                   contradicting itself, so the press names the raise and the finished height */}
-              Raise the sides by {formatMeters(rootDepthIssue.shortfallM)}, to{' '}
-              {formatMeters(raiseToM)} above the ground
+              Raise the sides by {formatLength(rootDepthIssue.shortfallM, unit)}, to{' '}
+              {formatLength(raiseToM, unit)} above the ground
             </Action>
           )}
           {chosen === null ? null : (
@@ -932,8 +935,6 @@ interface PlotSize {
   readonly depthM: number
 }
 
-type PlotUnit = 'm' | 'ft'
-
 /** The same floor the guided setup types against, in both units it offers */
 const MIN_PLOT_M = 0.5
 const MIN_PLOT_FT = 2
@@ -949,9 +950,9 @@ const PLOT_SIZE_HELP =
  * whatever precision a mouse gives you.
  *
  * One pair of fields and a unit switch, where there were two pairs. Four fields for one rectangle
- * crowded the step on a phone, and the switch is remembered
- * only here: which unit somebody measures in is a fact about the screen, and the boundary in the
- * store is in metres whichever pair wrote it. The test ids follow the pair that is showing.
+ * crowded the step on a phone, and the switch is saved with the design: every other length field
+ * and summary in the sidebar reads and writes through the same stored unit, and the boundary in
+ * the store is in metres whichever pair wrote it. The test ids follow the pair that is showing.
  *
  * A boundary that is not a rectangle is not describable by two numbers, so it is never quietly
  * rebuilt from them. What is typed is held, what it would cost is said in words, and the shape is
@@ -959,7 +960,8 @@ const PLOT_SIZE_HELP =
  */
 const PlotSizeSection = ({ boundary }: { readonly boundary: Polygon2D }): ReactElement => {
   const setBoundary = useAppStore((s) => s.setBoundary)
-  const [unit, setUnit] = useState<PlotUnit>('m')
+  const unit = useLengthUnit()
+  const setLengthUnit = useAppStore((s) => s.setLengthUnit)
   // a size typed against a shape that is no longer on screen is a stale answer to a question
   // nobody asked, so what is held is held against the boundary it was typed for and no other
   const [pending, setPending] = useState<{
@@ -984,10 +986,7 @@ const PlotSizeSection = ({ boundary }: { readonly boundary: Polygon2D }): ReactE
     if (rectangle === null) setPending({ of: boundary, size: next })
     else write(next)
   }
-  const metres = unit === 'm'
-  const shown = (valueM: number): number => roundTenth(metres ? valueM : metresToFeet(valueM))
-  const typed = (value: number): number =>
-    Math.max(MIN_PLOT_M, metres ? value : feetToMetres(value))
+  const typed = (value: number): number => Math.max(MIN_PLOT_M, toMetres(value, unit))
 
   return (
     <>
@@ -1004,7 +1003,7 @@ const PlotSizeSection = ({ boundary }: { readonly boundary: Polygon2D }): ReactE
               value={option}
               checked={unit === option}
               data-testid={`control-plot-units-${option}`}
-              onChange={() => setUnit(option)}
+              onChange={() => setLengthUnit(option)}
             />
             {option}
           </label>
@@ -1015,18 +1014,18 @@ const PlotSizeSection = ({ boundary }: { readonly boundary: Polygon2D }): ReactE
           testId={`control-plot-width-${unit}`}
           label="Across the front"
           unit={unit}
-          min={metres ? MIN_PLOT_M : MIN_PLOT_FT}
-          step={metres ? 0.1 : 0.5}
-          value={shown(size.widthM)}
+          min={unit === 'm' ? MIN_PLOT_M : MIN_PLOT_FT}
+          step={lengthStep(unit, 0.1)}
+          value={showLength(size.widthM, unit, roundTenth)}
           onChange={(value) => resize({ ...size, widthM: typed(value) })}
         />
         <NumberField
           testId={`control-plot-depth-${unit}`}
           label="Front to back"
           unit={unit}
-          min={metres ? MIN_PLOT_M : MIN_PLOT_FT}
-          step={metres ? 0.1 : 0.5}
-          value={shown(size.depthM)}
+          min={unit === 'm' ? MIN_PLOT_M : MIN_PLOT_FT}
+          step={lengthStep(unit, 0.1)}
+          value={showLength(size.depthM, unit, roundTenth)}
           onChange={(value) => resize({ ...size, depthM: typed(value) })}
         />
       </div>
@@ -1144,6 +1143,7 @@ const bedsSummary = (beds: readonly Bed[]): string => {
  */
 export const GroundPanel = (): ReactElement => {
   const plot = useAppStore((s) => s.plot)
+  const unit = useLengthUnit()
   // the selection, falling back to the only bed there is: `selectedBedOf` is the store's own
   // definition of "this bed", so Ground and Planting agree with each other and with every other
   // panel that reads it, even though each reads the store for itself
@@ -1303,12 +1303,12 @@ export const GroundPanel = (): ReactElement => {
               <NumberField
                 testId="control-bed-raised-height"
                 label="How high the bed stands"
-                unit="m"
+                unit={unit}
                 min={0}
-                step={0.05}
-                value={bed.raisedHeightM}
+                step={lengthStep(unit, 0.05)}
+                value={showLength(bed.raisedHeightM, unit, (value) => value)}
                 onChange={(value) =>
-                  upsertBed({ ...bed, raisedHeightM: meters(Math.max(0, value)) })
+                  upsertBed({ ...bed, raisedHeightM: meters(Math.max(0, toMetres(value, unit))) })
                 }
               />
               <NumberField
