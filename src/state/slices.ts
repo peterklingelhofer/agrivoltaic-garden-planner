@@ -390,8 +390,8 @@ export interface UiSlice {
   readonly overlayOnSeasons: boolean
   /**
    * The plan column across the whole window, with the garden put away until asked for. Eleven beds'
-   * worth of calendar in a 380px column holds a reader's eyes on the right side of the screen for
-   * too long. Not persisted, and never on a phone, where the tabs already take turns
+   * worth of calendar in a 380px column holds a reader's eyes on one side of the screen for too
+   * long. Not persisted, and never on a phone, where the tabs already take turns
    */
   readonly widePlan: boolean
   readonly timeUtcMillis: EpochMillis

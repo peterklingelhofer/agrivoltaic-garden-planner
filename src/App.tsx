@@ -253,6 +253,19 @@ const App = (): ReactElement => {
     >
       <Toolbar />
       <main className="stage">
+        <Sidebar />
+        {/*
+          Sharing the sidebar's grid cell, and shown only on the surface that asked for it. It is
+          mounted alongside the editor, outside it, because it is a way IN to the design and
+          not a panel of it: leaving the conversation has to leave every answer where it was put
+        */}
+        {AgentPanel === null ? null : (
+          <ErrorBoundary label="Ask" testId="panel-agent-failed">
+            <Suspense fallback={null}>
+              <AgentPanel />
+            </Suspense>
+          </ErrorBoundary>
+        )}
         {/*
           The mode and whether anything is under the pointer, on the element the cursor is read
           off. The 3D cannot set a cursor for what it is hovering without a React render per
@@ -277,19 +290,6 @@ const App = (): ReactElement => {
               which is the argument the whole product rests on. Said once, over the example only */}
           <ColdOpen />
         </div>
-        <Sidebar />
-        {/*
-          Sharing the sidebar's grid cell, and shown only on the surface that asked for it. It is
-          mounted alongside the editor, outside it, because it is a way IN to the design and
-          not a panel of it: leaving the conversation has to leave every answer where it was put
-        */}
-        {AgentPanel === null ? null : (
-          <ErrorBoundary label="Ask" testId="panel-agent-failed">
-            <Suspense fallback={null}>
-              <AgentPanel />
-            </Suspense>
-          </ErrorBoundary>
-        )}
       </main>
       {/*
         Below the breakpoint the garden and the editor stop sharing the screen and take turns on
