@@ -1308,17 +1308,17 @@ export const roughKwh = (value: number): string => {
  * The bed-count sentence in the tradeoff line, on its own so it can be tested against every count
  * directly: a placed bed can sit too deep in a row's shade for anything on the plant list to grow
  * there, and this is what a grower who drew four beds reads before the layout is even applied.
- * Singular subjects take "fits", plural ones "fit"
+ * A layout with no room for a bed says so in words, where a count would read "room for 0 beds"
  */
 export const bedsFitSentence = (beds: number, adequate: number): string => {
-  if (adequate >= beds) {
-    return `${String(beds)} bed${beds === 1 ? '' : 's'} fit${beds === 1 ? 's' : ''} the light it leaves`
-  }
+  if (beds === 0) return 'These panels leave no room for a bed'
+  const room = `These panels leave room for ${String(beds)} bed${beds === 1 ? '' : 's'}`
+  if (adequate >= beds) return room
   if (beds === 1) {
-    return "1 bed fits, and it doesn't get enough light for anything on the plant list to grow"
+    return `${room}, and it doesn't get enough light for anything on the plant list to grow`
   }
   const share = adequate === 0 ? 'none of them' : `only ${String(adequate)} of them`
-  return `${String(beds)} beds fit, and ${share} get enough light for anything on the plant list to grow`
+  return `${room}, and ${share} get enough light for anything on the plant list to grow`
 }
 
 const tradeoffOf = (evaluated: Evaluated, catalog: readonly Crop[]): string => {
