@@ -79,6 +79,10 @@
   --sans: 'Ubuntu Sans', system-ui, 'Segoe UI', Roboto, sans-serif;
   --mono: 'Ubuntu Sans Mono', ui-monospace, Consolas, monospace;
 
+  /* The sidebar's width: `.stage`'s grid track and the toolbar's inset calc both read this one
+     number, so it's typed here once and never again */
+  --sidebar-width: 380px;
+
   /* The one motion token in this sheet. State changes here are instant on purpose, and the cold
      open's fade in and fade out are the exception. Reduced motion zeroes it in one place, below,
      so nothing built on the token can forget to answer for itself */
@@ -199,11 +203,42 @@ body {
   margin-left: auto;
 }
 
+/*
+ * Above 900px the garden and the editor share the row below, and the mode buttons line up with
+ * the garden's own overlays: the sidebar's width plus their 12px inset, less the toolbar's own
+ * 14px left padding and 16px column gap, since both sit before `.toolbar-modes` even starts
+ */
+@media (min-width: 901px) {
+  .toolbar h1 {
+    flex-basis: calc(var(--sidebar-width) + 12px - 14px - 16px);
+  }
+
+  /*
+   * The title no longer shrinks to make room, so between 901 and about 950px the place name would
+   * drop the toolbar to a second row. A wrapping row moves an item to the next line before it
+   * shrinks one, so the place name starts from no width at all and grows into whatever the row
+   * leaves, ending in an ellipsis where that isn't enough
+   */
+  .toolbar h1,
+  .toolbar-modes {
+    flex-shrink: 0;
+  }
+
+  .toolbar-site {
+    flex: 1 1 0;
+    min-width: 0;
+    text-align: right;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
 .stage {
   /* the scroller below 900px, for the same reason `.sidebar` is positioned */
   position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 380px;
+  grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
   flex: 1;
   min-height: 0;
 }
@@ -212,6 +247,16 @@ body {
   .stage {
     grid-template-columns: 1fr;
     grid-template-rows: 55svh 1fr;
+  }
+
+  /* the sidebar is first in the markup now, so auto-placement would put it in row 1 without
+     this: pinned, the garden stays on top and the sidebar keeps row 2 as it did before */
+  .canvas-host {
+    grid-row: 1;
+  }
+
+  .sidebar {
+    grid-row: 2;
   }
 }
 
@@ -260,13 +305,13 @@ body {
 /*
  * The one line of instruction a drawing mode owes whoever is in it.
  *
- * Bottom left, which is the only corner of the canvas nothing else claims: the example banner
- * takes the top left and the legend the top right. It never takes the pointer, because the
+ * Bottom right, which is the only corner of the canvas nothing else claims: the example banner
+ * takes the top right and the legend the top left. It never takes the pointer, because the
  * ground under it is where the next corner goes
  */
 .scene-hint {
   position: absolute;
-  left: 12px;
+  right: 12px;
   bottom: 12px;
   z-index: 2;
   max-width: 320px;
@@ -298,16 +343,16 @@ body {
 }
 
 /*
- * A small N arrow at the right edge, halfway down, rotated to the camera's heading every drawn
+ * A small N arrow at the left edge, halfway down, rotated to the camera's heading every drawn
  * frame by `CompassBridge`. Every corner of the canvas is spoken for at some width or moment:
- * the legend top right, the example banner top left, the hint and the selected-bed prompt along
- * the foot, the cold open and the preflight note bottom right. The middle of the right edge is
+ * the legend top left, the example banner top right, the hint and the selected-bed prompt along
+ * the foot, the cold open and the preflight note bottom left. The middle of the left edge is
  * the one place nothing else stands, on a laptop or a phone. Never takes the pointer, for the
  * same reason none of them do
  */
 .scene-compass {
   position: absolute;
-  right: 12px;
+  left: 12px;
   top: 50%;
   z-index: 2;
   width: 40px;
@@ -344,12 +389,14 @@ body {
 /* Names what the pointer is over in the 3D. Positioned by a direct transform write from
    `SceneTooltip`, outside React state, so a pointer move doesn't re-render the scene.
    `pointer-events: none` is load-bearing: it labels what is under the cursor, so taking the
-   cursor would make the thing it names unhoverable and the label would flicker against itself */
+   cursor would make the thing it names unhoverable and the label would flicker against itself.
+   One level above the banner and the corner notes, so the label under the pointer is never
+   covered by them */
 .scene-tooltip {
   position: absolute;
   left: 0;
   top: 0;
-  z-index: 2;
+  z-index: 3;
   pointer-events: none;
   max-width: 260px;
   display: flex;
@@ -477,12 +524,14 @@ body {
 
 /* over the canvas, out of the sidebar: the example garden is the thing the questions are asked
    about, and the banner sits over it. Color and background are declared together here and on
-   every state of the button inside it, and nothing in it is dimmed with opacity */
+   every state of the button inside it, and nothing in it is dimmed with opacity. Stacked above
+   the legend: between 901 and about 950px the garden is too narrow for both across its top, and
+   the banner's buttons are the part that takes a press */
 .example-banner {
   position: absolute;
-  left: 12px;
+  right: 12px;
   top: 12px;
-  z-index: 1;
+  z-index: 2;
   max-width: var(--banner-width);
   display: flex;
   flex-direction: column;
@@ -600,8 +649,8 @@ body {
  *
  * It has to find room between two things that were there first, so it's anchored to the one
  * whose size is a stated constant. `.example-banner` is
- * top-left and `--banner-width` across, `.legend` is top-right. Sitting at the foot of the
- * canvas, in the column to the right of the banner, clears both at every desktop size this app
+ * top-right and `--banner-width` across, `.legend` is top-left. Sitting at the foot of the
+ * canvas, in the column to the left of the banner, clears both at every desktop size this app
  * is usable at.
  *
  * `pointer-events: none` for the same reason `.scene-tooltip` has it: this talks about the
@@ -617,8 +666,8 @@ body {
  */
 .cold-open {
   position: absolute;
-  left: calc(var(--banner-width) + 24px);
-  right: 12px;
+  left: 12px;
+  right: calc(var(--banner-width) + 24px);
   bottom: 12px;
   z-index: 1;
   pointer-events: none;
@@ -668,7 +717,7 @@ body {
 }
 
 .sidebar {
-  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
   overflow-y: auto;
   /*
    * The containing block for everything positioned inside it. Without it the yield bands'
@@ -1477,7 +1526,7 @@ input[type='range'] {
 /* the one line about the slower light check, in the corner nothing else floats in */
 .preflight-note {
   position: absolute;
-  right: 12px;
+  left: 12px;
   bottom: 12px;
   z-index: 2;
   max-width: 320px;
@@ -1805,7 +1854,7 @@ input[type='range'] {
   color: var(--muted);
 }
 
-/* Pinned in the canvas's top-right corner: the one spot the example banner (top-left) never
+/* Pinned in the canvas's top-left corner: the one spot the example banner (top-right) never
    reaches, at either the desktop layout or the stacked one below 900px. `pointer-events: none`
    for the same reason `.scene-tooltip` has it: this labels the ground, and taking the pointer
    would make the ground under it unclickable. The background is fully OPAQUE: `.canvas-host`
@@ -1814,7 +1863,7 @@ input[type='range'] {
 .legend {
   position: absolute;
   top: 12px;
-  right: 12px;
+  left: 12px;
   z-index: 1;
   pointer-events: none;
   width: min(300px, calc(100vw - 24px));
@@ -2762,7 +2811,7 @@ details.wizard-advanced > summary:focus-visible {
   .sidebar {
     position: relative;
     z-index: 1;
-    border-left: none;
+    border-right: none;
     background: var(--bg);
   }
 
@@ -2967,6 +3016,7 @@ details.wizard-advanced > summary:focus-visible {
 
   /* the same edge, a little closer to it, as the rest of the furniture is on a phone */
   .scene-compass {
+    left: auto;
     right: 8px;
   }
 
@@ -3122,7 +3172,7 @@ details.wizard-advanced > summary:focus-visible {
     grid-template-rows: minmax(0, 1fr) auto;
     min-height: 0;
     background: var(--panel);
-    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
     min-width: 0;
   }
 
@@ -3590,17 +3640,18 @@ details.wizard-advanced > summary:focus-visible {
 
 @media (min-width: 901px) {
   .app[data-wide='true'] .stage {
-    grid-template-columns: 0 minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr) 0;
   }
 
-  /* hidden in place, since a grid item taken out of flow would put the sidebar in the 0 column */
+  /* its column is 0 wide here. Hidden in place, the overlays inside it, which have widths of
+     their own, neither spill over the plan nor stay in the tab order */
   .app[data-wide='true'] .canvas-host {
     visibility: hidden;
     overflow: hidden;
   }
 
   .app[data-wide='true'] .sidebar {
-    border-left: 0;
+    border-right: 0;
   }
 
   .app[data-wide='true'] .stepper {
