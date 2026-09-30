@@ -344,7 +344,7 @@ export const simulateSeason = (input: SeasonInput): SeasonResult => {
         )
         continue
       }
-      const gate = lightGate(crop, light, year.site)
+      const gate = lightGate(crop, light, year.site, frostPercentile)
       if (!gate.passed) {
         outcomes.push(
           outcomeOf(

@@ -43,6 +43,7 @@ const contextWith = (shares: readonly (readonly [string, number])[] = []): PairC
   tekRules,
   weights: DEFAULT_COMPATIBILITY_WEIGHTS,
   canopyShareByCropId: new Map(shares.map(([id, share]) => [id as CropId, share as Fraction])),
+  percentile: 20,
 })
 
 const termOf = (pair: ReturnType<typeof evaluatePair>, kind: string) => {

@@ -24,7 +24,7 @@ import type {
   PhWindow,
 } from '../types/polyculture'
 import type { PvArray } from '../types/pv'
-import type { Site } from '../types/site'
+import type { ExceedancePercentile, Site } from '../types/site'
 import type { TekDesignRule } from '../types/tek'
 import type { Fraction, PhUnits } from '../types/units'
 import { trapezoidMembership } from './membership'
@@ -51,6 +51,8 @@ export interface PairContext {
   readonly weights: CompatibilityWeights
   /** Share of the bed each crop's canopy covers, which sets how much shade it casts */
   readonly canopyShareByCropId: ReadonlyMap<CropId, Fraction>
+  /** The same frost-risk setting the ranking reads light at, so the two never disagree on a month */
+  readonly percentile: ExceedancePercentile
 }
 
 export const DEFAULT_COMPATIBILITY_WEIGHTS: CompatibilityWeights = {
@@ -413,7 +415,12 @@ export const lightOvertoppingTerm = (
   const share = context.canopyShareByCropId.get(taller.id) ?? 0.5
   const cover =
     share * canopyCoverFromLai(taller.footprint.leafAreaIndex, taller.footprint.lightExtinctionK)
-  const open = seasonLightFor(shorter, context.light, context.site).meanDliMolM2Day
+  const open = seasonLightFor(
+    shorter,
+    context.light,
+    context.site,
+    context.percentile,
+  ).meanDliMolM2Day
   const under = open * (1 - cover)
   const minimum = shorter.light.dliMinMolM2Day.value
   const target = shorter.light.dliTargetMolM2Day.value

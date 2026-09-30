@@ -66,7 +66,7 @@ describe('naming what the pointer is over', () => {
     const at = (rowCount: number): string => {
       store.upsertArray({ ...array, geometry: { ...array.geometry, rowCount } })
       const plot = useAppStore.getState().plot
-      return describeHover(plot, [], { kind: 'array', arrayId: array.id })?.detail ?? ''
+      return describeHover(plot, [], { kind: 'array', arrayId: array.id }, 'm')?.detail ?? ''
     }
     expect(at(1)).toContain('1 row of')
     expect(at(1)).not.toContain('1 rows')
@@ -78,7 +78,7 @@ describe('naming what the pointer is over', () => {
   it('names a bed by its label, its area and what is in it', () => {
     const { bed } = withPlot()
     const plot = useAppStore.getState().plot
-    const named = describeHover(plot, [], { kind: 'bed', bedId: bed.id })
+    const named = describeHover(plot, [], { kind: 'bed', bedId: bed.id }, 'm')
     expect(named?.title).toBe('Bed 1')
     // a hover names the plant: "1 planting" alone never says what it is
     expect(named?.detail).toBe('11.2 m²: lettuce-leaf')
@@ -106,7 +106,7 @@ describe('naming what the pointer is over', () => {
       id: cropId(id),
       taxonomy: { commonNames: [id] },
     })) as unknown as readonly Crop[]
-    const named = describeHover(plot, catalog, { kind: 'bed', bedId: bed.id })
+    const named = describeHover(plot, catalog, { kind: 'bed', bedId: bed.id }, 'm')
     expect(named?.detail).toBe('11.2 m²: lettuce-leaf, tomato, cucumber, chickpea and 1 more')
   })
 
@@ -117,11 +117,16 @@ describe('naming what the pointer is over', () => {
       id: cropId('lettuce-leaf'),
       taxonomy: { commonNames: ['leaf lettuce'] },
     } as unknown as Crop
-    const named = describeHover(plot, [lettuce], {
-      kind: 'planting',
-      bedId: bed.id,
-      plantingId: plantingId('bed-1:lettuce-leaf:100'),
-    })
+    const named = describeHover(
+      plot,
+      [lettuce],
+      {
+        kind: 'planting',
+        bedId: bed.id,
+        plantingId: plantingId('bed-1:lettuce-leaf:100'),
+      },
+      'm',
+    )
     expect(named?.title).toBe('leaf lettuce')
     expect(named?.detail).toBe('12 plants in Bed 1')
   })
@@ -160,11 +165,11 @@ describe('naming what the pointer is over', () => {
       energyShare: null,
       advice: { id: 'status', text: '', bedId: null },
     }
-    expect(describeHover(plot, [lettuce], target, report)?.detail).toBe(
+    expect(describeHover(plot, [lettuce], target, 'm', report)?.detail).toBe(
       '12 plants in Bed 1. Season 3: harvested at about 60% of full yield',
     )
     const frosted = { ...report, outcomes: [{ ...outcome, kind: 'frosted' as const }] }
-    expect(describeHover(plot, [lettuce], target, frosted)?.detail).toBe(
+    expect(describeHover(plot, [lettuce], target, 'm', frosted)?.detail).toBe(
       '12 plants in Bed 1. Season 3: lost to frost',
     )
   })
@@ -172,21 +177,37 @@ describe('naming what the pointer is over', () => {
   it('names an array by the geometry the panel prints, not by a second calculation', () => {
     const { array } = withPlot()
     const plot = useAppStore.getState().plot
-    const named = describeHover(plot, [], { kind: 'array', arrayId: array.id })
+    const named = describeHover(plot, [], { kind: 'array', arrayId: array.id }, 'm')
     expect(named?.title).toBe(array.label)
     expect(named?.detail).toContain(`${String(array.geometry.rowCount)} rows`)
+  })
+
+  it('prints the row spacing in the stored unit', () => {
+    const { array } = withPlot()
+    const plot = useAppStore.getState().plot
+    const target = { kind: 'array', arrayId: array.id } as const
+    const meters = describeHover(plot, [], target, 'm')?.detail ?? ''
+    const feet = describeHover(plot, [], target, 'ft')?.detail ?? ''
+    expect(meters).toMatch(/ m apart$/)
+    expect(feet).toMatch(/ ft apart$/)
+    expect(feet).not.toBe(meters)
   })
 
   it('refuses to name something that is no longer in the plot', () => {
     withPlot()
     const plot = useAppStore.getState().plot
-    expect(describeHover(plot, [], { kind: 'bed', bedId: 'bed-gone' as BedId })).toBeNull()
+    expect(describeHover(plot, [], { kind: 'bed', bedId: 'bed-gone' as BedId }, 'm')).toBeNull()
     expect(
-      describeHover(plot, [], {
-        kind: 'planting',
-        bedId: BED,
-        plantingId: 'gone' as PlantingId,
-      }),
+      describeHover(
+        plot,
+        [],
+        {
+          kind: 'planting',
+          bedId: BED,
+          plantingId: 'gone' as PlantingId,
+        },
+        'm',
+      ),
     ).toBeNull()
   })
 })

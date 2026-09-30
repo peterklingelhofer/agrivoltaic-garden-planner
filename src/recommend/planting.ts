@@ -1,4 +1,6 @@
-import type { BedCalendar, CropCalendar } from '../types/calendar'
+import { cropLabel } from '../data/crops'
+import { dayLabel } from '../data/util'
+import type { BedCalendar, CalendarFeasibility, CropCalendar } from '../types/calendar'
 import type { Crop, Spacing, SpacingBasis } from '../types/crop'
 import type { Bed, Planting } from '../types/garden'
 import type { BedId, CropId, CultivarId, PlantingId } from '../types/ids'
@@ -6,6 +8,23 @@ import type { PvArray } from '../types/pv'
 import type { DayOfYear } from '../types/units'
 import { forwardDays, wrapDayOfYear } from './calendar'
 import { assignCanopyTier } from './stages/space'
+
+/**
+ * `feasibilitySummary` in `src/ui/calendar.ts` says the same union in a badge and a longer
+ * detail sentence for the calendar bars. This says it in the clause shape a refusal reads best
+ * with. Kept in this file: `ui` is the only other reader, and a refusal reason is the one thing
+ * `recommend` hands it as finished words
+ */
+const FEASIBILITY_WORDS: Readonly<Record<CalendarFeasibility['kind'], string>> = {
+  fits: 'the season fits it here',
+  'needs-indoor-start': 'it only finishes if started indoors',
+  'season-too-short': 'the season here is too short for it',
+  'light-limited': 'the light here is too weak for it during part of the season',
+  'no-thermal-data': 'this site has no frost or soil temperature data to date it from',
+}
+
+export const feasibilityWords = (kind: CalendarFeasibility['kind']): string =>
+  FEASIBILITY_WORDS[kind]
 
 /**
  * Turning a chosen crop into a Planting.
@@ -100,14 +119,14 @@ export const plantingDensity = (crop: Crop, areaM2: number): Derivation<Planting
   const spacing = areaPerPlantM2(crop.spacing)
   if (spacing === null) {
     return refuse(
-      `${crop.id as string} carries no usable spacing in the catalog, so a plant count can't be derived from the bed area`,
+      `${cropLabel(crop)} carries no usable spacing in the catalog, so a plant count can't be derived from the bed area`,
     )
   }
   if (!usable(areaM2)) return refuse('this bed has no area to divide by the catalog spacing')
   const plantCount = Math.floor(areaM2 / spacing.areaM2)
   if (plantCount < 1) {
     return refuse(
-      `one ${crop.id as string} needs ${spacing.areaM2.toFixed(2)} m² at ${spacing.basis} spacing and this bed offers ${areaM2.toFixed(2)} m²`,
+      `one ${cropLabel(crop)} needs ${spacing.areaM2.toFixed(2)} m² at ${spacing.basis} spacing and this bed offers ${areaM2.toFixed(2)} m²`,
     )
   }
   return {
@@ -156,16 +175,16 @@ export interface PlantingDraft {
 
 export const derivePlanting = (draft: PlantingDraft): Derivation<Planting> => {
   const { bed, crop, calendar } = draft
-  const cropId = crop.id as string
+  const name = cropLabel(crop)
   if (calendar === undefined) {
     return refuse(
-      `no planting calendar for ${cropId} in ${bed.id as string}, so its harvest window would have to be invented`,
+      `no planting calendar for ${name} in ${bed.label}, so its harvest window would have to be invented`,
     )
   }
   const calendarSow = calendarSowDay(calendar)
   if (calendarSow === null) {
     return refuse(
-      `the calendar gives ${cropId} no planting window in ${bed.id as string} (${calendar.feasibility.kind})`,
+      `the calendar gives ${name} no planting window in ${bed.label}: ${feasibilityWords(calendar.feasibility.kind)}`,
     )
   }
   // an edit re-derives a planting that is already in the bed, so its own area isn't an obstacle
@@ -179,7 +198,7 @@ export const derivePlanting = (draft: PlantingDraft): Derivation<Planting> => {
     return occupancy === null || occupancy.plantedM2 === 0
       ? density
       : refuse(
-          `${bed.label} is full: what's already planted takes up all ${occupancy.areaM2.toFixed(1)} m². Take a planting out, or put ${crop.taxonomy.commonNames[0] ?? cropId} in place of one`,
+          `${bed.label} is full: what's already planted takes up all ${occupancy.areaM2.toFixed(1)} m². Take a planting out, or put ${name} in place of one`,
           'room',
         )
   }
@@ -191,16 +210,16 @@ export const derivePlanting = (draft: PlantingDraft): Derivation<Planting> => {
     draft.harvestEndDay ?? wrapDayOfYear(sowDay + forwardDays(calendarSow, calendar.harvest.end))
   if (forwardDays(sowDay, harvestStartDay) > forwardDays(sowDay, harvestEndDay)) {
     return refuse(
-      `sown on day ${String(sowDay)}, ${cropId} isn't ready to pick until day ${String(harvestStartDay)}, and the plan ends its harvest on day ${String(harvestEndDay)}`,
+      `sown on ${dayLabel(sowDay)}, ${name} isn't ready to pick until ${dayLabel(harvestStartDay)}, and the plan ends its harvest on ${dayLabel(harvestEndDay)}`,
     )
   }
   const plantCount = Math.round(draft.plantCount ?? density.value.plantCount)
-  if (plantCount < 1) return refuse(`a planting of ${cropId} needs at least one plant`)
+  if (plantCount < 1) return refuse(`a planting of ${name} needs at least one plant`)
   // refused: the grower asked for a number and is owed the
   // reason it can't be had, the same way `allocateSpace` reports a shortfall
   if (plantCount > density.value.plantCount) {
     return refuse(
-      `${bed.label} has room for ${String(density.value.plantCount)} ${cropId} at ${density.value.areaPerPlantM2.toFixed(2)} m² each, and ${String(plantCount)} was asked for`,
+      `${bed.label} has room for ${String(density.value.plantCount)} ${name} at ${density.value.areaPerPlantM2.toFixed(2)} m² each, and ${String(plantCount)} was asked for`,
     )
   }
 

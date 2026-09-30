@@ -1,13 +1,18 @@
 import { beforeAll, describe, expect, it } from 'bun:test'
 import { loadCompanionRules, loadRotationConstraints } from '../data/companions'
-import { loadCropCatalog } from '../data/crops'
+import { cropById, loadCropCatalog } from '../data/crops'
 import { cosDeg, sinDeg } from '../sim/math'
 import { REFERENCE_MAX_TILT_DEG, REFERENCE_MIN_TILT_DEG } from '../sim/pv/ler'
 import { polygonOf, rectangleRing, vec2 } from '../state/geom'
+import { bedLayoutFixture } from '../state/testkit'
+import type { Crop } from '../types/crop'
 import type { House } from '../types/garden'
 import { obstructionId } from '../types/ids'
+import type { CropId } from '../types/ids'
 import type {
   ArrayCandidate,
+  BedLayout,
+  BedPlacement,
   CandidateArchetype,
   DesignScenario,
   OnboardingAnswers,
@@ -18,14 +23,22 @@ import { degrees, degreesLatitude, degreesLongitude, meters } from '../types/uni
 import {
   AMBITION_SHADE_BUDGET,
   ARCHETYPE_ORDER,
+  bedsFitSentence,
   candidatesFor,
   type DesignDependencies,
   groundLightPlan,
+  lightAdequateBedCount,
   shadeBudgetFor,
   suggestDesigns,
 } from './design'
 import { BED_GAP_M, PLOT_MARGIN_M, POST_KEEP_CLEAR_M } from './layout'
-import { siteFixture, tmyFixture } from './testkit'
+import { bedLightFixture, siteFixture, tmyFixture } from './testkit'
+
+const need = (catalog: readonly Crop[], id: string): Crop => {
+  const crop = cropById(catalog, id as CropId)
+  if (crop === undefined) throw new Error(`missing fixture crop ${id}`)
+  return crop
+}
 
 const answersFor = (patch: Partial<OnboardingAnswers> = {}): OnboardingAnswers => ({
   location: { latitudeDeg: degreesLatitude(42.37), longitudeDeg: degreesLongitude(-72.52) },
@@ -461,6 +474,17 @@ describe('a full five-scenario run', () => {
     }
   })
 
+  it("never counts more light-adequate beds than were placed, and names the shortfall when there's one", () => {
+    for (const entry of result.scenarios) {
+      expect(entry.lightAdequateBeds).toBeGreaterThanOrEqual(0)
+      expect(entry.lightAdequateBeds).toBeLessThanOrEqual(entry.layout.beds.length)
+      if (entry.candidate.archetype === 'no-array-control') continue
+      expect(entry.tradeoff).toContain(
+        bedsFitSentence(entry.layout.beds.length, entry.lightAdequateBeds),
+      )
+    }
+  })
+
   /**
    * `evaluate` hands `placeBeds` a judge built off this candidate's own rain ground, so a bed
    * slides the way `layout.test.ts` proves it can. At least one paneled scenario on this plot has
@@ -525,6 +549,61 @@ describe('a full five-scenario run', () => {
     expect(again.recommendedArchetype).toBe(result.recommendedArchetype)
     expect(again.notConsidered).toEqual(result.notConsidered)
   }, 600_000)
+})
+
+/**
+ * `placeBeds` draws a bed wherever the layout has room for one, so a ground-row strip can be
+ * placed and still sit too deep in the shade for anything on the plant list to grow (Phoenix's
+ * energy-first layout, 4 of 6 beds). The card's count has to tell those beds apart from ones a
+ * crop can actually use
+ */
+describe('a placed bed only counts as getting enough light when a crop can grow there', () => {
+  it('counts a bed with the list against one too dark for any crop on it', async () => {
+    const catalog = await loadCropCatalog()
+    const lettuce = need(catalog, 'lettuce-leaf')
+    const site = siteFixture()
+    const base = bedLayoutFixture('balanced')
+    const brightBed = base.beds[0] as BedPlacement
+    const shadedBed = base.beds[1] as BedPlacement
+    const layout: BedLayout = {
+      ...base,
+      beds: [
+        { ...brightBed, light: bedLightFixture('bright', 0.05) },
+        { ...shadedBed, light: bedLightFixture('too-dark', 0.98) },
+      ],
+    }
+    expect(lightAdequateBedCount([lettuce], site, layout)).toBe(1)
+    // nothing on the list at all: neither bed can grow anything, however bright it is
+    expect(lightAdequateBedCount([], site, layout)).toBe(0)
+    // a layout with no beds placed has none to count
+    expect(lightAdequateBedCount([lettuce], site, { ...layout, beds: [] })).toBe(0)
+  })
+})
+
+describe('the bed-count sentence reads right at every count', () => {
+  it('uses "fits" for one bed and "fit" for any other count, when every bed qualifies', () => {
+    expect(bedsFitSentence(1, 1)).toBe('1 bed fits the light it leaves')
+    expect(bedsFitSentence(6, 6)).toBe('6 beds fit the light it leaves')
+    expect(bedsFitSentence(0, 0)).toBe('0 beds fit the light it leaves')
+  })
+
+  it("names the one bed directly when it's placed and doesn't qualify", () => {
+    expect(bedsFitSentence(1, 0)).toBe(
+      "1 bed fits, and it doesn't get enough light for anything on the plant list to grow",
+    )
+  })
+
+  it('says none of them when nothing placed qualifies', () => {
+    expect(bedsFitSentence(6, 0)).toBe(
+      '6 beds fit, and none of them get enough light for anything on the plant list to grow',
+    )
+  })
+
+  it("names the count that qualifies when it's somewhere in between", () => {
+    expect(bedsFitSentence(6, 4)).toBe(
+      '6 beds fit, and only 4 of them get enough light for anything on the plant list to grow',
+    )
+  })
 })
 
 describe('ranking answers to the objective weights', () => {

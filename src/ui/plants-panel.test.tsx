@@ -10,6 +10,7 @@ import { loadTekRules } from '../data/tek'
 import { bedCalendar } from '../recommend/calendar'
 import { runRecommendationPipeline } from '../recommend/pipeline'
 import { DEFAULT_WEIGHTS } from '../recommend/stages/rank'
+import { soilWaterStage } from '../recommend/stages/soil-water'
 import { AMBITION_CLASSES } from '../recommend/suggest'
 import { bedFixture, bedLightFixture, plotFixture, siteFixture } from '../recommend/testkit'
 import { FINAL_OPTIONS } from '../sim/pipeline'
@@ -18,6 +19,7 @@ import { ready } from '../state/slices'
 import { getAppState, resetAppStore, useAppStore } from '../state/store'
 import { energyReportFixture } from '../state/testkit'
 import type { BedId, CropId } from '../types/ids'
+import type { SoilProfile } from '../types/site'
 import { cropName } from './format'
 import { PlantsPanel } from './PlantsPanel'
 import { mount, type Harness } from './testkit'
@@ -33,18 +35,26 @@ const BED_2 = 'bed-2' as BedId
 /**
  * Two beds under one row of panels that read different light, ranked and dated, with automatic
  * ranking off so a test drives every action itself, without racing a debounce. The same shape
- * `seedRankedStore` builds for one bed, over two
+ * `seedRankedStore` builds for one bed, over two.
+ *
+ * `soil` stamps the one reading on both beds, the way a site resolves it onto every bed that
+ * hasn't been typed over. `rsr` overrides the two beds' shade ratios where a test needs a
+ * particular split of light
  */
-const seedTwoBeds = async (): Promise<void> => {
+const seedTwoBeds = async (
+  overrides: { readonly soil?: SoilProfile; readonly rsr?: readonly [number, number] } = {},
+): Promise<void> => {
   const [catalog, companionRules, rotationConstraints, tekRules] = await Promise.all([
     loadCropCatalog(),
     loadCompanionRules(),
     loadRotationConstraints(),
     loadTekRules(),
   ])
-  const beds = [bedFixture(BED_1), bedFixture(BED_2)]
+  const bedPatch = overrides.soil === undefined ? {} : { soil: overrides.soil }
+  const beds = [bedFixture(BED_1, bedPatch), bedFixture(BED_2, bedPatch)]
   const plot = { ...plotFixture(beds), arrays: [makeArray(1)] }
-  const bedLight = [bedLightFixture(BED_1, 0.08), bedLightFixture(BED_2, 0.42)]
+  const [rsr1, rsr2] = overrides.rsr ?? [0.08, 0.42]
+  const bedLight = [bedLightFixture(BED_1, rsr1), bedLightFixture(BED_2, rsr2)]
   const site = siteFixture()
   useAppStore.setState({
     autoRun: false,
@@ -72,6 +82,38 @@ const seedTwoBeds = async (): Promise<void> => {
     tekRules: ready(tekRules),
     energy: ready(energyReportFixture()),
   })
+}
+
+/**
+ * The engine's own count for a bed: of the crops the climate allows there, how many
+ * `soilWaterStage` itself refuses on pH. Called directly, the way the component counts, so a
+ * test pins the rule the component follows
+ */
+const expectedSoilPhCount = (
+  bedId: BedId,
+): { readonly allowed: number; readonly excluded: number } => {
+  const state = getAppState()
+  const ranked =
+    state.sets.status === 'ready'
+      ? (state.sets.value.find((set) => set.bedId === bedId)?.ranked ?? [])
+      : []
+  const allowed = ranked.filter(
+    (item) =>
+      !(item.outcome.verdict === 'excluded' && item.outcome.limiting.stage === 'climate-gate'),
+  )
+  const catalog = state.catalog.status === 'ready' ? state.catalog.value : []
+  const site = state.site.status === 'ready' ? state.site.value : null
+  const bed = state.plot?.beds.find((entry) => entry.id === bedId)
+  const excluded =
+    site === null || bed === undefined
+      ? 0
+      : allowed.filter((item) => {
+          const crop = catalog.find((entry) => entry.id === item.cropId)
+          if (crop === undefined) return false
+          const outcome = soilWaterStage(crop, bed, site)
+          return !outcome.passed && outcome.limiting?.cause.kind === 'soil-ph'
+        }).length
+  return { allowed: allowed.length, excluded }
 }
 
 const catalog = () => {
@@ -244,6 +286,46 @@ describe('planting every bed', () => {
     expect(harness.get('action-plants-fill').className).not.toContain('action-primary')
     expect(harness.find('action-plants-undo')).not.toBeNull()
     expect(harness.get('readout-plants-status').textContent).toContain('Planted bed by bed')
+    await harness.unmount()
+  })
+})
+
+describe('the soil pH notice', () => {
+  it('shows one notice for beds that share a map pH, with the same figure whatever their light', async () => {
+    const soil: SoilProfile = { ...bedFixture(BED_1).soil, phUnits: 5.0, sourceId: 'soilgrids' }
+    await seedTwoBeds({ soil, rsr: [0.2, 0.6] })
+    const harness = await mount(<PlantsPanel />)
+    const sunny = expectedSoilPhCount(BED_1)
+    const shady = expectedSoilPhCount(BED_2)
+    // soilWaterStage reads only the crop and the bed's own pH, so the shadier bed refuses no fewer
+    expect(shady).toEqual(sunny)
+    // the fixture pH is chosen to clear the notice's own quarter share by a wide margin
+    expect(sunny.excluded / sunny.allowed).toBeGreaterThanOrEqual(0.25)
+    expect(harness.all('status-plants-soil-ph').length).toBe(1)
+    const notice = harness.get('status-plants-soil-ph').textContent ?? ''
+    expect(notice).toContain('pH 5.0')
+    expect(notice).toContain(
+      `rules out ${String(sunny.excluded)} of the ${String(sunny.allowed)} plants`,
+    )
+    expect(notice).toContain('Change the beds')
+    await harness.unmount()
+  })
+
+  it('says nothing for a typed pH, even one that would otherwise qualify', async () => {
+    const soil: SoilProfile = { ...bedFixture(BED_1).soil, phUnits: 5.0, sourceId: 'user' }
+    await seedTwoBeds({ soil })
+    const harness = await mount(<PlantsPanel />)
+    expect(harness.find('status-plants-soil-ph')).toBeNull()
+    await harness.unmount()
+  })
+
+  it('says nothing when a map pH rules out only a few', async () => {
+    const soil: SoilProfile = { ...bedFixture(BED_1).soil, sourceId: 'soilgrids' }
+    await seedTwoBeds({ soil })
+    const harness = await mount(<PlantsPanel />)
+    const counts = expectedSoilPhCount(BED_1)
+    expect(counts.excluded / counts.allowed).toBeLessThan(0.25)
+    expect(harness.find('status-plants-soil-ph')).toBeNull()
     await harness.unmount()
   })
 })

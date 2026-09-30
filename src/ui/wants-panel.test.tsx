@@ -67,4 +67,18 @@ describe('what is wanted from the space', () => {
     expect(harness.get('readout-onboarding-objective-custom').textContent).toMatch(/your own/i)
     await harness.unmount()
   })
+
+  /**
+   * The row figure reads backward under "What you want most": a food-first layout is one panel
+   * deep and the others two, so "Mostly food" showed the most rows. The growing options keep the
+   * figure, since each one's own row count moves the way its label suggests
+   */
+  it('drops the row figure from the goal options and keeps it on the growing ones', async () => {
+    const harness = await mount(<WantsPanel />)
+    const objective = harness.get('control-onboarding-objective').textContent ?? ''
+    const growing = harness.get('control-onboarding-ambition').textContent ?? ''
+    expect(objective.toLowerCase()).not.toContain('room for')
+    expect(growing.toLowerCase()).toContain('room for')
+    await harness.unmount()
+  })
 })

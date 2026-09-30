@@ -4,6 +4,7 @@ import { polygonOf, rectangleOf, vec2 } from '../state/geom'
 import { getAppState, resetAppStore } from '../state/store'
 import type { Ring2D } from '../types/geo'
 import { GroundPanel } from './BedPanel'
+import { metersToFeet, roundTenth } from './onboarding'
 import { mount } from './testkit'
 
 /**
@@ -58,6 +59,45 @@ describe('the size of the plot, typed rather than redrawn', () => {
 
     await harness.click('control-plot-units-m')
     expect((harness.get('control-plot-depth-m') as HTMLInputElement).value).toBe('10')
+    await harness.unmount()
+  })
+
+  /**
+   * The switch is saved with the design and read by every length field in the sidebar: a house
+   * drawn on the ground and a bed sized by typing both follow it, alongside the plot's own pair
+   */
+  it('carries the switch to a house and a bed as well as the plot', async () => {
+    const harness = await mount(<GroundPanel />)
+    await harness.click('action-house-add')
+    const houseWidthM = Number(
+      (harness.get('control-house-width-house-1') as HTMLInputElement).value,
+    )
+    const bedWidthM = Number((harness.get('control-bed-width') as HTMLInputElement).value)
+
+    await harness.click('control-plot-units-ft')
+
+    // the house keeps its own id: only the plot's pair carries the unit in its id
+    expect(harness.get('control-house-width-house-1').closest('label')?.textContent).toContain(
+      '(ft)',
+    )
+    expect((harness.get('control-house-width-house-1') as HTMLInputElement).value).toBe(
+      String(roundTenth(metersToFeet(houseWidthM))),
+    )
+    expect((harness.get('control-bed-width') as HTMLInputElement).value).toBe(
+      String(roundTenth(metersToFeet(bedWidthM))),
+    )
+    await harness.unmount()
+  })
+
+  /**
+   * A bed's own precision is a hundredth of a meter, finer than the tenth the plot and the other
+   * length fields settled on: the switch this step carries to every field must not coarsen a
+   * bed's own display down to it
+   */
+  it('shows a bed size to a hundredth of a meter, 1.25 m included', async () => {
+    const harness = await mount(<GroundPanel />)
+    await harness.type('control-bed-width', '1.25')
+    expect((harness.get('control-bed-width') as HTMLInputElement).value).toBe('1.25')
     await harness.unmount()
   })
 

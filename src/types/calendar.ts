@@ -18,6 +18,8 @@ export type CalendarBasis =
       readonly minSoilTempC: number
       /** Set where the record holds no frost at this percentile, so soil temperature is the only anchor */
       readonly frostFree?: true
+      /** Set where a named wet season set this date */
+      readonly rains?: true
     }
   | { readonly kind: 'catalog-window' }
   | { readonly kind: 'light-window'; readonly firstAdequateMonth: number }

@@ -469,6 +469,7 @@
       "maxBeds": null
     },
     "sidebarStep": "place",
+    "lengthUnit": "m",
     "economyInputs": {
       "perKwh": null,
       "currency": "USD",

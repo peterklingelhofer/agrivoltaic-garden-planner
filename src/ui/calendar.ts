@@ -1,3 +1,4 @@
+import { dayLabel } from '../data/util'
 import type {
   BedCalendar,
   CalendarBasis,
@@ -69,10 +70,10 @@ export const dayOfYearFrom = (month: number, date: number): number => {
 export const daysInMonth = (month: number): number =>
   new Date(Date.UTC(2001, asMonth(month), 0)).getUTCDate()
 
-export const dayLabel = (day: number): string => {
-  const { month, date } = calendarDate(day)
-  return `${monthLabel(month)} ${date}`
-}
+// re-exported so every existing importer keeps working. It lives in `src/data/util` because
+// `recommend` says a date out loud too, in the reason a planting was refused, and it must not
+// import from `ui`
+export { dayLabel }
 
 export const methodLabel = (method: PlantingMethod): string =>
   method === 'start-indoors'
@@ -100,8 +101,15 @@ export const basisLabel = (basis: CalendarBasis): string => {
     const side = basis.offsetDays < 0 ? 'before' : 'after'
     return `${Math.abs(basis.offsetDays)} days ${side} ${anchor}, ${basis.percentile}% frost risk`
   }
-  if (basis.kind === 'soil-temperature')
-    return `${basis.frostFree === true ? 'no frost here: dated by soil temperature only, ' : ''}soil at or above ${formatCelsius(basis.minSoilTempC)}`
+  if (basis.kind === 'soil-temperature') {
+    const prefix =
+      basis.frostFree !== true
+        ? ''
+        : basis.rains === true
+          ? 'no frost here: dated from the start of the rains, '
+          : 'no frost here: dated by soil temperature only, '
+    return `${prefix}soil at or above ${formatCelsius(basis.minSoilTempC)}`
+  }
   if (basis.kind === 'catalog-window') return 'the planting window in the crop catalog'
   if (basis.kind === 'light-window')
     return `first month with adequate light, ${monthLabel(asMonth(basis.firstAdequateMonth))}`

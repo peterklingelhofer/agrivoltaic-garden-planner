@@ -8,7 +8,7 @@ import { plantingId } from '../types/ids'
 import type { ExceedancePercentile, Site } from '../types/site'
 import type { Celsius, DayOfYear, DegreeDaysC, DegreesLatitude, SquareMeters } from '../types/units'
 import { buildAgenda, fieldWindow, supplyKind, WEEK_DAYS } from './agenda'
-import { bedCalendar, forwardDays } from './calendar'
+import { bedCalendar, forwardDays, wrapDayOfYear } from './calendar'
 import { calendarFor, derivePlanting, plantingDensity } from './planting'
 import { bedFixture, bedLightFixture, FROST_EVERY_YEAR, siteFixture } from './testkit'
 
@@ -177,6 +177,60 @@ describe('the frost risk dial', () => {
     )
     expect(item?.basis.kind === 'frost-offset' ? item.basis.percentile : null).toBe(50)
     expect(item?.citations).toEqual(['open-meteo'])
+  })
+})
+
+/**
+ * A garden made mid-season should open with what to sow next. A harvest whose sowing passed
+ * before the garden existed waits for that sowing to come round again: pole bean's first
+ * harvest is what this catches
+ */
+describe("a crop's harvest waits for its own next sowing", () => {
+  it('lists no harvest items where the sowing has passed and the harvest is still ahead', async () => {
+    const crop = await need('tomato')
+    const { calendars } = plant([crop])
+    const calendar = calendarFor(calendars, bedFixture(BED).id, crop.id)
+    if (calendar === undefined) throw new Error('no calendar')
+    const field = fieldWindow(calendar)
+    if (field === undefined) throw new Error('no field window')
+    // the day the sowing window closes, with the harvest still ahead: the shape of a garden
+    // made after this year's sowing already passed
+    const today = wrapDayOfYear(field.latest + 1)
+    expect(forwardDays(today, calendar.harvest.start)).toBeGreaterThan(0)
+    expect(forwardDays(today, calendar.harvest.start)).toBeLessThan(
+      forwardDays(today, field.recommended),
+    )
+    const actions = flat(agendaOf([crop], today)).map((item) => item.action)
+    expect(actions).not.toContain('first-harvest')
+    expect(actions).not.toContain('harvest-ends')
+  })
+
+  it('lists the harvest after the sowing when the sowing is still ahead', async () => {
+    const crop = await need('tomato')
+    const { calendars } = plant([crop])
+    const calendar = calendarFor(calendars, bedFixture(BED).id, crop.id)
+    if (calendar === undefined) throw new Error('no calendar')
+    const field = fieldWindow(calendar)
+    if (field === undefined) throw new Error('no field window')
+    const today = wrapDayOfYear(field.recommended - 10)
+    const sowAhead = forwardDays(today, field.recommended)
+    const items = flat(agendaOf([crop], today))
+    const harvest = items.find((item) => item.action === 'first-harvest')
+    expect(harvest).toBeDefined()
+    expect(forwardDays(today, harvest?.day ?? today)).toBeGreaterThan(sowAhead)
+    expect(items.some((item) => item.action === 'harvest-ends')).toBe(true)
+  })
+
+  it('keeps the harvest for a crop inside its own sowing window', async () => {
+    const crop = await need('tomato')
+    const { calendars } = plant([crop])
+    const calendar = calendarFor(calendars, bedFixture(BED).id, crop.id)
+    if (calendar === undefined) throw new Error('no calendar')
+    const field = fieldWindow(calendar)
+    if (field === undefined) throw new Error('no field window')
+    const actions = flat(agendaOf([crop], field.recommended)).map((item) => item.action)
+    expect(actions).toContain('first-harvest')
+    expect(actions).toContain('harvest-ends')
   })
 })
 
