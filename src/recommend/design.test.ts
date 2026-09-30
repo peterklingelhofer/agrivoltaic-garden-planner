@@ -466,10 +466,14 @@ describe('a full five-scenario run', () => {
 
   it('writes the water figure into the tradeoff sentence', () => {
     for (const entry of result.scenarios) {
-      if (entry.candidate.archetype === 'no-array-control') {
+      // the control has no panels to compare with, and a layout with no room has no beds
+      if (entry.candidate.archetype === 'no-array-control' || entry.layout.beds.length === 0) {
         expect(entry.tradeoff).not.toContain('By the water balance')
       } else {
-        expect(entry.tradeoff).toContain('By the water balance')
+        expect(entry.tradeoff).toContain(
+          "By the water balance, the beds' water shortfall over a year",
+        )
+        expect(entry.tradeoff).toContain('with no panels')
       }
     }
   })
