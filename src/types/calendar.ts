@@ -24,6 +24,14 @@ export type CalendarBasis =
   | { readonly kind: 'catalog-window' }
   | { readonly kind: 'light-window'; readonly firstAdequateMonth: number }
   | { readonly kind: 'days-to-maturity'; readonly backedOffDays: Days }
+  | {
+      readonly kind: 'harvest-calendar'
+      /** Null for a whole-season crop, which has no single after-freeze figure */
+      readonly afterFreezeDays: number | null
+      readonly percentile: ExceedancePercentile
+      /** Set where a frost-free site picks a whole-season crop over its longest growing run instead */
+      readonly frostFree?: true
+    }
 
 export interface PlantingWindow {
   readonly method: PlantingMethod

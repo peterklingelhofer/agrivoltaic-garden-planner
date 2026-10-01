@@ -102,3 +102,22 @@ describe('lightGate reads only the months a crop could be in the ground at this 
     expect(outcome.limiting?.cause).toEqual({ kind: 'dli-minimum', month: 4 })
   })
 })
+
+describe('lightGate refuses wild ginger past its own survival ceiling', () => {
+  it('refuses a bed whose season mean is at or above 36.4 mol/m²/d and admits one in light shade below it', async () => {
+    const catalog = await catalogPromise
+    const crop = need(catalog, 'wild-ginger')
+
+    // 40 clears the 36.4 figure comfortably: a season mean built from a weighted average of
+    // several months lands a hair off an exact float literal, so the fixture sits well clear of
+    // the boundary
+    const bright = bedLightFixture('bed-bright', 0, 36, Array(12).fill(40))
+    const refused = lightGate(crop, bright, siteFixture(), PERCENTILE)
+    expect(refused.passed).toBe(false)
+    expect(refused.limiting?.cause).toEqual({ kind: 'dli-survival-ceiling' })
+
+    const dim = bedLightFixture('bed-dim', 0.3, 36, Array(12).fill(30))
+    const admitted = lightGate(crop, dim, siteFixture(), PERCENTILE)
+    expect(admitted.passed).toBe(true)
+  })
+})

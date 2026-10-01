@@ -1,21 +1,21 @@
 {
-  "version": 4,
-  "savedAtUtcMillis": 1789350554160,
+  "version": 5,
+  "savedAtUtcMillis": 1790817892734,
   "sceneTimeUtcMillis": 1723491000000,
   "example": {
     "label": "Example agrivoltaic garden, Amherst, Massachusetts",
-    "generatedAtUtc": "2026-09-14T01:49:14.160Z",
+    "generatedAtUtc": "2026-10-01T01:24:52.734Z",
     "generator": "scripts/bake-example-garden.mjs",
     "siteLabel": "Amherst, Massachusetts",
     "weather": "open-meteo typical meteorological year, 8760 hours",
     "backend": "tregenza-mf1",
     "targetCellSizeM": 0.4,
-    "bakeElapsedMs": 1651,
+    "bakeElapsedMs": 2293,
     "quantisationErrorMolM2Day": 0.004512786865234375,
     "notes": [
       "70 x 90 cells at 0.4 m, baked on the CPU reference backend",
       "1255 binned sun directions, tregenza-mf1 sky, 2 sub-steps per hour",
-      "11 plantings, each ranked against this bake and derived through derivePlanting"
+      "10 plantings, each ranked against this bake and derived through derivePlanting"
     ]
   },
   "design": {
@@ -92,8 +92,7 @@
           "irrigation": {
             "method": "drip",
             "available": true,
-            "appliedMmPerYear": 180,
-            "harvestsPanelRunoff": false
+            "appliedMmPerYear": 180
           },
           "raisedHeightM": 0.35,
           "modifiers": [],
@@ -173,48 +172,35 @@
           "irrigation": {
             "method": "drip",
             "available": true,
-            "appliedMmPerYear": 180,
-            "harvestsPanelRunoff": false
+            "appliedMmPerYear": 180
           },
           "raisedHeightM": 0.35,
           "modifiers": [],
           "waterHarvesting": [],
           "plantings": [
             {
-              "id": "bed-2:brussels-sprouts:132",
+              "id": "bed-2:napa-cabbage:93",
               "bedId": "bed-2",
-              "cropId": "brussels-sprouts",
+              "cropId": "napa-cabbage",
+              "cultivarId": null,
+              "role": "target-crop",
+              "tier": "herb-ground",
+              "sowDay": 93,
+              "harvestStartDay": 163,
+              "harvestEndDay": 177,
+              "plantCount": 43
+            },
+            {
+              "id": "bed-2:fava-bean:93",
+              "bedId": "bed-2",
+              "cropId": "fava-bean",
               "cultivarId": null,
               "role": "target-crop",
               "tier": "shrub",
-              "sowDay": 132,
-              "harvestStartDay": 277,
-              "harvestEndDay": 291,
-              "plantCount": 10
-            },
-            {
-              "id": "bed-2:clover-crimson:93",
-              "bedId": "bed-2",
-              "cropId": "clover-crimson",
-              "cultivarId": null,
-              "role": "cover",
-              "tier": "herb-ground",
               "sowDay": 93,
               "harvestStartDay": 183,
               "harvestEndDay": 197,
-              "plantCount": 527
-            },
-            {
-              "id": "bed-2:teff:130",
-              "bedId": "bed-2",
-              "cropId": "teff",
-              "cultivarId": null,
-              "role": "target-crop",
-              "tier": "mid-canopy",
-              "sowDay": 130,
-              "harvestStartDay": 263,
-              "harvestEndDay": 277,
-              "plantCount": 150
+              "plantCount": 130
             }
           ]
         },
@@ -254,8 +240,7 @@
           "irrigation": {
             "method": "drip",
             "available": true,
-            "appliedMmPerYear": 180,
-            "harvestsPanelRunoff": false
+            "appliedMmPerYear": 180
           },
           "raisedHeightM": 0.35,
           "modifiers": [],
@@ -269,14 +254,14 @@
               "role": "target-crop",
               "tier": "herb-ground",
               "sowDay": 87,
-              "harvestStartDay": 121,
-              "harvestEndDay": 151,
+              "harvestStartDay": 113,
+              "harvestEndDay": 119,
               "plantCount": 231
             },
             {
-              "id": "bed-3:wild-ginger:91",
+              "id": "bed-3:teaberry:91",
               "bedId": "bed-3",
-              "cropId": "wild-ginger",
+              "cropId": "teaberry",
               "cultivarId": null,
               "role": "target-crop",
               "tier": "herb-ground",
@@ -323,48 +308,47 @@
           "irrigation": {
             "method": "drip",
             "available": true,
-            "appliedMmPerYear": 180,
-            "harvestsPanelRunoff": false
+            "appliedMmPerYear": 180
           },
           "raisedHeightM": 0.35,
           "modifiers": [],
           "waterHarvesting": [],
           "plantings": [
             {
-              "id": "bed-4:brussels-sprouts:132",
+              "id": "bed-4:napa-cabbage:93",
               "bedId": "bed-4",
-              "cropId": "brussels-sprouts",
+              "cropId": "napa-cabbage",
+              "cultivarId": null,
+              "role": "target-crop",
+              "tier": "herb-ground",
+              "sowDay": 93,
+              "harvestStartDay": 163,
+              "harvestEndDay": 177,
+              "plantCount": 20
+            },
+            {
+              "id": "bed-4:barley:93",
+              "bedId": "bed-4",
+              "cropId": "barley",
               "cultivarId": null,
               "role": "target-crop",
               "tier": "shrub",
-              "sowDay": 132,
-              "harvestStartDay": 277,
-              "harvestEndDay": 291,
-              "plantCount": 10
-            },
-            {
-              "id": "bed-4:clover-crimson:93",
-              "bedId": "bed-4",
-              "cropId": "clover-crimson",
-              "cultivarId": null,
-              "role": "cover",
-              "tier": "herb-ground",
               "sowDay": 93,
-              "harvestStartDay": 183,
-              "harvestEndDay": 197,
-              "plantCount": 527
+              "harvestStartDay": 193,
+              "harvestEndDay": 207,
+              "plantCount": 165
             },
             {
-              "id": "bed-4:teff:130",
+              "id": "bed-4:aronia:91",
               "bedId": "bed-4",
-              "cropId": "teff",
+              "cropId": "aronia",
               "cultivarId": null,
               "role": "target-crop",
               "tier": "mid-canopy",
-              "sowDay": 130,
-              "harvestStartDay": 263,
-              "harvestEndDay": 277,
-              "plantCount": 150
+              "sowDay": 91,
+              "harvestStartDay": 236,
+              "harvestEndDay": 257,
+              "plantCount": 1
             }
           ]
         }
@@ -409,6 +393,7 @@
           }
         }
       ],
+      "obstructions": [],
       "groundCover": "grass"
     },
     "selectedBedId": null,

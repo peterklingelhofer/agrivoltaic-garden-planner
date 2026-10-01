@@ -230,6 +230,26 @@ export const lightGate = (
     }
   }
 
+  const survivalCeiling = crop.light.dliMaxBeforeSurvivalLossMolM2Day?.value ?? null
+  if (survivalCeiling !== null && seasonLight.meanDliMolM2Day >= survivalCeiling) {
+    return {
+      passed: false,
+      light: seasonLight,
+      fit,
+      shadeBenefitBonus: bonus,
+      limiting: {
+        stage: 'light-gate',
+        cause: { kind: 'dli-survival-ceiling' },
+        membership: clamp(
+          survivalCeiling / Math.max(seasonLight.meanDliMolM2Day, 0.001),
+          0,
+          1,
+        ) as Fraction,
+        explanation: `This bed averages ${seasonLight.meanDliMolM2Day.toFixed(1)} mol/m²/d over the season, at or above the ${survivalCeiling.toFixed(1)} at which a field study saw this plant's survival fall`,
+      },
+    }
+  }
+
   // a whole month of the crop's window whose mean sits above the ceiling. The counter adds month
   // lengths, so it reads 0 or at least 28 . An advisory: the crop has already passed, and the bed
   // is not a reason to move it

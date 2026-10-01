@@ -647,11 +647,11 @@ body {
 /**
  * The cold open: what the example garden is showing, said once, over the scene it is about.
  *
- * It has to find room between two things that were there first, so it is anchored to the one
- * whose size is a stated constant. `.example-banner` is
- * top-right and `--banner-width` across, `.legend` is top-left. Sitting at the foot of the
- * canvas, in the column to the left of the banner, clears both at every desktop size this app
- * is usable at.
+ * It has to find room between two things that were there first, `.example-banner` top right and
+ * `.legend` top left, and both hang from the top edge. Along the foot it clears both: the banner is
+ * about 107px tall closed and 306px with both its folds open, so the two meet only in a window
+ * under about 490px tall with both folds open. Kept to the column beside the banner, it was 149px
+ * wide and 283px tall in a 905px window, so it spans the foot and stops at 640px.
  *
  * `pointer-events: none` for the same reason `.scene-tooltip` has it: this talks about the
  * ground, and taking the pointer would make the ground it is talking about unclickable.
@@ -667,7 +667,7 @@ body {
 .cold-open {
   position: absolute;
   left: 12px;
-  right: calc(var(--banner-width) + 24px);
+  right: 12px;
   bottom: 12px;
   z-index: 1;
   pointer-events: none;

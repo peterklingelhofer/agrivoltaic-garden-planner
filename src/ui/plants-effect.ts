@@ -11,13 +11,40 @@ import { joinWords } from './polyculture'
 export const CHOICES_EFFECT_TOP_N = 8
 
 /**
+ * How many of the catalogue's plants Kew's checklist records growing wild here, said as its own
+ * sentence so a switch that moved nothing still has something to show for itself.
+ *
+ * Named outright at three or fewer, since a grower reads three names faster than a number. Past
+ * that, the count alone is plainer than a list long enough to lose track of
+ */
+export const nativeCountSentence = (
+  nativeCropIds: readonly CropId[],
+  catalog: readonly Crop[],
+): string => {
+  const total = String(catalog.length)
+  if (nativeCropIds.length === 0) {
+    return `None of the ${total} plants in the catalogue grow wild around here.`
+  }
+  if (nativeCropIds.length <= 3) {
+    const names = joinWords(nativeCropIds.map((id) => cropName(catalog, id)))
+    const verb = nativeCropIds.length === 1 ? 'grows' : 'grow'
+    return `Only ${names}, of the ${total} plants in the catalogue, ${verb} wild around here.`
+  }
+  return `${String(nativeCropIds.length)} of the ${total} plants in the catalogue grow wild around here.`
+}
+
+/**
  * What a wildlife switch or a like, must-have or never pick changed on a bed's own ranking, said
  * once the change has landed, without leaving it for a visitor to notice by comparing two screens.
  *
  * `cause` is already the sentence's own opening clause ("Flowers for bees on", "Prefer tomato"),
- * computed from whichever input actually changed; this only ever compares the two id lists it
+ * computed from whichever input actually changed. This only ever compares the two id lists it
  * is handed. Two sentences when something moved, because the reminder that the beds themselves
- * are untouched only means anything once there is a move to react to; one when there is not
+ * are untouched only means anything once there is a move to react to. One when there isn't.
+ *
+ * `nativeCropIds` carries the catalogue's own native crops for the site's area, passed only when
+ * the change was the natives switch turning on. With nothing moved for it to show, it says how
+ * many of the catalogue grow wild here instead, so the switch never reads as one that failed
  */
 export const choicesEffectSentence = (
   cause: string,
@@ -25,6 +52,7 @@ export const choicesEffectSentence = (
   before: readonly CropId[],
   after: readonly CropId[],
   catalog: readonly Crop[],
+  nativeCropIds: readonly CropId[] | null = null,
 ): string => {
   const wasIn = new Set<string>(before)
   const isIn = new Set<string>(after)
@@ -34,7 +62,10 @@ export const choicesEffectSentence = (
 
   if (movedIn.length === 0 && movedOut.length === 0) {
     const reordered = before.length !== after.length || before.some((id, i) => id !== after[i])
-    return `${cause}: ${topLabel} are ${reordered ? 'the same plants, in a different order' : 'unchanged'}`
+    const headline = `${cause}: ${topLabel} are ${reordered ? 'the same plants, in a different order' : 'unchanged'}`
+    return nativeCropIds === null
+      ? headline
+      : `${headline}. ${nativeCountSentence(nativeCropIds, catalog)}`
   }
 
   const names = (ids: readonly CropId[]): string =>
@@ -43,5 +74,5 @@ export const choicesEffectSentence = (
     movedIn.length === 0 ? '' : `${names(movedIn)} moved into ${topLabel}`,
     movedOut.length === 0 ? '' : `${names(movedOut)} moved out`,
   ].filter((sentence) => sentence !== '')
-  return `${cause}: ${sentences.join('; ')}. The beds keep what's planted until you replant.`
+  return `${cause}: ${sentences.join(', and ')}. The beds keep what's planted until you replant.`
 }

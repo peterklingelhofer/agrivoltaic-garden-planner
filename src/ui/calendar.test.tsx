@@ -10,6 +10,7 @@ import { bedId, cropId } from '../types/ids'
 import { dayOfYear, days } from '../types/units'
 import type { RecommendationSet } from '../types/recommend'
 import {
+  basisKindLabel,
   basisLabel,
   dayLabel,
   feasibilitySummary,
@@ -102,6 +103,26 @@ describe('basis and feasibility', () => {
     expect(basisLabel({ kind: 'light-window', firstAdequateMonth: 4 })).toContain('Apr')
     expect(basisLabel({ kind: 'days-to-maturity', backedOffDays: days(75) })).toContain('75 days')
     expect(basisLabel({ kind: 'catalog-window' })).toContain('catalog')
+    expect(basisLabel({ kind: 'harvest-calendar', afterFreezeDays: 53, percentile: 50 })).toBe(
+      '53 days after the last spring freeze, from an extension harvest calendar, 50% exceedance',
+    )
+    expect(basisLabel({ kind: 'harvest-calendar', afterFreezeDays: -7, percentile: 50 })).toBe(
+      '7 days before the last spring freeze, from an extension harvest calendar, 50% exceedance',
+    )
+    expect(basisLabel({ kind: 'harvest-calendar', afterFreezeDays: null, percentile: 50 })).toBe(
+      'picked from the last spring freeze to the first fall freeze, 50% exceedance',
+    )
+    expect(
+      basisLabel({
+        kind: 'harvest-calendar',
+        afterFreezeDays: null,
+        percentile: 50,
+        frostFree: true,
+      }),
+    ).toBe('no frost here: picked through its growing season')
+    expect(basisKindLabel({ kind: 'harvest-calendar', afterFreezeDays: 53, percentile: 50 })).toBe(
+      'harvest calendar',
+    )
   })
 
   it('refuses to call a crop plantable when it cannot finish', () => {

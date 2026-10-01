@@ -1128,7 +1128,20 @@ export const CROP_ROWS: readonly CropRow[] = [
     45,
     0.8,
     0.6,
-    { life: 'perennial', coldC: -34 },
+    {
+      life: 'perennial',
+      coldC: -34,
+      // University of Minnesota Extension, for Minnesota (Minneapolis-St Paul): "Horseradish grows
+      // the most during late summer and early autumn. For this reason, delay fall harvest until
+      // late October or early November, or just before the ground freezes". The median last spring
+      // freeze there is 23 Apr at Minneapolis-St Paul International Airport, so picking starts 185
+      // days after it and runs 11 days
+      harvest: {
+        afterFreezeDays: 185,
+        citations: ['umn-extension-2024-horseradish', 'noaa-ncei-2021-climate-normals-1991-2020'],
+      },
+      harvestDays: 11,
+    },
   ],
   [
     'onion-bulb',
@@ -1268,7 +1281,13 @@ export const CROP_ROWS: readonly CropRow[] = [
     20,
     0.35,
     0.25,
-    { life: 'perennial', coldC: -34 },
+    {
+      life: 'perennial',
+      coldC: -34,
+      // University of Illinois Extension: "Harvest chives throughout the season to prevent the
+      // leaves from becoming tough and to encourage formation of new bulblets"
+      harvest: { wholeSeason: true, citations: ['illinois-extension-herbs-chives'] },
+    },
   ],
 
   // Leafy greens
@@ -1622,7 +1641,13 @@ export const CROP_ROWS: readonly CropRow[] = [
     30,
     0.4,
     0.3,
-    { life: 'perennial', coldC: -34, harvestDays: 120 },
+    {
+      life: 'perennial',
+      coldC: -34,
+      // University of Minnesota Extension: "Once the plants are established, you can harvest sorrel
+      // at any time from early spring until frost kills the growth"
+      harvest: { wholeSeason: true, citations: ['umn-extension-2024-sorrel'] },
+    },
   ],
   [
     'mache',
@@ -1682,7 +1707,14 @@ export const CROP_ROWS: readonly CropRow[] = [
     20,
     0.2,
     0.4,
-    { life: 'perennial', coldC: -20 },
+    {
+      life: 'perennial',
+      coldC: -20,
+      // Utah State University Extension: "Harvest dime sized dark green leaves at any time during
+      // the year. ... Watercress can be harvested year round". The source says it's picked year
+      // round, longer than the frost-free season used here
+      harvest: { wholeSeason: true, citations: ['usu-extension-2020-watercress'] },
+    },
   ],
   [
     'orach',
@@ -1760,7 +1792,23 @@ export const CROP_ROWS: readonly CropRow[] = [
     60,
     0.7,
     0.8,
-    { life: 'perennial', coldC: -25 },
+    {
+      life: 'perennial',
+      coldC: -25,
+      // USDA Northeast SARE (Sustainable Agriculture Research and Education), with University of
+      // Vermont Extension as technical advisor, for Vermont (represented by Burlington): "Seakale
+      // provides a harvest of shoot (in May) and broccoli florets (in early June), which presents
+      // farmers with an opportunity to functionally integrate Seakale into their cropping when
+      // there are few other crops available for harvest". The median last spring freeze there is 29
+      // Apr at Burlington International Airport, VT, so picking starts 2 days after it and runs 30
+      // days. A USDA SARE farmer grant report with University of Vermont Extension as technical
+      // adviser, and it gives the harvest as the bare month of May
+      harvest: {
+        afterFreezeDays: 2,
+        citations: ['sare-2021-sea-kale', 'noaa-ncei-2021-climate-normals-1991-2020'],
+      },
+      harvestDays: 30,
+    },
   ],
 
   // Heading brassicas
@@ -2015,7 +2063,12 @@ export const CROP_ROWS: readonly CropRow[] = [
     40,
     0.6,
     0.9,
-    { life: 'perennial', coldC: -29, harvestDays: 120 },
+    {
+      life: 'perennial',
+      coldC: -29,
+      // University of Missouri Extension: "Leaves and stems may be picked anytime"
+      harvest: { wholeSeason: true, citations: ['rothenberger-mu-g6470-growing-herbs'] },
+    },
   ],
   [
     'oregano',
@@ -2064,7 +2117,9 @@ export const CROP_ROWS: readonly CropRow[] = [
       life: 'perennial',
       coldC: -23,
       temp: MEDITERRANEAN_SUBSHRUB_TEMP,
-      harvestDays: 150,
+      // University of Illinois Extension: "Stems of thyme can be cut through the season but is best
+      // cut just before the plant starts to flower"
+      harvest: { wholeSeason: true, citations: ['illinois-extension-herbs-thyme'] },
     },
   ],
   [
@@ -2085,7 +2140,14 @@ export const CROP_ROWS: readonly CropRow[] = [
     60,
     1.2,
     1,
-    { life: 'woody-perennial', coldC: -12, deciduous: false, harvestDays: 200 },
+    {
+      life: 'woody-perennial',
+      coldC: -12,
+      deciduous: false,
+      // University of Illinois Extension: "The tender tips and foliage can be cut as needed
+      // throughout the growing season"
+      harvest: { wholeSeason: true, citations: ['illinois-extension-herbs-rosemary'] },
+    },
   ],
   [
     'sage',
@@ -2110,7 +2172,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       coldC: -23,
       temp: MEDITERRANEAN_SUBSHRUB_TEMP,
       deciduous: false,
-      harvestDays: 150,
+      // University of Illinois Extension: "Leaves can be harvested through the season as needed"
+      harvest: { wholeSeason: true, citations: ['illinois-extension-herbs-sage'] },
     },
   ],
   [
@@ -2131,7 +2194,13 @@ export const CROP_ROWS: readonly CropRow[] = [
     45,
     0.8,
     0.5,
-    { life: 'perennial', coldC: -29, harvestDays: 120 },
+    {
+      life: 'perennial',
+      coldC: -29,
+      // University of Illinois Extension: "Young stem tips and leaves can be harvested as needed
+      // throughout the season"
+      harvest: { wholeSeason: true, citations: ['illinois-extension-herbs-tarragon-french'] },
+    },
   ],
   [
     'lemon-balm',
@@ -2151,7 +2220,13 @@ export const CROP_ROWS: readonly CropRow[] = [
     40,
     0.7,
     0.6,
-    { life: 'perennial', coldC: -29, harvestDays: 120 },
+    {
+      life: 'perennial',
+      coldC: -29,
+      // University of Illinois Extension: "Stems can be cut as needed anytime during the season
+      // preferably before flowering"
+      harvest: { wholeSeason: true, citations: ['illinois-extension-herbs-lemon-balm'] },
+    },
   ],
   [
     'lovage',
@@ -2171,7 +2246,13 @@ export const CROP_ROWS: readonly CropRow[] = [
     60,
     1.8,
     0.9,
-    { life: 'perennial', coldC: -34, harvestDays: 120 },
+    {
+      life: 'perennial',
+      coldC: -34,
+      // University of Illinois Extension: "Leaves and stems can be used fresh anytime they are
+      // needed"
+      harvest: { wholeSeason: true, citations: ['illinois-extension-herbs-lovage'] },
+    },
   ],
   [
     'marjoram',
@@ -2289,7 +2370,14 @@ export const CROP_ROWS: readonly CropRow[] = [
     200,
     4,
     2.5,
-    { life: 'woody-perennial', coldC: -9, deciduous: false, yearsToMature: 8 },
+    {
+      life: 'woody-perennial',
+      coldC: -9,
+      deciduous: false,
+      yearsToMature: 8,
+      // University of Illinois Extension: "Leaves can be harvested throughout the season as needed"
+      harvest: { wholeSeason: true, citations: ['illinois-extension-herbs-bay-laurel'] },
+    },
   ],
   [
     'winter-savory',
@@ -2309,7 +2397,14 @@ export const CROP_ROWS: readonly CropRow[] = [
     30,
     0.4,
     0.4,
-    { life: 'perennial', coldC: -23, temp: MEDITERRANEAN_SUBSHRUB_TEMP },
+    {
+      life: 'perennial',
+      coldC: -23,
+      temp: MEDITERRANEAN_SUBSHRUB_TEMP,
+      // University of Illinois Extension: "Young shoots and leaves can be harvested throughout the
+      // growing season"
+      harvest: { wholeSeason: true, citations: ['illinois-extension-herbs-savory-winter'] },
+    },
   ],
   [
     'hyssop',
@@ -2349,7 +2444,14 @@ export const CROP_ROWS: readonly CropRow[] = [
     45,
     0.9,
     0.5,
-    { life: 'perennial', coldC: -34 },
+    {
+      life: 'perennial',
+      coldC: -34,
+      // University of Wisconsin-Madison Division of Extension: "The best time to harvest foliage to
+      // dry is when the flowers are just past full bloom, as the oil content in the leaves is the
+      // highest at that time, but they can be used at any time"
+      harvest: { wholeSeason: true, citations: ['mahr-2025-anise-hyssop'] },
+    },
   ],
 
   // Fruits and perennial crops
@@ -2383,11 +2485,19 @@ export const CROP_ROWS: readonly CropRow[] = [
       life: 'perennial',
       coldC: -25,
       yearsToMature: 2,
-      harvestDays: 30,
       // the 0.10 ceiling and its tier live on the strawberry class in `schema.ts`, and this row is
       // the class's only member, so the number is kept in one place
       dliCitations: ['widmer-strawberry-dli', 'kubota-osu-strawberry-dli'],
       dliCaveat: STRAWBERRY_CAVEAT,
+      // University of Minnesota Extension, for Southern Minnesota (Twin Cities area): "June-bearing
+      // strawberries produce a large, concentrated crop in mid-June to early July". The median last
+      // spring freeze there is 23 Apr at Minneapolis-St Paul Intl AP, MN, so picking starts 53 days
+      // after it and runs 20 days
+      harvest: {
+        afterFreezeDays: 53,
+        citations: ['umn-extension-2024-strawberries', 'noaa-ncei-2021-climate-normals-1991-2020'],
+      },
+      harvestDays: 20,
     },
   ],
   [
@@ -2415,9 +2525,17 @@ export const CROP_ROWS: readonly CropRow[] = [
       life: 'woody-perennial',
       coldC: -34,
       yearsToMature: 2,
-      harvestDays: 30,
       dliCitations: ['widmer-strawberry-dli'],
       dliCaveat: RASPBERRY_CAVEAT,
+      // University of Minnesota Extension, for Southern Minnesota (Twin Cities area): its "Care
+      // through the seasons" checklist for summer-bearing raspberries marks July and August for
+      // "Harvest". The median last spring freeze there is 23 Apr at Minneapolis-St Paul Intl AP,
+      // MN, so picking starts 69 days after it and runs 61 days
+      harvest: {
+        afterFreezeDays: 69,
+        citations: ['umn-extension-2026-raspberries', 'noaa-ncei-2021-climate-normals-1991-2020'],
+      },
+      harvestDays: 61,
     },
   ],
   [
@@ -2438,7 +2556,25 @@ export const CROP_ROWS: readonly CropRow[] = [
     90,
     2,
     1.2,
-    { life: 'woody-perennial', coldC: -23, yearsToMature: 2, harvestDays: 30 },
+    {
+      life: 'woody-perennial',
+      coldC: -23,
+      yearsToMature: 2,
+      // Oregon State University Extension Service (EC 1303), for Willamette Valley, Oregon: "All
+      // cultivars are summer-bearing (‘Triple Crown’, for example) and are the latest
+      // summer-bearing cultivars, fruiting from early August to September or October in the
+      // Willamette Valley". The median last spring freeze there is 11 Apr at Eugene-Mahlon Sweet
+      // Fld, OR, so picking starts 116 days after it and runs 87 days. The semierect type, the
+      // guide's latest-fruiting group
+      harvest: {
+        afterFreezeDays: 116,
+        citations: [
+          'osu-extension-2020-blackberries-ec1303',
+          'noaa-ncei-2021-climate-normals-1991-2020',
+        ],
+      },
+      harvestDays: 87,
+    },
   ],
   [
     'blueberry',
@@ -2465,6 +2601,14 @@ export const CROP_ROWS: readonly CropRow[] = [
       ph: [4, 4.5, 5.5, 6],
       chillHours: 800,
       deciduous: true,
+      // University of Minnesota Extension, for Southern Minnesota (Twin Cities area): its "Care
+      // through the seasons" checklist marks July for "Harvest". The median last spring freeze there
+      // is 23 Apr at Minneapolis-St Paul Intl AP, MN, so picking starts 69 days after it and runs 30
+      // days
+      harvest: {
+        afterFreezeDays: 69,
+        citations: ['umn-extension-2026-blueberries', 'noaa-ncei-2021-climate-normals-1991-2020'],
+      },
       harvestDays: 30,
     },
   ],
@@ -2500,7 +2644,19 @@ export const CROP_ROWS: readonly CropRow[] = [
       envCitations: ['tirmenstein1991-lingonberry-feis'],
       maxRsr: 0.5,
       maxRsrTier: 'C',
-      harvestDays: 21,
+      // Oregon State University Extension Service (PNW Extension Publication, PNW 583), for
+      // Willamette Valley, Oregon: "There are two bloom periods: March to April and July to August.
+      // The fruit ripens in mid-August and mid-October, respectively". The median last spring
+      // freeze there is 11 Apr at Eugene-Mahlon Sweet Fld, OR, so picking starts 126 days after it
+      // and runs 61 days. Two crops a year, in mid-August and mid-October, read as one season
+      harvest: {
+        afterFreezeDays: 126,
+        citations: [
+          'osu-extension-2006-lingonberry-pnw583',
+          'noaa-ncei-2021-climate-normals-1991-2020',
+        ],
+      },
+      harvestDays: 61,
     },
   ],
   [
@@ -2530,7 +2686,20 @@ export const CROP_ROWS: readonly CropRow[] = [
       ph: [2.8, 4.2, 5.2, 6.6],
       envCitations: ['tirmenstein1991-lowbush-blueberry-feis'],
       deciduous: true,
-      harvestDays: 21,
+      // University of Maine Cooperative Extension, for Washington County, Maine (Down East wild
+      // blueberry barrens): "If possible, go to the fields and buy berries directly from growers
+      // during harvest season. Buy your supply when berries are at their peak, from July to
+      // mid-August". The median last spring freeze there is 3 May at Jonesboro, ME, so picking
+      // starts 59 days after it and runs 45 days. Buying advice in a nutrition bulletin, read as
+      // the peak of the harvest season
+      harvest: {
+        afterFreezeDays: 59,
+        citations: [
+          'umaine-extension-2008-wild-blueberries-bulletin-4263',
+          'noaa-ncei-2021-climate-normals-1991-2020',
+        ],
+      },
+      harvestDays: 45,
     },
   ],
   [
@@ -2560,7 +2729,19 @@ export const CROP_ROWS: readonly CropRow[] = [
       // as the highbush blueberry row above, and no source is claimed for the numbers
       ph: [3.2, 4, 5.5, 6.5],
       envCitations: [],
-      harvestDays: 21,
+      // University of Massachusetts Amherst Cranberry Station Extension (ScholarWorks@UMass
+      // Amherst), for Massachusetts (East Wareham / southeastern Massachusetts cranberry-growing
+      // area): "Harvesting typically begins around mid-September and continues through early
+      // November". The median last spring freeze there is 21 Apr at East Wareham, MA, so picking
+      // starts 147 days after it and runs 51 days
+      harvest: {
+        afterFreezeDays: 147,
+        citations: [
+          'umass-extension-2008-cranberry-production-guide',
+          'noaa-ncei-2021-climate-normals-1991-2020',
+        ],
+      },
+      harvestDays: 51,
     },
   ],
   [
@@ -2654,7 +2835,17 @@ export const CROP_ROWS: readonly CropRow[] = [
       deciduous: true,
       maxRsr: 0.45,
       maxRsrTier: 'C',
-      harvestDays: 21,
+      // University of Minnesota Extension, for Southern Minnesota (Twin Cities area): "July,
+      // August: Harvest". The median last spring freeze there is 23 Apr at Minneapolis-St Paul Intl
+      // AP, MN, so picking starts 69 days after it and runs 61 days
+      harvest: {
+        afterFreezeDays: 69,
+        citations: [
+          'umn-extension-2024-currants-gooseberries',
+          'noaa-ncei-2021-climate-normals-1991-2020',
+        ],
+      },
+      harvestDays: 61,
     },
   ],
   [
@@ -2683,7 +2874,17 @@ export const CROP_ROWS: readonly CropRow[] = [
       deciduous: true,
       maxRsr: 0.4,
       maxRsrTier: 'C',
-      harvestDays: 21,
+      // University of Minnesota Extension, for Southern Minnesota (Twin Cities area): "July,
+      // August: Harvest". The median last spring freeze there is 23 Apr at Minneapolis-St Paul Intl
+      // AP, MN, so picking starts 69 days after it and runs 61 days
+      harvest: {
+        afterFreezeDays: 69,
+        citations: [
+          'umn-extension-2024-currants-gooseberries',
+          'noaa-ncei-2021-climate-normals-1991-2020',
+        ],
+      },
+      harvestDays: 61,
     },
   ],
   [
@@ -2712,7 +2913,17 @@ export const CROP_ROWS: readonly CropRow[] = [
       deciduous: true,
       maxRsr: 0.45,
       maxRsrTier: 'C',
-      harvestDays: 21,
+      // University of Minnesota Extension, for Southern Minnesota (Twin Cities area): "July,
+      // August: Harvest". The median last spring freeze there is 23 Apr at Minneapolis-St Paul Intl
+      // AP, MN, so picking starts 69 days after it and runs 61 days
+      harvest: {
+        afterFreezeDays: 69,
+        citations: [
+          'umn-extension-2024-currants-gooseberries',
+          'noaa-ncei-2021-climate-normals-1991-2020',
+        ],
+      },
+      harvestDays: 61,
     },
   ],
   [
@@ -2738,7 +2949,18 @@ export const CROP_ROWS: readonly CropRow[] = [
       coldC: -34,
       yearsToMature: 4,
       deciduous: true,
-      harvestDays: 21,
+      // University of Maryland Extension, Home and Garden Information Center, for Maryland:
+      // "Harvest is usually between mid-August and mid-September, depending on cultivar and
+      // location". The median last spring freeze there is 10 Apr at Baltimore-Washington Intl AP,
+      // MD, so picking starts 127 days after it and runs 31 days
+      harvest: {
+        afterFreezeDays: 127,
+        citations: [
+          'umd-extension-2024-less-common-fruits',
+          'noaa-ncei-2021-climate-normals-1991-2020',
+        ],
+      },
+      harvestDays: 31,
     },
   ],
   [
@@ -2763,8 +2985,18 @@ export const CROP_ROWS: readonly CropRow[] = [
       life: 'perennial',
       coldC: -34,
       yearsToMature: 3,
-      harvestDays: 45,
       laubNote: NO_COMPARABLE_CROP_NOTE,
+      // Iowa State University Extension and Outreach, Yard and Garden, for Iowa (represented by Des
+      // Moines): "Begin harvesting rhubarb when stalks reach 10 to 15 inches long (usually sometime
+      // in April or early May in Iowa). Rhubarb can be harvested for eight to ten weeks, ending in
+      // mid-June". The median last spring freeze there is 18 Apr at Des Moines International
+      // Airport, so picking starts 0 days after it and runs 58 days. The start is the middle of the
+      // stated range, April to early May
+      harvest: {
+        afterFreezeDays: 0,
+        citations: ['iastate-extension-2025-rhubarb', 'noaa-ncei-2021-climate-normals-1991-2020'],
+      },
+      harvestDays: 58,
     },
   ],
   [
@@ -2791,8 +3023,16 @@ export const CROP_ROWS: readonly CropRow[] = [
       yearsToMature: 3,
       maxRsr: 0.1,
       maxRsrTier: 'C',
-      harvestDays: 45,
       laubNote: NO_COMPARABLE_CROP_NOTE,
+      // University of Minnesota Extension, for Minnesota (Minneapolis-St Paul): "The asparagus
+      // harvest season lasts about 6 to 8 weeks, from early May to late June in Minnesota". The
+      // median last spring freeze there is 23 Apr at Minneapolis-St Paul International Airport, so
+      // picking starts 12 days after it and runs 51 days
+      harvest: {
+        afterFreezeDays: 12,
+        citations: ['umn-extension-2026-asparagus', 'noaa-ncei-2021-climate-normals-1991-2020'],
+      },
+      harvestDays: 51,
     },
   ],
   [
@@ -2817,8 +3057,18 @@ export const CROP_ROWS: readonly CropRow[] = [
       life: 'perennial',
       coldC: -12,
       yearsToMature: 2,
-      harvestDays: 45,
       laubNote: NO_COMPARABLE_CROP_NOTE,
+      // University of California Division of Agriculture and Natural Resources, for Central Coast
+      // California (Salinas Valley, Monterey County, represented by Salinas): "Perennial artichokes
+      // are harvested year-round, but the highest volume of production occurs between March and
+      // May". The median last spring freeze there is 29 Jan at Salinas Municipal Airport, CA, so
+      // picking starts 31 days after it and runs 91 days. Picked year-round on the Central Coast,
+      // and the figure is the stated March to May peak
+      harvest: {
+        afterFreezeDays: 31,
+        citations: ['ucanr-2008-artichoke', 'noaa-ncei-2021-climate-normals-1991-2020'],
+      },
+      harvestDays: 91,
     },
   ],
   [
@@ -2848,7 +3098,19 @@ export const CROP_ROWS: readonly CropRow[] = [
       support: 'trellis',
       maxRsr: 0.1,
       maxRsrTier: 'C',
-      harvestDays: 21,
+      // University of Minnesota Extension, for Southern Minnesota (Twin Cities area): "In
+      // Minnesota, many varieties begin to grow in May, and the earliest-ripening varieties are
+      // harvested in mid-August, while later-ripening varieties may hang until mid-to-late
+      // October". The median last spring freeze there is 23 Apr at Minneapolis-St Paul Intl AP, MN,
+      // so picking starts 114 days after it and runs 71 days
+      harvest: {
+        afterFreezeDays: 114,
+        citations: [
+          'umn-extension-2026-cold-climate-grapes',
+          'noaa-ncei-2021-climate-normals-1991-2020',
+        ],
+      },
+      harvestDays: 71,
     },
   ],
   [
@@ -2878,7 +3140,20 @@ export const CROP_ROWS: readonly CropRow[] = [
       chillHours: 800,
       maxRsr: 0.1,
       maxRsrTier: 'C',
-      harvestDays: 30,
+      // Oregon State University Extension Service, for Western Oregon valleys (Willamette Valley),
+      // Oregon, Area 1 in the publication's own map: Table 3, "Approximate time of maturity": July
+      // for Lodi through October for Braeburn, Fuji, Golden Delicious and the other late varieties.
+      // The median last spring freeze there is 3 Apr at Salem AP (McNary Field), OR, so picking
+      // starts 89 days after it and runs 122 days. The span runs from the earliest to the latest
+      // listed variety
+      harvest: {
+        afterFreezeDays: 89,
+        citations: [
+          'osu-extension-2025-tree-fruits-nuts-home',
+          'noaa-ncei-2021-climate-normals-1991-2020',
+        ],
+      },
+      harvestDays: 122,
     },
   ],
   [
@@ -2906,7 +3181,19 @@ export const CROP_ROWS: readonly CropRow[] = [
       chillHours: 700,
       maxRsr: 0.1,
       maxRsrTier: 'C',
-      harvestDays: 30,
+      // Oregon State University Extension Service, for Western Oregon valleys (Willamette Valley),
+      // Oregon, Area 1 and 2 in the publication's own map: Table 8, "Approximate time of maturity":
+      // Aug 1 - 15 for Starkrimson through Sept 20 - 30 for Comice. The median last spring freeze
+      // there is 3 Apr at Salem AP (McNary Field), OR, so picking starts 120 days after it and runs
+      // 60 days. The span runs from the earliest to the latest listed variety
+      harvest: {
+        afterFreezeDays: 120,
+        citations: [
+          'osu-extension-2025-tree-fruits-nuts-home',
+          'noaa-ncei-2021-climate-normals-1991-2020',
+        ],
+      },
+      harvestDays: 60,
     },
   ],
   [
@@ -2934,7 +3221,20 @@ export const CROP_ROWS: readonly CropRow[] = [
       chillHours: 750,
       maxRsr: 0.1,
       maxRsrTier: 'C',
-      harvestDays: 21,
+      // Oregon State University Extension Service, for Western Oregon valleys (Willamette Valley),
+      // Oregon, Area 1 and 2 in the publication's own map: Table 7, "Approximate time of maturity":
+      // early August for Harko and Red Haven through late August for Improved Elberta and Veteran.
+      // The median last spring freeze there is 3 Apr at Salem AP (McNary Field), OR, so picking
+      // starts 124 days after it and runs 20 days. The span runs from the earliest to the latest
+      // listed variety
+      harvest: {
+        afterFreezeDays: 124,
+        citations: [
+          'osu-extension-2025-tree-fruits-nuts-home',
+          'noaa-ncei-2021-climate-normals-1991-2020',
+        ],
+      },
+      harvestDays: 20,
     },
   ],
   [
@@ -2962,7 +3262,19 @@ export const CROP_ROWS: readonly CropRow[] = [
       chillHours: 800,
       maxRsr: 0.1,
       maxRsrTier: 'C',
-      harvestDays: 21,
+      // Oregon State University Extension Service, for Western Oregon valleys (Willamette Valley),
+      // Oregon, Area 1 in the publication's own map: Table 10, European varieties: Sept 1 - 15 for
+      // Parsons and Stanley through Oct. 1 for Moyer Perfecto. The median last spring freeze there
+      // is 3 Apr at Salem AP (McNary Field), OR, so picking starts 151 days after it and runs 30
+      // days. The span runs from the earliest to the latest listed European variety
+      harvest: {
+        afterFreezeDays: 151,
+        citations: [
+          'osu-extension-2025-tree-fruits-nuts-home',
+          'noaa-ncei-2021-climate-normals-1991-2020',
+        ],
+      },
+      harvestDays: 30,
     },
   ],
   [
@@ -2990,7 +3302,16 @@ export const CROP_ROWS: readonly CropRow[] = [
       chillHours: 1000,
       maxRsr: 0.1,
       maxRsrTier: 'C',
-      harvestDays: 14,
+      // Utah State University Extension, for Box Elder County south to Salt Lake County, Utah:
+      // "From Box Elder County south to Salt Lake County, sweet cherries ripen around June 10 to
+      // the 25". The median last spring freeze there is 8 Apr at Salt Lake City Intl AP, UT, so
+      // picking starts 63 days after it and runs 15 days. A food preservation page giving the
+      // northern Utah season, June 10 to the 25
+      harvest: {
+        afterFreezeDays: 63,
+        citations: ['usu-extension-preserve-cherries', 'noaa-ncei-2021-climate-normals-1991-2020'],
+      },
+      harvestDays: 15,
     },
   ],
   [
@@ -3018,7 +3339,18 @@ export const CROP_ROWS: readonly CropRow[] = [
       chillHours: 1100,
       maxRsr: 0.1,
       maxRsrTier: 'C',
-      harvestDays: 14,
+      // Oregon State University Extension Service, for Western Oregon valleys (Willamette Valley),
+      // Oregon, Area 1 and 2 in the publication's own map: Table 5, sour varieties: July for
+      // Balaton, Montmorency and North Star. The median last spring freeze there is 3 Apr at Salem
+      // AP (McNary Field), OR, so picking starts 89 days after it and runs 30 days
+      harvest: {
+        afterFreezeDays: 89,
+        citations: [
+          'osu-extension-2025-tree-fruits-nuts-home',
+          'noaa-ncei-2021-climate-normals-1991-2020',
+        ],
+      },
+      harvestDays: 30,
     },
   ],
   [
@@ -3046,7 +3378,19 @@ export const CROP_ROWS: readonly CropRow[] = [
       chillHours: 700,
       maxRsr: 0.1,
       maxRsrTier: 'C',
-      harvestDays: 14,
+      // Oregon State University Extension Service, for Western Oregon valleys (Willamette Valley),
+      // Oregon, Area 1 and 2 in the publication's own map: Table 4, "Approximate time of maturity":
+      // July for Puget Gold, Rival, Royal (Blenheim) and the rest. The median last spring freeze
+      // there is 3 Apr at Salem AP (McNary Field), OR, so picking starts 89 days after it and runs
+      // 30 days
+      harvest: {
+        afterFreezeDays: 89,
+        citations: [
+          'osu-extension-2025-tree-fruits-nuts-home',
+          'noaa-ncei-2021-climate-normals-1991-2020',
+        ],
+      },
+      harvestDays: 30,
     },
   ],
   [
@@ -3074,7 +3418,18 @@ export const CROP_ROWS: readonly CropRow[] = [
       deciduous: true,
       maxRsr: 0.1,
       maxRsrTier: 'C',
-      harvestDays: 45,
+      // Oregon State University Extension Service, for Western Oregon valleys (Willamette Valley),
+      // Oregon, Area 1 in the publication's own map: Table 6, "Approximate time of maturity":
+      // August for Brown Turkey, Desert King and Lattarula. The median last spring freeze there is
+      // 3 Apr at Salem AP (McNary Field), OR, so picking starts 120 days after it and runs 30 days
+      harvest: {
+        afterFreezeDays: 120,
+        citations: [
+          'osu-extension-2025-tree-fruits-nuts-home',
+          'noaa-ncei-2021-climate-normals-1991-2020',
+        ],
+      },
+      harvestDays: 30,
     },
   ],
   [
@@ -3103,7 +3458,22 @@ export const CROP_ROWS: readonly CropRow[] = [
       deciduous: true,
       maxRsr: 0.3,
       maxRsrTier: 'C',
-      harvestDays: 21,
+      // Oregon State University Extension Service, for Oregon (Willamette Valley hazelnut
+      // industry): "Blank nuts fall before good nuts. After blanks have fallen and just before good
+      // nuts begin to drop (usually at the end of August), it might be desirable to do a final
+      // flailing and floating to fill small depressions in the ground. ... In most years, it is
+      // October before all of the nuts have fallen naturally". The median last spring freeze there
+      // is 3 Apr at Salem AP (McNary Field), OR, so picking starts 144 days after it and runs 67
+      // days. Nut drop stands in for harvest: nuts start falling at the end of August and have
+      // mostly fallen by October
+      harvest: {
+        afterFreezeDays: 144,
+        citations: [
+          'osu-extension-2013-hazelnuts-orchard-floor',
+          'noaa-ncei-2021-climate-normals-1991-2020',
+        ],
+      },
+      harvestDays: 67,
     },
   ],
   [
@@ -3131,7 +3501,19 @@ export const CROP_ROWS: readonly CropRow[] = [
       deciduous: true,
       maxRsr: 0.45,
       maxRsrTier: 'C',
-      harvestDays: 21,
+      // Kentucky State University Cooperative Extension Program, for Kentucky (Frankfort, home of
+      // the KSU Pawpaw Research Program): "Depending on the variety, fruit ripen in late-August to
+      // early-October. Fruit ripen on the same tree over about a 2 week period, which reflects an
+      // extended spring flowering period". The median last spring freeze there is 15 Apr at
+      // Frankfort Capital City AP, KY, so picking starts 132 days after it and runs 41 days
+      harvest: {
+        afterFreezeDays: 132,
+        citations: [
+          'ksu-extension-2010-organic-pawpaw',
+          'noaa-ncei-2021-climate-normals-1991-2020',
+        ],
+      },
+      harvestDays: 41,
     },
   ],
   [
@@ -3158,7 +3540,17 @@ export const CROP_ROWS: readonly CropRow[] = [
       yearsToMature: 4,
       chillHours: 800,
       deciduous: true,
-      harvestDays: 21,
+      // Montana State University Extension (MontGuide MT201821AG), for Montana: "Serviceberry fruit
+      // ripens in late June through July". The median last spring freeze there is 26 May at Bozeman
+      // Gallatin Fld AP, MT, so picking starts 30 days after it and runs 36 days
+      harvest: {
+        afterFreezeDays: 30,
+        citations: [
+          'msu-extension-2018-growing-serviceberries',
+          'noaa-ncei-2021-climate-normals-1991-2020',
+        ],
+      },
+      harvestDays: 36,
     },
   ],
   [
@@ -3184,6 +3576,13 @@ export const CROP_ROWS: readonly CropRow[] = [
       coldC: -37,
       yearsToMature: 4,
       deciduous: true,
+      // Iowa State University Extension and Outreach, Yard and Garden, for Iowa: "The fruit ripen
+      // from late August through mid-September". The median last spring freeze there is 18 Apr at
+      // Des Moines Intl AP, IA, so picking starts 129 days after it and runs 21 days
+      harvest: {
+        afterFreezeDays: 129,
+        citations: ['iastate-extension-2015-aronia', 'noaa-ncei-2021-climate-normals-1991-2020'],
+      },
       harvestDays: 21,
     },
   ],
@@ -3212,7 +3611,14 @@ export const CROP_ROWS: readonly CropRow[] = [
       chillHours: 600,
       deciduous: true,
       support: 'arbor',
-      harvestDays: 21,
+      // University of Minnesota Extension, for Southern Minnesota (Twin Cities area): "Late August
+      // to mid-October". The median last spring freeze there is 23 Apr at Minneapolis-St Paul Intl
+      // AP, MN, so picking starts 124 days after it and runs 51 days
+      harvest: {
+        afterFreezeDays: 124,
+        citations: ['umn-extension-2024-kiwiberry', 'noaa-ncei-2021-climate-normals-1991-2020'],
+      },
+      harvestDays: 51,
     },
   ],
   [
@@ -3238,7 +3644,16 @@ export const CROP_ROWS: readonly CropRow[] = [
       coldC: -34,
       yearsToMature: 3,
       support: 'trellis',
-      harvestDays: 21,
+      // Oregon State University Extension Service (EM 9115), for Western and Central Oregon: "In
+      // both Western and Central Oregon, hops typically mature between August 15 and September 15,
+      // depending on the cultivar and growing season conditions". The median last spring freeze
+      // there is 11 Apr at Eugene-Mahlon Sweet Fld, OR, so picking starts 126 days after it and
+      // runs 31 days
+      harvest: {
+        afterFreezeDays: 126,
+        citations: ['osu-extension-2015-hops-em9115', 'noaa-ncei-2021-climate-normals-1991-2020'],
+      },
+      harvestDays: 31,
     },
   ],
   [
@@ -3316,6 +3731,11 @@ export const CROP_ROWS: readonly CropRow[] = [
     0.15,
     0.4,
     {
+      // Kept out of anything to eat: the FDA lists Asarum caudatum among "Botanicals Known or
+      // Suspected to Contain Aristolochic Acid" (Import Alert 54-10), which damages the kidneys,
+      // so the catalogue carries it as a native evergreen groundcover that joins a bed only as a
+      // support plant
+      role: 'cover',
       life: 'perennial',
       coldC: -29,
       // WCVP records it wild in British Columbia, Washington, Oregon, California, Idaho and
@@ -3324,6 +3744,18 @@ export const CROP_ROWS: readonly CropRow[] = [
       coldWinterOnly: true,
       maxRsr: 0.75,
       maxRsrTier: 'C',
+      // Nelson, Halpern and Antos 2007 tagged Asarum caudatum ramets in old-growth Douglas-fir
+      // forest and the clearcut beside it in Washington. Page 2882: growing-season PPFD averaged
+      // 36.4 mol/m2/d in the clearcut against 8.6 in the forest, and clearcut ramet survival fell
+      // to about 30% of the forest's in year 1, still depressed for this species alone in year 2
+      // even as its surviving ramets grew faster. Only two light levels were measured, and
+      // mid-summer air and soil were warmer in the clearcut too, so heat and drought ride along
+      // with the light in every figure this paper reports
+      survivalCeiling: 36.4,
+      survivalCeilingTier: 'B',
+      survivalCeilingCitations: ['nelson2007-late-seral-herbs'],
+      survivalCeilingNote:
+        'Nelson et al. 2007 measured growing-season PPFD at 36.4 mol/m2/d in a Washington clearcut where tagged Asarum caudatum ramets survived at about 30% of the adjacent old-growth forest rate in year 1, still depressed in year 2. Only two light levels were compared, one clearcut and one forest stand, and mid-summer heat and drought ran higher in the clearcut too',
     },
   ],
   [
@@ -3355,6 +3787,18 @@ export const CROP_ROWS: readonly CropRow[] = [
       window: [3, 5],
       maxRsr: 0.75,
       maxRsrTier: 'C',
+      // USDA Forest Service, USDA National Agroforestry Center, for Southern Appalachia
+      // (represented by Asheville, NC): "The timing of harvest may differ geographically. For
+      // example, in southern Appalachia the optimal time to harvest is usually about the third week
+      // in April, whereas in cooler northern climates harvesting may be best a bit later". The
+      // median last spring freeze there is 9 Apr at Asheville Regional Airport, NC, so picking
+      // starts 6 days after it and runs 6 days. The stated best week, since ramps are dug once in
+      // spring
+      harvest: {
+        afterFreezeDays: 6,
+        citations: ['usfs-2014-ramps', 'noaa-ncei-2021-climate-normals-1991-2020'],
+      },
+      harvestDays: 6,
     },
   ],
   [
@@ -3653,6 +4097,20 @@ export const CROP_ROWS: readonly CropRow[] = [
       // the 0.1 floor as its own Tier C inference
       maxRsr: 0.1,
       maxRsrTier: 'C',
+      // University of California Cooperative Extension, for San Joaquin Valley South, California
+      // (Tulare and Kern counties): "Typically one-third of the orchard is picked in each of three
+      // harvests over the growing season. Lemons are picked and graded by size and normally
+      // harvested from mid October through March". The median last spring freeze there is 17 Jan at
+      // Bakersfield AP, CA, so picking starts 271 days after it and runs 167 days. A commercial
+      // cost study for the southern San Joaquin Valley
+      harvest: {
+        afterFreezeDays: 271,
+        citations: [
+          'ucce-2010-lemon-cost-study-sjv-south',
+          'noaa-ncei-2021-climate-normals-1991-2020',
+        ],
+      },
+      harvestDays: 167,
     },
   ],
   [
@@ -4065,6 +4523,21 @@ export const CROP_ROWS: readonly CropRow[] = [
       // ECOCROP sheet 1553 climate zones: Ar, Bs, Cs
       koppen: [...AR, ...BS, ...CS],
       laubNote: OUTSIDE_SCOPE_NOTE,
+      // California Olive Committee / California Minor Crops Council, for San Joaquin and Sacramento
+      // Valleys, California (table-cultivar production areas): "Table olive harvest usually begins
+      // in mid-September and can extend through November. Cultivars grown for oil, however, are
+      // harvested much later so that the maximum amount of oil can accumulate in the fruit". The
+      // median last spring freeze there is 17 Jan at Bakersfield AP, CA, so picking starts 241 days
+      // after it and runs 76 days. A pest management strategic plan from the California Olive
+      // Committee and the California Minor Crops Council, for table olives in the Central Valley
+      harvest: {
+        afterFreezeDays: 241,
+        citations: [
+          'ca-olive-committee-2003-olive-pmsp',
+          'noaa-ncei-2021-climate-normals-1991-2020',
+        ],
+      },
+      harvestDays: 76,
     },
   ],
   [
@@ -4630,7 +5103,14 @@ export const CROP_ROWS: readonly CropRow[] = [
     90,
     1,
     1,
-    { life: 'perennial', coldC: -34, zr: 1.8 },
+    {
+      life: 'perennial',
+      coldC: -34,
+      zr: 1.8,
+      // Utah State University Extension: "Once established, harvest leaves every 2 weeks throughout
+      // the growing season"
+      harvest: { wholeSeason: true, citations: ['usu-extension-2023-comfrey'] },
+    },
   ],
   [
     'fenugreek',

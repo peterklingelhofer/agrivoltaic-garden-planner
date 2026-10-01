@@ -187,14 +187,21 @@ export const preferenceSignal = (preferences: PreferenceSet, cropId: CropId): nu
 }
 
 /**
- * The same rule the ranking's preference term uses in pipeline.ts: the strongest thing the
- * grower asked for about this crop, so a native or a forage plant counts like a named pick in
- * the combinations too. A named avoid still stands, whatever the wildlife answers say
+ * What a crop carries into the combinations: whatever the grower named, plus a wildlife lean the
+ * size of the growing answer's own, capped at 1. A native that's also in what the grower asked to
+ * grow, or a forage plant that's also asked for, scores like a named pick, and one that's only
+ * native, only forage or only asked scores half. A named avoid or exclude stands, whatever the
+ * wildlife answers say
+ *
+ * At full strength a native outscored the growing answer two to one, and with the natives switch
+ * on a food garden came out all native. The ranking's preference term in pipeline.ts still takes
+ * the strongest single ask, so the two rules differ here on purpose
  */
-const askedForSignal = (request: SuggestionRequest, crop: Crop): number => {
+export const askedForSignal = (request: SuggestionRequest, crop: Crop): number => {
   const named = preferenceSignal(request.preferences, crop.id)
   if (named < 0) return named
-  return Math.max(named, wildlifeMatch(crop, request.wildlife ?? NO_WILDLIFE_PREFERENCE) ?? 0)
+  const wildlife = wildlifeMatch(crop, request.wildlife ?? NO_WILDLIFE_PREFERENCE) ?? 0
+  return Math.min(1, named + AMBITION_WEIGHT * wildlife)
 }
 
 /**
@@ -424,7 +431,12 @@ const confidenceOf = (
   for (const admission of inferredLightAdmissions) {
     reasons.push(admission.explanation)
   }
+  // three pairs of the same family carry the identical sentence, and the UI keys this list on
+  // the sentence, so each distinct one lands here once, in the order it was first seen
+  const seenCautions = new Set<string>()
   for (const caution of cautions) {
+    if (seenCautions.has(caution.explanation)) continue
+    seenCautions.add(caution.explanation)
     reasons.push(caution.explanation)
   }
   if (unscoredClaimCount > 0) {

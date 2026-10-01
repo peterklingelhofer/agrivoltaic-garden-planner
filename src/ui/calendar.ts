@@ -91,7 +91,9 @@ export const basisKindLabel = (basis: CalendarBasis): string =>
         ? 'catalog window'
         : basis.kind === 'light-window'
           ? 'light window'
-          : 'days to maturity'
+          : basis.kind === 'harvest-calendar'
+            ? 'harvest calendar'
+            : 'days to maturity'
 
 /** Decision Record 7: no date is shown without the rule that produced it */
 export const basisLabel = (basis: CalendarBasis): string => {
@@ -113,6 +115,15 @@ export const basisLabel = (basis: CalendarBasis): string => {
   if (basis.kind === 'catalog-window') return 'the crop catalog planting window'
   if (basis.kind === 'light-window')
     return `first month with adequate light, ${monthLabel(asMonth(basis.firstAdequateMonth))}`
+  if (basis.kind === 'harvest-calendar') {
+    if (basis.afterFreezeDays === null) {
+      return basis.frostFree === true
+        ? 'no frost here: picked through its growing season'
+        : `picked from the last spring freeze to the first fall freeze, ${basis.percentile}% exceedance`
+    }
+    const side = basis.afterFreezeDays < 0 ? 'before' : 'after'
+    return `${Math.abs(basis.afterFreezeDays)} days ${side} the last spring freeze, from an extension harvest calendar, ${basis.percentile}% exceedance`
+  }
   return `${basis.backedOffDays} days backed off from days to maturity`
 }
 
