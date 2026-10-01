@@ -735,7 +735,7 @@ const built = new WeakMap<readonly Crop[], readonly Candidate<CropId>[]>()
 export const cropVocabulary = (catalog: readonly Crop[]): readonly Candidate<CropId>[] => {
   /*
     Memoised on the catalogue itself, because the catalogue is loaded once and then never changes,
-    and building this is not free: 182 crops with two or three names each is about 480 phrases to
+    and building this is not free: 209 crops with two or three names each is about 560 phrases to
     normalise and sort. Rebuilt once per candidate intent for every sentence typed, it measured ~100
     ms a sentence in node. A WeakMap and not a module-level variable so a test that loads a second
     catalogue gets a second vocabulary, never the first one's answers

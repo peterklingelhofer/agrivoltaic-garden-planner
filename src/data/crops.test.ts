@@ -33,7 +33,7 @@ describe('crop catalogue', () => {
   it('ships a curated catalogue of the target size', async () => {
     const catalog = await loadCropCatalog()
     expect(catalog.length).toBeGreaterThanOrEqual(120)
-    expect(catalog.length).toBeLessThanOrEqual(200)
+    expect(catalog.length).toBeLessThanOrEqual(250)
   })
 
   it('gives every crop a DLI value with an honest evidence tier, and a citation only where one prints it', async () => {
@@ -46,7 +46,7 @@ describe('crop catalogue', () => {
       )
       // a row above tier C has to name the work it read the number off. A tier C row may name
       // nothing, which is the ordinary case: the two extension documents print a band for five rows
-      // and this catalogue holds 182
+      // and this catalogue holds 209
       if (crop.light.dliMinMolM2Day.tier !== 'C') {
         expect(crop.light.dliMinMolM2Day.citations.length, String(crop.id)).toBeGreaterThan(0)
       }

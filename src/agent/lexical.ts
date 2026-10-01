@@ -127,7 +127,7 @@ const pick = <T>(text: string, candidates: readonly Candidate<T>[]): T | null =>
 /**
  * The crops named in a sentence, by literal containment first and one fuzzy match after.
  *
- * Containment before fuzziness, and not the other way round, because the catalogue has 182 entries
+ * Containment before fuzziness, and not the other way round, because the catalogue has 209 entries
  * and several of them are two bigrams apart: "swede" and "sweetcorn", "pea" and "pear". A literal
  * hit is certain and a fuzzy one is a guess, so every certainty is taken before any guess is
  * considered, and the guess is only allowed to run when the sentence produced no certainties at

@@ -39,7 +39,7 @@ describe('the neutral crop catalogue', () => {
   })
 
   /**
-   * Every column of every crop, not a sample. A catalogue is 182 rows of eighteen columns and the
+   * Every column of every crop, not a sample. A catalogue is 209 rows of eighteen columns and the
    * one that drifts will be the one nobody sampled
    */
   it('matches the TypeScript column for column', () => {

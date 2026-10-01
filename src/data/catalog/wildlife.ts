@@ -16,7 +16,7 @@ import type { PlantingRole } from '../../types/garden'
  * basis string, because that is honestly what they are. Klein et al. 2007 classify 107 crops at the
  * level of the harvested product; this derives a class from botanical family and harvested organ,
  * which is the paper's own structure applied one level up. Reading a per-species value out of the
- * published table for each of 182 rows by hand would look more precise and would be less honest
+ * published table for each of 209 rows by hand would look more precise and would be less honest
  * about where the number came from
  */
 

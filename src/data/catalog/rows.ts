@@ -318,6 +318,68 @@ export const CROP_ROWS: readonly CropRow[] = [
     },
   ],
   [
+    'bitter-melon',
+    'Momordica charantia',
+    'Cucurbitaceae',
+    'bitter melon|bitter gourd|balsam pear',
+    // dliClass, DLI figures and tier as cucumber, the catalogue's other trellised cucurbit, no
+    // DLI trial exists for bitter melon itself
+    'fruity-vegetables',
+    'cucurbits',
+    'vining-trellised',
+    'warm',
+    15,
+    20,
+    30,
+    'C',
+    // NC State Extension Plant Toolbox: "Light: Full sun... Partial Shade (Direct sunlight only
+    // part of the day, 2-6 hours)"
+    1,
+    // UF/IFAS HS1271: "Fruit should be started harvesting approximately 50 days after seeding in
+    // north Florida". Two other UF/IFAS sheets give 80-100 days and 3-4 months for the same crop,
+    // 50 days matches how this catalogue dates every other fruiting vine to its first pick, not
+    // full fruit maturity (cucumber 55, summer squash 50)
+    50,
+    // UF/IFAS HS1271: "Distance between rows should be 5 to 6 feet and spacing between plants
+    // should be between 3 and 5 feet", row mid 5.5 ft x in-row mid 4 ft, sqrt(5.5 x 4) = 4.69 ft
+    143,
+    // NC State Extension Plant Toolbox structured Dimensions field: "Height: 12 ft. 0 in. - 20
+    // ft. 0 in.", the 16 ft midpoint, the trellised vine's own reach
+    4.88,
+    // NC State Extension Plant Toolbox: "Width: 3 ft. 0 in. - 6 ft. 0 in.", the 4.5 ft midpoint
+    1.37,
+    { harvestDays: 45 },
+  ],
+  [
+    'chayote',
+    'Sechium edule',
+    'Cucurbitaceae',
+    'chayote|mirliton',
+    // dliClass, DLI figures and tier as cucumber, the catalogue's other trellised cucurbit
+    'fruity-vegetables',
+    'cucurbits',
+    'vining-trellised',
+    'warm',
+    15,
+    20,
+    30,
+    'C',
+    // UF/IFAS HS1454: "Chayote can grow in full-sun and partially shaded conditions", LSU
+    // AgCenter notes shade cloth "helps keep the plants from wilting" in hot afternoon sun
+    2,
+    // LSU AgCenter (GNO Gardening, Jan 2017): "typically takes 150 frost free days before the
+    // vine will produce", planted from a whole sprouted fruit
+    150,
+    // UF/IFAS HS579: "Plant one fruit per hill in hills spaced 12 feet apart and in rows spaced
+    // 12 feet apart"
+    366,
+    // UF/IFAS HS1454: "A trellis, usually 6 feet tall... should be placed near the plant"
+    1.83,
+    // no source gives chayote a spread, the 12 ft hill spacing stands in, as the spacing above
+    3.66,
+    { dtmRef: 'transplant' },
+  ],
+  [
     'squash-summer',
     'Cucurbita pepo',
     'Cucurbitaceae',
@@ -491,6 +553,42 @@ export const CROP_ROWS: readonly CropRow[] = [
     {
       harvestDays: 45,
       zr: 0.6,
+      p: 0.45,
+      nfix: true,
+      laubNote: IMMATURE_POD_NOTE,
+    },
+  ],
+  [
+    'lima-bean',
+    'Phaseolus lunatus',
+    'Fabaceae',
+    'lima bean|butter bean',
+    'grain-legumes',
+    'grain-legumes',
+    'vining-trellised',
+    // dliClass, habit, archetype and DLI figures as bean-pole, the same pole-type habit
+    'warm',
+    12,
+    18,
+    25,
+    'C',
+    // LSU AgCenter Pub. 2309: "Choose a fertile, well-drained area that receives full sunlight",
+    // with no shade tolerance stated, unlike bean-pole's own figure
+    0,
+    // UGA Bulletin 577 planting chart, "Bean, lima" row: "65-75" days, the midpoint
+    70,
+    // UGA B577 same row: distance between rows 2-2.5 ft, between plants 3-4 in, row mid 2.25 ft
+    // (68.58 cm) x in-row mid 3.5 in (8.89 cm), sqrt(68.58 x 8.89) = 24.7 cm
+    25,
+    // LSU AgCenter Pub. 2309: "Many pole varieties will grow 10-12 feet", the 11 ft midpoint
+    3.35,
+    // no source gives lima bean a spread, as bean-pole
+    0.3,
+    {
+      // as bean-pole: weeks of picking
+      harvestDays: 45,
+      // FAO-56 Table 22, "Beans, lima, large vines": Zr 0.8-1.2 m, p 0.45, the 1.0 m midpoint
+      zr: 1,
       p: 0.45,
       nfix: true,
       laubNote: IMMATURE_POD_NOTE,
@@ -712,6 +810,45 @@ export const CROP_ROWS: readonly CropRow[] = [
     },
   ],
   [
+    'maize-grain',
+    'Zea mays',
+    'Poaceae',
+    'field corn|grain corn|dent corn',
+    // Laub's own maize-c4 group is grain maize: this is what the meta-analysis measured, so unlike
+    // sweet-corn (cut at the milk stage) this row carries no laubNote. dliClass, habit, archetype
+    // and DLI figures as sweet-corn
+    'maize-c4',
+    'maize-c4',
+    'clumping-grass',
+    'warm',
+    18,
+    25,
+    35,
+    'C',
+    0,
+    // UGA 2024 Corn Production Guide Table 8: hybrids of 115 to 119 day relative maturity reach
+    // black layer (physiological maturity) 115-119 days after planting, NDSU NDAWN gives the same
+    // relative-maturity range for the crop generally. The 117 midpoint
+    117,
+    // UGA 2024 guide: rows 30-36 in (33 in midpoint, 83.8 cm), irrigated population 28,000-36,000
+    // plants/acre translating (Table 4) to 4.5-9 in within-row at that row width (6.75 in
+    // midpoint, 17.1 cm). sqrt(83.8 x 17.1) = 37.9 cm
+    38,
+    // University of Minnesota Extension (Minnesota Crop News, 2026): "traditional corn towers at 9
+    // to 12 feet" before newer short-stature hybrids, the 10.5 ft midpoint
+    3.2,
+    // no source gives field corn a spread, as sweet-corn
+    0.5,
+    {
+      // no gdd override: sweet-corn's 6.7 C base is OSU EM 9305's fresh-market figure, the warm
+      // archetype's own 10 C, kept here, is NDSU's general field-corn figure
+      // FAO-56 Table 22, "Maize, Field (grain) (field corn)": Zr 1.0-1.7 m, p 0.55, the 1.35 m
+      // midpoint
+      zr: 1.35,
+      p: 0.55,
+    },
+  ],
+  [
     'wheat-spring',
     'Triticum aestivum',
     'Poaceae',
@@ -872,6 +1009,71 @@ export const CROP_ROWS: readonly CropRow[] = [
     1.5,
     0.5,
     {
+      laubNote: OILSEED_NOTE,
+    },
+  ],
+  [
+    'flax',
+    'Linum usitatissimum',
+    'Linaceae',
+    'flax|linseed',
+    // an oilseed with no Laub group of its own, the C3 seed-crop curve, as sesame and sunflower
+    'c3-cereals',
+    'c3-cereals',
+    'upright-herb',
+    'cool',
+    // NC State Extension: "It does best in full sun and cannot grow in the shade"
+    14,
+    20,
+    28,
+    'C',
+    0,
+    // NDSU A1038: "a 50-day vegetative period, 25-day flowering period and about 35 days to
+    // mature", 50+25+35 = 110
+    110,
+    // NDSU A1038: "A stand of 70 plants per square foot is desired", sqrt(1/70 ft2) = 0.1195 ft
+    // = 3.6 cm
+    4,
+    // NDSU A1038: "Flax grows to a height of 24 to 36 inches", the 30 in midpoint
+    0.76,
+    // no source gives flax a spread, as sesame, an erect single-stem annual
+    0.3,
+    {
+      // FAO-56 Table 22, "Flax": Zr 1.0-1.5 m, p 0.50, the 1.25 m midpoint
+      zr: 1.25,
+      p: 0.5,
+      laubNote: OILSEED_NOTE,
+    },
+  ],
+  [
+    'canola',
+    'Brassica napus',
+    'Brassicaceae',
+    'canola|rapeseed',
+    // the oilseed Laub treatment, as flax, the Brassica light class carries its DLI figures
+    'c3-cereals',
+    'brassicas',
+    'upright-herb',
+    'cool',
+    10,
+    14,
+    20,
+    'C',
+    // no source states a full-sun requirement for canola, as flax, its oilseed-curve sibling
+    0,
+    // OMAFRA Agronomy Guide ch. 6: "matures in 90-96 days" after emergence, the 93 midpoint
+    93,
+    // OMAFRA: "optimum plant stand is 75-130 healthy plants/m2", the 102.5 midpoint,
+    // sqrt(1/102.5 m2) = 0.0988 m
+    10,
+    // Purdue AY-272: "reaching a height of 3 to 5 feet", the 4 ft midpoint
+    1.22,
+    // no source gives canola a spread, as flax, another densely sown erect oilseed annual
+    0.3,
+    {
+      // FAO-56 Table 22, "Rapeseed, Canola": Zr 1.0-1.5 m, p 0.60, the 1.25 m midpoint
+      zr: 1.25,
+      p: 0.6,
       laubNote: OILSEED_NOTE,
     },
   ],
@@ -1141,6 +1343,102 @@ export const CROP_ROWS: readonly CropRow[] = [
         citations: ['umn-extension-2024-horseradish', 'noaa-ncei-2021-climate-normals-1991-2020'],
       },
       harvestDays: 11,
+    },
+  ],
+  [
+    'ginger',
+    'Zingiber officinale',
+    'Zingiberaceae',
+    'ginger',
+    'tubers-root-crops',
+    'understory-herbs',
+    'rhizomatous',
+    'subtropical',
+    // as lemon-balm and sorrel, the understory-herbs rows with no DLI trial of their own
+    4,
+    8,
+    14,
+    'C',
+    // UF/IFAS Gardening Solutions: "Edible ginger does best in partial shade... More than a
+    // couple hours in the sun is too much, the plants will grow poorly"
+    2,
+    // UF/IFAS Gardening Solutions: "considered a long-season crop and takes about eight to ten
+    // months to produce fully developed rhizomes", the 9-month (270-day) midpoint, counted from
+    // planting the rhizome piece
+    270,
+    // UF/IFAS Gardening Solutions: "Space pieces about 15 inches apart"
+    38,
+    // NC State Extension Plant Toolbox: "Height: 2 ft. 0 in. - 4 ft. 0 in.", the 3 ft midpoint
+    0.91,
+    // NC State Extension Plant Toolbox: "Width: 2 ft. 0 in. - 3 ft. 0 in.", the 2.5 ft midpoint
+    0.76,
+    {
+      // grown from a rhizome piece, not true seed, through one season
+      life: 'annual',
+      dtmRef: 'transplant',
+      // NC State Extension Plant Toolbox: "thrives in zones 9-12", the zone 9a floor
+      coldC: -6.7,
+      // ECOCROP sheet 2177: temperature 13 / 19-29 / 35 C, rainfall 700 / 1400-3000 / 4000 mm,
+      // pH 4.3 / 6-7 / 7.5, cycle 270 to 365 days
+      temp: [13, 19, 29, 35],
+      rain: [700, 1400, 3000, 4000],
+      ph: [4.3, 6, 7, 7.5],
+      cycle: [270, 365],
+      // ECOCROP sheet 2177 climate zones: Aw, Ar, Cf
+      koppen: [...AW, ...AR, ...CF],
+      laubNote: OUTSIDE_SCOPE_NOTE,
+    },
+  ],
+  [
+    'turmeric',
+    'Curcuma longa',
+    'Zingiberaceae',
+    'turmeric',
+    'tubers-root-crops',
+    'root-tuber',
+    'rhizomatous',
+    'subtropical',
+    // as potato, the root-tuber row closest to a full-sun preference
+    12,
+    18,
+    25,
+    'C',
+    // NC State Extension Plant Toolbox: "full sun in the morning and afternoon shade", CTAHR's
+    // VC-9 adds the crop "tolerates up to 40% shade"
+    1,
+    // UF/IFAS EP638: "Ginger and turmeric rhizomes harvested approximately seven months after
+    // planting... are suitable for curing and selling in retail", 7 months = 210 days
+    210,
+    // UF/IFAS Gardening Solutions: "Space them 15 inches in the row and 15 inches between the
+    // row"
+    38,
+    // NC State Extension Plant Toolbox: "Height: 3 ft. 0 in. - 4 ft. 0 in.", the 3.5 ft midpoint
+    1.07,
+    // NC State Extension Plant Toolbox: "Width: 3 ft. 0 in. - 4 ft. 0 in.", the same 3.5 ft
+    // figure
+    1.07,
+    {
+      life: 'annual',
+      dtmRef: 'transplant',
+      // NC State Extension Plant Toolbox: "The USDA Hardiness Zones are 8-11", the zone 8a floor
+      coldC: -12.2,
+      // CTAHR's VC-9 Hawaii Turmeric Production Guidelines states turmeric "tolerates up to 40%
+      // shade". No trial measured a yield response behind that figure, so it stays Tier C, and
+      // the class's own citation (Laub) says nothing about turmeric: CTAHR is named in the note
+      // text only, not in the formal citation, which this field cannot redirect
+      maxRsr: 0.4,
+      maxRsrTier: 'C',
+      maxRsrNote:
+        'CTAHR’s VC-9 Hawaii Turmeric Production Guidelines states the crop "tolerates up to 40% shade." No trial measured a yield response behind that figure',
+      // ECOCROP sheet 828: temperature 18 / 20-28 / 32 C, rainfall 800 / 1000-2000 / 3000 mm,
+      // pH 5.5 / 6-7 / 7.5, cycle 270 to 300 days
+      temp: [18, 20, 28, 32],
+      rain: [800, 1000, 2000, 3000],
+      ph: [5.5, 6, 7, 7.5],
+      cycle: [270, 300],
+      // ECOCROP sheet 828 climate zones: Aw, Ar, Cs
+      koppen: [...AW, ...AR, ...CS],
+      laubNote: OUTSIDE_SCOPE_NOTE,
     },
   ],
   [
@@ -1624,6 +1922,35 @@ export const CROP_ROWS: readonly CropRow[] = [
     { harvestDays: 90 },
   ],
   [
+    'malabar-spinach',
+    'Basella alba',
+    'Basellaceae',
+    'malabar spinach|ceylon spinach',
+    // dliClass, laubGroup, archetype and DLI figures as nz-spinach, the catalogue's other
+    // warm-season leaf vine
+    'leafy-vegetables',
+    'leafy-greens',
+    'vining-trellised',
+    'warm',
+    8,
+    14,
+    20,
+    'C',
+    // UF/IFAS HS1371: "While full-sun cultivation does not harm plants, partial shade may be
+    // beneficial by facilitating development of larger and more succulent leaves"
+    2,
+    // UF/IFAS HS1371: "reaches maturity around 70 days from seed in optimal conditions"
+    70,
+    // University of Kentucky CCD-CP-130: "direct seeded in rows spaced 1 foot apart, with seeds
+    // spaced 1 to 2 inches and thinned to 6 inches between plants", sqrt(12 in x 6 in) = 8.5 in
+    22,
+    // UF/IFAS HS1371: "a fast-growing vine that can grow six feet or even longer", trellised
+    1.83,
+    // NC State Extension Plant Toolbox: "Width: 2 ft. 0 in. - 3 ft. 0 in.", the 2.5 ft midpoint
+    0.76,
+    { harvestDays: 90 },
+  ],
+  [
     'sorrel',
     'Rumex acetosa',
     'Polygonaceae',
@@ -2094,6 +2421,121 @@ export const CROP_ROWS: readonly CropRow[] = [
       temp: MEDITERRANEAN_SUBSHRUB_TEMP,
       harvestDays: 120,
     },
+  ],
+  [
+    'lemongrass',
+    'Cymbopogon citratus',
+    'Poaceae',
+    'lemongrass',
+    // no crop in the nine groups is harvested as a cut stalk, so this is an analogy this app
+    // chose. dliClass, DLI figures and tier as oregano, a full-sun leafy-greens herb
+    'leafy-vegetables',
+    'leafy-greens',
+    'clumping-grass',
+    'subtropical',
+    12,
+    18,
+    25,
+    'C',
+    // UF/IFAS EP618 Table 1: "Light needs: Partial-full sun"
+    1,
+    // grown as a frost-tender perennial clump, the column is unused once `life` is set to
+    // perennial below, and 365 marks a full growing season
+    365,
+    // UF/IFAS EP618: "planting them about 4' apart, center-to-center"
+    122,
+    // UF/IFAS EP618: "growing to approximately 6' tall"
+    1.83,
+    // UF/IFAS EP618: "4' wide"
+    1.22,
+    {
+      life: 'perennial',
+      // USU Extension: "Typically plants will produce several harvestable stalks by the end of
+      // the summer", from divisions set out that same spring
+      yearsToMature: 1,
+      // UF/IFAS EP618 Table 1: "Hardiness zones: 9-11", the zone 9a floor
+      coldC: -6.7,
+      // USU Extension: "lemongrass can be harvested at any time, once the plant stalks have
+      // reached 1/2 inch thick"
+      harvest: { wholeSeason: true, citations: ['usu-2020-lemongrass'] },
+      laubNote: NO_COMPARABLE_CROP_NOTE,
+    },
+  ],
+  [
+    'lavender',
+    'Lavandula angustifolia',
+    'Lamiaceae',
+    'lavender|english lavender',
+    // laubGroup, dliClass, DLI figures, tier and the woody-perennial MEDITERRANEAN_SUBSHRUB_TEMP
+    // treatment as sage, the catalogue's other woody Mediterranean subshrub
+    'leafy-vegetables',
+    'leafy-greens',
+    'bush',
+    'hardy-perennial',
+    12,
+    18,
+    25,
+    'C',
+    // USU Extension: "Grow in full sun", no source mentions shade tolerance
+    0,
+    // USU Extension: lavender "takes 3 years to reach full size", its own first-year flowers are
+    // clipped off (below), so 730 (2 years) marks the column pending that first harvest
+    730,
+    // USU Extension: "Space lavender plants 18-24 inches apart", the 21 in midpoint
+    53,
+    // USU Extension: "Lavender grows about 1-2 feet tall and wide depending on variety", the
+    // 1.5 ft midpoint
+    0.46,
+    // same sentence: "1-2 feet... wide"
+    0.46,
+    {
+      life: 'woody-perennial',
+      deciduous: false,
+      temp: MEDITERRANEAN_SUBSHRUB_TEMP,
+      // Washington State University EB2005: "Lavandula angustifolia... can survive winter
+      // temperatures of -15C (5F)"
+      coldC: -15,
+      // USU Extension: "During the first year, branches should be clipped to keep them from
+      // flowering", implying first harvest in year two
+      yearsToMature: 2,
+      // Penn State Extension: "Harvest is accomplished by hand and can occur throughout the
+      // summer months", read as June to August at State College, PA (USC00368449), where the
+      // median last spring freeze is 20 Apr: picking starts 42 days after it (1 Jun) and runs
+      // 91 days (to 31 Aug)
+      harvest: {
+        afterFreezeDays: 42,
+        citations: ['psu-2026-agritourism-lavender', 'noaa-ncei-2021-climate-normals-1991-2020'],
+      },
+      harvestDays: 91,
+    },
+  ],
+  [
+    'chamomile',
+    'Matricaria chamomilla',
+    'Asteraceae',
+    'chamomile|german chamomile',
+    // dliClass, laubGroup, archetype, habit, DLI figures and tier as calendula
+    'leafy-vegetables',
+    'leafy-greens',
+    'upright-herb',
+    'cool',
+    8,
+    14,
+    20,
+    'C',
+    // NC State Extension Plant Toolbox: "Full sun (6 or more hours of direct sunlight a day)",
+    // as calendula
+    1,
+    // Purdue NewCrop fact sheet: German chamomile has a "short, two-month growing season", read
+    // as a season length rather than a stated days-to-harvest figure, the 60-day midpoint
+    60,
+    // Virginia Cooperative Extension 426-420, "Herb Culture and Use" table: "6-12\"" spacing for
+    // chamomile, the 9 in midpoint
+    23,
+    // Purdue NewCrop: German chamomile "reaches a height of about 0.3 meter"
+    0.3,
+    // NC State Extension Plant Toolbox: "Width: 0 ft. 6 in. - 2 ft. 0 in.", the 15 in midpoint
+    0.38,
   ],
   [
     'thyme',
@@ -3238,6 +3680,59 @@ export const CROP_ROWS: readonly CropRow[] = [
     },
   ],
   [
+    'almond',
+    'Prunus dulcis',
+    'Rosaceae',
+    'almond',
+    // laubGroup, dliClass, habit, archetype, DLI figures, tier, chillHours and maxRsr as peach,
+    // almond's closer relative within Prunus (both subgenus Amygdalus, unlike apricot)
+    'fruits',
+    'cane-bush-berries',
+    'vase-tree',
+    'temperate-tree',
+    18,
+    25,
+    35,
+    'C',
+    // USU Extension: "Select a location that will receive full sun for at least 3/4 of the day"
+    0,
+    1460,
+    // USU Extension: "will occupy a space roughly 20 x 20 feet (10-12 foot radius from the
+    // trunk)"
+    610,
+    // no source states almond's own height, as peach
+    3.5,
+    // USU Extension: derived from "10-12 foot radius from the trunk", a 20-24 ft diameter, the
+    // 22 ft midpoint
+    6.71,
+    {
+      life: 'woody-perennial',
+      // USU Extension: "Don't expect to harvest nuts for 4 to 6 years after planting"
+      yearsToMature: 5,
+      chillHours: 750,
+      // USU Extension: "temperatures below -20 F will damage the woody stems and branches of
+      // almond trees"
+      coldC: -28.9,
+      maxRsr: 0.1,
+      maxRsrTier: 'C',
+      // FAO-56 Table 22, "Almonds": Zr 1.0-2.0 m, p 0.40, the 1.5 m midpoint
+      zr: 1.5,
+      p: 0.4,
+      // USU Extension, cultivar 'Nonpareil' at Fresno, CA (USW00093193, 14 Jan median last
+      // spring freeze): "matures at the end of August", picking starts 223 days after the
+      // freeze. As peach, this source gives no closing date of its own, so harvestDays is
+      // peach's own 20-day span
+      harvest: {
+        afterFreezeDays: 223,
+        citations: [
+          'usu-extension-2020-almonds-home-garden',
+          'noaa-ncei-2021-climate-normals-1991-2020',
+        ],
+      },
+      harvestDays: 20,
+    },
+  ],
+  [
     'plum',
     'Prunus domestica',
     'Rosaceae',
@@ -3433,6 +3928,52 @@ export const CROP_ROWS: readonly CropRow[] = [
     },
   ],
   [
+    'pomegranate',
+    'Punica granatum',
+    'Lythraceae',
+    'pomegranate',
+    // laubGroup, dliClass, habit, archetype, DLI figures and tier as fig
+    'fruits',
+    'cane-bush-berries',
+    'spreading-tree',
+    'subtropical',
+    15,
+    20,
+    30,
+    'C',
+    // UGA Circular 997: "require at least six hours of direct sunlight a day", Clemson HGIC 1359:
+    // "partial shade reduces fruit set"
+    0,
+    // ECOCROP sheet 1829 cycle 180 to 365 days, a fruit cycle of the full year, as lemon and
+    // mango
+    365,
+    // UGA Circular 997: "Traditional spacing for an orchard is 18' x 18'"
+    549,
+    // Clemson HGIC 1359: "typically grows from 12 to 20 feet tall and nearly the same in
+    // spread", the 16 ft midpoint
+    4.88,
+    // same sentence: "nearly the same in spread"
+    4.88,
+    {
+      life: 'woody-perennial',
+      yearsToMature: 3,
+      // UGA Circular 997: "Most pomegranate cultivars are hardy down to 12 degrees F, with the
+      // hardier types surviving... down to 7 degrees F", the warmer, more typical end
+      coldC: -12.5,
+      maxRsr: 0.1,
+      maxRsrTier: 'C',
+      // UGA Circular 997, for Tifton, GA (Ponder Farm, USC00098703, 11 Mar median last spring
+      // freeze): "Early cultivars will begin to ripen near the end of August, and will continue
+      // through to October or early November for the late-maturing cultivars", picking starts
+      // 167 days after the freeze and runs 72 days
+      harvest: {
+        afterFreezeDays: 167,
+        citations: ['uga-2022-pomegranate-production', 'noaa-ncei-2021-climate-normals-1991-2020'],
+      },
+      harvestDays: 72,
+    },
+  ],
+  [
     'hazelnut',
     'Corylus avellana',
     'Betulaceae',
@@ -3477,6 +4018,211 @@ export const CROP_ROWS: readonly CropRow[] = [
     },
   ],
   [
+    'walnut',
+    'Juglans regia',
+    'Juglandaceae',
+    'walnut|english walnut|persian walnut',
+    // laubGroup, dliClass, archetype, DLI figures and tier as hazelnut. A canopy tree in full sun, so
+    // the habit and the 0.1 shade ceiling are the tree fruit's, as apple and pear, where hazelnut's
+    // bush and 0.3 belong to an understory shrub
+    'fruits',
+    'cane-bush-berries',
+    'spreading-tree',
+    'temperate-tree',
+    10,
+    18,
+    25,
+    'C',
+    // OSU EM 8907: "Walnuts grow best in full sun"
+    0,
+    1825,
+    // OSU EM 8907: "Walnut trees usually are planted about 30 feet apart"
+    914,
+    // NC State Extension Plant Toolbox: "Height: 40 ft. 0 in. - 60 ft. 0 in.", the 50 ft midpoint
+    15.24,
+    // same page: "Width: 40 ft. 0 in. - 60 ft. 0 in."
+    15.24,
+    {
+      life: 'woody-perennial',
+      yearsToMature: 6,
+      chillHours: 800,
+      deciduous: true,
+      // NC State's own zone list, 3a-7b, names 'Carpathian' as its one cold-hardy cultivar
+      // ("Cold-hardy English strain") among four, the other three (Chandler, Franquette,
+      // Hartley) are ordinary commercial walnut and would not reach the 3a end. As this row is
+      // not the Carpathian selection specifically, coldC follows hazelnut's own figure instead
+      coldC: -29,
+      maxRsr: 0.1,
+      maxRsrTier: 'C',
+      // OSU EM 8907, for the Willamette Valley, western Oregon (Salem AP (McNary Field), OR,
+      // USW00024232, 3 Apr median last spring freeze): "This usually happens in October",
+      // picking starts 181 days after the freeze and runs 30 days
+      harvest: {
+        afterFreezeDays: 181,
+        citations: [
+          'osu-extension-2006-growing-walnuts-oregon',
+          'noaa-ncei-2021-climate-normals-1991-2020',
+        ],
+      },
+      harvestDays: 30,
+    },
+  ],
+  [
+    'black-walnut',
+    'Juglans nigra',
+    'Juglandaceae',
+    'black walnut',
+    // laubGroup, dliClass, archetype, DLI figures and tier as hazelnut. A canopy tree in full sun, so
+    // the habit and the 0.1 shade ceiling are the tree fruit's, as apple and pear, where hazelnut's
+    // bush and 0.3 belong to an understory shrub
+    'fruits',
+    'cane-bush-berries',
+    'spreading-tree',
+    'temperate-tree',
+    10,
+    18,
+    25,
+    'C',
+    // USDA NRCS Plant Guide: "Black walnut prefers full sun", NDSU Extension separately notes it
+    // "tolerates partial shade"
+    1,
+    1825,
+    // University of Missouri Center for Agroforestry AF1011: "Minimum tree spacing should be 25
+    // to 30 feet", the 27.5 ft midpoint
+    838,
+    // USDA NRCS Plant Guide: "usually a medium sized tree ranging from 70-90 feet tall", the 80
+    // ft midpoint (150 ft is this source's stated maximum, not its usual size)
+    24.38,
+    // NDSU Extension F2209's only explicit spread figure, "the largest tree in North Dakota... a
+    // canopy spread of 50 feet", is a state-champion outlier at this species' cold margin, not a
+    // typical mature spread, so it is not used here. No other source gives one, so this row's
+    // own spacing stands in instead, as chayote's hill spacing stands in for its own width
+    8.38,
+    {
+      life: 'woody-perennial',
+      yearsToMature: 5,
+      chillHours: 800,
+      deciduous: true,
+      // NDSU Extension F2209: "Hardiness: Zone 4"
+      coldC: -34.4,
+      maxRsr: 0.1,
+      maxRsrTier: 'C',
+      // University of Missouri Center for Agroforestry AF1011, for central Missouri (Columbia
+      // Regional AP, MO, USW00003945, 7 Apr median last spring freeze): "early-ripening
+      // cultivars mature Sept. 1-14... Mid-season cultivars ripen Sept. 15-28 and late-ripening
+      // cultivars become harvestable after Sept. 28", read as Sept 1 to early October across the
+      // three groups. Picking starts 147 days after the freeze and runs 34 days
+      harvest: {
+        afterFreezeDays: 147,
+        citations: [
+          'mu-agroforestry-2009-black-walnut-nut-production',
+          'noaa-ncei-2021-climate-normals-1991-2020',
+        ],
+      },
+      harvestDays: 34,
+    },
+  ],
+  [
+    'chestnut',
+    'Castanea mollissima',
+    'Fagaceae',
+    'chestnut|chinese chestnut',
+    // laubGroup, dliClass, archetype, DLI figures and tier as hazelnut. A canopy tree in full sun, so
+    // the habit and the 0.1 shade ceiling are the tree fruit's, as apple and pear, where hazelnut's
+    // bush and 0.3 belong to an understory shrub
+    'fruits',
+    'cane-bush-berries',
+    'spreading-tree',
+    'temperate-tree',
+    10,
+    18,
+    25,
+    'C',
+    // University of Missouri Center for Agroforestry AF1007: "Chestnuts require full sun for
+    // best nut production so they should not be planted adjacent to large shade trees"
+    0,
+    1825,
+    // AF1007: "Spacing your trees at least 40 to 50 feet apart", the 45 ft midpoint
+    1372,
+    // Iowa State University Extension: "Eventually after several decades the trees can reach a
+    // height of 40-60'", the 50 ft midpoint
+    15.24,
+    // same sentence: "a spread of 30'"
+    9.14,
+    {
+      life: 'woody-perennial',
+      yearsToMature: 3,
+      deciduous: true,
+      // AF1007: "Chinese chestnuts can tolerate -20 F temperatures when fully dormant"
+      coldC: -28.9,
+      maxRsr: 0.1,
+      maxRsrTier: 'C',
+      // University of Missouri Center for Agroforestry AF1007, for central Missouri (Columbia
+      // Regional AP, MO, USW00003945, 7 Apr median last spring freeze): "stretching from
+      // September into October in Missouri", picking starts 147 days after the freeze and runs
+      // 60 days
+      harvest: {
+        afterFreezeDays: 147,
+        citations: [
+          'mu-agroforestry-2022-chinese-chestnut',
+          'noaa-ncei-2021-climate-normals-1991-2020',
+        ],
+      },
+      harvestDays: 60,
+    },
+  ],
+  [
+    'pecan',
+    'Carya illinoinensis',
+    'Juglandaceae',
+    'pecan',
+    // laubGroup, dliClass, archetype, DLI figures and tier as hazelnut. A canopy tree in full sun, so
+    // the habit and the 0.1 shade ceiling are the tree fruit's, as apple and pear, where hazelnut's
+    // bush and 0.3 belong to an understory shrub
+    'fruits',
+    'cane-bush-berries',
+    'spreading-tree',
+    'temperate-tree',
+    10,
+    18,
+    25,
+    'C',
+    // NC State Extension Gardener Handbook ch. 15: "Fruit and nut trees need at least 6 hours of
+    // sunlight during the growing season"
+    0,
+    1825,
+    // UGA Bulletin 1348: "Yard and home orchard trees should be spaced at least 60 to 80 feet
+    // apart", the 70 ft midpoint
+    2134,
+    // University of Missouri Center for Agroforestry AF1002: "pecan trees often grow to a height
+    // of over 70 feet", the stated floor
+    21.34,
+    // same sentence: "with a spread of greater than 80 feet", the stated floor
+    24.38,
+    {
+      life: 'woody-perennial',
+      yearsToMature: 6,
+      deciduous: true,
+      // as black-walnut: zone 4, the same family (Juglandaceae), and no source gives pecan its
+      // own cold floor
+      coldC: -34.4,
+      maxRsr: 0.1,
+      maxRsrTier: 'C',
+      // UGA Bulletin 1348, for Georgia's pecan belt (Albany SW Georgia Regional AP, GA,
+      // USW00013869, 8 Mar median last spring freeze): cultivars 'Carter' and 'McMillian' have
+      // "estimated harvest date[s]" of October 18 and October 20, picking starts 221 days after
+      // the freeze and runs 10 days
+      harvest: {
+        afterFreezeDays: 221,
+        citations: [
+          'uga-extension-2024-pecan-home-backyard',
+          'noaa-ncei-2021-climate-normals-1991-2020',
+        ],
+      },
+      harvestDays: 10,
+    },
+  ],
+  [
     'pawpaw',
     'Asimina triloba',
     'Annonaceae',
@@ -3514,6 +4260,107 @@ export const CROP_ROWS: readonly CropRow[] = [
         ],
       },
       harvestDays: 41,
+    },
+  ],
+  [
+    'persimmon',
+    'Diospyros kaki',
+    'Ebenaceae',
+    'persimmon|japanese persimmon|kaki',
+    // laubGroup, dliClass, habit, archetype, DLI figures and tier as pawpaw
+    'fruits',
+    'cane-bush-berries',
+    'columnar-tree',
+    'temperate-tree',
+    6,
+    14,
+    22,
+    'C',
+    // UF/IFAS ENH388/ST229: "Light requirement: full sun"
+    0,
+    // ECOCROP sheet 945 cycle 150 to 270 days, the 210 midpoint, this app's own reading with no
+    // secondary source dating the species' own cycle more precisely
+    210,
+    // Texas A&M E-611: "Plant the trees every 15 to 18 feet in rows that are 20 feet apart",
+    // in-row mid 16.5 ft x row 20 ft, sqrt(16.5 x 20) = 18.17 ft
+    554,
+    // UF/IFAS ENH388/ST229: "Height: 20 to 30 feet", the 25 ft midpoint
+    7.62,
+    // UF/IFAS ENH388/ST229: "Spread: 15 to 25 feet", the 20 ft midpoint
+    6.1,
+    {
+      life: 'woody-perennial',
+      // not found for Diospyros kaki specifically, as pawpaw
+      yearsToMature: 7,
+      // Clemson HGIC 1357's "Survive to about 10 F" does not state whether the full text was
+      // read (readFullText false), so this row does not use it, as pawpaw
+      coldC: -26,
+      maxRsr: 0.45,
+      maxRsrTier: 'C',
+      // Texas A&M AgriLife Extension (Bexar County), for San Antonio, TX (USW00012921, 26 Feb
+      // median last spring freeze): "Oriental persimmons generally start ripening around late
+      // October through the early part of December in San Antonio and surrounding areas",
+      // picking starts 241 days after the freeze and runs 41 days
+      harvest: {
+        afterFreezeDays: 241,
+        citations: [
+          'tamu-2011-rodriguez-harvesting-oriental-persimmons',
+          'noaa-ncei-2021-climate-normals-1991-2020',
+        ],
+      },
+      harvestDays: 41,
+    },
+  ],
+  [
+    'american-persimmon',
+    'Diospyros virginiana',
+    'Ebenaceae',
+    'american persimmon|common persimmon',
+    // laubGroup, dliClass, habit, archetype, DLI figures and tier as pawpaw
+    'fruits',
+    'cane-bush-berries',
+    'columnar-tree',
+    'temperate-tree',
+    6,
+    14,
+    22,
+    'C',
+    // University of Kentucky CCD-CP-1: "from partial shade to full sun. However, for best growth
+    // and fruit production... sunny sites are best"
+    1,
+    // ECOCROP sheet 5474 cycle 240 to 270 days, the 255 midpoint
+    255,
+    // University of Kentucky CCD-CP-1: "A tree spacing of 20 feet between trees in the row and
+    // 27 feet between rows", in-row 20 ft x row 27 ft, sqrt(20 x 27) = 23.24 ft
+    708,
+    // NC State Extension Plant Toolbox: "Height: 30 ft. 0 in. - 80 ft. 0 in.", the 55 ft
+    // midpoint
+    16.76,
+    // NC State Extension Plant Toolbox: "Width: 20 ft. 0 in. - 35 ft. 0 in.", the 27.5 ft
+    // midpoint
+    8.38,
+    {
+      life: 'woody-perennial',
+      // University of Kentucky CCD-CP-1: "grafted trees can begin fruiting three years after
+      // planting"
+      yearsToMature: 3,
+      // Clemson HGIC 1357's "-20 F to -25 F" does not state whether the full text was read
+      // (readFullText false), so this row does not use it, as pawpaw
+      coldC: -26,
+      maxRsr: 0.45,
+      maxRsrTier: 'C',
+      // Purdue Extension (Whitley County), quoting forestry specialist Lenny Farlee, for Indiana
+      // (Fort Wayne Intl AP, IN, USW00014827, 24 Apr median last spring freeze): "persimmon
+      // fruit normally ripens in September and October", picking starts 130 days after the
+      // freeze and runs 60 days
+      harvest: {
+        afterFreezeDays: 130,
+        citations: [
+          'purdue-2025-woodmansee-divine-fruit',
+          'noaa-ncei-2021-climate-normals-1991-2020',
+        ],
+      },
+      harvestDays: 60,
     },
   ],
   [
@@ -3619,6 +4466,56 @@ export const CROP_ROWS: readonly CropRow[] = [
         citations: ['umn-extension-2024-kiwiberry', 'noaa-ncei-2021-climate-normals-1991-2020'],
       },
       harvestDays: 51,
+    },
+  ],
+  [
+    'kiwifruit',
+    'Actinidia deliciosa',
+    'Actinidiaceae',
+    'kiwifruit|fuzzy kiwi',
+    // laubGroup, dliClass, DLI figures, tier and the arbor support as hardy-kiwi, the
+    // catalogue's other Actinidia vine
+    'fruits',
+    'cane-bush-berries',
+    'vining-trellised',
+    'temperate-tree',
+    10,
+    18,
+    25,
+    'C',
+    // OSU EM 9322: "Ideal environmental conditions... are full sun exposure... While plants can
+    // tolerate partial shade, yield and fruit quality may be lower"
+    1,
+    1825,
+    // OSU EM 9322: "One plant needs about 15 feet of space. Plant two vines 15 feet apart"
+    457,
+    // OSU EM 9322: "Attach a strong cross arm at 6 to 7 feet above ground level on each post",
+    // the 6.5 ft midpoint, the T-bar trellis this vine is trained onto
+    1.98,
+    // OSU EM 9322: the same 15 ft of horizontal space one vine fills
+    4.57,
+    {
+      life: 'woody-perennial',
+      yearsToMature: 3,
+      chillHours: 600,
+      deciduous: true,
+      support: 'arbor',
+      // OSU EM 9322: fuzzy kiwifruit "is cold hardy to about 0 to 10 F", the warmer, more
+      // typical end. Hardy kiwi (Actinidia arguta) is the much hardier species already in the
+      // catalogue
+      coldC: -15,
+      // OSU EM 9322, for western Oregon (Corvallis State University, OR, USC00351862, 17 Apr
+      // median last spring freeze): "pick 'Hayward' and other fuzzy kiwifruit cultivars as late
+      // as possible (late October/early November, or before the first hard frost)", picking
+      // starts 191 days after the freeze and runs 11 days
+      harvest: {
+        afterFreezeDays: 191,
+        citations: [
+          'osu-2021-strik-kiwifruit-home-garden',
+          'noaa-ncei-2021-climate-normals-1991-2020',
+        ],
+      },
+      harvestDays: 11,
     },
   ],
   [
@@ -4114,6 +5011,185 @@ export const CROP_ROWS: readonly CropRow[] = [
     },
   ],
   [
+    'orange',
+    'Citrus sinensis',
+    'Rutaceae',
+    'orange|sweet orange',
+    // laubGroup, dliClass, habit, archetype, DLI figures, tier and maxRsr as lemon
+    'fruits',
+    'cane-bush-berries',
+    'spreading-tree',
+    'subtropical',
+    15,
+    20,
+    30,
+    'C',
+    // Texas A&M AgriLife (Sauls): "Citrus requires full sunlight for optimum growth and
+    // production"
+    0,
+    // ECOCROP sheet 720 cycle 180 to 365 days, a fruit cycle of the full year, as lemon and mango
+    365,
+    // UC Cooperative Extension, Sacramento County (GN127): "Space standard trees at least 12
+    // feet apart"
+    366,
+    // UCCE Santa Clara County: "Navel - Standard tree 20 to 25 feet high", the 22.5 ft midpoint
+    6.86,
+    // no source gives orange a canopy spread distinct from its height or spacing, as lemon
+    3,
+    {
+      life: 'woody-perennial',
+      // Clemson HGIC 1364: "Young, grafted oranges, grapefruits, and mandarins must grow for 5
+      // years before they will flower and produce fruit"
+      yearsToMature: 5,
+      // UC Cooperative Extension, Sacramento County (GN127): "Oranges and mandarins ... 21F"
+      coldC: -6.1,
+      deciduous: false,
+      // ECOCROP sheet 720: temperature 13 / 20-30 / 38 C, rainfall 450 / 1200-2000 / 2700 mm,
+      // pH 4 / 5-6 / 8.3, cycle 180 to 365 days
+      temp: [13, 20, 30, 38],
+      rain: [450, 1200, 2000, 2700],
+      ph: [4, 5, 6, 8.3],
+      cycle: [180, 365],
+      // ECOCROP sheet 720 climate zones: Aw, Ar, Bs, Cf, Cs, Cw
+      koppen: [...AW, ...AR, ...BS, ...CF, ...CS, ...CW],
+      // FAO-56 Table 22, citrus at 50% canopy: Zr 1.1-1.5 m, p 0.50, the 1.3 m midpoint, as
+      // lemon
+      zr: 1.3,
+      p: 0.5,
+      maxRsr: 0.1,
+      maxRsrTier: 'C',
+      // UC Cooperative Extension, Santa Clara County, for San Jose, CA (USW00023293, 12 Jan
+      // median last spring freeze): "Washington Navel - harvest Dec - May", picking starts 323
+      // days after the freeze and runs 181 days
+      harvest: {
+        afterFreezeDays: 323,
+        citations: ['ucanr-santaclara-citrus', 'noaa-ncei-2021-climate-normals-1991-2020'],
+      },
+      harvestDays: 181,
+    },
+  ],
+  [
+    'lime',
+    'Citrus x latifolia',
+    'Rutaceae',
+    'lime|persian lime|tahiti lime',
+    // laubGroup, dliClass, habit, archetype, DLI figures, tier and maxRsr as lemon
+    'fruits',
+    'cane-bush-berries',
+    'spreading-tree',
+    'subtropical',
+    15,
+    20,
+    30,
+    'C',
+    // UCCE Santa Clara County: "Limes and most lemons do not need full sun or long periods of
+    // heat to ripen fruit", unlike oranges and grapefruit, which "need heat for pigmentation and
+    // sweetness"
+    1,
+    // ECOCROP sheet 4631 cycle fixed at 365 days, a fruit cycle of the full year, as lemon and
+    // mango
+    365,
+    // UC Cooperative Extension, Sacramento County (GN127): "Space standard trees at least 12
+    // feet apart"
+    366,
+    // Texas A&M AgriLife (Galveston County)'s own height figure for lime is not used
+    // (readFullText false), as lemon
+    3,
+    // no source gives lime a canopy spread, as lemon
+    3,
+    {
+      life: 'woody-perennial',
+      // Texas A&M AgriLife (Sauls): general citrus statement, "usually do not produce until the
+      // third year", no lime-specific figure exists
+      yearsToMature: 3,
+      // UC Cooperative Extension, Sacramento County (GN127): "Limes ... 29F"
+      coldC: -1.7,
+      deciduous: false,
+      // ECOCROP sheet 4631: temperature 12 / 20-28 / 32 C, rainfall 750 / 1200-1500 / 2300 mm,
+      // pH 5 / 5.5-6.5 / 7.5, cycle a fixed 365 days
+      temp: [12, 20, 28, 32],
+      rain: [750, 1200, 1500, 2300],
+      ph: [5, 5.5, 6.5, 7.5],
+      cycle: [365, 365],
+      // ECOCROP sheet 4631 climate zones: Aw
+      koppen: [...AW],
+      // FAO-56 Table 22, citrus at 50% canopy: Zr 1.1-1.5 m, p 0.50, the 1.3 m midpoint, as
+      // lemon
+      zr: 1.3,
+      p: 0.5,
+      maxRsr: 0.1,
+      maxRsrTier: 'C',
+      // UCCE Santa Clara County, for San Jose, CA (USW00023293, 12 Jan median last spring
+      // freeze): Bearss lime "Harvest Aug-Mar", picking starts 201 days after the freeze and
+      // runs 242 days
+      harvest: {
+        afterFreezeDays: 201,
+        citations: ['ucanr-santaclara-citrus', 'noaa-ncei-2021-climate-normals-1991-2020'],
+      },
+      harvestDays: 242,
+    },
+  ],
+  [
+    'mandarin',
+    'Citrus reticulata',
+    'Rutaceae',
+    'mandarin|satsuma|tangerine',
+    // laubGroup, dliClass, habit, archetype, DLI figures, tier and maxRsr as lemon
+    'fruits',
+    'cane-bush-berries',
+    'spreading-tree',
+    'subtropical',
+    15,
+    20,
+    30,
+    'C',
+    // Clemson HGIC 1364: "Citrus trees should be planted in a full-sun location to achieve
+    // maximum production"
+    0,
+    // ECOCROP sheet 718 cycle 60 to 365 days, a fruit cycle of the full year, as lemon and mango
+    365,
+    // UC Cooperative Extension, Sacramento County (GN127): "Space standard trees at least 12
+    // feet apart"
+    366,
+    // Texas A&M AgriLife (Galveston County)'s own height figure for mandarin is not used
+    // (readFullText false), as lemon
+    3,
+    // no source gives mandarin a canopy spread, as lemon
+    3,
+    {
+      life: 'woody-perennial',
+      // Clemson HGIC 1364: "Young, grafted oranges, grapefruits, and mandarins must grow for 5
+      // years before they will flower and produce fruit"
+      yearsToMature: 5,
+      // Clemson HGIC 1364's cold-hardiness table, Satsuma 'Owari': "19.8-20.7 F", the 20.25 F
+      // midpoint, the variety matching this crop's own common-name list
+      coldC: -6.5,
+      deciduous: false,
+      // ECOCROP sheet 718: temperature 12 / 23-34 / 38 C, rainfall 300 / 1200-1800 / 4000 mm,
+      // pH 5.5 / 6-6.8 / 8.3, cycle 60 to 365 days
+      temp: [12, 23, 34, 38],
+      rain: [300, 1200, 1800, 4000],
+      ph: [5.5, 6, 6.8, 8.3],
+      cycle: [60, 365],
+      // ECOCROP sheet 718 climate zones: Aw, Bs, Cf, Cs, Cw
+      koppen: [...AW, ...BS, ...CF, ...CS, ...CW],
+      // FAO-56 Table 22, citrus at 50% canopy: Zr 1.1-1.5 m, p 0.50, the 1.3 m midpoint, as
+      // lemon
+      zr: 1.3,
+      p: 0.5,
+      maxRsr: 0.1,
+      maxRsrTier: 'C',
+      // UCCE Santa Clara County, for San Jose, CA (USW00023293, 12 Jan median last spring
+      // freeze): Satsuma, "a group of varieties including Owari... Harvest Dec - Apr, depending
+      // on variety", picking starts 323 days after the freeze and runs 150 days
+      harvest: {
+        afterFreezeDays: 323,
+        citations: ['ucanr-santaclara-citrus', 'noaa-ncei-2021-climate-normals-1991-2020'],
+      },
+      harvestDays: 150,
+    },
+  ],
+  [
     'mango',
     'Mangifera indica',
     'Anacardiaceae',
@@ -4365,6 +5441,48 @@ export const CROP_ROWS: readonly CropRow[] = [
       cycle: [60, 120],
       // ECOCROP sheet 8418 climate zones: Aw, Ar, Bw, Bs, Cf, Cs, Cw
       koppen: [...AW, ...AR, ...BW, ...BS, ...CF, ...CS, ...CW],
+    },
+  ],
+  [
+    'finger-millet',
+    'Eleusine coracana',
+    'Poaceae',
+    'finger millet|ragi',
+    // dliClass, habit, archetype and DLI figures as pearl-millet
+    'maize-c4',
+    'forages-c3-pasture',
+    'clumping-grass',
+    'hot',
+    12,
+    20,
+    30,
+    'C',
+    // no source states a full-sun requirement for finger millet specifically, as pearl-millet
+    0,
+    // Tamil Nadu Agricultural University, "Particulars of Ragi Strains" table, varieties CO 9,
+    // CO 13 and CO (Ra) 14: duration 100-105, 95-100 and 105-110 days, the mean of the three
+    // midpoints is 103
+    103,
+    // ICAR-IIMR package of practices: direct-sown rows 22.5-30 cm apart, plants 7.5-10 cm apart,
+    // row mid 26.25 cm x in-row mid 8.75 cm, sqrt(26.25 x 8.75) = 15.2 cm
+    15,
+    // TNAU's same three-variety table: height 75-80, 85-90 and 115-120 cm, the mean of the three
+    // midpoints is 94 cm
+    0.94,
+    // no source gives finger millet a spread, as pearl-millet
+    0.4,
+    {
+      // ECOCROP sheet 5657: temperature 8 / 18-30 / 35 C, rainfall 300 / 500-1100 / 4300 mm,
+      // pH 5.5 / 6-7 / 8.2, cycle 75 to 180 days
+      temp: [8, 18, 30, 35],
+      rain: [300, 500, 1100, 4300],
+      ph: [5.5, 6, 7, 8.2],
+      cycle: [75, 180],
+      // ECOCROP sheet 5657 climate zones: Aw, Bw, Bs, Cf, Cs, Cw
+      koppen: [...AW, ...BW, ...BS, ...CF, ...CS, ...CW],
+      // FAO-56 Table 22, "Millet": Zr 1.0-2.0 m, p 0.55, the 1.5 m midpoint
+      zr: 1.5,
+      p: 0.55,
     },
   ],
   [
@@ -4621,6 +5739,111 @@ export const CROP_ROWS: readonly CropRow[] = [
       // ECOCROP sheet 749 climate zones: Aw, Cf, Cw
       koppen: [...AW, ...CF, ...CW],
       laubNote: LAUB_EXCLUDED_NOTE,
+    },
+  ],
+  [
+    'tea',
+    'Camellia sinensis',
+    'Theaceae',
+    'tea|tea plant',
+    // laubGroup, dliClass, habit and archetype as coffee, the catalogue's other shade-grown
+    // shrub crop. No crop in the nine Laub groups is harvested as a picked leaf flush, so the
+    // group is an analogy this app chose
+    'berries',
+    'cane-bush-berries',
+    'bush',
+    'subtropical',
+    6,
+    12,
+    18,
+    'C',
+    // University of Arkansas Division of Agriculture: "Plants are understory shrubs in nature
+    // and grow in moderate to heavy shade, but tea plantations are almost always in open fields
+    // in full sun", a stronger shade affinity than coffee's own "light shade"
+    2,
+    // ECOCROP sheet 599 cycle 240 to 365 days, a fruit cycle of the full year, as lemon and mango
+    365,
+    // Zhang et al. 2022, Mississippi State field trial: "0.76 m between plants within a row,
+    // 0.91 m between inner rows", sqrt(76 x 91 cm) = 83.2 cm
+    83,
+    // NC State Extension Plant Toolbox: "Height: 6 ft. 0 in. - 15 ft. 0 in.", the 10.5 ft
+    // midpoint
+    3.2,
+    // NC State Extension Plant Toolbox: "Width: 4 ft. 0 in. - 8 ft. 0 in.", the 6 ft midpoint
+    1.83,
+    {
+      life: 'woody-perennial',
+      // not found, the catalogue keeps the perennial default of 3 years
+      // NC State Extension Plant Toolbox: the Chinese type (var. sinensis) is "hardy into USDA
+      // Zone 6" and the Assam type (var. assamica) only to "zone 7 and south". Zone 7a, the
+      // warmer of the two, so a site this row admits is always warm enough for either type
+      coldC: -17.8,
+      // ECOCROP sheet 599: temperature 8 / 20-30 / 35 C, rainfall 1000 / 1400-2000 / 5000 mm,
+      // pH 4 / 4.5-5.5 / 6, cycle 240 to 365 days
+      temp: [8, 20, 30, 35],
+      rain: [1000, 1400, 2000, 5000],
+      ph: [4, 4.5, 5.5, 6],
+      cycle: [240, 365],
+      // ECOCROP sheet 599 climate zones: Aw, Ar, Cf
+      koppen: [...AW, ...AR, ...CF],
+      // FAO-56 Table 22, "Tea - non-shaded": Zr 0.9-1.5 m, p 0.40, the 1.2 m midpoint
+      zr: 1.2,
+      p: 0.4,
+      // Zhang et al. 2022, sampling fresh leaf at the Mississippi State field trial "in spring,
+      // summer, and fall... on 10 April, 12 July, and 18 October": their picking schedule, not a
+      // commercial harvest calendar
+      harvest: { wholeSeason: true, citations: ['zhang-2022-tea-shade-nets-mississippi'] },
+      laubNote: NO_COMPARABLE_CROP_NOTE,
+    },
+  ],
+  [
+    'cacao',
+    'Theobroma cacao',
+    'Malvaceae',
+    'cacao|cocoa',
+    // laubGroup, dliClass, habit and archetype as coffee
+    'berries',
+    'cane-bush-berries',
+    'bush',
+    'subtropical',
+    6,
+    12,
+    18,
+    'C',
+    // Duke 1983: "Plants are shade-tolerant... Seedling cacao does best with only 25% full
+    // sunlight, saplings with closer to 50%", a stronger shade need than coffee's own
+    2,
+    // ECOCROP sheet 2074 cycle 180 to 365 days, a fruit cycle of the full year, as lemon and
+    // mango
+    365,
+    // CTAHR AB-17 (Kona, Hawaii economic case study): "The example farm's tree spacing is 6 ft
+    // by 7 ft", sqrt(6 x 7) = 6.48 ft
+    198,
+    // Duke 1983: "Small tree usually 4-8 m tall, rarely up to 20 m", the 6 m midpoint
+    6,
+    // no source gives cacao a canopy spread distinct from its own tree spacing, the spacing
+    // above stands in, as chayote's and black-walnut's do
+    1.98,
+    {
+      life: 'woody-perennial',
+      // Duke 1983: "Remove floral buds until trees are 5 years old"
+      yearsToMature: 5,
+      // ECOCROP sheet 2074 killing temperature during rest, as mango's own sheet gives its own
+      coldC: 0,
+      // ECOCROP sheet 2074: temperature 10 / 21-32 / 38 C, rainfall 900 / 1200-3000 / 7600 mm,
+      // pH 4 / 5-6.5 / 8, cycle 180 to 365 days
+      temp: [10, 21, 32, 38],
+      rain: [900, 1200, 3000, 7600],
+      ph: [4, 5, 6.5, 8],
+      cycle: [180, 365],
+      // ECOCROP sheet 2074 climate zones: Aw, Ar
+      koppen: [...AW, ...AR],
+      // FAO-56 Table 22, "Cacao": Zr 0.7-1.0 m, p 0.30, the 0.85 m midpoint
+      zr: 0.85,
+      p: 0.3,
+      // Duke 1983: "fruits mature throughout the year"
+      harvest: { wholeSeason: true, citations: ['duke-1983-cacao-energy-crops'] },
+      laubNote: OUTSIDE_SCOPE_NOTE,
     },
   ],
   [

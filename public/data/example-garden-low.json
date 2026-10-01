@@ -1,21 +1,21 @@
 {
   "version": 5,
-  "savedAtUtcMillis": 1790817999112,
+  "savedAtUtcMillis": 1790826807641,
   "sceneTimeUtcMillis": 1723491000000,
   "example": {
     "label": "Example agrivoltaic garden, Amherst, Massachusetts",
-    "generatedAtUtc": "2026-10-01T01:26:39.112Z",
+    "generatedAtUtc": "2026-10-01T03:53:27.641Z",
     "generator": "scripts/bake-example-garden.mjs",
     "siteLabel": "Phoenix, Arizona",
     "weather": "open-meteo typical meteorological year, 8760 hours",
     "backend": "tregenza-mf1",
     "targetCellSizeM": 0.4,
-    "bakeElapsedMs": 2265,
+    "bakeElapsedMs": 2183,
     "quantisationErrorMolM2Day": 0.006275177001953125,
     "notes": [
       "70 x 90 cells at 0.4 m, baked on the CPU reference backend",
       "1357 binned sun directions, tregenza-mf1 sky, 2 sub-steps per hour",
-      "6 plantings, each ranked against this bake and derived through derivePlanting",
+      "9 plantings, each ranked against this bake and derived through derivePlanting",
       "Bed 3: no polyculture the light and soil support"
     ]
   },
@@ -109,7 +109,7 @@
               "sowDay": 152,
               "harvestStartDay": 308,
               "harvestEndDay": 338,
-              "plantCount": 14
+              "plantCount": 10
             },
             {
               "id": "bed-1:napa-cabbage:60",
@@ -121,7 +121,19 @@
               "sowDay": 60,
               "harvestStartDay": 130,
               "harvestEndDay": 144,
-              "plantCount": 41
+              "plantCount": 27
+            },
+            {
+              "id": "bed-1:maize-grain:121",
+              "bedId": "bed-1",
+              "cropId": "maize-grain",
+              "cultivarId": null,
+              "role": "target-crop",
+              "tier": "overstory",
+              "sowDay": 121,
+              "harvestStartDay": 238,
+              "harvestEndDay": 252,
+              "plantCount": 23
             }
           ]
         },
@@ -177,7 +189,7 @@
               "sowDay": 152,
               "harvestStartDay": 308,
               "harvestEndDay": 338,
-              "plantCount": 14
+              "plantCount": 10
             },
             {
               "id": "bed-2:napa-cabbage:60",
@@ -189,7 +201,19 @@
               "sowDay": 60,
               "harvestStartDay": 130,
               "harvestEndDay": 144,
-              "plantCount": 41
+              "plantCount": 27
+            },
+            {
+              "id": "bed-2:maize-grain:121",
+              "bedId": "bed-2",
+              "cropId": "maize-grain",
+              "cultivarId": null,
+              "role": "target-crop",
+              "tier": "overstory",
+              "sowDay": 121,
+              "harvestStartDay": 238,
+              "harvestEndDay": 252,
+              "plantCount": 23
             }
           ]
         },
@@ -288,7 +312,7 @@
               "sowDay": 152,
               "harvestStartDay": 308,
               "harvestEndDay": 338,
-              "plantCount": 14
+              "plantCount": 10
             },
             {
               "id": "bed-4:napa-cabbage:60",
@@ -300,7 +324,19 @@
               "sowDay": 60,
               "harvestStartDay": 130,
               "harvestEndDay": 144,
-              "plantCount": 41
+              "plantCount": 27
+            },
+            {
+              "id": "bed-4:maize-grain:121",
+              "bedId": "bed-4",
+              "cropId": "maize-grain",
+              "cultivarId": null,
+              "role": "target-crop",
+              "tier": "overstory",
+              "sowDay": 121,
+              "harvestStartDay": 238,
+              "harvestEndDay": 252,
+              "plantCount": 23
             }
           ]
         }
