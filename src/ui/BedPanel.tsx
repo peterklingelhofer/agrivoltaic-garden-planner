@@ -352,7 +352,7 @@ const PlantingSection = ({
   // lists agree about how much of the ranking is on screen
   const showAllCrops = useAppStore((s) => s.showAllCrops)
   const setShowAllCrops = useAppStore((s) => s.setShowAllCrops)
-  // a name typed in, which is the only way into a 182-crop ranking for somebody who came here
+  // a name typed in, which is the only way into a 209-crop ranking for somebody who came here
   // wanting one plant. Local, because it's a question about this screen
   const [search, setSearch] = useState('')
   // the planting this draft would take the place of, empty for adding alongside
@@ -622,7 +622,7 @@ const PlantingSection = ({
       {/*
         What is in the bed already, above the list to pick from. The ranking is reference and the
         plantings are the thing a grower came to change, so the plantings come first. With the
-        ranking above them, "Fix Bed 1" on the seasons step would land on 182 ranked crops and never
+        ranking above them, "Fix Bed 1" on the seasons step would land on 209 ranked crops and never
         reach the planting it names
       */}
       {bed.plantings.length === 0 ? null : (
@@ -692,7 +692,7 @@ const PlantingSection = ({
         </p>
       ) : (
         <>
-          {/* the only way into a 182-crop ranking for somebody who came here wanting one plant:
+          {/* the only way into a 209-crop ranking for somebody who came here wanting one plant:
               a search field lets a visitor jump straight to the plant they came for */}
           <TextField
             testId="control-bed-crop-search"
@@ -870,7 +870,7 @@ const PlantingSection = ({
                 >
                   <span className="picker-label">
                     {/* decorative, and the crop's own name is the next thing in the line: what
-                        it buys is an eye running down 182 rows and stopping on the shape it
+                        it buys is an eye running down 209 rows and stopping on the shape it
                         wants */}
                     {glyph === undefined ? null : (
                       <CropPicture cropId={glyph.id} dliClass={glyph.dliClass} />

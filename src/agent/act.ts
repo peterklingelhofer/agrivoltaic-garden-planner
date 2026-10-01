@@ -360,7 +360,7 @@ const asksPanelCost = (subject: string | null): boolean => {
  * specific the answer is.
  *
  * A planting refusal first, because it's about THIS bed and this attempt. Then the ranking's own
- * verdict, which has an opinion about all 182 crops and carries a `LimitingFactor` with an
+ * verdict, which has an opinion about all 209 crops and carries a `LimitingFactor` with an
  * explanation for every one it wouldn't recommend. Only if both are silent does it say so.
  *
  * The ranking is the more useful half. `planRefusals` is only written when the planner was ASKED to

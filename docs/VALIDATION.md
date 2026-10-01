@@ -109,7 +109,7 @@ data across every RSR the app defines (5% to 90%):
   40%, forages through 25% and leafy vegetables through 15%, peaking at 116.1%, 115.5%, 108.3%,
   103.7% and 101.3%. For these five groups the gate does what Decision Record 6 describes: a
   water-limited site can show a modeled benefit, and a non-water-limited site is held at parity.
-  Leafy vegetables is the one to watch, because it holds 62 of the 182 catalog rows and its
+  Leafy vegetables is the one to watch, because it holds 66 of the 209 catalog rows and its
   upper 95% bound exceeds 100% from 5% to 65% RSR, so the gate moves its band across most of the
   usable range.
 - **Corn and grain legumes** never rise above 100% at any RSR, central estimate or 95% upper bound.
@@ -161,23 +161,24 @@ regression tests, and nowhere else:
   interval is symmetric in log space) with no external check possible: a trial reports a mean and
   an interval across replicate plots, and comparing a draw would need the single-season realization
   a trial never publishes.
-- **The DLI gate** that decides whether a crop can grow in a bed at all is a different mechanism
-  from the shade-yield curve this file checks, and it rests on thinner evidence. 177 of the 182
-  per-crop DLI rows are Tier C. 171 of them cite nothing for light: the figure is the crop's garden
-  sun label, converted into a band by the app's own arithmetic, and the row says no cited work
-  measured it. The other six cite the documents their numbers come from: tomato, both peppers,
-  cucumber and spinach cite the VCE, Purdue and Runkle greenhouse guidance, and raspberry cites the
-  Widmer et al. 2026 agrivoltaic trial. The three Tier A rows (leaf and head lettuce, basil) are
-  read from per-crop trials that place no failure point, and the rows say so (Decision Record 23).
-  Two more rows are Tier B: potato, citing an agrivoltaic potato trial, and strawberry, citing a
-  four-year, 21-site agrivoltaic trial that states its figure in the app's own unit. The gate also
-  has a floor and almost no ceiling: no source gives an upper DLI bound for any crop but lettuce,
-  where Cornell's CEA handbook reports tipburn as light-limited at 12 to 17 mol/m2/d depending on
-  cultivar and airflow. The model carries 17 as `dliMaxBeforeDisorderMolM2Day`: a season mean above
-  it lowers the light score, and a whole month above it is flagged on a crop that still passes. So a
-  shade-loving crop scores as well on light in a full-sun desert bed as a sun crop does. The shade
-  test doesn't touch the DLI gate. A crop that clears it can still have its realized yield checked
-  here, and whether it clears the gate at all is a separate, thinner claim.
+- **The DLI gate** that decides whether a crop can grow in a bed is a different mechanism from the
+  shade-yield curve this file checks, and it rests on thinner evidence. 204 of the 209 per-crop DLI
+  rows are Tier C. 198 of them cite nothing for light: the figure is the crop's garden sun label,
+  converted into a band by the app's own arithmetic, and the row says no cited work measured it. The
+  other six cite the documents their numbers come from: tomato, both peppers, cucumber and spinach
+  cite the Virginia Cooperative Extension (VCE), Purdue and Runkle greenhouse guidance, and
+  raspberry cites the Widmer et al. 2026 agrivoltaic trial. The three Tier A rows (leaf and head
+  lettuce, basil) are read from per-crop trials that don't locate the DLI below which the crop
+  fails, and the rows say so (Decision Record 23). Two more rows are Tier B: potato, citing an
+  agrivoltaic potato trial, and strawberry, citing a four-year, 21-site agrivoltaic trial that
+  states its figure in the app's own unit. The gate also has a floor and almost no ceiling, so a
+  shade-loving crop scores as well on light in a full-sun desert bed as a sun crop does. Lettuce is
+  the one crop with a sourced upper bound: Cornell's controlled-environment agriculture (CEA)
+  handbook puts the tipburn ceiling at 12 to 17 mol/m2/d, depending on cultivar and airflow. The
+  model carries 17 as `dliMaxBeforeDisorderMolM2Day`: a season mean above it lowers the light score,
+  and a whole month above it is flagged on a crop that still passes. The shade test doesn't touch
+  the DLI gate. A crop that clears it can still have its realized yield checked here, and whether it
+  clears the gate is a separate, thinner claim.
 
 ## 5. Unvalidated: measured in no garden
 

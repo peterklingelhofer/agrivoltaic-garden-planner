@@ -14,7 +14,7 @@ import { PlantsPanel } from './PlantsPanel'
 import { mount, type Harness } from './testkit'
 
 /**
- * The picker as a beginner meets it: a ranking of 182 crops, a box that says how many of them to
+ * The picker as a beginner meets it: a ranking of 209 crops, a box that says how many of them to
  * show, and a search for the name of the plant you came for, since scrolling past hops, tomatillo,
  * purslane and phacelia looking for a tomato ends on field pea.
  *
