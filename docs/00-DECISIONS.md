@@ -877,21 +877,23 @@ Known limits: every cool-season crop shares the archetype's spring offset, so an
 climate has a dozen jobs on one day. The succession schedule sows peas into June. Where the heat
 supply stretches days to maturity, a melon's harvest can land in late October.
 
-A perennial's harvest can also come from an extension harvest calendar: 48 perennials carry a
-figure read against the source region's own median last spring freeze, from NOAA's 1991-2020
-climate normals. Most carry so many days off that freeze and a stated picking season
-(`harvestDays`). The rest are picked right through the growing season, where the source names no
-narrower window. The figures count from a median, so the harvest sits on the site's median season
-whatever frost risk the grower sets, since that setting moves planting and leaves ripening alone. A
-perennial planted inside its own picking season is picked from the day it goes in. Teaberry,
-highbush cranberry, oregano, hyssop, good king henry, jerusalem artichoke, murnong, crabapple and
-avocado carry no such figure and keep the catalog window, along with the tropical perennials and
-the support plants. A frost-free site moves only a whole-season crop's harvest, to the bed's own
-longest growing run: an after-freeze figure has no freeze there to count from, so it keeps the
-catalog window too. Counting from spring alone can stretch a long-season source onto a
-short-season garden. With a median last spring freeze on April 20 and a first fall freeze on 22
-October, apple and hazelnut are still picked almost four weeks past that freeze, and blackberry
-about two and a half.
+A perennial's harvest can also come from an extension harvest calendar, and 64 perennials carry a
+figure from one. Of these, 47 carry an offset in days from the source region's median last spring
+freeze, and the length of that region's median frost-free season (`seasonDays`), both from NOAA's
+1991-2020 climate normals: an offset inside the source's season lands at the same share of the
+site's median season, an offset before it counts back from the site's spring freeze unscaled, and
+one past it counts on from the site's fall freeze unscaled. Picking then runs for the source's
+stated season (`harvestDays`), unscaled. The other 17 are picked right through the growing season,
+where the source names no narrower window. The figures count from a median, so the harvest sits on
+the site's median season whatever frost risk the grower sets, since that setting moves planting and
+leaves ripening alone. A perennial planted inside its own picking season is picked from the day it
+goes in. Teaberry, highbush cranberry, oregano, hyssop, good king henry, jerusalem artichoke,
+murnong, crabapple and avocado carry no such figure and keep the catalog window, along with the
+tropical perennials and the support plants. A frost-free site moves only a whole-season crop's
+harvest, to the bed's own longest growing run: an after-freeze figure has no freeze there to count
+from, so it keeps the catalog window too. One limit remains: the picking length isn't scaled, so
+apple's 122 days from a 212-day source season still run about two weeks past the first fall freeze
+in a 185-day season (median April 20 to October 22: picked from July 7 to November 6).
 
 ## 21. Row azimuth is the direction the rows run
 

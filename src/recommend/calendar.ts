@@ -753,12 +753,12 @@ const catalogWindowHarvest = (crop: Crop, site: Site): HarvestWindow => {
 const HARVEST_PERCENTILE: ExceedancePercentile = 50
 
 /**
- * A perennial's harvest where the catalog carries an extension harvest calendar for it: picked
- * so many days off the site's own median last spring freeze, for as long as the source's picking
- * season, or picked right through the frost-free season where the source names no narrower one.
- * A site with no frost in its median year has no freeze to count from there, so it counts from
- * the frost-risk setting's own anchors. Where the catalog carries no such figure, its growing
- * window stands, as before
+ * A perennial's harvest where the catalog carries an extension harvest calendar for it: placed
+ * at the same point in the site's own median season that the source holds in its own, for as long
+ * as the source's picking season, or picked right through the frost-free season where the source
+ * names no narrower one. A site with no frost in its median year has no freeze to count from
+ * there, so it counts from the frost-risk setting's own anchors. Where the catalog carries no
+ * such figure, its growing window stands, as before
  */
 const perennialHarvestWindow = (
   crop: Crop,
@@ -775,16 +775,40 @@ const perennialHarvestWindow = (
     return {
       start: season.lastSpringFreeze,
       end: season.firstFallFreeze,
-      basis: { kind: 'harvest-calendar', afterFreezeDays: null, percentile: seasonPercentile },
+      basis: {
+        kind: 'harvest-calendar',
+        afterFreezeDays: null,
+        sourceSeasonDays: null,
+        percentile: seasonPercentile,
+      },
     }
   }
-  const start = wrapDayOfYear(season.lastSpringFreeze + harvest.afterFreezeDays)
+  const { afterFreezeDays, sourceSeasonDays } = harvest
+  /*
+    The source's own harvest sits at a point in its own season, and a garden's season can run much
+    shorter or longer than that one. A negative offset counts back from the spring freeze on its
+    own, since the source picked before its own season opened and no season length applies there
+    yet. An offset past the source's own season counts forward from the fall freeze on its own
+    too, for a crop dug or picked once the ground has started freezing, such as horseradish.
+    Everything between places the harvest at the same share of the garden's season that it holds
+    of the source's, so a much shorter or longer season moves the harvest along with it
+  */
+  const start =
+    afterFreezeDays < 0
+      ? wrapDayOfYear(season.lastSpringFreeze + afterFreezeDays)
+      : afterFreezeDays > sourceSeasonDays
+        ? wrapDayOfYear(season.firstFallFreeze + (afterFreezeDays - sourceSeasonDays))
+        : wrapDayOfYear(
+            season.lastSpringFreeze +
+              Math.round((afterFreezeDays * season.frostFreeDays) / sourceSeasonDays),
+          )
   return {
     start,
     end: wrapDayOfYear(start + crop.harvestDurationDays),
     basis: {
       kind: 'harvest-calendar',
-      afterFreezeDays: harvest.afterFreezeDays,
+      afterFreezeDays,
+      sourceSeasonDays,
       percentile: seasonPercentile,
     },
   }
@@ -989,7 +1013,13 @@ const frostFreeCalendar = (input: CalendarInput, anchors: SeasonAnchors): CropCa
         ? {
             start: longest.start,
             end: longest.end,
-            basis: { kind: 'harvest-calendar', afterFreezeDays: null, percentile, frostFree: true },
+            basis: {
+              kind: 'harvest-calendar',
+              afterFreezeDays: null,
+              sourceSeasonDays: null,
+              percentile,
+              frostFree: true,
+            },
           }
         : catalogWindowHarvest(crop, site)
     return {

@@ -1,16 +1,16 @@
 {
   "version": 5,
-  "savedAtUtcMillis": 1790826918343,
+  "savedAtUtcMillis": 1790857636147,
   "sceneTimeUtcMillis": 1723491000000,
   "example": {
     "label": "Example agrivoltaic garden, Amherst, Massachusetts",
-    "generatedAtUtc": "2026-10-01T03:55:18.343Z",
+    "generatedAtUtc": "2026-10-01T12:27:16.147Z",
     "generator": "scripts/bake-example-garden.mjs",
     "siteLabel": "Bergen, Norway",
     "weather": "open-meteo typical meteorological year, 8760 hours",
     "backend": "tregenza-mf1",
     "targetCellSizeM": 0.4,
-    "bakeElapsedMs": 1927,
+    "bakeElapsedMs": 1852,
     "quantizationErrorMolM2Day": 0.003299713134765625,
     "notes": [
       "70 x 90 cells at 0.4 m, baked on the CPU reference backend",
@@ -118,8 +118,8 @@
               "role": "target-crop",
               "tier": "mid-canopy",
               "sowDay": 91,
-              "harvestStartDay": 241,
-              "harvestEndDay": 262,
+              "harvestStartDay": 248,
+              "harvestEndDay": 269,
               "plantCount": 1
             },
             {
@@ -186,8 +186,8 @@
               "role": "target-crop",
               "tier": "shrub",
               "sowDay": 91,
-              "harvestStartDay": 181,
-              "harvestEndDay": 242,
+              "harvestStartDay": 188,
+              "harvestEndDay": 249,
               "plantCount": 4
             },
             {
@@ -322,8 +322,8 @@
               "role": "target-crop",
               "tier": "shrub",
               "sowDay": 91,
-              "harvestStartDay": 181,
-              "harvestEndDay": 242,
+              "harvestStartDay": 188,
+              "harvestEndDay": 249,
               "plantCount": 4
             },
             {

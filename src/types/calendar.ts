@@ -28,6 +28,8 @@ export type CalendarBasis =
       readonly kind: 'harvest-calendar'
       /** Null for a whole-season crop, which has no single after-freeze figure */
       readonly afterFreezeDays: number | null
+      /** The source region's own median frost-free season. Null wherever afterFreezeDays is */
+      readonly sourceSeasonDays: number | null
       readonly percentile: ExceedancePercentile
       /** Set where a frost-free site picks a whole-season crop over its longest growing run instead */
       readonly frostFree?: true

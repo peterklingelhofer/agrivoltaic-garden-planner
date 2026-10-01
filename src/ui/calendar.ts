@@ -121,8 +121,16 @@ export const basisLabel = (basis: CalendarBasis): string => {
         ? 'no frost here: picked through its growing season'
         : `picked from the last spring freeze to the first fall freeze, ${basis.percentile}% frost risk`
     }
-    const side = basis.afterFreezeDays < 0 ? 'before' : 'after'
-    return `${Math.abs(basis.afterFreezeDays)} days ${side} the last spring freeze, from an extension harvest calendar, ${basis.percentile}% exceedance`
+    const { afterFreezeDays, sourceSeasonDays, percentile } = basis
+    if (afterFreezeDays < 0) {
+      return `${Math.abs(afterFreezeDays)} days before the last spring freeze, from an extension harvest calendar, ${percentile}% frost risk`
+    }
+    if (sourceSeasonDays !== null && afterFreezeDays > sourceSeasonDays) {
+      return `${afterFreezeDays - sourceSeasonDays} days after the first fall freeze, as an extension harvest calendar places it, ${percentile}% frost risk`
+    }
+    const percent =
+      sourceSeasonDays === null ? 0 : Math.round((100 * afterFreezeDays) / sourceSeasonDays)
+    return `${percent}% of the way through the frost-free season, where an extension harvest calendar places it, ${percentile}% frost risk`
   }
   return `${basis.backedOffDays} days, counted from the crop's days to maturity`
 }

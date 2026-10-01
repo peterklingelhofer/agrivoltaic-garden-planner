@@ -1,16 +1,16 @@
 {
   "version": 5,
-  "savedAtUtcMillis": 1790826807641,
+  "savedAtUtcMillis": 1790857603316,
   "sceneTimeUtcMillis": 1723491000000,
   "example": {
     "label": "Example agrivoltaic garden, Amherst, Massachusetts",
-    "generatedAtUtc": "2026-10-01T03:53:27.641Z",
+    "generatedAtUtc": "2026-10-01T12:26:43.316Z",
     "generator": "scripts/bake-example-garden.mjs",
     "siteLabel": "Phoenix, Arizona",
     "weather": "open-meteo typical meteorological year, 8760 hours",
     "backend": "tregenza-mf1",
     "targetCellSizeM": 0.4,
-    "bakeElapsedMs": 2183,
+    "bakeElapsedMs": 2159,
     "quantizationErrorMolM2Day": 0.006275177001953125,
     "notes": [
       "70 x 90 cells at 0.4 m, baked on the CPU reference backend",
