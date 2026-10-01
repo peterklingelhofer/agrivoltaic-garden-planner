@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState, type ReactElement } from 'react'
+import { isNativeIn } from '../data/catalog/native-ranges'
 import { ARCHETYPE_LABEL } from '../recommend/design'
 import { soilWaterStage } from '../recommend/stages/soil-water'
 import { AMBITION_CLASSES } from '../recommend/suggest'
 import { FINAL_OPTIONS } from '../sim/pipeline'
-import { bedLightSummary } from '../state/bed-light'
+import { bedLightSummary, zoneWord } from '../state/bed-light'
 import { growingWindowOf } from '../state/growing-window'
 import { EMPTY_LIST, type AppState } from '../state/slices'
 import { selectedBedOf, useAppStore } from '../state/store'
@@ -71,14 +72,6 @@ const sameSet = (left: readonly CropId[], right: readonly CropId[]): boolean => 
 
 const cropIdsOf = (bed: Bed): readonly CropId[] => bed.plantings.map((planting) => planting.cropId)
 
-/**
- * The zone word on a card, read off the bed's own growing-season shade at the thresholds the layout
- * search itself places beds by (under 15% is a gap between rows, over 40% is under one), the same
- * rounded percent and thresholds the light step prints
- */
-const shadeWord = (openSkyPercent: number): string =>
-  openSkyPercent >= 85 ? 'sunny' : openSkyPercent >= 60 ? 'part shade' : 'shady'
-
 const zoneWordOf = (
   bedLight: AppState['bedLight'],
   bed: Bed,
@@ -87,7 +80,7 @@ const zoneWordOf = (
   const light = bedLight.find((entry) => entry.bedId === bed.id)
   if (light === undefined) return null
   const lost = Math.round(bedLightSummary(light, window).shadeRatio * 100)
-  return shadeWord(100 - lost)
+  return zoneWord(100 - lost)
 }
 
 /* ------------------------------- replanting after a chip ------------------------------- */
@@ -609,7 +602,11 @@ const topIdsOf = (sets: AppState['sets'], bedId: BedId | null): readonly CropId[
  * anything to say. Kept separate because one replants beds and the other only reports.
  *
  * The bed's own previous top ids live in a ref keyed by bed id, so switching beds between two
- * changes compares a bed against its own last reading
+ * changes compares a bed against its own last reading.
+ *
+ * `nativesTurnedOn` is read at the same point as `cause`, off the same two states, so `settle`
+ * knows whether to count the catalog's own natives for the site's area: a count worth passing
+ * only when that's the switch that just moved and there's an area to count it against
  */
 const useChoicesEffect = (): string | null => {
   const [message, setMessage] = useState<string | null>(null)
@@ -619,6 +616,7 @@ const useChoicesEffect = (): string | null => {
     let waiting = false
     let cause = ''
     let bedId: BedId | null = null
+    let nativesTurnedOn = false
     const settle = (): void => {
       waiting = false
       if (bedId === null) return
@@ -628,13 +626,19 @@ const useChoicesEffect = (): string | null => {
       const after = topIdsOf(state.sets, bedId)
       const before = previousTopIds.current.get(bedId) ?? after
       previousTopIds.current.set(bedId, after)
-      setMessage(choicesEffectSentence(cause, bedLabel, before, after, catalog))
+      const area = state.site.status === 'ready' ? state.site.value.botanicalArea : null
+      const nativeCropIds =
+        nativesTurnedOn && area !== null
+          ? catalog.filter((crop) => isNativeIn(crop.id, area) === true).map((crop) => crop.id)
+          : null
+      setMessage(choicesEffectSentence(cause, bedLabel, before, after, catalog, nativeCropIds))
     }
     const unsubscribe = useAppStore.subscribe((state, previous) => {
       if (likesKeyOf(state) !== likesKeyOf(previous)) {
         const catalog = state.catalog.status === 'ready' ? state.catalog.value : EMPTY_LIST
         bedId = selectedBedOf(state)?.id ?? null
         cause = causeOf(state, previous, catalog)
+        nativesTurnedOn = state.wildlife.favorNative && !previous.wildlife.favorNative
         waiting = true
         // the automatic ranking will run on this change. Wait for it to land, the same as above
         if (!(state.autoRun && autoRunReady(state))) settle()
@@ -658,7 +662,7 @@ const Likes = (): ReactElement => {
   const setWildlife = useAppStore((s) => s.setWildlife)
   const site = useAppStore((s) => s.site)
   const ambition = useAppStore((s) => s.answers.ambition)
-  const region = regionNote(site)
+  const region = regionNote(site, catalog)
   const choicesEffect = useChoicesEffect()
   const plantEveryBed = useAppStore((s) => s.plantEveryBed)
 
@@ -749,8 +753,9 @@ const Likes = (): ReactElement => {
         checked={wildlife.favorNative}
         onChange={(checked) => setWildlife({ favorNative: checked })}
       />
-      {/* with no region there is nothing to be native TO, and a switch that quietly does nothing
-          reads exactly like one that worked: said whichever way the switch is set */}
+      {/* with no region, or nothing in the catalog native to it, there's nothing for the switch
+          to favor, and a switch that quietly does nothing reads exactly like one that worked:
+          said whichever way the switch is set */}
       {region === null ? null : (
         <p className="notice notice-warn" data-testid="status-plants-natives-region">
           {region}

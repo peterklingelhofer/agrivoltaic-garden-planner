@@ -374,13 +374,18 @@ describe('feasibility', () => {
     expect(sowDay(calendar)).toBe(152)
   })
 
+  /**
+   * Apple now carries an extension harvest calendar (`perennialHarvest`), so its own harvest is
+   * no longer the catalog window: see the `perennial harvest dating` tests below for the dates
+   * a crop with and without that figure get
+   */
   it('gives a perennial a planting window and no invented maturity date', async () => {
     const crop = need(await catalogPromise, 'apple')
     const calendar = calendarFor(crop)
     expect(crop.thermal).toBeNull()
     expect(calendar.feasibility.kind).toBe('no-thermal-data')
     expect(calendar.plantings[0]?.method).toBe('transplant-out')
-    expect(calendar.harvest.basis.kind).toBe('catalog-window')
+    expect(calendar.harvest.basis.kind).toBe('harvest-calendar')
   })
 
   /**
@@ -432,6 +437,56 @@ describe('feasibility', () => {
     expect(day).toBeLessThanOrEqual(304)
     // a clove sown in autumn is lifted the following summer
     expect(forwardDays(day, calendar.harvest.start)).toBeGreaterThan(200)
+  })
+})
+
+/**
+ * 48 perennials carry a figure from an extension harvest calendar, read against the source
+ * region's own median last spring freeze, so the harvest sits on the site's median season whatever
+ * frost risk the grower sets. The rest keep the catalog growing window
+ */
+describe('perennial harvest dating', () => {
+  it("starts an after-last-freeze crop's harvest the catalog's own days off the median last spring freeze", async () => {
+    const strawberry = need(await catalogPromise, 'strawberry')
+    if (strawberry.perennialHarvest?.kind !== 'after-last-freeze') {
+      throw new Error('fixture crop lost its after-last-freeze harvest override')
+    }
+    const median = seasonAnchors(siteFixture(), 50)
+    const calendar = calendarFor(strawberry)
+    expect(forwardDays(median.lastSpringFreeze, calendar.harvest.start)).toBe(
+      strawberry.perennialHarvest.afterFreezeDays,
+    )
+    expect(forwardDays(calendar.harvest.start, calendar.harvest.end)).toBe(
+      strawberry.harvestDurationDays,
+    )
+    expect(calendar.harvest.basis).toEqual({
+      kind: 'harvest-calendar',
+      afterFreezeDays: strawberry.perennialHarvest.afterFreezeDays,
+      percentile: 50,
+    })
+    // the frost-risk setting moves planting and leaves the ripening alone
+    expect(calendarFor(strawberry, 10).harvest).toEqual(calendar.harvest)
+  })
+
+  it('runs a whole-season crop from the median last spring freeze to the median first fall freeze', async () => {
+    const thyme = need(await catalogPromise, 'thyme')
+    expect(thyme.perennialHarvest?.kind).toBe('whole-season')
+    const median = seasonAnchors(siteFixture(), 50)
+    const calendar = calendarFor(thyme)
+    expect(calendar.harvest.start).toBe(median.lastSpringFreeze)
+    expect(calendar.harvest.end).toBe(median.firstFallFreeze)
+    expect(calendar.harvest.basis).toEqual({
+      kind: 'harvest-calendar',
+      afterFreezeDays: null,
+      percentile: 50,
+    })
+  })
+
+  it('keeps the catalog window for a perennial with no extension harvest calendar', async () => {
+    const oregano = need(await catalogPromise, 'oregano')
+    expect(oregano.perennialHarvest).toBeNull()
+    const calendar = calendarFor(oregano)
+    expect(calendar.harvest.basis.kind).toBe('catalog-window')
   })
 })
 

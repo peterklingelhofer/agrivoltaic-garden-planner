@@ -1,6 +1,6 @@
 # Citation corpus
 
-241 sources (171 crossref-verified, 1 datacite-verified, 16 unverified, 53 url-verified). Machine-readable companion: [`CITATIONS.csl.json`](./CITATIONS.csl.json) (CSL-JSON).
+284 sources (172 crossref-verified, 1 datacite-verified, 16 unverified, 95 url-verified). Machine-readable companion: [`CITATIONS.csl.json`](./CITATIONS.csl.json) (CSL-JSON).
 A record enters this corpus verified against the Crossref REST API, against the DataCite REST API,
 or by a fetch of the authoritative publisher, standards-body or government URL, with an Internet
 Archive snapshot standing in where a live page withholds its text.
@@ -45,25 +45,25 @@ Physics, geodata and software sources carry `null`: the scheme does not apply to
 
 | Verification | n |
 |---|---|
-| crossref-verified | 171 |
+| crossref-verified | 172 |
 | datacite-verified | 1 |
 | unverified | 16 |
-| url-verified | 53 |
-| **total** | **241** |
+| url-verified | 95 |
+| **total** | **284** |
 
 | Access level | n |
 |---|---|
-| open-access | 73 |
+| open-access | 74 |
 | paywalled | 115 |
-| public-domain | 52 |
+| public-domain | 94 |
 | public-domain-with-conditions | 1 |
 
 | Evidence tier | n |
 |---|---|
-| A | 39 |
-| B | 73 |
-| C | 36 |
-| null (not applicable) | 93 |
+| A | 40 |
+| B | 74 |
+| C | 76 |
+| null (not applicable) | 94 |
 
 ---
 
@@ -1003,7 +1003,7 @@ Yavari, Rouhangiz; Zaliwciw, Demetrius; Cibin, Raj; McPhillips, Lauren. (2022). 
 
 ## Horticulture & crop physiology
 
-84 sources.
+125 sources.
 
 #### `adhikary2025-clubroot-review`
 
@@ -1070,6 +1070,16 @@ Brechner, Melissa; Both, A. J.. (2013). *Hydroponic Lettuce Handbook*. Cornell U
   - tipburn is light-limited and cultivar-dependent, verbatim: 'For some cultivars, 15 or mol/m2/d is the maximum amount of light that can be used before the physiological condition called tipburn occurs' and 'Without the air flow, we were not able to go over 12 mol/m2/d'
   - seedlings, verbatim: 'the same total daily accumulated light (~22 mol/m2/d). Anecdotal evidence shows that some lettuce seedlings can tolerate 30 mol/m2/d'
 - **Caveat:** A production handbook for one floating-raft greenhouse system, written from Cornell trials on a boston bibb cultivar (Ostinata, no longer available). It gives no minimum DLI and no sustained-days rule for tipburn: the tipburn ceiling it describes moves with cultivar, spacing and vertical airflow (12 to 17 mol/m2/d in its own examples), so it backs the 17 target and the existence of a light-driven tipburn limit, and nothing more precise.
+
+#### `ca-olive-committee-2003-olive-pmsp`
+
+California Olive Committee and California Minor Crops Council. (2003). *A Pest Management Strategic Plan for Olive Production in California*. California Olive Committee / California Minor Crops Council
+
+- URL: <https://ipmdata.ipmcenters.org/documents/pmsps/CAOLIVEPMSP.pdf>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - harvest timing for olive, verbatim: 'Table olive harvest usually begins in mid-September and can extend through November. Cultivars grown for oil, however, are harvested much later so that the maximum amount of oil can accumulate in the fruit' (HARVEST section, document p. 19 (PDF p. 21). Table cultivar region and 'September - November' harvest period also given in the 'Differences in Production of Table Versus Oil Cultivars in California' table, PDF p. 7)
+- **Caveat:** Extension publication, not peer reviewed. Calibrated to San Joaquin and Sacramento Valleys, California (table-cultivar production areas), and the app moves its dates by each garden's own last spring freeze. olive: a pest management strategic plan from the California Olive Committee and the California Minor Crops Council, for table olives in the Central Valley.
 
 #### `chamberlain2014-forest-farming-ramps`
 
@@ -1376,6 +1386,116 @@ Hooks, Cerruti R. R.; Wang, Koon-Hui; Ploeg, Antoon; McSorley, Robert. (2010). *
   - the named sources of that variability: how the marigold is used (intercrop vs cover crop vs soil amendment), seeding rate, interval between marigold and cash crop, cultivar, nematode species or race, temperature and marigold plant age
 - **Caveat:** Literature review, not a trial, and the abstract's own conclusion is that the mechanism is uncertain and the results contradictory. Elsevier paywalls the full text. The Crossref record and the abstract were read via Europe PMC 2026-07-30, and the body never was. SCOPE LIMIT: the abstract addresses PLANT-PARASITIC NEMATODES generally. It doesn't single out root-knot nematode (Meloidogyne), and it doesn't use the phrase 'full-season'. A companion rule that claims root-knot-specific suppression from a full-season stand is claiming more than this entry verifies. Tier B, not A: replicated but strongly context-dependent with management preconditions, and the mechanism is explicitly NOT characterized, which is the A criterion.
 
+#### `iastate-extension-2015-aronia`
+
+Hannan, Joe. (2015). *Growing Aronia in Iowa*. Iowa State University Extension and Outreach, Yard and Garden
+
+- URL: <https://yardandgarden.extension.iastate.edu/article/2015/02-13/aronia.htm>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - harvest timing for aronia, verbatim: 'The fruit ripen from late August through mid-September' (Third paragraph of the article (fruiting-habit paragraph))
+- **Caveat:** Extension publication, not peer reviewed. Calibrated to Iowa, and the app moves its dates by each garden's own last spring freeze.
+
+#### `iastate-extension-2025-rhubarb`
+
+Iowa State University Extension and Outreach. (2025). *Growing Rhubarb in Iowa*. Iowa State University Extension and Outreach, Yard and Garden
+
+- URL: <https://yardandgarden.extension.iastate.edu/how-to/growing-rhubarb-iowa>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - harvest timing for rhubarb, verbatim: 'Begin harvesting rhubarb when stalks reach 10 to 15 inches long (usually sometime in April or early May in Iowa). Rhubarb can be harvested for eight to ten weeks, ending in mid-June' ("Harvesting > When to Harvest" section)
+- **Caveat:** Extension publication, not peer reviewed. Calibrated to Iowa (represented by Des Moines), and the app moves its dates by each garden's own last spring freeze. rhubarb: the start is the middle of the stated range, April to early May.
+
+#### `illinois-extension-herbs-bay-laurel`
+
+University of Illinois Extension. (n.d.). *Bay Laurel*. University of Illinois Extension
+
+- URL: <https://extension.illinois.edu/herbs/bay-laurel>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - harvest timing for bay-laurel, verbatim: 'Leaves can be harvested throughout the season as needed' ("Harvesting" section)
+- **Caveat:** Extension publication, not peer reviewed. Calibrated to Illinois, and the app moves its dates by each garden's own last spring freeze.
+
+#### `illinois-extension-herbs-chives`
+
+University of Illinois Extension. (n.d.). *Chives*. University of Illinois Extension
+
+- URL: <https://extension.illinois.edu/herbs/chives>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - harvest timing for chives, verbatim: 'Harvest chives throughout the season to prevent the leaves from becoming tough and to encourage formation of new bulblets' ("Harvesting" section)
+- **Caveat:** Extension publication, not peer reviewed. Calibrated to Illinois, and the app moves its dates by each garden's own last spring freeze.
+
+#### `illinois-extension-herbs-lemon-balm`
+
+University of Illinois Extension. (n.d.). *Lemon Balm*. University of Illinois Extension
+
+- URL: <https://extension.illinois.edu/herbs/lemon-balm>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - harvest timing for lemon-balm, verbatim: 'Stems can be cut as needed anytime during the season preferably before flowering' ("Harvesting" section)
+- **Caveat:** Extension publication, not peer reviewed. Calibrated to Illinois, and the app moves its dates by each garden's own last spring freeze.
+
+#### `illinois-extension-herbs-lovage`
+
+University of Illinois Extension. (n.d.). *Lovage*. University of Illinois Extension
+
+- URL: <https://extension.illinois.edu/herbs/lovage>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - harvest timing for lovage, verbatim: 'Leaves and stems can be used fresh anytime they are needed' ("Harvesting" section)
+- **Caveat:** Extension publication, not peer reviewed. Calibrated to Illinois, and the app moves its dates by each garden's own last spring freeze.
+
+#### `illinois-extension-herbs-rosemary`
+
+University of Illinois Extension. (n.d.). *Rosemary*. University of Illinois Extension
+
+- URL: <https://extension.illinois.edu/herbs/rosemary>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - harvest timing for rosemary, verbatim: 'The tender tips and foliage can be cut as needed throughout the growing season' ("Harvesting" section)
+- **Caveat:** Extension publication, not peer reviewed. Calibrated to Illinois, and the app moves its dates by each garden's own last spring freeze.
+
+#### `illinois-extension-herbs-sage`
+
+University of Illinois Extension. (n.d.). *Sage*. University of Illinois Extension
+
+- URL: <https://extension.illinois.edu/herbs/sage>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - harvest timing for sage, verbatim: 'Leaves can be harvested through the season as needed' ("Harvest" section)
+- **Caveat:** Extension publication, not peer reviewed. Calibrated to Illinois, and the app moves its dates by each garden's own last spring freeze.
+
+#### `illinois-extension-herbs-savory-winter`
+
+University of Illinois Extension. (n.d.). *Savory: Winter*. University of Illinois Extension
+
+- URL: <https://extension.illinois.edu/herbs/savory-winter>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - harvest timing for winter-savory, verbatim: 'Young shoots and leaves can be harvested throughout the growing season' ("Harvest" section)
+- **Caveat:** Extension publication, not peer reviewed. Calibrated to Illinois, and the app moves its dates by each garden's own last spring freeze.
+
+#### `illinois-extension-herbs-tarragon-french`
+
+University of Illinois Extension. (n.d.). *Tarragon: French*. University of Illinois Extension
+
+- URL: <https://extension.illinois.edu/herbs/tarragon-french>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - harvest timing for tarragon, verbatim: 'Young stem tips and leaves can be harvested as needed throughout the season' ("Harvesting" section)
+- **Caveat:** Extension publication, not peer reviewed. Calibrated to Illinois, and the app moves its dates by each garden's own last spring freeze.
+
+#### `illinois-extension-herbs-thyme`
+
+University of Illinois Extension. (n.d.). *Thyme*. University of Illinois Extension
+
+- URL: <https://extension.illinois.edu/herbs/thyme>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - harvest timing for thyme, verbatim: 'Stems of thyme can be cut through the season but is best cut just before the plant starts to flower' ("Harvesting" section)
+- **Caveat:** Extension publication, not peer reviewed. Calibrated to Illinois, and the app moves its dates by each garden's own last spring freeze.
+
 #### `jose-juglone`
 
 Jose, Shibu; Holzmueller, Eric J.. (2008). *Black Walnut Allelopathy: Implications for Intercropping*. Allelopathy in Sustainable Agriculture and Forestry 303-319
@@ -1446,6 +1566,16 @@ Klein, Alexandra-Maria; Vaissière, Bernard E.; Cane, James H.; Steffan-Dewenter
   - how much a crop's yield depends on animal pollination, by crop and by harvested organ
 - **Caveat:** Classes are stated for crops at the level of the harvested product across 107 world crops. This product applies them at the level of botanical family and harvested organ, which is an inference from the paper and not a per-species reading of it.
 
+#### `ksu-extension-2010-organic-pawpaw`
+
+Pomper, Kirk W.; Crabtree, Sheri B.; Lowe, Jeremy D.. (2010). *Organic Production of Pawpaw*. Kentucky State University Cooperative Extension Program
+
+- URL: <https://www.kysu.edu/wp-content/uploads/2017/09/OrganicPawpawPBI-004-New-2.pdf>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - harvest timing for pawpaw, verbatim: 'Depending on the variety, fruit ripen in late-August to early-October. Fruit ripen on the same tree over about a 2 week period, which reflects an extended spring flowering period' (PBI-004, p. 1)
+- **Caveat:** Extension publication, not peer reviewed. Calibrated to Kentucky (Frankfort, home of the KSU Pawpaw Research Program), and the app moves its dates by each garden's own last spring freeze.
+
 #### `kubota-osu-strawberry-dli`
 
 Kubota Lab, The Ohio State University. (n.d.). *Environment*. Controlled Environment Berry Production Information
@@ -1489,6 +1619,16 @@ Long, Yu; Tan, Xiaofeng; Zhu, Jing; An, Hua. (2024). *Response of blueberry phot
   - highbush blueberry light saturation point near 500 umol/m2/s under field conditions
   - Pmax, apparent quantum yield, LCP and LSP all decline under sustained low light
 - **Caveat:** Single-species, single-study. The paper circulates with neither authors nor DOI, and both are supplied here. The PLOS ONE full text never states '500' as a light saturation point. The nearest textual anchor is a Pn-vs-PAR curve described as plateauing at 400 umol/m2/s, and the fitted LSP values appear only in a bar chart (Fig 3), beyond reach of any text extraction. The '~500 umol/m2/s' figure that circulates for this paper is unconfirmed and must not reach a hard filter.
+
+#### `mahr-2025-anise-hyssop`
+
+Mahr, Susan. (2025). *Anise hyssop, Agastache foeniculum*. University of Wisconsin-Madison Division of Extension
+
+- URL: <https://hort.extension.wisc.edu/articles/anise-hyssop-agastache-foeniculum/>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - harvest timing for anise-hyssop, verbatim: 'The best time to harvest foliage to dry is when the flowers are just past full bloom, as the oil content in the leaves is the highest at that time, but they can be used at any time' (main overview text (before the "Landscape Use" heading))
+- **Caveat:** Extension publication, not peer reviewed. Calibrated to Wisconsin, and the app moves its dates by each garden's own last spring freeze.
 
 #### `mansion-vaquie2019-aphids`
 
@@ -1535,6 +1675,16 @@ Morra, M. J.; Kirkegaard, J. A.. (2002). *Isothiocyanate release from soil-incor
   - the authors' management conclusion: choose a high-glucosinolate rapeseed or mustard variety, provide adequate moisture, and above all maximize cell disruption
 - **Caveat:** Elsevier paywalls the full text. The Crossref record and the abstract were read via Europe PMC 2026-07-30, and the body never was. The cell disruption tested here is FREEZE-THAW in a controlled study, not field maceration by a flail mower or a garden spade. That a gardener's chopping achieves the same disruption is an inference this paper doesn't make. Measures ITC concentration in soil, NOT pest suppression or crop outcome: nothing here shows a garden pest was controlled. Rapeseed and Indian mustard only.
 
+#### `msu-extension-2018-growing-serviceberries`
+
+Palmer, Dara. (2018). *Growing Serviceberries*. Montana State University Extension (MontGuide MT201821AG)
+
+- URL: <https://extension-store.montana.edu/montguides/growing-serviceberries>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - harvest timing for serviceberry, verbatim: 'Serviceberry fruit ripens in late June through July' (Section ‘Harvest and Uses’)
+- **Caveat:** Extension publication, not peer reviewed. Calibrated to Montana, and the app moves its dates by each garden's own last spring freeze.
+
 #### `mt-pleasant2010-iroquoian`
 
 Mt. Pleasant, Jane; Burt, Robert F.. (2010). *Estimating Productivity of Traditional Iroquoian Cropping Systems from Field Experiments and Historical Literature*. Journal of Ethnobiology 30: 52-79
@@ -1569,6 +1719,19 @@ NC State Extension. (n.d.). *North Carolina Extension Gardener Plant Toolbox*. N
   - corn GDD upper limit, verbatim: 'The upper limit for corn is 86 F (30 C)'
   - the threshold-substitution modified GDD method: substitute 50 F for daily minima below it and 86 F for daily maxima above it
 - **Caveat:** EXTRAPOLATION WARNING. The page is about CORN generally and never mentions SWEET corn. This app's rows.ts sweet-corn 10/30 C is an inference from the field-corn convention, with no sweet-corn measurement behind it. OSU EM 9305, which did fit sweet corn specifically, uses 44 F (6.7 C) for fresh-market varieties and 50 F only for processing varieties, so the two sources disagree on exactly the crop this app ships. A weather-network help page isn't peer-reviewed literature. The 10/30 C pair is a standard agronomic convention, which is a different kind of warrant from a measurement.
+
+#### `nelson2007-late-seral-herbs`
+
+Nelson, Cara R.; Halpern, Charles B.; Antos, Joseph A.. (2007). *Variation in responses of late-seral herbs to disturbance and environmental stress*. Ecology 88: 2880-2890
+
+- DOI: [10.1890/06-1989.1](https://doi.org/10.1890/06-1989.1)
+- Verification: Crossref-verified | Access: open-access, evidence tier **B**
+- Backs:
+  - growing-season PPFD averaged 36.4 mol/m2/d in the clearcut and 8.6 mol/m2/d in the adjacent old-growth Douglas-fir forest, verbatim from p. 2882: 'Photosynthetic photon flux density (PPFD) over the growing season averaged 36.4 mol·m-2·d-1 in the harvest area, but only 8.6 mol·m-2·d-1 in the forest'
+  - Asarum caudatum ramet survival in the clearcut was about 30% of the forest's in year 1, verbatim: 'survival rates were ca. 30% of those in the forest (year 1; Fig. 2a-c)'
+  - the depression held into year 2 for Asarum alone, verbatim: 'For Asarum, ramet survival remained depressed in the harvest area (Fig. 2a)', while its surviving ramets' clonal growth (new ramet production) ran markedly higher in the clearcut by year 2
+  - mid-summer air and soil temperatures ran higher in the clearcut, by 3.3 C on the daily mean and up to 5.6 C on the daily maximum
+- **Caveat:** A two-level comparison: nine patches per species in one 6-ha clearcut and the adjacent 7-ha stand of old-growth forest in Washington, so 36.4 is the one light level this app has a measured survival collapse at for this species and never a fitted breakpoint. Mid-summer heat and soil dryness ran higher in the clearcut alongside the light, so this figure folds light, heat and drought stress together. Three species were tracked and the pattern belongs to Asarum alone: Clintonia uniflora's survival was significantly greater in the clearcut by year 2, and Pyrola picta's was comparable between environments throughout.
 
 #### `oikeh-warda-upland-rice-handbook`
 
@@ -1608,6 +1771,62 @@ Oplinger, E. S.; Putnam, D. H.; Kaminski, A. R.; Hanson, C. V.; Oelke, E. A.; Sc
   - verbatim: 'Daytime temperatures of 77F to 80F are optimal; below 68F, growth is reduced, and at 50F germination and growth is inhibited'; 'Commercial varieties of sesame require 90 to 120 frostfree days'
   - verbatim: 'A minimum rainfall of 20 to 26 in. per season is necessary for reasonable yields'
 - **Caveat:** Written for the upper Midwest. The agronomy is transferable, the calendar is local.
+
+#### `osu-extension-2006-lingonberry-pnw583`
+
+Penhallegon, Ross. (2006). *Lingonberry production guide for the Pacific Northwest*. Oregon State University Extension Service (PNW Extension Publication, PNW 583)
+
+- URL: <https://extension.oregonstate.edu/catalog/pnw-583-lingonberry-production-guide-pacific-northwest>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - harvest timing for lingonberry, verbatim: 'There are two bloom periods: March to April and July to August. The fruit ripens in mid-August and mid-October, respectively' (Section ‘Bloom’, p. 4)
+- **Caveat:** Extension publication, not peer reviewed. Calibrated to Willamette Valley, Oregon, and the app moves its dates by each garden's own last spring freeze. lingonberry: two crops a year, in mid-August and mid-October, read as one season.
+
+#### `osu-extension-2013-hazelnuts-orchard-floor`
+
+Olsen, Jeff L.; Peachey, Ed. (2013). *Growing Hazelnuts in the Pacific Northwest: Orchard Floor Management*. Oregon State University Extension Service
+
+- URL: <https://extension.oregonstate.edu/catalog/pub/em-9079-growing-hazelnuts-pacific-northwest-orchard-floor-management>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - harvest timing for hazelnut, verbatim: 'Blank nuts fall before good nuts. After blanks have fallen and just before good nuts begin to drop (usually at the end of August), it might be desirable to do a final flailing and floating to fill small depressions in the ground. ... In most years, it is October before all of the nuts have fallen naturally' (EM 9079, 'Nut Fall' and 'Hazelnut Harvest' sections, p. 3)
+- **Caveat:** Extension publication, not peer reviewed. Calibrated to Oregon (Willamette Valley hazelnut industry), and the app moves its dates by each garden's own last spring freeze. hazelnut: nut drop stands in for harvest: nuts start falling at the end of August and have mostly fallen by October.
+
+#### `osu-extension-2015-hops-em9115`
+
+Getty, Brooke; Townsend, Shaun; Detweiler, Amy Jo. (2015). *Growing hops in the home garden*. Oregon State University Extension Service (EM 9115)
+
+- URL: <https://extension.oregonstate.edu/catalog/em-9115-growing-hops-home-garden>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - harvest timing for hops, verbatim: 'In both Western and Central Oregon, hops typically mature between August 15 and September 15, depending on the cultivar and growing season conditions' (Section ‘Harvesting and storage’)
+- **Caveat:** Extension publication, not peer reviewed. Calibrated to Western and Central Oregon, and the app moves its dates by each garden's own last spring freeze.
+
+#### `osu-extension-2020-blackberries-ec1303`
+
+Strik, Bernadine; Dixon, Emily; Detweiler, Amy Jo; Sanchez, Nicole. (2020). *Growing blackberries in your home garden*. Oregon State University Extension Service (EC 1303)
+
+- URL: <https://extension.oregonstate.edu/catalog/ec-1303-growing-blackberries-your-home-garden>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - harvest timing for blackberry, verbatim: 'All cultivars are summer-bearing (‘Triple Crown’, for example) and are the latest summer-bearing cultivars, fruiting from early August to September or October in the Willamette Valley' (Section ‘Blackberry types > Growth type’, paragraph on semierect cultivars)
+- **Caveat:** Extension publication, not peer reviewed. Calibrated to Willamette Valley, Oregon, and the app moves its dates by each garden's own last spring freeze. blackberry: the semierect type, the guide's latest-fruiting group.
+
+#### `osu-extension-2025-tree-fruits-nuts-home`
+
+Olsen, Jeff L.. (2025). *Growing tree fruits and nuts at home*. Oregon State University Extension Service
+
+- URL: <https://extension.oregonstate.edu/catalog/ec-819-growing-tree-fruits-nuts-home>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - harvest timing for apple, read from Table 3, "Approximate time of maturity": July for Lodi through October for Braeburn, Fuji, Golden Delicious and the other late varieties
+  - harvest timing for pear, read from Table 8, "Approximate time of maturity": Aug 1 - 15 for Starkrimson through Sept 20 - 30 for Comice
+  - harvest timing for peach, read from Table 7, "Approximate time of maturity": early August for Harko and Red Haven through late August for Improved Elberta and Veteran
+  - harvest timing for plum, read from Table 10, European varieties: Sept 1 - 15 for Parsons and Stanley through Oct. 1 for Moyer Perfecto
+  - harvest timing for cherry-sour, read from Table 5, sour varieties: July for Balaton, Montmorency and North Star
+  - harvest timing for apricot, read from Table 4, "Approximate time of maturity": July for Puget Gold, Rival, Royal (Blenheim) and the rest
+  - harvest timing for fig, read from Table 6, "Approximate time of maturity": August for Brown Turkey, Desert King and Lattarula
+- **Caveat:** Extension publication, not peer reviewed. Calibrated to Western Oregon's valleys, Area 1 in the guide's own map, and the app moves its dates by each garden's own last spring freeze. apple, pear and peach: the span runs from the earliest to the latest listed variety. plum: the span runs from the earliest to the latest listed European variety.
 
 #### `peng2015-clubroot-rotation`
 
@@ -1651,6 +1870,16 @@ Rollings, Rosi; Goulson, Dave. (2019). *Quantifying the attractiveness of garden
 - Backs:
   - that flower visitors concentrate on a minority of garden plants, and which plant families those tend to be
 - **Caveat:** A single UK garden over two seasons. Family-level patterns travel further than the per-variety ranking does.
+
+#### `rothenberger-mu-g6470-growing-herbs`
+
+Rothenberger, Ray R.. (n.d.). *Growing Herbs at Home*. University of Missouri Extension
+
+- URL: <https://extension.missouri.edu/publications/g6470>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - harvest timing for mint, verbatim: 'Leaves and stems may be picked anytime' (page 4, "Herb descriptions (continued)", Spearmint entry)
+- **Caveat:** Extension publication, not peer reviewed. Calibrated to Missouri, and the app moves its dates by each garden's own last spring freeze.
 
 #### `runkle2011-vegetable-dli`
 
@@ -1705,6 +1934,16 @@ Sahli, A.; Dakhlaoui, H.; Aïachi Mezghani, M.; Bornaz, S.; Aounallah, M. K.; He
 - Verification: Crossref-verified | Access: paywalled, evidence tier **C**
 - Backs:
   - the chilling and heat requirement estimated for the 'Chemlali' olive cultivar, cited here for its summary of De Melo-Abreu et al.'s 150 to 300 hour range
+
+#### `sare-2021-sea-kale`
+
+Unangst-Rufenacht, Graham. (2021). *Seakale: Commercial Opportunities for New Perennial Crops and Climate Smart Agriculture (Final Report, Project FNE18-895)*. USDA Northeast SARE (Sustainable Agriculture Research and Education), with University of Vermont Extension as technical advisor
+
+- URL: <https://projects.sare.org/project-reports/fne18-895/>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - harvest timing for sea-kale, verbatim: 'Seakale provides a harvest of shoot (in May) and broccoli florets (in early June), which presents farmers with an opportunity to functionally integrate Seakale into their cropping when there are few other crops available for harvest' (Project summary/rationale narrative (opening section, before "Description of farm operation"))
+- **Caveat:** Extension publication, not peer reviewed. Calibrated to Vermont (represented by Burlington), and the app moves its dates by each garden's own last spring freeze. sea-kale: a USDA SARE farmer grant report with University of Vermont Extension as technical adviser, and it gives the harvest as the bare month of May.
 
 #### `shelton2006-trap-cropping`
 
@@ -1810,6 +2049,26 @@ Tirmenstein, D. A.. (1991). *Vaccinium angustifolium, lowbush blueberry*. Fire E
   - lowbush blueberry grows on acidic soils with pH ranging from 2.8 to 6.6 but thrives at pH 4.2 to 5.2
 - **Caveat:** Secondary synthesis of field observations, not a controlled pH trial. Verified against the FEIS full text 2026-07-31.
 
+#### `ucanr-2008-artichoke`
+
+Smith, Richard; Baameur, Aziz; Bari, Mohammad; Cahn, Michael; Giraud, Deborah; Natwick, Eric; Takele, Eta. (2008). *Artichoke Production in California (UC ANR Publication 7221)*. University of California Division of Agriculture and Natural Resources
+
+- URL: <https://ucanr.edu/sites/default/files/2026-04/anrcatalog%20Artichoke%20Production%20in%20California%207221.pdf>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - harvest timing for globe-artichoke, verbatim: 'Perennial artichokes are harvested year-round, but the highest volume of production occurs between March and May' (p. 4, "Harvesting and Handling" section)
+- **Caveat:** Extension publication, not peer reviewed. Calibrated to Central Coast California (Salinas Valley, Monterey County, represented by Salinas), and the app moves its dates by each garden's own last spring freeze. globe-artichoke: picked year-round on the Central Coast, and the figure is the stated March to May peak.
+
+#### `ucce-2010-lemon-cost-study-sjv-south`
+
+O'Connell, Neil V.; Kallsen, Craig E.; Klonsky, Karen M.; De Moura, Richard L.. (2010). *Sample Costs to Establish an Orchard and Produce Lemons, San Joaquin Valley South, Low Volume Irrigation*. University of California Cooperative Extension
+
+- URL: <https://coststudyfiles.ucdavis.edu/uploads/cs_public/57/c4/57c4611c-f2bb-4bde-9b77-a343ca9f0a62/lemonvs10.pdf>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - harvest timing for lemon, verbatim: 'Typically one-third of the orchard is picked in each of three harvests over the growing season. Lemons are picked and graded by size and normally harvested from mid October through March' (LM-VS-10, p. 8)
+- **Caveat:** Extension publication, not peer reviewed. Calibrated to San Joaquin Valley South, California (Tulare and Kern counties), and the app moves its dates by each garden's own last spring freeze. lemon: a commercial cost study for the southern San Joaquin Valley.
+
 #### `uga-b577-planting-chart`
 
 Westerfield, Robert. (2022). *Home Garden Planting Chart*. University of Georgia Cooperative Extension Bulletin 577
@@ -1821,6 +2080,128 @@ Westerfield, Robert. (2022). *Home Garden Planting Chart*. University of Georgia
   - explicit spring and fall calendar-date planting windows per crop, including 'Not recommended' for fall where no fall window exists
   - in-row and between-row spacing and sowing depth per crop
 - **Caveat:** Extension publication, not peer reviewed. Calendar dates are ABSOLUTE, not frost-relative, and are stated for Middle Georgia only. The chart itself says north Georgia should shift about two weeks later in spring and earlier in fall, and south Georgia the reverse. Use it for days-to-maturity and for the existence and shape of spring/fall windows, NOT for dates outside the Southeast. UGA asserts university copyright. Version mismatch between the served chart (March 2022) and its parent bulletin (February 2026) is unresolved.
+
+#### `umaine-extension-2008-wild-blueberries-bulletin-4263`
+
+Fishman, Lisa; Hedstrom, Nellie. (2008). *Bulletin #4263, Vegetables and Fruits for Health: Wild Blueberries*. University of Maine Cooperative Extension
+
+- URL: <https://extension.umaine.edu/publications/4263e/>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - harvest timing for lowbush-blueberry, verbatim: 'If possible, go to the fields and buy berries directly from growers during harvest season. Buy your supply when berries are at their peak, from July to mid-August' (Section ‘Selection’)
+- **Caveat:** Extension publication, not peer reviewed. Calibrated to Washington County, Maine (Down East wild blueberry barrens), and the app moves its dates by each garden's own last spring freeze. lowbush-blueberry: buying advice in a nutrition bulletin, read as the peak of the harvest season.
+
+#### `umass-extension-2008-cranberry-production-guide`
+
+Averill, Anne; Caruso, Frank L.; DeMoranville, Carolyn J.; Jeranyama, Peter; LaFleur, Jeffrey; McKenzie, Kenna; Rinta, Linda; Sandler, Hilary A.; Wick, Brian. (2008). *Cranberry Production Guide (CP-08)*. University of Massachusetts Amherst Cranberry Station Extension (ScholarWorks@UMass Amherst)
+
+- URL: <http://scholarworks.umass.edu/cranberry_prod_guide/8>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - harvest timing for cranberry, verbatim: 'Harvesting typically begins around mid-September and continues through early November' (p. 3, fruit growth and development discussion ('The Cranberry Plant' chapter, before the 'Flowers' heading))
+- **Caveat:** Extension publication, not peer reviewed. Calibrated to Massachusetts (East Wareham / southeastern Massachusetts cranberry-growing area), and the app moves its dates by each garden's own last spring freeze.
+
+#### `umd-extension-2024-less-common-fruits`
+
+Talabac, Miri. (2024). *Less Common Fruits for a Home Garden*. University of Maryland Extension, Home and Garden Information Center
+
+- URL: <https://extension.umd.edu/resource/less-common-fruits-home-garden>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - harvest timing for elderberry, verbatim: 'Harvest is usually between mid-August and mid-September, depending on cultivar and location' (Elderberry section, ‘Harvesting’ subheading)
+- **Caveat:** Extension publication, not peer reviewed. Calibrated to Maryland, and the app moves its dates by each garden's own last spring freeze.
+
+#### `umn-extension-2024-currants-gooseberries`
+
+Wimmer, Madeline; Tepe, Emily S.; Hoover, Emily E.. (2024). *Growing currants and gooseberries in the home garden*. University of Minnesota Extension
+
+- URL: <https://extension.umn.edu/garden-and-home/yard-and-garden/gardening-in-minnesota/growing-currants-and-gooseberries-in-the-home-garden>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - harvest timing for currant-red, verbatim: 'July, August: Harvest' (‘Care through the seasons’ checklist)
+  - harvest timing for currant-black, verbatim: 'July, August: Harvest' (‘Care through the seasons’ checklist)
+  - harvest timing for gooseberry, verbatim: 'July, August: Harvest' (‘Care through the seasons’ checklist)
+- **Caveat:** Extension publication, not peer reviewed. Calibrated to Southern Minnesota (Twin Cities area), and the app moves its dates by each garden's own last spring freeze.
+
+#### `umn-extension-2024-horseradish`
+
+University of Minnesota Extension. (2024). *Growing horseradish in home gardens*. University of Minnesota Extension
+
+- URL: <https://extension.umn.edu/vegetables/growing-horseradish>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - harvest timing for horseradish, verbatim: 'Horseradish grows the most during late summer and early autumn. For this reason, delay fall harvest until late October or early November, or just before the ground freezes' ("Harvesting" section)
+- **Caveat:** Extension publication, not peer reviewed. Calibrated to Minnesota (Minneapolis-St Paul), and the app moves its dates by each garden's own last spring freeze.
+
+#### `umn-extension-2024-kiwiberry`
+
+Hoover, Emily; Luby, Jim; Guthrie, Bob; Tepe, Emily; Wannemuehler, Seth. (2024). *Growing kiwiberry in the home garden*. University of Minnesota Extension
+
+- URL: <https://extension.umn.edu/fruit/kiwiberry>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - harvest timing for hardy-kiwi, verbatim: 'Late August to mid-October' (Table ‘Characteristics of kiwiberry species for Minnesota,’ row ‘Harvest date,’ column ‘A. arguta’)
+- **Caveat:** Extension publication, not peer reviewed. Calibrated to Southern Minnesota (Twin Cities area), and the app moves its dates by each garden's own last spring freeze.
+
+#### `umn-extension-2024-sorrel`
+
+University of Minnesota Extension. (2024). *Growing sorrel in home gardens*. University of Minnesota Extension
+
+- URL: <https://extension.umn.edu/vegetables/growing-sorrel>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - harvest timing for sorrel, verbatim: 'Once the plants are established, you can harvest sorrel at any time from early spring until frost kills the growth' ("Harvest" section)
+- **Caveat:** Extension publication, not peer reviewed. Calibrated to Minnesota, and the app moves its dates by each garden's own last spring freeze.
+
+#### `umn-extension-2024-strawberries`
+
+Hoover, Emily E.; Klodd, Annie; Tepe, Emily S.; Foulk, Doug. (2024). *Growing strawberries in the home garden*. University of Minnesota Extension
+
+- URL: <https://extension.umn.edu/fruit/growing-strawberries-home-garden>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - harvest timing for strawberry, verbatim: 'June-bearing strawberries produce a large, concentrated crop in mid-June to early July' (Section ‘Types of strawberries’ (Quick facts list))
+- **Caveat:** Extension publication, not peer reviewed. Calibrated to Southern Minnesota (Twin Cities area), and the app moves its dates by each garden's own last spring freeze.
+
+#### `umn-extension-2026-asparagus`
+
+University of Minnesota Extension. (2026). *Growing asparagus in home gardens*. University of Minnesota Extension
+
+- URL: <https://extension.umn.edu/vegetables/growing-asparagus>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - harvest timing for asparagus, verbatim: 'The asparagus harvest season lasts about 6 to 8 weeks, from early May to late June in Minnesota' ("Harvest and storage > Harvest" section)
+- **Caveat:** Extension publication, not peer reviewed. Calibrated to Minnesota (Minneapolis-St Paul), and the app moves its dates by each garden's own last spring freeze.
+
+#### `umn-extension-2026-blueberries`
+
+Tepe, Emily S.; Hoover, Emily E.; Luby, James; Klodd, Annie; Schuh, Marissa. (2026). *Growing blueberries in the home garden*. University of Minnesota Extension
+
+- URL: <https://extension.umn.edu/garden-and-home/yard-and-garden/gardening-in-minnesota/growing-blueberries-in-the-home-garden>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - harvest timing for blueberry, from the ‘Care through the seasons’ checklist, which marks July for ‘Harvest’
+- **Caveat:** Extension publication, not peer reviewed. Calibrated to Southern Minnesota (Twin Cities area), and the app moves its dates by each garden's own last spring freeze.
+
+#### `umn-extension-2026-cold-climate-grapes`
+
+Wimmer, Madeline. (2026). *Cold-climate grapes*. University of Minnesota Extension
+
+- URL: <https://extension.umn.edu/fruit-and-vegetable-farming/cold-climate-grapes>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - harvest timing for grape, verbatim: 'In Minnesota, many varieties begin to grow in May, and the earliest-ripening varieties are harvested in mid-August, while later-ripening varieties may hang until mid-to-late October' (Section ‘Bud-break and harvest windows’)
+- **Caveat:** Extension publication, not peer reviewed. Calibrated to Southern Minnesota (Twin Cities area), and the app moves its dates by each garden's own last spring freeze.
+
+#### `umn-extension-2026-raspberries`
+
+University of Minnesota Extension. (2026). *Growing raspberries in the home garden*. University of Minnesota Extension
+
+- URL: <https://extension.umn.edu/fruit/growing-raspberries-home-garden>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - harvest timing for raspberry, from the ‘Care through the seasons’ checklist for summer-bearing raspberries, which marks July and August for ‘Harvest’
+- **Caveat:** Extension publication, not peer reviewed. Calibrated to Southern Minnesota (Twin Cities area), and the app moves its dates by each garden's own last spring freeze.
 
 #### `usda-nrcs-pigeonpea-plant-guide`
 
@@ -1834,6 +2215,46 @@ USDA NRCS Cape May Plant Materials Center. (n.d.). *Plant Guide: Pigeonpea, Caja
   - verbatim: 'C. cajan requires 65-80 days to flower and 50-75 additional days to create mature seeds (Mullen et al., 2003), however many varieties have been developed to flower earlier'
   - verbatim: 'C. cajan grows best under hot conditions (65-86F)'; 'Frost will defoliate the plant'; 'Under good management, the plant can live up to five years'
 - **Caveat:** A conservation-planting guide compiled from secondary sources (Cook et al. 2005, Mullen et al. 2003, Phatak et al. 1993, Duke 1983), and it reports no trial of its own.
+
+#### `usfs-2014-ramps`
+
+Chamberlain, Jim; Beegle, Dana; Lajeunesse Connette, Katie. (2014). *Forest Farming Ramps (Agroforestry Notes, AF Note-47)*. USDA Forest Service, USDA National Agroforestry Center
+
+- URL: <https://www.fs.usda.gov/nac/assets/documents/agroforestrynotes/an47ff08.pdf>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - harvest timing for ramps, verbatim: 'The timing of harvest may differ geographically. For example, in southern Appalachia the optimal time to harvest is usually about the third week in April, whereas in cooler northern climates harvesting may be best a bit later' (p. 4, "Harvesting & Processing" section)
+- **Caveat:** Extension publication, not peer reviewed. Calibrated to Southern Appalachia (represented by Asheville, NC), and the app moves its dates by each garden's own last spring freeze. ramps: the stated best week, since ramps are dug once in spring.
+
+#### `usu-extension-2020-watercress`
+
+Kendrick, Trudy; Drost, Dan. (2020). *How to Grow Watercress in Your Garden (HG/Garden/2008-03pr, "Watercress in the Garden")*. Utah State University Extension
+
+- URL: <https://extension.usu.edu/yardandgarden/research/watercress-in-the-garden>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - harvest timing for watercress, verbatim: 'Harvest dime sized dark green leaves at any time during the year. ... Watercress can be harvested year round' ("How to Harvest and Store Watercress" section, p.2)
+- **Caveat:** Extension publication, not peer reviewed. Calibrated to Utah, and the app moves its dates by each garden's own last spring freeze. watercress: the source says it's picked year round, longer than the frost-free season used here.
+
+#### `usu-extension-2023-comfrey`
+
+Rolfe, Emmalee; Drost, Dan. (2023). *Comfrey in the Garden*. Utah State University Extension
+
+- URL: <https://extension.usu.edu/yardandgarden/research/comfrey-in-the-garden>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - harvest timing for comfrey, verbatim: 'Once established, harvest leaves every 2 weeks throughout the growing season' ("Harvest and Storage > Fresh" section, p.2)
+- **Caveat:** Extension publication, not peer reviewed. Calibrated to Utah, and the app moves its dates by each garden's own last spring freeze.
+
+#### `usu-extension-preserve-cherries`
+
+Utah State University Extension, Preserve the Harvest. (n.d.). *How to Preserve Cherries*. Utah State University Extension
+
+- URL: <https://extension.usu.edu/preserve-the-harvest/research/cherries>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - harvest timing for cherry-sweet, verbatim: 'From Box Elder County south to Salt Lake County, sweet cherries ripen around June 10 to the 25' (Season Availability section)
+- **Caveat:** Extension publication, not peer reviewed. Calibrated to Box Elder County south to Salt Lake County, Utah, and the app moves its dates by each garden's own last spring freeze. cherry-sweet: a food preservation page giving the northern Utah season, June 10 to the 25.
 
 #### `uvah-coaker1984-mixed-cropping`
 
@@ -1938,7 +2359,7 @@ Zimmerman, Cynthia. (2020). *Helpline Hot Topic for June 2020: Moringa Oleifera*
 
 ## Climate & geodata
 
-23 sources.
+24 sources.
 
 #### `beck2018-koppen`
 
@@ -2098,6 +2519,29 @@ Palecki, Michael; Durre, Imke; Applequist, Scott; Arguez, Anthony; Lawrimore, Ja
   - station coverage: more than 15,000 US stations with at least precipitation normals, more than 7,300 with temperature normals
   - frost-freeze date probabilities are computed from the first and last 'killing freeze' of the growing season using serially-complete daily minimum temperatures derived from GHCN-Daily
 - **Caveat:** NO DOI. Government dataset, and the DOI field on NCEI's own landing page is an unfilled template placeholder. THE PRODUCT IS WIDER THAN IT IS OFTEN DESCRIBED: it gives 10-90% in 10-point steps at six thresholds, where a description of the Normals as dates at the 50, 40, 30, 20 and 10 percent levels covers five percentiles at one threshold. US and US-territory stations only: there's no equivalent product for the rest of the world, so any non-US frost percentile the product renders is an Open-Meteo-derived estimate and must be labeled as such. Completeness flags matter: normals are 'standard' above 80% data availability, 'representative' at 10+ years, and 'provisional' where neighbors can't fill the record. A station-level frost date isn't uniformly reliable.
+
+#### `noaa-ncei-2021-climate-normals-1991-2020`
+
+NOAA National Centers for Environmental Information. (2021). *U.S. Climate Normals 1991-2020: Annual/Seasonal Normals (Probability of Last Spring Occurrence of Low Temperatures)*. National Oceanic and Atmospheric Administration
+
+- URL: <https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-annualseasonal-1991-2020>
+- Verification: URL-verified | Access: public-domain, evidence tier **A**
+- Backs:
+  - median (50 percent probability) date of the last spring 32 F freeze at Jonesboro, ME (station USC00174183), May 3, field ANN-TMIN-PRBLST-T32FP50
+  - median (50 percent probability) date of the last spring 32 F freeze at East Wareham, MA (station USC00192451), Apr 21, field ANN-TMIN-PRBLST-T32FP50
+  - median (50 percent probability) date of the last spring 32 F freeze at Asheville Regional Airport, NC (station USW00003812), Apr 9, field ANN-TMIN-PRBLST-T32FP50
+  - median (50 percent probability) date of the last spring 32 F freeze at Burlington International Airport, VT (station USW00014742), Apr 29, field ANN-TMIN-PRBLST-T32FP50
+  - median (50 percent probability) date of the last spring 32 F freeze at Minneapolis-St Paul Intl AP, MN (station USW00014922), Apr 23, field ANN-TMIN-PRBLST-T32FP50
+  - median (50 percent probability) date of the last spring 32 F freeze at Des Moines Intl AP, IA (station USW00014933), Apr 18, field ANN-TMIN-PRBLST-T32FP50
+  - median (50 percent probability) date of the last spring 32 F freeze at Bakersfield AP, CA (station USW00023155), Jan 17, field ANN-TMIN-PRBLST-T32FP50
+  - median (50 percent probability) date of the last spring 32 F freeze at Salinas Municipal Airport, CA (station USW00023233), Jan 29, field ANN-TMIN-PRBLST-T32FP50
+  - median (50 percent probability) date of the last spring 32 F freeze at Salt Lake City Intl AP, UT (station USW00024127), Apr 8, field ANN-TMIN-PRBLST-T32FP50
+  - median (50 percent probability) date of the last spring 32 F freeze at Bozeman Gallatin Fld AP, MT (station USW00024132), May 26, field ANN-TMIN-PRBLST-T32FP50
+  - median (50 percent probability) date of the last spring 32 F freeze at Eugene-Mahlon Sweet Fld, OR (station USW00024221), Apr 11, field ANN-TMIN-PRBLST-T32FP50
+  - median (50 percent probability) date of the last spring 32 F freeze at Salem AP (McNary Field), OR (station USW00024232), Apr 3, field ANN-TMIN-PRBLST-T32FP50
+  - median (50 percent probability) date of the last spring 32 F freeze at Frankfort Capital City AP, KY (station USW00053841), Apr 15, field ANN-TMIN-PRBLST-T32FP50
+  - median (50 percent probability) date of the last spring 32 F freeze at Baltimore-Washington Intl AP, MD (station USW00093721), Apr 10, field ANN-TMIN-PRBLST-T32FP50
+- **Caveat:** Station normals for the regions the cited extension harvest calendars speak for. They place each source season against its own spring, and the app then moves it by each garden’s own last spring freeze.
 
 #### `oke1981-canyon-svf`
 
@@ -2433,7 +2877,7 @@ Yuan, Zhengjie; Xu, Jie; Shen, Le. (2022). *Valuation of Ecosystem Services for 
 
 ## Standards & regulation
 
-10 sources.
+11 sources.
 
 #### `din-spec-91434-2021`
 
@@ -2455,6 +2899,17 @@ Yuan, Zhengjie; Xu, Jie; Shen, Le. (2022). *Valuation of Ecosystem Services for 
 - Verification: URL-verified | Access: open-access
 - Backs:
   - the livestock counterpart to DIN SPEC 91434, out of scope for a garden tool and recorded for completeness
+
+#### `fda-import-alert-54-10`
+
+U.S. Food and Drug Administration. (n.d.). *Import Alert 54-10: Detention Without Physical Examination of Bulk/Finished Dietary Supplements Products Containing Aristolochic Acid*. U.S. Food and Drug Administration
+
+- URL: <https://www.accessdata.fda.gov/cms_ia/importalert_141.html>
+- Verification: URL-verified | Access: public-domain
+- Backs:
+  - Asarum caudatum is listed under 'Botanicals Known or Suspected to Contain Aristolochic Acid', verbatim: 'Asarum caudatum Lindl'
+  - the health risk, verbatim: 'In sum, products containing aristolochic acid cause renal damage and can cause or contribute to renal failure.'
+- **Caveat:** A regulatory notice on dietary supplements and botanical products. It lists the species as known or suspected to contain the compound and gives no measured content for it, which is why the catalog keeps the plant and offers it only as a groundcover.
 
 #### `france-decret-2024-318`
 

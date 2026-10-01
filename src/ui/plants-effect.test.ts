@@ -44,7 +44,7 @@ describe('what a wildlife switch or a pick changed on the ranking', () => {
       CATALOG,
     )
     expect(said).toBe(
-      "Flowers for bees on: borage and calendula moved into the top 3 for Bed 1; cabbage and leek moved out. The beds keep what's planted until you replant.",
+      "Flowers for bees on: borage and calendula moved into the top 3 for Bed 1, and cabbage and leek moved out. The beds keep what's planted until you replant.",
     )
   })
 
@@ -71,6 +71,29 @@ describe('what a wildlife switch or a pick changed on the ranking', () => {
     )
     expect(said).toBe(
       "Wild plants from around here off: borage moved out. The beds keep what's planted until you replant.",
+    )
+  })
+})
+
+describe('why turning natives on moved nothing', () => {
+  it('says how many of the catalog grow wild here, naming them at three or fewer', () => {
+    const unchanged = (nativeCropIds: readonly CropId[]): string =>
+      choicesEffectSentence(
+        'Wild plants from around here on',
+        'Bed 1',
+        ids('tomato', 'cabbage'),
+        ids('tomato', 'cabbage'),
+        CATALOG,
+        nativeCropIds,
+      )
+    expect(unchanged(ids('tomato'))).toBe(
+      'Wild plants from around here on: the top 2 for Bed 1 are unchanged. Only tomato, of the 5 plants in the catalog, grows wild around here.',
+    )
+    expect(unchanged([])).toBe(
+      'Wild plants from around here on: the top 2 for Bed 1 are unchanged. None of the 5 plants in the catalog grow wild around here.',
+    )
+    expect(unchanged(ids('borage', 'calendula', 'cabbage', 'leek'))).toBe(
+      'Wild plants from around here on: the top 2 for Bed 1 are unchanged. 4 of the 5 plants in the catalog grow wild around here.',
     )
   })
 })

@@ -1,4 +1,11 @@
-import type { DerivedCited, InferredCited, MaybeCited, SourcedCited, VerbatimCited } from './cited'
+import type {
+  DerivedCited,
+  InferredCited,
+  MaybeCited,
+  NonEmpty,
+  SourcedCited,
+  VerbatimCited,
+} from './cited'
 import type { CitationId } from './citation-ids.generated'
 import type { Licensed } from './evidence'
 import type { PlantingRole } from './garden'
@@ -83,6 +90,13 @@ export interface LightRequirement {
   readonly dliMinMolM2Day: SourcedCited<MolPerM2Day>
   readonly dliTargetMolM2Day: SourcedCited<MolPerM2Day>
   readonly dliMaxBeforeDisorderMolM2Day: MaybeCited<MolPerM2Day>
+  /**
+   * A ceiling the light gate REFUSES at, unlike `dliMaxBeforeDisorderMolM2Day` above, which stays
+   * advisory and leaves `passed: true` with a cultivar-and-airflow caveat. Set only where a cited
+   * work measured this crop's own survival falling at or above this season-mean DLI, null for
+   * every crop with no such figure
+   */
+  readonly dliMaxBeforeSurvivalLossMolM2Day: SourcedCited<MolPerM2Day> | null
   readonly maxDesignRsr: SourcedCited<Fraction>
   readonly shadeBenefitingWhenWaterLimited: boolean
 }
@@ -142,6 +156,22 @@ export interface RootProfile {
 }
 
 export type DtmReference = 'sow' | 'transplant'
+
+/**
+ * A perennial's own picking season, from an extension harvest calendar read against the source
+ * region's median last spring freeze (NOAA 1991-2020 climate normals). `after-last-freeze`
+ * counts `afterFreezeDays` forward from a site's own last spring freeze, negative for a crop the
+ * source picks before it, and then runs for the crop's `harvestDurationDays`. `whole-season` is
+ * picked right through the growing season, the last spring freeze to the first fall freeze. Null
+ * where the catalog carries no such figure, so the growing-window dating stands
+ */
+export type PerennialHarvest =
+  | {
+      readonly kind: 'after-last-freeze'
+      readonly afterFreezeDays: number
+      readonly citations: NonEmpty<CitationId>
+    }
+  | { readonly kind: 'whole-season'; readonly citations: NonEmpty<CitationId> }
 
 export interface ThermalRequirement {
   readonly gddBaseC: Celsius
@@ -215,6 +245,8 @@ export interface Crop {
   readonly frostOffsetDays: Days
   readonly minSoilTempC: Celsius
   readonly harvestDurationDays: Days
+  /** A perennial's own harvest calendar, anchored to the site's frost dates. Null keeps the catalog window */
+  readonly perennialHarvest: PerennialHarvest | null
   readonly successionIntervalDays: Days | null
   readonly nitrogenFixing: boolean
   readonly provenance: Licensed

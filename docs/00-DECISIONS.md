@@ -877,6 +877,22 @@ Known limits: every cool-season crop shares the archetype's spring offset, so an
 climate has a dozen jobs on one day. The succession schedule sows peas into June. Where the heat
 supply stretches days to maturity, a melon's harvest can land in late October.
 
+A perennial's harvest can also come from an extension harvest calendar: 48 perennials carry a
+figure read against the source region's own median last spring freeze, from NOAA's 1991-2020
+climate normals. Most carry so many days off that freeze and a stated picking season
+(`harvestDays`). The rest are picked right through the growing season, where the source names no
+narrower window. The figures count from a median, so the harvest sits on the site's median season
+whatever frost risk the grower sets, since that setting moves planting and leaves ripening alone. A
+perennial planted inside its own picking season is picked from the day it goes in. Teaberry,
+highbush cranberry, oregano, hyssop, good king henry, jerusalem artichoke, murnong, crabapple and
+avocado carry no such figure and keep the catalog window, along with the tropical perennials and
+the support plants. A frost-free site moves only a whole-season crop's harvest, to the bed's own
+longest growing run: an after-freeze figure has no freeze there to count from, so it keeps the
+catalog window too. Counting from spring alone can stretch a long-season source onto a
+short-season garden. With a median last spring freeze on April 20 and a first fall freeze on 22
+October, apple and hazelnut are still picked almost four weeks past that freeze, and blackberry
+about two and a half.
+
 ## 21. Row azimuth is the direction the rows run
 
 `rowAzimuthDeg` is the direction the rows run, everywhere. A fixed row facing the equator runs east
@@ -985,6 +1001,25 @@ Alternative Field Crops Manual, USDA NRCS, WARDA, CTAHR, IRETA and UC ANR. Rooti
 cassava, rice, sesame, plantain and lemon are FAO-56 Table 22 midpoints, and native ranges come from
 the WCVP archive (Govaerts et al. 2021). Three figures are this app's own and say so: papaya's 3 m
 picking height, moringa's 3 m pruned height, sesame's 0.3 m spread.
+
+**A survival ceiling for one crop.** Western wild ginger is excluded outright where a bed's
+growing-season mean DLI reaches 36.4 mol/m2/d. Nelson, Halpern and Antos 2007 tagged Asarum
+caudatum ramets in old-growth Douglas-fir forest and the clearcut beside it in Washington.
+Growing-season PPFD averaged 36.4 mol/m2/d in the clearcut against 8.6 in the forest, and clearcut
+ramet survival fell to about 30 percent of the forest's in year one, staying depressed for this
+species into year two even as its surviving ramets grew faster. The comparison holds two light
+levels only, and mid-summer heat and soil dryness also ran higher in the clearcut, so the figure
+carries light, heat and drought together. The catalog carries the plant as a native evergreen
+groundcover, a support plant never offered as food, because the FDA lists Asarum caudatum among
+botanicals known or suspected to contain aristolochic acid, which damages the kidneys (Import
+Alert 54-10).
+
+The catalog's other two forest-floor perennials carry no such rule. Ramps point the other way:
+Dion, Bussieres and Lapointe 2017 (Botany 95: 457-467) found more spring light grows a bigger bulb,
+Davis and Greenfield 2002 lost open-field seedlings in a shade-cloth trial to dry, exposed ground,
+and a Laval thesis (Bernatchez 2012) describes ramps grown in the open with irrigation. Heat and dry
+soil carry the risk for this crop, and watering addresses both. No located study gives teaberry a
+light figure, so there's no number to set a ceiling from.
 
 ## 24. License, the site's own season and clock, banded figures
 

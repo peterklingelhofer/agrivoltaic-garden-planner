@@ -13,6 +13,7 @@ import type {
   EcocropEnvelope,
   LaubCropGroup,
   LifeCycle,
+  PerennialHarvest,
   PlantHabit,
   SupportRequirement,
 } from '../../types/crop'
@@ -447,6 +448,15 @@ export interface CropOverrides {
   readonly nfix?: true
   readonly succession?: number
   readonly harvestDays?: number
+  /**
+   * A perennial's picking season from an extension harvest calendar, read against the source
+   * region's median last spring freeze: either so many days before or after that freeze, with
+   * `harvestDays` as how long picking lasts, or picked right through the growing season where
+   * the source says so. Absent, the crop keeps the catalog growing-window dating
+   */
+  readonly harvest?:
+    | { readonly afterFreezeDays: number; readonly citations: NonEmpty<CitationId> }
+    | { readonly wholeSeason: true; readonly citations: NonEmpty<CitationId> }
   readonly ph?: readonly [number, number, number, number]
   /** Works the envelope trapezoids are transcribed from, where they're not the default */
   readonly envCitations?: readonly CitationId[]
@@ -482,6 +492,17 @@ export interface CropOverrides {
   readonly dliCitations?: NonEmpty<CitationId>
   /** What the figure is in the cited work, rendered beside the number in place of the default */
   readonly dliCaveat?: string
+  /**
+   * The season-mean DLI at which a cited work measured this crop's own survival fall away: a
+   * REFUSAL in the light gate (`dli-survival-ceiling`), unlike the advisory `ceiling` above. Set
+   * only where such a figure exists, which today is wild ginger alone, always together with
+   * `survivalCeilingTier`, `survivalCeilingCitations` and `survivalCeilingNote`
+   */
+  readonly survivalCeiling?: number
+  readonly survivalCeilingTier?: DataTier
+  readonly survivalCeilingCitations?: NonEmpty<CitationId>
+  /** What stands behind the figure: the cited work's design and what else moved besides light */
+  readonly survivalCeilingNote?: string
   /**
    * Why this crop's Laub group is an analogy and no membership, carried onto the yield curve's
    * own record and into the yield caveats. Set where the group holds no comparable
@@ -638,8 +659,42 @@ export const expandRow = (row: CropRow): Crop => {
     dliCitations === null
       ? citedInferred(value as MolPerM2Day, [], dliNote)
       : sourced(value as MolPerM2Day, tier, dliCitations, dliNote)
+  const survivalCeiling = overrides.survivalCeiling ?? null
+  const survivalCeilingTier = overrides.survivalCeilingTier ?? null
+  const survivalCeilingCitations = overrides.survivalCeilingCitations ?? null
+  const survivalCeilingNote = overrides.survivalCeilingNote ?? null
+  if (
+    survivalCeiling !== null &&
+    (survivalCeilingTier === null ||
+      survivalCeilingCitations === null ||
+      survivalCeilingNote === null)
+  ) {
+    throw new Error(`${id} sets a survival ceiling and is missing its tier, citations or note`)
+  }
+  const survivalCeilingCited: SourcedCited<MolPerM2Day> | null =
+    survivalCeiling === null ||
+    survivalCeilingTier === null ||
+    survivalCeilingCitations === null ||
+    survivalCeilingNote === null
+      ? null
+      : sourced(
+          survivalCeiling as MolPerM2Day,
+          survivalCeilingTier,
+          survivalCeilingCitations,
+          survivalCeilingNote,
+        )
   const lifeCycle = overrides.life ?? arch.lifeCycle
   const perennial = lifeCycle === 'perennial' || lifeCycle === 'woody-perennial'
+  const perennialHarvest: PerennialHarvest | null =
+    overrides.harvest === undefined
+      ? null
+      : 'wholeSeason' in overrides.harvest
+        ? { kind: 'whole-season', citations: overrides.harvest.citations }
+        : {
+            kind: 'after-last-freeze',
+            afterFreezeDays: overrides.harvest.afterFreezeDays,
+            citations: overrides.harvest.citations,
+          }
 
   const envelope: EcocropEnvelope = {
     temperatureC: trapezoid(overrides.temp ?? arch.temperatureC),
@@ -675,6 +730,7 @@ export const expandRow = (row: CropRow): Crop => {
       dliTargetMolM2Day: dliCited((dliTargetLow + dliTargetHigh) / 2),
       dliMaxBeforeDisorderMolM2Day:
         ceiling === null ? null : unsourcedClaim(ceiling as MolPerM2Day, TIPBURN_CEILING_CLAIM),
+      dliMaxBeforeSurvivalLossMolM2Day: survivalCeilingCited,
       maxDesignRsr: sourced(
         maxDesignRsr as Fraction,
         overrides.maxRsrTier ?? classSpec.maxDesignRsrTier,
@@ -736,6 +792,7 @@ export const expandRow = (row: CropRow): Crop => {
     frostOffsetDays: (overrides.frostOffset ?? arch.frostOffsetDays) as Days,
     minSoilTempC: (overrides.minSoilTempC ?? arch.minSoilTempC) as Celsius,
     harvestDurationDays: (overrides.harvestDays ?? (perennial ? 30 : 14)) as Days,
+    perennialHarvest,
     successionIntervalDays:
       overrides.succession === undefined ? null : (overrides.succession as Days),
     nitrogenFixing: overrides.nfix ?? false,

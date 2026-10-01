@@ -22,6 +22,7 @@ export type LimitingFactorKind =
   | { readonly kind: 'season-gdd' }
   | { readonly kind: 'dli-minimum'; readonly month: MonthIndex }
   | { readonly kind: 'dli-disorder-ceiling'; readonly month: MonthIndex }
+  | { readonly kind: 'dli-survival-ceiling' }
   | { readonly kind: 'max-design-rsr' }
   | { readonly kind: 'soil-ph' }
   | { readonly kind: 'water' }
