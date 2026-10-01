@@ -441,31 +441,102 @@ describe('feasibility', () => {
 })
 
 /**
- * 48 perennials carry a figure from an extension harvest calendar, read against the source
- * region's own median last spring freeze, so the harvest sits on the site's median season whatever
- * frost risk the grower sets. The rest keep the catalog growing window
+ * 64 perennials carry a figure from an extension harvest calendar, each read against the source
+ * region's own median last spring freeze and median frost-free season, so the harvest sits on the
+ * site's median season whatever frost risk the grower sets. The rest keep the catalog growing
+ * window
  */
 describe('perennial harvest dating', () => {
-  it("starts an after-last-freeze crop's harvest the catalog's own days off the median last spring freeze", async () => {
+  it("starts an after-last-freeze crop's harvest at the same share of the median season the source holds of its own", async () => {
     const strawberry = need(await catalogPromise, 'strawberry')
     if (strawberry.perennialHarvest?.kind !== 'after-last-freeze') {
       throw new Error('fixture crop lost its after-last-freeze harvest override')
     }
+    const { afterFreezeDays, sourceSeasonDays } = strawberry.perennialHarvest
     const median = seasonAnchors(siteFixture(), 50)
     const calendar = calendarFor(strawberry)
-    expect(forwardDays(median.lastSpringFreeze, calendar.harvest.start)).toBe(
-      strawberry.perennialHarvest.afterFreezeDays,
-    )
+    const expectedOffset = Math.round((afterFreezeDays * median.frostFreeDays) / sourceSeasonDays)
+    expect(forwardDays(median.lastSpringFreeze, calendar.harvest.start)).toBe(expectedOffset)
     expect(forwardDays(calendar.harvest.start, calendar.harvest.end)).toBe(
       strawberry.harvestDurationDays,
     )
     expect(calendar.harvest.basis).toEqual({
       kind: 'harvest-calendar',
-      afterFreezeDays: strawberry.perennialHarvest.afterFreezeDays,
+      afterFreezeDays,
+      sourceSeasonDays,
       percentile: 50,
     })
     // the frost-risk setting moves planting and leaves the ripening alone
     expect(calendarFor(strawberry, 10).harvest).toEqual(calendar.harvest)
+  })
+
+  /**
+   * Apple's source picks 89 of its own 212 day season off the freeze, a 42% share. A garden
+   * season a world away from Oregon's should still start the picking at that same share of its
+   * own season, whether that season runs short or long, so this checks the same crop at two sites
+   * whose median seasons differ by nearly twice
+   */
+  it('places the harvest start at the same share of the season at two sites whose season lengths differ', async () => {
+    const apple = need(await catalogPromise, 'apple')
+    if (apple.perennialHarvest?.kind !== 'after-last-freeze') {
+      throw new Error('fixture crop lost its after-last-freeze harvest override')
+    }
+    const { afterFreezeDays, sourceSeasonDays } = apple.perennialHarvest
+
+    const shortSeasonSite = siteFixture()
+    const longSeasonSite = siteFixture({
+      frost: [
+        {
+          ...FROST_EVERY_YEAR,
+          thresholdC: 0 as Celsius,
+          lastSpringFreeze: { 10: 30, 20: 25, 30: 20, 40: 18, 50: 15 } as never,
+          firstFallFreeze: { 10: 325, 20: 330, 30: 335, 40: 340, 50: 345 } as never,
+          frostFreeDays: { 10: 295, 20: 305, 30: 315, 40: 322, 50: 330 } as never,
+        },
+      ],
+    })
+
+    const shortMedian = seasonAnchors(shortSeasonSite, 50)
+    const longMedian = seasonAnchors(longSeasonSite, 50)
+    expect(longMedian.frostFreeDays).toBeGreaterThan(shortMedian.frostFreeDays * 1.5)
+
+    const shortCalendar = calendarFor(apple, 20, 0, shortSeasonSite)
+    const longCalendar = calendarFor(apple, 20, 0, longSeasonSite)
+    const shortOffset = forwardDays(shortMedian.lastSpringFreeze, shortCalendar.harvest.start)
+    const longOffset = forwardDays(longMedian.lastSpringFreeze, longCalendar.harvest.start)
+
+    expect(shortOffset).toBe(
+      Math.round((afterFreezeDays * shortMedian.frostFreeDays) / sourceSeasonDays),
+    )
+    expect(longOffset).toBe(
+      Math.round((afterFreezeDays * longMedian.frostFreeDays) / sourceSeasonDays),
+    )
+    // the same share of each season, within the rounding a whole day introduces
+    expect(
+      Math.abs(shortOffset / shortMedian.frostFreeDays - longOffset / longMedian.frostFreeDays),
+    ).toBeLessThan(0.01)
+  })
+
+  /**
+   * Horseradish is dug 185 days off the freeze against a source season of 178, 7 days past the
+   * source's own fall freeze: the ground there has started freezing by the time it's dug, so that
+   * excess counts on from the site's own fall freeze unscaled, the same 7 days wherever it's grown
+   */
+  it('places horseradish, whose source count runs past its own season, that many days after the median first fall freeze', async () => {
+    const horseradish = need(await catalogPromise, 'horseradish')
+    if (horseradish.perennialHarvest?.kind !== 'after-last-freeze') {
+      throw new Error('fixture crop lost its after-last-freeze harvest override')
+    }
+    const { afterFreezeDays, sourceSeasonDays } = horseradish.perennialHarvest
+    expect(afterFreezeDays).toBeGreaterThan(sourceSeasonDays)
+    const median = seasonAnchors(siteFixture(), 50)
+    const calendar = calendarFor(horseradish)
+    expect(forwardDays(median.firstFallFreeze, calendar.harvest.start)).toBe(
+      afterFreezeDays - sourceSeasonDays,
+    )
+    expect(forwardDays(calendar.harvest.start, calendar.harvest.end)).toBe(
+      horseradish.harvestDurationDays,
+    )
   })
 
   it('runs a whole-season crop from the median last spring freeze to the median first fall freeze', async () => {
@@ -478,6 +549,7 @@ describe('perennial harvest dating', () => {
     expect(calendar.harvest.basis).toEqual({
       kind: 'harvest-calendar',
       afterFreezeDays: null,
+      sourceSeasonDays: null,
       percentile: 50,
     })
   })
