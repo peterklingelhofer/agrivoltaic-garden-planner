@@ -518,7 +518,7 @@ describe('an inference never passes for a measurement', () => {
   /**
    * The defect this reproduces. A Phoenix shade band at 55 percent season-cumulative shade
    * refuses the fruiting vegetables and potato on shade ceilings that carry a source, and keeps
-   * claytonia on an inferred 0.6 that is 0.1 past anything measured. Nothing here claims claytonia
+   * ginger on an inferred 0.6 that is 0.1 past anything measured. Nothing here claims ginger
    * fails: no measured figure says that either. What it refuses to do is present the survivor as
    * the equal of the numbers it outlived
    *
@@ -532,13 +532,13 @@ describe('an inference never passes for a measurement', () => {
     const [best] = set.suggestions
     expect(best).toBeDefined()
     if (best === undefined) return
-    expect(best.cropIds).toContain('claytonia' as CropId)
+    expect(best.cropIds).toContain('ginger' as CropId)
     // the crops are in the order the combination was built in, so the admission is found by
     // matching its name
     const admission = best.confidence.inferredLightAdmissions.find(
-      (entry) => entry.cropId === ('claytonia' as CropId),
+      (entry) => entry.cropId === ('ginger' as CropId),
     )
-    expect(admission?.cropId).toBe('claytonia' as CropId)
+    expect(admission?.cropId).toBe('ginger' as CropId)
     expect(admission?.threshold).toBe('max-design-rsr')
     expect(admission?.inferredValue).toBe(0.6)
     expect(admission?.measuredEnvelopeValue).toBe(0.5)

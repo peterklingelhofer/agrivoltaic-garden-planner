@@ -201,6 +201,50 @@
       }
     },
     {
+      "id": "bitter-melon",
+      "acceptedName": "Momordica charantia",
+      "family": "Cucurbitaceae",
+      "commonNames": "bitter melon|bitter gourd|balsam pear",
+      "laubGroup": "fruity-vegetables",
+      "dliClass": "cucurbits",
+      "habit": "vining-trellised",
+      "archetype": "warm",
+      "dliMin": 15,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 30,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 50,
+      "spacingCm": 143,
+      "heightM": 4.88,
+      "widthM": 1.37,
+      "overrides": {
+        "harvestDays": 45
+      }
+    },
+    {
+      "id": "chayote",
+      "acceptedName": "Sechium edule",
+      "family": "Cucurbitaceae",
+      "commonNames": "chayote|mirliton",
+      "laubGroup": "fruity-vegetables",
+      "dliClass": "cucurbits",
+      "habit": "vining-trellised",
+      "archetype": "warm",
+      "dliMin": 15,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 30,
+      "tier": "C",
+      "shade": 2,
+      "daysToMaturity": 150,
+      "spacingCm": 366,
+      "heightM": 1.83,
+      "widthM": 3.66,
+      "overrides": {
+        "dtmRef": "transplant"
+      }
+    },
+    {
       "id": "squash-summer",
       "acceptedName": "Cucurbita pepo",
       "family": "Cucurbitaceae",
@@ -386,6 +430,32 @@
       "overrides": {
         "harvestDays": 45,
         "zr": 0.6,
+        "p": 0.45,
+        "nfix": true,
+        "laubNote": "The grain-legume trials in the meta-analysis measured dry seed, and this crop is picked as an immature pod or a green seed, which is a different sink (where the plant sends its sugars)"
+      }
+    },
+    {
+      "id": "lima-bean",
+      "acceptedName": "Phaseolus lunatus",
+      "family": "Fabaceae",
+      "commonNames": "lima bean|butter bean",
+      "laubGroup": "grain-legumes",
+      "dliClass": "grain-legumes",
+      "habit": "vining-trellised",
+      "archetype": "warm",
+      "dliMin": 12,
+      "dliTargetLow": 18,
+      "dliTargetHigh": 25,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 70,
+      "spacingCm": 25,
+      "heightM": 3.35,
+      "widthM": 0.3,
+      "overrides": {
+        "harvestDays": 45,
+        "zr": 1,
         "p": 0.45,
         "nfix": true,
         "laubNote": "The grain-legume trials in the meta-analysis measured dry seed, and this crop is picked as an immature pod or a green seed, which is a different sink (where the plant sends its sugars)"
@@ -604,6 +674,29 @@
       }
     },
     {
+      "id": "corn-grain",
+      "acceptedName": "Zea mays",
+      "family": "Poaceae",
+      "commonNames": "field corn|grain corn|dent corn",
+      "laubGroup": "corn-c4",
+      "dliClass": "corn-c4",
+      "habit": "clumping-grass",
+      "archetype": "warm",
+      "dliMin": 18,
+      "dliTargetLow": 25,
+      "dliTargetHigh": 35,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 117,
+      "spacingCm": 38,
+      "heightM": 3.2,
+      "widthM": 0.5,
+      "overrides": {
+        "zr": 1.35,
+        "p": 0.55
+      }
+    },
+    {
       "id": "wheat-spring",
       "acceptedName": "Triticum aestivum",
       "family": "Poaceae",
@@ -761,6 +854,54 @@
       "heightM": 1.5,
       "widthM": 0.5,
       "overrides": {
+        "laubNote": "No group in the meta-analysis holds an oilseed, so this crop uses the nearest grain curve as a proxy"
+      }
+    },
+    {
+      "id": "flax",
+      "acceptedName": "Linum usitatissimum",
+      "family": "Linaceae",
+      "commonNames": "flax|linseed",
+      "laubGroup": "c3-cereals",
+      "dliClass": "c3-cereals",
+      "habit": "upright-herb",
+      "archetype": "cool",
+      "dliMin": 14,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 28,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 110,
+      "spacingCm": 4,
+      "heightM": 0.76,
+      "widthM": 0.3,
+      "overrides": {
+        "zr": 1.25,
+        "p": 0.5,
+        "laubNote": "No group in the meta-analysis holds an oilseed, so this crop uses the nearest grain curve as a proxy"
+      }
+    },
+    {
+      "id": "canola",
+      "acceptedName": "Brassica napus",
+      "family": "Brassicaceae",
+      "commonNames": "canola|rapeseed",
+      "laubGroup": "c3-cereals",
+      "dliClass": "brassicas",
+      "habit": "upright-herb",
+      "archetype": "cool",
+      "dliMin": 10,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 20,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 93,
+      "spacingCm": 10,
+      "heightM": 1.22,
+      "widthM": 0.3,
+      "overrides": {
+        "zr": 1.25,
+        "p": 0.6,
         "laubNote": "No group in the meta-analysis holds an oilseed, so this crop uses the nearest grain curve as a proxy"
       }
     },
@@ -1048,6 +1189,117 @@
           ]
         },
         "harvestDays": 11
+      }
+    },
+    {
+      "id": "ginger",
+      "acceptedName": "Zingiber officinale",
+      "family": "Zingiberaceae",
+      "commonNames": "ginger",
+      "laubGroup": "tubers-root-crops",
+      "dliClass": "understory-herbs",
+      "habit": "rhizomatous",
+      "archetype": "subtropical",
+      "dliMin": 4,
+      "dliTargetLow": 8,
+      "dliTargetHigh": 14,
+      "tier": "C",
+      "shade": 2,
+      "daysToMaturity": 270,
+      "spacingCm": 38,
+      "heightM": 0.91,
+      "widthM": 0.76,
+      "overrides": {
+        "life": "annual",
+        "dtmRef": "transplant",
+        "coldC": -6.7,
+        "temp": [
+          13,
+          19,
+          29,
+          35
+        ],
+        "rain": [
+          700,
+          1400,
+          3000,
+          4000
+        ],
+        "ph": [
+          4.3,
+          6,
+          7,
+          7.5
+        ],
+        "cycle": [
+          270,
+          365
+        ],
+        "koppen": [
+          "Aw",
+          "Af",
+          "Am",
+          "Cfa",
+          "Cfb"
+        ],
+        "laubNote": "The meta-analysis took data from temperate and subtropical sites only, and this crop is grown outside that range, so the curve is an extrapolation"
+      }
+    },
+    {
+      "id": "turmeric",
+      "acceptedName": "Curcuma longa",
+      "family": "Zingiberaceae",
+      "commonNames": "turmeric",
+      "laubGroup": "tubers-root-crops",
+      "dliClass": "root-tuber",
+      "habit": "rhizomatous",
+      "archetype": "subtropical",
+      "dliMin": 12,
+      "dliTargetLow": 18,
+      "dliTargetHigh": 25,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 210,
+      "spacingCm": 38,
+      "heightM": 1.07,
+      "widthM": 1.07,
+      "overrides": {
+        "life": "annual",
+        "dtmRef": "transplant",
+        "coldC": -12.2,
+        "maxRsr": 0.4,
+        "maxRsrTier": "C",
+        "maxRsrNote": "CTAHR’s VC-9 Hawaii Turmeric Production Guidelines states the crop \"tolerates up to 40% shade.\" No trial measured a yield response behind that figure",
+        "temp": [
+          18,
+          20,
+          28,
+          32
+        ],
+        "rain": [
+          800,
+          1000,
+          2000,
+          3000
+        ],
+        "ph": [
+          5.5,
+          6,
+          7,
+          7.5
+        ],
+        "cycle": [
+          270,
+          300
+        ],
+        "koppen": [
+          "Aw",
+          "Af",
+          "Am",
+          "Csa",
+          "Csb"
+        ],
+        "laubNote": "The meta-analysis took data from temperate and subtropical sites only, and this crop is grown outside that range, so the curve is an extrapolation"
       }
     },
     {
@@ -1573,6 +1825,28 @@
       }
     },
     {
+      "id": "malabar-spinach",
+      "acceptedName": "Basella alba",
+      "family": "Basellaceae",
+      "commonNames": "malabar spinach|ceylon spinach",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "vining-trellised",
+      "archetype": "warm",
+      "dliMin": 8,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 20,
+      "tier": "C",
+      "shade": 2,
+      "daysToMaturity": 70,
+      "spacingCm": 22,
+      "heightM": 1.83,
+      "widthM": 0.76,
+      "overrides": {
+        "harvestDays": 90
+      }
+    },
+    {
       "id": "sorrel",
       "acceptedName": "Rumex acetosa",
       "family": "Polygonaceae",
@@ -2078,6 +2352,95 @@
         ],
         "harvestDays": 120
       }
+    },
+    {
+      "id": "lemongrass",
+      "acceptedName": "Cymbopogon citratus",
+      "family": "Poaceae",
+      "commonNames": "lemongrass",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "clumping-grass",
+      "archetype": "subtropical",
+      "dliMin": 12,
+      "dliTargetLow": 18,
+      "dliTargetHigh": 25,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 365,
+      "spacingCm": 122,
+      "heightM": 1.83,
+      "widthM": 1.22,
+      "overrides": {
+        "life": "perennial",
+        "yearsToMature": 1,
+        "coldC": -6.7,
+        "harvest": {
+          "wholeSeason": true,
+          "citations": [
+            "usu-2020-lemongrass"
+          ]
+        },
+        "laubNote": "No crop in the nine groups is harvested the way this one is, so the group is an analogy this app chose"
+      }
+    },
+    {
+      "id": "lavender",
+      "acceptedName": "Lavandula angustifolia",
+      "family": "Lamiaceae",
+      "commonNames": "lavender|english lavender",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "bush",
+      "archetype": "hardy-perennial",
+      "dliMin": 12,
+      "dliTargetLow": 18,
+      "dliTargetHigh": 25,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 730,
+      "spacingCm": 53,
+      "heightM": 0.46,
+      "widthM": 0.46,
+      "overrides": {
+        "life": "woody-perennial",
+        "deciduous": false,
+        "temp": [
+          0,
+          12,
+          30,
+          40
+        ],
+        "coldC": -15,
+        "yearsToMature": 2,
+        "harvest": {
+          "afterFreezeDays": 42,
+          "citations": [
+            "psu-2026-agritourism-lavender",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 91
+      }
+    },
+    {
+      "id": "chamomile",
+      "acceptedName": "Matricaria chamomilla",
+      "family": "Asteraceae",
+      "commonNames": "chamomile|german chamomile",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "upright-herb",
+      "archetype": "cool",
+      "dliMin": 8,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 20,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 60,
+      "spacingCm": 23,
+      "heightM": 0.3,
+      "widthM": 0.38
     },
     {
       "id": "thyme",
@@ -3219,6 +3582,43 @@
       }
     },
     {
+      "id": "almond",
+      "acceptedName": "Prunus dulcis",
+      "family": "Rosaceae",
+      "commonNames": "almond",
+      "laubGroup": "fruits",
+      "dliClass": "cane-bush-berries",
+      "habit": "vase-tree",
+      "archetype": "temperate-tree",
+      "dliMin": 18,
+      "dliTargetLow": 25,
+      "dliTargetHigh": 35,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 1460,
+      "spacingCm": 610,
+      "heightM": 3.5,
+      "widthM": 6.71,
+      "overrides": {
+        "life": "woody-perennial",
+        "yearsToMature": 5,
+        "chillHours": 750,
+        "coldC": -28.9,
+        "maxRsr": 0.1,
+        "maxRsrTier": "C",
+        "zr": 1.5,
+        "p": 0.4,
+        "harvest": {
+          "afterFreezeDays": 223,
+          "citations": [
+            "usu-extension-2020-almonds-home-garden",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 20
+      }
+    },
+    {
       "id": "plum",
       "acceptedName": "Prunus domestica",
       "family": "Rosaceae",
@@ -3394,6 +3794,40 @@
       }
     },
     {
+      "id": "pomegranate",
+      "acceptedName": "Punica granatum",
+      "family": "Lythraceae",
+      "commonNames": "pomegranate",
+      "laubGroup": "fruits",
+      "dliClass": "cane-bush-berries",
+      "habit": "spreading-tree",
+      "archetype": "subtropical",
+      "dliMin": 15,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 30,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 365,
+      "spacingCm": 549,
+      "heightM": 4.88,
+      "widthM": 4.88,
+      "overrides": {
+        "life": "woody-perennial",
+        "yearsToMature": 3,
+        "coldC": -12.5,
+        "maxRsr": 0.1,
+        "maxRsrTier": "C",
+        "harvest": {
+          "afterFreezeDays": 167,
+          "citations": [
+            "uga-2022-pomegranate-production",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 72
+      }
+    },
+    {
       "id": "hazelnut",
       "acceptedName": "Corylus avellana",
       "family": "Betulaceae",
@@ -3430,6 +3864,148 @@
       }
     },
     {
+      "id": "walnut",
+      "acceptedName": "Juglans regia",
+      "family": "Juglandaceae",
+      "commonNames": "walnut|english walnut|persian walnut",
+      "laubGroup": "fruits",
+      "dliClass": "cane-bush-berries",
+      "habit": "spreading-tree",
+      "archetype": "temperate-tree",
+      "dliMin": 10,
+      "dliTargetLow": 18,
+      "dliTargetHigh": 25,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 1825,
+      "spacingCm": 914,
+      "heightM": 15.24,
+      "widthM": 15.24,
+      "overrides": {
+        "life": "woody-perennial",
+        "yearsToMature": 6,
+        "chillHours": 800,
+        "deciduous": true,
+        "coldC": -29,
+        "maxRsr": 0.1,
+        "maxRsrTier": "C",
+        "harvest": {
+          "afterFreezeDays": 181,
+          "citations": [
+            "osu-extension-2006-growing-walnuts-oregon",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 30
+      }
+    },
+    {
+      "id": "black-walnut",
+      "acceptedName": "Juglans nigra",
+      "family": "Juglandaceae",
+      "commonNames": "black walnut",
+      "laubGroup": "fruits",
+      "dliClass": "cane-bush-berries",
+      "habit": "spreading-tree",
+      "archetype": "temperate-tree",
+      "dliMin": 10,
+      "dliTargetLow": 18,
+      "dliTargetHigh": 25,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 1825,
+      "spacingCm": 838,
+      "heightM": 24.38,
+      "widthM": 8.38,
+      "overrides": {
+        "life": "woody-perennial",
+        "yearsToMature": 5,
+        "chillHours": 800,
+        "deciduous": true,
+        "coldC": -34.4,
+        "maxRsr": 0.1,
+        "maxRsrTier": "C",
+        "harvest": {
+          "afterFreezeDays": 147,
+          "citations": [
+            "mu-agroforestry-2009-black-walnut-nut-production",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 34
+      }
+    },
+    {
+      "id": "chestnut",
+      "acceptedName": "Castanea mollissima",
+      "family": "Fagaceae",
+      "commonNames": "chestnut|chinese chestnut",
+      "laubGroup": "fruits",
+      "dliClass": "cane-bush-berries",
+      "habit": "spreading-tree",
+      "archetype": "temperate-tree",
+      "dliMin": 10,
+      "dliTargetLow": 18,
+      "dliTargetHigh": 25,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 1825,
+      "spacingCm": 1372,
+      "heightM": 15.24,
+      "widthM": 9.14,
+      "overrides": {
+        "life": "woody-perennial",
+        "yearsToMature": 3,
+        "deciduous": true,
+        "coldC": -28.9,
+        "maxRsr": 0.1,
+        "maxRsrTier": "C",
+        "harvest": {
+          "afterFreezeDays": 147,
+          "citations": [
+            "mu-agroforestry-2022-chinese-chestnut",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 60
+      }
+    },
+    {
+      "id": "pecan",
+      "acceptedName": "Carya illinoinensis",
+      "family": "Juglandaceae",
+      "commonNames": "pecan",
+      "laubGroup": "fruits",
+      "dliClass": "cane-bush-berries",
+      "habit": "spreading-tree",
+      "archetype": "temperate-tree",
+      "dliMin": 10,
+      "dliTargetLow": 18,
+      "dliTargetHigh": 25,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 1825,
+      "spacingCm": 2134,
+      "heightM": 21.34,
+      "widthM": 24.38,
+      "overrides": {
+        "life": "woody-perennial",
+        "yearsToMature": 6,
+        "deciduous": true,
+        "coldC": -34.4,
+        "maxRsr": 0.1,
+        "maxRsrTier": "C",
+        "harvest": {
+          "afterFreezeDays": 221,
+          "citations": [
+            "uga-extension-2024-pecan-home-backyard",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 10
+      }
+    },
+    {
       "id": "pawpaw",
       "acceptedName": "Asimina triloba",
       "family": "Annonaceae",
@@ -3462,6 +4038,74 @@
           ]
         },
         "harvestDays": 41
+      }
+    },
+    {
+      "id": "persimmon",
+      "acceptedName": "Diospyros kaki",
+      "family": "Ebenaceae",
+      "commonNames": "persimmon|japanese persimmon|kaki",
+      "laubGroup": "fruits",
+      "dliClass": "cane-bush-berries",
+      "habit": "columnar-tree",
+      "archetype": "temperate-tree",
+      "dliMin": 6,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 22,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 210,
+      "spacingCm": 554,
+      "heightM": 7.62,
+      "widthM": 6.1,
+      "overrides": {
+        "life": "woody-perennial",
+        "yearsToMature": 7,
+        "coldC": -26,
+        "maxRsr": 0.45,
+        "maxRsrTier": "C",
+        "harvest": {
+          "afterFreezeDays": 241,
+          "citations": [
+            "tamu-2011-rodriguez-harvesting-oriental-persimmons",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 41
+      }
+    },
+    {
+      "id": "american-persimmon",
+      "acceptedName": "Diospyros virginiana",
+      "family": "Ebenaceae",
+      "commonNames": "american persimmon|common persimmon",
+      "laubGroup": "fruits",
+      "dliClass": "cane-bush-berries",
+      "habit": "columnar-tree",
+      "archetype": "temperate-tree",
+      "dliMin": 6,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 22,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 255,
+      "spacingCm": 708,
+      "heightM": 16.76,
+      "widthM": 8.38,
+      "overrides": {
+        "life": "woody-perennial",
+        "yearsToMature": 3,
+        "coldC": -26,
+        "maxRsr": 0.45,
+        "maxRsrTier": "C",
+        "harvest": {
+          "afterFreezeDays": 130,
+          "citations": [
+            "purdue-2025-woodmansee-divine-fruit",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 60
       }
     },
     {
@@ -3564,6 +4208,41 @@
           ]
         },
         "harvestDays": 51
+      }
+    },
+    {
+      "id": "kiwifruit",
+      "acceptedName": "Actinidia deliciosa",
+      "family": "Actinidiaceae",
+      "commonNames": "kiwifruit|fuzzy kiwi",
+      "laubGroup": "fruits",
+      "dliClass": "cane-bush-berries",
+      "habit": "vining-trellised",
+      "archetype": "temperate-tree",
+      "dliMin": 10,
+      "dliTargetLow": 18,
+      "dliTargetHigh": 25,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 1825,
+      "spacingCm": 457,
+      "heightM": 1.98,
+      "widthM": 4.57,
+      "overrides": {
+        "life": "woody-perennial",
+        "yearsToMature": 3,
+        "chillHours": 600,
+        "deciduous": true,
+        "support": "arbor",
+        "coldC": -15,
+        "harvest": {
+          "afterFreezeDays": 191,
+          "citations": [
+            "osu-2021-strik-kiwifruit-home-garden",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 11
       }
     },
     {
@@ -4107,6 +4786,210 @@
       }
     },
     {
+      "id": "orange",
+      "acceptedName": "Citrus sinensis",
+      "family": "Rutaceae",
+      "commonNames": "orange|sweet orange",
+      "laubGroup": "fruits",
+      "dliClass": "cane-bush-berries",
+      "habit": "spreading-tree",
+      "archetype": "subtropical",
+      "dliMin": 15,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 30,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 365,
+      "spacingCm": 366,
+      "heightM": 6.86,
+      "widthM": 3,
+      "overrides": {
+        "life": "woody-perennial",
+        "yearsToMature": 5,
+        "coldC": -6.1,
+        "deciduous": false,
+        "temp": [
+          13,
+          20,
+          30,
+          38
+        ],
+        "rain": [
+          450,
+          1200,
+          2000,
+          2700
+        ],
+        "ph": [
+          4,
+          5,
+          6,
+          8.3
+        ],
+        "cycle": [
+          180,
+          365
+        ],
+        "koppen": [
+          "Aw",
+          "Af",
+          "Am",
+          "BSh",
+          "BSk",
+          "Cfa",
+          "Cfb",
+          "Csa",
+          "Csb",
+          "Cwa",
+          "Cwb"
+        ],
+        "zr": 1.3,
+        "p": 0.5,
+        "maxRsr": 0.1,
+        "maxRsrTier": "C",
+        "harvest": {
+          "afterFreezeDays": 323,
+          "citations": [
+            "ucanr-santaclara-citrus",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 181
+      }
+    },
+    {
+      "id": "lime",
+      "acceptedName": "Citrus x latifolia",
+      "family": "Rutaceae",
+      "commonNames": "lime|persian lime|tahiti lime",
+      "laubGroup": "fruits",
+      "dliClass": "cane-bush-berries",
+      "habit": "spreading-tree",
+      "archetype": "subtropical",
+      "dliMin": 15,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 30,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 365,
+      "spacingCm": 366,
+      "heightM": 3,
+      "widthM": 3,
+      "overrides": {
+        "life": "woody-perennial",
+        "yearsToMature": 3,
+        "coldC": -1.7,
+        "deciduous": false,
+        "temp": [
+          12,
+          20,
+          28,
+          32
+        ],
+        "rain": [
+          750,
+          1200,
+          1500,
+          2300
+        ],
+        "ph": [
+          5,
+          5.5,
+          6.5,
+          7.5
+        ],
+        "cycle": [
+          365,
+          365
+        ],
+        "koppen": [
+          "Aw"
+        ],
+        "zr": 1.3,
+        "p": 0.5,
+        "maxRsr": 0.1,
+        "maxRsrTier": "C",
+        "harvest": {
+          "afterFreezeDays": 201,
+          "citations": [
+            "ucanr-santaclara-citrus",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 242
+      }
+    },
+    {
+      "id": "mandarin",
+      "acceptedName": "Citrus reticulata",
+      "family": "Rutaceae",
+      "commonNames": "mandarin|satsuma|tangerine",
+      "laubGroup": "fruits",
+      "dliClass": "cane-bush-berries",
+      "habit": "spreading-tree",
+      "archetype": "subtropical",
+      "dliMin": 15,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 30,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 365,
+      "spacingCm": 366,
+      "heightM": 3,
+      "widthM": 3,
+      "overrides": {
+        "life": "woody-perennial",
+        "yearsToMature": 5,
+        "coldC": -6.5,
+        "deciduous": false,
+        "temp": [
+          12,
+          23,
+          34,
+          38
+        ],
+        "rain": [
+          300,
+          1200,
+          1800,
+          4000
+        ],
+        "ph": [
+          5.5,
+          6,
+          6.8,
+          8.3
+        ],
+        "cycle": [
+          60,
+          365
+        ],
+        "koppen": [
+          "Aw",
+          "BSh",
+          "BSk",
+          "Cfa",
+          "Cfb",
+          "Csa",
+          "Csb",
+          "Cwa",
+          "Cwb"
+        ],
+        "zr": 1.3,
+        "p": 0.5,
+        "maxRsr": 0.1,
+        "maxRsrTier": "C",
+        "harvest": {
+          "afterFreezeDays": 323,
+          "citations": [
+            "ucanr-santaclara-citrus",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 150
+      }
+    },
+    {
       "id": "mango",
       "acceptedName": "Mangifera indica",
       "family": "Anacardiaceae",
@@ -4446,6 +5329,64 @@
       }
     },
     {
+      "id": "finger-millet",
+      "acceptedName": "Eleusine coracana",
+      "family": "Poaceae",
+      "commonNames": "finger millet|ragi",
+      "laubGroup": "corn-c4",
+      "dliClass": "forages-c3-pasture",
+      "habit": "clumping-grass",
+      "archetype": "hot",
+      "dliMin": 12,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 30,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 103,
+      "spacingCm": 15,
+      "heightM": 0.94,
+      "widthM": 0.4,
+      "overrides": {
+        "temp": [
+          8,
+          18,
+          30,
+          35
+        ],
+        "rain": [
+          300,
+          500,
+          1100,
+          4300
+        ],
+        "ph": [
+          5.5,
+          6,
+          7,
+          8.2
+        ],
+        "cycle": [
+          75,
+          180
+        ],
+        "koppen": [
+          "Aw",
+          "BWh",
+          "BWk",
+          "BSh",
+          "BSk",
+          "Cfa",
+          "Cfb",
+          "Csa",
+          "Csb",
+          "Cwa",
+          "Cwb"
+        ],
+        "zr": 1.5,
+        "p": 0.55
+      }
+    },
+    {
       "id": "sorghum-grain",
       "acceptedName": "Sorghum bicolor",
       "family": "Poaceae",
@@ -4776,6 +5717,127 @@
           "Cwb"
         ],
         "laubNote": "Laub et al. 2022 name this species among the crops they excluded as not relevant for temperate regions, so the curve runs past the data it was fitted on"
+      }
+    },
+    {
+      "id": "tea",
+      "acceptedName": "Camellia sinensis",
+      "family": "Theaceae",
+      "commonNames": "tea|tea plant",
+      "laubGroup": "berries",
+      "dliClass": "cane-bush-berries",
+      "habit": "bush",
+      "archetype": "subtropical",
+      "dliMin": 6,
+      "dliTargetLow": 12,
+      "dliTargetHigh": 18,
+      "tier": "C",
+      "shade": 2,
+      "daysToMaturity": 365,
+      "spacingCm": 83,
+      "heightM": 3.2,
+      "widthM": 1.83,
+      "overrides": {
+        "life": "woody-perennial",
+        "coldC": -17.8,
+        "temp": [
+          8,
+          20,
+          30,
+          35
+        ],
+        "rain": [
+          1000,
+          1400,
+          2000,
+          5000
+        ],
+        "ph": [
+          4,
+          4.5,
+          5.5,
+          6
+        ],
+        "cycle": [
+          240,
+          365
+        ],
+        "koppen": [
+          "Aw",
+          "Af",
+          "Am",
+          "Cfa",
+          "Cfb"
+        ],
+        "zr": 1.2,
+        "p": 0.4,
+        "harvest": {
+          "wholeSeason": true,
+          "citations": [
+            "zhang-2022-tea-shade-nets-mississippi"
+          ]
+        },
+        "laubNote": "No crop in the nine groups is harvested the way this one is, so the group is an analogy this app chose"
+      }
+    },
+    {
+      "id": "cacao",
+      "acceptedName": "Theobroma cacao",
+      "family": "Malvaceae",
+      "commonNames": "cacao|cocoa",
+      "laubGroup": "berries",
+      "dliClass": "cane-bush-berries",
+      "habit": "bush",
+      "archetype": "subtropical",
+      "dliMin": 6,
+      "dliTargetLow": 12,
+      "dliTargetHigh": 18,
+      "tier": "C",
+      "shade": 2,
+      "daysToMaturity": 365,
+      "spacingCm": 198,
+      "heightM": 6,
+      "widthM": 1.98,
+      "overrides": {
+        "life": "woody-perennial",
+        "yearsToMature": 5,
+        "coldC": 0,
+        "temp": [
+          10,
+          21,
+          32,
+          38
+        ],
+        "rain": [
+          900,
+          1200,
+          3000,
+          7600
+        ],
+        "ph": [
+          4,
+          5,
+          6.5,
+          8
+        ],
+        "cycle": [
+          180,
+          365
+        ],
+        "koppen": [
+          "Aw",
+          "Af",
+          "Am"
+        ],
+        "zr": 0.85,
+        "p": 0.3,
+        "harvest": {
+          "wholeSeason": true,
+          "citations": [
+            "duke-1983-cacao-energy-crops"
+          ]
+        },
+        "laubNote": "The meta-analysis took data from temperate and subtropical sites only, and this crop is grown outside that range, so the curve is an extrapolation"
       }
     },
     {

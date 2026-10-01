@@ -936,9 +936,9 @@ neighbors isn't offered, and nor is rotating a bed by hand.
 
 ECOCROP holds no daily light integral, its light field being a descriptor, so no row cites
 `fao-ecocrop` for one and the schema default cites nothing. Against Torres et al. 2010 (Purdue
-HO-238-B-W) and Stallknecht 2025 (Virginia Cooperative Extension, VCE SPES-720NP), each of the 177 Tier C rows is in one of three
-states. The three Tier A and two Tier B rows cite work on the crop itself and are set out under the
-tiers below.
+HO-238-B-W) and Stallknecht 2025 (Virginia Cooperative Extension, VCE SPES-720NP), each of the 204
+Tier C rows is in one of three states. The three Tier A and two Tier B rows cite work on the crop
+itself and are set out under the tiers below.
 
 1. **Printed for this crop**, six rows: tomato and cucumber on VCE Table 3's "Tomato 20-30" and
    "Cucumber 20-30", spinach on its "Spinach 14-20", both peppers on Purdue's Capsicum bands,
@@ -947,7 +947,7 @@ tiers below.
    and Runkle: the 15 at the foot of all four is Runkle's figure for vine crops as a group, and the
    peppers' 20 to 30 is the range VCE prints for tomato. Every row but hot pepper carries a comment
    naming the row or the band.
-2. **Printed nowhere**, 168 rows. They cite nothing for light and carry one sentence: "This app's
+2. **Printed nowhere**, 195 rows. They cite nothing for light and carry one sentence: "This app's
    own figure, set by analogy with the crops in its class for which a published DLI exists. No cited
    work measured it for this crop, and the sources step lists it as a gap. Trust the ordering it
    gives, and treat the number itself as provisional." The sources step lists every one, as the
@@ -960,7 +960,7 @@ tiers below.
 On screen an inferred figure reads "no cited work measured it for this crop", because "nothing was
 measured for this crop" would be untrue of spinach.
 
-**The tiers.** 3 A, 2 B and 177 C, and a Tier C figure is never shown as a measurement. A is leaf
+**The tiers.** 3 A, 2 B and 204 C, and a Tier C figure is never shown as a measurement. A is leaf
 lettuce, head lettuce and basil, on per-crop trials: Both et al. 1997 for Cornell's 17 mol/m2/d,
 read in Brechner and Both 2013, Kelly et al. 2020 (lettuce at 6.9, 10.4, 15.6), Pennisi et al. 2020
 (lettuce and basil 5.8 to 17.3, optimum 14.4), Dou et al. 2018 (basil 9.3 to 17.8, 12.9 for
@@ -981,7 +981,7 @@ and Widmer's 25 maintains trial-average yield under agrivoltaic cover. The gate 
 being the agrivoltaic one, and the OSU 30 tops the band.
 
 The yield band names its study count beside the citation, "dominated by crop response: the leafy
-vegetables curve, 4 studies (Laub et al. 2022)", from `cropResponseLabel`, so a reader sees 61
+vegetables curve, 4 studies (Laub et al. 2022)", from `cropResponseLabel`, so a reader sees 66
 greens sitting on a four-study curve without opening a file.
 
 **Constants with no source.** The water model's basal coefficient is FAO-56 chapter 9 equations 97

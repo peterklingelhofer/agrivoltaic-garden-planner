@@ -8,7 +8,7 @@ import { CROP_GLYPH } from './crop-glyph'
  *
  * Decorative by construction: the crop's name is always right beside it, so the glyph is
  * `aria-hidden` and adds nothing to what a screen reader says. It's what lets
- * an eye skip down a list of 182 crops and land on the roots or the beans without reading every
+ * an eye skip down a list of 209 crops and land on the roots or the beans without reading every
  * row, which is the thing a list of words can't do and the reason this exists.
  *
  * What it draws is the crop's class, and the class is named in `DLI_CLASS_LABEL` in the same

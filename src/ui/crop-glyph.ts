@@ -3,7 +3,7 @@ import type { DliClass } from '../types/crop'
 /**
  * A picture for every crop, drawn, and keyed on a class of crop.
  *
- * The gap this closes is the one a beginner names first: choosing vegetables from a list of 182
+ * The gap this closes is the one a beginner names first: choosing vegetables from a list of 209
  * words is the last place this app asks a gardener to read where it could let them look, and it's
  * felt hardest on a phone, where the list IS the screen.
  *

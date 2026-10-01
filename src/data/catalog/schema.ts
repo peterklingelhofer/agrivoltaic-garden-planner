@@ -487,7 +487,7 @@ export interface CropOverrides {
   readonly qid?: string
   /**
    * Set only where a cited work prints this crop's own figure. Absent is the ordinary case and
-   * means the row cites nothing for its light numbers, which is true of 171 of the 182 rows
+   * means the row cites nothing for its light numbers, which is true of 198 of the 209 rows
    */
   readonly dliCitations?: NonEmpty<CitationId>
   /** What the figure is in the cited work, rendered beside the number in place of the default */
@@ -577,7 +577,7 @@ const stratumFor = (depthM: number): 'shallow' | 'medium' | 'deep' =>
  * What a Tier C light figure is (Decision Record 23): the crop's conventional garden sun label,
  * converted into a band by this app's own arithmetic and set beside the crops in its class that
  * do have a published figure. The two cited extension documents print a band for five of the
- * 182 rows and for none of the rest, so the rest cite nothing and say so
+ * 209 rows and for none of the rest, so the rest cite nothing and say so
  */
 const DLI_CLASS_BASIS =
   'It’s set by analogy with the crops in its class that have a published DLI, and the sources step lists it as a gap. Trust the ordering it gives, and treat the number itself as provisional'

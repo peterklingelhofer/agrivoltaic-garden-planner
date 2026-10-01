@@ -1277,7 +1277,7 @@ input[type='range'] {
   padding: 4px;
   /**
    * about six rows: at 220px a search that finds three crops looks like a list that has been cut
-   * off, and scrolling 182 rows four at a time sends a reader past the plant she came for
+   * off, and scrolling 209 rows four at a time sends a reader past the plant she came for
    */
   max-height: 320px;
   overflow-y: auto;
