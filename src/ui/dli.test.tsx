@@ -41,6 +41,7 @@ describe('the DLI threshold a crop was gated on names its own evidence', () => {
     const causes: readonly (readonly [LimitingFactorKind, string | null])[] = [
       [{ kind: 'dli-minimum', month: 6 }, 'minimum'],
       [{ kind: 'dli-disorder-ceiling', month: 7 }, 'disorder-ceiling'],
+      [{ kind: 'dli-survival-ceiling' }, 'survival-ceiling'],
       [{ kind: 'max-design-rsr' }, 'max-design-rsr'],
       [{ kind: 'hardiness' }, null],
       [{ kind: 'chill' }, null],
@@ -53,6 +54,7 @@ describe('the DLI threshold a crop was gated on names its own evidence', () => {
       'disorder-ceiling',
       'max-design-rsr',
       'minimum',
+      'survival-ceiling',
     ])
   })
 

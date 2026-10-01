@@ -247,6 +247,39 @@ describe('deriving a planting', () => {
 })
 
 /**
+ * A perennial's picking season recurs every year on the calendar's own clock. A plant already
+ * established and sown well after its own spring window still gets a harvest, starting the day
+ * it went in, where an annual sown that late would be refused for missing its own harvest end
+ */
+describe('a perennial sown inside its own harvest window', () => {
+  it('accepts the planting and starts picking on the sow day itself', () => {
+    const thyme = cropOf('thyme')
+    const bed = beds[0] as Bed
+    const calendar = calendarFor(calendarsFor(), bed.id, thyme.id)
+    expect(calendar).toBeDefined()
+    if (calendar === undefined) return
+    // well inside thyme's whole-season harvest window, the last spring freeze to the first fall
+    // freeze, and later than the crop's own spring transplant day
+    const sowDay = 200 as DayOfYear
+    expect(forwardDays(calendar.harvest.start, sowDay)).toBeLessThanOrEqual(
+      forwardDays(calendar.harvest.start, calendar.harvest.end),
+    )
+    const derived = derivePlanting({
+      id: plantingIdFor(bed.id, thyme.id, sowDay),
+      bed,
+      crop: thyme,
+      arrays: [],
+      calendar,
+      sowDay,
+    })
+    expect(derived.ok).toBe(true)
+    if (!derived.ok) return
+    expect(derived.value.harvestStartDay).toBe(sowDay)
+    expect(derived.value.harvestEndDay).toBe(calendar.harvest.end)
+  })
+})
+
+/**
  * Pune: this derivation refuses a crop with no window, so if every annual's calendar were barren,
  * "Plant every bed" would plant nothing. The calendar is pinned in `calendar.test.ts`. This is the
  * same crop reaching the derivation the fill actually calls

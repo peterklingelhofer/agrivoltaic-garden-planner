@@ -1039,7 +1039,15 @@
       "widthM": 0.6,
       "overrides": {
         "life": "perennial",
-        "coldC": -34
+        "coldC": -34,
+        "harvest": {
+          "afterFreezeDays": 185,
+          "citations": [
+            "umn-extension-2024-horseradish",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 11
       }
     },
     {
@@ -1189,7 +1197,13 @@
       "widthM": 0.25,
       "overrides": {
         "life": "perennial",
-        "coldC": -34
+        "coldC": -34,
+        "harvest": {
+          "wholeSeason": true,
+          "citations": [
+            "illinois-extension-herbs-chives"
+          ]
+        }
       }
     },
     {
@@ -1579,7 +1593,12 @@
       "overrides": {
         "life": "perennial",
         "coldC": -34,
-        "harvestDays": 120
+        "harvest": {
+          "wholeSeason": true,
+          "citations": [
+            "umn-extension-2024-sorrel"
+          ]
+        }
       }
     },
     {
@@ -1653,7 +1672,13 @@
       "widthM": 0.4,
       "overrides": {
         "life": "perennial",
-        "coldC": -20
+        "coldC": -20,
+        "harvest": {
+          "wholeSeason": true,
+          "citations": [
+            "usu-extension-2020-watercress"
+          ]
+        }
       }
     },
     {
@@ -1737,7 +1762,15 @@
       "widthM": 0.8,
       "overrides": {
         "life": "perennial",
-        "coldC": -25
+        "coldC": -25,
+        "harvest": {
+          "afterFreezeDays": 2,
+          "citations": [
+            "sare-2021-sea-kale",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 30
       }
     },
     {
@@ -2008,7 +2041,12 @@
       "overrides": {
         "life": "perennial",
         "coldC": -29,
-        "harvestDays": 120
+        "harvest": {
+          "wholeSeason": true,
+          "citations": [
+            "rothenberger-mu-g6470-growing-herbs"
+          ]
+        }
       }
     },
     {
@@ -2068,7 +2106,12 @@
           30,
           40
         ],
-        "harvestDays": 150
+        "harvest": {
+          "wholeSeason": true,
+          "citations": [
+            "illinois-extension-herbs-thyme"
+          ]
+        }
       }
     },
     {
@@ -2093,7 +2136,12 @@
         "life": "woody-perennial",
         "coldC": -12,
         "deciduous": false,
-        "harvestDays": 200
+        "harvest": {
+          "wholeSeason": true,
+          "citations": [
+            "illinois-extension-herbs-rosemary"
+          ]
+        }
       }
     },
     {
@@ -2124,7 +2172,12 @@
           40
         ],
         "deciduous": false,
-        "harvestDays": 150
+        "harvest": {
+          "wholeSeason": true,
+          "citations": [
+            "illinois-extension-herbs-sage"
+          ]
+        }
       }
     },
     {
@@ -2148,7 +2201,12 @@
       "overrides": {
         "life": "perennial",
         "coldC": -29,
-        "harvestDays": 120
+        "harvest": {
+          "wholeSeason": true,
+          "citations": [
+            "illinois-extension-herbs-tarragon-french"
+          ]
+        }
       }
     },
     {
@@ -2172,7 +2230,12 @@
       "overrides": {
         "life": "perennial",
         "coldC": -29,
-        "harvestDays": 120
+        "harvest": {
+          "wholeSeason": true,
+          "citations": [
+            "illinois-extension-herbs-lemon-balm"
+          ]
+        }
       }
     },
     {
@@ -2196,7 +2259,12 @@
       "overrides": {
         "life": "perennial",
         "coldC": -34,
-        "harvestDays": 120
+        "harvest": {
+          "wholeSeason": true,
+          "citations": [
+            "illinois-extension-herbs-lovage"
+          ]
+        }
       }
     },
     {
@@ -2325,7 +2393,13 @@
         "life": "woody-perennial",
         "coldC": -9,
         "deciduous": false,
-        "yearsToMature": 8
+        "yearsToMature": 8,
+        "harvest": {
+          "wholeSeason": true,
+          "citations": [
+            "illinois-extension-herbs-bay-laurel"
+          ]
+        }
       }
     },
     {
@@ -2354,7 +2428,13 @@
           12,
           30,
           40
-        ]
+        ],
+        "harvest": {
+          "wholeSeason": true,
+          "citations": [
+            "illinois-extension-herbs-savory-winter"
+          ]
+        }
       }
     },
     {
@@ -2406,7 +2486,13 @@
       "widthM": 0.5,
       "overrides": {
         "life": "perennial",
-        "coldC": -34
+        "coldC": -34,
+        "harvest": {
+          "wholeSeason": true,
+          "citations": [
+            "mahr-2025-anise-hyssop"
+          ]
+        }
       }
     },
     {
@@ -2431,12 +2517,19 @@
         "life": "perennial",
         "coldC": -25,
         "yearsToMature": 2,
-        "harvestDays": 30,
         "dliCitations": [
           "widmer-strawberry-dli",
           "kubota-osu-strawberry-dli"
         ],
-        "dliCaveat": "25 mol/m2/d is the level Widmer et al. 2026 found maintains trial-average yield under agrivoltaic cover, from a four-year study of 21 cases in Switzerland, every one substrate-grown under a protective cover. The 30 at the top of the band is where the Ohio State Kubota Lab’s greenhouse guidance reports strawberry plants tend to be stressed. Neither figure is a failure point, and transfer to an in-ground bed is an extrapolation"
+        "dliCaveat": "25 mol/m2/d is the level Widmer et al. 2026 found maintains trial-average yield under agrivoltaic cover, from a four-year study of 21 cases in Switzerland, every one substrate-grown under a protective cover. The 30 at the top of the band is where the Ohio State Kubota Lab’s greenhouse guidance reports strawberry plants tend to be stressed. Neither figure is a failure point, and transfer to an in-ground bed is an extrapolation",
+        "harvest": {
+          "afterFreezeDays": 53,
+          "citations": [
+            "umn-extension-2024-strawberries",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 20
       }
     },
     {
@@ -2461,11 +2554,18 @@
         "life": "woody-perennial",
         "coldC": -34,
         "yearsToMature": 2,
-        "harvestDays": 30,
         "dliCitations": [
           "widmer-strawberry-dli"
         ],
-        "dliCaveat": "15 mol/m2/d is the level Widmer et al. 2026 found maintains trial-average yield for raspberry, on the same convention as strawberry. They publish no target band and no shading percentage for raspberry, so the 18 to 25 is this app’s own"
+        "dliCaveat": "15 mol/m2/d is the level Widmer et al. 2026 found maintains trial-average yield for raspberry, on the same convention as strawberry. They publish no target band and no shading percentage for raspberry, so the 18 to 25 is this app’s own",
+        "harvest": {
+          "afterFreezeDays": 69,
+          "citations": [
+            "umn-extension-2026-raspberries",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 61
       }
     },
     {
@@ -2490,7 +2590,14 @@
         "life": "woody-perennial",
         "coldC": -23,
         "yearsToMature": 2,
-        "harvestDays": 30
+        "harvest": {
+          "afterFreezeDays": 116,
+          "citations": [
+            "osu-extension-2020-blackberries-ec1303",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 87
       }
     },
     {
@@ -2523,6 +2630,13 @@
         ],
         "chillHours": 800,
         "deciduous": true,
+        "harvest": {
+          "afterFreezeDays": 69,
+          "citations": [
+            "umn-extension-2026-blueberries",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
         "harvestDays": 30
       }
     },
@@ -2559,7 +2673,14 @@
         ],
         "maxRsr": 0.5,
         "maxRsrTier": "C",
-        "harvestDays": 21
+        "harvest": {
+          "afterFreezeDays": 126,
+          "citations": [
+            "osu-extension-2006-lingonberry-pnw583",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 61
       }
     },
     {
@@ -2594,7 +2715,14 @@
           "tirmenstein1991-lowbush-blueberry-feis"
         ],
         "deciduous": true,
-        "harvestDays": 21
+        "harvest": {
+          "afterFreezeDays": 59,
+          "citations": [
+            "umaine-extension-2008-wild-blueberries-bulletin-4263",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 45
       }
     },
     {
@@ -2626,7 +2754,14 @@
           6.5
         ],
         "envCitations": [],
-        "harvestDays": 21
+        "harvest": {
+          "afterFreezeDays": 147,
+          "citations": [
+            "umass-extension-2008-cranberry-production-guide",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 51
       }
     },
     {
@@ -2725,7 +2860,14 @@
         "deciduous": true,
         "maxRsr": 0.45,
         "maxRsrTier": "C",
-        "harvestDays": 21
+        "harvest": {
+          "afterFreezeDays": 69,
+          "citations": [
+            "umn-extension-2024-currants-gooseberries",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 61
       }
     },
     {
@@ -2754,7 +2896,14 @@
         "deciduous": true,
         "maxRsr": 0.4,
         "maxRsrTier": "C",
-        "harvestDays": 21
+        "harvest": {
+          "afterFreezeDays": 69,
+          "citations": [
+            "umn-extension-2024-currants-gooseberries",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 61
       }
     },
     {
@@ -2783,7 +2932,14 @@
         "deciduous": true,
         "maxRsr": 0.45,
         "maxRsrTier": "C",
-        "harvestDays": 21
+        "harvest": {
+          "afterFreezeDays": 69,
+          "citations": [
+            "umn-extension-2024-currants-gooseberries",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 61
       }
     },
     {
@@ -2809,7 +2965,14 @@
         "coldC": -34,
         "yearsToMature": 4,
         "deciduous": true,
-        "harvestDays": 21
+        "harvest": {
+          "afterFreezeDays": 127,
+          "citations": [
+            "umd-extension-2024-less-common-fruits",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 31
       }
     },
     {
@@ -2834,8 +2997,15 @@
         "life": "perennial",
         "coldC": -34,
         "yearsToMature": 3,
-        "harvestDays": 45,
-        "laubNote": "No crop in the nine groups is harvested the way this one is, so the group is an analogy this app chose"
+        "laubNote": "No crop in the nine groups is harvested the way this one is, so the group is an analogy this app chose",
+        "harvest": {
+          "afterFreezeDays": 0,
+          "citations": [
+            "iastate-extension-2025-rhubarb",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 58
       }
     },
     {
@@ -2862,8 +3032,15 @@
         "yearsToMature": 3,
         "maxRsr": 0.1,
         "maxRsrTier": "C",
-        "harvestDays": 45,
-        "laubNote": "No crop in the nine groups is harvested the way this one is, so the group is an analogy this app chose"
+        "laubNote": "No crop in the nine groups is harvested the way this one is, so the group is an analogy this app chose",
+        "harvest": {
+          "afterFreezeDays": 12,
+          "citations": [
+            "umn-extension-2026-asparagus",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 51
       }
     },
     {
@@ -2888,8 +3065,15 @@
         "life": "perennial",
         "coldC": -12,
         "yearsToMature": 2,
-        "harvestDays": 45,
-        "laubNote": "No crop in the nine groups is harvested the way this one is, so the group is an analogy this app chose"
+        "laubNote": "No crop in the nine groups is harvested the way this one is, so the group is an analogy this app chose",
+        "harvest": {
+          "afterFreezeDays": 31,
+          "citations": [
+            "ucanr-2008-artichoke",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 91
       }
     },
     {
@@ -2919,7 +3103,14 @@
         "support": "trellis",
         "maxRsr": 0.1,
         "maxRsrTier": "C",
-        "harvestDays": 21
+        "harvest": {
+          "afterFreezeDays": 114,
+          "citations": [
+            "umn-extension-2026-cold-climate-grapes",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 71
       }
     },
     {
@@ -2947,7 +3138,14 @@
         "chillHours": 800,
         "maxRsr": 0.1,
         "maxRsrTier": "C",
-        "harvestDays": 30
+        "harvest": {
+          "afterFreezeDays": 89,
+          "citations": [
+            "osu-extension-2025-tree-fruits-nuts-home",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 122
       }
     },
     {
@@ -2975,7 +3173,14 @@
         "chillHours": 700,
         "maxRsr": 0.1,
         "maxRsrTier": "C",
-        "harvestDays": 30
+        "harvest": {
+          "afterFreezeDays": 120,
+          "citations": [
+            "osu-extension-2025-tree-fruits-nuts-home",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 60
       }
     },
     {
@@ -3003,7 +3208,14 @@
         "chillHours": 750,
         "maxRsr": 0.1,
         "maxRsrTier": "C",
-        "harvestDays": 21
+        "harvest": {
+          "afterFreezeDays": 124,
+          "citations": [
+            "osu-extension-2025-tree-fruits-nuts-home",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 20
       }
     },
     {
@@ -3031,7 +3243,14 @@
         "chillHours": 800,
         "maxRsr": 0.1,
         "maxRsrTier": "C",
-        "harvestDays": 21
+        "harvest": {
+          "afterFreezeDays": 151,
+          "citations": [
+            "osu-extension-2025-tree-fruits-nuts-home",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 30
       }
     },
     {
@@ -3059,7 +3278,14 @@
         "chillHours": 1000,
         "maxRsr": 0.1,
         "maxRsrTier": "C",
-        "harvestDays": 14
+        "harvest": {
+          "afterFreezeDays": 63,
+          "citations": [
+            "usu-extension-preserve-cherries",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 15
       }
     },
     {
@@ -3087,7 +3313,14 @@
         "chillHours": 1100,
         "maxRsr": 0.1,
         "maxRsrTier": "C",
-        "harvestDays": 14
+        "harvest": {
+          "afterFreezeDays": 89,
+          "citations": [
+            "osu-extension-2025-tree-fruits-nuts-home",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 30
       }
     },
     {
@@ -3115,7 +3348,14 @@
         "chillHours": 700,
         "maxRsr": 0.1,
         "maxRsrTier": "C",
-        "harvestDays": 14
+        "harvest": {
+          "afterFreezeDays": 89,
+          "citations": [
+            "osu-extension-2025-tree-fruits-nuts-home",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 30
       }
     },
     {
@@ -3143,7 +3383,14 @@
         "deciduous": true,
         "maxRsr": 0.1,
         "maxRsrTier": "C",
-        "harvestDays": 45
+        "harvest": {
+          "afterFreezeDays": 120,
+          "citations": [
+            "osu-extension-2025-tree-fruits-nuts-home",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 30
       }
     },
     {
@@ -3172,7 +3419,14 @@
         "deciduous": true,
         "maxRsr": 0.3,
         "maxRsrTier": "C",
-        "harvestDays": 21
+        "harvest": {
+          "afterFreezeDays": 144,
+          "citations": [
+            "osu-extension-2013-hazelnuts-orchard-floor",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 67
       }
     },
     {
@@ -3200,7 +3454,14 @@
         "deciduous": true,
         "maxRsr": 0.45,
         "maxRsrTier": "C",
-        "harvestDays": 21
+        "harvest": {
+          "afterFreezeDays": 132,
+          "citations": [
+            "ksu-extension-2010-organic-pawpaw",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 41
       }
     },
     {
@@ -3227,7 +3488,14 @@
         "yearsToMature": 4,
         "chillHours": 800,
         "deciduous": true,
-        "harvestDays": 21
+        "harvest": {
+          "afterFreezeDays": 30,
+          "citations": [
+            "msu-extension-2018-growing-serviceberries",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 36
       }
     },
     {
@@ -3253,6 +3521,13 @@
         "coldC": -37,
         "yearsToMature": 4,
         "deciduous": true,
+        "harvest": {
+          "afterFreezeDays": 129,
+          "citations": [
+            "iastate-extension-2015-aronia",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
         "harvestDays": 21
       }
     },
@@ -3281,7 +3556,14 @@
         "chillHours": 600,
         "deciduous": true,
         "support": "arbor",
-        "harvestDays": 21
+        "harvest": {
+          "afterFreezeDays": 124,
+          "citations": [
+            "umn-extension-2024-kiwiberry",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 51
       }
     },
     {
@@ -3307,7 +3589,14 @@
         "coldC": -34,
         "yearsToMature": 3,
         "support": "trellis",
-        "harvestDays": 21
+        "harvest": {
+          "afterFreezeDays": 126,
+          "citations": [
+            "osu-extension-2015-hops-em9115",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 31
       }
     },
     {
@@ -3385,11 +3674,18 @@
       "heightM": 0.15,
       "widthM": 0.4,
       "overrides": {
+        "role": "cover",
         "life": "perennial",
         "coldC": -29,
         "coldWinterOnly": true,
         "maxRsr": 0.75,
-        "maxRsrTier": "C"
+        "maxRsrTier": "C",
+        "survivalCeiling": 36.4,
+        "survivalCeilingTier": "B",
+        "survivalCeilingCitations": [
+          "nelson2007-late-seral-herbs"
+        ],
+        "survivalCeilingNote": "Nelson et al. 2007 measured growing-season light (PPFD) at 36.4 mol/m2/d in a Washington clearcut. Tagged Asarum caudatum plants (ramets) there survived at about 30% of the rate in the old-growth forest next to it in year 1, and survival was still low in year 2. Only two light levels were compared, one clearcut and one forest stand, and mid-summer heat and drought ran higher in the clearcut too"
       }
     },
     {
@@ -3419,7 +3715,15 @@
           5
         ],
         "maxRsr": 0.75,
-        "maxRsrTier": "C"
+        "maxRsrTier": "C",
+        "harvest": {
+          "afterFreezeDays": 6,
+          "citations": [
+            "usfs-2014-ramps",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 6
       }
     },
     {
@@ -3791,7 +4095,15 @@
         "zr": 1.3,
         "p": 0.5,
         "maxRsr": 0.1,
-        "maxRsrTier": "C"
+        "maxRsrTier": "C",
+        "harvest": {
+          "afterFreezeDays": 271,
+          "citations": [
+            "ucce-2010-lemon-cost-study-sjv-south",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 167
       }
     },
     {
@@ -4346,7 +4658,15 @@
           "Csa",
           "Csb"
         ],
-        "laubNote": "The meta-analysis took data from temperate and subtropical sites only, and this crop is grown outside that range, so the curve is an extrapolation"
+        "laubNote": "The meta-analysis took data from temperate and subtropical sites only, and this crop is grown outside that range, so the curve is an extrapolation",
+        "harvest": {
+          "afterFreezeDays": 241,
+          "citations": [
+            "ca-olive-committee-2003-olive-pmsp",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 76
       }
     },
     {
@@ -5001,7 +5321,13 @@
       "overrides": {
         "life": "perennial",
         "coldC": -34,
-        "zr": 1.8
+        "zr": 1.8,
+        "harvest": {
+          "wholeSeason": true,
+          "citations": [
+            "usu-extension-2023-comfrey"
+          ]
+        }
       }
     },
     {

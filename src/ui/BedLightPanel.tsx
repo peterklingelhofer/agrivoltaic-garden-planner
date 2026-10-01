@@ -1,7 +1,7 @@
 import type { ReactElement } from 'react'
 import { MONTH_NAMES } from '../data/util'
 import { surroundingsNote } from '../recommend/surroundings'
-import { bedLightSummary } from '../state/bed-light'
+import { bedLightSummary, zoneWord } from '../state/bed-light'
 import { growingWindowOf } from '../state/growing-window'
 import { EMPTY_LIST } from '../state/slices'
 import { useAppStore } from '../state/store'
@@ -9,14 +9,6 @@ import { formatDli } from './format'
 import { Panel } from './Panel'
 
 const monthName = (month: number): string => MONTH_NAMES[month - 1] ?? String(month)
-
-/**
- * A bed's light in one word, from the same rounded percent of open-sky light the row prints
- * beside it. The same thresholds the plants step uses for its bed cards, so the two steps never
- * call one bed by two names
- */
-const zoneWord = (openSkyPercent: number): 'sunny' | 'part shade' | 'shady' =>
-  openSkyPercent >= 85 ? 'sunny' : openSkyPercent >= 60 ? 'part shade' : 'shady'
 
 /**
  * Each bed's light, live, on the step that computes it.

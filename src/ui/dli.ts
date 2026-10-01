@@ -9,11 +9,16 @@ import type { LimitingFactorKind } from '../types/recommend'
 import type { Fraction, MolPerM2Day } from '../types/units'
 import { formatDli, formatRsr } from './format'
 
-export type DliThresholdKind = 'minimum' | 'disorder-ceiling' | 'max-design-rsr'
+export type DliThresholdKind =
+  | 'minimum'
+  | 'disorder-ceiling'
+  | 'survival-ceiling'
+  | 'max-design-rsr'
 
 const THRESHOLD_BY_CAUSE: Readonly<Record<string, DliThresholdKind>> = {
   'dli-minimum': 'minimum',
   'dli-disorder-ceiling': 'disorder-ceiling',
+  'dli-survival-ceiling': 'survival-ceiling',
   'max-design-rsr': 'max-design-rsr',
 }
 
@@ -24,6 +29,7 @@ export const dliThresholdKind = (cause: LimitingFactorKind): DliThresholdKind | 
 export const THRESHOLD_LABEL: Readonly<Record<DliThresholdKind, string>> = {
   minimum: 'Minimum light',
   'disorder-ceiling': 'Disorder ceiling',
+  'survival-ceiling': 'Survival ceiling',
   'max-design-rsr': 'Maximum design shade',
 }
 
@@ -76,7 +82,12 @@ const reading = (crop: Crop, kind: DliThresholdKind): Reading => {
   if (kind === 'max-design-rsr') {
     return { cited: light.maxDesignRsr, value: formatRsr(light.maxDesignRsr.value as Fraction) }
   }
-  const cited = kind === 'minimum' ? light.dliMinMolM2Day : light.dliMaxBeforeDisorderMolM2Day
+  const cited =
+    kind === 'minimum'
+      ? light.dliMinMolM2Day
+      : kind === 'survival-ceiling'
+        ? light.dliMaxBeforeSurvivalLossMolM2Day
+        : light.dliMaxBeforeDisorderMolM2Day
   return {
     cited,
     value: cited === null ? '' : formatDli(cited.value as MolPerM2Day),

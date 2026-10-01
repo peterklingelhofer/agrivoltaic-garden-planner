@@ -22,6 +22,7 @@ import {
   allocateSpace,
   ambitionPreferences,
   AMBITION_CLASSES,
+  askedForSignal,
   emptyPreferences,
   measuredLightEnvelope,
   orchardScale,
@@ -211,6 +212,34 @@ describe('a blueberry anchor', () => {
 })
 
 /**
+ * `confidenceOf` reads every caution term across a combination's pairs into `reasons`. Four
+ * Ericaceae crops pair with each other six ways, and every one of those pairs carries the
+ * identical shared-family sentence, so without a dedupe it lands in `reasons` six times and the
+ * UI, which keys the list on the sentence, warns about the duplicate key
+ */
+describe('a caution shared by every pair of one family', () => {
+  it('lists the family sentence once in confidence.reasons', () => {
+    const set = suggest(
+      preferences([
+        prefer('blueberry', 'require'),
+        prefer('lingonberry', 'require'),
+        prefer('teaberry', 'require'),
+        prefer('lowbush-blueberry', 'require'),
+      ]),
+    )
+    const [combination] = set.suggestions
+    expect(combination).toBeDefined()
+    if (combination === undefined) return
+    const familyCautions = combination.pairs.flatMap((pair) =>
+      pair.terms.filter((term) => term.kind === 'shared-pest-or-pathogen'),
+    )
+    expect(familyCautions.length).toBeGreaterThan(1)
+    const sentence = familyCautions[0]?.explanation
+    expect(combination.confidence.reasons.filter((reason) => reason === sentence)).toHaveLength(1)
+  })
+})
+
+/**
  * A combination is built around something to eat. Support plants (an insectary, a cover crop, a
  * nurse, a trap) score well on the compatibility and stratification terms, so seeding combinations
  * with them would hand the grower eastern teaberry in every bed of a plot where tomatoes fit. They
@@ -378,6 +407,38 @@ describe('the wildlife answers move the combinations', () => {
     for (const suggestion of withoutWildlife.suggestions) {
       expect(suggestion.score.preference).toBe(0)
     }
+  })
+})
+
+/**
+ * In the combinations, a native that's also something the grower asked to grow counts like a
+ * named pick. See the comment above `askedForSignal`
+ */
+describe('a native already asked for leans like a named pick', () => {
+  it("scores a native that's also asked for as high as a named pick, and either alone at half that", () => {
+    const preferences = withAmbition(emptyPreferences(), 'fruiting-and-berries', catalog)
+    const wildlife: WildlifePreference = {
+      favorNative: true,
+      favorPollinators: false,
+      botanicalArea: 'NWJ',
+    }
+    const request = { preferences, wildlife } as unknown as Parameters<typeof askedForSignal>[0]
+
+    // highbush blueberry is native in New Jersey, and its class is one the answer names
+    expect(isNativeIn(crop('blueberry').id, 'NWJ')).toBe(true)
+    expect(AMBITION_CLASSES['fruiting-and-berries']).toContain(crop('blueberry').dliClass)
+    expect(askedForSignal(request, crop('blueberry'))).toBe(1)
+
+    // teaberry is native there too, and its class isn't one the answer names
+    expect(isNativeIn(crop('teaberry').id, 'NWJ')).toBe(true)
+    expect(AMBITION_CLASSES['fruiting-and-berries']).not.toContain(crop('teaberry').dliClass)
+    expect(askedForSignal(request, crop('teaberry'))).toBe(0.5)
+
+    // tomato's class is one the answer names, but Kew's checklist has no accepted record of it
+    // growing wild there
+    expect(isNativeIn(crop('tomato').id, 'NWJ')).toBe(false)
+    expect(AMBITION_CLASSES['fruiting-and-berries']).toContain(crop('tomato').dliClass)
+    expect(askedForSignal(request, crop('tomato'))).toBe(0.5)
   })
 })
 

@@ -1,17 +1,17 @@
 {
-  "version": 4,
-  "savedAtUtcMillis": 1789350535371,
+  "version": 5,
+  "savedAtUtcMillis": 1790817999112,
   "sceneTimeUtcMillis": 1723491000000,
   "example": {
     "label": "Example agrivoltaic garden, Amherst, Massachusetts",
-    "generatedAtUtc": "2026-09-14T01:48:55.371Z",
+    "generatedAtUtc": "2026-10-01T01:26:39.112Z",
     "generator": "scripts/bake-example-garden.mjs",
     "siteLabel": "Phoenix, Arizona",
     "weather": "open-meteo typical meteorological year, 8760 hours",
     "backend": "tregenza-mf1",
     "targetCellSizeM": 0.4,
-    "bakeElapsedMs": 1712,
-    "quantizationErrorMolM2Day": 0.0062713623046875,
+    "bakeElapsedMs": 2265,
+    "quantizationErrorMolM2Day": 0.006275177001953125,
     "notes": [
       "70 x 90 cells at 0.4 m, baked on the CPU reference backend",
       "1357 binned sun directions, tregenza-mf1 sky, 2 sub-steps per hour",
@@ -93,8 +93,7 @@
           "irrigation": {
             "method": "drip",
             "available": true,
-            "appliedMmPerYear": 180,
-            "harvestsPanelRunoff": false
+            "appliedMmPerYear": 180
           },
           "raisedHeightM": 0.35,
           "modifiers": [],
@@ -162,8 +161,7 @@
           "irrigation": {
             "method": "drip",
             "available": true,
-            "appliedMmPerYear": 180,
-            "harvestsPanelRunoff": false
+            "appliedMmPerYear": 180
           },
           "raisedHeightM": 0.35,
           "modifiers": [],
@@ -231,8 +229,7 @@
           "irrigation": {
             "method": "drip",
             "available": true,
-            "appliedMmPerYear": 180,
-            "harvestsPanelRunoff": false
+            "appliedMmPerYear": 180
           },
           "raisedHeightM": 0.35,
           "modifiers": [],
@@ -275,8 +272,7 @@
           "irrigation": {
             "method": "drip",
             "available": true,
-            "appliedMmPerYear": 180,
-            "harvestsPanelRunoff": false
+            "appliedMmPerYear": 180
           },
           "raisedHeightM": 0.35,
           "modifiers": [],
@@ -349,6 +345,7 @@
           }
         }
       ],
+      "obstructions": [],
       "groundCover": "grass"
     },
     "selectedBedId": null,

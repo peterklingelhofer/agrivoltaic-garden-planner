@@ -204,7 +204,7 @@ const CAUSE_BY_TERM: Partial<Record<CompatibilityTermKind, RefusalCause>> = {
 }
 
 /**
- * The three limiting factors that are about the bed's LIGHT itself. The site is a separate question.
+ * The four limiting factors that are about the bed's LIGHT itself. The site is a separate question.
  *
  * Everything else that carries a limiting factor still reads as "this bed cannot grow it at all",
  * which is the harder no and belongs above any pairing. Light is the exception because in this
@@ -222,6 +222,7 @@ const CAUSE_BY_TERM: Partial<Record<CompatibilityTermKind, RefusalCause>> = {
 const LIGHT_LIMITS: ReadonlySet<LimitingFactorKind['kind']> = new Set([
   'dli-minimum',
   'dli-disorder-ceiling',
+  'dli-survival-ceiling',
   'max-design-rsr',
 ])
 

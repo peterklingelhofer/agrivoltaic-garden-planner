@@ -204,11 +204,25 @@ export const derivePlanting = (draft: PlantingDraft): Derivation<Planting> => {
   }
 
   const sowDay = draft.sowDay ?? calendarSow
-  // the calendar's own sow-to-harvest lag, carried to whatever day this planting is sown
-  const harvestStartDay = wrapDayOfYear(sowDay + forwardDays(calendarSow, calendar.harvest.start))
+  // a perennial's picking season is the calendar's own, coming round every year on the frost or
+  // catalog clock: it doesn't move with this sowing the way an annual's harvest lag does
+  const perennial = crop.thermal === null
+  const sowInsideHarvest =
+    forwardDays(calendar.harvest.start, sowDay) <=
+    forwardDays(calendar.harvest.start, calendar.harvest.end)
+  const harvestStartDay = perennial
+    ? sowInsideHarvest
+      ? sowDay
+      : calendar.harvest.start
+    : wrapDayOfYear(sowDay + forwardDays(calendarSow, calendar.harvest.start))
   const harvestEndDay =
-    draft.harvestEndDay ?? wrapDayOfYear(sowDay + forwardDays(calendarSow, calendar.harvest.end))
-  if (forwardDays(sowDay, harvestStartDay) > forwardDays(sowDay, harvestEndDay)) {
+    draft.harvestEndDay ??
+    (perennial
+      ? calendar.harvest.end
+      : wrapDayOfYear(sowDay + forwardDays(calendarSow, calendar.harvest.end)))
+  // an annual sown too late to reach its own harvest end is refused. A perennial's picking season
+  // recurs on its own and is never refused for the day it went into the bed
+  if (!perennial && forwardDays(sowDay, harvestStartDay) > forwardDays(sowDay, harvestEndDay)) {
     return refuse(
       `sown on ${dayLabel(sowDay)}, ${name} isn't ready to pick until ${dayLabel(harvestStartDay)}, and the plan ends its harvest on ${dayLabel(harvestEndDay)}`,
     )

@@ -235,6 +235,8 @@ export const citationsFor = (basis: CalendarBasis, crop: Crop): readonly Citatio
       return FROST_CITATIONS
     case 'light-window':
       return crop.light.dliMinMolM2Day.citations
+    case 'harvest-calendar':
+      return [...(crop.perennialHarvest?.citations ?? []), ...FROST_CITATIONS]
     case 'catalog-window':
       return []
   }
@@ -732,25 +734,75 @@ const annualCalendar = (input: AnnualInput): CropCalendar => {
   }
 }
 
+/** The catalog's own growing window, end month onward for the harvest duration */
+const catalogWindowHarvest = (crop: Crop, site: Site): HarvestWindow => {
+  const window = growingWindowFor(crop, site.location.latitudeDeg)
+  const start = firstDayOfMonth(window.endMonth)
+  return {
+    start,
+    end: wrapDayOfYear(start + crop.harvestDurationDays),
+    basis: { kind: 'catalog-window' },
+  }
+}
+
+/**
+ * The extension figures count from their region's median last spring freeze, so a harvest is
+ * dated off the site's median season whatever frost risk the grower set: that setting moves
+ * planting, and a perennial ripens on the season it actually gets
+ */
+const HARVEST_PERCENTILE: ExceedancePercentile = 50
+
+/**
+ * A perennial's harvest where the catalog carries an extension harvest calendar for it: picked
+ * so many days off the site's own median last spring freeze, for as long as the source's picking
+ * season, or picked right through the frost-free season where the source names no narrower one.
+ * A site with no frost in its median year has no freeze to count from there, so it counts from
+ * the frost-risk setting's own anchors. Where the catalog carries no such figure, its growing
+ * window stands, as before
+ */
+const perennialHarvestWindow = (
+  crop: Crop,
+  site: Site,
+  anchors: SeasonAnchors,
+  percentile: ExceedancePercentile,
+): HarvestWindow => {
+  const harvest = crop.perennialHarvest
+  if (harvest === null) return catalogWindowHarvest(crop, site)
+  const median = seasonAnchors(site, HARVEST_PERCENTILE)
+  const season = median.frostFree ? anchors : median
+  const seasonPercentile = median.frostFree ? percentile : HARVEST_PERCENTILE
+  if (harvest.kind === 'whole-season') {
+    return {
+      start: season.lastSpringFreeze,
+      end: season.firstFallFreeze,
+      basis: { kind: 'harvest-calendar', afterFreezeDays: null, percentile: seasonPercentile },
+    }
+  }
+  const start = wrapDayOfYear(season.lastSpringFreeze + harvest.afterFreezeDays)
+  return {
+    start,
+    end: wrapDayOfYear(start + crop.harvestDurationDays),
+    basis: {
+      kind: 'harvest-calendar',
+      afterFreezeDays: harvest.afterFreezeDays,
+      percentile: seasonPercentile,
+    },
+  }
+}
+
 /**
  * Perennials carry no thermal requirement, so no maturity date can be computed
- * and none is invented. The window is the frost-anchored planting season and
- * the harvest is the catalog growing window
+ * and none is invented. The planting window is the frost-anchored planting season. The harvest is
+ * the catalog growing window, or an extension harvest calendar's where the catalog carries one
  */
 const perennialCalendar = (input: DatedInput): CropCalendar => {
   const { crop, site, anchors, notes, percentile } = input
   const floor = plantingFloor(input)
-  const window = growingWindowFor(crop, site.location.latitudeDeg)
-  const harvestStart = firstDayOfMonth(window.endMonth)
   return {
     cropId: crop.id,
     plantings: [plantingWindow(crop, 'transplant-out', floor, anchors.firstFallFreeze)],
     successions: [],
-    harvest: {
-      start: harvestStart,
-      end: wrapDayOfYear(harvestStart + crop.harvestDurationDays),
-      basis: { kind: 'catalog-window' },
-    },
+    harvest: perennialHarvestWindow(crop, site, anchors, percentile),
     feasibility: { kind: 'no-thermal-data' },
     frostRiskPercentile: percentile,
     notes,
@@ -928,20 +980,25 @@ const frostFreeCalendar = (input: CalendarInput, anchors: SeasonAnchors): CropCa
     rainAnchored(run) ? wetSeasonStartNote(precip) : wetSeasonNote(precip)
 
   if (thermal === null) {
-    // a perennial: no maturity date can be computed and none is invented, as on a frosted site
-    const window = growingWindowFor(crop, site.location.latitudeDeg)
-    const harvestStart = firstDayOfMonth(window.endMonth)
+    // a perennial: no maturity date can be computed and none is invented, as on a frosted site.
+    // An after-last-freeze figure has no freeze to count from here, so it keeps the catalog
+    // window. A whole-season crop is picked over the bed's own longest growing run instead,
+    // which `dayRuns` already closes at wrapDayOfYear(start - 1) wherever that run is the whole year
+    const harvest: HarvestWindow =
+      crop.perennialHarvest?.kind === 'whole-season'
+        ? {
+            start: longest.start,
+            end: longest.end,
+            basis: { kind: 'harvest-calendar', afterFreezeDays: null, percentile, frostFree: true },
+          }
+        : catalogWindowHarvest(crop, site)
     return {
       cropId: crop.id,
       plantings: runs.map((run) =>
         plantingWindow(crop, 'transplant-out', { day: run.start, basis: basisOf(run) }, run.end),
       ),
       successions: [],
-      harvest: {
-        start: harvestStart,
-        end: wrapDayOfYear(harvestStart + crop.harvestDurationDays),
-        basis: { kind: 'catalog-window' },
-      },
+      harvest,
       feasibility: { kind: 'fits', slackDays: (longest.days - 1) as Days },
       frostRiskPercentile: percentile,
       notes: withWet(wetNoteFor(longest)),

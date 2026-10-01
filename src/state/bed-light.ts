@@ -26,3 +26,14 @@ export const bedLightSummary = (light: BedLight, window: GrowingWindow): BedLigh
     shadeRatio: relativeShadeRatio(under as MolPerM2Day, open as MolPerM2Day) as Fraction,
   }
 }
+
+/**
+ * A bed's light in one word, from its rounded percent of open-sky light over the growing season.
+ *
+ * The thresholds are the layout search's own: under 15% shade is a gap between rows (sunny, at
+ * least 85% of open sky) and over 40% is under one (shady, under 60%). Both the light step and
+ * the plants step read the same rounded percent off this, so neither ever calls a bed by two
+ * names
+ */
+export const zoneWord = (openSkyPercent: number): 'sunny' | 'part shade' | 'shady' =>
+  openSkyPercent >= 85 ? 'sunny' : openSkyPercent >= 60 ? 'part shade' : 'shady'
