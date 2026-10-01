@@ -12516,7 +12516,7 @@
   {
     "id": "noaa-ncei-2021-climate-normals-1991-2020",
     "type": "report",
-    "title": "U.S. Climate Normals 1991-2020: Annual/Seasonal Normals (Probability of Last Spring Occurrence of Low Temperatures)",
+    "title": "U.S. Climate Normals 1991-2020: Annual/Seasonal Normals",
     "author": [
       {
         "literal": "NOAA National Centers for Environmental Information"
@@ -12569,9 +12569,32 @@
         "median (50 percent probability) date of the last spring 32 F freeze at station USC00351862, 04-17, field ANN-TMIN-PRBLST-T32FP50",
         "median (50 percent probability) date of the last spring 32 F freeze at station USW00003945, 04-07, field ANN-TMIN-PRBLST-T32FP50",
         "median (50 percent probability) date of the last spring 32 F freeze at station USW00013869, 03-08, field ANN-TMIN-PRBLST-T32FP50",
-        "median (50 percent probability) date of the last spring 32 F freeze at station USW00093193, 01-14, field ANN-TMIN-PRBLST-T32FP50"
+        "median (50 percent probability) date of the last spring 32 F freeze at station USW00093193, 01-14, field ANN-TMIN-PRBLST-T32FP50",
+        "median (50 percent probability) date of the first fall 32 F freeze at station USC00098703, 19 Nov, field ANN-TMIN-PRBFST-T32FP50, which with the last spring freeze gives a 253-day season",
+        "median (50 percent probability) date of the first fall 32 F freeze at station USC00174183, 9 Oct, field ANN-TMIN-PRBFST-T32FP50, which with the last spring freeze gives a 159-day season",
+        "median (50 percent probability) date of the first fall 32 F freeze at station USC00192451, 24 Oct, field ANN-TMIN-PRBFST-T32FP50, which with the last spring freeze gives a 186-day season",
+        "median (50 percent probability) date of the first fall 32 F freeze at station USC00351862, 28 Oct, field ANN-TMIN-PRBFST-T32FP50, which with the last spring freeze gives a 194-day season",
+        "median (50 percent probability) date of the first fall 32 F freeze at station USC00368449, 26 Oct, field ANN-TMIN-PRBFST-T32FP50, which with the last spring freeze gives a 189-day season",
+        "median (50 percent probability) date of the first fall 32 F freeze at station USW00003812, 28 Oct, field ANN-TMIN-PRBFST-T32FP50, which with the last spring freeze gives a 202-day season",
+        "median (50 percent probability) date of the first fall 32 F freeze at station USW00003945, 29 Oct, field ANN-TMIN-PRBFST-T32FP50, which with the last spring freeze gives a 205-day season",
+        "median (50 percent probability) date of the first fall 32 F freeze at station USW00012921, 28 Nov, field ANN-TMIN-PRBFST-T32FP50, which with the last spring freeze gives a 275-day season",
+        "median (50 percent probability) date of the first fall 32 F freeze at station USW00013869, 21 Nov, field ANN-TMIN-PRBFST-T32FP50, which with the last spring freeze gives a 258-day season",
+        "median (50 percent probability) date of the first fall 32 F freeze at station USW00014742, 15 Oct, field ANN-TMIN-PRBFST-T32FP50, which with the last spring freeze gives a 169-day season",
+        "median (50 percent probability) date of the first fall 32 F freeze at station USW00014827, 21 Oct, field ANN-TMIN-PRBFST-T32FP50, which with the last spring freeze gives a 180-day season",
+        "median (50 percent probability) date of the first fall 32 F freeze at station USW00014922, 18 Oct, field ANN-TMIN-PRBFST-T32FP50, which with the last spring freeze gives a 178-day season",
+        "median (50 percent probability) date of the first fall 32 F freeze at station USW00014933, 20 Oct, field ANN-TMIN-PRBFST-T32FP50, which with the last spring freeze gives a 185-day season",
+        "median (50 percent probability) date of the first fall 32 F freeze at station USW00023155, 15 Dec, field ANN-TMIN-PRBFST-T32FP50, which with the last spring freeze gives a 332-day season",
+        "median (50 percent probability) date of the first fall 32 F freeze at station USW00023233, 10 Dec, field ANN-TMIN-PRBFST-T32FP50, which with the last spring freeze gives a 315-day season",
+        "median (50 percent probability) date of the first fall 32 F freeze at station USW00023293, 22 Dec, field ANN-TMIN-PRBFST-T32FP50, which with the last spring freeze gives a 344-day season",
+        "median (50 percent probability) date of the first fall 32 F freeze at station USW00024127, 31 Oct, field ANN-TMIN-PRBFST-T32FP50, which with the last spring freeze gives a 206-day season",
+        "median (50 percent probability) date of the first fall 32 F freeze at station USW00024132, 16 Sep, field ANN-TMIN-PRBFST-T32FP50, which with the last spring freeze gives a 113-day season",
+        "median (50 percent probability) date of the first fall 32 F freeze at station USW00024221, 23 Oct, field ANN-TMIN-PRBFST-T32FP50, which with the last spring freeze gives a 195-day season",
+        "median (50 percent probability) date of the first fall 32 F freeze at station USW00024232, 1 Nov, field ANN-TMIN-PRBFST-T32FP50, which with the last spring freeze gives a 212-day season",
+        "median (50 percent probability) date of the first fall 32 F freeze at station USW00053841, 24 Oct, field ANN-TMIN-PRBFST-T32FP50, which with the last spring freeze gives a 192-day season",
+        "median (50 percent probability) date of the first fall 32 F freeze at station USW00093193, 14 Dec, field ANN-TMIN-PRBFST-T32FP50, which with the last spring freeze gives a 334-day season",
+        "median (50 percent probability) date of the first fall 32 F freeze at station USW00093721, 31 Oct, field ANN-TMIN-PRBFST-T32FP50, which with the last spring freeze gives a 204-day season"
       ],
-      "caveat": "Station normals for the regions the cited extension harvest calendars speak for. They place each source season against its own spring, and the app then moves it by each garden’s own last spring freeze."
+      "caveat": "Station normals for the regions the cited extension harvest calendars speak for. The last spring and first fall freezes give each source its own frost-free season, and the app places a harvest at the same point in the garden's own season."
     },
     "note": "Queried 2026-09-30 through the NCEI data service, dataset normals-annualseasonal-1991-2020."
   },

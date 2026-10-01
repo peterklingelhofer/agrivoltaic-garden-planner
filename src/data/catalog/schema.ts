@@ -451,11 +451,17 @@ export interface CropOverrides {
   /**
    * A perennial's picking season from an extension harvest calendar, read against the source
    * region's median last spring freeze: either so many days before or after that freeze, with
-   * `harvestDays` as how long picking lasts, or picked right through the growing season where
-   * the source says so. Absent, the crop keeps the catalogue growing-window dating
+   * `seasonDays` as the source region's own median frost-free season (also NOAA's 1991-2020
+   * normals, last spring freeze to first fall freeze) and `harvestDays` as how long picking
+   * lasts, or picked right through the growing season where the source says so. Absent, the crop
+   * keeps the catalogue growing-window dating
    */
   readonly harvest?:
-    | { readonly afterFreezeDays: number; readonly citations: NonEmpty<CitationId> }
+    | {
+        readonly afterFreezeDays: number
+        readonly seasonDays: number
+        readonly citations: NonEmpty<CitationId>
+      }
     | { readonly wholeSeason: true; readonly citations: NonEmpty<CitationId> }
   readonly ph?: readonly [number, number, number, number]
   /** Works the envelope trapezoids are transcribed from, where they are not the default */
@@ -693,6 +699,7 @@ export const expandRow = (row: CropRow): Crop => {
         : {
             kind: 'after-last-freeze',
             afterFreezeDays: overrides.harvest.afterFreezeDays,
+            sourceSeasonDays: overrides.harvest.seasonDays,
             citations: overrides.harvest.citations,
           }
 

@@ -103,26 +103,63 @@ describe('basis and feasibility', () => {
     expect(basisLabel({ kind: 'light-window', firstAdequateMonth: 4 })).toContain('Apr')
     expect(basisLabel({ kind: 'days-to-maturity', backedOffDays: days(75) })).toContain('75 days')
     expect(basisLabel({ kind: 'catalog-window' })).toContain('catalog')
-    expect(basisLabel({ kind: 'harvest-calendar', afterFreezeDays: 53, percentile: 50 })).toBe(
-      '53 days after the last spring freeze, from an extension harvest calendar, 50% exceedance',
-    )
-    expect(basisLabel({ kind: 'harvest-calendar', afterFreezeDays: -7, percentile: 50 })).toBe(
+    expect(
+      basisLabel({
+        kind: 'harvest-calendar',
+        afterFreezeDays: -7,
+        sourceSeasonDays: 178,
+        percentile: 50,
+      }),
+    ).toBe(
       '7 days before the last spring freeze, from an extension harvest calendar, 50% exceedance',
     )
-    expect(basisLabel({ kind: 'harvest-calendar', afterFreezeDays: null, percentile: 50 })).toBe(
-      'picked from the last spring freeze to the first fall freeze, 50% exceedance',
+    // 29 days of a 100 day source season: the same share lands wherever the site's own season runs
+    expect(
+      basisLabel({
+        kind: 'harvest-calendar',
+        afterFreezeDays: 29,
+        sourceSeasonDays: 100,
+        percentile: 50,
+      }),
+    ).toBe(
+      '29% of the way through the frost-free season, where an extension harvest calendar places it, 50% exceedance',
+    )
+    // horseradish: dug 185 days off the freeze against a 178 day source season, 7 days past it
+    expect(
+      basisLabel({
+        kind: 'harvest-calendar',
+        afterFreezeDays: 185,
+        sourceSeasonDays: 178,
+        percentile: 50,
+      }),
+    ).toBe(
+      '7 days after the first fall freeze, as an extension harvest calendar places it, 50% exceedance',
     )
     expect(
       basisLabel({
         kind: 'harvest-calendar',
         afterFreezeDays: null,
+        sourceSeasonDays: null,
+        percentile: 50,
+      }),
+    ).toBe('picked from the last spring freeze to the first fall freeze, 50% exceedance')
+    expect(
+      basisLabel({
+        kind: 'harvest-calendar',
+        afterFreezeDays: null,
+        sourceSeasonDays: null,
         percentile: 50,
         frostFree: true,
       }),
     ).toBe('no frost here: picked through its growing season')
-    expect(basisKindLabel({ kind: 'harvest-calendar', afterFreezeDays: 53, percentile: 50 })).toBe(
-      'harvest calendar',
-    )
+    expect(
+      basisKindLabel({
+        kind: 'harvest-calendar',
+        afterFreezeDays: 53,
+        sourceSeasonDays: 178,
+        percentile: 50,
+      }),
+    ).toBe('harvest calendar')
   })
 
   it('refuses to call a crop plantable when it cannot finish', () => {

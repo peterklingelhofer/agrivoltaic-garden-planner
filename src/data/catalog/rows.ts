@@ -1340,6 +1340,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // days after it and runs 11 days
       harvest: {
         afterFreezeDays: 185,
+        // the source's own median season at USW00014922, 23 Apr to 18 Oct (NCEI 1991-2020)
+        seasonDays: 178,
         citations: ['umn-extension-2024-horseradish', 'noaa-ncei-2021-climate-normals-1991-2020'],
       },
       harvestDays: 11,
@@ -2132,6 +2134,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // adviser, and it gives the harvest as the bare month of May
       harvest: {
         afterFreezeDays: 2,
+        // the source's own median season at USW00014742, 29 Apr to 15 Oct (NCEI 1991-2020)
+        seasonDays: 169,
         citations: ['sare-2021-sea-kale', 'noaa-ncei-2021-climate-normals-1991-2020'],
       },
       harvestDays: 30,
@@ -2504,6 +2508,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // 91 days (to 31 Aug)
       harvest: {
         afterFreezeDays: 42,
+        // the source's own median season at USC00368449, 20 Apr to 26 Oct (NCEI 1991-2020)
+        seasonDays: 189,
         citations: ['psu-2026-agritourism-lavender', 'noaa-ncei-2021-climate-normals-1991-2020'],
       },
       harvestDays: 91,
@@ -2937,6 +2943,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // after it and runs 20 days
       harvest: {
         afterFreezeDays: 53,
+        // the source's own median season at USW00014922, 23 Apr to 18 Oct (NCEI 1991-2020)
+        seasonDays: 178,
         citations: ['umn-extension-2024-strawberries', 'noaa-ncei-2021-climate-normals-1991-2020'],
       },
       harvestDays: 20,
@@ -2975,6 +2983,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // MN, so picking starts 69 days after it and runs 61 days
       harvest: {
         afterFreezeDays: 69,
+        // the source's own median season at USW00014922, 23 Apr to 18 Oct (NCEI 1991-2020)
+        seasonDays: 178,
         citations: ['umn-extension-2026-raspberries', 'noaa-ncei-2021-climate-normals-1991-2020'],
       },
       harvestDays: 61,
@@ -3010,6 +3020,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // guide's latest-fruiting group
       harvest: {
         afterFreezeDays: 116,
+        // the source's own median season at USW00024221, 11 Apr to 23 Oct (NCEI 1991-2020)
+        seasonDays: 195,
         citations: [
           'osu-extension-2020-blackberries-ec1303',
           'noaa-ncei-2021-climate-normals-1991-2020',
@@ -3049,6 +3061,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // days
       harvest: {
         afterFreezeDays: 69,
+        // the source's own median season at USW00014922, 23 Apr to 18 Oct (NCEI 1991-2020)
+        seasonDays: 178,
         citations: ['umn-extension-2026-blueberries', 'noaa-ncei-2021-climate-normals-1991-2020'],
       },
       harvestDays: 30,
@@ -3093,6 +3107,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // and runs 61 days. Two crops a year, in mid-August and mid-October, read as one season
       harvest: {
         afterFreezeDays: 126,
+        // the source's own median season at USW00024221, 11 Apr to 23 Oct (NCEI 1991-2020)
+        seasonDays: 195,
         citations: [
           'osu-extension-2006-lingonberry-pnw583',
           'noaa-ncei-2021-climate-normals-1991-2020',
@@ -3136,6 +3152,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // the peak of the harvest season
       harvest: {
         afterFreezeDays: 59,
+        // the source's own median season at USC00174183, 3 May to 9 Oct (NCEI 1991-2020)
+        seasonDays: 159,
         citations: [
           'umaine-extension-2008-wild-blueberries-bulletin-4263',
           'noaa-ncei-2021-climate-normals-1991-2020',
@@ -3178,6 +3196,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // starts 147 days after it and runs 51 days
       harvest: {
         afterFreezeDays: 147,
+        // the source's own median season at USC00192451, 21 Apr to 24 Oct (NCEI 1991-2020)
+        seasonDays: 186,
         citations: [
           'umass-extension-2008-cranberry-production-guide',
           'noaa-ncei-2021-climate-normals-1991-2020',
@@ -3282,6 +3302,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // AP, MN, so picking starts 69 days after it and runs 61 days
       harvest: {
         afterFreezeDays: 69,
+        // the source's own median season at USW00014922, 23 Apr to 18 Oct (NCEI 1991-2020)
+        seasonDays: 178,
         citations: [
           'umn-extension-2024-currants-gooseberries',
           'noaa-ncei-2021-climate-normals-1991-2020',
@@ -3321,6 +3343,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // AP, MN, so picking starts 69 days after it and runs 61 days
       harvest: {
         afterFreezeDays: 69,
+        // the source's own median season at USW00014922, 23 Apr to 18 Oct (NCEI 1991-2020)
+        seasonDays: 178,
         citations: [
           'umn-extension-2024-currants-gooseberries',
           'noaa-ncei-2021-climate-normals-1991-2020',
@@ -3360,6 +3384,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // AP, MN, so picking starts 69 days after it and runs 61 days
       harvest: {
         afterFreezeDays: 69,
+        // the source's own median season at USW00014922, 23 Apr to 18 Oct (NCEI 1991-2020)
+        seasonDays: 178,
         citations: [
           'umn-extension-2024-currants-gooseberries',
           'noaa-ncei-2021-climate-normals-1991-2020',
@@ -3397,6 +3423,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // MD, so picking starts 127 days after it and runs 31 days
       harvest: {
         afterFreezeDays: 127,
+        // the source's own median season at USW00093721, 10 Apr to 31 Oct (NCEI 1991-2020)
+        seasonDays: 204,
         citations: [
           'umd-extension-2024-less-common-fruits',
           'noaa-ncei-2021-climate-normals-1991-2020',
@@ -3436,6 +3464,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // stated range, April to early May
       harvest: {
         afterFreezeDays: 0,
+        // the source's own median season at USW00014933, 18 Apr to 20 Oct (NCEI 1991-2020)
+        seasonDays: 185,
         citations: ['iastate-extension-2025-rhubarb', 'noaa-ncei-2021-climate-normals-1991-2020'],
       },
       harvestDays: 58,
@@ -3472,6 +3502,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // picking starts 12 days after it and runs 51 days
       harvest: {
         afterFreezeDays: 12,
+        // the source's own median season at USW00014922, 23 Apr to 18 Oct (NCEI 1991-2020)
+        seasonDays: 178,
         citations: ['umn-extension-2026-asparagus', 'noaa-ncei-2021-climate-normals-1991-2020'],
       },
       harvestDays: 51,
@@ -3508,6 +3540,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // and the figure is the stated March to May peak
       harvest: {
         afterFreezeDays: 31,
+        // the source's own median season at USW00023233, 29 Jan to 10 Dec (NCEI 1991-2020)
+        seasonDays: 315,
         citations: ['ucanr-2008-artichoke', 'noaa-ncei-2021-climate-normals-1991-2020'],
       },
       harvestDays: 91,
@@ -3547,6 +3581,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // so picking starts 114 days after it and runs 71 days
       harvest: {
         afterFreezeDays: 114,
+        // the source's own median season at USW00014922, 23 Apr to 18 Oct (NCEI 1991-2020)
+        seasonDays: 178,
         citations: [
           'umn-extension-2026-cold-climate-grapes',
           'noaa-ncei-2021-climate-normals-1991-2020',
@@ -3590,6 +3626,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // listed variety
       harvest: {
         afterFreezeDays: 89,
+        // the source's own median season at USW00024232, 3 Apr to 1 Nov (NCEI 1991-2020)
+        seasonDays: 212,
         citations: [
           'osu-extension-2025-tree-fruits-nuts-home',
           'noaa-ncei-2021-climate-normals-1991-2020',
@@ -3630,6 +3668,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // 60 days. The span runs from the earliest to the latest listed variety
       harvest: {
         afterFreezeDays: 120,
+        // the source's own median season at USW00024232, 3 Apr to 1 Nov (NCEI 1991-2020)
+        seasonDays: 212,
         citations: [
           'osu-extension-2025-tree-fruits-nuts-home',
           'noaa-ncei-2021-climate-normals-1991-2020',
@@ -3671,6 +3711,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // listed variety
       harvest: {
         afterFreezeDays: 124,
+        // the source's own median season at USW00024232, 3 Apr to 1 Nov (NCEI 1991-2020)
+        seasonDays: 212,
         citations: [
           'osu-extension-2025-tree-fruits-nuts-home',
           'noaa-ncei-2021-climate-normals-1991-2020',
@@ -3724,6 +3766,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // peach's own 20-day span
       harvest: {
         afterFreezeDays: 223,
+        // the source's own median season at USW00093193, 14 Jan to 14 Dec (NCEI 1991-2020)
+        seasonDays: 334,
         citations: [
           'usu-extension-2020-almonds-home-garden',
           'noaa-ncei-2021-climate-normals-1991-2020',
@@ -3764,6 +3808,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // days. The span runs from the earliest to the latest listed European variety
       harvest: {
         afterFreezeDays: 151,
+        // the source's own median season at USW00024232, 3 Apr to 1 Nov (NCEI 1991-2020)
+        seasonDays: 212,
         citations: [
           'osu-extension-2025-tree-fruits-nuts-home',
           'noaa-ncei-2021-climate-normals-1991-2020',
@@ -3804,6 +3850,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // northern Utah season, June 10 to the 25
       harvest: {
         afterFreezeDays: 63,
+        // the source's own median season at USW00024127, 8 Apr to 31 Oct (NCEI 1991-2020)
+        seasonDays: 206,
         citations: ['usu-extension-preserve-cherries', 'noaa-ncei-2021-climate-normals-1991-2020'],
       },
       harvestDays: 15,
@@ -3840,6 +3888,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // AP (McNary Field), OR, so picking starts 89 days after it and runs 30 days
       harvest: {
         afterFreezeDays: 89,
+        // the source's own median season at USW00024232, 3 Apr to 1 Nov (NCEI 1991-2020)
+        seasonDays: 212,
         citations: [
           'osu-extension-2025-tree-fruits-nuts-home',
           'noaa-ncei-2021-climate-normals-1991-2020',
@@ -3880,6 +3930,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // 30 days
       harvest: {
         afterFreezeDays: 89,
+        // the source's own median season at USW00024232, 3 Apr to 1 Nov (NCEI 1991-2020)
+        seasonDays: 212,
         citations: [
           'osu-extension-2025-tree-fruits-nuts-home',
           'noaa-ncei-2021-climate-normals-1991-2020',
@@ -3919,6 +3971,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // 3 Apr at Salem AP (McNary Field), OR, so picking starts 120 days after it and runs 30 days
       harvest: {
         afterFreezeDays: 120,
+        // the source's own median season at USW00024232, 3 Apr to 1 Nov (NCEI 1991-2020)
+        seasonDays: 212,
         citations: [
           'osu-extension-2025-tree-fruits-nuts-home',
           'noaa-ncei-2021-climate-normals-1991-2020',
@@ -3968,6 +4022,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // 167 days after the freeze and runs 72 days
       harvest: {
         afterFreezeDays: 167,
+        // the source's own median season at USC00098703, 11 Mar to 19 Nov (NCEI 1991-2020)
+        seasonDays: 253,
         citations: ['uga-2022-pomegranate-production', 'noaa-ncei-2021-climate-normals-1991-2020'],
       },
       harvestDays: 72,
@@ -4009,6 +4065,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // mostly fallen by October
       harvest: {
         afterFreezeDays: 144,
+        // the source's own median season at USW00024232, 3 Apr to 1 Nov (NCEI 1991-2020)
+        seasonDays: 212,
         citations: [
           'osu-extension-2013-hazelnuts-orchard-floor',
           'noaa-ncei-2021-climate-normals-1991-2020',
@@ -4059,6 +4117,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // picking starts 181 days after the freeze and runs 30 days
       harvest: {
         afterFreezeDays: 181,
+        // the source's own median season at USW00024232, 3 Apr to 1 Nov (NCEI 1991-2020)
+        seasonDays: 212,
         citations: [
           'osu-extension-2006-growing-walnuts-oregon',
           'noaa-ncei-2021-climate-normals-1991-2020',
@@ -4114,6 +4174,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // three groups. Picking starts 147 days after the freeze and runs 34 days
       harvest: {
         afterFreezeDays: 147,
+        // the source's own median season at USW00003945, 7 Apr to 29 Oct (NCEI 1991-2020)
+        seasonDays: 205,
         citations: [
           'mu-agroforestry-2009-black-walnut-nut-production',
           'noaa-ncei-2021-climate-normals-1991-2020',
@@ -4163,6 +4225,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // 60 days
       harvest: {
         afterFreezeDays: 147,
+        // the source's own median season at USW00003945, 7 Apr to 29 Oct (NCEI 1991-2020)
+        seasonDays: 205,
         citations: [
           'mu-agroforestry-2022-chinese-chestnut',
           'noaa-ncei-2021-climate-normals-1991-2020',
@@ -4214,6 +4278,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // the freeze and runs 10 days
       harvest: {
         afterFreezeDays: 221,
+        // the source's own median season at USW00013869, 8 Mar to 21 Nov (NCEI 1991-2020)
+        seasonDays: 258,
         citations: [
           'uga-extension-2024-pecan-home-backyard',
           'noaa-ncei-2021-climate-normals-1991-2020',
@@ -4254,6 +4320,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // Frankfort Capital City AP, KY, so picking starts 132 days after it and runs 41 days
       harvest: {
         afterFreezeDays: 132,
+        // the source's own median season at USW00053841, 15 Apr to 24 Oct (NCEI 1991-2020)
+        seasonDays: 192,
         citations: [
           'ksu-extension-2010-organic-pawpaw',
           'noaa-ncei-2021-climate-normals-1991-2020',
@@ -4303,6 +4371,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // picking starts 241 days after the freeze and runs 41 days
       harvest: {
         afterFreezeDays: 241,
+        // the source's own median season at USW00012921, 26 Feb to 28 Nov (NCEI 1991-2020)
+        seasonDays: 275,
         citations: [
           'tamu-2011-rodriguez-harvesting-oriental-persimmons',
           'noaa-ncei-2021-climate-normals-1991-2020',
@@ -4355,6 +4425,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // freeze and runs 60 days
       harvest: {
         afterFreezeDays: 130,
+        // the source's own median season at USW00014827, 24 Apr to 21 Oct (NCEI 1991-2020)
+        seasonDays: 180,
         citations: [
           'purdue-2025-woodmansee-divine-fruit',
           'noaa-ncei-2021-climate-normals-1991-2020',
@@ -4392,6 +4464,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // Gallatin Fld AP, MT, so picking starts 30 days after it and runs 36 days
       harvest: {
         afterFreezeDays: 30,
+        // the source's own median season at USW00024132, 26 May to 16 Sep (NCEI 1991-2020)
+        seasonDays: 113,
         citations: [
           'msu-extension-2018-growing-serviceberries',
           'noaa-ncei-2021-climate-normals-1991-2020',
@@ -4428,6 +4502,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // Des Moines Intl AP, IA, so picking starts 129 days after it and runs 21 days
       harvest: {
         afterFreezeDays: 129,
+        // the source's own median season at USW00014933, 18 Apr to 20 Oct (NCEI 1991-2020)
+        seasonDays: 185,
         citations: ['iastate-extension-2015-aronia', 'noaa-ncei-2021-climate-normals-1991-2020'],
       },
       harvestDays: 21,
@@ -4463,6 +4539,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // AP, MN, so picking starts 124 days after it and runs 51 days
       harvest: {
         afterFreezeDays: 124,
+        // the source's own median season at USW00014922, 23 Apr to 18 Oct (NCEI 1991-2020)
+        seasonDays: 178,
         citations: ['umn-extension-2024-kiwiberry', 'noaa-ncei-2021-climate-normals-1991-2020'],
       },
       harvestDays: 51,
@@ -4510,6 +4588,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // starts 191 days after the freeze and runs 11 days
       harvest: {
         afterFreezeDays: 191,
+        // the source's own median season at USC00351862, 17 Apr to 28 Oct (NCEI 1991-2020)
+        seasonDays: 194,
         citations: [
           'osu-2021-strik-kiwifruit-home-garden',
           'noaa-ncei-2021-climate-normals-1991-2020',
@@ -4548,6 +4628,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // runs 31 days
       harvest: {
         afterFreezeDays: 126,
+        // the source's own median season at USW00024221, 11 Apr to 23 Oct (NCEI 1991-2020)
+        seasonDays: 195,
         citations: ['osu-extension-2015-hops-em9115', 'noaa-ncei-2021-climate-normals-1991-2020'],
       },
       harvestDays: 31,
@@ -4693,6 +4775,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // spring
       harvest: {
         afterFreezeDays: 6,
+        // the source's own median season at USW00003812, 9 Apr to 28 Oct (NCEI 1991-2020)
+        seasonDays: 202,
         citations: ['usfs-2014-ramps', 'noaa-ncei-2021-climate-normals-1991-2020'],
       },
       harvestDays: 6,
@@ -5002,6 +5086,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // cost study for the southern San Joaquin Valley
       harvest: {
         afterFreezeDays: 271,
+        // the source's own median season at USW00023155, 17 Jan to 15 Dec (NCEI 1991-2020)
+        seasonDays: 332,
         citations: [
           'ucce-2010-lemon-cost-study-sjv-south',
           'noaa-ncei-2021-climate-normals-1991-2020',
@@ -5063,6 +5149,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // days after the freeze and runs 181 days
       harvest: {
         afterFreezeDays: 323,
+        // the source's own median season at USW00023293, 12 Jan to 22 Dec (NCEI 1991-2020)
+        seasonDays: 344,
         citations: ['ucanr-santaclara-citrus', 'noaa-ncei-2021-climate-normals-1991-2020'],
       },
       harvestDays: 181,
@@ -5124,6 +5212,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // runs 242 days
       harvest: {
         afterFreezeDays: 201,
+        // the source's own median season at USW00023293, 12 Jan to 22 Dec (NCEI 1991-2020)
+        seasonDays: 344,
         citations: ['ucanr-santaclara-citrus', 'noaa-ncei-2021-climate-normals-1991-2020'],
       },
       harvestDays: 242,
@@ -5184,6 +5274,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // on variety", picking starts 323 days after the freeze and runs 150 days
       harvest: {
         afterFreezeDays: 323,
+        // the source's own median season at USW00023293, 12 Jan to 22 Dec (NCEI 1991-2020)
+        seasonDays: 344,
         citations: ['ucanr-santaclara-citrus', 'noaa-ncei-2021-climate-normals-1991-2020'],
       },
       harvestDays: 150,
@@ -5650,6 +5742,8 @@ export const CROP_ROWS: readonly CropRow[] = [
       // Committee and the California Minor Crops Council, for table olives in the Central Valley
       harvest: {
         afterFreezeDays: 241,
+        // the source's own median season at USW00023155, 17 Jan to 15 Dec (NCEI 1991-2020)
+        seasonDays: 332,
         citations: [
           'ca-olive-committee-2003-olive-pmsp',
           'noaa-ncei-2021-climate-normals-1991-2020',

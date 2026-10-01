@@ -159,16 +159,20 @@ export type DtmReference = 'sow' | 'transplant'
 
 /**
  * A perennial's own picking season, from an extension harvest calendar read against the source
- * region's median last spring freeze (NOAA 1991-2020 climate normals). `after-last-freeze`
- * counts `afterFreezeDays` forward from a site's own last spring freeze, negative for a crop the
- * source picks before it, and then runs for the crop's `harvestDurationDays`. `whole-season` is
- * picked right through the growing season, the last spring freeze to the first fall freeze. Null
- * where the catalogue carries no such figure, so the growing-window dating stands
+ * region's median last spring freeze (NOAA 1991-2020 climate normals). `after-last-freeze` holds
+ * `afterFreezeDays` and the source region's own median frost-free season, `sourceSeasonDays`
+ * (the same normals): an offset before the source's own season, or one past it, counts unscaled
+ * from the site's spring or fall freeze, and everything between lands at the same share of the
+ * site's own season that it holds of the source's. Picking then runs for the crop's
+ * `harvestDurationDays`, the source's own length, unscaled. `whole-season` is picked right
+ * through the growing season, the last spring freeze to the first fall freeze. Null where the
+ * catalogue carries no such figure, so the growing-window dating stands
  */
 export type PerennialHarvest =
   | {
       readonly kind: 'after-last-freeze'
       readonly afterFreezeDays: number
+      readonly sourceSeasonDays: number
       readonly citations: NonEmpty<CitationId>
     }
   | { readonly kind: 'whole-season'; readonly citations: NonEmpty<CitationId> }
