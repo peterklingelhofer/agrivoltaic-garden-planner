@@ -7740,13 +7740,13 @@
     "custom": {
       "group": "climate",
       "verification": "url-verified",
-      "accessLevel": "public-domain-with-conditions",
+      "accessLevel": "open-access",
       "evidenceTier": null,
       "backsClaims": [
         "hardiness zone gating for perennials",
         "decision 9: no official USDA hardiness API exists, only an interactive map, ZIP lookup and static downloads"
       ],
-      "caveat": "NOT unconditionally public domain: the 2023 PRISM terms permit redistributing ALTERED data only with a prominently displayed disclaimer that it's not the official USDA Plant Hardiness Zone Map. This app resamples to 0.02 deg, which is an alteration, so the disclaimer is a license obligation and is rendered by staticLayerLicenses() in the attribution panel."
+      "caveat": "Not public domain: Oregon State University retains ownership, and the 2023 PRISM terms permit redistributing ALTERED data only with a prominently displayed disclaimer that it's not the official USDA Plant Hardiness Zone Map. This app resamples to 0.02 deg, which is an alteration, so the disclaimer is a license obligation and is rendered by staticLayerLicenses() in the attribution panel."
     }
   },
   {

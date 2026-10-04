@@ -270,6 +270,15 @@ pepper and cucumber rows carry that as their caveat.
 Strawberry is split from Laub's lumped berry group on the authority of Widmer et al. 2026, a 21-site
 Swiss study and the only source expressing agrivoltaic limits directly as DLI.
 
+A crop row's DLI figures, shade ceiling and survival ceiling each carry an evidence tier
+(`DataTier`), set per field in `src/data/catalog/rows.ts` and `schema.ts`. Tier A rests on per-crop
+DLI trials (leaf lettuce, head lettuce and basil), and Tier B on a shade, field or agrivoltaic study
+of the crop or of crops pooled: strawberry on Widmer et al. 2026, potato on Weselek et al. 2021 and
+Laub et al. 2022, the 20% ceiling below on Zhang et al. 2025 and wild ginger's survival ceiling on
+Nelson et al. 2007. Tier C is this app's own figure, such as one set by analogy with the crop's
+class, or one read from an extension or greenhouse table that cites no trial for it, and the app
+labels it provisional and never shows it as a measurement (Record 23).
+
 The 20% ceiling on Solanaceae and cucurbits rests at Tier B on Zhang et al. 2025, whose segmented
 regression finds no statistically significant yield difference from the control below 20% shading
 (p = 0.084), lower yield from 20% to 30% (p < 0.01), and recommends shading from PV "preferably not
@@ -337,11 +346,12 @@ secondary sources, while sweet corn's 10/30 C is confirmed against NDSU NDAWN an
 ## 8. Compliance overlays
 
 Every overlay is an estimate, and the types make a determination unrepresentable: `Verifiability`
-has the single value `'estimate-only'`, criterion outcomes are `meets` and `misses`, an
-`approximate` outcome carries a window disclaimer, and a regime verdict is
+has the single value `'estimate-only'`, criterion outcomes are `meets`, `misses`, `estimate` and
+`not-applicable`, an `approximate` outcome carries a window disclaimer, and a regime verdict is
 `meets-expedited-parameters`, `requires-exception-request` or `indeterminate`. A test pins that no
 rendered string says compliant, non-compliant, pass, fail, approved or rejected. Verdicts read
-"meets the expedited design parameters" or "would require an exception request".
+"Meets every fast-track limit", "Misses a limit, so it would need an exception" or "Can't be
+checked from the layout alone".
 
 **Massachusetts SMART 3.0**, 225 CMR 28.00, term of art Dual-use Agricultural STGU (Solar Tariff
 Generation Unit). Parameters verbatim from 28.07(5)(b)3.b:
@@ -1187,8 +1197,8 @@ restricts no placement: a bed may stand under a crown.
 
 **Where it lives.** `GardenPlot.obstructions` (schema 5) holds both kinds in one list, and it's
 empty for every garden saved at schema 4 and for the three shipped examples. A house needs four
-corners and a positive height, and a tree needs a crown above its base and two figures between 0 and
-1. `lightGeometryKey` and the worker's memo key both carry the list, so a moved or altered box
+corners and a positive height, and a tree needs a crown above its base and two figures between 0
+and 1. `lightGeometryKey` and the worker's memo key both carry the list, so a moved or altered box
 re-bakes by itself. `HouseMesh` and `TreeMesh` draw the boxes the bake shades with (Record 14.5), a
 house casting the scene's live shadow like a panel, and a crown's opacity is one minus the
 transmittance the bake applies in the month the scene clock shows, dithered to that density because
@@ -1257,10 +1267,10 @@ leaves through 20 cm of it. That figure says how concentrated a flat panel's str
 tracker note carries it. The drift is computed for a 3.8 mm drop, the mass mode of the drops the
 paper measured leaving a panel edge, with its fall speed read off Gunn and Kinzer's Table 2,
 integrated from rest under quadratic drag along the drop's velocity relative to the wind, through
-the site's own wind profile: 0.059 m at 1 m/s, 0.24 m at 3, 0.69 m at
-6. Gunn and Kinzer measured their largest drops reaching terminal speed only after about 12 m, and
-Wang and Pruppacher 1977 put the fall to 99 percent of terminal at 9.5 m for a 2 mm drop and 14 m
-for a 4 mm one, and a test checks the drip's fall from rest against those distances.
+the site's own wind profile: 0.059 m at 1 m/s, 0.24 m at 3, 0.69 m at 6. Gunn and Kinzer measured
+their largest drops reaching terminal speed only after about 12 m, and Wang and Pruppacher 1977 put
+the fall to 99 percent of terminal at 9.5 m for a 2 mm drop and 14 m for a 4 mm one, and a test
+checks the drip's fall from rest against those distances.
 
 **The wind's height.** The NSRDB's wind is MERRA-2's 2 m surface wind where every other source
 reports 10 m. NREL's own NSRDB builder documents `wind_speed` as "Wind speed at 2 meters above the
