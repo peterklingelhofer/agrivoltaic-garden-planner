@@ -610,7 +610,7 @@ export const shadeBenefitStatusOf = (limitation: WaterLimitation): ShadeBenefitS
     scale: scale as Fraction,
     reason:
       scale > 0
-        ? `${deficit}, above the ${percent(WATER_LIMITED_INDEX)} threshold where the shade benefit starts, so the shade-benefit pathway runs at ${percent(scale)} of its maximum`
+        ? `${deficit}, above the ${percent(WATER_LIMITED_INDEX)} threshold where the shade benefit starts`
         : `${deficit}, at or below the ${percent(WATER_LIMITED_INDEX)} threshold where the shade benefit starts. The 2 to 3 times gains Barron-Gafford et al. 2019 measured in Arizona come from relieved water stress and don't transfer to a garden this well watered, so panel shade earns no yield bonus here`,
   }
 }

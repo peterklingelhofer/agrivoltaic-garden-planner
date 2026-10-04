@@ -79,6 +79,13 @@ describe('graded shade-benefit scale', () => {
     expect(temperate.reason).toMatch(/Barron-Gafford/)
     expect(shadeBenefitStatusOf(at(ARID).waterLimitation).active).toBe(true)
   })
+
+  // the water pane prints "at N% of its maximum" itself, right before the reason
+  it('leaves the share of the maximum out of an active reason', () => {
+    const arid = shadeBenefitStatusOf(at(ARID).waterLimitation)
+    expect(arid.active).toBe(true)
+    expect(arid.reason).not.toContain('of its maximum')
+  })
 })
 
 /** Only `cumulativeRsr` is read, so these carry the shade and nothing else that matters here */
