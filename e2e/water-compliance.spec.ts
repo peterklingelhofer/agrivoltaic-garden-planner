@@ -217,10 +217,6 @@ test('a baked raster shades the water balance and evaluates all five regimes', a
     // an outcome and the barrier that stops it being a determination
     await expect(page.getByTestId(`readout-compliance-overall-${regime}`), regime).not.toBeEmpty()
     await expect(page.getByTestId(`readout-compliance-barrier-${regime}`), regime).not.toBeEmpty()
-    // the waiver line shows only where there's a note to show, and Massachusetts has none
-    await expect(page.getByTestId(`readout-compliance-waiver-${regime}`), regime).toHaveCount(
-      regime === 'us-ma-smart' ? 0 : 1,
-    )
     // the outcome text is a design-parameter statement
     await expect(page.getByTestId(`readout-compliance-overall-${regime}`), regime).toHaveText(
       /fast-track limit|need an exception|Can't be checked from the layout alone/i,
@@ -244,8 +240,7 @@ test('a baked raster shades the water balance and evaluates all five regimes', a
   )
   await expect(sunlight).toContainText(/every 15 minutes on the local clock/)
 
-  // the waiver and the exception route are said in the barrier line, since Massachusetts has no
-  // waiver note of its own
+  // the waiver and the exception route are said in the barrier line
   const barrier = page.getByTestId('readout-compliance-barrier-us-ma-smart')
   await expect(barrier).toContainText(/Every limit can be waived/i)
   await expect(barrier).toContainText(/can still apply for an exception/i)

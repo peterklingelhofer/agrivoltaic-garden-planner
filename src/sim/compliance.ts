@@ -292,7 +292,6 @@ export const checkMassachusettsSmart = (input: ComplianceInput): ComplianceCheck
     results,
     overall: misses ? 'requires-exception-request' : 'meets-expedited-parameters',
     isDetermination: false,
-    waiverNote: '',
   }
 }
 
@@ -385,7 +384,6 @@ const estimateRegime = (input: ComplianceInput, regime: ComplianceRegimeId): Com
     ],
     overall: 'indeterminate',
     isDetermination: false,
-    waiverNote: REGIMES[regime].determinationBarrier,
   }
 }
 

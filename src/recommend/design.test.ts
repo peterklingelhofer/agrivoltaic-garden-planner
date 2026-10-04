@@ -416,7 +416,7 @@ describe('a full five-scenario run', () => {
   it('carries the Massachusetts geometry flags for every scenario', () => {
     for (const entry of result.scenarios) {
       expect(entry.flags.notes.length).toBeGreaterThan(0)
-      // Massachusetts has no waiver note of its own, so no blank line stands in for one
+      // every note is drawn as a line on the card, so none may be blank
       expect(entry.flags.notes).not.toContain('')
       expect(typeof entry.flags.meetsExpeditedClearance).toBe('boolean')
       expect(typeof entry.flags.fiftyPercentEverywhere).toBe('boolean')
