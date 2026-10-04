@@ -3,8 +3,10 @@ import { afterEach, beforeEach, describe, expect, it } from 'bun:test'
 import { vi } from '../../test/vi'
 import { ready } from '../state/slices'
 import { getAppState, resetAppStore, useAppStore } from '../state/store'
-import { scenarioSetFixture } from '../state/testkit'
+import { designScenarioFixture, scenarioSetFixture } from '../state/testkit'
+import { fraction } from '../types/units'
 import { LayoutPanel } from './LayoutPanel'
+import { shadeBudgetNote } from './onboarding'
 import { mount, type Harness } from './testkit'
 
 /**
@@ -227,6 +229,38 @@ describe('the comparison', () => {
     const allLit = await showResults(set)
     expect(allLit.get('readout-onboarding-beds-balanced').textContent).toBe('2')
     await allLit.unmount()
+  })
+
+  /**
+   * More shade than the requested plants take is said above the fold, so the fold's flag list
+   * leaves it out. Inside the budget there's no warning and the flag list carries the sentence
+   */
+  it('says the shade note once, above the fold over budget and in the fold within it', async () => {
+    const set = scenarioSetFixture()
+    const balanced = designScenarioFixture('balanced')
+    const over = {
+      ...balanced,
+      flags: {
+        ...balanced.flags,
+        shade: { maxRatio: fraction(0.3), measuredRatio: fraction(0.42), withinBudget: false },
+      },
+    }
+    const harness = await showResults({
+      ...set,
+      scenarios: set.scenarios.map((scenario) =>
+        scenario.candidate.archetype === 'balanced' ? over : scenario,
+      ),
+    })
+    const card = harness.get('item-onboarding-scenario-balanced').textContent ?? ''
+    expect(card.split(shadeBudgetNote(over.flags)).length - 1).toBe(1)
+    expect(harness.get('readout-onboarding-shade-warning-balanced').closest('details')).toBeNull()
+    expect(harness.find('item-onboarding-flag-shade-balanced')).toBeNull()
+    await harness.unmount()
+
+    const within = await showResults(set)
+    expect(within.find('readout-onboarding-shade-warning-balanced')).toBeNull()
+    expect(within.get('item-onboarding-flag-shade-balanced').closest('details')).not.toBeNull()
+    await within.unmount()
   })
 
   it('shows the garden from the card, on the surface the garden lives on', async () => {

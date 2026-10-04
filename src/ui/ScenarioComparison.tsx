@@ -269,13 +269,11 @@ const ScenarioCard = ({
               </li>
             </>
           ) : null}
-          <li
-            className={scenario.flags.shade.withinBudget ? undefined : 'scenario-over-budget'}
-            data-testid={`item-onboarding-flag-shade-${archetype}`}
-            data-within-budget={String(scenario.flags.shade.withinBudget)}
-          >
-            {shadeBudgetNote(scenario.flags)}
-          </li>
+          {scenario.flags.shade.withinBudget ? (
+            <li data-testid={`item-onboarding-flag-shade-${archetype}`}>
+              {shadeBudgetNote(scenario.flags)}
+            </li>
+          ) : null}
           {scenario.flags.notes.map((note) => (
             <li key={note}>{note}</li>
           ))}

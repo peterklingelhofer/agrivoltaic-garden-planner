@@ -2654,12 +2654,6 @@ details.wizard-advanced > summary:focus-visible {
   display: none;
 }
 
-/* the grower asked for a planting and this layout shades it harder than that planting takes */
-.scenario-over-budget {
-  color: var(--warn);
-  background: var(--warn-bg);
-}
-
 /**
  * The phone tier.
  *
