@@ -7740,7 +7740,7 @@
     "custom": {
       "group": "climate",
       "verification": "url-verified",
-      "accessLevel": "public-domain-with-conditions",
+      "accessLevel": "open-access",
       "evidenceTier": null,
       "backsClaims": [
         "hardiness zone gating for perennials",

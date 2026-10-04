@@ -93,7 +93,7 @@ Each hop names the module that owns it. No hop is owned by two modules.
 
 | # | Hop | Owning module | Key export |
 |---|---|---|---|
-| 0 | text query -> lat/lon, elevation, timezone | `src/data/geocode.ts` | `geocode`, `elevation` |
+| 0 | text query -> lat/lon, place label, country code. lat/lon -> the fallback timezone where no upstream names one | `src/data/geocode.ts` | `geocode`, `timezoneFor` |
 | 1 | lat/lon -> Koppen, hardiness, frost normals, soil, climate normals | `src/data/static-layers.ts` | `koppenAt`, `hardinessAt`, `frostNormalsAt`, `soilAt` |
 | 2 | lat/lon -> raw TMY payload -> `TmySeries` | `src/data/tmy.ts` | `fetchTmy`, `normalizeTmy` |
 | 3 | TMY -> GDD curves, chill CH/CU/CP, heat days | `src/data/agronomy.ts` | `chillAccumulation`, `seasonGdd` |
@@ -119,7 +119,7 @@ Each hop names the module that owns it. No hop is owned by two modules.
 | 20b | preferences + ranked set -> ranked polyculture combinations | `src/recommend/suggest.ts` | `suggestPolycultures`, `allocateSpace` |
 | 20c | plot + a measured year + what grew before -> per-planting season outcomes | `src/simulation/season.ts` | `simulateSeason` |
 | 20d | ten measured years -> the site as it was in one | `src/data/site.ts` | `siteForYear` |
-| 21 | answers + site -> five candidate geometries, each baked (run through the light simulation) at full quality and ranked by the grower's objective | `src/recommend/design.ts` | `suggestDesigns`, `candidatesFor` |
+| 21 | answers + site -> up to five candidate geometries, each baked (run through the light simulation) at full quality and ranked by the grower's objective | `src/recommend/design.ts` | `suggestDesigns`, `candidatesFor` |
 | 21b | shipped example asset -> `PersistedDesign` + `DliRaster` | `src/state/example.ts`, `src/data/example-raster.ts` | `loadExampleGarden`, `decodeExampleRaster` |
 | 22 | everything -> store slices | `src/state/slices.ts`, `src/state/store.ts` | `useAppStore` |
 | 23 | store -> scene graph | `src/scene/*` | `GardenScene` |
@@ -136,7 +136,7 @@ and `src/sim/units.ts#relativeShadeRatio` is the single definition.
 
 Hop 2, `fetchWeather`, asks four sources in turn: Open-Meteo's ten-year hourly archive, then PVGIS,
 then NASA POWER, then NSRDB. PVGIS comes second because it answers its whole typical year in about 4
-s where POWER's hourly endpoint is three sequential four-year chunks at up to 12 s each. The cost is
+s where POWER's hourly endpoint is five sequential two-year chunks at up to 12 s each. The cost is
 that PVGIS gives a typical year with no measured years behind it, and the season simulation tells
 the user so. The weather's dataset label carries the radiation database PVGIS chose for the place
 (`PVGIS-ERA5` at Amherst, `PVGIS-SARAH3` on the Meteosat disk). A source whose year can't have
@@ -351,7 +351,7 @@ enters once. `Radians` and `Degrees` are mutually unassignable, which is the who
 `toRadians`/`toDegrees` exist in `src/sim/units.ts`.
 
 Discriminated unions replace optional-field soup throughout: `TrackerConfig` (four variants),
-`CriterionResult` (pass/fail/estimate/not-applicable), `RecommendationVerdict`
+`CriterionResult` (meets/misses/approximate/estimate/not-applicable), `RecommendationVerdict`
 (recommended/marginal/excluded), `LimitingFactorKind`, `AsyncState<T>`, `CompanionRule`.
 
 ## 4. Workers
@@ -528,5 +528,7 @@ Fixed by the Decision Record, and encoded as constants so code review doesn't re
   (`src/sim/shading.ts#projectPanelToGround`). `vfGroundSky2dOracle` in
   `src/sim/viewfactor.ts` exists solely as a unit-test oracle for the degenerate infinite-row case
   and must never appear on a user path.
-- Weather input is always a TMY. `WeatherProvenance.isTypicalMeteorologicalYear` must be true
-  before a yield band is produced.
+- The planner runs on the typical year. A season in the simulation mode runs on a measured calendar
+  year, whose `WeatherProvenance.isTypicalMeteorologicalYear` is false and whose `datasetLabel`
+  names the year, or on the typical year where the grower picks it or the source has no measured
+  years (Decision Record 14.1).

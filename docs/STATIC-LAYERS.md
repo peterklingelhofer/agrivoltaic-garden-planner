@@ -347,6 +347,5 @@ grow.
 `staticLayerLicenses()` returns it as part of the USDA attribution. `src/ui/AttributionPanel.tsx`
 renders `staticLayerLicenses()` and holds no hardcoded credit list, so every shipped layer reaches
 the screen with its own license text and the redistribution condition is met.
-`docs/CITATIONS.csl.json` records `usda-phzm-2023` as `accessLevel:
-"public-domain-with-conditions"`, and the `ophz-hardiness-geojson` caveat records the OPHZ 2012
-vintage.
+`docs/CITATIONS.csl.json` records `usda-phzm-2023` as `accessLevel: "open-access"`, and the
+`ophz-hardiness-geojson` caveat records the OPHZ 2012 vintage.

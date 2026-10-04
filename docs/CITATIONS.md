@@ -53,10 +53,9 @@ Physics, geodata and software sources carry `null`: the scheme does not apply to
 
 | Access level | n |
 |---|---|
-| open-access | 74 |
+| open-access | 75 |
 | paywalled | 115 |
 | public-domain | 155 |
-| public-domain-with-conditions | 1 |
 
 | Evidence tier | n |
 |---|---|
@@ -3334,7 +3333,7 @@ Richardson, E. Arlo; Seeley, Schuyler D.; Walker, David R.. (1974). *A model for
 (2023). *2023 USDA Plant Hardiness Zone Map*. USDA Agricultural Research Service and PRISM Climate Group, Oregon State University
 
 - URL: <https://planthardiness.ars.usda.gov/>
-- Verification: URL-verified | Access: public-domain-with-conditions
+- Verification: URL-verified | Access: open-access
 - Backs:
   - hardiness zone gating for perennials
   - decision 9: no official USDA hardiness API exists, only an interactive map, ZIP lookup and static downloads
