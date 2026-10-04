@@ -493,7 +493,9 @@ export const MoreChoices = ({
     <details className="wizard-advanced" data-testid="details-plants-more">
       <summary>More choices: must have, never, and how hard your picks push</summary>
       <p className="pref-legend" data-testid="readout-polyculture-kinds">
-        {HARD_KINDS.map((entry) => `${entry.label}: ${entry.help}`).join('. ')}
+        {HARD_KINDS.map((entry) =>
+          entry.help === undefined ? entry.label : `${entry.label}: ${entry.help}`,
+        ).join('. ')}
       </p>
       <ul className="list" data-testid="list-polyculture-preferences">
         {options.map((item) => (

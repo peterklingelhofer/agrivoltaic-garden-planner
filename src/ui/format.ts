@@ -18,7 +18,6 @@ import type { Bed } from '../types/garden'
 import type { BedId } from '../types/ids'
 import type { PolycultureSuggestion } from '../types/polyculture'
 import type { CropRecommendation, LimitingFactor, RecommendationVerdict } from '../types/recommend'
-import type { YieldEstimate } from '../types/recommend'
 import type { LengthUnit } from '../state/slices'
 import type { Fraction, MolPerM2Day, MonthIndex } from '../types/units'
 import type { WeatherSourceId } from '../types/weather'
@@ -153,15 +152,6 @@ export const confidenceLabel = (confidence: ConfidenceLevel): string =>
 
 export const bandBasisLabel = <T extends number>(value: Banded<T>): string =>
   `${Math.round(value.confidence * 100)}% ${intervalNoun(value.intervalKind)}`
-
-export const formatYieldEstimate = (estimate: YieldEstimate): string => {
-  const band = assertBanded(estimate.relativeYield)
-  const term =
-    band.dominantSource === 'crop-response'
-      ? cropResponseLabel(estimate.laubGroup)
-      : attributionLabel(band.dominantSource)
-  return `${formatBandPercent(band)} of full yield, ${bandBasisLabel(band)} dominated by ${term}`
-}
 
 export const formatDli = (value: MolPerM2Day): string => `${num(value)} mol/m²/d`
 
