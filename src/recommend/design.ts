@@ -1349,7 +1349,7 @@ const tradeoffOf = (evaluated: Evaluated, catalog: readonly Crop[]): string => {
 
 const NOT_CONSIDERED_BASE: readonly string[] = [
   "Semi-transparent, checkerboard and spaced-module layouts weren't tried. They buy a more even ground light for a linear loss of electricity and are a real option this search doesn't cover",
-  "The plot is treated as a level rectangle with a clear horizon. Slope, buildings, trees and fences on the site weren't modeled",
+  "The plot is treated as a level rectangle with a clear horizon. Slope and fences weren't modeled, and buildings and trees count only where they're drawn",
   "Cost, planning permission, grid connection and mounting structure weren't considered at all",
 ]
 
