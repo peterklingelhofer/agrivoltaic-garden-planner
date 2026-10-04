@@ -67,14 +67,15 @@ import { landEquivalentRatio } from './yield'
 
 /**
  * How one candidate's annual bake is run. It's the signature `runSimulation` and
- * `SimClient.run` already share, so the browser can hand over the worker client and keep five
+ * `SimClient.run` already share, so the browser can hand over the worker client and keep the
  * bakes off the thread that has to animate through them
  */
 export type SimulationRunner = typeof runSimulation
 
 /**
  * Where the search has got to, reported per candidate: a bar drawn from
- * the bake alone would restart from zero five times, reading as five stalls when it's one run
+ * the bake alone would restart from zero for every candidate, reading as a stall each time when
+ * it's one run
  */
 export interface DesignProgress {
   readonly candidatesDone: number
@@ -876,8 +877,8 @@ interface Shared {
   readonly chainOptions: PvChainOptions
   /**
    * The site's rain-hour wind rose, computed once for the whole set: every candidate bakes on
-   * the same plot in the same weather, so the water term reads one shared rose across all five
-   * candidates, the same one the app's own water panel would compute for this site
+   * the same plot in the same weather, so the water term reads one shared rose across every
+   * candidate, the same one the app's own water panel would compute for this site
    */
   readonly rain: RainWind
 }
@@ -1354,8 +1355,8 @@ const NOT_CONSIDERED_BASE: readonly string[] = [
 ]
 
 /**
- * Five candidate geometries, one per archetype, each scored on a full annual light bake
- * and ranked by the grower's own objective weights.
+ * Up to five candidate geometries, one per archetype the mounting choice offers, each scored on a
+ * full annual light bake and ranked by the grower's own objective weights.
  *
  * The search is deliberately not a sweep. Each candidate costs one annual bake, so the cap is the
  * five archetypes, and `notConsidered` states it plainly. Geometry is derived from the answers:

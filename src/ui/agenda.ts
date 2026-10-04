@@ -64,7 +64,7 @@ export const supplyUnit = (kind: SupplyKind): string => (kind === 'seed' ? 'seed
 export const windowSpansYear = (day: number, through: number): boolean =>
   (through - day + 365) % 365 >= 364
 
-/** "every 14 days, 5 more sowings to Aug 12", one line for five near-identical rows */
+/** "Repeats every 14 days, 5 sowings to Aug 12", one line for five near-identical rows */
 export const recurrenceLabel = (item: AgendaItem): string | null => {
   if (item.repeats.length === 0 || item.intervalDays === null) return null
   const last = item.repeats[item.repeats.length - 1]

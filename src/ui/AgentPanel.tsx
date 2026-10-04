@@ -259,8 +259,8 @@ const BLOCK: Partial<Record<Line['tone'], string>> = {
 /**
  * Consecutive lines of the same tone, as one group.
  *
- * It exists for the caveats. The design search reports five of them and every word is worth
- * keeping (what it didn't sweep, that slope and buildings weren't modeled) but five
+ * It exists for the caveats. The design search reports at least four of them and every word is
+ * worth keeping (what it didn't sweep, that slope wasn't modeled) but four or more
  * full-width paragraphs each carrying its own warning rule is a wall, and a wall is read exactly
  * as carefully as no caveat at all.
  *
@@ -268,7 +268,7 @@ const BLOCK: Partial<Record<Line['tone'], string>> = {
  * only thing ever hidden is detail and a caveat is never detail, so putting these behind a
  * disclosure would be the one shortcut this feature isn't allowed to take. Every word stays on
  * screen. What changes is that they read as one qualification of one answer, which is what they
- * are. Ungrouped, they'd read as six separate alarms
+ * are. Ungrouped, they'd read as four or more separate alarms
  */
 const grouped = (lines: readonly Line[]): readonly Group[] => {
   const groups: Group[] = []

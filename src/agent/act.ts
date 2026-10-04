@@ -709,14 +709,6 @@ const agendaReply = (state: AppState, crops: readonly CropId[], limit: number): 
 }
 
 /**
- * The crops the corpus records a positive interaction with, for one named crop.
- *
- * Scored rules only. The catalog also carries experimental and folklore rules and both are
- * shown elsewhere in the app under their own headings, which is the whole point of the
- * partition. An agent that answered "what goes well with tomatoes" out of the folklore shelf
- * would be laundering a claim the app is careful to label
- */
-/**
  * What goes well with a crop, and the works that say so
  */
 interface Companions {
@@ -724,6 +716,14 @@ interface Companions {
   readonly citations: readonly CitationId[]
 }
 
+/**
+ * The crops the corpus records a positive interaction with, for one named crop.
+ *
+ * Scored rules only. The catalog also carries experimental and folklore rules and both are
+ * shown elsewhere in the app under their own headings, which is the whole point of the
+ * partition. An agent that answered "what goes well with tomatoes" out of the folklore shelf
+ * would be laundering a claim the app is careful to label
+ */
 const companionsFor = (state: AppState, cropId: CropId): Companions => {
   const none = { cropIds: [], citations: [] }
   if (state.catalog.status !== 'ready' || state.companionRules.status !== 'ready') return none

@@ -1939,8 +1939,6 @@ input[type='range'] {
   display: none;
 }
 
-/* warn coloring: this one is the reason not to trust the ramp, and it sits above it for the
-   same reason */
 .carrying .picker-option {
   cursor: grabbing;
 }
@@ -1952,6 +1950,8 @@ input[type='range'] {
   cursor: copy;
 }
 
+/* warn coloring: this one is the reason not to trust the ramp, and it sits above it for the
+   same reason */
 .legend-stale {
   margin: 0 0 6px;
   padding: 5px 7px;
