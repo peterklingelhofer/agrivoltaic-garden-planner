@@ -59,15 +59,22 @@ const reasonOf = (cited: Cited<number>): string =>
 
 /**
  * A Tier C figure is this app's own inference from the crop's sun label, so the sentence says so:
- * "(Purdue, VCE)" beside the number reads as the number's source. An inference carries a citation
- * only where that document prints this crop's own figure, and the sentence splits on whether it
- * does
+ * "(Purdue, VCE)" beside the number reads as the number's source. A light figure that cites a work
+ * gets no sentence of its own, because what the work prints differs by row (a group's figure, this
+ * crop's target, this crop's own number), and the reason printed after it says which. A maximum
+ * design shade is the app's own bound for the crop's class, set inside the meta-analysis it cites,
+ * so it reads the same with or without the citation
  */
-const summaryOf = (label: string, value: string, cited: Cited<number>): string =>
+const summaryOf = (
+  kind: DliThresholdKind,
+  label: string,
+  value: string,
+  cited: Cited<number>,
+): string =>
   cited.provenance === 'inferred'
-    ? cited.citations.length === 0
+    ? cited.citations.length === 0 || kind === 'max-design-rsr'
       ? `${label} ${value} is this app's own figure for the crop's class, and no cited work measured it for this crop`
-      : `${label} ${value} is printed for this crop in the cited work, which is greenhouse guidance`
+      : `${label} ${value}`
     : cited.provenance === 'unsourced'
       ? `${label} ${value} has no source among the works listed in Sources`
       : `${label} ${value} is read from a Tier ${cited.tier} source`
@@ -107,7 +114,7 @@ export const dliEvidence = (crop: Crop, kind: DliThresholdKind): DliEvidence | n
     value,
     citations: cited.citations,
     reason: reasonOf(cited),
-    summary: summaryOf(label, value, cited),
+    summary: summaryOf(kind, label, value, cited),
   }
 }
 
