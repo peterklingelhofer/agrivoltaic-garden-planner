@@ -60,14 +60,13 @@ const regime = (id: ComplianceCheck['regime']['id']): ComplianceCheck['regime'] 
   citations: [] as unknown as ComplianceCheck['regime']['citations'],
 })
 
-/** A Massachusetts check with no waiver note, and a rule judged on field yield that has one */
+/** A Massachusetts check with no criteria, and a rule judged on field yield with one estimate */
 const CHECKS: readonly ComplianceCheck[] = [
   {
     regime: regime('us-ma-smart'),
     results: [],
     overall: 'meets-expedited-parameters',
     isDetermination: false,
-    waiverNote: '',
   },
   {
     regime: regime('de-din-spec-91434'),
@@ -90,19 +89,17 @@ const CHECKS: readonly ComplianceCheck[] = [
     ],
     overall: 'indeterminate',
     isDetermination: false,
-    waiverNote: 'the program decides',
   },
 ]
 
 describe('what a rule card shows', () => {
-  it("shows a waiver line only where there's a note, and no badge on any card", async () => {
+  it('says its barrier once on each card, and carries no badge on any card', async () => {
     useAppStore.setState({ compliance: CHECKS })
     const harness = await mount(<CompliancePanel />)
-    expect(harness.find('item-compliance-us-ma-smart')).not.toBeNull()
-    expect(harness.find('readout-compliance-waiver-us-ma-smart')).toBeNull()
-    expect(harness.get('readout-compliance-waiver-de-din-spec-91434').textContent).toBe(
-      'the program decides',
-    )
+    for (const check of CHECKS) {
+      const text = harness.get(`item-compliance-${check.regime.id}`).textContent ?? ''
+      expect(text.split(check.regime.determinationBarrier).length - 1, check.regime.id).toBe(1)
+    }
     expect(harness.container.querySelector('[data-testid^="badge-compliance-"]')).toBeNull()
     // an estimate with no disclaimer of its own draws no line for one
     expect(harness.get('item-criterion-reference-yield').querySelector('.disclaimer')).toBeNull()

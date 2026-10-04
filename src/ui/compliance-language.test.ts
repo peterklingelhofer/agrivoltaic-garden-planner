@@ -79,7 +79,6 @@ describe('compliance language', () => {
       results: [],
       overall,
       isDetermination: false,
-      waiverNote: 'waivable',
     }))
     const lines = wordsFor({ kind: 'compliance', checks }, [])
     const first = lines[0]?.text ?? ''

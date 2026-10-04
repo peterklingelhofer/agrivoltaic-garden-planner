@@ -785,7 +785,6 @@ const flagsFrom = (check: ComplianceCheck, shade: ShadeBudgetCheck): ScenarioFla
         : [],
     ),
     ...(sunlight?.outcome === 'approximate' ? [sunlight.windowDisclaimer] : []),
-    ...(check.waiverNote === '' ? [] : [check.waiverNote]),
     clearance.length === 0
       ? "There's no array, so no clearance parameter applies"
       : `Measured against the Massachusetts SMART Dual-use expedited design parameters, which this design ${check.overall === 'meets-expedited-parameters' ? 'meets' : 'would need an exception request for'}`,

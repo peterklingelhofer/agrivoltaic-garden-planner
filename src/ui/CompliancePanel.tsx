@@ -16,11 +16,6 @@ const CheckBlock = ({ check }: { readonly check: ComplianceCheck }): ReactElemen
     <p className="disclaimer" data-testid={`readout-compliance-barrier-${check.regime.id}`}>
       {check.regime.determinationBarrier}
     </p>
-    {check.waiverNote === '' ? null : (
-      <p className="disclaimer" data-testid={`readout-compliance-waiver-${check.regime.id}`}>
-        {check.waiverNote}
-      </p>
-    )}
     <ul className="list">
       {check.results.map((result) => (
         <li key={result.criterion.key} data-testid={`item-criterion-${result.criterion.key}`}>

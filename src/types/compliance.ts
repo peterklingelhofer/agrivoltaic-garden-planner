@@ -95,5 +95,4 @@ export interface ComplianceCheck {
   readonly results: readonly CriterionResult[]
   readonly overall: ComplianceOutcome
   readonly isDetermination: false
-  readonly waiverNote: string
 }
