@@ -80,6 +80,29 @@ describe('the DLI threshold a crop was gated on names its own evidence', () => {
     expect(evidence?.reason).toContain('14 to 20')
   })
 
+  /**
+   * A cited inference claims no more than its row's note does. The shade ceiling is this app's own
+   * bound for the crop's class, set inside a field meta-analysis. Tomato's 15 is a figure printed
+   * for vine crops as a group, and raspberry's comes from a trial under agrivoltaic cover, so
+   * neither summary says the work printed this crop's own number or calls it greenhouse guidance
+   */
+  it('claims no more for a cited inference than its note says', async () => {
+    const catalog = await loadCropCatalog()
+    const ceiling = dliEvidence(cropBy(catalog, 'lettuce-leaf'), 'max-design-rsr')
+    expect(ceiling?.provenance).toBe('inferred')
+    expect(ceiling?.citations).toEqual(['laub2022-shade-meta'])
+    expect(ceiling?.summary).toContain("this app's own figure for the crop's class")
+    expect(ceiling?.summary).not.toContain('greenhouse')
+    const tomato = dliEvidence(cropBy(catalog, 'tomato'), 'minimum')
+    expect(tomato?.provenance).toBe('inferred')
+    expect(tomato?.summary).not.toMatch(/printed for this crop|greenhouse/)
+    expect(tomato?.reason).toContain('vine crops as a group')
+    const raspberry = dliEvidence(cropBy(catalog, 'raspberry'), 'minimum')
+    expect(raspberry?.citations).toEqual(['widmer-strawberry-dli'])
+    expect(raspberry?.summary).not.toMatch(/printed for this crop|greenhouse/)
+    expect(raspberry?.reason).toContain('Widmer')
+  })
+
   it('distinguishes a measured threshold from an inferred one on primitives', async () => {
     const catalog = await loadCropCatalog()
     const measured = dliEvidence(cropBy(catalog, 'lettuce-leaf'), 'minimum')
