@@ -19,7 +19,7 @@
  *   bun run demo                 both cuts, recorded and encoded
  *   bun run demo --cut=short     just the short one
  *   bun run demo --encode-only   re-encode whatever was last recorded
- *   bun run demo --share-only    just rebuild the under-25 MB copies from the finished MP4s
+ *   bun run demo --share-only    just rebuild the under-20 MB copies from the finished MP4s
  */
 import { spawnSync } from 'node:child_process'
 import {

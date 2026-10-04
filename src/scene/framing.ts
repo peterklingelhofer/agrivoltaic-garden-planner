@@ -133,10 +133,10 @@ const cross = (a: Triple, b: Triple): Triple => [
  * With a fixed multiple of the plot's longest side, resizing the plot can leave the near edge off
  * the bottom of the picture: a 42 degree look down at a 35 by 25 m rectangle puts the near corners
  * much lower in the frame than the far ones. So the corners are projected. With the camera `d`
- * meters from the target along the unit line `look`, a corner at `p` from the target sits `p . look
- * + d` deep and `p . right`, `p . up` across, and it fits when each of those is inside the
- * frustum's half-angle at that depth. Solving for `d` per corner and taking the largest is exact,
- * and nothing about it depends on the plot being a rectangle
+ * meters from the target along the unit line `look`, a corner at `p` from the target sits
+ * `p . look + d` deep and `p . right`, `p . up` across, and it fits when each of those is inside
+ * the frustum's half-angle at that depth. Solving for `d` per corner and taking the largest is
+ * exact, and nothing about it depends on the plot being a rectangle
  */
 const standOffM = (
   corners: readonly Triple[],

@@ -2,7 +2,10 @@ import { describe, expect, it } from 'bun:test'
 import type { TmySeries } from '../types/weather'
 import { seriesOffsetMinutesAt, standardOffsetHours, utcOffsetMinutesAt } from './timezone'
 
-/** Only the two fields the clock reads. The rest of a series isn't what is under test */
+/**
+ * Only `utcOffsetHours`. The clock reads it and `timezone`, and the tests add `timezone` where
+ * they need it. The rest of a series isn't what is under test
+ */
 const fixed = { utcOffsetHours: -5 } as TmySeries
 
 describe('the offset a zone keeps at an instant', () => {

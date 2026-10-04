@@ -247,7 +247,6 @@ export const plotFromAnswers = (
   }
 }
 
-/** The candidate's geometry and tracker on the array already in the plot, or on a new one */
 /**
  * The plot a scenario would write, built once and used by BOTH the preview and the apply.
  *
@@ -345,6 +344,7 @@ export const archetypeLeaning = (objective: DesignObjective): CandidateArchetype
   return preset === null ? 'balanced' : ARCHETYPE_BY_PRESET[preset]
 }
 
+/** The candidate's geometry and tracker on the array already in the plot, or on a new one */
 export const arrayFromCandidate = (
   candidate: ArrayCandidate,
   existing: PvArray | null,

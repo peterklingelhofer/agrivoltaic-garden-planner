@@ -1139,8 +1139,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     'root-tuber',
     'rosette',
     'cool',
-    // the row cites a potato shade trial and the meta-analysis, and neither prints a daily
-    // light integral for carrot, so the tier is C
+    // no cited work prints a daily light integral for carrot, so the tier is C
     8,
     14,
     20,
@@ -1712,8 +1711,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     'leafy-greens',
     'upright-herb',
     'cool',
-    // the row cites a potato shade trial and the meta-analysis for a figure neither of them
-    // prints for kale, so the tier is C
+    // no cited work prints a daily light integral for kale, so the tier is C
     6,
     12,
     18,

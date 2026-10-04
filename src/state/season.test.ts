@@ -39,7 +39,9 @@ describe('growth across the season', () => {
       expect(value).toBeGreaterThanOrEqual(previous)
       previous = value
     }
-    // a straight ramp would put the midpoint halfway. A smoothstep puts it above
+    // day 115 is a quarter of the way from sowing to first harvest, where a straight ramp would
+    // put the scale a quarter of the way up from `SEEDLING_SCALE` to full size. The smoothstep
+    // puts it lower, at 0.156 of the way up
     const mid = seasonalScale(planting(), undefined, 115)
     expect(mid).toBeLessThan(SEEDLING_SCALE + (1 - SEEDLING_SCALE) * 0.25)
   })

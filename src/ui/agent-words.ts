@@ -198,18 +198,20 @@ const DEFINE_LINES: readonly Line[] = [
 /**
  * How many programs were checked and how they fell out, in one sentence.
  *
- * Counts only. The words for each outcome are lifted from `OUTCOME_LABEL` in lower case, so the
- * headline and the rows under it can't drift apart, and so this
- * stays inside the language `compliance-language.test.ts` polices: nothing here may read as a
- * determination, and "meets", "would need" and "cannot be judged" are the three things it may say
+ * Counts only. The words for each outcome follow `OUTCOME_LABEL`'s in lower case, so the headline
+ * and the rows under it say the same thing. They're written out here because a count needs a verb
+ * that agrees with it. This stays inside the language `compliance-language.test.ts` polices:
+ * nothing here may read as a determination, and "meets every fast-track limit", "would need an
+ * exception" and "can't be checked from the layout alone" are the three things it may say
  */
 const complianceHeadline = (checks: readonly ComplianceCheck[]): string => {
   const count = (outcome: ComplianceOutcome): number =>
     checks.filter((check) => check.overall === outcome).length
+  const meets = count('meets-expedited-parameters')
   const parts = [
-    [count('meets-expedited-parameters'), 'meet the expedited design parameters'] as const,
-    [count('requires-exception-request'), 'would need an exception request'] as const,
-    [count('indeterminate'), "can't be computed from the shapes alone"] as const,
+    [meets, `${meets === 1 ? 'meets' : 'meet'} every fast-track limit`] as const,
+    [count('requires-exception-request'), 'would need an exception'] as const,
+    [count('indeterminate'), "can't be checked from the layout alone"] as const,
   ]
     .filter(([n]) => n > 0)
     .map(([n, words]) => `${String(n)} ${words}`)
@@ -379,7 +381,7 @@ export const wordsFor = (utterance: Utterance, catalog: readonly Crop[]): readon
           tone: 'say',
         },
         // the search's own account of its limits, verbatim, because it's the sentence that keeps
-        // five geometries from reading as every geometry
+        // up to five geometries from reading as every geometry
         ...utterance.notConsidered.map((text) => ({ text, tone: 'caveat' as const })),
       ]
     case 'applied':
@@ -606,10 +608,11 @@ export const wordsFor = (utterance: Utterance, catalog: readonly Crop[]): readon
           })),
         ]),
         /*
-          Never a determination, said in the app's own words. Every string above comes from the
-          compliance model and `OUTCOME_LABEL`, both of which are already policed by
-          `compliance-language.test.ts`. This is the sentence that says what the whole readout is
-          and isn't, and it's not optional
+          Never a determination, said in the app's own words. The headline is written in this
+          file, following `OUTCOME_LABEL`, and the lines under it come from the compliance model,
+          `OUTCOME_LABEL` and `criterionSummary`. `compliance-language.test.ts` polices the
+          headline, `OUTCOME_LABEL` and `criterionSummary`. This is the sentence that says what the
+          whole readout is and isn't, and it's not optional
         */
         { text: NOT_A_DETERMINATION, tone: 'caveat' },
       ]

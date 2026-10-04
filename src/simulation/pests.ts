@@ -39,9 +39,9 @@ export interface Crowding {
  * area dilutes the landing sequence so specialist flies leave before ovipositing. The mechanism
  * is green surface area, not smell." So what protects a bed is other GREEN that is not its host,
  * and bare ground isn't green: a lone bed in an otherwise bare plot is fully exposed, which is
- * the classic result and the reason undersowing works at all. Green area is every planted bed,
- * weighted by the share of its plantings that are the host family. A garden with nothing planted
- * around the bed has nothing to lose a fly in.
+ * the classic result and the reason undersowing works at all. Green area is the full area of every
+ * planted bed. Host area is each planted bed's area weighted by the share of its plantings that
+ * are the host family. A garden with nothing planted around the bed has nothing to lose a fly in.
  *
  * The general form of a specialist claim, and said so: the studies are brassica and allium
  * studies, and every family here gets the same dilution response, which is the honest

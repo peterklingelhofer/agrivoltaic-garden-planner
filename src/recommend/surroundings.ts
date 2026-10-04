@@ -12,8 +12,8 @@ import type { ByMonth, Fraction, MolPerM2Day } from '../types/units'
  * panels (`shadeBudgetFor` in `design.ts` scales the budget by one minus this), and every bed's
  * light is dimmed by the same share before the crop ranking reads it (`shadedBySurroundings`).
  * Without the second, a grower who said the space was in shade most of the day would get the same
- * crop list as one with open sky, because the light bake holds no house, fence or tree and nothing
- * else would apply the answer to the light.
+ * crop list as one with open sky, because the light bake holds only the houses and trees that are
+ * drawn, and nothing else would apply the answer to the light.
  *
  * The shares are this app's own reading of the three answers, declared unsourced below so they
  * show on the sources step: a third of the day's light for a space shaded in the morning or the

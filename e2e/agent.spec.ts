@@ -730,11 +730,11 @@ test.describe('answering why', () => {
   })
 
   /**
-   * The caveats are grouped and never folded. Six full-width paragraphs each with its own warning
-   * rule is a wall, and a wall is read as carefully as no caveat at all. A disclosure would be
-   * the one shortcut this feature isn't allowed to take
+   * The caveats are grouped and never folded. Four or more full-width paragraphs each with its own
+   * warning rule is a wall, and a wall is read as carefully as no caveat at all. A disclosure
+   * would be the one shortcut this feature isn't allowed to take
    */
-  test('keeps every caveat on screen, as one block rather than six alarms', async ({ page }) => {
+  test('keeps every caveat on screen, in one block', async ({ page }) => {
     test.setTimeout(300_000)
     await openApp(page)
     await openChat(page)
