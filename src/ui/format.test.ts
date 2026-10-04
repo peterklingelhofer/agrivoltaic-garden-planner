@@ -26,7 +26,6 @@ import {
   nativeNote,
   nearestFivePercent,
   formatBandPercent,
-  formatYieldEstimate,
   formatRsr,
   suggestionTieNote,
   tiedLeadingCropCount,
@@ -92,13 +91,12 @@ describe('band formatting', () => {
   })
 
   it('attributes the band to the crop term', () => {
-    expect(formatYieldEstimate(estimate)).toContain('crop response')
     expect(attributionLabel('crop-response')).toContain('Laub')
   })
 
   it('names the curve and its study count in the attribution', () => {
-    expect(formatYieldEstimate(estimate)).toContain(
-      'dominated by crop response: the fruity vegetables curve, 3 studies (Laub et al. 2022)',
+    expect(cropResponseLabel('fruity-vegetables')).toBe(
+      'crop response: the fruity vegetables curve, 3 studies (Laub et al. 2022)',
     )
     expect(cropResponseLabel('leafy-vegetables')).toBe(
       'crop response: the leafy vegetables curve, 4 studies (Laub et al. 2022)',

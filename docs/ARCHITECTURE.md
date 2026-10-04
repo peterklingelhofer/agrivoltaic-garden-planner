@@ -123,7 +123,7 @@ Each hop names the module that owns it. No hop is owned by two modules.
 | 21b | shipped example asset -> `PersistedDesign` + `DliRaster` | `src/state/example.ts`, `src/data/example-raster.ts` | `loadExampleGarden`, `decodeExampleRaster` |
 | 22 | everything -> store slices | `src/state/slices.ts`, `src/state/store.ts` | `useAppStore` |
 | 23 | store -> scene graph | `src/scene/*` | `GardenScene` |
-| 24 | store -> panels, band formatting | `src/ui/*` | `formatYieldEstimate` |
+| 24 | store -> panels, band formatting | `src/ui/*` | `formatBandPercent`, `bandBasisLabel` |
 
 Two Perez models exist and must not be collapsed: `perez_transposition_1990` in
 `crates/agv-sim/src/transposition.rs` (48-coefficient `allsitescomposite1990` POA transposition) and

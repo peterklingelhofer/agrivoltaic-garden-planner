@@ -16,12 +16,12 @@ import { approxCount, cropName } from './format'
 export interface PreferenceKindCopy {
   readonly kind: PreferenceKind
   readonly label: string
-  readonly help: string
+  readonly help?: string
 }
 
 /**
- * The whole easy half of this surface is these four sentences. A grower who reads only
- * them can use the panel. Everything else is opt-in
+ * The four kinds a pick can carry and the name each goes by. Only Must have and Never have help,
+ * since they're the two the legend under "More choices" explains
  */
 export const PREFERENCE_KINDS: readonly PreferenceKindCopy[] = [
   {
@@ -29,16 +29,8 @@ export const PREFERENCE_KINDS: readonly PreferenceKindCopy[] = [
     label: 'Must have',
     help: "Every suggestion is built around it. If this bed can't grow it you are told why, and nothing is put in its place",
   },
-  {
-    kind: 'prefer',
-    label: 'Prefer',
-    help: 'Moves it up the ranking by as much as the influence control allows, and no further',
-  },
-  {
-    kind: 'avoid',
-    label: 'Avoid',
-    help: 'Moves it down the same way. It can still appear where the agronomy is strong enough',
-  },
+  { kind: 'prefer', label: 'Prefer' },
+  { kind: 'avoid', label: 'Avoid' },
   {
     kind: 'exclude',
     label: 'Never',
