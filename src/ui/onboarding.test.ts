@@ -267,7 +267,7 @@ describe('nothing the results render reads as a determination', () => {
       expect(groundLightNote(flags(meets))).not.toMatch(FORBIDDEN)
     }
     expect(clearanceNote(flags(true))).toMatch(/fast-track rules for growing under panels/i)
-    expect(groundLightNote(flags(false))).toMatch(/exception request/i)
+    expect(groundLightNote(flags(false))).toMatch(/can still qualify through an exception/i)
   })
 
   /**

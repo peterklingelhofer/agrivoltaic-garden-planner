@@ -218,15 +218,15 @@ describe('the height limit is a hard limit', () => {
     expect(envelopeHeightM(tight)).toBeLessThanOrEqual(2.5 + 1e-9)
     expect(tight.geometry.clearanceHeightM).toBeLessThan(8 * 0.3048)
     expect(tight.geometry.clearanceHeightM).toBeGreaterThan(2.1)
-    expect(tight.rationale).toContain('Massachusetts expedited design parameters')
-    expect(tight.rationale).toContain('exception request')
+    expect(tight.rationale).toContain('Massachusetts fast-track rules')
+    expect(tight.rationale).toContain('in Massachusetts the layout would need an exception')
     expect(tight.rationale).not.toContain('DIN SPEC 91434 Category I')
 
     const tighter = balancedAt(42.37, { maxHeightM: meters(2) })
     expect(envelopeHeightM(tighter)).toBeLessThanOrEqual(2 + 1e-9)
     expect(tighter.geometry.clearanceHeightM).toBeLessThan(2.1)
     expect(tighter.rationale).toContain('DIN SPEC 91434 Category I')
-    expect(tighter.rationale).toContain('Massachusetts expedited design parameters')
+    expect(tighter.rationale).toContain('Massachusetts fast-track rules')
   })
 
   it('keeps the vertical rows vertical rather than tilting them to fit', () => {
