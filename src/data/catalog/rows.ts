@@ -63,7 +63,7 @@ const VINE_CROP_CAVEAT =
 
 /** Spinach carries Virginia Extension's own spinach row, and a floor that table doesn't print */
 const SPINACH_CAVEAT =
-  'Virginia Cooperative Extension’s Table 3 prints 14 to 20 mol/m2/d for spinach, which is this row’s target. The 6 floor is this app’s own: Gao et al. 2020 grew spinach from 11.5 to 20.2 with an optimum at 17.3, so the trial starts too high to place a minimum'
+  'Virginia Cooperative Extension’s Table 3 prints 14 to 20 mol/m2/d for spinach, which is this row’s target. It’s a greenhouse figure, and the table cites no spinach study for it. The 6 floor is this app’s own: Gao et al. 2020 grew spinach from 11.5 to 20.2 with an optimum at 17.3, so the trial starts too high to place a minimum'
 
 /** Strawberry and raspberry are the two rows an agrivoltaic trial states a DLI for */
 const STRAWBERRY_CAVEAT =
