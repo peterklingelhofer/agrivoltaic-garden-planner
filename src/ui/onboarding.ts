@@ -304,21 +304,21 @@ export const CONFIDENCE_CEILING =
  * gloss, it would leave a first-time grower unable to tell whether it's a law, a grant scheme or
  * this tool's own opinion, and it would measure a grower outside Massachusetts against a
  * Massachusetts yardstick without saying so. So the term of art is left out: what stays is whose
- * rules they are and, in plain words, what kind of rules they are. `CompliancePanel` and
- * `format.ts` carry the program's own words for anyone who needs to quote them
+ * rules they are and, in plain words, what kind of rules they are. `CompliancePanel` names the
+ * program and its expedited route for anyone who needs to quote them
  */
 export const clearanceNote = (flags: ScenarioFlags): string =>
   flags.meetsExpeditedClearance
     ? 'Panel height meets the Massachusetts fast-track rules for growing under panels'
-    : 'Panel height would need an exception request under the Massachusetts fast-track rules for growing under panels'
+    : 'Panel height misses a limit in the Massachusetts fast-track rules for growing under panels, so it would need an exception'
 
 // the second half of a pair, so it names the regime by reference, without repeating fifteen
 // words of it directly under the line that has just said them. The miss spells out what an
-// exception request is, in plain words, because the bare term alone doesn't say what it means
+// exception is, in plain words, because the bare word alone doesn't say what it means
 export const groundLightNote = (flags: ScenarioFlags): string =>
   flags.fiftyPercentEverywhere
     ? 'Ground light meets the same fast-track rules everywhere in the plot'
-    : 'Part of the plot gets less than half its daylight. Under the same fast-track rules, a layout that misses one limit (height, spacing, or half the sunlight on every part of the ground) can still qualify through an exception request.'
+    : 'Part of the plot gets less than half its daylight. Under the same fast-track rules, a layout that misses one limit (height, spacing, or half the sunlight on every part of the ground) can still qualify through an exception.'
 
 const percent = (ratio: number): string => `${String(Math.round(ratio * 100))}%`
 

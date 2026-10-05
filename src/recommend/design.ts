@@ -356,14 +356,12 @@ export const fitToMaxHeight = (
     // two, so falling below it always means falling below the Massachusetts figure as well
     const below = [
       clearanceM < DIN_CATEGORY_I_CLEARANCE_M ? 'the 2.10 m of DIN SPEC 91434 Category I' : null,
-      clearanceM < MA_FIXED_CLEARANCE_M
-        ? 'the 8 ft of the Massachusetts expedited design parameters'
-        : null,
+      clearanceM < MA_FIXED_CLEARANCE_M ? 'the 8 ft of the Massachusetts fast-track rules' : null,
     ].filter((entry): entry is string => entry !== null)
     compromises.push(
       below.length === 0
         ? `Your ${limit} m height limit lowered the headroom under the panels to ${clearanceM.toFixed(2)} m`
-        : `Your ${limit} m height limit forced the headroom under the panels down to ${clearanceM.toFixed(2)} m, below ${below.join(' and ')}. Working under it will be cramped, and the Massachusetts figure would need an exception request`,
+        : `Your ${limit} m height limit forced the headroom under the panels down to ${clearanceM.toFixed(2)} m, below ${below.join(' and ')}. Working under it will be cramped, and in Massachusetts the layout would need an exception`,
     )
     plan = { ...plan, clearanceM }
   }
@@ -548,7 +546,7 @@ const tiltedCandidate = (
   }
   const rationale = [
     tracking
-      ? `Rows track the sun about a north-south axis, so the panels follow it from morning to evening. Tracking is only offered here because the site is at ${latitude.toFixed(0)} degrees of latitude and the design can carry the 10 ft of headroom the Massachusetts expedited parameters ask of a tracker${measured === null ? '' : ", and it's only taken because it out-generated every fixed tilt on this plot"}`
+      ? `Rows track the sun about a north-south axis, so the panels follow it from morning to evening. Tracking is only offered here because the site is at ${latitude.toFixed(0)} degrees of latitude and the design can carry the 10 ft of headroom the Massachusetts fast-track rules ask of a tracker${measured === null ? '' : ", and it's only taken because it out-generated every fixed tilt on this plot"}`
       : archetype === 'food-first' && measured !== null
         ? `Panels are fixed at ${finalTiltDeg.toFixed(0)} degrees, the angle between ${String(REFERENCE_MIN_TILT_DEG)} and ${String(REFERENCE_MAX_TILT_DEG)} that puts the least panel over this plot as seen from overhead: a steeper row covers less ground, a flatter row sits further from the next so fewer rows fit, and this is where the two come out lowest for a plot this size. The light figure beside this design is measured from that arrangement`
         : measured !== null
@@ -788,7 +786,7 @@ const flagsFrom = (check: ComplianceCheck, shade: ShadeBudgetCheck): ScenarioFla
     ...(sunlight?.outcome === 'approximate' ? [sunlight.windowDisclaimer] : []),
     clearance.length === 0
       ? "There's no array, so no clearance parameter applies"
-      : `Measured against the Massachusetts SMART Dual-use expedited design parameters, which this design ${check.overall === 'meets-expedited-parameters' ? 'meets' : 'would need an exception request for'}`,
+      : `Measured against the Massachusetts fast-track rules for growing under panels, this design ${check.overall === 'meets-expedited-parameters' ? 'meets every limit' : 'misses a limit, so it would need an exception'}`,
   ]
   return {
     meetsExpeditedClearance: clearance.every((result) => result.outcome === 'meets'),

@@ -46,8 +46,8 @@ export const CompliancePanel = (): ReactElement => {
   /**
    * Where the garden is, so that outside Massachusetts the one rule this app can check is
    * introduced as another state's rule. Without it, a grower in New Jersey reads "Measured against
-   * the Massachusetts SMART Dual-use expedited design parameters, which this design would need an
-   * exception request for" and nothing on the step says the rule isn't theirs
+   * the Massachusetts fast-track rules for growing under panels, this design misses a limit, so it
+   * would need an exception" and nothing on the step says the rule isn't theirs
    */
   const state = useAppStore((s) =>
     s.site.status === 'ready' ? usStateOf(s.site.value.botanicalArea) : null,
