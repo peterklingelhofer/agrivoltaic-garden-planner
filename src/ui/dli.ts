@@ -147,7 +147,7 @@ export const DLI_DISCLOSURE: readonly DisclosurePoint[] = [
   {
     id: 'ordinal-holds',
     heading: 'How far to trust the crop order and the per-crop numbers',
-    body: "Crops are ordered by light demand from one consistent table of crop classes, and that ordering is the part to trust: lettuce wants less light than a tomato, which wants less than a strawberry. The mol/m²/d numbers attached to individual crops are a weaker claim. Most are Tier C figures, this app's own estimates for the crop's class, and few were measured on the crop itself, so a threshold is a soft boundary.",
+    body: "Use the light figures to compare crops. They show, for example, that lettuce needs less light than a tomato. The mol/m²/d numbers for individual crops are less certain. Most are Tier C figures, this app's own estimates for the crop's class, and few were measured on the crop itself, so a threshold is a soft boundary.",
   },
   {
     id: 'no-source',
