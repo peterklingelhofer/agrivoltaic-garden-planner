@@ -11,7 +11,7 @@ import type { EditorMode } from '../state/slices'
 import { getAppState, resetAppStore } from '../state/store'
 import { bedId, obstructionId } from '../types/ids'
 import { mount } from './testkit'
-import { useEditKeys } from './useEditKeys'
+import { REDO_KEYS, UNDO_KEYS, useEditKeys } from './useEditKeys'
 
 /*
   The hook listens on `window`, and `App` mounts it once. It sits outside the scene so that the
@@ -161,6 +161,58 @@ describe('undo and redo from the keyboard', () => {
     getAppState().setMaxCropsPerBed(9)
     expect(await press('z', { ctrlKey: true })).toBe(false)
     expect(maxCrops()).toBe(9)
+  })
+})
+
+/**
+ * The Undo and Redo buttons read `UNDO_KEYS` and `REDO_KEYS` for `aria-keyshortcuts`, so each
+ * chord those strings name is pressed here and has to do what the button does. A string that
+ * promised a chord the hook ignores would tell assistive tech about a key that isn't there
+ */
+describe('the keys the Undo and Redo buttons announce', () => {
+  /** "Meta+Shift+Z" as the keydown that says it: the last part is the key, the rest are held */
+  const chordOf = (spec: string): readonly [string, KeyboardEventInit] => {
+    const parts = spec.split('+')
+    const held = parts.slice(0, -1)
+    return [
+      parts[parts.length - 1] ?? '',
+      {
+        metaKey: held.includes('Meta'),
+        ctrlKey: held.includes('Control'),
+        shiftKey: held.includes('Shift'),
+        altKey: held.includes('Alt'),
+      },
+    ]
+  }
+
+  it('undo with every chord UNDO_KEYS names', async () => {
+    const harness = await mount(createElement(Keys))
+    const chords = UNDO_KEYS.split(' ')
+    expect(chords.length).toBeGreaterThan(1)
+    for (const spec of chords) {
+      resetAppStore()
+      getAppState().setMaxCropsPerBed(9)
+      const [key, init] = chordOf(spec)
+      expect(await press(key, init), spec).toBe(true)
+      expect(maxCrops(), spec).not.toBe(9)
+    }
+    await harness.unmount()
+  })
+
+  it('redo with every chord REDO_KEYS names', async () => {
+    const harness = await mount(createElement(Keys))
+    const chords = REDO_KEYS.split(' ')
+    expect(chords.length).toBeGreaterThan(1)
+    for (const spec of chords) {
+      resetAppStore()
+      getAppState().setMaxCropsPerBed(9)
+      await press('z', { ctrlKey: true })
+      expect(maxCrops(), spec).not.toBe(9)
+      const [key, init] = chordOf(spec)
+      expect(await press(key, init), spec).toBe(true)
+      expect(maxCrops(), spec).toBe(9)
+    }
+    await harness.unmount()
   })
 })
 

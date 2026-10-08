@@ -1,3 +1,4 @@
+import { act } from 'react'
 import { beforeEach, describe, expect, it } from 'bun:test'
 import { getAppState, resetAppStore } from '../state/store'
 import App from '../App'
@@ -38,7 +39,10 @@ describe('the tab bar', () => {
 
   it('switches to the garden and back, keeping the answers', async () => {
     const harness = await mount(<MobileTabs />)
-    getAppState().answerOnboarding({ ambition: 'fruiting-and-berries' })
+    // an answer is an edit of the design, and the bar's Undo goes live with it
+    await act(async () => {
+      getAppState().answerOnboarding({ ambition: 'fruiting-and-berries' })
+    })
     await harness.click('action-tab-garden')
     expect(getAppState().surface).toBe('garden')
     expect(harness.get('action-tab-garden').dataset.current).toBe('true')

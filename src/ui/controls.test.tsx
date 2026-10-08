@@ -113,3 +113,87 @@ describe('the keys an Action announces', () => {
     await dead.unmount()
   })
 })
+
+/**
+ * `ariaDisabled` is the way for a press that can use up what it does, like Undo on the last step.
+ * What these hold is that it says "unavailable" to assistive tech without the native `disabled`,
+ * which is what lets the button keep the focus of whoever just pressed it, and that the press does
+ * nothing while it's set
+ */
+describe('an Action that is aria-disabled', () => {
+  it('adds the single attribute and nothing else about the button moves', async () => {
+    const without = await mount(
+      <Action testId="undo" onClick={() => {}}>
+        Undo
+      </Action>,
+    )
+    const bare = attributesOf(without.get('undo'))
+    expect(without.get('undo').hasAttribute('aria-disabled')).toBe(false)
+    await without.unmount()
+
+    const dim = await mount(
+      <Action testId="undo" ariaDisabled onClick={() => {}}>
+        Undo
+      </Action>,
+    )
+    const button = dim.get('undo')
+    expect(attributesOf(button)).toEqual([...bare, 'aria-disabled'].sort())
+    expect(button.getAttribute('aria-disabled')).toBe('true')
+    expect(button.hasAttribute('disabled')).toBe(false)
+    expect(button.className).toBe('action action-ghost')
+    await dim.unmount()
+
+    const live = await mount(
+      <Action testId="undo" ariaDisabled={false} onClick={() => {}}>
+        Undo
+      </Action>,
+    )
+    expect(live.get('undo').getAttribute('aria-disabled')).toBe('false')
+    await live.unmount()
+  })
+
+  it('takes the focus, which a disabled button refuses', async () => {
+    const aria = await mount(
+      <Action testId="undo" ariaDisabled onClick={() => {}}>
+        Undo
+      </Action>,
+    )
+    aria.get('undo').focus()
+    expect(document.activeElement).toBe(aria.get('undo'))
+    await aria.unmount()
+
+    const native = await mount(
+      <Action testId="undo" disabled onClick={() => {}}>
+        Undo
+      </Action>,
+    )
+    native.get('undo').focus()
+    expect(document.activeElement).not.toBe(native.get('undo'))
+    await native.unmount()
+  })
+
+  it('ignores a press while set, and answers one once it is lifted', async () => {
+    let presses = 0
+    const press = (): void => {
+      presses += 1
+    }
+    const dim = await mount(
+      <Action testId="undo" ariaDisabled onClick={press}>
+        Undo
+      </Action>,
+    )
+    // the click arrives, since nothing about the button is natively disabled, and goes nowhere
+    await dim.click('undo')
+    expect(presses).toBe(0)
+    await dim.unmount()
+
+    const live = await mount(
+      <Action testId="undo" ariaDisabled={false} onClick={press}>
+        Undo
+      </Action>,
+    )
+    await live.click('undo')
+    expect(presses).toBe(1)
+    await live.unmount()
+  })
+})

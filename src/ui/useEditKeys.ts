@@ -9,11 +9,21 @@ import { useAppStore } from '../state/store'
  */
 const FIELD = 'input, textarea, select, [contenteditable]:not([contenteditable="false"])'
 
+/**
+ * What `isUndo` answers, in the form `aria-keyshortcuts` takes: modifiers and key joined by "+",
+ * alternatives separated by a space. Every button that announces the keys reads this one string,
+ * and `edit-keys.test.ts` presses each chord it names
+ */
+export const UNDO_KEYS = 'Meta+Z Control+Z'
+
 const isUndo = (event: KeyboardEvent): boolean =>
   (event.metaKey || event.ctrlKey) &&
   !event.altKey &&
   !event.shiftKey &&
   event.key.toLowerCase() === 'z'
+
+/** What `isRedo` answers, in the same form */
+export const REDO_KEYS = 'Meta+Shift+Z Control+Shift+Z Control+Y'
 
 /**
  * Shift with Cmd or Ctrl and Z, and Ctrl and Y for those whose hands learned it on Windows. Cmd and

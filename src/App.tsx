@@ -18,7 +18,7 @@ import { GardenPlanStrip, Sidebar } from './ui/Sidebar'
 import { Action } from './ui/controls'
 import { useAutoLight } from './ui/useAutoLight'
 import { useAutoRecommend } from './ui/useAutoRecommend'
-import { useEditKeys } from './ui/useEditKeys'
+import { REDO_KEYS, UNDO_KEYS, useEditKeys } from './ui/useEditKeys'
 import type { EditorMode } from './state/slices'
 
 /**
@@ -91,22 +91,24 @@ export const Toolbar = (): ReactElement => {
           </Action>
         ))}
         {/*
-          One item, so a single rule can leave the pair out where a phone's pill has no room for it.
-          The keys that do the same are answered by `useEditKeys`, mounted in `App`
+          One item, so a single rule can leave the pair out on a phone, where the bottom bar holds
+          it (`MobileTabs`). The keys that do the same are answered by `useEditKeys`, mounted in
+          `App`. Each button takes `ariaDisabled`, so one pressed down to its last step keeps the
+          focus that press gave it
         */}
         <div className="toolbar-history">
           <Action
             testId="action-toolbar-undo"
-            disabled={!undoable}
-            keyShortcuts="Meta+Z Control+Z"
+            ariaDisabled={!undoable}
+            keyShortcuts={UNDO_KEYS}
             onClick={undo}
           >
             Undo
           </Action>
           <Action
             testId="action-toolbar-redo"
-            disabled={!redoable}
-            keyShortcuts="Meta+Shift+Z Control+Shift+Z Control+Y"
+            ariaDisabled={!redoable}
+            keyShortcuts={REDO_KEYS}
             onClick={redo}
           >
             Redo

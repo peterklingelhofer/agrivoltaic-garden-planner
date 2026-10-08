@@ -1236,7 +1236,12 @@ input[type='range'] {
   outline-offset: 1px;
 }
 
-.action:disabled {
+/* `aria-disabled` is the other way to go dim, for a press that can use up what it does: the button
+   keeps the focus of whoever just pressed it, which `:disabled` would drop. See `.agent-chip`.
+   The Undo and Redo pairs, in the toolbar and in the phone bar, take it and dim the same way */
+.action:disabled,
+.action[aria-disabled='true'],
+.bottombar-action[aria-disabled='true'] {
   opacity: 0.45;
   cursor: default;
 }
@@ -2772,8 +2777,9 @@ details.wizard-advanced > summary:focus-visible {
 }
 
 /* Above the breakpoint the garden and the editor both fit, so there's nothing to switch between
-   and the bar isn't merely hidden but absent from the accessibility tree */
-.tabbar {
+   and the bar isn't merely hidden but absent from the accessibility tree. Its Undo and Redo go
+   with it, since the toolbar holds that pair there */
+.bottombar {
   display: none;
 }
 
@@ -3105,10 +3111,10 @@ details.wizard-advanced > summary:focus-visible {
     display: none;
   }
 
-  /* the pair takes the pill's own spacing */
+  /* Undo and Redo live in the bottom bar on a phone, so the pill keeps one row. A second row would
+     push the example notice, which sits 8px under the pill, down onto the color key at 320x568 */
   .toolbar-history {
-    gap: 4px;
-    margin-left: 0;
+    display: none;
   }
 
   /* rounded to match the pill they sit in: at 4px padding inside a 999px radius the container's
@@ -3126,17 +3132,49 @@ details.wizard-advanced > summary:focus-visible {
     background: transparent;
   }
 
-  .tabbar {
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: 1fr;
+  /*
+   * One bar and two groups: the destinations in the nav and, beside it, the pair of actions.
+   *
+   * Every button in it takes an equal share of the width, four cells or five in a build with the
+   * agent, at the 48px height the tabs had on their own, so nothing above the bar moves. A flex
+   * item with a basis of zero takes the row in proportion to its grow factor, and each group's
+   * factor is the number of buttons in it: `--tab-count` from the markup for the nav, since the
+   * agent's tab joins it only in some builds, and two for the pair. One grid over all the buttons
+   * would need `display: contents` on the groups, and some browsers drop a landmark from the
+   * accessibility tree for it
+   */
+  .bottombar {
+    display: flex;
     border-top: 1px solid var(--border);
     background: var(--panel);
     /* the home indicator on a modern phone sits over the bottom of the viewport */
     padding-bottom: env(safe-area-inset-bottom, 0);
   }
 
-  .tab {
+  .tabbar {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    flex: var(--tab-count) 1 0%;
+  }
+
+  /* the pair's own left border is the divider, which the shares leave out, so the cells on either
+     side of it stay equal. A border also survives forced colors, where a shadow would drop out */
+  .bottombar-history {
+    display: flex;
+    flex: 2 1 0%;
+    min-width: 0;
+    border-left: 1px solid var(--border);
+  }
+
+  .bottombar-action {
+    flex: 1 1 0%;
+  }
+
+  /* the pair takes the tabs' box and type, so its labels sit level with theirs. It never carries
+     `data-current`, so the accent rule below can't reach it */
+  .tab,
+  .bottombar-action {
     font: inherit;
     font-size: 13px;
     /* the 44px the touch guidance asks for, plus room for the underline that marks the current
@@ -3148,6 +3186,8 @@ details.wizard-advanced > summary:focus-visible {
     background: none;
     color: var(--muted);
     cursor: pointer;
+    /* quick repeat taps, which Undo gets, press the button and leave the page at its zoom */
+    touch-action: manipulation;
   }
 
   .tab[data-current='true'] {
@@ -3156,24 +3196,10 @@ details.wizard-advanced > summary:focus-visible {
     font-weight: 600;
   }
 
-  .tab:focus-visible {
+  .tab:focus-visible,
+  .bottombar-action:focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: -2px;
-  }
-}
-
-/*
- * Undo and Redo leave the pill below 480px.
- *
- * The notice sits 114px down, 8px under a pill one row tall. On a 320px phone the four modes nearly
- * fill that row, so the pair wanted a second one, 48px more, and the notice had to follow it down.
- * An unfolded notice then reaches the color key, which is anchored to the foot, on a 320x568
- * screen. So below 480px the pill stays as it was and the pair is reached from the keyboard. From
- * 480px up a row has room for all six
- */
-@media (max-width: 480px) {
-  .toolbar-history {
-    display: none;
   }
 }
 
