@@ -12,6 +12,7 @@ import {
   RGBAFormat,
 } from 'three'
 import { leafOnMonthsFor } from '../sim/obstruction'
+import { requestCardScroll } from '../state/card-scroll'
 import { centroidOf } from '../state/geom'
 import { scenePlot, useAppStore } from '../state/store'
 import type { Tree } from '../types/garden'
@@ -112,6 +113,7 @@ export const TreeMesh = ({ obstructionId, selected }: TreeMeshProps): ReactEleme
   })
   const mode = useAppStore((s) => s.mode)
   const selectObstruction = useAppStore((s) => s.selectObstruction)
+  const setSidebarStep = useAppStore((s) => s.setSidebarStep)
   const dragging = useAppStore((s) => s.dragging)
   const site = useAppStore((s) => s.site)
   const weather = useAppStore((s) => s.weather)
@@ -176,8 +178,12 @@ export const TreeMesh = ({ obstructionId, selected }: TreeMeshProps): ReactEleme
       if (dragging) return
       event.stopPropagation()
       selectObstruction(obstructionId)
+      // its card is on the ground step, so the press opens it, as a plant opens the plants step,
+      // and asks for the card to scroll into view
+      setSidebarStep('ground')
+      requestCardScroll(obstructionId)
     },
-    [dragging, obstructionId, selectObstruction],
+    [dragging, obstructionId, selectObstruction, setSidebarStep],
   )
 
   if (!tree || !trunkGeometry || !crownGeometry) return null

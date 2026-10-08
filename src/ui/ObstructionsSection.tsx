@@ -1,4 +1,5 @@
-import type { ReactElement } from 'react'
+import { useEffect, useRef, type ReactElement, type RefObject } from 'react'
+import { onCardScrollRequest, requestCardScroll, takeCardScroll } from '../state/card-scroll'
 import {
   centroidOf,
   polygonOf,
@@ -9,9 +10,12 @@ import {
 import { useAppStore } from '../state/store'
 import type { House, Tree } from '../types/garden'
 import type { Ring2D } from '../types/geo'
+import type { ObstructionId } from '../types/ids'
 import { meters, type Fraction } from '../types/units'
 import { Action, NumberField, Toggle } from './controls'
+import { settleLanding } from './landing'
 import { lengthStep, showLength, showLimit, toMeters, useLengthUnit } from './length-units'
+import { bringIntoView } from './scroll-into-view'
 import { SourceLink } from './SourcesPanel'
 
 const round2 = (value: number): number => Math.round(value * 100) / 100
@@ -25,6 +29,53 @@ const turnDeg = (ring: Ring2D): number => {
   const b = ring[1]
   if (a === undefined || b === undefined) return 0
   return Math.round((Math.atan2(b.yM - a.yM, b.xM - a.xM) * 180) / Math.PI)
+}
+
+/**
+ * Scrolls a card into view when something asked for it: a click on its house or tree in the scene,
+ * or the press that added it (`card-scroll.ts`). Being the selection asks for nothing, so pressing
+ * the step's header with a card still selected leaves the column at the top of the step.
+ *
+ * The ask is taken in a frame. A click that opens this step also starts the stepper holding the
+ * step's header at the top of the column, and the scroll waits a frame so that it can end that hold
+ * first, the way a jump to a source does (`landing.ts`). The frame is also why StrictMode's first
+ * run of this effect, which it cancels, can't use the ask up. It only scrolls: focus stays where
+ * it is
+ */
+const useScrollWhenAsked = (
+  id: ObstructionId,
+  selected: boolean,
+): RefObject<HTMLLIElement | null> => {
+  const card = useRef<HTMLLIElement | null>(null)
+  useEffect(() => {
+    if (!selected) return undefined
+    let queued = false
+    let frame = 0
+    const soon = (): void => {
+      if (queued) return
+      queued = true
+      frame = requestAnimationFrame(() => {
+        queued = false
+        if (!takeCardScroll(id)) return
+        settleLanding()
+        bringIntoView(card.current)
+      })
+    }
+    // look for an ask parked before this card was selected, then listen for later ones
+    soon()
+    const stopListening = onCardScrollRequest(soon)
+    return () => {
+      stopListening()
+      if (queued) cancelAnimationFrame(frame)
+    }
+  }, [id, selected])
+  return card
+}
+
+/** An add selects what it draws and returns it, and the card of what it drew is asked to scroll */
+const addAndShow = (add: () => ObstructionId | null): void => {
+  const added = add()
+  if (added !== null) requestCardScroll(added)
 }
 
 /**
@@ -42,6 +93,7 @@ const HouseCard = ({
   const upsertObstruction = useAppStore((s) => s.upsertObstruction)
   const removeObstruction = useAppStore((s) => s.removeObstruction)
   const unit = useLengthUnit()
+  const card = useScrollWhenAsked(house.id, selected)
   const ring = house.footprint.exterior
   const [a, b, c] = ring
   const widthM = a && b ? Math.hypot(b.xM - a.xM, b.yM - a.yM) : 0
@@ -54,6 +106,7 @@ const HouseCard = ({
 
   return (
     <li
+      ref={card}
       className="obstruction-card"
       data-testid={`item-house-${house.id}`}
       data-selected={selected}
@@ -150,6 +203,7 @@ const TreeCard = ({
   const removeObstruction = useAppStore((s) => s.removeObstruction)
   const unit = useLengthUnit()
   const ring = tree.footprint.exterior
+  const card = useScrollWhenAsked(tree.id, selected)
   const [a, b, c] = ring
   const widthM = a && b ? Math.hypot(b.xM - a.xM, b.yM - a.yM) : 0
   const depthM = b && c ? Math.hypot(c.xM - b.xM, c.yM - b.yM) : 0
@@ -160,7 +214,12 @@ const TreeCard = ({
     upsertObstruction({ ...tree, footprint: polygonOf(nextRing) })
 
   return (
-    <li className="obstruction-card" data-testid={`item-tree-${tree.id}`} data-selected={selected}>
+    <li
+      ref={card}
+      className="obstruction-card"
+      data-testid={`item-tree-${tree.id}`}
+      data-selected={selected}
+    >
       <strong>{tree.label}</strong>
       <div className="row">
         <NumberField
@@ -324,10 +383,18 @@ export const ObstructionsSection = (): ReactElement => {
         ))}
       </ul>
       <div className="row">
-        <Action testId="action-house-add" disabled={plot === null} onClick={() => addHouse()}>
+        <Action
+          testId="action-house-add"
+          disabled={plot === null}
+          onClick={() => addAndShow(addHouse)}
+        >
           Add a house
         </Action>
-        <Action testId="action-tree-add" disabled={plot === null} onClick={() => addTree()}>
+        <Action
+          testId="action-tree-add"
+          disabled={plot === null}
+          onClick={() => addAndShow(addTree)}
+        >
           Add a tree
         </Action>
       </div>

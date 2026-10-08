@@ -14,7 +14,6 @@ import type { BedId, CropId } from '../types/ids'
 import type { GrowingWindow } from '../types/light'
 import type { PolycultureSuggestion, PreferenceKind } from '../types/polyculture'
 import type { Site } from '../types/site'
-import { prefersReducedMotion } from '../state/motion'
 import { SelectedBedPlanting } from './BedPanel'
 import { Action, Toggle } from './controls'
 import { approxCount, bedName, cropName } from './format'
@@ -27,6 +26,7 @@ import { RankingSection } from './RecommendationPanel'
 import { regionNote } from './region'
 import { firstUnmet, rankingChain, rankingRequirement, requirementKey } from './requirement'
 import { RequirementNotice } from './RequirementNotice'
+import { bringIntoView } from './scroll-into-view'
 import { autoRunReady } from './useAutoRecommend'
 
 /**
@@ -803,9 +803,7 @@ export const PlantsPanel = (): ReactElement => {
     if (fold === null) return
     fold.open = true
     const field = fold.querySelector<HTMLElement>('[data-testid="control-bed-crop-search"]') ?? fold
-    // jsdom has no `scrollIntoView`, and a browser missing it skips the scroll, without throwing
-    if (typeof field.scrollIntoView !== 'function') return
-    field.scrollIntoView({ block: 'center', behavior: prefersReducedMotion() ? 'auto' : 'smooth' })
+    bringIntoView(field)
   }
 
   return (
