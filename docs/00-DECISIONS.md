@@ -1131,12 +1131,15 @@ rows. Olive carries a chill figure of 150 hours, cited to De Melo-Abreu et al. 2
 tzdb zone to the point, inside the country the geocoder named where it named one: tzdb holds one
 point for all of India, so without the country the nearest point to Mumbai is Karachi's. The place
 step says which basis the clock has. Where SoilGrids answers nothing at the point, as at the center
-of nearly every town, a ring of four points three kilometers out is asked, then a ring six
-kilometers out, and the reading says how far away it was taken. The rainy-season sentence names
-every run of wet months, so Nairobi's two rains are both named, and a sowing window spanning the
-year reads "any time of year". The store's lookup carries a token and drops an answer that lands
-after a later lookup began, so two lookups in flight can't leave one town's ground under another's
-weather.
+of nearly every town, a ring of four points three kilometers out is asked one point at a time, the
+walk stops at the first plausible reading, and the reading says how far away it was taken. A
+request that gets no answer is another case. At the point the ring isn't asked, at a ring point the
+walk ends there, and either way the soil is the assumed loam, marked as out of reach. That keeps a
+lookup to five calls at most, against ISRIC's fair-use limit of five a minute. The rainy-season
+sentence names every run of wet months, so Nairobi's two rains are both named, and a sowing window
+spanning the year reads "any time of year". The store's lookup carries a token and drops an answer
+that lands after a later lookup began, so two lookups in flight can't leave one town's ground under
+another's weather.
 
 ## 26. Houses and trees shade the bake
 

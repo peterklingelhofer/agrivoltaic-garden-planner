@@ -275,7 +275,7 @@ export const SitePanel = (): ReactElement => {
         <p className="notice notice-idle" data-testid="status-site-soil">
           {resolved.soil.unreachable
             ? "The soil map couldn't be reached, so every bed assumes pH 6.5 loam until you type your own soil or search for the place again."
-            : 'The soil map has no reading for this spot or within 6 km of it. The map leaves out built-up ground and water. Every bed assumes pH 6.5 loam until you type your own soil.'}
+            : 'The soil map has no reading for this spot or for four points 3 km around it. The map leaves out built-up ground and water. Every bed assumes pH 6.5 loam until you type your own soil.'}
         </p>
       ) : null}
       {/* a reading from a few kilometers out is the area's soil: said, with the distance */}

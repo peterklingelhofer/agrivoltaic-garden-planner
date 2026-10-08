@@ -717,6 +717,9 @@ export const DEFAULT_SOIL: SoilProfile = {
   sourceId: 'default',
 }
 
+/** The assumed soil where a request this lookup needed got no answer, so the place step says so */
+const UNREACHABLE_SOIL: SoilProfile = { ...DEFAULT_SOIL, unreachable: true }
+
 interface SoilGridsBody {
   readonly properties?: {
     readonly layers?: readonly {
@@ -775,8 +778,13 @@ const fetchSoilProfile = async (location: LatLon): Promise<SoilProfile | null> =
 
 const KM_PER_DEGREE_LAT = 111.32
 
-/** Rings tried in order when the point itself has no plausible reading: 3 km, then 6 km */
-const SOIL_RING_KM: readonly number[] = [3, 6]
+/**
+ * The ring tried when the point itself answers with no plausible reading: four points 3 km out.
+ *
+ * One ring and no more, because ISRIC's fair-use limit for this API is 5 calls a minute and a
+ * lookup is the point plus the ring, 5 at most. A second ring would take it to 9
+ */
+const SOIL_RING_KM: readonly number[] = [3]
 
 /** The points `km` north, east, south and west of `location`, in that order */
 const ringPoints = (location: LatLon, km: number): readonly LatLon[] => {
@@ -806,27 +814,30 @@ const fetchSoilPoint = async (location: LatLon): Promise<SoilProfile | null | un
 
 /**
  * SoilGrids masks built-up ground, so the pH layer is null at the center of nearly every town.
- * Where the point itself has no plausible reading, a ring of four points around it is queried
- * instead, nearest ring first, and the first plausible answer going north, east, south, west
- * stands in for the point.
+ * Where the point answers with no plausible reading, the ring around it is walked one point at a
+ * time, north, east, south, west, and the first plausible answer stands in for the point. The
+ * walk ends there, so a lookup is at most 5 calls against a fair-use limit of 5 a minute, and
+ * fewer wherever a reading turns up early.
  *
  * A request can also fail outright: SoilGrids returned 503s and aborted connections for single
- * points all evening. That's a different thing from a plausible answer of no data, so
- * `fetchSoilPoint` catches each point on its own and one failed point never sinks a whole ring.
- * The map counts as unreachable only when every point asked, at the center and both rings,
- * never answered at all
+ * points all evening, and has stalled without sending a byte. That's a different thing from a
+ * plausible answer of no data, which moves on to the next point. A request that gets no answer,
+ * at the point or on the ring, ends the lookup at once with the assumed soil marked `unreachable`,
+ * because a host that just failed is no likelier to answer the next call, and each call is another
+ * wait. `fetchSoilPoint` catches each point on its own, so a failure here never throws
  */
 export const soilAt = async (location: LatLon): Promise<SoilProfile> => {
   const own = await fetchSoilPoint(location)
   if (own) return own
-  let answered = own === null
+  if (own === undefined) return UNREACHABLE_SOIL
   for (const km of SOIL_RING_KM) {
-    const readings = await Promise.all(ringPoints(location, km).map(fetchSoilPoint))
-    answered ||= readings.some((reading) => reading === null)
-    const hit = readings.find((reading): reading is SoilProfile => Boolean(reading))
-    if (hit !== undefined) return { ...hit, sampledKm: km }
+    for (const point of ringPoints(location, km)) {
+      const reading = await fetchSoilPoint(point)
+      if (reading) return { ...reading, sampledKm: km }
+      if (reading === undefined) return UNREACHABLE_SOIL
+    }
   }
-  return answered ? DEFAULT_SOIL : { ...DEFAULT_SOIL, unreachable: true }
+  return DEFAULT_SOIL
 }
 
 export const staticLayerLicenses = (): readonly Licensed[] => [
