@@ -64,24 +64,47 @@ export const siteWaterLimitation = (
 export const siteCacheKey = (location: LatLon): string =>
   cacheKeyFor('open-meteo', location, 'site')
 
+/**
+ * The waits a reader tells apart, in the order they're named: the weather record, the soil map,
+ * and the frost dates. The last covers every request that reads the daily normals or sits beside
+ * them (the frost curves, the climate figures, the hardiness zone, the climate class and the
+ * botanical area), so it lands when the slowest of those has
+ */
+export const SITE_PARTS = ['weather', 'soil', 'frost'] as const
+export type SitePart = (typeof SITE_PARTS)[number]
+
 export const resolveSite = async (
   location: LatLon,
   label: string,
   signal: AbortSignal | null,
   // the country a geocoder named, which narrows the fallback clock to that country's zones
   countryCode: string | null = null,
+  // told once as each part lands, so a notice can name the ones still out
+  onPart?: (part: SitePart) => void,
 ): Promise<ResolvedSite> => {
-  const [koppenCode, botanicalArea, hardiness, frost, normals, soil, record, daily] =
+  // a part lands when every request in its group has. A failure passes through untouched, so the
+  // `Promise.all` below still rejects the whole lookup on the first one
+  const landed = async <T>(part: SitePart, group: Promise<T>): Promise<T> => {
+    const value = await group
+    onPart?.(part)
+    return value
+  }
+  const [[koppenCode, botanicalArea, hardiness, frost, normals, daily], soil, record] =
     await Promise.all([
-      koppenAt(location),
-      botanicalAreaAt(location),
-      hardinessAt(location),
-      frostNormalsAt(location),
-      climateNormalsAt(location),
-      soilAt(location),
-      fetchWeather({ location, source: preferredSourceFor(location), signal }),
-      // the same cached answer the normals above read, for the zone it names
-      dailyNormalsAt(location),
+      landed(
+        'frost',
+        Promise.all([
+          koppenAt(location),
+          botanicalAreaAt(location),
+          hardinessAt(location),
+          frostNormalsAt(location),
+          climateNormalsAt(location),
+          // the same cached answer the normals above read, for the zone it names
+          dailyNormalsAt(location),
+        ]),
+      ),
+      landed('soil', soilAt(location)),
+      landed('weather', fetchWeather({ location, source: preferredSourceFor(location), signal })),
     ])
   /**
    * The height above sea level comes with the weather, from the body the record was read out of. A

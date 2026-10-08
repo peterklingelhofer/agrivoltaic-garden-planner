@@ -8,7 +8,7 @@ import {
 import { loadCropCatalog } from '../data/crops'
 import { utcOffsetHoursFor } from '../data/geocode'
 import { fetchRetailPrice, usStateOf } from '../data/retail-price'
-import { resolveSite } from '../data/site'
+import { resolveSite, SITE_PARTS } from '../data/site'
 import { UpstreamError } from '../data/http'
 import { loadTekRules } from '../data/tek'
 import { DEFAULT_COMPATIBILITY_WEIGHTS } from '../recommend/compatibility'
@@ -228,6 +228,7 @@ const initialData = (): DataOnly<AppState> => ({
   years: [],
   seasonYears: null,
   siteRetryAt: null,
+  sitePending: [],
   retailPrice: null,
   simulationNotice: null,
   sweeping: false,
@@ -992,6 +993,8 @@ export const useAppStore = create<AppState>()(
           s.locationLabel = label
           s.site = loading()
           s.weather = loading()
+          // every part is out until it reports in
+          s.sitePending = [...SITE_PARTS]
           s.years = []
           s.seasonYears = null
           // whichever retry was pending is superseded by this lookup
@@ -1001,7 +1004,16 @@ export const useAppStore = create<AppState>()(
         })
         // the error itself and not only its sentence, because an upstream that refused for the
         // hour says so on the error and the retry below is scheduled off that
-        const result = await resolveSite(location, label, null, countryCode).then(
+        const result = await resolveSite(location, label, null, countryCode, (part) => {
+          // a part from an earlier lookup would shrink the list of the one on screen
+          if (lookup !== siteToken) return
+          set((s) => {
+            // and one that lands after its own lookup failed finds the list already empty
+            if (s.sitePending.includes(part)) {
+              s.sitePending = s.sitePending.filter((pending) => pending !== part)
+            }
+          })
+        }).then(
           (value) => ({ ok: true as const, value }),
           (error: unknown) => ({ ok: false as const, error }),
         )
@@ -1024,6 +1036,8 @@ export const useAppStore = create<AppState>()(
         const due = scheduleWrite.pending()
         const before = snapshotDesign(get())
         set((s) => {
+          // landed or failed, nothing is out any more
+          s.sitePending = []
           if (result.ok) {
             s.site = ready(result.value.site)
             s.weather = ready(result.value.weather)

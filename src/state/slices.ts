@@ -1,3 +1,4 @@
+import type { SitePart } from '../data/site'
 import type { AccumulationProgress } from '../sim/backend'
 import type { SimulationOptions } from '../sim/pipeline'
 import type { BedCalendar } from '../types/calendar'
@@ -84,6 +85,12 @@ export interface SiteSlice {
    * this is what lets a panel print the countdown
    */
   readonly siteRetryAt: number | null
+  /**
+   * The parts of the lookup in flight that haven't landed yet, so the notice can name what's slow.
+   * All of them when a lookup starts, fewer as each lands, and empty once it settles or when none
+   * has run. Never saved with the design, since it describes a request that dies with the page
+   */
+  readonly sitePending: readonly SitePart[]
   /**
    * The country, when a geocoder named one, narrows the fallback clock to that country's zones:
    * tzdb records one point for all of India, so the nearest point to Mumbai is Karachi's

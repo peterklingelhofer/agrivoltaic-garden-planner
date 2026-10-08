@@ -68,6 +68,7 @@ const coordinateLabel = (location: LatLon): string =>
 export const SitePanel = (): ReactElement => {
   const site = useAppStore((s) => s.site)
   const weather = useAppStore((s) => s.weather)
+  const pending = useAppStore((s) => s.sitePending)
   const location = useAppStore((s) => s.location)
   const locationLabel = useAppStore((s) => s.locationLabel)
   const frostPercentile = useAppStore((s) => s.frostPercentile)
@@ -164,8 +165,8 @@ export const SitePanel = (): ReactElement => {
 
   const resolved = site.status === 'ready' ? site.value : null
   const example = useAppStore(showingExample)
-  const siteText = siteNoticeText(site, SITE_IDLE)
-  const weatherText = siteNoticeText(weather, WEATHER_IDLE)
+  const siteText = siteNoticeText(site, SITE_IDLE, pending)
+  const weatherText = siteNoticeText(weather, WEATHER_IDLE, pending)
   // the weather record the elevation came with, named in the readout when it carried none
   const weatherRecord = weather.status === 'ready' ? weather.value.provenance.datasetLabel : null
   const nrcanZone =

@@ -3,14 +3,15 @@ import { readFileSync } from 'node:fs'
 import { act } from 'react'
 import { afterEach, beforeEach, describe, expect, it } from 'bun:test'
 import { vi } from '../../test/vi'
+import type { SitePart } from '../data/site'
 import { siteFixture } from '../recommend/testkit'
-import { failed, loading, ready } from '../state/slices'
+import { failed, idle, loading, ready } from '../state/slices'
 import { exampleDesignPath, exampleRasterPath } from '../state/example'
 import { getAppState, resetAppStore, useAppStore } from '../state/store'
 import { SiteNotice } from './SiteNotice'
 import { SitePanel } from './SitePanel'
 import { mount } from './testkit'
-import { capitalizeSentence, soilSampledNote, waitLabel } from './site-notice'
+import { capitalizeSentence, siteNoticeText, soilSampledNote, waitLabel } from './site-notice'
 
 /**
  * The failure path had no door.
@@ -93,6 +94,121 @@ describe('the other states', () => {
     expect(text).toContain('Looking up the weather, soil and frost dates for this place')
     expect(text).not.toContain(useAppStore.getState().locationLabel)
     expect(harness.find('status-site-retry')).toBeNull()
+    await harness.unmount()
+  })
+})
+
+/**
+ * The requests run side by side and the slowest sets the pace. A reader who sees the weather arrive
+ * and then waits on the soil can tell which one is late, so the sentence says what has landed and
+ * what is still out
+ */
+describe('the loading sentence', () => {
+  const EVERYTHING = 'Looking up the weather, soil and frost dates for this place…'
+  const say = (pending: readonly SitePart[]): string | null =>
+    siteNoticeText(loading(), 'nothing yet', pending)
+
+  /** What is still out, and the sentence that names it */
+  const PARTIAL: readonly (readonly [readonly SitePart[], string])[] = [
+    [['soil', 'frost'], 'The weather is ready. Still looking up the soil and frost dates…'],
+    [['weather', 'frost'], 'The soil is ready. Still looking up the weather and frost dates…'],
+    [['weather', 'soil'], 'The frost dates are ready. Still looking up the weather and soil…'],
+    [['frost'], 'The weather and soil are ready. Still looking up the frost dates…'],
+    [['soil'], 'The weather and frost dates are ready. Still looking up the soil…'],
+    [['weather'], 'The soil and frost dates are ready. Still looking up the weather…'],
+  ]
+
+  it('names all three while nothing has landed, and when there is no list to read', () => {
+    expect(say(['weather', 'soil', 'frost'])).toBe(EVERYTHING)
+    expect(say([])).toBe(EVERYTHING)
+  })
+
+  for (const [pending, sentence] of PARTIAL) {
+    it(`with ${pending.join(' and ')} still out, says what has landed`, () => {
+      expect(say(pending)).toBe(sentence)
+      // the order the list arrives in changes nothing
+      expect(say([...pending].reverse())).toBe(sentence)
+    })
+  }
+
+  it('leaves every other state to say what it said before', () => {
+    expect(siteNoticeText(ready(siteFixture()), 'nothing yet', ['soil'])).toBeNull()
+    expect(siteNoticeText(failed(UPSTREAM), 'nothing yet', ['soil'])).toBe(UPSTREAM)
+    expect(siteNoticeText(idle(), 'nothing yet', ['soil'])).toBe('nothing yet')
+  })
+
+  it('reads the store list and rewrites the same paragraph as each part lands', async () => {
+    useAppStore.setState({ sitePending: ['weather', 'soil', 'frost'] })
+    const harness = await mount(
+      <SiteNotice state={loading()} testId="status-site" idleLabel="nothing yet" />,
+    )
+    const sentence = harness.get('status-site').querySelector('[role="status"]')
+    expect(sentence?.textContent).toBe(EVERYTHING)
+    await act(async () => {
+      useAppStore.setState({ sitePending: ['soil', 'frost'] })
+    })
+    // one element throughout, so a screen reader hears a change in a region it already holds
+    expect(harness.get('status-site').querySelector('[role="status"]')).toBe(sentence)
+    expect(sentence?.textContent).toBe(
+      'The weather is ready. Still looking up the soil and frost dates…',
+    )
+    await harness.unmount()
+  })
+
+  it("touches nothing when the list changes but the sentence doesn't", async () => {
+    useAppStore.setState({ sitePending: ['soil', 'frost'] })
+    const harness = await mount(
+      <SiteNotice state={loading()} testId="status-site" idleLabel="nothing yet" />,
+    )
+    const sentence = harness.get('status-site').querySelector('[role="status"]')
+    if (sentence === null) throw new Error('no status region')
+    // the callback gathers what it's handed, since the awaits below let it run before any
+    // `takeRecords` call could see a mutation
+    const seen: MutationRecord[] = []
+    const observer = new MutationObserver((batch) => {
+      seen.push(...batch)
+    })
+    observer.observe(sentence, {
+      attributes: true,
+      characterData: true,
+      childList: true,
+      subtree: true,
+    })
+    // a new array holding the same parts, which is what a repeated report can look like
+    await act(async () => {
+      useAppStore.setState({ sitePending: ['soil', 'frost'] })
+    })
+    seen.push(...observer.takeRecords())
+    expect(seen).toHaveLength(0)
+    // and the observer does see a real change, so the silence above means something
+    await act(async () => {
+      useAppStore.setState({ sitePending: ['frost'] })
+    })
+    seen.push(...observer.takeRecords())
+    expect(seen.length).toBeGreaterThan(0)
+    observer.disconnect()
+    await harness.unmount()
+  })
+
+  it('keeps the countdown and the press outside the region that is read out', async () => {
+    useAppStore.setState({ siteRetryAt: Date.now() + 60_000 })
+    const harness = await mount(notice)
+    const region = harness.get('status-site').querySelector('[role="status"]')
+    expect(region?.textContent).toBe(capitalizeSentence(UPSTREAM))
+    expect(region?.contains(harness.get('status-site-retry-when'))).toBe(false)
+    expect(region?.contains(harness.get('status-site-retry'))).toBe(false)
+    await harness.unmount()
+  })
+
+  /** One lookup writes the place and the weather, so both notices build the sentence from one list */
+  it('prints once on the site panel while the place and the weather load together', async () => {
+    useAppStore.setState({ site: loading(), weather: loading(), sitePending: ['soil'] })
+    const harness = await mount(<SitePanel />)
+    const said = 'The weather and frost dates are ready. Still looking up the soil…'
+    const text = harness.get('panel-site').textContent ?? ''
+    expect(text).toContain(said)
+    expect(text.indexOf(said)).toBe(text.lastIndexOf(said))
+    expect(harness.find('status-weather')).toBeNull()
     await harness.unmount()
   })
 })

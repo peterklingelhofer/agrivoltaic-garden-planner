@@ -79,8 +79,15 @@ describe('the place the app is already showing gets looked up', () => {
     expect(state().site.status).toBe('idle')
     await state().ensureSite()
     expect(resolveSite).toHaveBeenCalledTimes(1)
-    // no signal, and no country: the boot lookup has no geocoder answer to take one from
-    expect(resolveSite).toHaveBeenCalledWith(DEFAULT_LOCATION, DEFAULT_LOCATION_LABEL, null, null)
+    // no signal, and no country: the boot lookup has no geocoder answer to take one from. The
+    // function at the end is the store listening for each part of the lookup to land
+    expect(resolveSite).toHaveBeenCalledWith(
+      DEFAULT_LOCATION,
+      DEFAULT_LOCATION_LABEL,
+      null,
+      null,
+      expect.any(Function),
+    )
     expect(state().site.status).toBe('ready')
     expect(state().weather.status).toBe('ready')
   })
