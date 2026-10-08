@@ -88,25 +88,57 @@ describe('soilAt', () => {
     expect(soil.sampledKm).toBeUndefined()
   })
 
-  // SoilGrids masks built-up ground, so a town centroid is null. The ring finds the reading
-  it('answers from the 3 km ring, north/east/south/west, when the point itself has none', async () => {
+  // SoilGrids masks built-up ground, so a town centroid is null. The ring finds the reading, one
+  // point at a time: call 1 is the point, and north, east, south and west follow in that order
+  it('answers from north of the point when the point itself has none', async () => {
     let call = 0
     fetchJson.mockImplementation(async () => {
       call += 1
-      // call 1 is the point, and the ring's north, east, south and west follow in that order
-      return call === 4 ? body(65) : body(null)
+      return call === 2 ? body(65) : body(null)
     })
     const soil = await soilAt(LOCATION)
     expect(soil.phUnits).toBe(6.5)
     expect(soil.sourceId).toBe('soilgrids')
     expect(soil.sampledKm).toBe(3)
-    expect(fetchJson.mock.calls.length).toBe(5)
+    expect(fetchJson.mock.calls.length).toBe(2)
   })
 
-  it('falls back to DEFAULT_SOIL after trying both rings and finding nothing plausible', async () => {
+  it('goes on to east when north has no data, and takes the first reading it finds', async () => {
+    let call = 0
+    fetchJson.mockImplementation(async () => {
+      call += 1
+      // south (call 4) would answer with another pH, so a walk that went on would show
+      if (call === 3) return body(65)
+      if (call === 4) return body(72)
+      return body(null)
+    })
+    const soil = await soilAt(LOCATION)
+    expect(soil.phUnits).toBe(6.5)
+    expect(soil.sampledKm).toBe(3)
+    expect(fetchJson.mock.calls.length).toBe(3)
+  })
+
+  it('reaches south and west, the fourth and fifth calls, when the points before have no data', async () => {
+    for (const answering of [4, 5]) {
+      fetchJson.mockReset()
+      let call = 0
+      fetchJson.mockImplementation(async () => {
+        call += 1
+        return call === answering ? body(65) : body(null)
+      })
+      const soil = await soilAt(LOCATION)
+      expect(soil.sampledKm, `call ${String(answering)}`).toBe(3)
+      expect(fetchJson.mock.calls.length, `call ${String(answering)}`).toBe(answering)
+    }
+  })
+
+  it('falls back to the plain DEFAULT_SOIL when the whole ring has no data', async () => {
     fetchJson.mockResolvedValue(body(null))
-    await expect(soilAt(LOCATION)).resolves.toStrictEqual(DEFAULT_SOIL)
-    expect(fetchJson.mock.calls.length).toBe(9)
+    const soil = await soilAt(LOCATION)
+    expect(soil).toStrictEqual(DEFAULT_SOIL)
+    expect(soil.unreachable).toBeUndefined()
+    // the point and the ring of four, which is as many as ISRIC's 5 calls a minute leaves room for
+    expect(fetchJson.mock.calls.length).toBe(5)
   })
 
   it('samples the ring about 3 km from the point', async () => {
@@ -117,27 +149,37 @@ describe('soilAt', () => {
     expect(Math.abs(latOffset - 0.02695)).toBeLessThan(0.001)
   })
 
-  // a 503 or an aborted connection on one point of a ring must not read as the whole ring
-  // having no data, when a different point in the same ring answered just fine
-  it("keeps a ring reading when another point's request fails", async () => {
+  // the map answered at the point, and then a request on the ring got no answer. A host that just
+  // failed is no likelier to answer the next call, and each call is another wait, so the walk
+  // stops there with the points after it never asked. They would have answered, so a walk that
+  // went on would show. A point before it that answered no data moves the walk on
+  it('stops at the first ring point that gets no answer, and says the map was out of reach', async () => {
+    for (const failing of [2, 3, 4, 5]) {
+      fetchJson.mockReset()
+      let call = 0
+      fetchJson.mockImplementation(async () => {
+        call += 1
+        if (call === failing) throw new Error('503')
+        return call < failing ? body(null) : body(65)
+      })
+      const soil = await soilAt(LOCATION)
+      expect(soil, `call ${String(failing)}`).toStrictEqual({ ...DEFAULT_SOIL, unreachable: true })
+      expect(fetchJson.mock.calls.length, `call ${String(failing)}`).toBe(failing)
+    }
+  })
+
+  // a host that just failed the point is no likelier to answer four more calls, and each of them
+  // is another wait. The later calls here would answer, so a ring that was asked would show
+  it("says the map wasn't reached after one call when the point's request fails", async () => {
     let call = 0
     fetchJson.mockImplementation(async () => {
       call += 1
-      if (call === 1) return body(null) // the point itself: a plausible answer of no data
-      if (call === 2) throw new Error('503') // north: the request itself fails
-      if (call === 3) return body(65) // east: a plausible pH
-      return body(null) // south, west
+      if (call === 1) throw new Error('network down')
+      return body(65)
     })
     const soil = await soilAt(LOCATION)
-    expect(soil.phUnits).toBe(6.5)
-    expect(soil.sourceId).toBe('soilgrids')
-    expect(soil.sampledKm).toBe(3)
-  })
-
-  it("says the map wasn't reached when no request answered", async () => {
-    fetchJson.mockRejectedValue(new Error('network down'))
-    const soil = await soilAt(LOCATION)
+    expect(soil).toStrictEqual({ ...DEFAULT_SOIL, unreachable: true })
     expect(soil.sourceId).toBe('default')
-    expect(soil.unreachable).toBe(true)
+    expect(fetchJson.mock.calls.length).toBe(1)
   })
 })
