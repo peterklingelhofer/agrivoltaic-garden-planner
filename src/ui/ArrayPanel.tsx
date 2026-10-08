@@ -342,7 +342,11 @@ export const ArrayPanel = (): ReactElement => {
             collector width, row spacing center to center is the pitch, headroom is the clearance
             height, and a direction in degrees clockwise from north is an azimuth.
           </InfoTip>
-          <Action testId="action-array-remove" onClick={() => removeArray(array.id)}>
+          <Action
+            testId="action-array-remove"
+            keyShortcuts="Delete Backspace"
+            onClick={() => removeArray(array.id)}
+          >
             Remove array
           </Action>
         </>

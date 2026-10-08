@@ -26,6 +26,7 @@ import type {
 } from '../types/onboarding'
 import type { NoPanelsComparison } from './counterfactual'
 import type { ExampleProvenance } from './example'
+import type { HistorySnapshot } from './history'
 import type { WizardAnswers } from './onboarding'
 import type { BedLight, DliRaster } from '../types/light'
 import type {
@@ -147,6 +148,12 @@ export interface DesignSlice {
    * Draws the default tree outside the boundary and selects it. Null with no plot to draw one on
    */
   addTree(): ObstructionId | null
+  /**
+   * Puts the design back to a snapshot kept by `state/history.ts`, and resets or keeps each slice
+   * derived from it by the rules an edit of that field follows. Only the history calls it: a call
+   * from anywhere else would be an edit like any other
+   */
+  restoreDesign(snapshot: HistorySnapshot): void
 }
 
 export interface LightSlice {

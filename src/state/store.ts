@@ -71,6 +71,7 @@ import {
   soilForSite,
 } from './defaults'
 import { growingWindowOf } from './growing-window'
+import { resetHistory, trackHistory } from './history'
 import { codeOf, unit } from '../simulation/evidence'
 import { simulateSeason } from '../simulation/season'
 import { chooseYear, measuredSeasonYear, type SeasonYear, typicalYear } from '../simulation/year'
@@ -80,7 +81,13 @@ import { loadExampleGarden } from './example'
 import { withDerived } from './derive'
 import { movedCorner, polygonAreaM2, polygonOf, untangledRing } from './geom'
 import { lightGeometryKey, lightIsMissing, lightIsStale } from './light-freshness'
-import { answersOf, cropsPerBedFor, plotForScenario, staleSearchAfter } from './onboarding'
+import {
+  answersOf,
+  cropsPerBedFor,
+  plotForScenario,
+  SEARCH_ANSWER_FIELDS,
+  staleSearchAfter,
+} from './onboarding'
 import {
   debounce,
   defaultDesign,
@@ -856,6 +863,9 @@ export const useAppStore = create<AppState>()(
         // the subscriber runs inside `set`, so the writer is told what is coming first:
         // forgetting the design must not write the default one straight back out
         lastSeen = snapshotDesign(fresh)
+        // and the history forgets it too, told the same way. `FORGET_COST` promises that nothing
+        // brings the design back, and an Undo that did would break the promise
+        resetHistory(fresh)
         set((s) => {
           Object.assign(s, fresh)
           s.storage = cleared
@@ -2366,6 +2376,96 @@ export const useAppStore = create<AppState>()(
           s.onboarding = { ...s.onboarding, appliedArchetype: null }
         }),
 
+      /**
+       * Puts the design back to a moment `history.ts` kept, and settles the slices derived from it.
+       *
+       * Modeled on `undoGeneration`. To the history a guided layout is a plot like any other, so
+       * the slot that action restores from is emptied whenever the plot moves: it names the plot
+       * from before a generation, which the history has stepped past.
+       *
+       * Each derived slice does what an edit of the same field does to it, and that is not always
+       * a reset:
+       *
+       * - The plot moved: the record of the last generation, the refusals its plantings produced
+       *   and the claim of an applied layout describe a plot that is gone, so they go. The energy
+       *   figure goes idle when the arrays or the ground cover moved, as `upsertArray`,
+       *   `removeArray` and `setGroundCover` leave it. A selection of a bed, a row of panels or an
+       *   obstruction the plot no longer holds is cleared
+       * - The light: the raster stays, and each bed's reading is taken off it again, when it was
+       *   baked over exactly the geometry coming back (its stamp equals the plot's key). The
+       *   surroundings answer may have moved with the plot, and the reading carries it. Otherwise
+       *   the raster, the bed readings, their sky subdivision, the stamp and the compliance checks
+       *   go back to idle and `useAutoLight` computes the light again, as it does after
+       *   `undoGeneration`. The comparison is between the stamp and the key of the plot coming
+       *   back, because a raster that was already stale against the plot on screen can be fresh
+       *   against the one returning
+       * - A boundary or an answer the layout search reads moved: a finished search is dropped, as
+       *   `patchBoundary` and `answerOnboarding` drop it. A previewed scenario goes too when an
+       *   answer moved, since the preview is built from the answers
+       * - The frost percentile moved: the compliance checks are read again over the new window, as
+       *   `setFrostPercentile` does
+       * - Kept as they are: the ranking, the calendars and the polyculture suggestions, which an
+       *   edit of the plot leaves alone because `useAutoRecommend` and the combinations panel run
+       *   again off the keys this moves. Also the place and its weather, the seasons that were run
+       *   and the no-panels comparison that names one
+       */
+      restoreDesign: (snapshot) => {
+        const before = get()
+        const plot = snapshot.plot
+        const plotMoved = before.plot !== plot
+        const boundaryMoved = plotMoved && before.plot?.boundary !== plot?.boundary
+        const energyMoved =
+          plotMoved &&
+          (before.plot?.arrays !== plot?.arrays || before.plot?.groundCover !== plot?.groundCover)
+        const searchAnswersMoved = SEARCH_ANSWER_FIELDS.some(
+          (field) => before.answers[field] !== snapshot.answers[field],
+        )
+        const exposureMoved = before.answers.exposure !== snapshot.answers.exposure
+        // the raster's stamp is read against the plot coming back, since a raster that is stale for
+        // the plot on screen can be fresh for that one. The light bullet above says more
+        const lightFits =
+          plot !== null &&
+          before.raster.status === 'ready' &&
+          before.lightGeometry === lightGeometryKey(plot)
+        set((s) => {
+          Object.assign(s, snapshot)
+          if (plotMoved) {
+            s.generated = null
+            s.generationUndo = null
+            s.planRefusals = []
+            s.onboarding = { ...s.onboarding, appliedArchetype: null }
+            if (energyMoved) s.energy = idle()
+            if (!(plot?.beds ?? []).some((bed) => bed.id === s.selectedBedId)) {
+              s.selectedBedId = null
+            }
+            if (!(plot?.arrays ?? []).some((array) => array.id === s.selectedArrayId)) {
+              s.selectedArrayId = null
+            }
+            if (!(plot?.obstructions ?? []).some((o) => o.id === s.selectedObstructionId)) {
+              s.selectedObstructionId = null
+            }
+          }
+          if (plotMoved && !lightFits) {
+            s.raster = idle()
+            s.progress = null
+            s.bedLight = []
+            s.bedLightSubdivision = null
+            s.lightGeometry = null
+            s.compliance = []
+          } else if (plotMoved || exposureMoved) {
+            rederiveBedLight(s)
+          }
+          if ((boundaryMoved || searchAnswersMoved) && s.onboarding.designs.status === 'ready') {
+            s.onboarding = { ...s.onboarding, designs: idle() }
+          }
+          if (searchAnswersMoved) {
+            s.previewPlot = null
+            s.previewArchetype = null
+          }
+        })
+        if (before.frostPercentile !== snapshot.frostPercentile) recheckCompliance(set, get)
+      },
+
       setMode: (mode) =>
         set((s) => {
           s.mode = mode
@@ -2709,6 +2809,9 @@ if (storage !== null) {
   globalThis.addEventListener?.('pagehide', () => scheduleWrite.flush())
 }
 
+// outside the storage check above: undo works in a browser that keeps nothing between visits
+trackHistory(useAppStore)
+
 export const getAppState = (): AppState => useAppStore.getState()
 
 export const resetAppStore = (): void => {
@@ -2735,6 +2838,8 @@ export const resetAppStore = (): void => {
   const fresh = initialData()
   lastSeen = snapshotDesign(fresh)
   startingDesign = lastSeen
+  // the steps of the store that was replaced aren't steps of this one
+  resetHistory(fresh)
   examplePlot = null
   useAppStore.setState(fresh as Partial<AppState>)
 }

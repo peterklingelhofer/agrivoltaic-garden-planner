@@ -198,9 +198,33 @@ body {
   gap: 6px;
 }
 
+/* Undo and Redo, one item in the row of modes so a single rule can leave the pair out */
+.toolbar-history {
+  display: flex;
+  gap: 6px;
+  margin-left: 8px;
+}
+
 .toolbar-site {
   color: var(--muted);
   margin-left: auto;
+}
+
+/*
+ * Between the phone layout and the laptop one, which is a tablet held upright. The pair of buttons
+ * takes about 110px from the row, so a long place name would drop to a row of its own. It gives
+ * way here as it does from 901px up: it starts from no width at all and grows into whatever the
+ * row leaves, ending in an ellipsis
+ */
+@media (min-width: 761px) and (max-width: 900px) {
+  .toolbar-site {
+    flex: 1 1 0;
+    min-width: 0;
+    text-align: right;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
 
 /*
@@ -3081,6 +3105,12 @@ details.wizard-advanced > summary:focus-visible {
     display: none;
   }
 
+  /* the pair takes the pill's own spacing */
+  .toolbar-history {
+    gap: 4px;
+    margin-left: 0;
+  }
+
   /* rounded to match the pill they sit in: at 4px padding inside a 999px radius the container's
      curve passes inside a 4px corner, so the outer corners of the first and last button stood
      outside the background and read as clipped */
@@ -3129,6 +3159,21 @@ details.wizard-advanced > summary:focus-visible {
   .tab:focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: -2px;
+  }
+}
+
+/*
+ * Undo and Redo leave the pill below 480px.
+ *
+ * The notice sits 114px down, 8px under a pill one row tall. On a 320px phone the four modes nearly
+ * fill that row, so the pair wanted a second one, 48px more, and the notice had to follow it down.
+ * An unfolded notice then reaches the color key, which is anchored to the foot, on a 320x568
+ * screen. So below 480px the pill stays as it was and the pair is reached from the keyboard. From
+ * 480px up a row has room for all six
+ */
+@media (max-width: 480px) {
+  .toolbar-history {
+    display: none;
   }
 }
 
