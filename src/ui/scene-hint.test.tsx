@@ -76,6 +76,7 @@ describe('what Move mode says it can do', () => {
     expect(harness.get('status-scene-hint').textContent).toContain(MOVE_HINT)
     for (const hint of [MOVE_HINT, TOUCH_MOVE_HINT]) {
       expect(hint).toMatch(/arrow keys/i)
+      expect(hint).toContain('a house, a tree')
       expect(hint).toContain('0.1 m')
       expect(hint).toContain('1 m with Shift')
     }

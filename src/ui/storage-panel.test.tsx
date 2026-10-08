@@ -86,6 +86,8 @@ describe('storage panel', () => {
     const said = harness.get('readout-storage-forget-cost')
     expect(said.textContent).toBe(FORGET_COST)
     expect(said.textContent).toMatch(/every bed/i)
+    expect(said.textContent).toMatch(/houses and trees/i)
+    expect(said.textContent).not.toMatch(/empty/i)
     expect(said.textContent).toMatch(/bring them back/i)
     expect(harness.get('action-storage-reset').getAttribute('aria-describedby')).toBe(said.id)
     await harness.unmount()
