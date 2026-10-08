@@ -1,5 +1,6 @@
 import { lazy, Suspense, useEffect, useMemo, useState, type ReactElement } from 'react'
 import { browserCapabilities, preflight } from './ui/preflight'
+import { canRedo, canUndo, redo, undo, useHistory } from './state/history'
 import { lightIsStale } from './state/light-freshness'
 import { overlayField, overlayOffOnSeasons } from './state/overlay'
 import { rainFieldOf } from './state/rain'
@@ -17,6 +18,7 @@ import { GardenPlanStrip, Sidebar } from './ui/Sidebar'
 import { Action } from './ui/controls'
 import { useAutoLight } from './ui/useAutoLight'
 import { useAutoRecommend } from './ui/useAutoRecommend'
+import { useEditKeys } from './ui/useEditKeys'
 import type { EditorMode } from './state/slices'
 
 /**
@@ -58,12 +60,12 @@ const MODES: readonly (readonly [EditorMode, string])[] = [
 ]
 
 /**
- * The title, the drawing modes, Ask where the build has it, and the name of the place. Simulation
- * status stays out of this row: "ready" and "loading" beside a title say nothing useful on a phone,
- * and the step that is waiting says so in its own status row. The state stays on the root element
- * for anything that has to wait on a bake from any step
+ * The title, the drawing modes with Undo and Redo after them, Ask where the build has it, and the
+ * name of the place. Simulation status stays out of this row: "ready" and "loading" beside a title
+ * say nothing useful on a phone, and the step that is waiting says so in its own status row. The
+ * state stays on the root element for anything that has to wait on a bake from any step
  */
-const Toolbar = (): ReactElement => {
+export const Toolbar = (): ReactElement => {
   const mode = useAppStore((s) => s.mode)
   const setMode = useAppStore((s) => s.setMode)
   const locationLabel = useAppStore((s) => s.locationLabel)
@@ -71,6 +73,8 @@ const Toolbar = (): ReactElement => {
   const setSurface = useAppStore((s) => s.setSurface)
   const wide = useAppStore((s) => s.widePlan)
   const setWidePlan = useAppStore((s) => s.setWidePlan)
+  const undoable = useHistory(canUndo)
+  const redoable = useHistory(canRedo)
   return (
     <header className="toolbar" data-testid="panel-toolbar">
       <h1>Agrivoltaic garden planner</h1>
@@ -86,6 +90,28 @@ const Toolbar = (): ReactElement => {
             {label}
           </Action>
         ))}
+        {/*
+          One item, so a single rule can leave the pair out where a phone's pill has no room for it.
+          The keys that do the same are answered by `useEditKeys`, mounted in `App`
+        */}
+        <div className="toolbar-history">
+          <Action
+            testId="action-toolbar-undo"
+            disabled={!undoable}
+            keyShortcuts="Meta+Z Control+Z"
+            onClick={undo}
+          >
+            Undo
+          </Action>
+          <Action
+            testId="action-toolbar-redo"
+            disabled={!redoable}
+            keyShortcuts="Meta+Shift+Z Control+Shift+Z Control+Y"
+            onClick={redo}
+          >
+            Redo
+          </Action>
+        </div>
         {/*
           The way in on a laptop, where there's no tab bar to be a destination in.
 
@@ -206,6 +232,8 @@ const CheckedScene = (): ReactElement => {
 const App = (): ReactElement => {
   useAutoRecommend()
   useAutoLight()
+  // outside the scene, so the keys answer on a page whose scene never loads
+  useEditKeys()
   const loadExample = useAppStore((s) => s.loadExample)
   const carrying = useAppStore((s) => s.carrying)
   const carry = useAppStore((s) => s.carry)

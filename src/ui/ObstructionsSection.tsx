@@ -179,6 +179,7 @@ const HouseCard = ({
       </div>
       <Action
         testId={`action-house-remove-${house.id}`}
+        keyShortcuts="Delete Backspace"
         onClick={() => removeObstruction(house.id)}
       >
         Remove
@@ -202,8 +203,8 @@ const TreeCard = ({
   const upsertObstruction = useAppStore((s) => s.upsertObstruction)
   const removeObstruction = useAppStore((s) => s.removeObstruction)
   const unit = useLengthUnit()
-  const ring = tree.footprint.exterior
   const card = useScrollWhenAsked(tree.id, selected)
+  const ring = tree.footprint.exterior
   const [a, b, c] = ring
   const widthM = a && b ? Math.hypot(b.xM - a.xM, b.yM - a.yM) : 0
   const depthM = b && c ? Math.hypot(c.xM - b.xM, c.yM - b.yM) : 0
@@ -343,7 +344,11 @@ const TreeCard = ({
         the air is, is set to moist, since a garden tree stands where the beds are watered. A month
         counts as in leaf when the index, averaged over 21 days, passes 0.5 at mid-month.
       </p>
-      <Action testId={`action-tree-remove-${tree.id}`} onClick={() => removeObstruction(tree.id)}>
+      <Action
+        testId={`action-tree-remove-${tree.id}`}
+        keyShortcuts="Delete Backspace"
+        onClick={() => removeObstruction(tree.id)}
+      >
         Remove
       </Action>
     </li>

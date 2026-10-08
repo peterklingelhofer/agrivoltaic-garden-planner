@@ -245,6 +245,12 @@ export interface ActionProps {
    * half that tells them apart. The visible label stays what a sighted reader sees
    */
   readonly label?: string
+  /**
+   * The keys that do what a press does, in the form `aria-keyshortcuts` takes: modifiers and key
+   * joined by "+", alternatives separated by a space ("Meta+Z Control+Z"). It tells assistive tech
+   * about a shortcut the page already answers elsewhere and adds none of its own
+   */
+  readonly keyShortcuts?: string
   onClick(): void
 }
 
@@ -256,6 +262,7 @@ export const Action = ({
   pressed,
   describedBy,
   label,
+  keyShortcuts,
   block,
   onClick,
 }: ActionProps): ReactElement => (
@@ -267,6 +274,7 @@ export const Action = ({
     aria-pressed={pressed}
     aria-describedby={describedBy}
     aria-label={label}
+    aria-keyshortcuts={keyShortcuts}
     onClick={onClick}
   >
     {children}

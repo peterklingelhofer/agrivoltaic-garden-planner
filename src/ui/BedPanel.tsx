@@ -1432,7 +1432,11 @@ export const GroundPanel = (): ReactElement => {
                 </ul>
               </>
             ) : null}
-            <Action testId="action-bed-remove" onClick={() => removeBed(bed.id)}>
+            <Action
+              testId="action-bed-remove"
+              keyShortcuts="Delete Backspace"
+              onClick={() => removeBed(bed.id)}
+            >
               Remove bed
             </Action>
           </>

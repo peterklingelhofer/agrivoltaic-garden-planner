@@ -190,6 +190,20 @@ debounces on the key, for the same reason: a boolean goes true on the first nudg
 a timer keyed on it fires part-way through the third adjustment when it should fire after the last
 one.
 
+### Hop 22: the session's history, and what a restore keeps
+
+`src/state/history.ts` keeps undo and redo for the session in a store of its own, outside
+`AppState`, so a reload starts with nothing to undo. It steps over `HISTORY_KEYS`, the design the
+grower authored, and leaves out what they only looked at and the seasons that were run. `location`
+is out too. Putting a place back takes a fresh lookup, and a lookup writes onto the plot in ways a
+restore wouldn't repeat, so a change of coordinates empties the history and an undo never crosses a
+town. Edits less than `WRITE_DELAY_MS` apart make one step, the last 500 steps are kept, and
+`clearDesign` and `resetAppStore` empty them. A step comes back through `restoreDesign`, which
+settles each derived slice the way an edit of the same field does. The raster stays, and each bed's
+reading is taken off it again, when its `lightGeometry` stamp equals the key of the plot coming
+back, so undoing a move made since the last bake costs no bake. Any other stamp sends the bake back
+to idle, and `useAutoLight` computes it again.
+
 ## 3. Uncertainty is a type-system requirement
 
 Decision Record 7 says never render a single-point yield number. The types enforce that.
@@ -381,6 +395,12 @@ identical requests from thirty addresses for a town. Behind the cache that's one
 per town per year. When adding another upstream, decide which reason applies. Routing something
 through for neither reason burns the free tier for nothing.
 
+SoilGrids is here for Open-Meteo's reason and two more. ISRIC publishes a fair-use limit of 5 calls
+a minute for the API and describes it as a beta with no uptime guarantee. A lookup asks it up to
+five times, the point and then a ring of four that stops at the first reading, and every page load
+asked again. Behind the cache a place costs ISRIC its calls once a year however many visitors ask
+about it, and a stalled answer costs the visitor one 15 s wait.
+
 The site's height above sea level comes with the weather, from the archive body's own `elevation`
 field, so there's no elevation upstream to proxy. Decision Record 9b has the reason.
 
@@ -395,18 +415,17 @@ It doesn't transform payloads. Normalization into `TmySeries` happens in
 **Cache key scheme** (`workers/proxy/cache.ts`):
 
 ```
-SoilGrids is here for Open-Meteo's reason and two more. ISRIC publishes a fair-use limit of 5 calls
-a minute for the API and describes it as a beta with no uptime guarantee. A lookup asks it up to
-five times, the point and then a ring of four that stops at the first reading, and every page load
-asked again. Behind the cache a place costs ISRIC its calls once a year however many visitors ask
-about it, and a stalled answer costs the visitor one 15 s wait.
-
 v{schemaVersion}/{upstream}/{lat}/{lon}/{dataset}/{variant}
 ```
 
 - `lat`/`lon` quantized to 0.01 deg by default (Decision Record 9) and rendered with `toFixed(2)`,
   so `42.3736` and `42.3701` collapse to the same key. At mid-latitudes 0.01 deg is ~1.1 km, well
   inside TMY spatial resolution.
+- A route whose upstream resolves finer sets `Route.coordinateDecimals`, and `buildCacheKey` keeps
+  that many places. SoilGrids sets 3 (0.001 deg, ~110 m). Its pixels are 250 m across and a miss
+  forwards the caller's exact point upstream, so an entry holds the answer for whichever point asked
+  first. At ~1.1 km that answer would go to every garden in the square. A route that sets nothing
+  keeps the two-decimal key it always had.
 - `dataset` distinguishes e.g. `tmy` from `seriescalc`, `upstream` is one of the ones above.
 - `variant` is what tells two answers from one dataset apart. For PVGIS and NSRDB it holds a year
   range, which is all they vary by. **Open-Meteo serves the 1991-2020 climate normals and the
@@ -421,11 +440,6 @@ v{schemaVersion}/{upstream}/{lat}/{lon}/{dataset}/{variant}
   `src/data/http.test.ts`, with no hardcoded copy on either side. A path that drifted on either side
   causes a silent outage: nothing in the client can tell a blocked path from a dead upstream.
 - Key is materialized as a synthetic `https://cache.invalid/{key}` request for the Cache API.
-- A route whose upstream resolves finer sets `Route.coordinateDecimals`, and `buildCacheKey` keeps
-  that many places. SoilGrids sets 3 (0.001 deg, ~110 m). Its pixels are 250 m across and a miss
-  forwards the caller's exact point upstream, so an entry holds the answer for whichever point asked
-  first. At ~1.1 km that answer would go to every garden in the square. A route that sets nothing
-  keeps the two-decimal key it always had.
 
 TTLs: `TTL_TMY_SECONDS` is one year (a TMY for a fixed point doesn't change), and so is
 `TTL_SOIL_SECONDS` (a release of the soil map doesn't change). `TTL_ERROR_SECONDS` is 60 for a 4xx
