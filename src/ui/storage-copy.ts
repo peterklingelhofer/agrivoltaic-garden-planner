@@ -31,13 +31,13 @@ export const KEPT = __AGENT_ENABLED__
  *
  * The label understates it by a wide margin. `clearDesign` doesn't only drop the copy in this
  * browser: it puts the whole application back to `initialData()`, so the plot, the beds, every
- * planting in them, the panel rows and the resolved site all go with it, and nothing in this app
- * can undo that. Naming the pieces one by one, said in full and never abbreviated to
- * "everything", is deliberate: a grower who
- * has spent an afternoon on four beds should be able to recognize their own afternoon in it.
+ * planting in them, the panel rows, the houses and trees, and the resolved site all go with it,
+ * and nothing in this app can undo that. Naming the pieces one by one, said in full and never
+ * abbreviated to "everything", is deliberate: a grower who has spent an afternoon on four beds
+ * should be able to recognize their own afternoon in it.
  *
  * The conversation goes too, because `removeDesign` takes `TRANSCRIPT_KEY` with the design
  */
 export const FORGET_COST = __AGENT_ENABLED__
-  ? `This clears the copy kept in this browser AND puts the app back to an empty starting plot: your plot outline, every bed, everything planted in them, the panel rows and the site you looked up all go, along with ${TRANSCRIPT}. Nothing here can bring them back.`
-  : 'This clears the copy kept in this browser AND puts the app back to an empty starting plot: your plot outline, every bed, everything planted in them, the panel rows and the site you looked up all go. Nothing here can bring them back.'
+  ? `This clears the copy kept in this browser AND puts the app back to the default plot: your plot outline, every bed, everything planted in them, the panel rows, the houses and trees, and the site you looked up all go, along with ${TRANSCRIPT}. Nothing here can bring them back.`
+  : 'This clears the copy kept in this browser AND puts the app back to the default plot: your plot outline, every bed, everything planted in them, the panel rows, the houses and trees, and the site you looked up all go. Nothing here can bring them back.'

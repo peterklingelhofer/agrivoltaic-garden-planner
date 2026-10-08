@@ -49,8 +49,8 @@ const AgentPanel = __AGENT_ENABLED__
   : null
 
 /**
- * Select looks around and picks. Move drags beds, panel rows and plot corners with the camera
- * held still. Move is its own mode so a drag never grabs the camera
+ * Select looks around and picks. Move drags beds, panel rows, houses, trees and plot corners
+ * with the camera held still. Move is its own mode so a drag never grabs the camera
  */
 const MODES: readonly (readonly [EditorMode, string])[] = [
   ['select', 'Select'],
