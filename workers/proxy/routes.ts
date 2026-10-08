@@ -4,6 +4,7 @@ import {
   type CachedUpstream,
   TTL_GEOCODE_SECONDS,
   TTL_RETAIL_PRICE_SECONDS,
+  TTL_SOIL_SECONDS,
   TTL_TMY_SECONDS,
   withCache,
 } from './cache'
@@ -30,11 +31,16 @@ export interface Route {
   /**
    * What tells two answers from this route's dataset apart, when the path alone can't.
    *
-   * Only open-meteo needs it: the climate normals and the hourly typical year are the same path
-   * and differ by query. Everything else keeps the year-range default, which is what its own
-   * answers vary by
+   * Only open-meteo and soilgrids need it. The climate normals and the hourly typical year are the
+   * same path and differ by query, and so are a soil reading's properties, depth and statistic.
+   * Everything else keeps the year-range default, which is what its own answers vary by
    */
   readonly variant?: (params: URLSearchParams) => string
+  /**
+   * How many decimal places of the point the cache key keeps, for a route whose upstream resolves
+   * finer than the default of two (about 1.1 km). `cache.ts` says why soilgrids asks for three
+   */
+  readonly coordinateDecimals?: number
   /**
    * How long an answer from this route stays good for: a year where the weather windows asked
    * about are closed and in the past, a week for a geocode, a month for a price that moves once
@@ -119,9 +125,10 @@ export const UPSTREAM_TIMEOUT_MS = 15_000
 export const CACHE_SCHEMA_VERSION = 1
 
 /**
- * An allowlist: only these exact upstream paths are reachable, so the
- * proxy can never be turned into an open relay for the two hosts it holds credentials or
- * policy exemptions for
+ * An allowlist: only these exact upstream paths are reachable, so the proxy can never be turned
+ * into an open relay for the hosts behind it. Each is here for something this deployment holds
+ * and a stranger must not spend: a key (NSRDB, EIA), a policy exemption (PVGIS), a name the
+ * upstream can ban (the two geocoders) or an allowance every visitor shares (Open-Meteo, SoilGrids)
  */
 export const ROUTES: readonly Route[] = [
   {
@@ -175,6 +182,31 @@ export const ROUTES: readonly Route[] = [
     dataset: 'era5-archive',
     host: () => 'archive-api.open-meteo.com',
     variant: queryVariant,
+  },
+  /**
+   * The soil map, here for the weather's reason and two of its own.
+   *
+   * ISRIC publishes a fair-use limit of 5 calls a minute for this API and calls it a beta with no
+   * uptime guarantee. A lookup at a built-up point makes up to five calls, the point and a ring of
+   * four walked one at a time, and every page load made them again. Behind this route a place
+   * costs ISRIC its calls once a year however many visitors ask about it, and a stalled answer
+   * costs a visitor one `UPSTREAM_TIMEOUT_MS`, because the 504 is held for ten seconds and the
+   * client's retries land on it.
+   *
+   * Keyed to three decimals, about 110 m, where everything else here is keyed to two. The map's
+   * pixels are 250 m across and a miss forwards the caller's exact point, so a key 1.1 km wide
+   * would give one garden's reading to every garden in the square. The properties, the depth and
+   * the statistic ride in the variant, and the point stays out of it. No credential and no host
+   * binding, as for open-meteo
+   */
+  {
+    upstream: 'soilgrids',
+    path: '/soilgrids/v2.0/properties/query',
+    dataset: 'properties',
+    host: () => 'rest.isric.org',
+    variant: queryVariant,
+    ttlSeconds: TTL_SOIL_SECONDS,
+    coordinateDecimals: 3,
   },
   /**
    * The place-name lookup.
@@ -435,6 +467,7 @@ const subjectKeyFor = (route: Route, params: URLSearchParams): string | Response
     upstream: route.upstream,
     latitudeDeg: coordinates.latitudeDeg,
     longitudeDeg: coordinates.longitudeDeg,
+    coordinateDecimals: route.coordinateDecimals,
     dataset: route.dataset,
     variant: route.variant?.(params) ?? params.get('startyear') ?? params.get('names') ?? 'default',
     schemaVersion: CACHE_SCHEMA_VERSION,

@@ -12,7 +12,8 @@
  * Cost: the coordinate lookup below picks a random town and jitters it to a point nobody has looked
  * up, so the Worker's cache can't hide an outage. Every run spends about one fresh lookup of the
  * pooled Open-Meteo allowance (600/min, 5,000/h, 10,000/day, shared across every address this app
- * resolves). Manual check only
+ * resolves), and up to five SoilGrids calls from the Worker's address against ISRIC's fair-use
+ * limit of 5 a minute: the point and, where it's built-up ground, a ring of four. Manual check only
  *
  *   bun run verify-live
  *   bun run verify-live https://some-other-host/

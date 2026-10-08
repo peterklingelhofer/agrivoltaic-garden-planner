@@ -11,7 +11,7 @@ export type UpstreamId =
   | 'nsrdb'
   | 'eia'
 
-export const BROWSER_DIRECT: readonly UpstreamId[] = ['nasa-power', 'overpass', 'soilgrids']
+export const BROWSER_DIRECT: readonly UpstreamId[] = ['nasa-power', 'overpass']
 
 /**
  * Through the Worker, and cached at its edge.
@@ -30,7 +30,15 @@ export const BROWSER_DIRECT: readonly UpstreamId[] = ['nasa-power', 'overpass', 
  * request a second, which `MIN_INTERVAL_MS` below could only ever enforce per tab. All three are
  * things an edge in front of the upstream can actually do, and none of them are things a client
  * throttle was ever going to. `photon` follows it because a fallback that stayed browser-direct
- * would be the leg that runs precisely when the first one is refusing us
+ * would be the leg that runs precisely when the first one is refusing us.
+ *
+ * `soilgrids` is here for `open-meteo`'s reason with two of its own. ISRIC publishes a fair-use
+ * limit of 5 calls a minute for this API and calls it a beta with no uptime guarantee, and a
+ * lookup at a built-up point makes up to five calls, the point and one ring of four. Every page
+ * load made them again from the visitor's own address, where behind the edge a repeat visit costs
+ * ISRIC nothing and a place costs it its calls once a year for everybody. It has stalled for
+ * minutes (measured: one answer in 3.6 s, then no bytes for 150 s). Through the Worker that wait
+ * ends at its 15 s and the 504 is held for ten, so the retries behind it read the 504 at once
  */
 export const WORKER_PROXIED: readonly UpstreamId[] = [
   'pvgis',
@@ -39,6 +47,7 @@ export const WORKER_PROXIED: readonly UpstreamId[] = [
   'open-meteo',
   'nominatim',
   'photon',
+  'soilgrids',
 ]
 
 export const USER_AGENT = 'agrivoltaic-garden-designer'
@@ -58,8 +67,10 @@ export const COORDINATE_DECIMALS = 2
  * `fetch` has no deadline of its own. When an upstream stops answering, as SoilGrids has (measured:
  * no status line and no bytes after 90 s), a request with no deadline holds the guided setup on
  * "Working..." for as long as the browser will hold the socket, then twice more for the retries.
- * `soilAt` falls back to DEFAULT_SOIL when the read fails, and this deadline is what lets it fail.
- * Every browser-direct upstream here is a third party that can do this at any time
+ * This deadline is what lets a read fail, so the fallback behind it can take over. SoilGrids sits
+ * behind the Worker now, which bounds it twice over (see below), and NASA POWER and Overpass are
+ * the upstreams the browser still reaches itself. Every browser-direct upstream here is a third
+ * party that can do this at any time
  */
 export const RESPONSE_DEADLINE_MS = 12_000
 
@@ -159,7 +170,7 @@ export const MIN_INTERVAL_MS: Readonly<Record<UpstreamId, number>> = {
   nominatim: 1000,
   photon: 200,
   overpass: 1000,
-  soilgrids: 500,
+  soilgrids: 0,
   pvgis: 0,
   nsrdb: 0,
   eia: 0,

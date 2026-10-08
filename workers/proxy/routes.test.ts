@@ -19,7 +19,9 @@ import {
   buildQueryCacheKey,
   normalizeQuery,
   TTL_GEOCODE_SECONDS,
+  TTL_OUTAGE_SECONDS,
   TTL_RETAIL_PRICE_SECONDS,
+  TTL_SOIL_SECONDS,
   TTL_TMY_SECONDS,
 } from './cache'
 
@@ -65,6 +67,11 @@ const SEARCH_PATH = `${PROXY_PREFIX}/nominatim/search`
 const REVERSE_PATH = `${PROXY_PREFIX}/nominatim/reverse`
 const PHOTON_PATH = `${PROXY_PREFIX}/photon/api`
 const EIA_PATH = `${PROXY_PREFIX}/eia/v2/electricity/retail-sales/data/`
+const SOIL_PATH = `${PROXY_PREFIX}/soilgrids/soilgrids/v2.0/properties/query`
+
+/** the soil request `src/data/static-layers.ts` actually builds, in its own words */
+const soilQuery = (lat: number, lon: number): string =>
+  `lat=${String(lat)}&lon=${String(lon)}&property=phh2o&property=clay&property=sand&property=soc&depth=0-5cm&value=mean`
 
 /** the annual residential query `src/data/retail-price.ts` actually builds, in its own words */
 const EIA_QUERY =
@@ -208,6 +215,126 @@ describe('the weather, cached at the edge', () => {
     captureFetch(new Response('slow down', { status: 429 }))
     const response = await call(`${METEO_PATH}?${HOURLY_QUERY}`)
     expect(response.status).toBe(429)
+  })
+})
+
+/**
+ * The soil map, which sits behind this proxy for its fair-use limit of 5 calls a minute, its lack of
+ * an uptime guarantee and the page loads that asked it again. It holds no credential
+ */
+describe('the soil map, cached at the edge', () => {
+  /** A cache that keeps what it is given by request URL and never expires it */
+  const holdingCaches = (): Map<string, Response> => {
+    const held = new Map<string, Response>()
+    const cache = {
+      match: (request: Request) => Promise.resolve(held.get(request.url)?.clone()),
+      put: (request: Request, response: Response) => {
+        held.set(request.url, response)
+        return Promise.resolve()
+      },
+    }
+    vi.stubGlobal('caches', { default: cache, open: () => Promise.resolve(cache) })
+    return held
+  }
+
+  /** a fresh body per call, since a Response body can be read once */
+  const answering = (): ReturnType<typeof vi.fn> => {
+    const upstream = vi.fn(() => Promise.resolve(new Response('{"properties":{"layers":[]}}')))
+    vi.stubGlobal('fetch', upstream)
+    return upstream
+  }
+
+  it('routes the path src/data actually builds, and nothing else on that host', () => {
+    expect(matchRoute(SOIL_PATH)?.upstream).toBe('soilgrids')
+    expect(matchRoute(`${PROXY_PREFIX}/soilgrids/soilgrids/v2.0/classification/query`)).toBeNull()
+    expect(matchRoute(`${PROXY_PREFIX}/soilgrids/soilgrids/v2.0/properties/query/x`)).toBeNull()
+    expect(
+      matchRoute(`${PROXY_PREFIX}/soilgrids/soilgrids/v2.0/properties/query/../../x`),
+    ).toBeNull()
+  })
+
+  it("forwards the caller's own point and the whole query verbatim to ISRIC", async () => {
+    passthroughCaches()
+    const fetched = captureFetch(new Response('{}'))
+    await call(`${SOIL_PATH}?${soilQuery(42.3736, -72.5199)}`)
+    const url = new URL(fetched.url())
+    expect(url.host).toBe('rest.isric.org')
+    expect(url.pathname).toBe('/soilgrids/v2.0/properties/query')
+    expect(url.searchParams.getAll('property')).toEqual(['phh2o', 'clay', 'sand', 'soc'])
+    expect(url.searchParams.get('depth')).toBe('0-5cm')
+    // only the key is quantized, so the upstream is asked about the point itself
+    expect(url.searchParams.get('lat')).toBe('42.3736')
+    expect(url.searchParams.get('lon')).toBe('-72.5199')
+  })
+
+  it('refuses a request with no usable point, and asks no upstream', async () => {
+    passthroughCaches()
+    const upstream = answering()
+    const response = await call(`${SOIL_PATH}?property=phh2o&depth=0-5cm&value=mean`)
+    expect(response.status).toBe(400)
+    expect(upstream).not.toHaveBeenCalled()
+  })
+
+  it("holds an answer for a year, because a release of the map doesn't change", () => {
+    expect(matchRoute(SOIL_PATH)?.ttlSeconds).toBe(TTL_SOIL_SECONDS)
+    expect(TTL_SOIL_SECONDS).toBe(31_536_000)
+  })
+
+  /**
+   * The map's pixels are 250 m across. A miss forwards the caller's exact point, so a key 1.1 km
+   * wide would hand one garden's reading to every garden in the square. At three decimals a garden
+   * 55 m away reads the held answer and one 220 m away asks again
+   */
+  it('keys a reading to about 110 m, with the properties in the key and the point quantized', async () => {
+    const held = holdingCaches()
+    const upstream = answering()
+    await call(`${SOIL_PATH}?${soilQuery(42.3736, -72.5199)}`)
+    expect([...held.keys()]).toEqual([
+      'https://cache.invalid/v1/soilgrids/42.374/-72.520/properties/depth=0-5cm&property=clay&property=phh2o&property=sand&property=soc&value=mean',
+    ])
+    await call(`${SOIL_PATH}?${soilQuery(42.3741, -72.5199)}`)
+    expect(upstream).toHaveBeenCalledTimes(1)
+    await call(`${SOIL_PATH}?${soilQuery(42.3756, -72.5199)}`)
+    expect(upstream).toHaveBeenCalledTimes(2)
+  })
+
+  it('leaves the weather on its kilometer key, so two gardens 280 m apart still share it', async () => {
+    holdingCaches()
+    const upstream = answering()
+    const rest =
+      'longitude=-72.5199&start_date=2015-01-01&end_date=2024-12-31&hourly=temperature_2m'
+    await call(`${METEO_PATH}?latitude=42.3711&${rest}`)
+    await call(`${METEO_PATH}?latitude=42.3736&${rest}`)
+    expect(upstream).toHaveBeenCalledTimes(1)
+    // and the same two gardens are two soil readings
+    await call(`${SOIL_PATH}?${soilQuery(42.3711, -72.5199)}`)
+    await call(`${SOIL_PATH}?${soilQuery(42.3736, -72.5199)}`)
+    expect(upstream).toHaveBeenCalledTimes(3)
+  })
+
+  /**
+   * A stalled SoilGrids costs the visitor one wait. The Worker gives up at `UPSTREAM_TIMEOUT_MS`,
+   * answers 504 and holds it for `TTL_OUTAGE_SECONDS`, so the client's retries a quarter of a
+   * second behind it read the held failure at once and never wait on the upstream a second time
+   */
+  it('holds a stalled answer, so the retries behind it read it and never wait again', async () => {
+    holdingCaches()
+    const upstream = vi.fn(() => {
+      const error = new Error('timed out')
+      error.name = 'TimeoutError'
+      return Promise.reject(error)
+    })
+    vi.stubGlobal('fetch', upstream)
+    const path = `${SOIL_PATH}?${soilQuery(42.3736, -72.5199)}`
+    expect((await call(path)).status).toBe(504)
+    for (let retry = 0; retry < 2; retry += 1) {
+      const held = await call(path)
+      expect(held.status).toBe(504)
+      expect(held.headers.get('Cache-Control')).toBe(
+        `public, max-age=${String(TTL_OUTAGE_SECONDS)}`,
+      )
+    }
+    expect(upstream).toHaveBeenCalledTimes(1)
   })
 })
 

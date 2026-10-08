@@ -368,8 +368,10 @@ Responsibilities, and nothing else:
    `workers/proxy/routes.ts` and have to be edited when the dataset changes. The dataset is GOES TMY
    v4.0.0.
 3. Proxy **Open-Meteo**, which needs no credential and is here so the cache absorbs repeat requests.
-4. Cache each of them aggressively at the edge.
-5. Emit CORS headers scoped to the configured origins.
+4. Proxy **SoilGrids**, which needs no credential and is here for its fair-use limit and its lack of
+   an uptime guarantee, under a finer cache key than the rest.
+5. Cache each of them aggressively at the edge.
+6. Emit CORS headers scoped to the configured origins.
 
 **The two reasons are different and must not be confused.** PVGIS and NSRDB are here because a
 browser can't hold the credential or the policy exemption. Open-Meteo is here because it's free,
@@ -382,10 +384,10 @@ through for neither reason burns the free tier for nothing.
 The site's height above sea level comes with the weather, from the archive body's own `elevation`
 field, so there's no elevation upstream to proxy. Decision Record 9b has the reason.
 
-The Worker does **not** proxy NASA POWER, SoilGrids or Overpass. Those stay browser-direct (CORS
-verified). Nominatim and Photon are proxied and held for a week (`TTL_GEOCODE_SECONDS`): a place
-name is a text search against a live index, so its answer is good for days where a TMY's is good for
-a year. A place-name lookup carries its own key, separate from the coordinate key below.
+The Worker does **not** proxy NASA POWER or Overpass. Those stay browser-direct (CORS verified).
+Nominatim and Photon are proxied and held for a week (`TTL_GEOCODE_SECONDS`): a place name is a
+text search against a live index, so its answer is good for days where a TMY's is good for a year.
+A place-name lookup carries its own key, separate from the coordinate key below.
 
 It doesn't transform payloads. Normalization into `TmySeries` happens in
 `src/data/tmy.ts#normalizeTmy`, in the browser, where it's unit-testable.
@@ -393,11 +395,17 @@ It doesn't transform payloads. Normalization into `TmySeries` happens in
 **Cache key scheme** (`workers/proxy/cache.ts`):
 
 ```
+SoilGrids is here for Open-Meteo's reason and two more. ISRIC publishes a fair-use limit of 5 calls
+a minute for the API and describes it as a beta with no uptime guarantee. A lookup asks it up to
+five times, the point and then a ring of four that stops at the first reading, and every page load
+asked again. Behind the cache a place costs ISRIC its calls once a year however many visitors ask
+about it, and a stalled answer costs the visitor one 15 s wait.
+
 v{schemaVersion}/{upstream}/{lat}/{lon}/{dataset}/{variant}
 ```
 
-- `lat`/`lon` quantized to 0.01 deg (Decision Record 9) and rendered with `toFixed(2)`, so
-  `42.3736` and `42.3701` collapse to the same key. At mid-latitudes 0.01 deg is ~1.1 km, well
+- `lat`/`lon` quantized to 0.01 deg by default (Decision Record 9) and rendered with `toFixed(2)`,
+  so `42.3736` and `42.3701` collapse to the same key. At mid-latitudes 0.01 deg is ~1.1 km, well
   inside TMY spatial resolution.
 - `dataset` distinguishes e.g. `tmy` from `seriescalc`, `upstream` is one of the ones above.
 - `variant` is what tells two answers from one dataset apart. For PVGIS and NSRDB it holds a year
@@ -413,23 +421,32 @@ v{schemaVersion}/{upstream}/{lat}/{lon}/{dataset}/{variant}
   `src/data/http.test.ts`, with no hardcoded copy on either side. A path that drifted on either side
   causes a silent outage: nothing in the client can tell a blocked path from a dead upstream.
 - Key is materialized as a synthetic `https://cache.invalid/{key}` request for the Cache API.
+- A route whose upstream resolves finer sets `Route.coordinateDecimals`, and `buildCacheKey` keeps
+  that many places. SoilGrids sets 3 (0.001 deg, ~110 m). Its pixels are 250 m across and a miss
+  forwards the caller's exact point upstream, so an entry holds the answer for whichever point asked
+  first. At ~1.1 km that answer would go to every garden in the square. A route that sets nothing
+  keeps the two-decimal key it always had.
 
-TTLs: `TTL_TMY_SECONDS` is one year (a TMY for a fixed point doesn't change). `TTL_ERROR_SECONDS` is
-60 for a 4xx and `TTL_OUTAGE_SECONDS` is 10 for a 5xx, so an upstream outage isn't pinned for a
-year, or for the minute the client waits before it asks again. Held for a minute, a 502 would answer
-the client's first scheduled retry with the failure it had already read. A 429 is forwarded and held
+TTLs: `TTL_TMY_SECONDS` is one year (a TMY for a fixed point doesn't change), and so is
+`TTL_SOIL_SECONDS` (a release of the soil map doesn't change). `TTL_ERROR_SECONDS` is 60 for a 4xx
+and `TTL_OUTAGE_SECONDS` is 10 for a 5xx, so an upstream outage isn't pinned for a year, or for the
+minute the client waits before it asks again. Held for a minute, a 502 would answer the client's
+first scheduled retry with the failure it had already read. A 429 is forwarded and held
 for the full 60 s, which turns a stampede into one upstream request a minute. `withRetry` in
 `src/data/http.ts` correspondingly does **not** retry a 429, because the backoff there is a quarter
 of a second and a retry spends two more of the requests the limit is counting. The client's deadline
 for the response headers is `RESPONSE_DEADLINE_MS` (12 s) on an upstream it reaches itself and
 `PROXIED_DEADLINE_MS` (20 s) through the Worker. The Worker bounds its own wait for an upstream at
 `UPSTREAM_TIMEOUT_MS` (15 s) and answers 504 past it, so the client outlasts it and reads either the
-upstream's answer or the 504.
+upstream's answer or the 504. The client's retries, a quarter of a second and then half a second
+behind a 504, land on the held failure and read it at once, so a stalled upstream costs the browser
+the Worker's 15 s once.
 
-`bun run dev` has no Worker behind it, so `vite.config.ts` sends `/api/proxy/open-meteo/*` straight
-to its upstream. PVGIS and NSRDB can fall back silently when nothing is on `:8787`, because both
-have fallbacks. The weather has none. `wrangler dev` fetches from the developer's own IP, so the
-rate-limit relief the Worker exists for can't be shown locally.
+`bun run dev` has no Worker behind it, so `dev-proxy.ts` sends `/api/proxy/open-meteo/*`,
+`/api/proxy/soilgrids/*` and the two geocoders straight to their upstreams. PVGIS and NSRDB can fall
+back silently when nothing is on `:8787`, because both have fallbacks. The weather has none, and
+without its rule the soil would read as out of reach on every lookup. `wrangler dev` fetches from
+the developer's own IP, so the rate-limit relief the Worker exists for can't be shown locally.
 
 ### 4.2 Simulation web worker (`src/sim/worker/`)
 
