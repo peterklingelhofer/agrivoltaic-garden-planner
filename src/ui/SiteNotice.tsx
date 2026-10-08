@@ -17,7 +17,11 @@ export interface SiteNoticeProps<T> {
  * A "Try again" that gives no sign of trying, and nothing new when it fails again, stops being
  * believed. The store schedules its own retry and keeps the clock time in `siteRetryAt`, so the
  * promise the message makes is one a reader can watch: the seconds tick down, the button is there
- * for anyone who won't wait, and when nothing more is scheduled it says so
+ * for anyone who won't wait, and when nothing more is scheduled it says so.
+ *
+ * The sentence is a polite live region, so each part of the lookup landing is read out as the text
+ * changes, and the same text is never read twice because React leaves it alone. The countdown and
+ * the press sit outside it, since a clock ticking over every second would be read out every second
  */
 export const SiteNotice = <T,>({
   state,
@@ -27,6 +31,7 @@ export const SiteNotice = <T,>({
   const location = useAppStore((s) => s.location)
   const locationLabel = useAppStore((s) => s.locationLabel)
   const retryAt = useAppStore((s) => s.siteRetryAt)
+  const pending = useAppStore((s) => s.sitePending)
   const resolveSite = useAppStore((s) => s.resolveSite)
   const example = useAppStore(showingExample)
   const failed = state.status === 'error'
@@ -55,7 +60,7 @@ export const SiteNotice = <T,>({
     }
   }, [failed, retryAt])
 
-  const text = siteNoticeText(state, idleLabel)
+  const text = siteNoticeText(state, idleLabel, pending)
   if (text === null) return null
   const seconds = retryAt === null ? null : Math.max(0, Math.ceil((retryAt - now) / 1000))
 
@@ -67,7 +72,7 @@ export const SiteNotice = <T,>({
     >
       {/* the upstream sentence arrives lowercase. Muted it sits after a colon and stays that
           way, plain it opens the paragraph on its own and reads wrong without a capital */}
-      <p>
+      <p role="status">
         {muted ? `The weather for this place hasn't loaded yet: ${text}` : capitalizeSentence(text)}
       </p>
       {failed ? (
