@@ -28,6 +28,18 @@ describe('bringIntoView', () => {
     expect(asked).toEqual([{ block: 'center', behavior: 'auto' }])
   })
 
+  it('puts a node taller than the window at the top of the view, so its start shows', () => {
+    vi.stubGlobal('matchMedia', () => ({ matches: false }))
+    vi.stubGlobal('innerHeight', 800)
+    const asked: ScrollIntoViewOptions[] = []
+    const node = {
+      getBoundingClientRect: () => ({ height: 1200 }),
+      scrollIntoView: (options: ScrollIntoViewOptions) => asked.push(options),
+    } as unknown as HTMLElement
+    bringIntoView(node)
+    expect(asked).toEqual([{ block: 'start', behavior: 'smooth' }])
+  })
+
   it('does nothing without a node, or where the node cannot scroll', () => {
     expect(() => bringIntoView(null)).not.toThrow()
     expect(() => bringIntoView({} as unknown as HTMLElement)).not.toThrow()
