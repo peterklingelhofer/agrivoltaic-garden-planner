@@ -866,6 +866,11 @@ export const useAppStore = create<AppState>()(
         // and the history forgets it too, told the same way. `FORGET_COST` promises that nothing
         // brings the design back, and an Undo that did would break the promise
         resetHistory(fresh)
+        // a lookup still out would land on the fresh design and mark the place that was forgotten
+        // ready over it, so it's superseded here, the way a later lookup supersedes an earlier one.
+        // The price that lookup went on to ask for is dropped the same way
+        siteToken += 1
+        priceToken += 1
         set((s) => {
           Object.assign(s, fresh)
           s.storage = cleared
@@ -2825,6 +2830,8 @@ export const resetAppStore = (): void => {
   // and the same for a comparison bake in flight, whose own worker would otherwise outlive
   // every reset in the suite exactly as the other two would without the lines below
   noPanelsToken += 1
+  // and a place lookup in flight, which would mark its site ready over the store that replaced it
+  siteToken += 1
   scheduleWrite.cancel()
   attempt(() => client?.terminate())
   client = null

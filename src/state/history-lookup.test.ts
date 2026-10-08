@@ -8,8 +8,8 @@ import type { LatLon } from '../types/geo'
 import { degreesLatitude, degreesLongitude } from '../types/units'
 
 /**
- * The writers that put a design into the store without the grower, and the place a lookup
- * commits. A lookup is held by hand
+ * The writers that put a design into the store without the grower, the lookup that can land after
+ * the design it was started for is gone, and the place a lookup commits. A lookup is held by hand
  * here: the test says when it lands, so what the store does with it can be read before and after
  */
 
@@ -111,6 +111,96 @@ describe('a place lookup landing is not an edit of the grower', () => {
     undo()
     expect(state().maxCropsPerBed).not.toBe(9)
     expect(canUndo(useHistory.getState())).toBe(false)
+  })
+})
+
+describe('a lookup that lands after the design was forgotten', () => {
+  it('is dropped by forgetting the saved design', async () => {
+    const lookup = holdLookup(BOSTON, 'Boston')
+    expect(state().site.status).toBe('loading')
+    state().clearDesign()
+    expect(state().site.status).toBe('idle')
+    lookup.land()
+    await lookup.done
+    // the forgotten place doesn't come back as ready over the default design
+    expect(state().site.status).toBe('idle')
+    expect(state().weather.status).toBe('idle')
+    expect(state().sitePending).toEqual([])
+    expect(state().location).toEqual(DEFAULT_LOCATION)
+    expect(state().locationLabel).toBe(DEFAULT_LOCATION_LABEL)
+    // and its soil reading wasn't written onto the beds of the design that replaced it
+    expect(bedSources()).toEqual(['default', 'default', 'default'])
+  })
+
+  it('is dropped by resetting the store', async () => {
+    const lookup = holdLookup(BOSTON, 'Boston')
+    resetAppStore()
+    lookup.land()
+    await lookup.done
+    expect(state().site.status).toBe('idle')
+    expect(state().location).toEqual(DEFAULT_LOCATION)
+    expect(bedSources()).toEqual(['default', 'default', 'default'])
+  })
+
+  it('lets the next lookup land as usual', async () => {
+    const first = holdLookup(BOSTON, 'Boston')
+    state().clearDesign()
+    const second = holdLookup()
+    second.land()
+    await second.done
+    first.land()
+    await first.done
+    expect(state().site.status).toBe('ready')
+    expect(state().locationLabel).toBe(DEFAULT_LOCATION_LABEL)
+  })
+})
+
+describe('a price still in flight when the design is forgotten', () => {
+  const PRICE = { usdPerKwh: 0.3, stateCode: 'MA', year: 2025, sourceLabel: 'test' } as never
+
+  /** A lookup that lands in Massachusetts at once, and whose price is held until the test says */
+  const landWithPriceHeld = async (): Promise<(price: unknown) => void> => {
+    let deliver: (price: unknown) => void = () => undefined
+    resolveSite.mockImplementationOnce(() =>
+      Promise.resolve({
+        site: siteFixture({ botanicalArea: 'MAS' }),
+        weather: tmyFixture(),
+        years: [],
+      }),
+    )
+    fetchRetailPrice.mockReturnValueOnce(
+      new Promise((resolve) => {
+        deliver = resolve
+      }),
+    )
+    await state().resolveSite(DEFAULT_LOCATION, DEFAULT_LOCATION_LABEL)
+    // the site is ready and the price is the part still out, which is the point of not awaiting it
+    expect(state().site.status).toBe('ready')
+    expect(fetchRetailPrice).toHaveBeenCalledTimes(1)
+    return deliver
+  }
+
+  it('lands on the design it was asked for', async () => {
+    const deliver = await landWithPriceHeld()
+    deliver(PRICE)
+    await vi.advanceTimersByTimeAsync(0)
+    expect(state().retailPrice).toBe(PRICE)
+  })
+
+  it('is dropped by forgetting the saved design', async () => {
+    const deliver = await landWithPriceHeld()
+    state().clearDesign()
+    deliver(PRICE)
+    await vi.advanceTimersByTimeAsync(0)
+    expect(state().retailPrice).toBeNull()
+  })
+
+  it('is dropped by resetting the store', async () => {
+    const deliver = await landWithPriceHeld()
+    resetAppStore()
+    deliver(PRICE)
+    await vi.advanceTimersByTimeAsync(0)
+    expect(state().retailPrice).toBeNull()
   })
 })
 
