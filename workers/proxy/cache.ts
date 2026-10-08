@@ -1,6 +1,7 @@
 import type { ExecutionContextLike, KVStore } from './env'
 
-export const COORDINATE_PRECISION_DEG = 0.01
+/** Decimal places of latitude and longitude a key keeps, unless its route asks for more */
+export const COORDINATE_DECIMALS = 2
 export const TTL_TMY_SECONDS = 31_536_000
 export const TTL_ERROR_SECONDS = 60
 /**
@@ -37,6 +38,16 @@ export const TTL_GEOCODE_SECONDS = 604_800
 export const TTL_RETAIL_PRICE_SECONDS = 2_592_000
 
 /**
+ * A year, for a map that doesn't change between releases.
+ *
+ * SoilGrids 2.0 is a published release, and the release is named in the path the route allows. An
+ * answer for a pixel is as good a year on as the day it was read, so it stays until the cache lets
+ * it go. A new release would come with a new path and a new entry, and the old answers would
+ * never be read again
+ */
+export const TTL_SOIL_SECONDS = 31_536_000
+
+/**
  * The upstreams whose answers this proxy holds.
  *
  * `pvgis`, `nsrdb` and `eia` are here because they need a credential or a policy exemption the
@@ -49,14 +60,39 @@ export const TTL_RETAIL_PRICE_SECONDS = 2_592_000
  * The two geocoders are here for a third reason again, and it's the one that can't be worked
  * around in a browser at all: the OSM Nominatim usage policy asks for a User-Agent that
  * identifies the application, and a browser isn't permitted to set one. Every request this app
- * made to Nominatim therefore arrived anonymous, at the rate of one per browser, uncached
+ * made to Nominatim therefore arrived anonymous, at the rate of one per browser, uncached.
+ *
+ * `soilgrids` is here for `open-meteo`'s reason with two of its own: ISRIC publishes a fair-use
+ * limit of 5 calls a minute for the API and calls it a beta with no uptime guarantee. A lookup
+ * asks it up to five times, the point and then a ring of four that stops at the first reading, and
+ * every page load made the lookup again. Cached at the edge, a place costs ISRIC its calls once a
+ * year however many visitors ask about it, and a stall costs a visitor one `UPSTREAM_TIMEOUT_MS`,
+ * because the 504 is held for the retries behind it
  */
-export type CachedUpstream = 'pvgis' | 'nsrdb' | 'open-meteo' | 'nominatim' | 'photon' | 'eia'
+export type CachedUpstream =
+  | 'pvgis'
+  | 'nsrdb'
+  | 'open-meteo'
+  | 'nominatim'
+  | 'photon'
+  | 'eia'
+  | 'soilgrids'
 
 export interface CacheKeyParts {
   readonly upstream: CachedUpstream
   readonly latitudeDeg: number
   readonly longitudeDeg: number
+  /**
+   * How many decimal places of latitude and longitude the key keeps. Two by default, which is a
+   * square about 1.1 km across.
+   *
+   * A route asks for more when its upstream resolves finer than that. The upstream is asked for
+   * the caller's exact point on a miss, so an entry holds the answer for whichever point asked
+   * first, and a key coarser than the upstream's own cells hands that one point's answer to every
+   * point in the square. SoilGrids has 250 m pixels, and at two decimals one garden's reading
+   * would go to every garden within a kilometer
+   */
+  readonly coordinateDecimals?: number
   readonly dataset: string
   /**
    * What tells two answers from the same dataset apart.
@@ -70,18 +106,22 @@ export interface CacheKeyParts {
   readonly schemaVersion: number
 }
 
-export const quantizeCoordinate = (value: number): number =>
-  Math.round(value / COORDINATE_PRECISION_DEG) * COORDINATE_PRECISION_DEG
+export const quantizeCoordinate = (value: number, decimals = COORDINATE_DECIMALS): number => {
+  const step = 10 ** -decimals
+  return Math.round(value / step) * step
+}
 
-export const buildCacheKey = (parts: CacheKeyParts): string =>
-  [
+export const buildCacheKey = (parts: CacheKeyParts): string => {
+  const decimals = parts.coordinateDecimals ?? COORDINATE_DECIMALS
+  return [
     `v${parts.schemaVersion}`,
     parts.upstream,
-    quantizeCoordinate(parts.latitudeDeg).toFixed(2),
-    quantizeCoordinate(parts.longitudeDeg).toFixed(2),
+    quantizeCoordinate(parts.latitudeDeg, decimals).toFixed(decimals),
+    quantizeCoordinate(parts.longitudeDeg, decimals).toFixed(decimals),
     parts.dataset,
     parts.variant,
   ].join('/')
+}
 
 /**
  * The words somebody typed, as the thing a cached answer is about.
@@ -184,7 +224,8 @@ const fromStore = async (
  *
  * The free tier is 1,000 writes a day, 100,000 reads a day and 25 MiB a value. A write happens
  * only when both tiers missed AND the upstream answered 2xx, so a day's writes is a day's new
- * places, and a rate-limited upstream or a bad parameter costs no write at all
+ * places times what each one asks for, up to seven: two weather answers, and the soil at the point
+ * and at a ring of four around it. A rate-limited upstream or a bad parameter costs no write at all
  */
 const toStore = async (
   store: KVStore,

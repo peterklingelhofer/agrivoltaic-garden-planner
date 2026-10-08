@@ -250,6 +250,7 @@ describe('the client and the allowlist agree on every proxied path', () => {
     ['nominatim', '/reverse'],
     ['photon', '/api'],
     ['eia', '/v2/electricity/retail-sales/data/'],
+    ['soilgrids', '/soilgrids/v2.0/properties/query'],
   ]
 
   it('routes every URL the client builds for a proxied upstream', () => {
@@ -285,6 +286,16 @@ describe('the client and the allowlist agree on every proxied path', () => {
     expect(WORKER_PROXIED).toContain('nominatim')
     expect(WORKER_PROXIED).toContain('photon')
     expect(requestUrl('nominatim', '/search', new URLSearchParams())).toContain(PROXY_PREFIX)
+    /**
+     * And the soil map, named for the same reason: ISRIC allows 5 calls a minute and promises no
+     * uptime, and a lookup asks up to five times. Straight from the browser every page load spent
+     * that allowance again, where the edge answers a repeat
+     */
+    expect(WORKER_PROXIED).toContain('soilgrids')
+    expect(BROWSER_DIRECT).not.toContain('soilgrids')
+    expect(requestUrl('soilgrids', '/soilgrids/v2.0/properties/query', new URLSearchParams())).toBe(
+      `${PROXY_PREFIX}/soilgrids/soilgrids/v2.0/properties/query`,
+    )
     // what stays browser-direct stays browser-direct: these have no key, no policy and no
     // per-visit call, so putting them behind an edge would buy nothing and cost a hop
     for (const upstream of BROWSER_DIRECT) {

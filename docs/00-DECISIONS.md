@@ -399,9 +399,11 @@ establish, so each such criterion is labeled as requiring field agronomy.
 
 Open-Meteo is the primary weather source, the one global, keyless, CC BY 4.0 source returning GHI,
 DNI and DHI. The Worker proxies it, with PVGIS v5.3 (which forbids AJAX by written policy), NREL
-NSRDB (for key secrecy, at `developer.nlr.gov` as GOES TMY v4.0.0), Nominatim, Photon and the EIA
-retail price, and caches weather by latitude and longitude rounded to 0.01 deg. NASA POWER,
-SoilGrids and Overpass stay browser-direct, CORS verified.
+NSRDB (for key secrecy, at `developer.nlr.gov` as GOES TMY v4.0.0), Nominatim, Photon, the EIA
+retail price and SoilGrids (ISRIC's fair-use limit is 5 calls a minute and the API is a beta with
+no uptime guarantee). It caches weather by latitude and longitude rounded to 0.01 deg, and soil to
+0.001 deg because the soil map's pixels are 250 m across. NASA POWER and Overpass stay
+browser-direct, CORS verified.
 
 Bundled static, detailed in `docs/STATIC-LAYERS.md`: the official 2023 USDA PRISM hardiness grid, the
 published 5 arcmin Köppen aggregate (Beck et al. 2018), NRCan's 4th edition Canadian zones under the

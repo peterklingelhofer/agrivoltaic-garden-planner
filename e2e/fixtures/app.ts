@@ -114,7 +114,15 @@ export const stubUpstreams = async (page: Page, over: Upstreams = {}): Promise<v
         )
   await page.route(/open-meteo\.com/, weather)
   await page.route('**/api/proxy/open-meteo/**', weather)
-  await page.route(/isric\.org/, (route) => json(route, over.soil ?? soilBody()))
+  /*
+   * The soil map is same-origin too, behind the proxy for the edge cache and ISRIC's fair-use limit,
+   * so its requests are `/api/proxy/soilgrids/soilgrids/v2.0/properties/query?...` and fall inside
+   * the blanket abort above like the weather's. It's registered after the abort for the same
+   * reason, and the host pattern stays beside it as it does for the weather
+   */
+  const soil = (route: Route): Promise<void> => json(route, over.soil ?? soilBody())
+  await page.route(/isric\.org/, soil)
+  await page.route('**/api/proxy/soilgrids/**', soil)
   /*
    * The electricity price, same-origin behind the proxy like the weather, and stubbed for the
    * same reason: aborted, it showed up as `net::ERR_FAILED` console lines on every US site the

@@ -119,6 +119,67 @@ describe('buildCacheKey', () => {
   })
 })
 
+/**
+ * A route that sets no precision keeps two decimals, and the keys already held depend on it: a
+ * changed byte in one is a cold cache for every place the deployment has answered. The literal
+ * below is the weather's key as it has always been written
+ */
+describe('buildCacheKey, coordinate precision', () => {
+  const meteo = {
+    upstream: 'open-meteo',
+    latitudeDeg: 42.3736,
+    longitudeDeg: -72.5199,
+    dataset: 'era5-archive',
+    variant: 'end_date=2024-12-31&hourly=shortwave_radiation&start_date=2015-01-01&timezone=UTC',
+    schemaVersion: 1,
+  } as const
+
+  it('keeps the open-meteo key byte for byte, at its half-cell boundaries and its signed zero', () => {
+    expect(buildCacheKey(meteo)).toBe(
+      'v1/open-meteo/42.37/-72.52/era5-archive/end_date=2024-12-31&hourly=shortwave_radiation&start_date=2015-01-01&timezone=UTC',
+    )
+    expect(buildCacheKey({ ...meteo, latitudeDeg: 42.375, longitudeDeg: -72.525 })).toContain(
+      '/42.38/-72.52/',
+    )
+    expect(buildCacheKey({ ...meteo, latitudeDeg: -0.0049, longitudeDeg: -179.995 })).toContain(
+      '/0.00/-179.99/',
+    )
+  })
+
+  const soil = {
+    upstream: 'soilgrids',
+    latitudeDeg: 42.3736,
+    longitudeDeg: -72.5199,
+    dataset: 'properties',
+    variant: 'value=mean',
+    schemaVersion: 1,
+  } as const
+
+  it('keys to the decimals a route asks for', () => {
+    const fine = { ...soil, coordinateDecimals: 3 }
+    expect(buildCacheKey(fine)).toBe('v1/soilgrids/42.374/-72.520/properties/value=mean')
+    expect(quantizeCoordinate(42.3736, 3).toFixed(3)).toBe('42.374')
+    // 55 m north is the same cell and 220 m north is the next one
+    expect(buildCacheKey({ ...fine, latitudeDeg: 42.3741 })).toBe(buildCacheKey(fine))
+    expect(buildCacheKey({ ...fine, latitudeDeg: 42.3756 })).not.toBe(buildCacheKey(fine))
+  })
+
+  it('gives two gardens 280 m apart a key each at three decimals, where two decimals gave one', () => {
+    const north = { ...soil, latitudeDeg: 42.3711 }
+    expect(buildCacheKey(north)).toBe(buildCacheKey(soil))
+    expect(buildCacheKey({ ...north, coordinateDecimals: 3 })).not.toBe(
+      buildCacheKey({ ...soil, coordinateDecimals: 3 }),
+    )
+  })
+
+  it("doesn't split the equator or prime meridian across a signed zero at three decimals either", () => {
+    const fine = { ...soil, coordinateDecimals: 3 }
+    expect(buildCacheKey({ ...fine, latitudeDeg: -0.0004, longitudeDeg: -0.0004 })).toBe(
+      buildCacheKey({ ...fine, latitudeDeg: 0.0004, longitudeDeg: 0.0004 }),
+    )
+  })
+})
+
 describe('withCache', () => {
   it('calls the producer once and serves the second read from cache', async () => {
     const { waited } = stubCaches()
