@@ -204,6 +204,13 @@ reading is taken off it again, when its `lightGeometry` stamp equals the key of 
 back, so undoing a move made since the last bake costs no bake. Any other stamp sends the bake back
 to idle, and `useAutoLight` computes it again.
 
+On a laptop the toolbar holds the Undo and Redo buttons. At 760px and below they sit in the bottom
+bar of `src/ui/MobileTabs.tsx`, in a named region beside the tabs, because that bar is the one
+strip of controls on screen on both tabs. Both pairs go `aria-disabled` when they have nothing to do. A
+button pressed down to its last step then keeps the focus that press gave it, and each ignores a
+press in that state. `useEditKeys` answers the keys that do the same at every width, and exports
+the `aria-keyshortcuts` strings both pairs announce.
+
 ## 3. Uncertainty is a type-system requirement
 
 Decision Record 7 says never render a single-point yield number. The types enforce that.

@@ -225,6 +225,13 @@ export interface ActionProps {
   readonly testId: string
   readonly children: ReactNode
   readonly disabled?: boolean
+  /**
+   * Unavailable to assistive tech and dimmed the way `disabled` is, with no `disabled` on the
+   * button, for a press that can use up what it does: Undo on the last step. A disabled button
+   * drops the focus of whoever just pressed it, and this one keeps it. The press does nothing
+   * while this is set, so the handler needn't check
+   */
+  readonly ariaDisabled?: boolean
   readonly tone?: 'primary' | 'ghost'
   /** Set on a button that toggles something, so assistive tech is told the state and not just
    *  the label. Omit it for a button that simply does a thing */
@@ -258,6 +265,7 @@ export const Action = ({
   testId,
   children,
   disabled,
+  ariaDisabled,
   tone = 'ghost',
   pressed,
   describedBy,
@@ -271,11 +279,12 @@ export const Action = ({
     className={`action action-${tone}${block === true ? ' action-block' : ''}`}
     data-testid={testId}
     disabled={disabled}
+    aria-disabled={ariaDisabled}
     aria-pressed={pressed}
     aria-describedby={describedBy}
     aria-label={label}
     aria-keyshortcuts={keyShortcuts}
-    onClick={onClick}
+    onClick={ariaDisabled === true ? undefined : onClick}
   >
     {children}
   </button>

@@ -38,6 +38,7 @@ import {
   auditHovered,
   contrastCollector,
   type ContrastCollector,
+  type ContrastReport,
 } from './fixtures/contrast.ts'
 import { hourlyArchiveBody, nulledDailyNormalsBody } from './fixtures/weather.ts'
 
@@ -898,6 +899,60 @@ for (const scheme of SCHEMES) {
     await page.getByTestId('action-legend-fold').click()
 
     found.addFocus(`${scheme} phone chrome focus indicators`, await auditFocusIndicators(page, 12))
+    settle(found)
+  })
+}
+
+/**
+ * How long the history waits before it calls a burst of edits one step. `WRITE_DELAY_MS` in
+ * `src/state/persist.ts` is 600, and this clears it with room to spare
+ */
+const HISTORY_SETTLE_MS = 800
+
+/**
+ * The phone bar's Undo and Redo, which the audit above can't read: a control that says it's
+ * unavailable is skipped as inactive, and a fresh session has nothing for either to do. Two edits
+ * a settle apart and an undo put both in force, so Undo has the first step to retake and Redo has
+ * the second. The audit then reads the pair the way it reads the tabs: at rest over the plan,
+ * hovered, and over the garden.
+ *
+ * It's a test of its own so the audits above stay independent of the edits. Every reading has to
+ * find both buttons, which turns a pair left dim into a failure where it would have passed on an
+ * empty reading. 320x568, like the phone chrome, where the bar is narrowest
+ */
+for (const scheme of SCHEMES) {
+  test(`the phone bar's Undo and Redo read in ${scheme}`, async ({ page }) => {
+    test.setTimeout(120_000)
+    await page.setViewportSize({ width: 320, height: 568 })
+    await openIn(page, scheme)
+
+    await step(page, 'ground')
+    const trees = page.locator('[data-testid^="item-tree-"]')
+    await page.getByTestId('action-tree-add').click()
+    await expect(trees).toHaveCount(1)
+    await page.waitForTimeout(HISTORY_SETTLE_MS)
+    await page.getByTestId('action-tree-add').click()
+    await expect(trees).toHaveCount(2)
+    const undo = page.getByTestId('action-tabbar-undo')
+    const redo = page.getByTestId('action-tabbar-redo')
+    await undo.click()
+    await expect(trees).toHaveCount(1)
+    await expect(undo).toHaveAttribute('aria-disabled', 'false')
+    await expect(redo).toHaveAttribute('aria-disabled', 'false')
+
+    const found = contrastCollector()
+    const pair = '[aria-label="Undo and redo"]'
+    const read = (label: string, report: ContrastReport): void => {
+      expect.soft(report.checked, `${label} should read both buttons`).toBe(2)
+      found.add(label, report)
+    }
+    read(`${scheme} Undo and Redo over the plan`, await auditContrast(page, { within: pair }))
+    read(`${scheme} hovering Undo`, await auditHovered(page, undo, pair))
+    read(`${scheme} hovering Redo`, await auditHovered(page, redo, pair))
+
+    // and over the garden, as the tabs are read
+    await page.getByTestId('action-tab-garden').click()
+    read(`${scheme} Undo and Redo over the garden`, await auditContrast(page, { within: pair }))
     settle(found)
   })
 }
