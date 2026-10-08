@@ -1,9 +1,15 @@
-import { beforeEach, describe, expect, it } from 'bun:test'
+import { act, StrictMode, type ReactElement } from 'react'
+import { afterEach, beforeEach, describe, expect, it } from 'bun:test'
+import { vi } from '../../test/vi'
 import { loadCitations } from '../data/citations'
+import { requestCardScroll, takeCardScroll } from '../state/card-scroll'
 import { makePlot } from '../state/defaults'
-import { getAppState, resetAppStore } from '../state/store'
+import type { SidebarStep } from '../state/slices'
+import { getAppState, resetAppStore, useAppStore } from '../state/store'
+import { obstructionId } from '../types/ids'
 import { SurroundingsStep } from './AnswerPanels'
 import { ObstructionsSection } from './ObstructionsSection'
+import { Stepper, type StepDefinition } from './Stepper'
 import { mount } from './testkit'
 
 beforeEach(async () => {
@@ -119,5 +125,196 @@ describe('a tree drawn on the ground', () => {
     if (tree === undefined || tree.kind !== 'tree') throw new Error('no tree drawn')
     expect(tree.heightM).toBeCloseTo(tree.crownBaseM + 0.5, 6)
     await harness.unmount()
+  })
+})
+
+const STEPS: readonly StepDefinition<SidebarStep>[] = [
+  { id: 'plants', label: 'Plants', summary: null, requirement: null },
+  { id: 'ground', label: 'Ground', summary: null, requirement: null },
+]
+
+/** The sidebar's own stepper, over the store's open step, with this section as the ground panel */
+const StepperHost = (): ReactElement => {
+  const step = useAppStore((s) => s.sidebarStep)
+  return (
+    <Stepper
+      label="Steps"
+      steps={STEPS}
+      selected={step}
+      landOn="none"
+      onSelect={(id) => getAppState().setSidebarStep(id)}
+      renderPanel={(id) => (id === 'ground' ? <ObstructionsSection /> : null)}
+    />
+  )
+}
+
+/**
+ * A click on a house or a tree in the scene, or the press that adds one, asks for its card to
+ * scroll into view, so its fields and its Remove press are in sight. Being the selection asks for
+ * nothing: pressing the step's header with a card still selected leaves the column at the top of
+ * the step
+ */
+describe('a card asked to scroll', () => {
+  /** The test ids `scrollIntoView` was asked of, in order */
+  const scrolled: string[] = []
+  const frames = new Map<number, FrameRequestCallback>()
+  let issued = 0
+
+  /** Runs the frames asked for so far, in order, skipping any that an earlier one canceled */
+  const runFrames = (): void => {
+    for (const [id, callback] of [...frames]) {
+      if (frames.delete(id)) callback(0)
+    }
+  }
+
+  beforeEach(() => {
+    scrolled.length = 0
+    frames.clear()
+    // an ask an earlier test left parked is replaced by one that is then taken, leaving none
+    const none = obstructionId('none')
+    requestCardScroll(none)
+    takeCardScroll(none)
+    // jsdom has no scrolling, so the method is defined here to record which node it was asked of
+    Object.defineProperty(HTMLElement.prototype, 'scrollIntoView', {
+      configurable: true,
+      writable: true,
+      value: function (this: HTMLElement) {
+        scrolled.push(this.getAttribute('data-testid') ?? 'unnamed')
+      },
+    })
+    vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback): number => {
+      issued += 1
+      frames.set(issued, callback)
+      return issued
+    })
+    vi.stubGlobal('cancelAnimationFrame', (id: number): void => {
+      frames.delete(id)
+    })
+  })
+
+  afterEach(() => {
+    vi.unstubAllGlobals()
+    Reflect.deleteProperty(HTMLElement.prototype, 'scrollIntoView')
+  })
+
+  it('scrolls the card a scene click names, again on a second click, and no other', async () => {
+    const harness = await mount(<ObstructionsSection />)
+    await act(async () => {
+      getAppState().addHouse()
+      getAppState().addTree()
+    })
+    runFrames()
+    // drawn through the store, so nothing asked, though the tree took the selection
+    expect(scrolled).toEqual([])
+    const [house, tree] = getAppState().plot?.obstructions ?? []
+    if (house === undefined || tree === undefined) throw new Error('no house and tree drawn')
+
+    // what a click on the house does in the scene: select it and ask
+    await act(async () => {
+      getAppState().selectObstruction(house.id)
+      requestCardScroll(house.id)
+    })
+    runFrames()
+    expect(scrolled).toEqual([`item-house-${house.id}`])
+
+    // and again with the card already selected and the column scrolled away from it
+    await act(async () => {
+      requestCardScroll(house.id)
+    })
+    runFrames()
+    expect(scrolled).toEqual([`item-house-${house.id}`, `item-house-${house.id}`])
+
+    // editing the card, or clearing the selection, asks for nothing
+    await harness.type(`control-house-width-${house.id}`, '12')
+    await act(async () => {
+      getAppState().selectObstruction(null)
+    })
+    runFrames()
+    expect(scrolled).toHaveLength(2)
+  })
+
+  it('scrolls the card an Add press drew, and not the one before it', async () => {
+    const harness = await mount(<ObstructionsSection />)
+    await harness.click('action-house-add')
+    runFrames()
+    const house = getAppState().plot?.obstructions[0]
+    if (house === undefined) throw new Error('no house drawn')
+    expect(scrolled).toEqual([`item-house-${house.id}`])
+
+    await harness.click('action-tree-add')
+    runFrames()
+    const tree = getAppState().plot?.obstructions[1]
+    if (tree === undefined) throw new Error('no tree drawn')
+    expect(scrolled).toEqual([`item-house-${house.id}`, `item-tree-${tree.id}`])
+  })
+
+  it('leaves a card selected before the step opened where it is', async () => {
+    getAppState().addHouse()
+    getAppState().addTree()
+    await mount(<ObstructionsSection />)
+    runFrames()
+    expect(scrolled).toEqual([])
+  })
+
+  /** Used once, so closing the step and opening it again doesn't replay a scroll already served */
+  it('is used once', async () => {
+    const tree = getAppState().addTree()
+    if (tree === null) throw new Error('no tree drawn')
+    requestCardScroll(tree)
+    const first = await mount(<ObstructionsSection />)
+    runFrames()
+    expect(scrolled).toEqual([`item-tree-${tree}`])
+    expect(takeCardScroll(tree)).toBe(false)
+
+    await first.unmount()
+    await mount(<ObstructionsSection />)
+    runFrames()
+    expect(scrolled).toHaveLength(1)
+  })
+
+  /** StrictMode runs an effect, undoes it and runs it again, and the second run needs the ask */
+  it('survives StrictMode running its effect twice', async () => {
+    const house = getAppState().addHouse()
+    if (house === null) throw new Error('no house drawn')
+    requestCardScroll(house)
+    await mount(
+      <StrictMode>
+        <ObstructionsSection />
+      </StrictMode>,
+    )
+    runFrames()
+    expect(scrolled).toEqual([`item-house-${house}`])
+  })
+
+  /**
+   * A click in the scene opens the ground step and selects the card in one commit. The stepper
+   * then holds the step's header at the top of the column for a frame, and a card scrolled
+   * inside that hold is dragged back to the header (`landing.ts`)
+   */
+  it('ends the column on the card when the click also opens the step', async () => {
+    const tree = getAppState().addTree()
+    if (tree === null) throw new Error('no tree drawn')
+    getAppState().selectObstruction(null)
+    getAppState().setSidebarStep('plants')
+    const harness = await mount(<StepperHost />)
+    expect(harness.find(`item-tree-${tree}`)).toBeNull()
+
+    await act(async () => {
+      getAppState().selectObstruction(tree)
+      getAppState().setSidebarStep('ground')
+      requestCardScroll(tree)
+    })
+    runFrames()
+    expect(scrolled).toEqual([`item-tree-${tree}`])
+  })
+
+  /** The same step opened by its header, over a selection left from before, lands on the header */
+  it('leaves the header press with an old selection on the top of the step', async () => {
+    getAppState().addTree()
+    getAppState().setSidebarStep('plants')
+    const harness = await mount(<StepperHost />)
+    await harness.click('action-step-ground')
+    runFrames()
+    expect(scrolled).toEqual(['action-step-ground'])
   })
 })

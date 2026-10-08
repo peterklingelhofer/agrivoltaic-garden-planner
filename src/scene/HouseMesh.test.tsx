@@ -2,6 +2,7 @@ import ReactThreeTestRenderer from '@react-three/test-renderer'
 import { beforeEach, describe, expect, it } from 'bun:test'
 import { Ray, Vector3 } from 'three'
 import type { Mesh, Object3D } from 'three'
+import { takeCardScroll } from '../state/card-scroll'
 import { makePlot } from '../state/defaults'
 import { polygonOf, rectangleRing, vec2 } from '../state/geom'
 import { resetAppStore, useAppStore } from '../state/store'
@@ -90,6 +91,46 @@ describe('HouseMesh', () => {
       6,
     )
     expect(useAppStore.getState().dragging).toBe(false)
+  })
+
+  /**
+   * A click on the house selects it, opens the ground step, where its card is, the way a click on
+   * a plant opens the plants step, and asks for the card to scroll into view. A press a corner
+   * handle owns is the handle's, and does none of the three
+   */
+  it('selects the house and opens the ground step when it is clicked', async () => {
+    const house = houseFixture(6)
+    useAppStore.getState().upsertObstruction(house)
+    useAppStore.getState().setSidebarStep('plants')
+    const renderer = await ReactThreeTestRenderer.create(
+      <HouseMesh obstructionId={house.id} selected={false} />,
+    )
+    await renderer.fireEvent(
+      renderer.scene.findByProps({ name: `house-${house.id}-solid` }),
+      'click',
+    )
+    expect(useAppStore.getState().selectedObstructionId).toBe(house.id)
+    expect(useAppStore.getState().sidebarStep).toBe('ground')
+    expect(takeCardScroll(house.id)).toBe(true)
+    await renderer.unmount()
+  })
+
+  it('leaves the selection and the step alone while a corner handle is being dragged', async () => {
+    const house = houseFixture(6)
+    useAppStore.getState().upsertObstruction(house)
+    useAppStore.getState().setSidebarStep('plants')
+    useAppStore.getState().setDragging(true)
+    const renderer = await ReactThreeTestRenderer.create(
+      <HouseMesh obstructionId={house.id} selected={false} />,
+    )
+    await renderer.fireEvent(
+      renderer.scene.findByProps({ name: `house-${house.id}-solid` }),
+      'click',
+    )
+    expect(useAppStore.getState().selectedObstructionId).toBeNull()
+    expect(useAppStore.getState().sidebarStep).toBe('plants')
+    expect(takeCardScroll(house.id)).toBe(false)
+    await renderer.unmount()
   })
 
   it('shows a corner handle per vertex in Move mode, and none while looking', async () => {

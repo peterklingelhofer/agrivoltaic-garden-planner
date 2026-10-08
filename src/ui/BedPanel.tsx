@@ -10,7 +10,6 @@ import {
 } from '../recommend/planting'
 import { makeBed, nextBedIndex, soilForSite } from '../state/defaults'
 import { extentOf, polygonAreaM2, polygonOf, rectangleOf, rectangleRing, vec2 } from '../state/geom'
-import { prefersReducedMotion } from '../state/motion'
 import { rainFieldOf } from '../state/rain'
 import { outOfSeason } from '../state/season'
 import { EMPTY_LIST, MAX_PLANT_YEAR } from '../state/slices'
@@ -56,6 +55,7 @@ import { lengthStep, showLength, toMeters, useLengthUnit } from './length-units'
 import { ObstructionsSection } from './ObstructionsSection'
 import { formatAreaBothUnits, roundTenth } from './onboarding'
 import { Panel, Readout } from './Panel'
+import { bringIntoView } from './scroll-into-view'
 
 const IRRIGATION: readonly (readonly [Bed['irrigation']['method'], string])[] = [
   ['none', 'None'],
@@ -156,16 +156,6 @@ const lowestScoringPlanting = (
     }
   }
   return lowest?.planting ?? bed.plantings[bed.plantings.length - 1] ?? null
-}
-
-/**
- * Scrolls a node into the middle of the view, and does nothing where there's no view to
- * scroll: jsdom has no `scrollIntoView`, and a browser missing it simply does nothing, without
- * throwing
- */
-const bringIntoView = (node: HTMLElement | null): void => {
-  if (node === null || typeof node.scrollIntoView !== 'function') return
-  node.scrollIntoView({ block: 'center', behavior: prefersReducedMotion() ? 'auto' : 'smooth' })
 }
 
 /**

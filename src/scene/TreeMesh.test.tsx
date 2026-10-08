@@ -4,6 +4,7 @@ import { MeshDepthMaterial, RGBADepthPacking, Ray, Vector3 } from 'three'
 import type { Mesh, MeshStandardMaterial, Object3D } from 'three'
 import { siteFixture } from '../recommend/testkit'
 import { leafOnMonthsFor } from '../sim/obstruction'
+import { takeCardScroll } from '../state/card-scroll'
 import { polygonOf, rectangleRing, vec2 } from '../state/geom'
 import { ready } from '../state/slices'
 import { resetAppStore, useAppStore } from '../state/store'
@@ -216,6 +217,46 @@ describe('TreeMesh', () => {
       6,
     )
     expect(useAppStore.getState().dragging).toBe(false)
+  })
+
+  /**
+   * A click on the tree selects it, opens the ground step, where its card is, the way a click on a
+   * plant opens the plants step, and asks for the card to scroll into view. A press a corner
+   * handle owns is the handle's, and does none of the three
+   */
+  it('selects the tree and opens the ground step when its trunk or its crown is clicked', async () => {
+    const tree = treeFixture()
+    useAppStore.getState().upsertObstruction(tree)
+    const renderer = await ReactThreeTestRenderer.create(
+      <TreeMesh obstructionId={tree.id} selected={false} />,
+    )
+    for (const part of ['trunk', 'crown']) {
+      useAppStore.getState().selectObstruction(null)
+      useAppStore.getState().setSidebarStep('plants')
+      await renderer.fireEvent(
+        renderer.scene.findByProps({ name: `tree-${tree.id}-${part}` }),
+        'click',
+      )
+      expect(useAppStore.getState().selectedObstructionId).toBe(tree.id)
+      expect(useAppStore.getState().sidebarStep).toBe('ground')
+      expect(takeCardScroll(tree.id)).toBe(true)
+    }
+    await renderer.unmount()
+  })
+
+  it('leaves the selection and the step alone while a corner handle is being dragged', async () => {
+    const tree = treeFixture()
+    useAppStore.getState().upsertObstruction(tree)
+    useAppStore.getState().setSidebarStep('plants')
+    useAppStore.getState().setDragging(true)
+    const renderer = await ReactThreeTestRenderer.create(
+      <TreeMesh obstructionId={tree.id} selected={false} />,
+    )
+    await renderer.fireEvent(renderer.scene.findByProps({ name: `tree-${tree.id}-crown` }), 'click')
+    expect(useAppStore.getState().selectedObstructionId).toBeNull()
+    expect(useAppStore.getState().sidebarStep).toBe('plants')
+    expect(takeCardScroll(tree.id)).toBe(false)
+    await renderer.unmount()
   })
 
   it('shows a corner handle per vertex in Move mode, and none while looking', async () => {

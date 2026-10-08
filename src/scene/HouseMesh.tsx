@@ -2,6 +2,7 @@ import { Line } from '@react-three/drei'
 import type { ThreeEvent } from '@react-three/fiber'
 import { useCallback, useEffect, useMemo, type ReactElement } from 'react'
 import { ExtrudeGeometry } from 'three'
+import { requestCardScroll } from '../state/card-scroll'
 import { scenePlot, useAppStore } from '../state/store'
 import type { ObstructionId } from '../types/ids'
 import { tintedBy } from './materials'
@@ -25,6 +26,7 @@ export const HouseMesh = ({ obstructionId, selected }: HouseMeshProps): ReactEle
   )
   const mode = useAppStore((s) => s.mode)
   const selectObstruction = useAppStore((s) => s.selectObstruction)
+  const setSidebarStep = useAppStore((s) => s.setSidebarStep)
   const dragging = useAppStore((s) => s.dragging)
   // in Move mode a press on the house picks it up. Every other mode leaves the press to the camera
   const drag = useObstructionDrag(obstructionId, 'house')
@@ -48,8 +50,12 @@ export const HouseMesh = ({ obstructionId, selected }: HouseMeshProps): ReactEle
       if (dragging) return
       event.stopPropagation()
       selectObstruction(obstructionId)
+      // its card is on the ground step, so the press opens it, as a plant opens the plants step,
+      // and asks for the card to scroll into view
+      setSidebarStep('ground')
+      requestCardScroll(obstructionId)
     },
-    [dragging, obstructionId, selectObstruction],
+    [dragging, obstructionId, selectObstruction, setSidebarStep],
   )
 
   if (!house || !geometry) return null
