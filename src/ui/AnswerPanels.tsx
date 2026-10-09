@@ -45,8 +45,7 @@ export const SurroundingsStep = (): ReactElement => {
       />
       {houses > 0 ? (
         <p className="panel-sub" data-testid="readout-onboarding-exposure-house">
-          These answers aren't used while a house or a tree is drawn. The light check shades with
-          what you drew.
+          With a house or tree drawn, the light check uses it and ignores this answer.
         </p>
       ) : (
         <p className="panel-sub" data-testid="readout-onboarding-exposure-help">
@@ -117,8 +116,7 @@ export const WaterStep = (): ReactElement => {
         onChange={(checked) => answer({ irrigationAvailable: checked })}
       />
       <p className="panel-sub" data-testid="readout-onboarding-water-help">
-        Answering no moves the layout toward more shade, which keeps the ground damp when nobody is
-        watering it.
+        Unchecked, the layout leans toward more shade, which keeps the ground damp.
       </p>
     </>
   )

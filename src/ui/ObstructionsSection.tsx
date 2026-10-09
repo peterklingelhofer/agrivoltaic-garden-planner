@@ -335,14 +335,13 @@ const TreeCard = ({
           />
         )}
       </div>
+      {/* the provenance in one line. How the leaf months are read is Decision Record 26's */}
       <p className="readout-note" data-testid={`readout-tree-source-${tree.id}`}>
-        Defaults 3% in leaf and 46% bare, the midpoints of what{' '}
-        <SourceLink id="konarska2014-urban-tree-transmissivity" short /> measured under five street
-        trees. Which months it's in leaf comes from the site's typical year, by the Growing Season
-        Index (<SourceLink id="jolly2005-growing-season-index" />
-        ). The index reads each day's lowest temperature and day length. Its third input, how dry
-        the air is, is set to moist, since a garden tree stands where the beds are watered. A month
-        counts as in leaf when the index, averaged over 21 days, passes 0.5 at mid-month.
+        Defaults 3% in leaf and 46% bare, from{' '}
+        <SourceLink id="konarska2014-urban-tree-transmissivity" short /> (five street trees). The
+        months in leaf follow the site's typical year (
+        <SourceLink id="jolly2005-growing-season-index" />
+        ).
       </p>
       <Action
         testId={`action-tree-remove-${tree.id}`}
@@ -372,11 +371,6 @@ export const ObstructionsSection = (): ReactElement => {
 
   return (
     <>
-      <p className="panel-sub" data-testid="readout-houses-help">
-        The light check shades the ground with a box for each house or tree, drawn where it stands.
-        A tree's crown lets some light through, and more once its leaves are down. Move it in Move
-        mode, or type where it stands.
-      </p>
       <ul className="list" data-testid="list-houses">
         {houses.map((house) => (
           <HouseCard key={house.id} house={house} selected={house.id === selectedObstructionId} />
