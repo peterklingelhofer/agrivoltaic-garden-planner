@@ -142,25 +142,30 @@ export const OverlayPanel = (): ReactElement => {
         display={`${Math.round(overlay.opacity * 100)}%`}
         onChange={(opacity) => setOverlay({ opacity })}
       />
-      <Toggle
-        testId="control-overlay-imagery"
-        label="Show a satellite photo underneath"
-        checked={imageryEnabled}
-        onChange={setImagery}
-      />
-      <SelectField
-        testId="control-overlay-lighting"
-        label="How hard the 3D view works"
-        value={lighting}
-        options={LIGHTING}
-        onChange={setLighting}
-      />
-      <Toggle
-        testId="control-overlay-occlusion"
-        label="Darken the ground where a panel blocks the sky"
-        checked={effects.ambientOcclusion}
-        onChange={(ambientOcclusion) => setEffects({ ambientOcclusion })}
-      />
+      {/* the three settings about the picture, and nothing about the light, behind one press:
+          on the face they made this the step's longest run of controls */}
+      <details className="wizard-advanced" data-testid="details-overlay-display">
+        <summary data-testid="action-overlay-display">Display settings</summary>
+        <Toggle
+          testId="control-overlay-imagery"
+          label="Show a satellite photo underneath"
+          checked={imageryEnabled}
+          onChange={setImagery}
+        />
+        <SelectField
+          testId="control-overlay-lighting"
+          label="How hard the 3D view works"
+          value={lighting}
+          options={LIGHTING}
+          onChange={setLighting}
+        />
+        <Toggle
+          testId="control-overlay-occlusion"
+          label="Darken the ground where a panel blocks the sky"
+          checked={effects.ambientOcclusion}
+          onChange={(ambientOcclusion) => setEffects({ ambientOcclusion })}
+        />
+      </details>
       {/*
         The ramp legend sits pinned over the canvas in `App.tsx`, reading the same `overlayField`
         this panel reads, so there's one legend and it can never say something the ground disagrees

@@ -33,14 +33,6 @@ const QUALITY_SENTENCE = `The light is read in squares of about ${FINAL_OPTIONS.
 const SUN_DIRECTION_HELP =
   'A sun direction is one position the sun holds in your sky. The run traces the shadows from each position in turn, then adds the year up from the results. The count says how finely the year was sampled.'
 
-/**
- * The unit, defined once on the face in a teacher's words. Every per-bed figure under it is a
- * DLI, and a class that has never met the term needs the bucket and the two landmarks before
- * the numbers mean anything. The fuller gloss stays on the overlay's channel tip
- */
-const DLI_SENTENCE =
-  'Daily light integral (DLI) counts the light that lands on a square meter in one day. A woodland floor gets about 5, an open field in midsummer about 40.'
-
 export const SimPanel = (): ReactElement => {
   const raster = useAppStore((s) => s.raster)
   const stale = useAppStore(lightIsStale)
@@ -122,14 +114,12 @@ export const SimPanel = (): ReactElement => {
       {raster.status === 'loading' ? (
         <progress data-testid="readout-sim-progress" value={percent} max={100} />
       ) : null}
-      <p className="panel-sub" data-testid="readout-sim-dli">
-        {DLI_SENTENCE}
-      </p>
       {/*
         The machinery, behind one press. Which backend traced the shadows, how big a square of
         ground is, how many sun positions were used and how the run is triggered are all answers
         about the run. With them in the open, this step measures at reading grade 12. The status row
-        and the unit's definition are what a grower needs from this panel
+        is what a grower needs from this panel, and the unit is defined where its figures are, on
+        the bed light panel's i
       */}
       <details className="wizard-advanced" data-testid="details-sim-how">
         <summary data-testid="action-sim-how">How the light was computed</summary>

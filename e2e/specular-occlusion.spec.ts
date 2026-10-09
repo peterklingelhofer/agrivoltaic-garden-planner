@@ -132,6 +132,7 @@ test('a wetted surface loses more to the sky occlusion than the same surface dry
   await page.getByTestId('control-overlay-visible').setChecked(false)
   // the clearcoat is a quality tier, and on `auto` the machine decides whether this test has a
   // glossy surface to measure at all
+  await openFold(page, 'details-overlay-display')
   await page.getByTestId('control-overlay-lighting').selectOption('high')
   /*
     A visitor's plot is framed whole from 42 degrees up by default, and a wet clearcoat reflects
@@ -203,6 +204,7 @@ test('a wetted surface loses more to the sky occlusion than the same surface dry
     await bedTools()
     await cards.nth(index).click()
     await step(page, 'light')
+    await openFold(page, 'details-overlay-display')
     await page.getByTestId('control-overlay-occlusion').setChecked(false)
     await bedTools()
     await page.getByTestId('control-bed-irrigation').selectOption('subsurface-drip')
@@ -215,6 +217,7 @@ test('a wetted surface loses more to the sky occlusion than the same surface dry
     if (cells.length < 200) continue
 
     await step(page, 'light')
+    await openFold(page, 'details-overlay-display')
     await page.getByTestId('control-overlay-occlusion').setChecked(true)
     const wetOccluded = await shoot(page)
     await bedTools()

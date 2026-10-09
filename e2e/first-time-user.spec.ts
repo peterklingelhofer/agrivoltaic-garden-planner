@@ -178,6 +178,7 @@ const stepIs = (page: Page, id: string): Promise<void> =>
  */
 const stillTheFrame = async (page: Page): Promise<void> => {
   await step(page, 'light')
+  await openFold(page, 'details-overlay-display')
   await page.getByTestId('control-overlay-lighting').selectOption('low')
   await step(page, 'place')
 }

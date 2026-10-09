@@ -6,9 +6,19 @@ import { growingWindowOf } from '../state/growing-window'
 import { EMPTY_LIST } from '../state/slices'
 import { useAppStore } from '../state/store'
 import { formatDli } from './format'
+import { InfoTip } from './InfoTip'
 import { Panel } from './Panel'
 
 const monthName = (month: number): string => MONTH_NAMES[month - 1] ?? String(month)
+
+/**
+ * The unit and the three shade words, defined once, behind the i on the source line. Every
+ * figure in the rows below is a DLI, and a reader who has never met the term needs the bucket
+ * and the two landmarks before the numbers mean anything. The fuller gloss stays on the
+ * overlay's channel tip
+ */
+const LIGHT_WORDS =
+  'DLI, daily light integral: the light landing on a square meter in one day. A woodland floor gets about 5, an open field in midsummer about 40. Sunny keeps at least 85% of the open sky’s light over the growing season, part shade 60 to 85%, shady under 60%. The whole-year map on the garden runs lower than these growing-season figures.'
 
 /**
  * Each bed's light, live, on the step that computes it.
@@ -47,15 +57,14 @@ export const BedLightPanel = (): ReactElement => {
       ) : (
         <>
           <p className="panel-sub" data-testid="readout-bed-light-source">
-            {rasterReady
-              ? 'From the light check. Change the panels or the beds and it runs again, and these move with it'
-              : 'From the layout search. The light check runs by itself and replaces these'}
-          </p>
-          {/* what decides the word beside each bed */}
-          <p className="panel-sub" data-testid="readout-bed-light-zones">
-            Sunny keeps at least 85% of the open sky's light over the growing season, part shade 60
-            to 85%, shady under 60%. The whole-year map on the garden runs lower than these
-            growing-season figures.
+            <span className="with-tip">
+              {rasterReady
+                ? 'From the light check.'
+                : 'From the layout search, until the light check replaces them.'}
+              <InfoTip label="DLI, sunny, part shade and shady" testId="info-bed-light-words">
+                {LIGHT_WORDS}
+              </InfoTip>
+            </span>
           </p>
           {/* the surroundings answer dims every figure below before the panels do, and the map on
               the ground doesn't follow it, so the difference is said where the figures are */}

@@ -38,7 +38,7 @@ export const TimePanel = (): ReactElement => {
     <Panel
       id="time"
       title="Sun and time"
-      subtitle="The sky, the shadows and the colors on the ground all follow the day and time set here"
+      subtitle="The sky, the shadows and the ground's colors follow this day and time"
     >
       <SliderField
         testId="control-time-day"
