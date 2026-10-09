@@ -4,6 +4,9 @@ A site-specific model of the light a solar array leaves on the ground, and of wh
 still supports. Every quantitative claim carries its source, and a figure that rests on an inference
 is labeled as inferred.
 
+The app is free to use, with no account and no API key. Its code is open source under
+Apache-2.0, and its own documents and data are under CC BY 4.0.
+
 **[Live app](https://garden.peterklingelhofer.com)** · [Modeling documents](https://garden.peterklingelhofer.com/docs/)
 
 [![Ten planted beds under three rows of panels at Amherst on August 14 at 15:30: the light map on the ground beside the light step, which lists each bed's share of open sky and its daily light integral](docs/readme-screenshot.webp)](https://garden.peterklingelhofer.com)
