@@ -28,6 +28,7 @@ const setUp = async (page: Page, occlusion: boolean): Promise<void> => {
   await page.getByTestId('control-time-day').fill('172')
   await page.getByTestId('control-time-minutes').fill('1020')
   await page.getByTestId('control-overlay-visible').setChecked(false)
+  await openFold(page, 'details-overlay-display')
   await page.getByTestId('control-overlay-occlusion').setChecked(occlusion)
   await page.waitForTimeout(1500)
 }
@@ -93,6 +94,7 @@ test('frames', async ({ page }) => {
   await page.getByTestId('control-time-minutes').fill('1020')
 
   for (const occlusion of [false, true]) {
+    await openFold(page, 'details-overlay-display')
     await page.getByTestId('control-overlay-occlusion').setChecked(occlusion)
     await page.waitForTimeout(2000)
     const deltas = (await frameTimes(page)).slice(5)

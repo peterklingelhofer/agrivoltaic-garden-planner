@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 import { sceneLuminance } from '../src/scene/agx.ts'
 import { TONE_MAPPING_EXPOSURE } from '../src/scene/lighting.ts'
-import { openApp, resolveSite, settledCanvas, step } from './fixtures/app.ts'
+import { openApp, openFold, resolveSite, settledCanvas, step } from './fixtures/app.ts'
 import { decodePng, pixelAt } from './fixtures/png.ts'
 
 /**
@@ -65,6 +65,7 @@ const median = (values: readonly number[]): number =>
   values.length === 0 ? 0 : (values.slice().sort((a, b) => a - b)[values.length >> 1] ?? 0)
 
 const groundLuminance = async (page: Page, occlusion: boolean): Promise<GroundLuminance> => {
+  await openFold(page, 'details-overlay-display')
   await page.getByTestId('control-overlay-occlusion').setChecked(occlusion)
   // the toggle asks for a structural frame, and the shot is read once that frame has landed
   const shot = await settledCanvas(page)

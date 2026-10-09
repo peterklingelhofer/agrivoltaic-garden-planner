@@ -162,6 +162,7 @@ test("a payload from a schema this build can't read is discarded whole, never ha
   // not one field of it was taken
   await expect(page.getByTestId('readout-toolbar-site')).not.toContainText('Somewhere else')
   await step(page, 'light')
+  await openFold(page, 'details-overlay-display')
   await expect(page.getByTestId('control-overlay-imagery')).not.toBeChecked()
   await bedFields(page)
   await expect(page.getByTestId('control-bed-plant-year')).toHaveValue('1')

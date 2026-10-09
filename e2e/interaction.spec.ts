@@ -526,6 +526,7 @@ test('a baked raster drives the channel, the monthly slice, the opacity and the 
   await page.getByTestId('control-overlay-visible').check()
 
   // the satellite backdrop is a toggle, and turning it on must not take the canvas down
+  await openFold(page, 'details-overlay-display')
   await page.getByTestId('control-overlay-imagery').check()
   await expect(page.getByTestId('control-overlay-imagery')).toBeChecked()
   await expect(page.getByTestId('panel-canvas-failed')).toHaveCount(0)
