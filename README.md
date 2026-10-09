@@ -9,7 +9,7 @@ Apache-2.0, and its own documents and data are under CC BY 4.0.
 
 **[Live app](https://garden.peterklingelhofer.com)** · [Modeling documents](https://garden.peterklingelhofer.com/docs/)
 
-[![Ten planted beds under three rows of panels at Amherst on August 14 at 15:30: the light map on the ground beside the light step, which lists each bed's share of open sky and its daily light integral](docs/readme-screenshot.webp)](https://garden.peterklingelhofer.com)
+[![Ten planted beds under three rows of panels in Amherst, Massachusetts: the whole-year light map on the ground beside the light step, which lists each bed's share of open sky and its daily light integral](docs/readme-screenshot.webp)](https://garden.peterklingelhofer.com)
 
 You give it a place and a rough rectangle. It looks up that site's sun, weather and soil, simulates
 how much light reaches the ground once panels are over it, and computes which crops still suit each
