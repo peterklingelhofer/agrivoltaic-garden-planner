@@ -13,7 +13,6 @@ import { ready } from '../state/slices'
 import { resetAppStore, useAppStore } from '../state/store'
 import type { Site } from '../types/site'
 import type { Fraction } from '../types/units'
-import { SitePanel } from './SitePanel'
 import { mount } from './testkit'
 import { WaterPanel } from './WaterPanel'
 
@@ -148,11 +147,11 @@ describe('water panel', () => {
   })
 })
 
-describe('site panel water readout', () => {
-  it('grades the index instead of answering yes or no', async () => {
+describe('the water pane limitation readout', () => {
+  it('grades the index and never answers yes or no', async () => {
     seed(0.5)
-    const harness = await mount(<SitePanel />)
-    const text = harness.get('readout-site-water-limited').textContent ?? ''
+    const harness = await mount(<WaterPanel />)
+    const text = harness.get('readout-water-limitation').textContent ?? ''
     expect(text).toMatch(/Rain leaves 50% of the season's water demand unmet/)
     expect(text).toMatch(/\d+% to \d+%/)
     // the band's label sits inside the sentence, ahead of the range it names

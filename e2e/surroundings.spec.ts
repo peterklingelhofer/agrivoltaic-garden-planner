@@ -22,10 +22,10 @@ test('the place step says how much of the catalog its climate admits and whether
   await step(page, 'place')
   const verdict = page.getByTestId('readout-site-verdict')
   await expect(verdict).toBeVisible({ timeout: SITE_TIMEOUT_MS })
-  await expect(verdict).toContainText(
-    /of the catalog grows in this climate: \d+ of \d+ crops pass the climate check/,
+  await expect(verdict).toContainText(/of the catalog grows in this climate: \d+ of \d+ crops\./)
+  await expect(page.getByTestId('readout-site-verdict-water')).toContainText(
+    /^Rain (is|covers|matches)/,
   )
-  await expect(page.getByTestId('readout-site-verdict-water')).toContainText(/Rain here/)
   expect(app.errors).toEqual([])
 })
 

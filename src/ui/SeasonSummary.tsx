@@ -3,6 +3,7 @@ import { seasonAnchors } from '../recommend/calendar'
 import { useAppStore } from '../state/store'
 import { dayLabel, noFrostSentence } from './calendar'
 import { SOURCE_NAME } from './format'
+import { InfoTip } from './InfoTip'
 
 /**
  * What the place the visitor chose is actually like to garden in.
@@ -16,9 +17,9 @@ import { SOURCE_NAME } from './format'
  *
  * Read through `seasonAnchors`. Never straight off `site.frost`: that function
  * already knows the two things this must not get wrong: which curve to take, and that a season
- * can wrap past new year in the southern hemisphere. The last sentence names the source at the
- * point of use: the dates come from thirty years of daily records, and it names which service
- * supplied them, since either of two may
+ * can wrap past new year in the southern hemisphere. The odds the dates carry and the record they
+ * come from sit behind the i beside the sentence, and the record names which service supplied it,
+ * since either of two may
  */
 export const SeasonSummary = (): ReactElement | null => {
   const site = useAppStore((s) => (s.site.status === 'ready' ? s.site.value : null))
@@ -42,12 +43,17 @@ export const SeasonSummary = (): ReactElement | null => {
   }
   return (
     <p className="notice notice-ready" data-testid="readout-onboarding-season">
-      Frost here usually ends around {dayLabel(anchors.lastSpringFreeze)} and returns around{' '}
-      {dayLabel(anchors.firstFallFreeze)}, which is about {anchors.frostFreeDays} growing days.
-      About one year in {Math.max(2, Math.round(100 / percentile))} sees frost outside those dates.
-      You can change how cautious the dates are in the planting calendar. The dates come from thirty
-      years of daily temperature records for this place, 1991 to 2020, from{' '}
-      {SOURCE_NAME[site.normals.source]}.
+      Frost usually ends around {dayLabel(anchors.lastSpringFreeze)} and returns around{' '}
+      {dayLabel(anchors.firstFallFreeze)}, about {anchors.frostFreeDays} growing{' '}
+      <span className="with-tip">
+        days.
+        <InfoTip label="a frost date" testId="info-season-dates">
+          Frost falls outside these dates about one year in{' '}
+          {Math.max(2, Math.round(100 / percentile))}. They're computed from thirty years of daily
+          temperatures for this place, 1991 to 2020, from {SOURCE_NAME[site.normals.source]}. Change
+          the risk under More about this place.
+        </InfoTip>
+      </span>
     </p>
   )
 }

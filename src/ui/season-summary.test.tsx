@@ -29,8 +29,18 @@ beforeEach(() => {
 describe('the place-step season sentence', () => {
   it('prints the frost pair where the record holds one', async () => {
     expect(await sentenceFor(siteFixture())).toContain(
-      'Frost here usually ends around May 5 and returns around Oct 7, which is about 155 growing days.',
+      'Frost usually ends around May 5 and returns around Oct 7, about 155 growing days.',
     )
+  })
+
+  it('keeps the odds and the record behind the i beside the sentence', async () => {
+    useAppStore.setState({ site: ready(siteFixture()), frostPercentile: 20 })
+    const harness = await mount(<SeasonSummary />)
+    expect(harness.get('info-season-dates').getAttribute('aria-label')).toBe(
+      'What is a frost date?',
+    )
+    expect(harness.get('readout-onboarding-season').textContent).not.toContain('one year in')
+    await harness.unmount()
   })
 
   it('says the season is the whole year where the record holds no frost', async () => {

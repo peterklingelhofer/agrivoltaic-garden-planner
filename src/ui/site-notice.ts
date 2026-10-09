@@ -78,7 +78,7 @@ export const waitLabel = (seconds: number): string => {
  * leaves the sun's air mass on the sea-level reference, and the sentence says both
  */
 export const elevationUnknownWords = (weatherRecord: string | null): string =>
-  `${weatherRecord ?? 'The weather record'} carries no elevation for this place, so the solar position is computed as if the place were at sea level`
+  `${weatherRecord ?? 'The weather record'} has no elevation for this place, so the sun's path is computed at sea level`
 
 /**
  * What the soil map answered, where it answered anything other than the point itself. SoilGrids
@@ -89,4 +89,4 @@ export const elevationUnknownWords = (weatherRecord: string | null): string =>
 export const soilSampledNote = (soil: { readonly sampledKm?: number }): string | null =>
   soil.sampledKm === undefined
     ? null
-    : `The soil map has no reading at this exact spot, so the pH comes from the nearest reading, about ${String(soil.sampledKm)} km away. Every bed starts from it until you type your own soil.`
+    : `Soil pH from the nearest map reading, about ${String(soil.sampledKm)} km away. Beds start from it until you type your own.`
