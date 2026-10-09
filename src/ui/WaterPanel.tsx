@@ -14,6 +14,7 @@ import type { UnsourcedCited } from '../types/cited'
 import type { BedWaterBalance, WaterLimitation } from '../types/water'
 import { SelectField } from './controls'
 import { bandBasisLabel, formatBandPercent, formatBandRange } from './format'
+import { InfoTip } from './InfoTip'
 import { Panel, Readout } from './Panel'
 
 const share = (value: number): string => `${Math.round(value * 100)}%`
@@ -155,6 +156,14 @@ export const WaterPanel = (): ReactElement => {
       title="Water balance"
       subtitle="Rain in and water out, day by day, for this plot: once under open sky and once under the panels. Watering needed is the gap between rain in and water out. (FAO-56 method)"
     >
+      {/* the method's name is in the subtitle, and what it is sits behind the i: two terms every
+          readout below rests on, defined once */}
+      <InfoTip label="FAO-56, ET0 and stress days" testId="info-water-fao56">
+        FAO-56 is the UN Food and Agriculture Organization's irrigation paper 56, the standard way
+        to compute how much water crops use from the weather. ET0, reference evapotranspiration, is
+        the water a well-watered short grass would use, and each crop's demand is a multiple of it.
+        A stress day is one where the soil can't meet that demand.
+      </InfoTip>
       <p className="notice notice-warn" data-testid="readout-water-modeled">
         {UNQUANTIFIED_MICROCLIMATE_CAVEAT}
       </p>

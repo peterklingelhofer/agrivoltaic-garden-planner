@@ -13,6 +13,7 @@ import type { Ring2D } from '../types/geo'
 import type { ObstructionId } from '../types/ids'
 import { meters, type Fraction } from '../types/units'
 import { Action, NumberField, Toggle } from './controls'
+import { InfoTip } from './InfoTip'
 import { settleLanding } from './landing'
 import { lengthStep, showLength, showLimit, toMeters, useLengthUnit } from './length-units'
 import { bringIntoView } from './scroll-into-view'
@@ -397,6 +398,13 @@ export const ObstructionsSection = (): ReactElement => {
           Add a tree
         </Action>
       </div>
+      {/* what one does and how it's moved, behind the i: the paragraph that said it stood above
+          the buttons on every visit */}
+      <InfoTip label="a house or a tree here" testId="info-obstructions">
+        Each one shades the light check as a box where it stands. Move it with the Move tool on the
+        garden, or type where it stands in Center east and Center north. A tree's crown lets some
+        light through, and more once its leaves are down.
+      </InfoTip>
     </>
   )
 }

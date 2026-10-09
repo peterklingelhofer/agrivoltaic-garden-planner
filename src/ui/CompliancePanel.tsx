@@ -4,6 +4,7 @@ import { overlapNotices } from '../recommend/overlap'
 import { useAppStore } from '../state/store'
 import type { ComplianceCheck } from '../types/compliance'
 import { OUTCOME_LABEL, criterionSummary } from './format'
+import { InfoTip } from './InfoTip'
 import { MissingRaster, MISSING_RASTER } from './MissingRaster'
 import { AsyncNotice, Panel } from './Panel'
 
@@ -61,6 +62,13 @@ export const CompliancePanel = (): ReactElement => {
       title="Dual-use solar rules"
       subtitle="Massachusetts SMART is the only rule the app can check from the layout alone"
     >
+      {/* the program's name is in the subtitle, and what it is sits behind the i */}
+      <InfoTip label="SMART, dual-use solar and nameplate" testId="info-compliance-smart">
+        SMART is Massachusetts' solar incentive program, the Solar Massachusetts Renewable Target.
+        Dual-use solar is an array with crops still grown underneath, and the program's rules say
+        how much sunlight must still reach them for the array to qualify. Nameplate is the array's
+        rated power: DC from the panels, AC after the inverter.
+      </InfoTip>
       {overlaps.map((text, index) => (
         <p key={text} className="notice" data-testid={`readout-check-overlap-${String(index)}`}>
           {text}

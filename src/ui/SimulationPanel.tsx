@@ -102,7 +102,12 @@ const describeRecord = (years: readonly MeasuredYear[], source: WeatherSourceId 
   }
   const numbers = years.map((measured) => measured.year)
   const from = source === null ? '' : `, from ${SOURCE_NAME[source]}`
-  return `Weather on record: ${String(years.length)} actual years, ${String(Math.min(...numbers))} to ${String(Math.max(...numbers))}${from}. The typical year is assembled from them.`
+  // one year is "2024", a run of them "2015 to 2024"
+  const span =
+    years.length === 1
+      ? String(numbers[0])
+      : `${String(Math.min(...numbers))} to ${String(Math.max(...numbers))}`
+  return `Weather on record: ${plural(years.length, 'actual year', 'actual years')}, ${span}${from}. The typical year is assembled from ${years.length === 1 ? 'it' : 'them'}.`
 }
 
 /** "(12 more than the typical year)", or nothing where there's no typical year to compare with */
