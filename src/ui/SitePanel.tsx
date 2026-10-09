@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState, type ReactElement } from 'react'
 import { type GeocodeHit, reverseGeocode } from '../data/geocode'
 import { NRCAN_SCHEME_NOTE } from '../data/static-layers'
-import { describeWaterLimitation } from '../data/water'
 import { showingExample, useAppStore } from '../state/store'
 import type { LatLon } from '../types/geo'
 import { degreesLatitude, degreesLongitude } from '../types/units'
@@ -9,7 +8,8 @@ import { isTemperatureHardiness } from '../types/site'
 import type { ExceedancePercentile, TemperatureHardinessRating } from '../types/site'
 import { PERCENTILE_HELP, PERCENTILE_OPTIONS } from './calendar'
 import { Action, NumberField, SelectField, TextField } from './controls'
-import { bandBasisLabel, formatMeters } from './format'
+import { formatMeters } from './format'
+import { InfoTip } from './InfoTip'
 import { Panel, Readout } from './Panel'
 import { Picker, type PickerHandle } from './Picker'
 import { SeasonSummary } from './SeasonSummary'
@@ -275,8 +275,8 @@ export const SitePanel = (): ReactElement => {
       {resolved !== null && resolved.soil.sourceId === 'default' ? (
         <p className="notice notice-idle" data-testid="status-site-soil">
           {resolved.soil.unreachable
-            ? "The soil map couldn't be reached, so every bed assumes pH 6.5 loam until you type your own soil or search for the place again."
-            : 'The soil map has no reading for this spot or for four points 3 km around it. The map leaves out built-up ground and water. Every bed assumes pH 6.5 loam until you type your own soil.'}
+            ? "The soil map couldn't be reached. Beds assume pH 6.5 loam until you type your own."
+            : 'The soil map has no reading here or 3 km around it, as it leaves out built-up ground and water. Beds assume pH 6.5 loam until you type your own.'}
         </p>
       ) : null}
       {/* a reading from a few kilometers out is the area's soil: said, with the distance */}
@@ -287,11 +287,12 @@ export const SitePanel = (): ReactElement => {
       )}
       {/*
         Everything a grower reads once and a specialist reads often, behind one press. On the face,
-        two coordinate fields, an exceedance percentile, a Köppen code, a hardiness zone and a
-        water-limitation band would put the first panel a beginner meets at reading grade 20, the
-        highest in the app, and none of them answer the question the step is asking. The search, the
-        place it found and the frost sentence stay on the face, and the press that looks up typed
-        coordinates is in here beside the fields it reads
+        two coordinate fields, an exceedance percentile, a Köppen code and a hardiness zone would
+        put the first panel a beginner meets at reading grade 20, the highest in the app, and none
+        of them answer the question the step is asking. The search, the place it found and the
+        frost sentence stay on the face, and the press that looks up typed coordinates is in here
+        beside the fields it reads. The water balance isn't here at all: the face says whether rain
+        covers a garden, and the check step's water pane has the figures
       */}
       <details className="wizard-advanced" data-testid="details-site-more">
         <summary data-testid="action-site-more">More about this place</summary>
@@ -332,10 +333,6 @@ export const SitePanel = (): ReactElement => {
         >
           Look up these coordinates
         </Action>
-        <p className="panel-sub" data-testid="readout-site-resolve-help">
-          Only needed for coordinates typed in by hand. Choosing a search result looks the place up
-          on its own.
-        </p>
         <SelectField
           testId="control-site-frost-percentile"
           label="How much frost risk to take"
@@ -343,9 +340,10 @@ export const SitePanel = (): ReactElement => {
           options={PERCENTILE_OPTIONS}
           onChange={(value) => setFrostPercentile(Number(value) as ExceedancePercentile)}
         />
-        <p className="panel-sub" data-testid="readout-site-percentile-help">
+        {/* the same i the calendar step puts beside this control */}
+        <InfoTip label="frost exceedance" testId="info-site-percentile">
           {PERCENTILE_HELP}
-        </p>
+        </InfoTip>
         {resolved ? (
           <div className="readouts">
             <Readout
@@ -375,14 +373,6 @@ export const SitePanel = (): ReactElement => {
             {nrcanZone === null ? null : (
               <Readout id="site-nrcan-zone" label="Canadian hardiness zone" value={nrcanZone} />
             )}
-            <Readout
-              id="site-water-limited"
-              label="Water limitation"
-              value={describeWaterLimitation(
-                resolved.waterLimitation,
-                bandBasisLabel(resolved.waterLimitation.band),
-              )}
-            />
           </div>
         ) : null}
         {nrcanZone === null ? null : (

@@ -33,10 +33,10 @@ beforeEach(() => {
 describe('the place-step verdict', () => {
   it('says how much of the catalog the climate admits and whether rain covers a garden', async () => {
     const text = await verdictFor(siteFixture())
-    expect(text).toMatch(
-      /of the catalog grows in this climate: \d+ of \d+ crops pass the climate check/,
-    )
-    expect(text).toContain('Rain here')
+    expect(text).toMatch(/of the catalog grows in this climate: \d+ of \d+ crops\./)
+    expect(text).toMatch(/Rain (is|covers|matches)/)
+    // the breakdown of what the refused crops would need sits behind the i, off the sentence
+    expect(text).not.toContain('The rest need')
   })
 
   it('says plainly that a frost-free monsoon site needs watering', async () => {

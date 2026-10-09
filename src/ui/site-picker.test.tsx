@@ -158,7 +158,9 @@ describe('choosing a result resolves the site', () => {
     const fold = harness.get('details-site-more')
     expect(harness.get('action-site-resolve').closest('details')).toBe(fold)
     expect(harness.get('control-site-latitude').closest('details')).toBe(fold)
-    expect(harness.get('readout-site-resolve-help').textContent).toContain('by hand')
+    // the frost-risk control and its i are in there too, as on the calendar step
+    expect(harness.get('control-site-frost-percentile').closest('details')).toBe(fold)
+    expect(harness.get('info-site-percentile').closest('details')).toBe(fold)
     expect(harness.get('readout-site-attribution').textContent).toContain('OpenStreetMap')
     await harness.click('action-site-resolve')
     expect(resolveSite).toHaveBeenCalledTimes(1)

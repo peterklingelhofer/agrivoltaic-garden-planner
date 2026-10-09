@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'bun:test'
 import { loadCropCatalog } from '../data/crops'
 import type { Celsius, MillimetersPerYear } from '../types/units'
-import { climateSentence, siteVerdict, waterSentence } from './site-verdict'
+import { climateRest, climateSentence, siteVerdict, waterSentence } from './site-verdict'
 import { frostFreeSiteFixture, hotDesertSiteFixture, siteFixture } from './testkit'
 
 const catalogPromise = loadCropCatalog()
@@ -38,8 +38,8 @@ describe('how a place grows, before any bed exists', () => {
     const catalog = await catalogPromise
     const verdict = siteVerdict(nairobi(), catalog, 20)
     expect(verdict.refused['cold-winter']).toBeGreaterThanOrEqual(3)
-    expect(climateSentence(verdict)).toContain('pass the climate check')
-    expect(climateSentence(verdict)).toContain('colder winters')
+    expect(climateSentence(verdict)).toContain('of the catalog')
+    expect(climateRest(verdict)).toContain('colder winters')
   })
 
   it('grades the share in three plain words', () => {
@@ -47,17 +47,20 @@ describe('how a place grows, before any bed exists', () => {
     expect(climateSentence({ total: 100, fits: 80, refused })).toContain('Most of the catalog')
     expect(climateSentence({ total: 100, fits: 50, refused })).toContain('About half')
     expect(climateSentence({ total: 100, fits: 20, refused })).toContain('Few of the')
-    expect(climateSentence({ total: 100, fits: 100, refused })).not.toContain('The rest')
+    expect(climateRest({ total: 100, fits: 100, refused })).toBeNull()
   })
 
   it('names what the refused crops would need, most common first, three at most', () => {
-    const sentence = climateSentence({
+    const verdict = {
       total: 10,
       fits: 2,
       refused: { hardiness: 1, chill: 2, 'cold-winter': 1, 'season-gdd': 4, 'fao-ecocrop': 0 },
-    })
-    expect(sentence).toBe(
-      "Few of the catalog's crops grow in this climate: 2 of 10 crops pass the climate check. The rest need a longer season (4), colder winters (3) and milder winters (1).",
+    }
+    expect(climateSentence(verdict)).toBe(
+      "Few of the catalog's crops grow in this climate: 2 of 10 crops.",
+    )
+    expect(climateRest(verdict)).toBe(
+      'The rest need a longer season (4), colder winters (3) and milder winters (1).',
     )
   })
 

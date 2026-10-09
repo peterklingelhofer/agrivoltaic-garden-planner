@@ -945,6 +945,18 @@ body {
   margin-left: 5px;
 }
 
+/* A sentence's last word and the i after it, kept on one line. A line may break before an
+   inline box, and an i that opens the next line reads as the next sentence's footnote. The i
+   hugs its word and leaves a wider gap before the next sentence, for the same reason */
+.with-tip {
+  white-space: nowrap;
+}
+
+.with-tip .infotip {
+  margin-left: 2px;
+  margin-right: 5px;
+}
+
 .infotip-trigger {
   font: inherit;
   font-size: 11px;

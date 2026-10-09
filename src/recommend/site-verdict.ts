@@ -72,9 +72,9 @@ const joinWords = (words: readonly string[]): string =>
     : `${words.slice(0, -1).join(', ')} and ${words[words.length - 1] ?? ''}`
 
 /**
- * The share of the catalog that passes, graded in three literal words, then the count and
- * what the rest would need. The grades are this app's own bands: most above seven in ten, about
- * half between four and seven, few below four
+ * The share of the catalog that passes, graded in three literal words, then the count. The
+ * grades are this app's own bands: most above seven in ten, about half between four and seven,
+ * few below four
  */
 export const climateSentence = (verdict: SiteVerdict): string => {
   const share = verdict.total === 0 ? 0 : verdict.fits / verdict.total
@@ -84,6 +84,15 @@ export const climateSentence = (verdict: SiteVerdict): string => {
       : share >= 0.4
         ? 'About half of the catalog grows in this climate'
         : "Few of the catalog's crops grow in this climate"
+  return `${lead}: ${String(verdict.fits)} of ${String(verdict.total)} crops.`
+}
+
+/**
+ * What the refused crops would need, most common first and three at most, or null where nothing
+ * was refused. It sits behind the i beside the sentence above: the count is the fact, and this is
+ * its breakdown
+ */
+export const climateRest = (verdict: SiteVerdict): string | null => {
   const counts = new Map<string, number>()
   for (const kind of REFUSALS) {
     const count = verdict.refused[kind]
@@ -93,27 +102,23 @@ export const climateSentence = (verdict: SiteVerdict): string => {
     .sort((left, right) => right[1] - left[1])
     .slice(0, 3)
     .map(([need, count]) => `${need} (${String(count)})`)
-  const rest = needs.length === 0 ? '' : ` The rest need ${joinWords(needs)}.`
-  return `${lead}: ${String(verdict.fits)} of ${String(verdict.total)} crops pass the climate check.${rest}`
+  return needs.length === 0 ? null : `The rest need ${joinWords(needs)}.`
 }
 
 /**
  * Rain against use, from the FAO-56 balance the site already ran. Reference evapotranspiration
- * is said as what a garden would use, which is what the figure is
+ * is said as what a garden would use, which is what the figure is. The millimeters themselves
+ * are on the check step's water pane
  */
 export const waterSentence = (site: Site): string => {
   const { rainfallMm, referenceEtMm, limited } = site.waterLimitation
-  const rain = rainfallMm.toFixed(0)
-  const use = referenceEtMm.toFixed(0)
   const share = Math.round((rainfallMm / Math.max(referenceEtMm, 1)) * 100)
   if (!limited) {
-    if (share >= 100) {
-      return `Rain here covers what a garden would use over a year: ${rain} mm falls against ${use} mm of use, so watering is a backup.`
-    }
-    return `Rain here is about ${String(share)}% of what a garden would use over a year: ${rain} mm falls against ${use} mm of use, a gap small enough that watering is a backup.`
+    if (share >= 100) return 'Rain covers what a garden uses over a year, so watering is a backup.'
+    return `Rain is about ${String(share)}% of what a garden uses over a year, so watering is a backup.`
   }
   if (share >= 100) {
-    return `Rain here matches what a garden would use over a year, ${rain} mm against ${use} mm of use, but it falls in a few months, so plan to water in the dry ones.`
+    return 'Rain matches what a garden uses over a year but falls in a few months, so plan to water in the dry ones.'
   }
-  return `Rain here is about ${String(share)}% of what a garden would use over a year: ${rain} mm falls against ${use} mm of use, so plan to water.`
+  return `Rain is about ${String(share)}% of what a garden uses over a year, so plan to water.`
 }

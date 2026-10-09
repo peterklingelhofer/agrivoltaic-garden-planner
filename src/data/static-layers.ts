@@ -54,7 +54,7 @@ export const NRCAN_ATTRIBUTION =
  * things, so the copy has to stop the comparison a reader would otherwise make on sight
  */
 export const NRCAN_SCHEME_NOTE =
-  "The Natural Resources Canada (NRCan) zone is a composite index of seven climate variables, among them snow depth, wind gust and summer rainfall. It isn't a winter minimum temperature and doesn't convert to a USDA zone, because the two numbers come from different systems and can't be compared. The temperature rating beside it is measured separately from thirty years of daily minima and isn't derived from this zone."
+  "The Natural Resources Canada (NRCan) zone scores seven climate variables, snow depth and summer rainfall among them. It isn't a winter minimum temperature and doesn't convert to a USDA zone. The temperature rating beside it comes from thirty years of daily minima, on its own."
 
 export const NORMALS_PERIOD = '1991-2020'
 
