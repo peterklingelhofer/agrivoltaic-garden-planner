@@ -119,28 +119,17 @@ const shadePercent = (exposure: SiteExposure): string =>
   String(Math.round(SURROUNDINGS_SHADE[exposure] * 100))
 
 /**
- * Why the surroundings question is asked before any panel exists, and what the answer does: it
- * dims the light every bed is judged by, from the one table the layout search spends its shade
- * budget from
+ * What the surroundings answer does: it dims the light every bed is judged by, from the one table
+ * the layout search spends its shade budget from. The figures are the whole sentence, since the
+ * answer is a crude factor and the face should say so
  */
-export const EXPOSURE_HELP = `Buildings, fences and trees shade a space before any panel does. Shaded for part of the day takes about ${shadePercent('partly-sheltered')}% off the light every bed gets, in shade most of the day takes ${shadePercent('overshadowed')}%`
+export const EXPOSURE_HELP = `Part of the day takes about ${shadePercent('partly-sheltered')}% off every bed's light, and most of the day takes ${shadePercent('overshadowed')}%`
 
+// the three labels carry the question on their own, so no option explains itself underneath
 export const EXPOSURE_OPTIONS: readonly ChoiceOption<SiteExposure>[] = [
-  {
-    value: 'open',
-    label: 'Open sky all day',
-    help: 'Nothing tall is close by: full sun from morning to evening',
-  },
-  {
-    value: 'partly-sheltered',
-    label: 'Shaded for part of the day',
-    help: 'A house, a fence, or trees shade it for the morning or the evening',
-  },
-  {
-    value: 'overshadowed',
-    label: 'Shaded most of the day',
-    help: 'Tall structures or trees block sun for most of the day',
-  },
+  { value: 'open', label: 'Open sky all day' },
+  { value: 'partly-sheltered', label: 'Shaded for part of the day' },
+  { value: 'overshadowed', label: 'Shaded most of the day' },
 ]
 
 export const MOUNTING_OPTIONS: readonly ChoiceOption<MountingPreference>[] = [

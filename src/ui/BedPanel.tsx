@@ -929,9 +929,6 @@ interface PlotSize {
 const MIN_PLOT_M = 0.5
 const MIN_PLOT_FT = 2
 
-const PLOT_SIZE_HELP =
-  'The plot resizes around its own middle, so your beds and panels stay where they are'
-
 /**
  * How big the plot is, in numbers, which is how the guided setup asked for it.
  *
@@ -1023,9 +1020,6 @@ const PlotSizeSection = ({ boundary }: { readonly boundary: Polygon2D }): ReactE
           lines at phone width */}
       <p className="panel-sub readout-line" data-testid="readout-plot-area">
         {formatAreaBothUnits(polygonAreaM2(boundary))}
-      </p>
-      <p className="panel-sub" data-testid="readout-plot-size-help">
-        {PLOT_SIZE_HELP}
       </p>
       {rectangle === null ? (
         <>

@@ -109,7 +109,7 @@ describe('the size of the plot, typed rather than redrawn', () => {
     const harness = await mount(<GroundPanel />)
     expect(harness.find('control-onboarding-exposure')).not.toBeNull()
     expect(harness.get('readout-onboarding-exposure-help').textContent).toMatch(
-      /shade a space before any panel/,
+      /takes about \d+% off every bed's light/,
     )
     expect(harness.find('control-onboarding-irrigation')).not.toBeNull()
     expect(harness.get('readout-ground-beds').textContent).toMatch(/^\d+ beds?, \d+\.\d m² /)

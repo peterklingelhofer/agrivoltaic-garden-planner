@@ -41,7 +41,7 @@ describe('a house drawn on the ground', () => {
     expect(harness.get('control-onboarding-exposure').hasAttribute('disabled')).toBe(true)
     expect(harness.find('readout-onboarding-exposure-help')).toBeNull()
     expect(harness.get('readout-onboarding-exposure-house').textContent).toBe(
-      "These answers aren't used while a house or a tree is drawn. The light check shades with what you drew.",
+      'With a house or tree drawn, the light check uses it and ignores this answer.',
     )
 
     await harness.type('control-house-width-house-1', '12')
@@ -86,7 +86,7 @@ describe('a tree drawn on the ground', () => {
     expect(harness.get('item-tree-tree-1').textContent).toContain('Tree 1')
     expect(harness.get('control-onboarding-exposure').hasAttribute('disabled')).toBe(true)
     expect(harness.get('readout-onboarding-exposure-house').textContent).toBe(
-      "These answers aren't used while a house or a tree is drawn. The light check shades with what you drew.",
+      'With a house or tree drawn, the light check uses it and ignores this answer.',
     )
 
     expect((harness.get('control-tree-leaf-tree-1') as HTMLInputElement).value).toBe('3')
