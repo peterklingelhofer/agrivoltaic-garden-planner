@@ -615,9 +615,18 @@ export const shadeBenefitStatusOf = (limitation: WaterLimitation): ShadeBenefitS
   }
 }
 
-// the band's label comes from the caller, which names the interval kind (src/ui/format.ts)
-export const describeWaterLimitation = (limitation: WaterLimitation, bandLabel: string): string =>
-  `${limitation.limited ? 'Limited' : 'Not limited'}. Rain leaves ${percent(limitation.index)} of the season's water demand unmet (${bandLabel}: ${percent(limitation.band.interval.lower)} to ${percent(limitation.band.interval.upper)}). ${limitation.rainfallMm.toFixed(0)} mm of rain, ${limitation.referenceEtMm.toFixed(0)} mm of demand (reference ET, ${ET0_METHOD_LABEL[limitation.method]})`
+/**
+ * The verdict is the readout's value, and the note under it is the index, its band and the two
+ * totals it comes from. The band's label comes from the caller, which names the interval kind
+ * (src/ui/format.ts). The ET0 method isn't repeated here: the readout beside this one names it
+ */
+export const describeWaterLimitation = (
+  limitation: WaterLimitation,
+  bandLabel: string,
+): { readonly verdict: string; readonly note: string } => ({
+  verdict: limitation.limited ? 'Limited' : 'Not limited',
+  note: `Rain leaves ${percent(limitation.index)} of the season's water demand unmet (${bandLabel}: ${percent(limitation.band.interval.lower)} to ${percent(limitation.band.interval.upper)}). ${limitation.rainfallMm.toFixed(0)} mm of rain against ${limitation.referenceEtMm.toFixed(0)} mm of demand.`,
+})
 
 /**
  * The soil-moisture and air-temperature responses
