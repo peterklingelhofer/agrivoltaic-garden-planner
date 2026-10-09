@@ -161,7 +161,11 @@ test('an ET0 fallback always names the upstream that forced it', async ({ page }
 
   await expect(page.getByTestId('readout-water-method')).toHaveText('Hargreaves-Samani')
   await expect(page.getByTestId('readout-water-fallback')).toContainText(/supplies no wind speed/i)
-  await expect(page.getByTestId('readout-water-limitation')).toContainText(/Hargreaves-Samani/)
+  // the method is named once, in its own readout. The limitation note beside it carries the
+  // figures and names no method, so nothing on the pane can claim the other one
+  const note = page.getByTestId('readout-water-limitation-note')
+  await expect(note).toContainText(/\d+ mm of rain against \d+ mm of demand/)
+  await expect(note).not.toContainText(/Penman|Hargreaves/)
 })
 
 // the site is looked up on mount now, so this asks for a lookup that can't succeed: the point
