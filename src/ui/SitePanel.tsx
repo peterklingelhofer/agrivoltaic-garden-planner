@@ -375,6 +375,16 @@ export const SitePanel = (): ReactElement => {
             )}
           </div>
         ) : null}
+        {/* two of the readouts are terms a gardener meets on plant labels and maps: defined
+            once, behind the i */}
+        {resolved ? (
+          <InfoTip label="the climate type and the hardiness zone" testId="info-site-climate-words">
+            A Köppen type sorts a climate by its temperature and rain through the year: Dfb, for
+            example, is humid with warm summers and cold winters. A hardiness zone is the coldest
+            winter temperature a place usually sees, in 10 °F bands, and it's what plant labels
+            quote.
+          </InfoTip>
+        ) : null}
         {nrcanZone === null ? null : (
           <p className="panel-sub" data-testid="readout-site-nrcan-note">
             {NRCAN_SCHEME_NOTE}

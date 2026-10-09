@@ -407,7 +407,7 @@ export interface UiSlice {
   readonly lengthUnit: LengthUnit
   readonly draft: readonly Vec2M[]
   readonly overlay: OverlaySettings
-  /** The grower's own override of `overlayOffOnSeasons`. Not persisted, and off by default */
+  /** The grower's own override of `overlayOffOnSeasons`. Not persisted, and on by default */
   readonly overlayOnSeasons: boolean
   /**
    * The plan column across the whole window, with the garden put away until asked for. Eleven beds'

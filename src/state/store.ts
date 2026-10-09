@@ -239,7 +239,8 @@ const initialData = (): DataOnly<AppState> => ({
   retailPrice: null,
   simulationNotice: null,
   sweeping: false,
-  overlayOnSeasons: false,
+  // on by default: the light colors are the point of running a season on this ground
+  overlayOnSeasons: true,
   widePlan: false,
   noPanels: idle(),
   options: DEFAULT_SIM_OPTIONS,

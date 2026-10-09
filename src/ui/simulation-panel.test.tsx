@@ -339,13 +339,13 @@ describe('simulation panel', () => {
     await harness.unmount()
   })
 
-  it('keeps the light colors off the seasons step until the grower asks for them', async () => {
+  it('shows the light colors on the seasons step until the grower unchecks them', async () => {
     seedGarden()
     const harness = await mount(<SimulationPanel />)
-    expect((harness.get('control-seasons-show-light') as HTMLInputElement).checked).toBe(false)
-    expect(useAppStore.getState().overlayOnSeasons).toBe(false)
-    await harness.click('control-seasons-show-light')
+    expect((harness.get('control-seasons-show-light') as HTMLInputElement).checked).toBe(true)
     expect(useAppStore.getState().overlayOnSeasons).toBe(true)
+    await harness.click('control-seasons-show-light')
+    expect(useAppStore.getState().overlayOnSeasons).toBe(false)
     await harness.unmount()
   })
 

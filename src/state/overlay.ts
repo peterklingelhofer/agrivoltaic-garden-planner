@@ -9,13 +9,11 @@ import type { OverlayChannel, OverlayPlayback, OverlaySlice, SidebarStep } from 
 /**
  * Whether the ground is left uncolored, which the scene and the color key have to agree on.
  *
- * The seasons step stops drawing the overlay so the plants the season is about are visible. The key
- * over the canvas is a separate component in a separate file, and left to itself it would go on
- * showing the daily light integral scale over flat green ground. One predicate, read by both, is
- * what stops them drifting apart.
- *
- * Overridden by the grower's own choice: `overlayOnSeasons` is the seasons step's own toggle for
- * bringing the colors back over the plants they were hidden for
+ * The seasons step can leave the ground uncolored so the plants the season is about are visible:
+ * `overlayOnSeasons` is the step's own toggle, on by default, and unchecking it hides the colors
+ * there alone. The key over the canvas is a separate component in a separate file, and left to
+ * itself it would go on showing the daily light integral scale over flat green ground. One
+ * predicate, read by both, is what stops them drifting apart
  */
 export const overlayOffOnSeasons = (state: {
   readonly sidebarStep: SidebarStep
