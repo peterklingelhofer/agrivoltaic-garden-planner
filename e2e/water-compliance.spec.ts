@@ -61,15 +61,16 @@ test('the water panel says what it modeled, per bed, and discloses every unsourc
   await expect(page.getByTestId('readout-water-modeled')).toContainText(/can go either way/i)
 
   /**
-   * Decision Record 6 grades water limitation with an index. The readout has to carry the grade,
-   * its band and the evidence behind it, since a bare "limited" carries none of them
+   * Decision Record 6 grades water limitation with an index. The value is the grade, and the note
+   * under it carries the index, its band and the evidence behind it, since a bare "limited"
+   * carries none of them
    */
-  const limitation = page.getByTestId('readout-water-limitation')
-  await expect(limitation).toContainText(/^(Not limited|Limited)\./)
-  await expect(limitation).toContainText(
+  await expect(page.getByTestId('readout-water-limitation')).toHaveText(/^(Not limited|Limited)$/)
+  const note = page.getByTestId('readout-water-limitation-note')
+  await expect(note).toContainText(
     /Rain leaves \d+% of the season's water demand unmet \(\d+% [a-z ]*(interval|range): \d+% to \d+%\)/,
   )
-  await expect(limitation).toContainText(/\d+ mm of rain, \d+ mm of demand \(reference ET, /)
+  await expect(note).toContainText(/\d+ mm of rain against \d+ mm of demand/)
 
   // the ET0 method is named, and a fallback is never silent
   const method = (await page.getByTestId('readout-water-method').textContent()) ?? ''

@@ -11,12 +11,35 @@ import {
 import { useAppStore } from '../state/store'
 import { waterBalanceView } from '../state/water'
 import type { UnsourcedCited } from '../types/cited'
-import type { BedWaterBalance } from '../types/water'
+import type { BedWaterBalance, WaterLimitation } from '../types/water'
 import { SelectField } from './controls'
 import { bandBasisLabel, formatBandPercent, formatBandRange } from './format'
 import { Panel, Readout } from './Panel'
 
 const share = (value: number): string => `${Math.round(value * 100)}%`
+
+/**
+ * The verdict is the value, and the index, its band and the two totals it comes from sit under it
+ * on a row of their own. As one value they wrapped to a dozen lines in a half-width cell
+ */
+const LimitationReadout = ({
+  limitation,
+}: {
+  readonly limitation: WaterLimitation
+}): ReactElement => {
+  const words = describeWaterLimitation(limitation, bandBasisLabel(limitation.band))
+  return (
+    <div className="readout readout-band">
+      <span className="readout-label">Water limitation</span>
+      <span className="readout-value" data-testid="readout-water-limitation">
+        {words.verdict}
+      </span>
+      <span className="readout-note" data-testid="readout-water-limitation-note">
+        {words.note}
+      </span>
+    </div>
+  )
+}
 
 const millimeters = (value: number): string => `${value.toFixed(0)} mm`
 
@@ -137,11 +160,7 @@ export const WaterPanel = (): ReactElement => {
       </p>
       {limitation === null ? null : (
         <div className="readouts">
-          <Readout
-            id="water-limitation"
-            label="Water limitation"
-            value={describeWaterLimitation(limitation, bandBasisLabel(limitation.band))}
-          />
+          <LimitationReadout limitation={limitation} />
           {limitation.fallbackReason === null ? null : (
             <Readout
               id="water-fallback"

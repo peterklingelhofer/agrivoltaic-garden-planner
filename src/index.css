@@ -1445,8 +1445,12 @@ input[type='range'] {
   font-family: var(--mono);
 }
 
+/* A readout whose value carries a note under it (the water limitation's index and band): the
+   note wraps onto its own line, and the row takes the grid's full width, since a sentence in a
+   half-width cell wrapped to a dozen lines */
 .readout-band {
   flex-wrap: wrap;
+  grid-column: 1 / -1;
 }
 
 .readout-note {

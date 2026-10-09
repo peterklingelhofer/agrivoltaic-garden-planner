@@ -151,12 +151,13 @@ describe('the water pane limitation readout', () => {
   it('grades the index and never answers yes or no', async () => {
     seed(0.5)
     const harness = await mount(<WaterPanel />)
-    const text = harness.get('readout-water-limitation').textContent ?? ''
-    expect(text).toMatch(/Rain leaves 50% of the season's water demand unmet/)
-    expect(text).toMatch(/\d+% to \d+%/)
+    expect(harness.get('readout-water-limitation').textContent).toMatch(/^(Not limited|Limited)$/)
+    // the index, its band and the totals sit in the note under the verdict
+    const note = harness.get('readout-water-limitation-note').textContent ?? ''
+    expect(note).toMatch(/Rain leaves 50% of the season's water demand unmet/)
     // the band's label sits inside the sentence, ahead of the range it names
-    expect(text).toMatch(/\(\d+% (plausible range|confidence interval): \d+% to \d+%\)/)
-    expect(text).not.toBe('yes')
+    expect(note).toMatch(/\(\d+% (plausible range|confidence interval): \d+% to \d+%\)/)
+    expect(note).toMatch(/\d+ mm of rain against \d+ mm of demand/)
     await harness.unmount()
   })
 })
