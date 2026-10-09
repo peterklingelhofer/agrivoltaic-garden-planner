@@ -249,13 +249,13 @@ export const AgendaPanel = (): ReactElement => {
     <Panel
       id="agenda"
       title="What to do next"
-      subtitle="Every job your beds need, nearest first, and what to buy for them. The dates come from the planting calendar"
+      subtitle="Every job your beds need, nearest first, and what to buy for them"
     >
       <AsyncNotice state={calendars} testId="status-agenda" idleLabel="No planting calendar yet" />
       {/* the jobs first. How they were dated is one fold below them, because five paragraphs of
           method landing above the first job read as unusable */}
       <p className="panel-sub" data-testid="readout-agenda-reference">
-        Dated from today, {dayLabel(agenda.referenceDay)}, and running one year forward from it
+        Dated from today, {dayLabel(agenda.referenceDay)}, for one year
       </p>
       {empty ? (
         <p

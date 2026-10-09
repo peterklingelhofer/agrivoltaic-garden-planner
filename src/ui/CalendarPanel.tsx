@@ -29,7 +29,7 @@ export const CalendarPanel = (): ReactElement => {
     <Panel
       id="calendar"
       title="Planting calendar"
-      subtitle="Sow and harvest windows for each bed: what's planted in it first, then the rest of its ranking. Every date names the rule that produced it"
+      subtitle="Sow and harvest windows for each bed, what's planted in it first"
     >
       <SelectField
         testId="control-calendar-frost-percentile"
