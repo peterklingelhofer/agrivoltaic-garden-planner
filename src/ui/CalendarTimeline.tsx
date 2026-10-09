@@ -93,12 +93,6 @@ const CropRow = ({
         >
           {feasibility.badge}
         </span>
-        <span
-          className="cal-percentile"
-          data-testid={`readout-calendar-percentile-${entry.cropId}`}
-        >
-          {entry.frostRiskPercentile}% frost risk
-        </span>
       </header>
       <p
         className={NOTICE_CLASS[feasibility.tone]}
@@ -107,9 +101,6 @@ const CropRow = ({
       >
         {feasibility.detail}
       </p>
-      {evidence === null ? null : (
-        <DliEvidenceNote evidence={evidence} subjectId={String(entry.cropId)} prefix="calendar" />
-      )}
       <div
         className="cal-track"
         data-testid={`chart-calendar-${entry.cropId}`}
@@ -155,24 +146,11 @@ const CropRow = ({
         {entry.plantings.map((planting, index) => (
           <li
             key={`${planting.method}-${planting.earliest}-${planting.latest}-${planting.recommended}`}
-            data-testid={`item-calendar-planting-${entry.cropId}-${index}`}
-            data-method={planting.method}
           >
             <span className={`cal-swatch cal-bar-${planting.method}`} />
             <strong>{methodLabel(planting.method)}</strong>{' '}
             <span data-testid={`readout-calendar-recommended-${entry.cropId}-${index}`}>
               {dayLabel(planting.recommended)}
-            </span>{' '}
-            <span className="cal-window">
-              (window {dayLabel(planting.earliest)} to {dayLabel(planting.latest)})
-            </span>
-            <span
-              className="cal-basis"
-              data-testid={`readout-calendar-basis-${entry.cropId}-${index}`}
-              data-basis={planting.basis.kind}
-              title={basisLabel(planting.basis)}
-            >
-              Basis: {basisKindLabel(planting.basis)}, {basisLabel(planting.basis)}
             </span>
           </li>
         ))}
@@ -182,6 +160,59 @@ const CropRow = ({
           <span data-testid={`readout-calendar-harvest-${entry.cropId}`}>
             {dayLabel(entry.harvest.start)} to {dayLabel(entry.harvest.end)}
           </span>
+        </li>
+      </ol>
+      {/*
+        The dates are the face. The window each one sits in, the rule that produced it, its
+        source, the succession days, the light evidence and the notes on the method fold, one
+        press away, as the agenda's "Why this date" does for a job. Unfolded, every row carried
+        four lines of method, and a bed's calendar read as the same page repeated. The e2e fixture
+        reads the plantings and their basis from inside the fold, by test id
+      */}
+      <details className="wizard-advanced" data-testid={`details-calendar-why-${entry.cropId}`}>
+        <summary>Why these dates</summary>
+        {evidence === null ? null : (
+          <DliEvidenceNote evidence={evidence} subjectId={String(entry.cropId)} prefix="calendar" />
+        )}
+        {entry.plantings.map((planting, index) => (
+          <p
+            key={`${planting.method}-${planting.earliest}-${planting.latest}-${planting.recommended}`}
+            className="cal-note"
+            data-testid={`item-calendar-planting-${entry.cropId}-${index}`}
+            data-method={planting.method}
+          >
+            <strong>{methodLabel(planting.method)}</strong>, window{' '}
+            <span className="cal-window">
+              {dayLabel(planting.earliest)} to {dayLabel(planting.latest)}
+            </span>
+            .{' '}
+            <span
+              className="cal-basis"
+              data-testid={`readout-calendar-basis-${entry.cropId}-${index}`}
+              data-basis={planting.basis.kind}
+              title={basisLabel(planting.basis)}
+            >
+              Basis: {basisKindLabel(planting.basis)}, {basisLabel(planting.basis)}
+            </span>
+            {planting.citations.length === 0 ? null : (
+              <span
+                className="cal-cites"
+                data-testid={`readout-calendar-citations-${entry.cropId}-${index}`}
+              >
+                {' ('}
+                {planting.citations.map((id, at) => (
+                  <Fragment key={id}>
+                    {at > 0 ? ', ' : null}
+                    <SourceLink id={id} />
+                  </Fragment>
+                ))}
+                {')'}
+              </span>
+            )}
+          </p>
+        ))}
+        <p className="cal-note">
+          <strong>Harvest</strong>.{' '}
           <span
             className="cal-basis"
             data-testid={`readout-calendar-harvest-basis-${entry.cropId}`}
@@ -190,49 +221,18 @@ const CropRow = ({
           >
             Basis: {basisKindLabel(entry.harvest.basis)}, {basisLabel(entry.harvest.basis)}
           </span>
-        </li>
-      </ol>
-      {entry.successions.length > 0 ? (
-        <p className="cal-note" data-testid={`readout-calendar-successions-${entry.cropId}`}>
-          Successions: {entry.successions.map((day) => dayLabel(day)).join(', ')}
         </p>
-      ) : null}
-      {/*
-        The dates and their one-line basis are the face. Where the basis came from and the notes on
-        the method fold. Unfolded, every planting line would carry its source's full title
-        ("Open-Meteo Historical Weather API and Satellite Radiation API n.d.") and two paragraphs on
-        heat supply and soil temperature, and a bed's calendar would read as the same page repeated
-      */}
-      {notes.length > 0 || entry.plantings.some((planting) => planting.citations.length > 0) ? (
-        <details
-          className="wizard-advanced"
-          data-testid={`details-calendar-sources-${entry.cropId}`}
-        >
-          <summary>Sources and notes</summary>
-          {entry.plantings.map((planting, index) =>
-            planting.citations.length === 0 ? null : (
-              <p
-                key={`${planting.method}-${planting.earliest}-${planting.latest}-${planting.recommended}`}
-                className="cal-cites"
-                data-testid={`readout-calendar-citations-${entry.cropId}-${index}`}
-              >
-                {methodLabel(planting.method)}:{' '}
-                {planting.citations.map((id, at) => (
-                  <Fragment key={id}>
-                    {at > 0 ? ', ' : null}
-                    <SourceLink id={id} />
-                  </Fragment>
-                ))}
-              </p>
-            ),
-          )}
-          {notes.map((note) => (
-            <p key={note} className="cal-note">
-              {note}
-            </p>
-          ))}
-        </details>
-      ) : null}
+        {entry.successions.length > 0 ? (
+          <p className="cal-note" data-testid={`readout-calendar-successions-${entry.cropId}`}>
+            Successions: {entry.successions.map((day) => dayLabel(day)).join(', ')}
+          </p>
+        ) : null}
+        {notes.map((note) => (
+          <p key={note} className="cal-note">
+            {note}
+          </p>
+        ))}
+      </details>
     </article>
   )
 }
@@ -240,9 +240,10 @@ const CropRow = ({
 /**
  * How many crops a bed shows before the fold: what is planted in it, or, while it's empty, the
  * head of the ranking. The catalog dates every crop, so twelve timelines over a planted bed could
- * hold only two of the grower's. The rest are one press away
+ * hold only two of the grower's, and twelve over an empty one made three beds a column of
+ * thirty-six timelines. Four is a taste of the ranking, and the rest are one press away
  */
-const VISIBLE_PER_BED = 12
+const VISIBLE_PER_BED = 4
 const visibleCount = (bed: BedCalendar, beds: readonly Bed[]): number => {
   const planted = new Set(
     beds.find((entry) => entry.id === bed.bedId)?.plantings.map((planting) => planting.cropId) ??

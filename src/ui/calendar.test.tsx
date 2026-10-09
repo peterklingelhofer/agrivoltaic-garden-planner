@@ -251,7 +251,10 @@ describe('CalendarTimeline', () => {
     expect(harness.get('readout-calendar-harvest-basis-daucus-carota').textContent).toContain(
       'days to maturity',
     )
-    expect(harness.get('readout-calendar-percentile-daucus-carota').textContent).toContain('20%')
+    // the basis lines sit behind the row's "Why these dates" fold, as the agenda's jobs do
+    expect(harness.get('readout-calendar-basis-daucus-carota-0').closest('details')).toBe(
+      harness.get('details-calendar-why-daucus-carota'),
+    )
     await harness.unmount()
   })
 
@@ -281,7 +284,12 @@ describe('CalendarTimeline', () => {
       crop('d-light', { feasibility: { kind: 'light-limited', month: 5 } }),
       crop('e-thermal', { feasibility: { kind: 'no-thermal-data' } }),
     ]
-    const harness = await mount(<CalendarTimeline calendars={bed(entries)} />)
+    // all five planted in the bed, so all five rows are on the face: an empty bed folds the
+    // ranking past its fourth crop
+    const beds = [
+      { id: bedId('bed-1'), plantings: entries.map((entry) => ({ cropId: entry.cropId })) },
+    ] as unknown as readonly import('../types/garden').Bed[]
+    const harness = await mount(<CalendarTimeline calendars={bed(entries)} beds={beds} />)
     const states = entries.map((entry) =>
       harness.get(`item-calendar-crop-${entry.cropId}`).getAttribute('data-feasibility'),
     )
