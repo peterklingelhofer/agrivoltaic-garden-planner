@@ -134,3 +134,18 @@ describe('the fold', () => {
     expect(harness.find('action-example-expand')).not.toBeNull()
   })
 })
+
+describe('how the example was made', () => {
+  /**
+   * Where the colors came from, in a gardener's words: the light check their own garden gets, run
+   * on the place's weather. The grid, the backend and the script that wrote the asset stay in the
+   * asset, and "baked" is a word a visitor would have to look up
+   */
+  it('names the light check and the weather, without the machinery', async () => {
+    const harness = await withExample()
+    const text = harness.get('readout-example-provenance').textContent ?? ''
+    expect(text).toContain('light check')
+    expect(text).toContain('Amherst, Massachusetts weather')
+    expect(text).not.toMatch(/baked|backend|cells|\.mjs/i)
+  })
+})

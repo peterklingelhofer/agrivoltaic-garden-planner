@@ -50,14 +50,15 @@ test('the example garden is on screen before the first click, and says it is an 
   await expect(example(page)).toContainText('worked example for Amherst')
 
   // a DLI surface has to say where its numbers came from wherever it is read, and for this one
-  // the answer is a bake with a recorded cell size and backend. It's two presses
-  // away, behind the banner's "About this example" and then its own fold, both on the banner
+  // the answer is the app's own light check run on the place's weather, in words a gardener
+  // reads. It's two presses away, behind the banner's "About this example" and then its own
+  // fold, both on the banner
   await page.getByTestId('action-example-expand').click()
   await page.getByTestId('action-example-provenance').click()
   const provenance = page.getByTestId('readout-example-provenance')
-  await expect(provenance).toContainText('cells at 0.4 m')
-  await expect(provenance).toContainText('CPU reference backend')
-  await expect(provenance).toContainText('scripts/bake-example-garden.mjs')
+  await expect(provenance).toContainText('light check')
+  // whichever band's example the browser's time zone opened on, it names that place's weather
+  await expect(provenance).toContainText(/a typical year of .+ weather/)
 
   // the raster arrived with the design: the simulation reads ready without a bake being run
   await expect(page.getByTestId('app-root')).toHaveAttribute('data-sim-state', 'ready')

@@ -652,9 +652,9 @@ body {
   background: var(--panel);
 }
 
+/* a sentence now, in the sentence's type: it was set in mono when it read as a build log */
 .example-banner-detail {
   margin: 0;
-  font-family: var(--mono);
   font-size: 12px;
   line-height: 1.4;
   color: var(--muted);

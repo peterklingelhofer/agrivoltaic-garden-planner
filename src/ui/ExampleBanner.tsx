@@ -70,19 +70,18 @@ export const ExampleBanner = (): ReactElement | null => {
         <p className="example-banner-body">{EXAMPLE_BANNER_BODY}</p>
         {/*
           The provenance, one press away.
-          It's a record of how the raster beside it was produced and it stays on this surface for
-          that reason: a DLI field with no provenance is indistinguishable from an invented one. But
-          "65 x 88 cells at 0.4 m, baked on the CPU reference backend ... quantized to within 0.005
-          mol/m2/d" is monospace machinery in the top-left corner of a first visit, which is where
-          the eye lands first. The banner says whose garden this is. This says how it was made,
-          to whoever asks
+          It stays on this surface because a DLI field with no provenance is indistinguishable from
+          an invented one. What a visitor needs from it is that the colors came out of the same
+          light check their own garden will get, and from which place's weather. The rest of the
+          record, the grid, the backend, the storage error, the date and the script that made it,
+          is machinery a gardener can't act on, and "baked" is a word they'd have to look up. It
+          stays whole in the shipped asset for whoever audits it
         */}
         <details className="example-banner-provenance">
           <summary data-testid="action-example-provenance">How this example was made</summary>
           <p className="example-banner-detail" data-testid="readout-example-provenance">
-            {provenance.notes[0]}. {provenance.siteLabel}, {provenance.weather}. Stored to within{' '}
-            {provenance.quantizationErrorMolM2Day.toFixed(3)} mol/m²/d. Baked{' '}
-            {provenance.generatedAtUtc.slice(0, 10)} by {provenance.generator}
+            The app's own light check worked out these colors, hour by hour through a typical year
+            of {provenance.siteLabel} weather. A garden of your own gets the same check.
           </p>
         </details>
       </div>
