@@ -72,7 +72,7 @@ const STYLE = `
   :root { --ink:#e6ece8; --dim:#a3b3aa; --bg:#131714; --panel:#1a201c; --line:#2c3630; --link:#7fc9a5; --code:#222a25 }
 }
 * { box-sizing: border-box }
-body { margin:0; background:var(--bg); color:var(--ink);
+body { margin:0; background:var(--bg); color:var(--ink); overflow-x:clip;
   font:16px/1.65 ui-serif, Georgia, "Times New Roman", serif; }
 .wrap { max-width: 46rem; margin:0 auto; padding: 2rem 1.25rem 6rem }
 header.site { border-bottom:1px solid var(--line); margin-bottom:2rem; padding-bottom:1rem }
@@ -87,8 +87,16 @@ code { background:var(--code); padding:0.1em 0.35em; border-radius:3px;
 pre { background:var(--code); padding:0.9rem 1rem; border-radius:6px; overflow-x:auto }
 pre code { background:none; padding:0 }
 blockquote { margin:1.2rem 0; padding:0.1rem 0 0.1rem 1rem; border-left:3px solid var(--line); color:var(--dim) }
-/* wide tables scroll in their own box; the page itself must never scroll sideways */
-.table-scroll { overflow-x:auto; margin:1.2rem 0; border:1px solid var(--line); border-radius:6px }
+/* the text keeps its reading width, and a table that can't fit it spreads into the margins: the
+   outer box spans the window, the inner one is the text's width or the least its table needs,
+   centered, and scrolls only where the window is narrower still. The page itself never scrolls
+   sideways */
+.table-bleed { margin:1.2rem calc(50% - 50vw); padding:0 1.25rem }
+.table-scroll { overflow-x:auto; width:min-content; min-width:min(100%, 43.5rem); max-width:100%;
+  margin:0 auto; border:1px solid var(--line); border-radius:6px }
+/* four columns or more get room to read, up to 64rem: held to the text's width, each column of
+   such a table wraps a word or two to a line */
+.table-scroll.wide { width:fit-content; max-width:min(100%, 64rem) }
 table { border-collapse:collapse; width:100%; font:0.86rem/1.5 ui-sans-serif, system-ui, sans-serif }
 th, td { border-bottom:1px solid var(--line); padding:0.5rem 0.7rem; text-align:left; vertical-align:top }
 th { background:var(--panel); font-weight:650; white-space:nowrap }
@@ -147,9 +155,11 @@ const relink = (html, published) =>
   )
 
 const wrapTables = (html) =>
-  html
-    .replace(/<table>/g, '<div class="table-scroll"><table>')
-    .replace(/<\/table>/g, '</table></div>')
+  html.replace(/<table>[\s\S]*?<\/table>/g, (table) => {
+    const header = table.match(/<tr>([\s\S]*?)<\/tr>/)?.[1] ?? ''
+    const wide = (header.match(/<th[\s>]/g) ?? []).length >= 4
+    return `<div class="table-bleed"><div class="table-scroll${wide ? ' wide' : ''}">${table}</div></div>`
+  })
 
 const main = () => {
   const available = new Set(readdirSync(new URL('docs/', ROOT)))
