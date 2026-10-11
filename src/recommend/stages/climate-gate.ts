@@ -1,6 +1,14 @@
 import { CHILL_CEILING_C } from '../../data/agronomy'
 import { growingWindowFor } from '../../data/crops'
-import { monthsInWindow } from '../../data/util'
+import {
+  clamp,
+  dayLabel,
+  DAYS_PER_YEAR,
+  forwardDays,
+  monthsInWindow,
+  wrapDay,
+} from '../../data/util'
+import { dayLengthHours } from '../../sim/phenology'
 import type { Crop } from '../../types/crop'
 import type { LimitingFactor } from '../../types/recommend'
 import { isTemperatureHardiness } from '../../types/site'
@@ -94,6 +102,62 @@ export const chillGate = (crop: Crop, site: Site): GateOutcome => {
     cause: { kind: 'chill' },
     membership: Math.max(available / Math.max(requirement.amount, 1), 0) as Fraction,
     explanation: `This site accumulates about ${Math.round(available).toString()} ${CHILL_METRIC_LABEL[requirement.metric]}, fewer than the ${String(requirement.amount)} this crop needs to break dormancy cleanly`,
+  })
+}
+
+/** Days from midsummer to the first day shorter than `hours`, or null if no day of the year is */
+const daysToShorterThan = (
+  latitudeDeg: number,
+  midsummer: number,
+  hours: number,
+): number | null => {
+  for (let offset = 0; offset < DAYS_PER_YEAR; offset += 1)
+    if (dayLengthHours(latitudeDeg, wrapDay(midsummer + offset)) < hours) return offset
+  return null
+}
+
+/**
+ * A crop whose flowering, or whose harvested root or tuber, starts only once days shorten has to
+ * reach that first short day and then a harvest before the site's first fall freeze. The first
+ * short day is the first one past midsummer whose length, by `dayLengthHours` (the geometric day,
+ * with no twilight), is under the crop's critical length. A frost-free site passes, and so does a
+ * crop with no day-length figures. Where days never get that short the crop is refused. Day
+ * length is all it reads, so it's lenient where an autumn turns cool before the frost
+ * (Decision Record 29)
+ */
+export const photoperiodGate = (
+  crop: Crop,
+  site: Site,
+  frostPercentile: ExceedancePercentile,
+): GateOutcome => {
+  const trigger = crop.photoperiod
+  if (trigger === null) return PASSED
+  const curve = site.frost[0]
+  if (curve === undefined || curve.frostFree[frostPercentile]) return PASSED
+  const latitude = site.location.latitudeDeg
+  // June 21 in the north and December 21 in the south
+  const midsummer = latitude >= 0 ? 172 : 355
+  const hours = String(trigger.criticalHours)
+  const flowers = trigger.triggers === 'flowering'
+  const need = flowers ? 'flower' : "form the roots or tubers it's grown for"
+  const offset = daysToShorterThan(latitude, midsummer, trigger.criticalHours)
+  if (offset === null) {
+    return fail({
+      stage: 'climate-gate',
+      cause: { kind: 'photoperiod' },
+      membership: 0 as Fraction,
+      explanation: `Days here never get shorter than ${hours} hours, which this crop needs to ${need}`,
+    })
+  }
+  const freezeDay = curve.firstFallFreeze[frostPercentile]
+  const freezeOffset = forwardDays(midsummer, freezeDay)
+  if (offset + trigger.toHarvestDays <= freezeOffset) return PASSED
+  const verb = flowers ? 'flower and give a first harvest' : need
+  return fail({
+    stage: 'climate-gate',
+    cause: { kind: 'photoperiod' },
+    membership: clamp((freezeOffset - offset) / trigger.toHarvestDays, 0, 1) as Fraction,
+    explanation: `Days here get shorter than ${hours} hours only on ${dayLabel(wrapDay(midsummer + offset))}, and this crop needs about ${String(Math.round(trigger.toHarvestDays))} days after that to ${verb}, past the first fall frost around ${dayLabel(freezeDay)}`,
   })
 }
 
@@ -226,6 +290,7 @@ export const climateGate = (
     hardinessGate(crop, site),
     chillGate(crop, site),
     seasonGddGate(crop, site, frostPercentile),
+    photoperiodGate(crop, site, frostPercentile),
     ecocropGate(crop, site, frostPercentile, true),
     coldWinterGate(crop, site),
   ]) {

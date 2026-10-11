@@ -13,7 +13,13 @@ import { climateGate } from './stages/climate-gate'
  * the plants step will refuse for the climate. Light isn't in it: light is a fact about a bed, and
  * there's no bed yet
  */
-export type ClimateRefusal = 'hardiness' | 'chill' | 'cold-winter' | 'season-gdd' | 'fao-ecocrop'
+export type ClimateRefusal =
+  | 'hardiness'
+  | 'chill'
+  | 'photoperiod'
+  | 'cold-winter'
+  | 'season-gdd'
+  | 'fao-ecocrop'
 
 export interface SiteVerdict {
   readonly total: number
@@ -24,6 +30,7 @@ export interface SiteVerdict {
 const REFUSALS: readonly ClimateRefusal[] = [
   'hardiness',
   'chill',
+  'photoperiod',
   'cold-winter',
   'season-gdd',
   'fao-ecocrop',
@@ -40,6 +47,7 @@ export const siteVerdict = (
   const refused: Record<ClimateRefusal, number> = {
     hardiness: 0,
     chill: 0,
+    photoperiod: 0,
     'cold-winter': 0,
     'season-gdd': 0,
     'fao-ecocrop': 0,
@@ -61,6 +69,7 @@ export const siteVerdict = (
 const NEED: Readonly<Record<ClimateRefusal, string>> = {
   hardiness: 'milder winters',
   chill: 'colder winters',
+  photoperiod: 'a later first frost',
   'cold-winter': 'colder winters',
   'season-gdd': 'a longer season',
   'fao-ecocrop': 'a different temperature or rainfall',

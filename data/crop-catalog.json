@@ -604,6 +604,17 @@
       "overrides": {
         "harvestDays": 45,
         "nfix": true,
+        "photoperiod": {
+          "triggers": "flowering",
+          "criticalHours": 12.75,
+          "criticalCitations": [
+            "tribhuvan2026-winged-bean-photoperiod"
+          ],
+          "toHarvestDays": 70.5,
+          "toHarvestCitations": [
+            "nakamura1989-winged-bean-okinawa"
+          ]
+        },
         "laubNote": "The grain-legume trials in the meta-analysis measured dry seed, and this crop is picked as an immature pod or a green seed, which is a different sink (where the plant sends its sugars)"
       }
     },

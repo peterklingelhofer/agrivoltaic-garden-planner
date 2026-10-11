@@ -307,33 +307,35 @@ export const explainLimitingFactor = (
         ? 'winters here are too cold for it to survive'
         : cause.kind === 'chill'
           ? "winters here aren't cold enough for it to break dormancy"
-          : cause.kind === 'cold-winter'
-            ? "winters here aren't cold enough for it: it grows only where winters are cold"
-            : cause.kind === 'season-gdd'
-              ? 'the growing season here is too short for it to reach maturity'
-              : cause.kind === 'dli-minimum'
-                ? `not enough light in ${monthLabel(cause.month)}`
-                : cause.kind === 'dli-disorder-ceiling'
-                  ? `too much light in ${monthLabel(cause.month)}`
-                  : cause.kind === 'max-design-rsr'
-                    ? 'more shade here than it can take'
-                    : cause.kind === 'dli-survival-ceiling'
-                      ? 'more light here than it can survive'
-                      : cause.kind === 'soil-ph'
-                        ? "the soil pH here doesn't suit it"
-                        : cause.kind === 'water'
-                          ? 'not enough water for it here'
-                          : cause.kind === 'footprint'
-                            ? "no room for it once it's fully grown"
-                            : cause.kind === 'root-depth'
-                              ? crop === undefined || bed === undefined
-                                ? ROOT_DEPTH_LIMITED
-                                : rootDepthDetail(rootDepthRemedy(crop, bed))
-                              : cause.kind === 'rotation'
-                                ? `grown here too recently to keep ${cause.pathogen} from building up`
-                                : cause.kind === 'shared-pest-or-pathogen'
-                                  ? `shares a pest or disease with ${cropName(catalog, cause.withCropId)}`
-                                  : "nothing on its own rules it out, and altogether it's a weak match"
+          : cause.kind === 'photoperiod'
+            ? 'days here shorten too late in the year for it to finish before frost'
+            : cause.kind === 'cold-winter'
+              ? "winters here aren't cold enough for it: it grows only where winters are cold"
+              : cause.kind === 'season-gdd'
+                ? 'the growing season here is too short for it to reach maturity'
+                : cause.kind === 'dli-minimum'
+                  ? `not enough light in ${monthLabel(cause.month)}`
+                  : cause.kind === 'dli-disorder-ceiling'
+                    ? `too much light in ${monthLabel(cause.month)}`
+                    : cause.kind === 'max-design-rsr'
+                      ? 'more shade here than it can take'
+                      : cause.kind === 'dli-survival-ceiling'
+                        ? 'more light here than it can survive'
+                        : cause.kind === 'soil-ph'
+                          ? "the soil pH here doesn't suit it"
+                          : cause.kind === 'water'
+                            ? 'not enough water for it here'
+                            : cause.kind === 'footprint'
+                              ? "no room for it once it's fully grown"
+                              : cause.kind === 'root-depth'
+                                ? crop === undefined || bed === undefined
+                                  ? ROOT_DEPTH_LIMITED
+                                  : rootDepthDetail(rootDepthRemedy(crop, bed))
+                                : cause.kind === 'rotation'
+                                  ? `grown here too recently to keep ${cause.pathogen} from building up`
+                                  : cause.kind === 'shared-pest-or-pathogen'
+                                    ? `shares a pest or disease with ${cropName(catalog, cause.withCropId)}`
+                                    : "nothing on its own rules it out, and altogether it's a weak match"
   return showsFigures(experience)
     ? `${detail} (${factor.stage}, membership ${factor.membership.toFixed(2)})`
     : detail

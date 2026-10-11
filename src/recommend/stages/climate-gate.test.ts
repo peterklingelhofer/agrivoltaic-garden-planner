@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'bun:test'
 import { cropById, loadCropCatalog } from '../../data/crops'
-import type { Crop } from '../../types/crop'
+import type { Crop, PhotoperiodTrigger } from '../../types/crop'
 import type { CropId } from '../../types/ids'
+import type { FrostExceedanceCurve } from '../../types/site'
+import type { DegreesLatitude, DegreesLongitude } from '../../types/units'
 import { ecocropMembership } from '../membership'
 import { CHILL_CEILING_C } from '../../data/agronomy'
 import { frostFreeSiteFixture, hotDesertSiteFixture, siteFixture } from '../testkit'
@@ -10,8 +12,12 @@ import {
   climateFit,
   climateGate,
   coldWinterGate,
+  ecocropGate,
   growingSeasonMeanTempC,
+  hardinessGate,
   isPerennial,
+  photoperiodGate,
+  seasonGddGate,
   seasonLengthDays,
 } from './climate-gate'
 
@@ -200,5 +206,136 @@ describe('olive is gated on its catalog chill figure', () => {
     const olive = need(catalog, 'olive')
     expect(chillGate(olive, frostFreeSiteFixture()).passed).toBe(false)
     expect(chillGate(olive, hotDesertSiteFixture()).passed).toBe(true)
+  })
+})
+
+const withTrigger = (crop: Crop, change: Partial<PhotoperiodTrigger>): Crop => {
+  if (crop.photoperiod === null) throw new Error(`${crop.id} carries no day-length figures`)
+  return { ...crop, photoperiod: { ...crop.photoperiod, ...change } }
+}
+
+/**
+ * The fixture's frost dates moved half a year on, for a site in the southern hemisphere: the last
+ * spring freeze falls near day 300 and the first fall freeze near day 110. The frost-free days
+ * stay the northern curve's own, since moving every date together leaves each span as it was
+ */
+const southernFrost = (): FrostExceedanceCurve => {
+  const [north] = siteFixture().frost
+  if (north === undefined) throw new Error('the fixture site has no frost curve')
+  type Dates = FrostExceedanceCurve['firstFallFreeze']
+  return {
+    ...north,
+    lastSpringFreeze: { 10: 312, 20: 307, 30: 302, 40: 297, 50: 292 } as Dates,
+    firstFallFreeze: { 10: 92, 20: 97, 30: 102, 40: 107, 50: 112 } as Dates,
+  }
+}
+
+// by `dayLengthHours`, days at 42.37 N first run shorter than 12.75 hours on day 251 (Sep 8), and
+// at 42.37 S on day 65 (Mar 6). The fixture site's first fall freeze at the 50 percent level is
+// day 295 (Oct 22), 123 days after June 21 and 44 after the days shorten, against the 70.5 days
+// winged bean needs from there to a first pod
+describe('a short-day crop needs its days to a harvest before the first fall freeze', () => {
+  it('refuses winged bean at the fixture site, where the days shorten too late', async () => {
+    const catalog = await catalogPromise
+    const outcome = photoperiodGate(need(catalog, 'winged-bean'), siteFixture(), 50)
+    expect(outcome.passed).toBe(false)
+    expect(outcome.limiting?.stage).toBe('climate-gate')
+    expect(outcome.limiting?.cause).toEqual({ kind: 'photoperiod' })
+    expect(outcome.limiting?.explanation).toContain('Sep 8')
+    expect(outcome.limiting?.membership).toBeCloseTo(44 / 70.5, 6)
+  })
+
+  it('keeps winged bean at a frost-free site in South Florida', async () => {
+    const catalog = await catalogPromise
+    const bean = need(catalog, 'winged-bean')
+    const location = {
+      latitudeDeg: 25.76 as DegreesLatitude,
+      longitudeDeg: -80.19 as DegreesLongitude,
+    }
+    expect(photoperiodGate(bean, frostFreeSiteFixture({ location }), 50).passed).toBe(true)
+    // under the fixture's frost dates the same days are refused, so it's the frost-free record
+    // that keeps the crop
+    expect(photoperiodGate(bean, siteFixture({ location }), 50).passed).toBe(false)
+  })
+
+  it('counts from December 21 at a southern site, where the days shorten on Mar 6', async () => {
+    const catalog = await catalogPromise
+    const site = siteFixture({
+      location: {
+        latitudeDeg: -42.37 as DegreesLatitude,
+        longitudeDeg: -71.11 as DegreesLongitude,
+      },
+      frost: [southernFrost()],
+    })
+    const outcome = photoperiodGate(need(catalog, 'winged-bean'), site, 50)
+    expect(outcome.passed).toBe(false)
+    expect(outcome.limiting?.cause).toEqual({ kind: 'photoperiod' })
+    expect(outcome.limiting?.explanation).toContain('Mar 6')
+  })
+
+  it('passes a harvest that lands on the freeze day and refuses one a day later', async () => {
+    const catalog = await catalogPromise
+    const bean = need(catalog, 'winged-bean')
+    const home = siteFixture()
+    const harvestIn = (toHarvestDays: number): boolean =>
+      photoperiodGate(withTrigger(bean, { toHarvestDays }), home, 50).passed
+    expect(harvestIn(44)).toBe(true)
+    expect(harvestIn(45)).toBe(false)
+  })
+
+  it('asks nothing of a crop with no day-length figures, and only winged bean has them', async () => {
+    const catalog = await catalogPromise
+    const tomato = need(catalog, 'tomato')
+    expect(tomato.photoperiod).toBeNull()
+    expect(photoperiodGate(tomato, siteFixture(), 50).passed).toBe(true)
+    expect(catalog.filter((crop) => crop.photoperiod !== null).map((crop) => crop.id)).toEqual([
+      'winged-bean',
+    ])
+  })
+
+  it('refuses a critical length the year never reaches, and says what the days are for', async () => {
+    const catalog = await catalogPromise
+    const bean = need(catalog, 'winged-bean')
+    // days at 5 N run between about 11.7 and 12.3 hours, so none is shorter than 10
+    const tropics = siteFixture({
+      location: { latitudeDeg: 5 as DegreesLatitude, longitudeDeg: -75 as DegreesLongitude },
+    })
+    const flowers = photoperiodGate(withTrigger(bean, { criticalHours: 10 }), tropics, 50)
+    expect(flowers.limiting?.explanation).toBe(
+      'Days here never get shorter than 10 hours, which this crop needs to flower',
+    )
+    const roots = photoperiodGate(
+      withTrigger(bean, { criticalHours: 10, triggers: 'storage-organ' }),
+      tropics,
+      50,
+    )
+    expect(roots.limiting?.explanation).toBe(
+      "Days here never get shorter than 10 hours, which this crop needs to form the roots or tubers it's grown for",
+    )
+  })
+
+  it('is the reason the whole climate gate gives at the fixture site, where nothing else refuses', async () => {
+    const catalog = await catalogPromise
+    const bean = need(catalog, 'winged-bean')
+    const home = siteFixture()
+    for (const outcome of [
+      hardinessGate(bean, home),
+      chillGate(bean, home),
+      seasonGddGate(bean, home, 50),
+      ecocropGate(bean, home, 50, true),
+      coldWinterGate(bean, home),
+    ])
+      expect(outcome.passed).toBe(true)
+    expect(climateGate(bean, home, 50).limiting?.cause).toEqual({ kind: 'photoperiod' })
+  })
+
+  it('leaves a site whose season is too short to the season gate, which comes first', async () => {
+    const catalog = await catalogPromise
+    const short = siteFixture({
+      seasonGdd: { base4C: 300 as never, base10C: 300 as never, percentile: 20 },
+    })
+    expect(climateGate(need(catalog, 'winged-bean'), short, 50).limiting?.cause).toEqual({
+      kind: 'season-gdd',
+    })
   })
 })

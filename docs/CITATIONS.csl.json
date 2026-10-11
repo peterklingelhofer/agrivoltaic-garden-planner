@@ -9166,7 +9166,8 @@
         "verbatim: 'It is a shrub that can grow to 12 ft tall, but usually only reaches 3 to 6 ft'",
         "verbatim: 'Sow seeds 1.5 inches deep on 1 to 3 foot rows at 8 to 10 lb per acre'",
         "verbatim: 'C. cajan requires 65-80 days to flower and 50-75 additional days to create mature seeds (Mullen et al., 2003), however many varieties have been developed to flower earlier'",
-        "verbatim: 'C. cajan grows best under hot conditions (65-86F)'; 'Frost will defoliate the plant'; 'Under good management, the plant can live up to five years'"
+        "verbatim: 'C. cajan grows best under hot conditions (65-86F)'; 'Frost will defoliate the plant'; 'Under good management, the plant can live up to five years'",
+        "pigeon-pea photoperiod, verbatim: 'There is a day-neutral cultivar from Florida called ‘Amarillo’ that can be sown and harvested throughout the year (Duke, 1983).' (page 3), why the row carries no day-length gate"
       ],
       "caveat": "A conservation-planting guide compiled from secondary sources (Cook et al. 2005, Mullen et al. 2003, Phatak et al. 1993, Duke 1983), and it reports no trial of its own."
     }
@@ -18318,7 +18319,8 @@
       "accessLevel": "public-domain",
       "evidenceTier": "C",
       "backsClaims": [
-        "oca height, verbatim: 'Oca is a compact, perennial, tuberous herb, usually 20-30 cm high, with cylindrical, succulent stems that vary in color from yellow and green to a purplish red.' (Oca chapter, 'Species Information', Description (page 91))"
+        "oca height, verbatim: 'Oca is a compact, perennial, tuberous herb, usually 20-30 cm high, with cylindrical, succulent stems that vary in color from yellow and green to a purplish red.' (Oca chapter, 'Species Information', Description (page 91))",
+        "oca photoperiod, verbatim: 'Although many types collected from Peru and Ecuador are daylength sensitive, the ones in New Zealand [...] are apparently unrestricted by daylength.' (Oca chapter, page 91), why the row carries no day-length gate"
       ],
       "caveat": "Published outside a peer-reviewed journal."
     }
@@ -21958,7 +21960,8 @@
       "accessLevel": "public-domain",
       "evidenceTier": "C",
       "backsClaims": [
-        "lablab light, verbatim: 'Lablab is also shade tolerant.' (Page 1, section 'Environmental requirements')"
+        "lablab light, verbatim: 'Lablab is also shade tolerant.' (Page 1, section 'Environmental requirements')",
+        "lablab photoperiod, verbatim: 'Both short-day and long-day varieties are known.' (page 1), why the row carries no day-length gate"
       ],
       "caveat": "Published outside a peer-reviewed journal."
     }
@@ -22647,6 +22650,164 @@
         "jicama coldLimit, verbatim: 'Jicama does best in a warm climate with moderate rainfall and is sensitive to frost.' (Page 2, section 'Culture')"
       ],
       "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "article-journal",
+    "title": "Germplasm screening and genome-wide PEBP profiling identify key regulators of photoperiod-insensitive flowering in winged bean (Psophocarpus tetragonolobus L)",
+    "author": [
+      {
+        "family": "Tribhuvan",
+        "given": "Kishor U."
+      },
+      {
+        "family": "N",
+        "given": "Mustafa"
+      },
+      {
+        "family": "Gidhi",
+        "given": "Anupama"
+      },
+      {
+        "family": "Singh",
+        "given": "Devendra K."
+      },
+      {
+        "family": "Kumar",
+        "given": "Saurav"
+      },
+      {
+        "family": "Kumar",
+        "given": "Sudhir"
+      },
+      {
+        "family": "Singh",
+        "given": "Binay K."
+      }
+    ],
+    "container-title": "BMC Genomics",
+    "volume": "27",
+    "issue": "1",
+    "page": "512",
+    "issued": {
+      "date-parts": [
+        [
+          2026
+        ]
+      ]
+    },
+    "DOI": "10.1186/s12864-026-12857-x",
+    "URL": "https://doi.org/10.1186/s12864-026-12857-x",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          11
+        ]
+      ]
+    },
+    "id": "tribhuvan2026-winged-bean-photoperiod",
+    "note": "Retrieved 2026-10-11 from PubMed Central (PMC13224713) and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "crossref-verified",
+      "accessLevel": "open-access",
+      "evidenceTier": "B",
+      "backsClaims": [
+        "winged-bean photoperiod criticalHours, verbatim: 'SD conditions corresponded to natural daylengths from July to October (11.5–12.5 h)' and 'LD conditions corresponded to natural daylengths from March to June (13.0–14.2 h)' (Methods, photoperiod sensitivity), with 'In this study, 76 (94%) of the 81 winged bean accessions evaluated under both SD and LD photoperiods for three consecutive years failed to initiate flowering under LD conditions.' (Discussion). Flowering under natural days of 12.5 h or less and almost none at 13.0 h or more puts the critical length between them, and the catalog takes the midpoint, 12.75 h"
+      ],
+      "caveat": "Three years of field sowings at one site, 81 accessions. The study brackets the critical day length between its short-day and long-day seasons and gives no single figure, so the 12.75 h midpoint is this app’s derivation. License CC BY-NC-ND 4.0."
+    }
+  },
+  {
+    "type": "article-journal",
+    "title": "Growth and Yields of Winged Bean Grown in Different Seasons in Okinawa",
+    "author": [
+      {
+        "family": "Nakamura",
+        "given": "Hiroshi"
+      },
+      {
+        "family": "Abe",
+        "given": "Jiro"
+      }
+    ],
+    "container-title": "Japan Agricultural Research Quarterly",
+    "volume": "23",
+    "issue": "1",
+    "page": "71-77",
+    "publisher": "Japan International Research Center for Agricultural Sciences",
+    "issued": {
+      "date-parts": [
+        [
+          1989
+        ]
+      ]
+    },
+    "URL": "https://www.jircas.go.jp/en/publication/jarq/23/1/71",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          11
+        ]
+      ]
+    },
+    "id": "nakamura1989-winged-bean-okinawa",
+    "note": "Retrieved 2026-10-11 from JIRCAS, a scanned PDF read in full through OCR, its tables checked by eye.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "open-access",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "winged-bean photoperiod toHarvestDays, verbatim: 'UPS-31 15 92 Dec. 9 57 94' (Table 1, the September 28 sowing, row UPS-31: 57 days in the column whose footnote reads 'Number of days from germination to the first flowering'), plants sown into days shorter than 12 hours",
+        "winged-bean photoperiod toHarvestDays, verbatim: 'Pods were carefully harvested before the suture became fibrous 12 to 15 days after flowering' (page 74, green pod production). The catalog adds the 13.5-day midpoint to UPS-31's 57 days, 70.5 days to a first green pod"
+      ],
+      "caveat": "One site at 24 N in one year. Its photoperiods include civil twilight. The days to flowering count from germination, so for a plant already growing when days shorten they overstate the wait."
+    }
+  },
+  {
+    "type": "report",
+    "title": "The Winged Bean: A High-Protein Crop for the Tropics (second edition)",
+    "author": [
+      {
+        "literal": "National Research Council"
+      }
+    ],
+    "publisher": "National Academy Press",
+    "issued": {
+      "date-parts": [
+        [
+          1981
+        ]
+      ]
+    },
+    "DOI": "10.17226/19754",
+    "URL": "https://doi.org/10.17226/19754",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          11
+        ]
+      ]
+    },
+    "id": "nrc-1981-winged-bean",
+    "note": "Retrieved 2026-10-11 as page images from the National Academies Press and read in full through OCR, its key pages checked by eye.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "crossref-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "winged-bean flowering and temperature, verbatim: 'Continuous day temperatures higher than 32°C or lower than 18°C inhibit flowering even under otherwise suitable short-day conditions.' (page 12), a limit the day-length gate doesn't model",
+        "winged-bean range in the United States, verbatim: 'For North Americans this means that good harvests can be gained in south Florida but almost nowhere else in the continental United States' (introduction)"
+      ],
+      "caveat": "A National Academies panel report, outside the usual extension, USDA and FAO classes, and not peer reviewed in the journal sense."
     }
   }
 ]

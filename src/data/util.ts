@@ -74,6 +74,9 @@ export const monthsInWindow = (startMonth: number, endMonth: number): readonly n
 
 export const wrapDay = (day: number): number => ((day - 1) % DAYS_PER_YEAR) + 1
 
+export const forwardDays = (from: number, to: number): number =>
+  (((to - from) % DAYS_PER_YEAR) + DAYS_PER_YEAR) % DAYS_PER_YEAR
+
 const clampDayOfYear = (day: number): number =>
   Math.min(DAYS_PER_YEAR, Math.max(1, Math.round(day) || 1))
 

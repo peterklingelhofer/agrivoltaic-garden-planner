@@ -2,6 +2,7 @@ import { growingWindowFor } from '../data/crops'
 import {
   at,
   DAYS_PER_YEAR,
+  forwardDays,
   lerp,
   mean,
   MONTH_LENGTH_DAYS,
@@ -36,8 +37,9 @@ import { seasonGddAvailable } from './stages/climate-gate'
 export const wrapDayOfYear = (day: number): DayOfYear =>
   (((((Math.round(day) - 1) % DAYS_PER_YEAR) + DAYS_PER_YEAR) % DAYS_PER_YEAR) + 1) as DayOfYear
 
-export const forwardDays = (from: number, to: number): number =>
-  (((to - from) % DAYS_PER_YEAR) + DAYS_PER_YEAR) % DAYS_PER_YEAR
+// defined in `data/util.ts`, where `stages/climate-gate.ts` reads it, since this file imports that
+// one, and exported here for this file's other importers
+export { forwardDays }
 
 export const signedDays = (from: number, to: number): number => {
   const forward = forwardDays(from, to)

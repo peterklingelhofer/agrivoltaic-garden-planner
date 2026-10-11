@@ -451,7 +451,7 @@ unreachable.
 
 0. Site resolution (geocode -> lat/lon -> elevation, climate normals, TMY)
 1. Hard climate gate: hardiness (perennials), chill portions (fruit), GDD against the season
-   (annuals)
+   (annuals), day length (short-day crops, record 29)
 2. **Light gate**: per crop x bed x month, against the crop's own growing window, with a bonus where
    a shade-benefiting crop meets many heat days
 3. Soil and water
@@ -1313,3 +1313,52 @@ parameter is fitted to it. Blocken and Carmeliet 2004 carry the same physics fro
 which ISO 15927-3 codifies. They define the flux-weighted distribution the field uses, and they
 recommend Gunn and Kinzer's own drag coefficients over sphere formulas. The drip's drag is matched
 to those coefficients.
+
+## 29. Short days gate a short-day crop
+
+A crop whose flowering, or whose harvested root or tuber, starts only once days shorten has to
+reach that point and then a harvest before the fall freeze. `photoperiodGate` in
+`src/recommend/stages/climate-gate.ts` finds the first day past midsummer (June 21 in the north,
+December 21 in the south) whose day length is shorter than the crop's critical length, adds the
+crop's days from there to a first harvest, and refuses the crop when that lands after the site's
+first fall freeze at the chosen percentile. A frost-free site passes, and so does a crop with no
+day-length figures. Where days never get that short, the crop is refused.
+
+**Winged bean is the one crop gated.** UF/IFAS HS561 says most varieties "need short days to
+initiate flowering", and NRC 1981 says good harvests come in south Florida "but almost nowhere else
+in the continental United States". Each figure rests on one source and one step of arithmetic:
+- **12.75 hours.** Tribhuvan et al. 2026 sowed 81 accessions over three years at one site. Plants
+  under natural days of 11.5 to 12.5 hours flowered, and 76 of the 81 didn't flower under days of
+  13.0 to 14.2 hours. The critical length lies between, and the gate takes the midpoint.
+- **70.5 days.** Nakamura and Abe 1989 sowed into days shorter than 12 hours at 24°N. UPS-31 first
+  flowered 57 days after germination, and green pods were picked 12 to 15 days after flowering, so
+  the figure is 57 days plus the 13.5-day midpoint. The count starts at germination, so for a
+  plant already growing when days shorten it overstates the wait, and the gate errs toward
+  refusing.
+
+At Amherst, 42.4°N, days get shorter than 12.75 hours on September 8, and a first green pod would
+come in mid-November, after the frost, so the gate refuses winged bean there. A frost-free South
+Florida site keeps it.
+
+**The day length.** `dayLengthHours` in `src/sim/phenology.ts` is the geometric day, with no
+refraction and no twilight. Tribhuvan et al. give natural day lengths, a few minutes from the
+geometric day. Nakamura and Abe's photoperiods include civil twilight, about an hour more, and the
+gate takes only their day counts.
+
+**What stays ungated.**
+- Roselle. Its sources give a critical length, 12 hours in some and 13 in FAO's, and two weeks from
+  flower to calyx, but none gives the weeks from short days to the first flower. Its cultivars
+  differ too.
+- Jicama. Only an abstract gives a critical length.
+- Oca. No source gives the days from short days to a harvest, and NRC 1989 says the New Zealand
+  lines "are apparently unrestricted by daylength".
+- Pigeon pea and lablab. NRCS names a day-neutral pigeon pea, 'Amarillo', and CTAHR says of lablab
+  that "Both short-day and long-day varieties are known".
+- Soybean, sorghum, upland rice and sesame. Seed sold at a latitude is bred or matched for it,
+  which makes this a cultivar matter.
+- Long-day responses, onion bulbing and spinach or cilantro bolting, belong to the calendar.
+
+**Not modeled.** Temperature holds winged bean back as well. NRC 1981: "Continuous day
+temperatures higher than 32°C or lower than 18°C inhibit flowering even under otherwise suitable
+short-day conditions." The gate reads day length alone, so it's lenient where an autumn turns cool
+before the frost.

@@ -14,6 +14,7 @@ import type {
   LaubCropGroup,
   LifeCycle,
   PerennialHarvest,
+  PhotoperiodTrigger,
   PlantHabit,
   SupportRequirement,
 } from '../../types/crop'
@@ -440,6 +441,13 @@ export interface CropOverrides {
   readonly chillHours?: number
   /** Recorded wild only where winters are cold. See `Crop.coldWinterOnly` */
   readonly coldWinterOnly?: true
+  /**
+   * A short-day crop's trigger: what days shorter than `criticalHours` start, and the days from
+   * the first such day to a first harvest, each figure with its source. Set only where a source
+   * says the cultivars gardeners grow respond to day length. Absent means no day-length gate
+   * (Decision Record 29)
+   */
+  readonly photoperiod?: PhotoperiodTrigger
   readonly window?: readonly [number, number]
   readonly gddBase?: number
   readonly gddUpper?: number | null
@@ -759,6 +767,7 @@ export const expandRow = (row: CropRow): Crop => {
       overrides.chillHours === undefined
         ? null
         : { metric: 'chilling-hours', amount: overrides.chillHours },
+    photoperiod: overrides.photoperiod ?? null,
     coldHardinessMinC:
       overrides.coldC === undefined
         ? null

@@ -1,16 +1,16 @@
 {
   "version": 5,
-  "savedAtUtcMillis": 1791686394865,
+  "savedAtUtcMillis": 1791732492020,
   "sceneTimeUtcMillis": 1723491000000,
   "example": {
     "label": "Example agrivoltaic garden, Amherst, Massachusetts",
-    "generatedAtUtc": "2026-10-11T02:39:54.865Z",
+    "generatedAtUtc": "2026-10-11T15:28:12.020Z",
     "generator": "scripts/bake-example-garden.mjs",
     "siteLabel": "Phoenix, Arizona",
     "weather": "open-meteo typical meteorological year, 8760 hours",
     "backend": "tregenza-mf1",
     "targetCellSizeM": 0.4,
-    "bakeElapsedMs": 3687,
+    "bakeElapsedMs": 2122,
     "quantizationErrorMolM2Day": 0.006275177001953125,
     "notes": [
       "70 x 90 cells at 0.4 m, baked on the CPU reference backend",
@@ -124,16 +124,16 @@
               "plantCount": 27
             },
             {
-              "id": "bed-1:corn-grain:121",
+              "id": "bed-1:winged-bean:152",
               "bedId": "bed-1",
-              "cropId": "corn-grain",
+              "cropId": "winged-bean",
               "cultivarId": null,
               "role": "target-crop",
               "tier": "overstory",
-              "sowDay": 121,
-              "harvestStartDay": 238,
-              "harvestEndDay": 252,
-              "plantCount": 23
+              "sowDay": 152,
+              "harvestStartDay": 241,
+              "harvestEndDay": 286,
+              "plantCount": 14
             }
           ]
         },
@@ -180,16 +180,16 @@
           "waterHarvesting": [],
           "plantings": [
             {
-              "id": "bed-2:pigeon-pea:152",
+              "id": "bed-2:winged-bean:152",
               "bedId": "bed-2",
-              "cropId": "pigeon-pea",
+              "cropId": "winged-bean",
               "cultivarId": null,
               "role": "target-crop",
-              "tier": "shrub",
+              "tier": "overstory",
               "sowDay": 152,
-              "harvestStartDay": 308,
-              "harvestEndDay": 338,
-              "plantCount": 10
+              "harvestStartDay": 241,
+              "harvestEndDay": 286,
+              "plantCount": 14
             },
             {
               "id": "bed-2:napa-cabbage:60",
@@ -204,16 +204,16 @@
               "plantCount": 27
             },
             {
-              "id": "bed-2:corn-grain:121",
+              "id": "bed-2:tomato:79",
               "bedId": "bed-2",
-              "cropId": "corn-grain",
+              "cropId": "tomato",
               "cultivarId": null,
               "role": "target-crop",
-              "tier": "overstory",
-              "sowDay": 121,
-              "harvestStartDay": 238,
-              "harvestEndDay": 252,
-              "plantCount": 23
+              "tier": "shrub",
+              "sowDay": 79,
+              "harvestStartDay": 201,
+              "harvestEndDay": 261,
+              "plantCount": 10
             }
           ]
         },
@@ -303,16 +303,16 @@
           "waterHarvesting": [],
           "plantings": [
             {
-              "id": "bed-4:pigeon-pea:152",
+              "id": "bed-4:winged-bean:152",
               "bedId": "bed-4",
-              "cropId": "pigeon-pea",
+              "cropId": "winged-bean",
               "cultivarId": null,
               "role": "target-crop",
-              "tier": "shrub",
+              "tier": "overstory",
               "sowDay": 152,
-              "harvestStartDay": 308,
-              "harvestEndDay": 338,
-              "plantCount": 10
+              "harvestStartDay": 241,
+              "harvestEndDay": 286,
+              "plantCount": 14
             },
             {
               "id": "bed-4:napa-cabbage:60",
@@ -327,16 +327,16 @@
               "plantCount": 27
             },
             {
-              "id": "bed-4:corn-grain:121",
+              "id": "bed-4:tomato:79",
               "bedId": "bed-4",
-              "cropId": "corn-grain",
+              "cropId": "tomato",
               "cultivarId": null,
               "role": "target-crop",
-              "tier": "overstory",
-              "sowDay": 121,
-              "harvestStartDay": 238,
-              "harvestEndDay": 252,
-              "plantCount": 23
+              "tier": "shrub",
+              "sowDay": 79,
+              "harvestStartDay": 201,
+              "harvestEndDay": 261,
+              "plantCount": 10
             }
           ]
         }

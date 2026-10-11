@@ -820,6 +820,19 @@ export const CROP_ROWS: readonly CropRow[] = [
       // as lima-bean: weeks of picking
       harvestDays: 45,
       nfix: true,
+      // Tribhuvan et al. 2026, 81 accessions over three years: "SD conditions corresponded to
+      // natural daylengths from July to October (11.5–12.5 h)", "LD conditions corresponded to
+      // natural daylengths from March to June (13.0–14.2 h)", and 76 of the 81 "failed to initiate
+      // flowering under LD conditions", the 12.75 h midpoint. Nakamura and Abe 1989, sown into
+      // days shorter than 12 hours: UPS-31 first flowered 57 days after germination, and pods were
+      // picked "12 to 15 days after flowering", 57 + 13.5 days (Decision Record 29)
+      photoperiod: {
+        triggers: 'flowering',
+        criticalHours: 12.75,
+        criticalCitations: ['tribhuvan2026-winged-bean-photoperiod'],
+        toHarvestDays: 70.5,
+        toHarvestCitations: ['nakamura1989-winged-bean-okinawa'],
+      },
       laubNote: IMMATURE_POD_NOTE,
     },
   ],

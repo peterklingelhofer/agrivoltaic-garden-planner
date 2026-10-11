@@ -1,16 +1,16 @@
 {
   "version": 5,
-  "savedAtUtcMillis": 1791686455385,
+  "savedAtUtcMillis": 1791732500923,
   "sceneTimeUtcMillis": 1723491000000,
   "example": {
     "label": "Example agrivoltaic garden, Amherst, Massachusetts",
-    "generatedAtUtc": "2026-10-11T02:40:55.385Z",
+    "generatedAtUtc": "2026-10-11T15:28:20.923Z",
     "generator": "scripts/bake-example-garden.mjs",
     "siteLabel": "Amherst, Massachusetts",
     "weather": "open-meteo typical meteorological year, 8760 hours",
     "backend": "tregenza-mf1",
     "targetCellSizeM": 0.4,
-    "bakeElapsedMs": 3527,
+    "bakeElapsedMs": 2091,
     "quantizationErrorMolM2Day": 0.004512786865234375,
     "notes": [
       "70 x 90 cells at 0.4 m, baked on the CPU reference backend",
@@ -111,16 +111,16 @@
               "plantCount": 10
             },
             {
-              "id": "bed-1:winged-bean:158",
+              "id": "bed-1:lablab:130",
               "bedId": "bed-1",
-              "cropId": "winged-bean",
+              "cropId": "lablab",
               "cultivarId": null,
               "role": "target-crop",
               "tier": "overstory",
-              "sowDay": 158,
-              "harvestStartDay": 291,
+              "sowDay": 130,
+              "harvestStartDay": 263,
               "harvestEndDay": 305,
-              "plantCount": 14
+              "plantCount": 12
             },
             {
               "id": "bed-1:napa-cabbage:93",

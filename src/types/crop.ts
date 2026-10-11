@@ -190,6 +190,16 @@ export interface ChillRequirement {
   readonly amount: number
 }
 
+export interface PhotoperiodTrigger {
+  readonly triggers: 'flowering' | 'storage-organ'
+  /** in the hours `dayLengthHours` counts, the geometric day with no twilight */
+  readonly criticalHours: number
+  readonly criticalCitations: NonEmpty<CitationId>
+  /** from the first day shorter than criticalHours to a first harvest */
+  readonly toHarvestDays: number
+  readonly toHarvestCitations: NonEmpty<CitationId>
+}
+
 export interface Spacing {
   readonly inRowCm: number
   readonly betweenRowsCm: number
@@ -227,6 +237,12 @@ export interface Crop {
   readonly light: LightRequirement
   readonly thermal: ThermalRequirement | null
   readonly chill: ChillRequirement | null
+  /**
+   * What days shorter than a critical length start, and the days from the first such day to a
+   * first harvest, for a crop whose cultivars respond to day length. Null means no day-length
+   * gate (`photoperiodGate`)
+   */
+  readonly photoperiod: PhotoperiodTrigger | null
   readonly coldHardinessMinC: MaybeCited<Celsius>
   /**
    * Recorded wild only where winters are cold, so a site whose coldest month stays above the

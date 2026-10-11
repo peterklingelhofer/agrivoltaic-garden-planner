@@ -1,6 +1,6 @@
 # Citation corpus
 
-524 sources (174 crossref-verified, 1 datacite-verified, 16 unverified, 333 url-verified). Machine-readable companion: [`CITATIONS.csl.json`](./CITATIONS.csl.json) (CSL-JSON).
+527 sources (176 crossref-verified, 1 datacite-verified, 16 unverified, 334 url-verified). Machine-readable companion: [`CITATIONS.csl.json`](./CITATIONS.csl.json) (CSL-JSON).
 A record enters this corpus verified against the Crossref REST API, against the DataCite REST API,
 or by a fetch of the authoritative publisher, standards-body or government URL, with an Internet
 Archive snapshot standing in where a live page withholds its text.
@@ -45,23 +45,23 @@ Physics, geodata and software sources carry `null`: the scheme does not apply to
 
 | Verification | n |
 |---|---|
-| crossref-verified | 174 |
+| crossref-verified | 176 |
 | datacite-verified | 1 |
 | unverified | 16 |
-| url-verified | 333 |
-| **total** | **524** |
+| url-verified | 334 |
+| **total** | **527** |
 
 | Access level | n |
 |---|---|
-| open-access | 77 |
+| open-access | 79 |
 | paywalled | 115 |
-| public-domain | 332 |
+| public-domain | 333 |
 
 | Evidence tier | n |
 |---|---|
 | A | 40 |
-| B | 74 |
-| C | 316 |
+| B | 75 |
+| C | 318 |
 | null (not applicable) | 94 |
 
 ---
@@ -1002,7 +1002,7 @@ Yavari, Rouhangiz; Zaliwciw, Demetrius; Cibin, Raj; McPhillips, Lauren. (2022). 
 
 ## Horticulture & crop physiology
 
-365 sources.
+368 sources.
 
 #### `adhikary2025-clubroot-review`
 
@@ -1304,6 +1304,7 @@ Valenzuela, Hector; Smith, Jody. (2002). *Green Manure Crops: Lablab (SA-GM-7)*.
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - lablab light, verbatim: 'Lablab is also shade tolerant.' (Page 1, section 'Environmental requirements')
+  - lablab photoperiod, verbatim: 'Both short-day and long-day varieties are known.' (page 1), why the row carries no day-length gate
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ctahr-2002-pineapple-cultivation-hawaii`
@@ -2310,6 +2311,17 @@ Reid, William; Templemire, Aaron. (2022). *Growing Pecans in Missouri (AF1002)*.
   - pecan yearsToFirstHarvest, verbatim: 'Trees should start to bear nuts within five to seven years after transplanting.' (AF1002, "Grafted Trees" subsection, p. 7)
 - **Caveat:** Published outside a peer-reviewed journal.
 
+#### `nakamura1989-winged-bean-okinawa`
+
+Nakamura, Hiroshi; Abe, Jiro. (1989). *Growth and Yields of Winged Bean Grown in Different Seasons in Okinawa*. Japan Agricultural Research Quarterly 23: 71-77
+
+- URL: <https://www.jircas.go.jp/en/publication/jarq/23/1/71>
+- Verification: URL-verified | Access: open-access, evidence tier **C**
+- Backs:
+  - winged-bean photoperiod toHarvestDays, verbatim: 'UPS-31 15 92 Dec. 9 57 94' (Table 1, the September 28 sowing, row UPS-31: 57 days in the column whose footnote reads 'Number of days from germination to the first flowering'), plants sown into days shorter than 12 hours
+  - winged-bean photoperiod toHarvestDays, verbatim: 'Pods were carefully harvested before the suture became fibrous 12 to 15 days after flowering' (page 74, green pod production). The catalog adds the 13.5-day midpoint to UPS-31's 57 days, 70.5 days to a first green pod
+- **Caveat:** One site at 24 N in one year. Its photoperiods include civil twilight. The days to flowering count from germination, so for a plant already growing when days shorten they overstate the wait.
+
 #### `ncstate-ces-diospyros-virginiana`
 
 NC State Extension. (n.d.). *Diospyros virginiana (American Persimmon, Common Persimmon, Date Plum, Eastern Persimmon, Jove's Fruit, Persimmon, Possum Apples, Possumwood, Simmon, Winter Plum)*. NC State University Extension, Plant Toolbox
@@ -2770,6 +2782,17 @@ National Park Service, Mid-Atlantic Exotic Plant Management Team. (n.d.). *Natio
   - goji invasiveStatus, verbatim: 'matrimony vine (Lycium barbarum L.)' (invasive.org species list 187, titled "National Park Service, Mid-Atlantic Exotic Plant Management Team Invasive Plant L)
 - **Caveat:** Published outside a peer-reviewed journal.
 
+#### `nrc-1981-winged-bean`
+
+National Research Council. (1981). *The Winged Bean: A High-Protein Crop for the Tropics (second edition)*. National Academy Press
+
+- DOI: [10.17226/19754](https://doi.org/10.17226/19754)
+- Verification: Crossref-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - winged-bean flowering and temperature, verbatim: 'Continuous day temperatures higher than 32°C or lower than 18°C inhibit flowering even under otherwise suitable short-day conditions.' (page 12), a limit the day-length gate doesn't model
+  - winged-bean range in the United States, verbatim: 'For North Americans this means that good harvests can be gained in south Florida but almost nowhere else in the continental United States' (introduction)
+- **Caveat:** A National Academies panel report, outside the usual extension, USDA and FAO classes, and not peer reviewed in the journal sense.
+
 #### `nrc-1989-lost-crops-of-the-incas`
 
 National Research Council. (1989). *Lost Crops of the Incas: Little-Known Plants of the Andes with Promise for Worldwide Cultivation*. National Academy Press
@@ -2778,6 +2801,7 @@ National Research Council. (1989). *Lost Crops of the Incas: Little-Known Plants
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - oca height, verbatim: 'Oca is a compact, perennial, tuberous herb, usually 20-30 cm high, with cylindrical, succulent stems that vary in color from yellow and green to a purplish red.' (Oca chapter, 'Species Information', Description (page 91))
+  - oca photoperiod, verbatim: 'Although many types collected from Peru and Ecuador are daylength sensitive, the ones in New Zealand [...] are apparently unrestricted by daylength.' (Oca chapter, page 91), why the row carries no day-length gate
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `nrcs-2006-plant-guide-sunn-hemp`
@@ -3559,6 +3583,16 @@ Tamil Nadu Agricultural University. (n.d.). *Horticulture :: Medicinal Crops :: 
 - Backs:
   - stevia spacing, verbatim: 'Rooted cuttings are planted at a spacing of 45X45 cm, with a total plant density in the order of 30,000 plants per ha.' (Planting section)
 - **Caveat:** Published outside a peer-reviewed journal.
+
+#### `tribhuvan2026-winged-bean-photoperiod`
+
+Tribhuvan, Kishor U.; N, Mustafa; Gidhi, Anupama; Singh, Devendra K.; Kumar, Saurav; Kumar, Sudhir; Singh, Binay K. (2026). *Germplasm screening and genome-wide PEBP profiling identify key regulators of photoperiod-insensitive flowering in winged bean (Psophocarpus tetragonolobus L)*. BMC Genomics 27: 512
+
+- DOI: [10.1186/s12864-026-12857-x](https://doi.org/10.1186/s12864-026-12857-x)
+- Verification: Crossref-verified | Access: open-access, evidence tier **B**
+- Backs:
+  - winged-bean photoperiod criticalHours, verbatim: 'SD conditions corresponded to natural daylengths from July to October (11.5–12.5 h)' and 'LD conditions corresponded to natural daylengths from March to June (13.0–14.2 h)' (Methods, photoperiod sensitivity), with 'In this study, 76 (94%) of the 81 winged bean accessions evaluated under both SD and LD photoperiods for three consecutive years failed to initiate flowering under LD conditions.' (Discussion). Flowering under natural days of 12.5 h or less and almost none at 13.0 h or more puts the critical length between them, and the catalog takes the midpoint, 12.75 h
+- **Caveat:** Three years of field sowings at one site, 81 accessions. The study brackets the critical day length between its short-day and long-day seasons and gives no single figure, so the 12.75 h midpoint is this app’s derivation. License CC BY-NC-ND 4.0.
 
 #### `uaex-2008-hyacinth-bean`
 
@@ -4609,6 +4643,7 @@ USDA NRCS Cape May Plant Materials Center. (n.d.). *Plant Guide: Pigeonpea, Caja
   - verbatim: 'Sow seeds 1.5 inches deep on 1 to 3 foot rows at 8 to 10 lb per acre'
   - verbatim: 'C. cajan requires 65-80 days to flower and 50-75 additional days to create mature seeds (Mullen et al., 2003), however many varieties have been developed to flower earlier'
   - verbatim: 'C. cajan grows best under hot conditions (65-86F)'; 'Frost will defoliate the plant'; 'Under good management, the plant can live up to five years'
+  - pigeon-pea photoperiod, verbatim: 'There is a day-neutral cultivar from Florida called ‘Amarillo’ that can be sown and harvested throughout the year (Duke, 1983).' (page 3), why the row carries no day-length gate
 - **Caveat:** A conservation-planting guide compiled from secondary sources (Cook et al. 2005, Mullen et al. 2003, Phatak et al. 1993, Duke 1983), and it reports no trial of its own.
 
 #### `usda-nrcs-plants-glycine-max-characteristics`

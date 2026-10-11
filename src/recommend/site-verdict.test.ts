@@ -43,7 +43,14 @@ describe('how a place grows, before any bed exists', () => {
   })
 
   it('grades the share in three plain words', () => {
-    const refused = { hardiness: 0, chill: 0, 'cold-winter': 0, 'season-gdd': 0, 'fao-ecocrop': 0 }
+    const refused = {
+      hardiness: 0,
+      chill: 0,
+      photoperiod: 0,
+      'cold-winter': 0,
+      'season-gdd': 0,
+      'fao-ecocrop': 0,
+    }
     expect(climateSentence({ total: 100, fits: 80, refused })).toContain('Most of the catalog')
     expect(climateSentence({ total: 100, fits: 50, refused })).toContain('About half')
     expect(climateSentence({ total: 100, fits: 20, refused })).toContain('Few of the')
@@ -54,7 +61,14 @@ describe('how a place grows, before any bed exists', () => {
     const verdict = {
       total: 10,
       fits: 2,
-      refused: { hardiness: 1, chill: 2, 'cold-winter': 1, 'season-gdd': 4, 'fao-ecocrop': 0 },
+      refused: {
+        hardiness: 1,
+        chill: 2,
+        photoperiod: 0,
+        'cold-winter': 1,
+        'season-gdd': 4,
+        'fao-ecocrop': 0,
+      },
     }
     expect(climateSentence(verdict)).toBe(
       "Few of the catalog's crops grow in this climate: 2 of 10 crops.",
