@@ -22606,5 +22606,47 @@
       ],
       "caveat": "A federal regulation, the list of federal noxious weeds."
     }
+  },
+  {
+    "type": "report",
+    "title": "Jicama: Pachyrhizus erosus (L.) Urban (HS615)",
+    "author": [
+      {
+        "family": "Stephens",
+        "given": "James M."
+      }
+    ],
+    "publisher": "University of Florida IFAS Extension (EDIS archival copy)",
+    "issued": {
+      "date-parts": [
+        [
+          1994
+        ]
+      ]
+    },
+    "DOI": "10.32473/edis-mv082-1994",
+    "URL": "https://doi.org/10.32473/edis-mv082-1994",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          11
+        ]
+      ]
+    },
+    "id": "ufifas-1994-jicama",
+    "note": "Retrieved 2026-10-11 and read in full for the sentences quoted. The archival copy was reviewed in May 2003, and the 2015 revision prints the same figures.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "jicama height, verbatim: 'The vining tops, which reach 10-20 feet in length, have compound leaves with pointed edges, and bear white flowers and green lima bean-shaped pods.' (Page 1, the second paragraph)",
+        "jicama coldLimit, verbatim: 'Jicama does best in a warm climate with moderate rainfall and is sensitive to frost.' (Page 2, section 'Culture')"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
   }
 ]

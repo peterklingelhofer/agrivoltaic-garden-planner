@@ -1264,7 +1264,7 @@
       "shade": 0,
       "daysToMaturity": 161,
       "spacingCm": 30,
-      "heightM": 2,
+      "heightM": 4.57,
       "widthM": 0.5,
       "overrides": {
         "nfix": true

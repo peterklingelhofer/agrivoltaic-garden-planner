@@ -396,6 +396,7 @@ export const CITATION_IDS = [
   'udc-2019-growing-roselle-fact-sheet-001',
   'ufifas-1994-adzuki-bean',
   'ufifas-1994-bambara-groundnut',
+  'ufifas-1994-jicama',
   'ufifas-1994-roselle-hs659',
   'ufifas-1994-winged-bean',
   'ufifas-2003-chayote',

@@ -1,6 +1,6 @@
 # Citation corpus
 
-523 sources (174 crossref-verified, 1 datacite-verified, 16 unverified, 332 url-verified). Machine-readable companion: [`CITATIONS.csl.json`](./CITATIONS.csl.json) (CSL-JSON).
+524 sources (174 crossref-verified, 1 datacite-verified, 16 unverified, 333 url-verified). Machine-readable companion: [`CITATIONS.csl.json`](./CITATIONS.csl.json) (CSL-JSON).
 A record enters this corpus verified against the Crossref REST API, against the DataCite REST API,
 or by a fetch of the authoritative publisher, standards-body or government URL, with an Internet
 Archive snapshot standing in where a live page withholds its text.
@@ -48,20 +48,20 @@ Physics, geodata and software sources carry `null`: the scheme does not apply to
 | crossref-verified | 174 |
 | datacite-verified | 1 |
 | unverified | 16 |
-| url-verified | 332 |
-| **total** | **523** |
+| url-verified | 333 |
+| **total** | **524** |
 
 | Access level | n |
 |---|---|
 | open-access | 77 |
 | paywalled | 115 |
-| public-domain | 331 |
+| public-domain | 332 |
 
 | Evidence tier | n |
 |---|---|
 | A | 40 |
 | B | 74 |
-| C | 315 |
+| C | 316 |
 | null (not applicable) | 94 |
 
 ---
@@ -1002,7 +1002,7 @@ Yavari, Rouhangiz; Zaliwciw, Demetrius; Cibin, Raj; McPhillips, Lauren. (2022). 
 
 ## Horticulture & crop physiology
 
-364 sources.
+365 sources.
 
 #### `adhikary2025-clubroot-review`
 
@@ -3713,6 +3713,17 @@ Stephens, James M. (1994). *Bambara Groundnut - Voandzeia subterranea (L.) Thoua
   - bambara-groundnut daysToMaturity, verbatim: 'When grown like the peanut, Bambara groundnuts take about 3-6 months to mature, depending on climatic conditions and the cultivar.' (Page 2, section 'Culture')
   - bambara-groundnut coldLimit, verbatim: 'It needs bright sunshine, high temperatures, at least 4 months free of frost, and frequent rains to grow best.' (Page 1, section 'Culture')
   - bambara-groundnut light, verbatim: 'It needs bright sunshine, high temperatures, at least 4 months free of frost, and frequent rains to grow best.' (Page 1, section 'Culture')
+- **Caveat:** Published outside a peer-reviewed journal.
+
+#### `ufifas-1994-jicama`
+
+Stephens, James M. (1994). *Jicama: Pachyrhizus erosus (L.) Urban (HS615)*. University of Florida IFAS Extension (EDIS archival copy)
+
+- DOI: [10.32473/edis-mv082-1994](https://doi.org/10.32473/edis-mv082-1994)
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - jicama height, verbatim: 'The vining tops, which reach 10-20 feet in length, have compound leaves with pointed edges, and bear white flowers and green lima bean-shaped pods.' (Page 1, the second paragraph)
+  - jicama coldLimit, verbatim: 'Jicama does best in a warm climate with moderate rainfall and is sensitive to frost.' (Page 2, section 'Culture')
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-1994-roselle-hs659`

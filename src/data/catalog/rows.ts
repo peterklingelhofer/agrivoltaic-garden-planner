@@ -1591,8 +1591,9 @@ export const CROP_ROWS: readonly CropRow[] = [
     'Fabaceae',
     'jicama|mexican yam bean|yam bean',
     // laubGroup, dliClass, archetype, DLI figures and tier as sweet-potato, the catalog's other
-    // frost-tender root crop lifted once per planting, and its light and cold too, since no saved
-    // source gives jicama either. The habit is a climber's, as yam-greater, the catalog's
+    // frost-tender root crop lifted once per planting, and its light too, since no source read
+    // gives jicama's. UF/IFAS HS615 says jicama "is sensitive to frost", which the archetype's
+    // frost-tender season covers. The habit is a climber's, as yam-greater, the catalog's
     // climbing root crop
     'tubers-root-crops',
     'root-tuber',
@@ -1611,9 +1612,10 @@ export const CROP_ROWS: readonly CropRow[] = [
     // the same trial: "the plant population of both species in the trials was 110 000 plants/ha",
     // a field population covering both species, sqrt(10,000 / 110,000) m = 0.30 m
     30,
-    // as yam-greater: no saved source sizes jicama itself
-    2,
-    // as yam-greater, for the same reason
+    // UF/IFAS HS615: "The vining tops, which reach 10-20 feet in length", the 15 ft midpoint,
+    // the trellis to plan for
+    4.57,
+    // as yam-greater: no source read gives jicama's spread as a number
     0.5,
     {
       // the 162-215 kg N/ha the trial sentence above reports for P. erosus itself
