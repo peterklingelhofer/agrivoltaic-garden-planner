@@ -1,21 +1,21 @@
 {
   "version": 5,
-  "savedAtUtcMillis": 1790857572651,
+  "savedAtUtcMillis": 1791683663146,
   "sceneTimeUtcMillis": 1723491000000,
   "example": {
     "label": "Example agrivoltaic garden, Amherst, Massachusetts",
-    "generatedAtUtc": "2026-10-01T12:26:12.651Z",
+    "generatedAtUtc": "2026-10-11T01:54:23.146Z",
     "generator": "scripts/bake-example-garden.mjs",
     "siteLabel": "Amherst, Massachusetts",
     "weather": "open-meteo typical meteorological year, 8760 hours",
     "backend": "tregenza-mf1",
     "targetCellSizeM": 0.4,
-    "bakeElapsedMs": 2319,
+    "bakeElapsedMs": 3338,
     "quantizationErrorMolM2Day": 0.004512786865234375,
     "notes": [
       "70 x 90 cells at 0.4 m, baked on the CPU reference backend",
       "1255 binned sun directions, tregenza-mf1 sky, 2 sub-steps per hour",
-      "10 plantings, each ranked against this bake and derived through derivePlanting"
+      "9 plantings, each ranked against this bake and derived through derivePlanting"
     ]
   },
   "design": {
@@ -191,16 +191,16 @@
               "plantCount": 43
             },
             {
-              "id": "bed-2:fava-bean:93",
+              "id": "bed-2:alfalfa:91",
               "bedId": "bed-2",
-              "cropId": "fava-bean",
+              "cropId": "alfalfa",
               "cultivarId": null,
-              "role": "target-crop",
+              "role": "cover",
               "tier": "shrub",
-              "sowDay": 93,
-              "harvestStartDay": 183,
-              "harvestEndDay": 197,
-              "plantCount": 130
+              "sowDay": 91,
+              "harvestStartDay": 139,
+              "harvestEndDay": 267,
+              "plantCount": 231
             }
           ]
         },
@@ -324,31 +324,19 @@
               "sowDay": 93,
               "harvestStartDay": 163,
               "harvestEndDay": 177,
-              "plantCount": 20
+              "plantCount": 43
             },
             {
-              "id": "bed-4:barley:93",
+              "id": "bed-4:alfalfa:91",
               "bedId": "bed-4",
-              "cropId": "barley",
+              "cropId": "alfalfa",
               "cultivarId": null,
-              "role": "target-crop",
+              "role": "cover",
               "tier": "shrub",
-              "sowDay": 93,
-              "harvestStartDay": 193,
-              "harvestEndDay": 207,
-              "plantCount": 165
-            },
-            {
-              "id": "bed-4:aronia:91",
-              "bedId": "bed-4",
-              "cropId": "aronia",
-              "cultivarId": null,
-              "role": "target-crop",
-              "tier": "mid-canopy",
               "sowDay": 91,
-              "harvestStartDay": 245,
-              "harvestEndDay": 266,
-              "plantCount": 1
+              "harvestStartDay": 139,
+              "harvestEndDay": 267,
+              "plantCount": 231
             }
           ]
         }

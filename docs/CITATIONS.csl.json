@@ -12592,7 +12592,15 @@
         "median (50 percent probability) date of the first fall 32 F freeze at station USW00024232, Nov 1, field ANN-TMIN-PRBFST-T32FP50, which with the last spring freeze gives a 212-day season",
         "median (50 percent probability) date of the first fall 32 F freeze at station USW00053841, Oct 24, field ANN-TMIN-PRBFST-T32FP50, which with the last spring freeze gives a 192-day season",
         "median (50 percent probability) date of the first fall 32 F freeze at station USW00093193, Dec 14, field ANN-TMIN-PRBFST-T32FP50, which with the last spring freeze gives a 334-day season",
-        "median (50 percent probability) date of the first fall 32 F freeze at station USW00093721, Oct 31, field ANN-TMIN-PRBFST-T32FP50, which with the last spring freeze gives a 204-day season"
+        "median (50 percent probability) date of the first fall 32 F freeze at station USW00093721, Oct 31, field ANN-TMIN-PRBFST-T32FP50, which with the last spring freeze gives a 204-day season",
+        "median (50 percent probability) date of the last spring 32 F freeze at Quincy 3 SSW, FL (station USC00087429), Mar 13, field ANN-TMIN-PRBLST-T32FP50",
+        "median (50 percent probability) date of the first fall 32 F freeze at station USC00087429, Nov 22, field ANN-TMIN-PRBFST-T32FP50, which with the last spring freeze gives a 254-day season",
+        "median (50 percent probability) date of the last spring 32 F freeze at Raleigh Durham Intl AP, NC (station USW00013722), Mar 31, field ANN-TMIN-PRBLST-T32FP50",
+        "median (50 percent probability) date of the first fall 32 F freeze at station USW00013722, Nov 4, field ANN-TMIN-PRBFST-T32FP50, which with the last spring freeze gives a 218-day season",
+        "median (50 percent probability) date of the last spring 32 F freeze at Macon Middle GA Rgnl AP, GA (station USW00003813), Mar 21, field ANN-TMIN-PRBLST-T32FP50",
+        "median (50 percent probability) date of the first fall 32 F freeze at station USW00003813, Nov 10, field ANN-TMIN-PRBFST-T32FP50, which with the last spring freeze gives a 234-day season",
+        "median (50 percent probability) date of the last spring 32 F freeze at Alamogordo, NM (station USC00290199), Mar 9, field ANN-TMIN-PRBLST-T32FP50",
+        "median (50 percent probability) date of the first fall 32 F freeze at station USC00290199, Nov 18, field ANN-TMIN-PRBFST-T32FP50, which with the last spring freeze gives a 254-day season"
       ],
       "caveat": "Station normals for the regions the cited extension harvest calendars speak for. The last spring and first fall freezes give each source its own frost-free season, and the app places a harvest at the same point in the garden's own season."
     },
@@ -15279,6 +15287,2951 @@
         "almond harvestSeason, verbatim: 'This is a premier cultivar in California. It blooms approximately the 3rd week in February in California’s central valley; matures at the end of August.' (USU Extension, \"Almond Cultivar and Rootstock Selection\" > \"Nonpareil\" section)",
         "almond coldLimit, verbatim: 'Temperatures below -10° F may damage the fruit buds during the winter, and temperatures below -20° F will damage the woody stems and branches of almond trees.' (USU Extension, \"Why Almond Trees Fail to Bear\" > \"Winter injury\" section)",
         "almond light, verbatim: 'Select a location that will receive full sun for at least ¾ of the day.' (USU Extension, \"Almond Tree Site Preparation\" section)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "webpage",
+    "title": "Alfalfa (Medicago sativa L.), Forage Information System",
+    "author": [
+      {
+        "literal": "Oregon State University Forage Information System"
+      }
+    ],
+    "publisher": "Oregon State University",
+    "issued": {
+      "date-parts": [
+        [
+          2016
+        ]
+      ]
+    },
+    "URL": "https://forages.oregonstate.edu/group/1701/alfalfa",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "osu-2016-forage-information-system-alfalfa",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "alfalfa spacing, verbatim: 'For pure stands, a seeding rate of 12-15 lb/a (26.5-33 kg/ha) planted in 6-inch rows is usually sufficient for a good stand of alfalfa.' (Section 'Establishment and Management', subsection 'Establishment')",
+        "alfalfa coldLimit, verbatim: 'Tolerant of drought, heat, and cold. Specific heat and cold tolerances depend on FD and WSI group. [USDA Plant Hardiness zone 3 for most cold-tolerant types; Jan mean minimum of -40 °F (-40 °C)' (Section 'Climate and Soil Suitability Zones', 'Climate Tolerances', and Table 1 'Climate Tolerances' (USDA Hardiness Zon)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "report",
+    "title": "Plant Fact Sheet: Alfalfa, Medicago sativa L.",
+    "author": [
+      {
+        "literal": "USDA NRCS Plant Materials Program"
+      }
+    ],
+    "publisher": "USDA Natural Resources Conservation Service",
+    "issued": {
+      "date-parts": [
+        [
+          2006
+        ]
+      ]
+    },
+    "URL": "https://plants.usda.gov/DocumentLibrary/factsheet/pdf/fs_mesa.pdf",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "usda-nrcs-2006-plant-fact-sheet-alfalfa",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "alfalfa height, verbatim: 'Alfalfa’s stems are erect and grow from a woody crown to about 2 to 3 feet tall.' (p. 1, 'Description' section)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "webpage",
+    "title": "Alfalfa establishment: Management strategies",
+    "author": [
+      {
+        "family": "Sheaffer",
+        "given": "Craig"
+      },
+      {
+        "family": "Wells",
+        "given": "M. Samantha"
+      },
+      {
+        "family": "Holen",
+        "given": "Doug"
+      }
+    ],
+    "publisher": "University of Minnesota Extension",
+    "issued": {
+      "date-parts": [
+        [
+          2023
+        ]
+      ]
+    },
+    "URL": "https://extension.umn.edu/planting-forages/alfalfa-establishment-management-strategies",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "umn-2023-alfalfa-establishment-management-strategies",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "alfalfa yearsToFirstHarvest, verbatim: 'Direct-seeded alfalfa should be harvested about 60 days following seeding and additional harvests taken before early September.' (Section 'Seeding alfalfa', accordion 'Weed control and companion crops with new seedings', paragraph 'Direct seeding wit)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "report",
+    "title": "Alfalfa (G4550)",
+    "author": [
+      {
+        "family": "Henning",
+        "given": "Jimmy C."
+      },
+      {
+        "family": "Nelson",
+        "given": "C. J."
+      }
+    ],
+    "publisher": "University of Missouri Extension",
+    "issued": {
+      "date-parts": [
+        [
+          2017
+        ]
+      ]
+    },
+    "URL": "https://extension.missouri.edu/publications/g4550",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "mu-2017-alfalfa-g4550",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "alfalfa harvestSeason, verbatim: 'For established stands, take the first (May 10 to 20) and second (June 15 to 25) cuttings when the plants are just beginning to bloom. For persistence of the stand, make two more harvests at about 35-day intervals before Sept. 15.' (Section 'Harvest management')"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "report",
+    "title": "Invasiveness Ranking System for Non-Native Plants of Alaska (R10-TP-143)",
+    "author": [
+      {
+        "family": "Carlson",
+        "given": "Matthew L."
+      },
+      {
+        "family": "Lapina",
+        "given": "Irina V."
+      },
+      {
+        "family": "Shephard",
+        "given": "Michael"
+      },
+      {
+        "family": "Conn",
+        "given": "Jeffery S."
+      },
+      {
+        "family": "Densmore",
+        "given": "Roseann"
+      },
+      {
+        "family": "Spencer",
+        "given": "Page"
+      },
+      {
+        "family": "Heys",
+        "given": "Jeff"
+      },
+      {
+        "family": "Riley",
+        "given": "Julie"
+      },
+      {
+        "family": "Nielsen",
+        "given": "Jamie"
+      }
+    ],
+    "publisher": "USDA Forest Service, Alaska Region",
+    "issued": {
+      "date-parts": [
+        [
+          2008
+        ]
+      ]
+    },
+    "URL": "https://accs.uaa.alaska.edu/wp-content/uploads/Invasiveness_Ranking_System_for_Non-Native_Plants_Alaska.pdf",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "usfs-2008-invasiveness-ranking-non-native-plants-alaska",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "alfalfa invasiveStatus, verbatim: 'Medicago sativa ssp. sativa Alfalfa 13(30) 17 16 7 53(90) 59 Yes Yes Yes' (Appendix A (p. A-2), table of invasiveness ranks, row 'Medicago sativa ssp. sativa', column 'Invasiveness'. The same tab)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "report",
+    "title": "Soybean Production Systems: Plant Populations and Seeding Rates for Soybeans (AY-217-W)",
+    "author": [
+      {
+        "family": "Robinson",
+        "given": "Andrew P."
+      },
+      {
+        "family": "Conley",
+        "given": "Shawn P."
+      }
+    ],
+    "publisher": "Purdue University Cooperative Extension Service",
+    "issued": {
+      "date-parts": [
+        [
+          2007
+        ]
+      ]
+    },
+    "URL": "https://www.extension.purdue.edu/extmedia/ay/ay-217-w.pdf",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "purdue-2007-soybean-plant-populations-ay217w",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "soybean spacing, verbatim: 'To maximize yields in most environments growers should have no less than 100,000 uniformly standing plants per acre in 7.5- and 15-inch rows and no less than 80,000 uniformly standing plants per acre in 30-inch rows.' (p. 3, paragraph above Table 1. Table 1 'Recommended Seeding Rates and Plant Populations at Different Row Widths', row 'R)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "webpage",
+    "title": "PLANTS Database: Glycine max (L.) Merr., soybean (GLMA4), Plant Characteristics",
+    "author": [
+      {
+        "literal": "USDA Natural Resources Conservation Service"
+      }
+    ],
+    "publisher": "USDA Natural Resources Conservation Service",
+    "URL": "https://plants.usda.gov/plant-profile/GLMA4/characteristics",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "usda-nrcs-plants-glycine-max-characteristics",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "soybean height, verbatim: 'Height, Mature (feet) | 3.0' (Plant Characteristics, 'Morphology/Physiology', field 'Height, Mature (feet)')"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "webpage",
+    "title": "Glycine max (soybean), NC State Extension Gardener Plant Toolbox",
+    "author": [
+      {
+        "literal": "NC State Extension"
+      }
+    ],
+    "publisher": "North Carolina State University and North Carolina A&T State University, N.C. Cooperative Extension",
+    "URL": "https://plants.ces.ncsu.edu/plants/glycine-max/",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "ncstate-plant-toolbox-glycine-max",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "soybean width, verbatim: 'Width: 0 ft. 9 in. - 2 ft. 0 in.' (Plant detail page, 'Dimensions' under Attributes)",
+        "soybean light, verbatim: 'Soybean grows readily in most garden soils in full sun.' ('Description' text, and 'Cultural Conditions', 'Light': 'Full sun (6 or more hours of direct sunlight a day)')"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "webpage",
+    "title": "Spring frost damage on soybean",
+    "author": [
+      {
+        "family": "Potter",
+        "given": "Bruce"
+      },
+      {
+        "family": "Bongard",
+        "given": "Phyllis"
+      },
+      {
+        "family": "Naeve",
+        "given": "Seth"
+      },
+      {
+        "family": "Gunsolus",
+        "given": "Jeff"
+      }
+    ],
+    "publisher": "University of Minnesota Extension",
+    "issued": {
+      "date-parts": [
+        [
+          2018
+        ]
+      ]
+    },
+    "URL": "https://extension.umn.edu/agriculture/crop-production/soybean/spring-frost",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "umn-2018-spring-frost-damage-on-soybean",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "soybean coldLimit, verbatim: 'To kill soybean tissue, temperatures usually need to be at or below 28 to 30 degrees Fahrenheit for several hours. However, an air temperature of 28 does not guarantee a soybean crop will freeze.' (Accordion 'Factors affecting survivability', 'Temperature')"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "report",
+    "title": "Backyard Sugarcane (SS-AGR-253), archival copy revised October 2009",
+    "author": [
+      {
+        "family": "Baucum",
+        "given": "L."
+      },
+      {
+        "family": "Rice",
+        "given": "R. W."
+      },
+      {
+        "family": "Muralles",
+        "given": "L."
+      }
+    ],
+    "publisher": "University of Florida Institute of Food and Agricultural Sciences, Florida Cooperative Extension Service",
+    "issued": {
+      "date-parts": [
+        [
+          2009
+        ]
+      ]
+    },
+    "URL": "https://ufdcimages.uflib.ufl.edu/IR/00/00/34/15/00001/SC05200.pdf",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "ufifas-2009-backyard-sugarcane-ss-agr-253",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "sugarcane spacing, verbatim: 'Sugarcane can be planted as a single row (a typical configuration for windbreaks) or in multiple, parallel rows with a distance of from 4 -10 feet between the rows.' (p. 3, section 'Planting')",
+        "sugarcane yearsToFirstHarvest, verbatim: 'Depending on variety and growing conditions, a stalk weighing 2 - 4 pounds with 11 - 12 percent sugar will be produced in about 12 - 14 months from an original planting or in 11 - 12 months from a ratoon re-growth.' (p. 1, Introduction)",
+        "sugarcane harvestSeason, verbatim: 'Given a reasonable planting date the preceding year, sugarcane will be ready for harvest anytime after November 1, but keep an eye on the weather since you'll want to harvest before a killing freeze.' (p. 5, section 'Harvesting')",
+        "sugarcane light, verbatim: 'A well-drained, sunny location is desirable; the more sun the better. Sugarcane planted in partially shaded areas (such as near buildings, walls, or tall trees) will have reduced growth potential.' (p. 2, section 'Site Selection')"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "report",
+    "title": "Sugarcane (Santa Rosa County Cooperative Extension Teaching and Demonstration Gardens)",
+    "author": [
+      {
+        "family": "Busbee",
+        "given": "Larry"
+      },
+      {
+        "family": "Stevens",
+        "given": "Sandy"
+      },
+      {
+        "family": "Andrews",
+        "given": "Frances"
+      },
+      {
+        "family": "Criss",
+        "given": "Josh"
+      }
+    ],
+    "publisher": "UF/IFAS Extension Santa Rosa County",
+    "issued": {
+      "date-parts": [
+        [
+          2025
+        ]
+      ]
+    },
+    "URL": "https://sfyl.ifas.ufl.edu/media/sfylifasufledu/santa-rosa/docs/pdfs/demo-garden-5/Sugarcane-final.pdf",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "ufifas-santarosa-2025-sugarcane",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "sugarcane height, verbatim: 'Height: 3 to 12 feet Spread: 3 to 10 feet' (Plant data block under the introductory text, field 'Height')",
+        "sugarcane width, verbatim: 'Height: 3 to 12 feet Spread: 3 to 10 feet' (Plant data block under the introductory text, field 'Spread')"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "webpage",
+    "title": "Saccharum officinarum L., in Handbook of Energy Crops (unpublished)",
+    "author": [
+      {
+        "family": "Duke",
+        "given": "James A."
+      }
+    ],
+    "publisher": "Purdue University Center for New Crops and Plant Products (NewCROP)",
+    "issued": {
+      "date-parts": [
+        [
+          1983
+        ]
+      ]
+    },
+    "URL": "https://hort.purdue.edu/newcrop/duke_energy/Saccharum_officinarum.html",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "duke-1983-handbook-of-energy-crops-saccharum-officinarum",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "sugarcane coldLimit, verbatim: 'Sugarcane in commercial production has endured a maximum of 53°C (127°F) and a minimum of -13°C (9°F). The high is endured by standing cane and the low by overwintering stubble. Standing stalks of sugarcane freeze at -4 to -5.5°C (25 to 22°F) depending on cv and length of exposure.' ('Ecology' section)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "report",
+    "title": "Growing Roselle (Hibiscus sabdariffa) for Home or Business Production in the Mid-Atlantic (Fact Sheet 001)",
+    "author": [
+      {
+        "family": "Richardson",
+        "given": "Matthew L."
+      },
+      {
+        "family": "Arlotta",
+        "given": "Caitlin G."
+      }
+    ],
+    "publisher": "University of the District of Columbia",
+    "issued": {
+      "date-parts": [
+        [
+          2019
+        ]
+      ]
+    },
+    "URL": "http://docs-do-not-link.udc.edu/causes/Fact_Sheet%20-%20Growing_Roselle.pdf",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "udc-2019-growing-roselle-fact-sheet-001",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "roselle spacing, verbatim: 'Plant roselle outdoors in areas that get full sun once the danger of frost has passed. This is a very shrubby plant, so plants should be spaced at least 3-4 feet apart and watered regularly.' (p. 1, right column, section 'Cultivation')"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "report",
+    "title": "Roselle, Hibiscus sabdariffa L. (HS659), archival copy reviewed May 2003",
+    "author": [
+      {
+        "family": "Stephens",
+        "given": "James M."
+      }
+    ],
+    "publisher": "University of Florida Institute of Food and Agricultural Sciences, Florida Cooperative Extension Service",
+    "issued": {
+      "date-parts": [
+        [
+          1994
+        ]
+      ]
+    },
+    "URL": "https://journals.flvc.org/edis/article/download/139843/144801/280434",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "ufifas-1994-roselle-hs659",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "roselle height, verbatim: 'The okra-like plant is an annual, 5-7 feet in height, with lobed leaves sometimes used for greens.' (p. 1, section 'DESCRIPTION')",
+        "roselle daysToMaturity, verbatim: 'It is usually started in April or in late August in Florida, requiring about 4 months to mature.' (p. 1, section 'CULTURE')"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "webpage",
+    "title": "Heat-Tolerant Edibles for the Summer: Roselle",
+    "author": [
+      {
+        "family": "Sirchia",
+        "given": "Julia"
+      }
+    ],
+    "publisher": "UF/IFAS Extension Pasco County",
+    "issued": {
+      "date-parts": [
+        [
+          2026
+        ]
+      ]
+    },
+    "URL": "https://blogs.ifas.ufl.edu/pascoco/2026/06/11/heat-tolerant-edibles-for-the-summer-home-garden/",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "ufifas-pasco-2026-heat-tolerant-edibles-roselle",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "roselle width, verbatim: 'roselle can easily grow 4 to 7 feet tall and 3 to 5 feet wide.' (Introduction paragraph)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "webpage",
+    "title": "Roselle, Gardening Solutions",
+    "author": [
+      {
+        "literal": "UF/IFAS Extension"
+      }
+    ],
+    "publisher": "University of Florida Institute of Food and Agricultural Sciences",
+    "URL": "https://gardeningsolutions.ifas.ufl.edu/plants/edibles/vegetables/roselle/",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "ufifas-gardening-solutions-roselle",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "roselle coldLimit, verbatim: 'It is only hardy in zones 9-10, and is damaged by frosts or freezes; plan your harvest before temperatures drop below 40° F.' (Section 'Planting and Care', paragraph on soil and hardiness)",
+        "roselle light, verbatim: 'Be aware that this plant does not do well in the shade and needs plenty of sunlight to thrive.' (Section 'Planting and Care')"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "webpage",
+    "title": "Growing staple vegetables from around the world in Minnesota (Molokhia, Corchorus olitorius)",
+    "author": [
+      {
+        "literal": "University of Minnesota Extension"
+      }
+    ],
+    "publisher": "University of Minnesota Extension",
+    "URL": "https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/growing-staple-vegetables-from-around-the-world-in-minnesota",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "umn-extension-staple-vegetables-molokhia",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "jute-mallow spacing, verbatim: 'Row spacing: 30-36 inches. Within-row plant spacing: 2-3 inches for bunched greens, 6-12 inches for continual harvest.' (Section 'Growing guides', accordion 'Molokhia (Corchorus olitorius)', 'Planting tips for growing molokhia in Minnesota')",
+        "jute-mallow daysToMaturity, verbatim: 'Days to harvest: 40-60 days for bunched greens. For continuous leaf harvest, start harvesting individually at 40 days and continue throughout the summer.' ('Planting tips for growing molokhia in Minnesota' list, item 'Days to harvest')"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "webpage",
+    "title": "Corchorus olitorius L., in Handbook of Energy Crops (unpublished)",
+    "author": [
+      {
+        "family": "Duke",
+        "given": "James A."
+      }
+    ],
+    "publisher": "Purdue University Center for New Crops and Plant Products (NewCROP)",
+    "issued": {
+      "date-parts": [
+        [
+          1983
+        ]
+      ]
+    },
+    "URL": "https://hort.purdue.edu/newcrop/duke_energy/Corchorus_olitorius.html",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "duke-1983-handbook-of-energy-crops-corchorus-olitorius",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "jute-mallow height, verbatim: 'Annual, much-branched herb 90-120 cm tall; stems glabrous.' ('Description' section)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "webpage",
+    "title": "Corchorus olitorius L., PROTA (Plant Resources of Tropical Africa) record, Pl@ntUse mirror",
+    "author": [
+      {
+        "family": "Fondio",
+        "given": "L."
+      },
+      {
+        "family": "Grubben",
+        "given": "G. J. H."
+      }
+    ],
+    "publisher": "PROTA Foundation, mirrored by Pl@ntUse (Pl@ntNet)",
+    "issued": {
+      "date-parts": [
+        [
+          2011
+        ]
+      ]
+    },
+    "URL": "https://plantuse.plantnet.org/en/Corchorus_olitorius_(PROTA)",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "prota-2011-corchorus-olitorius",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "jute-mallow coldLimit, verbatim: 'The optimal temperature is 25–32°C. Growth stops below 15°C. Jew’s mallow is a short-day species.' (Section 'Ecology')"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "report",
+    "title": "Jute Mallow: Corchorus olitorius and Corchorus capsularis",
+    "author": [
+      {
+        "literal": "Community Plant Breeding Team, University of Minnesota"
+      }
+    ],
+    "publisher": "University of Minnesota",
+    "URL": "https://cpbt.umn.edu/sites/cpbt.umn.edu/files/2025-03/Jute%20Mallow.pdf",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "umn-cpbt-jute-mallow",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "jute-mallow light, verbatim: 'Full sun and fertile, well-draining soil' (Column 'Growing')"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "report",
+    "title": "Pineapple Growing in the Florida Home Landscape (HS7, MG055)",
+    "author": [
+      {
+        "family": "Crane",
+        "given": "Jonathan H."
+      }
+    ],
+    "publisher": "UF/IFAS Extension, University of Florida",
+    "issued": {
+      "date-parts": [
+        [
+          2025
+        ]
+      ]
+    },
+    "URL": "https://edis.ifas.ufl.edu/publication/MG055",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "ufifas-2025-pineapple-home-landscape",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "pineapple spacing, verbatim: 'The distance between individual pineapple plants ranges from 12 to 36 inches (21–91 cm).' (UF/IFAS HS7 (MG055), section 'Spacing and Pruning', PDF page 3)",
+        "pineapple height, verbatim: 'Adult plants may be 3 to 6 feet (0.9–1.8 m) high and wide.' (UF/IFAS HS7 (MG055), section 'Description', subsection 'Plant', PDF page 2)",
+        "pineapple width, verbatim: 'Adult plants may be 3 to 6 feet (0.9–1.8 m) high and wide.' (UF/IFAS HS7 (MG055), section 'Description', subsection 'Plant', PDF page 2)",
+        "pineapple yearsToFirstHarvest, verbatim: 'The time from planting to harvest of the fruit ranges from 18 to 36 months in subtropical climates.' (UF/IFAS HS7 (MG055), section 'Production (Crop Yields)', PDF page 3)",
+        "pineapple coldLimit, verbatim: 'Pineapple plants do not tolerate freezing temperatures below 28°F (-2.0°C), and temperatures below 60°F (15.5°C) and above 90°F (32°C) may slow plant growth.' (UF/IFAS HS7 (MG055), section 'Cool and Freezing Temperatures', PDF page 3)",
+        "pineapple light, verbatim: 'In general, pineapple plants should be planted in full sun for best growth and fruit production.' (UF/IFAS HS7 (MG055), section 'Spacing and Pruning', PDF page 3)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "report",
+    "title": "Pineapple Cultivation in Hawaii (F&N-7)",
+    "author": [
+      {
+        "family": "Bartholomew",
+        "given": "Duane P."
+      },
+      {
+        "family": "Rohrbach",
+        "given": "Kenneth G."
+      },
+      {
+        "family": "Evans",
+        "given": "Dale O."
+      }
+    ],
+    "publisher": "College of Tropical Agriculture and Human Resources, University of Hawaii at Manoa",
+    "issued": {
+      "date-parts": [
+        [
+          2002
+        ]
+      ]
+    },
+    "URL": "https://www.ctahr.hawaii.edu/oc/freepubs/pdf/f_n-7.pdf",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "ctahr-2002-pineapple-cultivation-hawaii",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "pineapple harvestSeason, verbatim: 'Fruits are harvested year-round for fresh market and canning operations.' (CTAHR F&N-7, 'Overview of Commercial Production Practices', first page, PDF page 1)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "report",
+    "title": "Ananas comosus: Pineapple (FPS039)",
+    "author": [
+      {
+        "family": "Graves",
+        "given": "Keighly"
+      },
+      {
+        "family": "Wilber",
+        "given": "Wendy"
+      },
+      {
+        "family": "Wichman",
+        "given": "Tom"
+      },
+      {
+        "family": "Lewis",
+        "given": "Claire"
+      },
+      {
+        "family": "Hansen",
+        "given": "Gail"
+      },
+      {
+        "family": "Klein",
+        "given": "Ryan"
+      }
+    ],
+    "publisher": "UF/IFAS Extension, University of Florida",
+    "issued": {
+      "date-parts": [
+        [
+          2025
+        ]
+      ]
+    },
+    "URL": "https://edis.ifas.ufl.edu/publication/FP039",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "ufifas-2025-pineapple-fps039",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "pineapple invasiveStatus, verbatim: 'Invasive potential: not known to be invasive' (UF/IFAS FPS039, 'General Information' list, PDF page 3)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "report",
+    "title": "Guava Growing in the Florida Home Landscape (HS4, MG045)",
+    "author": [
+      {
+        "family": "Crane",
+        "given": "Jonathan H."
+      },
+      {
+        "family": "Balerdi",
+        "given": "Carlos F."
+      }
+    ],
+    "publisher": "UF/IFAS Extension, University of Florida",
+    "issued": {
+      "date-parts": [
+        [
+          2016
+        ]
+      ]
+    },
+    "URL": "https://edis.ifas.ufl.edu/publication/MG045",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "ufifas-2016-guava-home-landscape",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "guava spacing, verbatim: 'Depending upon ultimate tree size, trees should be planted 15 to 25 ft (4.6–7.6 m) away from other trees and structures and power lines.' (UF/IFAS HS4 (MG045), section 'Spacing', PDF page 3)",
+        "guava height, verbatim: 'Small, single or multi-trunked trees to 20 ft (6.1 m) in height with a broad, spreading or upright canopy.' (UF/IFAS HS4 (MG045), section 'Description', subsection 'Tree', PDF page 1)",
+        "guava yearsToFirstHarvest, verbatim: 'Guava trees generally begin fruit production 3 to 4 years after planting and yields range from 50 to 80 lbs (23–36 kg) or more per tree per year.' (UF/IFAS HS4 (MG045), section 'Production (Crop Yields)', PDF page 3)",
+        "guava coldLimit, verbatim: 'Young guava trees may be killed by temperatures of 27° to 28°F (-3° to -2°C). Mature trees may withstand short periods of 25° to 26°F (-4° to -3°C) without much damage.' (UF/IFAS HS4 (MG045), section 'Climate', Cold stress, PDF page 2)",
+        "guava light, verbatim: 'In general, guava trees should be planted in full sun for best growth and fruit production.' (UF/IFAS HS4 (MG045), section 'Site Selection', PDF page 3)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "report",
+    "title": "Guava (Psidium guajava L.) in Hawaii: History and Production (Research Extension Series 035)",
+    "author": [
+      {
+        "family": "Shigeura",
+        "given": "Gordon T."
+      },
+      {
+        "family": "Bullock",
+        "given": "Richard M."
+      }
+    ],
+    "publisher": "Hawaii Institute of Tropical Agriculture and Human Resources, University of Hawaii",
+    "issued": {
+      "date-parts": [
+        [
+          1983
+        ]
+      ]
+    },
+    "URL": "https://www3.ctahr.hawaii.edu/oc/freepubs/pdf/RES-035.pdf",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "ctahr-1983-guava-in-hawaii",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "guava width, verbatim: 'A properly pruned and trained tree can be confined to a foliage canopy approaching 4 meters (11 to 12 feet) in radius.' (CTAHR RES-035, section 'Orchard Design', Clonal orchard, PDF page 17)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "report",
+    "title": "Tropical and Subtropical Fruit Crops for the Home Landscape: Alternatives to Citrus (HS812, MG373)",
+    "author": [
+      {
+        "family": "Crane",
+        "given": "Jonathan H."
+      },
+      {
+        "family": "Balerdi",
+        "given": "Carlos F."
+      },
+      {
+        "family": "Orfanedes",
+        "given": "Michael S."
+      }
+    ],
+    "publisher": "UF/IFAS Extension, University of Florida",
+    "issued": {
+      "date-parts": [
+        [
+          2019
+        ]
+      ]
+    },
+    "URL": "https://edis.ifas.ufl.edu/publication/MG373",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "ufifas-2019-tropical-fruit-alternatives-to-citrus",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "guava harvestSeason, verbatim: 'Season: August–October, February–March.' (UF/IFAS MG373 (HS812), 'Invasive Fruit Crops', Guava entry, PDF page 5)",
+        "passion-fruit width, verbatim: 'Passion fruit/ ... vine 12–20+ ≤32 High June–Dec. Yes' (UF/IFAS MG373 (HS812), Table 1, row Passion fruit/maracuyá, column 'Rec. distance' (value 12–20+, in feet))",
+        "passion-fruit yearsToFirstHarvest, verbatim: 'Vines begin to bear within 3–6 months of planting.' (UF/IFAS MG373 (HS812), 'Passion Fruit' entry, PDF page 4)",
+        "passion-fruit harvestSeason, verbatim: 'Vines begin to bear within 3–6 months of planting. Season June–December.' (UF/IFAS MG373 (HS812), 'Passion Fruit' entry, PDF page 4)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "report",
+    "title": "FISC List of Invasive Plant Species, Category I and Category II (updated April 2026)",
+    "author": [
+      {
+        "literal": "Florida Invasive Species Council (formerly Florida Exotic Pest Plant Council)"
+      }
+    ],
+    "publisher": "Florida Invasive Species Council",
+    "issued": {
+      "date-parts": [
+        [
+          2026
+        ]
+      ]
+    },
+    "URL": "https://www.floridainvasives.org/wp-content/uploads/2026/07/FISC-2026-Plant-List-Cat-I-II_April2026.pdf",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "fisc-2026-invasive-plant-list",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "guava invasiveStatus, verbatim: 'Psidium guajava guava C, S' (FISC List of Invasive Plant Species, table 'FISC Category I', row Psidium guajava (columns Scientific Name, Common Name,)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "report",
+    "title": "The Passion Fruit (HS60)",
+    "author": [
+      {
+        "family": "Knight",
+        "given": "R. J., Jr."
+      },
+      {
+        "family": "Sauls",
+        "given": "Julian W."
+      }
+    ],
+    "publisher": "UF/IFAS Extension, University of Florida",
+    "issued": {
+      "date-parts": [
+        [
+          2009
+        ]
+      ]
+    },
+    "URL": "https://ufdcimages.uflib.ufl.edu/IR/00/00/33/95/00001/MG32800.pdf",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "ufifas-2009-the-passion-fruit-hs60",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "passion-fruit spacing, verbatim: 'In Florida, passion vines are planted 3-4.5 m (10-15 ft.) apart in rows 4.5-6 m (1 5-20 ft.) apart.' (UF/IFAS HS60 (archival copy, reviewed 2009), section 'Planting and Trellising', PDF page 2)",
+        "passion-fruit height, verbatim: 'Ideally they should be long enough to provide a trellis height of 1.5 m (5 ft.), with 45-75 cm (18-30 in.) in the ground.' (UF/IFAS HS60 (archival copy, reviewed 2009), section 'Planting and Trellising', PDF page 3)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "report",
+    "title": "Passiflora edulis Passion Fruit, Purple Granadilla (FPS456)",
+    "author": [
+      {
+        "family": "Gilman",
+        "given": "Edward F."
+      },
+      {
+        "family": "Klein",
+        "given": "Ryan W."
+      },
+      {
+        "family": "Hansen",
+        "given": "Gail"
+      }
+    ],
+    "publisher": "UF/IFAS Extension, University of Florida",
+    "issued": {
+      "date-parts": [
+        [
+          2023
+        ]
+      ]
+    },
+    "URL": "https://edis.ifas.ufl.edu/publication/FP456",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "ufifas-2023-passiflora-edulis-fps456",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "passion-fruit coldLimit, verbatim: 'USDA hardiness zones: 9B through 11' (UF/IFAS FPS456, 'General Information' list, PDF page 2)",
+        "passion-fruit light, verbatim: 'This plant does require a position in the landscape that receives full sun for best flowering and fruit production.' (UF/IFAS FPS456, 'Use and Management', PDF page 3)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "webpage",
+    "title": "Passiflora edulis, UF/IFAS Assessment of Non-Native Plants in Florida's Natural Areas",
+    "author": [
+      {
+        "literal": "UF/IFAS Center for Aquatic and Invasive Plants"
+      }
+    ],
+    "publisher": "University of Florida, Institute of Food and Agricultural Sciences",
+    "issued": {
+      "date-parts": [
+        [
+          2026
+        ]
+      ]
+    },
+    "URL": "https://assessment.ifas.ufl.edu/assessments/passiflora-edulis/",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "ufifas-2026-assessment-passiflora-edulis",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "passion-fruit invasiveStatus, verbatim: 'Predicted to be invasive and not recommended by IFAS.' (UF/IFAS Assessment of Non-Native Plants in Florida's Natural Areas, Passiflora edulis page, 'Conclusions by Zone' (Centr)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "report",
+    "title": "Macadamia: Hawaii's Dessert Nut (Circular 485)",
+    "author": [
+      {
+        "family": "Hamilton",
+        "given": "Richard A."
+      },
+      {
+        "family": "Ito",
+        "given": "Philip J."
+      },
+      {
+        "family": "Chia",
+        "given": "C. L."
+      }
+    ],
+    "publisher": "College of Tropical Agriculture and Human Resources, University of Hawaii at Manoa",
+    "URL": "https://www3.ctahr.hawaii.edu/oc/freepubs/pdf/C1-485.pdf",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "ctahr-circular-485-macadamia",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "macadamia spacing, verbatim: '... 30 to 35 feet between rows and 16 to 20 feet between trees in the row are considered reasonable, depending on tree form and growth rate of the trees.' (CTAHR Circular 485, section 'Yields and Spacing', PDF page 8)",
+        "macadamia harvestSeason, verbatim: 'The main harvest period for macadamia nuts in Hawaii extends from about August through January.' (CTAHR Circular 485, section 'Harvesting and Processing', PDF page 13)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "webpage",
+    "title": "Macadamia integrifolia (Australian Nut, Macadamia, Macadamia Nut, Queensland Nut)",
+    "author": [
+      {
+        "literal": "NC State Extension"
+      }
+    ],
+    "publisher": "NC State University, NC State Extension (Plant Toolbox)",
+    "URL": "https://plants.ces.ncsu.edu/plants/macadamia-integrifolia/",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "ncsu-planttoolbox-macadamia-integrifolia",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "macadamia height, verbatim: 'Height: 30 ft. 0 in. - 50 ft. 0 in.' (NC State Plant Toolbox, Macadamia integrifolia page, 'Dimensions')",
+        "macadamia width, verbatim: 'Width: 20 ft. 0 in. - 40 ft. 0 in.' (NC State Plant Toolbox, Macadamia integrifolia page, 'Dimensions')",
+        "macadamia coldLimit, verbatim: 'Macadamia Nut trees prefer humus-rich, moist, well drained soils in full sun and are intolerant of frost.' (NC State Plant Toolbox, Macadamia integrifolia page, description)",
+        "macadamia light, verbatim: 'Light: Full sun (6 or more hours of direct sunlight a day)' (NC State Plant Toolbox, Macadamia integrifolia page, 'Cultural Conditions')"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "report",
+    "title": "Non-Invasive Fruit Trees for Gardens in Hawai'i (F_N-17)",
+    "author": [
+      {
+        "family": "Clifford",
+        "given": "Patti"
+      },
+      {
+        "family": "Kobayashi",
+        "given": "Kent"
+      }
+    ],
+    "publisher": "Hawai'i Invasive Species Council and College of Tropical Agriculture and Human Resources, University of Hawaii at Manoa",
+    "issued": {
+      "date-parts": [
+        [
+          2010
+        ]
+      ]
+    },
+    "URL": "https://www.ctahr.hawaii.edu/oc/freepubs/pdf/F_N-17.pdf",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "ctahr-2010-non-invasive-fruit-trees-hawaii",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "macadamia yearsToFirstHarvest, verbatim: 'Harvest trees begin bearing fruit at 3–6 years' (CTAHR and Hawaii Invasive Species Council F_N-17, Macadamia entry, PDF page 6)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "webpage",
+    "title": "Macadamia integrifolia risk assessment (Hawaii-Pacific Weed Risk Assessment)",
+    "author": [
+      {
+        "literal": "Hawaiian Ecosystems at Risk project (HEAR), Pacific Island Ecosystems at Risk (PIER)"
+      }
+    ],
+    "publisher": "Hawaiian Ecosystems at Risk project",
+    "URL": "http://www.hear.org/pier/wra/pacific/macadamia_integrifolia_htmlwra.htm",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "hear-hpwra-macadamia-integrifolia",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "macadamia invasiveStatus, verbatim: 'RISK ASSESSMENT RESULTS: Low risk, score: -1' (HEAR (Hawaiian Ecosystems at Risk) Hawaii-Pacific Weed Risk Assessment page for Macadamia integrifolia)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "webpage",
+    "title": "Lagenaria siceraria (bottle gourd, calabash)",
+    "author": [
+      {
+        "literal": "NC State Extension"
+      }
+    ],
+    "publisher": "NC State University, NC State Extension (Plant Toolbox)",
+    "URL": "https://plants.ces.ncsu.edu/plants/lagenaria-siceraria/",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "ncsu-planttoolbox-lagenaria-siceraria",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "bottle-gourd spacing, verbatim: 'Plant several seeds in mounds 3 feet apart if growing on supports or 4 to 6 feet apart is the vine will trail on the ground.' (NC State Plant Toolbox, Lagenaria siceraria page, description (the sentence has the source's own typo 'is the vine'))",
+        "bottle-gourd width, verbatim: 'Width: 10 ft. 0 in. - 16 ft. 0 in.' (NC State Plant Toolbox, Lagenaria siceraria page, 'Dimensions')",
+        "bottle-gourd light, verbatim: 'Bottle gourd does best in sandy or loamy, well-drained, soil in full sun and will tolerate hot, humid summers.' (NC State Plant Toolbox, Lagenaria siceraria page, description)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "report",
+    "title": "Long Squash: an Asian Vegetable Expanding in Florida (HS1272), the bottle gourd grown for young fruit",
+    "author": [
+      {
+        "family": "Liu",
+        "given": "Guodong"
+      },
+      {
+        "family": "Li",
+        "given": "Yuncong"
+      },
+      {
+        "family": "Dinkins",
+        "given": "David"
+      },
+      {
+        "family": "Wells",
+        "given": "Bonnie"
+      },
+      {
+        "family": "Wang",
+        "given": "Qingren"
+      },
+      {
+        "family": "Cui",
+        "given": "Yuqi"
+      }
+    ],
+    "publisher": "UF/IFAS Extension, University of Florida",
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "URL": "https://edis.ifas.ufl.edu/publication/HS1272",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "ufifas-2024-long-squash-bottle-gourd",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "bottle-gourd height, verbatim: 'The vine has tendrils for climbing and can be up to 30 feet in length; hence, trellis support systems are needed for high yields of good quality (Figure 1).' (UF/IFAS HS1272 (EDIS page), second paragraph)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "webpage",
+    "title": "Lagenaria siceraria (Molina) Standl., record from PROTA4U (Plant Resources of Tropical Africa 2: Vegetables), text mirrored on Pl@ntUse",
+    "author": [
+      {
+        "family": "Morimoto",
+        "given": "Y."
+      },
+      {
+        "family": "Mvere",
+        "given": "B."
+      }
+    ],
+    "publisher": "PROTA Foundation, Wageningen",
+    "issued": {
+      "date-parts": [
+        [
+          2004
+        ]
+      ]
+    },
+    "URL": "https://plantuse.plantnet.org/en/Lagenaria_siceraria_(PROTA)",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "prota-2004-lagenaria-siceraria",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "bottle-gourd daysToMaturity, verbatim: 'For use as a vegetable, fruit harvesting starts three months after sowing.' (PROTA (Morimoto and Mvere 2004), section 'Harvesting', read on the Pl@ntUse mirror of the PROTA text)",
+        "bottle-gourd coldLimit, verbatim: 'It tolerates low temperatures, but if the temperature drops below 10°C flowering is reduced; it does not tolerate frost.' (PROTA (Morimoto and Mvere 2004), section 'Ecology', Pl@ntUse mirror)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "webpage",
+    "title": "Lagenaria siceraria risk assessment (Hawaii-Pacific Weed Risk Assessment)",
+    "author": [
+      {
+        "literal": "Hawaiian Ecosystems at Risk project (HEAR), Pacific Island Ecosystems at Risk (PIER)"
+      }
+    ],
+    "publisher": "Hawaiian Ecosystems at Risk project",
+    "URL": "http://www.hear.org/pier/wra/pacific/lagenaria_siceraria_htmlwra.htm",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "hear-hpwra-lagenaria-siceraria",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "bottle-gourd invasiveStatus, verbatim: 'RISK ASSESSMENT RESULTS: Low risk, score: 0' (HEAR (Hawaiian Ecosystems at Risk) Hawaii-Pacific Weed Risk Assessment page for Lagenaria siceraria)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "report",
+    "title": "Luffa: an Asian Vegetable Emerging in Florida (HS1285)",
+    "author": [
+      {
+        "family": "Liu",
+        "given": "Guodong"
+      },
+      {
+        "family": "Li",
+        "given": "Yuncong"
+      },
+      {
+        "family": "Migliaccio",
+        "given": "Kati W."
+      }
+    ],
+    "publisher": "UF/IFAS Extension, University of Florida",
+    "issued": {
+      "date-parts": [
+        [
+          2023
+        ]
+      ]
+    },
+    "URL": "https://edis.ifas.ufl.edu/publication/HS1285",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "ufifas-2023-luffa-asian-vegetable-florida",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "luffa spacing, verbatim: 'For planting or transplanting, the distance between plants is usually 3 feet, and the distance between rows is 6 feet.' (UF/IFAS HS1285 (EDIS page), section 'Cultivation Method')",
+        "luffa height, verbatim: 'Vertical trellises (Figure 11) of 6 feet in height are recommended because they substantially increase fruit yield (Davis 1994).' (UF/IFAS HS1285 (EDIS page), section 'Cultivation Method')",
+        "luffa daysToMaturity, verbatim: 'The pollinated flowers develop cylindrical fruit (Figures 1 and 2), and only young, immature fruits, which require the hot growing season of about two to three months, can be harvested for consumption as a vegetable.' (UF/IFAS HS1285 (EDIS page), section 'Cultivation Method', paragraph on inflorescences)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "webpage",
+    "title": "Luffa aegyptiaca (sponge gourd, luffa)",
+    "author": [
+      {
+        "literal": "NC State Extension"
+      }
+    ],
+    "publisher": "NC State University, NC State Extension (Plant Toolbox)",
+    "URL": "https://plants.ces.ncsu.edu/plants/luffa-aegyptiaca/",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "ncsu-planttoolbox-luffa-aegyptiaca",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "luffa width, verbatim: 'Width: 1 ft. 0 in. - 3 ft. 0 in.' (NC State Plant Toolbox, Luffa aegyptiaca page, 'Dimensions')"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "report",
+    "title": "Commercial Luffa Sponge Gourd Production (Horticulture Information Leaflet)",
+    "author": [
+      {
+        "family": "Davis",
+        "given": "Jeanine"
+      }
+    ],
+    "publisher": "NC State University, NC State Extension",
+    "issued": {
+      "date-parts": [
+        [
+          2023
+        ]
+      ]
+    },
+    "URL": "https://content.ces.ncsu.edu/commercial-luffa-sponge-gourd-production",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "ncsu-2023-commercial-luffa-sponge-gourd",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "luffa coldLimit, verbatim: 'Luffa should be transplanted outdoors after all danger of frost is past.' (NC State Extension, Commercial Luffa Sponge Gourd Production (Davis), section 'Selecting Seeds and Producing Transplants)",
+        "luffa light, verbatim: 'Luffa gourds require a well-drained soil in a location where they will have full sun and good air circulation.' (NC State Extension, Commercial Luffa Sponge Gourd Production (Davis), section 'Site Selection and Fertilization')"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "report",
+    "title": "Tree Fruit in the Home Garden (Publication 426-841)",
+    "author": [
+      {
+        "family": "Yuan",
+        "given": "Rongcai"
+      }
+    ],
+    "publisher": "Virginia Cooperative Extension, Virginia Tech",
+    "issued": {
+      "date-parts": [
+        [
+          2015
+        ]
+      ]
+    },
+    "URL": "https://www.pubs.ext.vt.edu/426/426-841/426-841.html",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "vce-2015-tree-fruit-home-garden",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "quince spacing, verbatim: 'Quince | 15 | 1 | 5-6 | 30-40' (Virginia Cooperative Extension 426-841, Table 1 (Space requirement, yield, bearing age, and life expectancy of tree frui)",
+        "quince yearsToFirstHarvest, verbatim: 'Quince | 15 | 1 | 5-6 | 30-40' (Virginia Cooperative Extension 426-841, Table 1, row Quince, column Bearing Age (years))"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "webpage",
+    "title": "Cydonia oblonga (Landscape Plants)",
+    "author": [
+      {
+        "literal": "Oregon State University, Department of Horticulture"
+      }
+    ],
+    "publisher": "Oregon State University, College of Agricultural Sciences, Department of Horticulture",
+    "URL": "https://landscapeplants.oregonstate.edu/plants/cydonia-oblonga",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "osu-horticulture-landscape-plants-cydonia-oblonga",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "quince height, verbatim: 'Deciduous tree/shrub, rounded, 15 x 15 ft (4.5 x 4.5 m).' (OSU Landscape Plants, Cydonia oblonga page, description paragraph)",
+        "quince width, verbatim: 'Deciduous tree/shrub, rounded, 15 x 15 ft (4.5 x 4.5 m).' (OSU Landscape Plants, Cydonia oblonga page, description paragraph)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "report",
+    "title": "20 Mediterranean Tastes You Can Grow at Home",
+    "author": [
+      {
+        "literal": "Oregon State University Extension Service"
+      }
+    ],
+    "publisher": "Oregon State University Extension Service",
+    "URL": "https://extension.oregonstate.edu/sites/extd8/files/documents/12846/mediterraneanedibles-morgan.pdf",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "osu-extension-mediterranean-edibles",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "quince harvestSeason, verbatim: 'Harvest in October or later – wait for yellow color and light citrusy odor to develop.' (OSU Extension handout 20 Mediterranean Tastes You Can Grow at Home, page 2, quince entry)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "webpage",
+    "title": "Quinces (Cydonia oblonga), Cornell Fruit Resources: Minor Fruits",
+    "author": [
+      {
+        "literal": "Cornell University, Department of Horticulture"
+      }
+    ],
+    "publisher": "Cornell University",
+    "URL": "http://www.hort.cornell.edu/fruit/mfruit/quince.html",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "cornell-fruit-resources-quince",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "quince coldLimit, verbatim: 'The flowers are susceptible to winter injury at temperatures below about -15 F, but trees are hardy in Zones 5 to 9.' (Cornell Fruit Resources, Quinces page, first paragraph)",
+        "quince light, verbatim: 'Quinces prefer a fertile site in full sun.' (Cornell Fruit Resources, Quinces page, Growing quinces paragraph)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "webpage",
+    "title": "Red Mulberry (Iowa Trees)",
+    "author": [
+      {
+        "literal": "Iowa State University Extension and Outreach, Natural Resources"
+      }
+    ],
+    "publisher": "Iowa State University Extension and Outreach",
+    "URL": "https://naturalresources.extension.iastate.edu/forestry/iowa_trees/trees/red_mulberry.html",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "iastate-extension-red-mulberry",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "mulberry-red height, verbatim: 'Height: 30-45 feet' (Iowa State University Extension, Natural Resources, Red Mulberry page, fact list at the top (last reviewed March 1, 2019)",
+        "mulberry-red width, verbatim: 'Width: 25-35 feet' (Iowa State University Extension, Natural Resources, Red Mulberry page, fact list at the top)",
+        "mulberry-red coldLimit, verbatim: 'Hardiness: Zones 5 through 10' (Iowa State University Extension, Natural Resources, Red Mulberry page, fact list at the top)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "report",
+    "title": "Morus rubra, red mulberry (Fire Effects Information System species review)",
+    "author": [
+      {
+        "family": "Sullivan",
+        "given": "Janet"
+      }
+    ],
+    "publisher": "U.S. Department of Agriculture, Forest Service, Rocky Mountain Research Station, Fire Sciences Laboratory",
+    "issued": {
+      "date-parts": [
+        [
+          1993
+        ]
+      ]
+    },
+    "URL": "https://research.fs.usda.gov/feis/species-reviews/morrub",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "usfs-1993-sullivan-feis-morus-rubra",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "mulberry-red light, verbatim: 'Red mulberry grows best in the open, but is somewhat tolerant of shade' (USDA Forest Service Fire Effects Information System species review, section Successional Status)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "report",
+    "title": "Minor Fruits and Nuts in Georgia (Bulletin 992)",
+    "author": [
+      {
+        "family": "Krewer",
+        "given": "Gerard W."
+      },
+      {
+        "family": "Crocker",
+        "given": "Thomas F."
+      },
+      {
+        "family": "Bertrand",
+        "given": "Paul F."
+      },
+      {
+        "family": "Horton",
+        "given": "Dan L."
+      }
+    ],
+    "publisher": "University of Georgia Cooperative Extension",
+    "issued": {
+      "date-parts": [
+        [
+          2026
+        ]
+      ]
+    },
+    "URL": "https://fieldreport.caes.uga.edu/publications/b992/minor-fruits-and-nuts-in-georgia/",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "uga-2026-b992-minor-fruits-nuts-georgia",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "mulberry-black harvestSeason, verbatim: 'The fruit are borne on current season’s growth and ripen in May in Georgia.' (UGA Cooperative Extension Bulletin 992, Minor Fruits and Nuts in Georgia, Mulberry section)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "webpage",
+    "title": "Mulberry (Morus ssp), Uncommon Fruit: Observations from Carandale Farm",
+    "author": [
+      {
+        "literal": "University of Wisconsin-Madison, Uncommon Fruit"
+      }
+    ],
+    "publisher": "University of Wisconsin-Madison",
+    "issued": {
+      "date-parts": [
+        [
+          2013
+        ]
+      ]
+    },
+    "URL": "https://uncommonfruit.cias.wisc.edu/mulberry/",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "uwmadison-2013-uncommon-fruit-mulberry",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "mulberry-black coldLimit, verbatim: 'The black mulberry, which is a small tree that lives longer, is said to have the best quality fruit, is the least winter hardy and will not tolerate temperatures below zero (Zone 7).' (UW-Madison Uncommon Fruit, Mulberry page, History and background paragraph)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "webpage",
+    "title": "Mulberry (Gardening Solutions)",
+    "author": [
+      {
+        "literal": "UF/IFAS Extension Gardening Solutions"
+      }
+    ],
+    "publisher": "University of Florida IFAS Extension, Gardening Solutions",
+    "URL": "https://gardeningsolutions.ifas.ufl.edu/plants/edibles/fruits/mulberry/",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "ufifas-gardeningsolutions-mulberry",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "mulberry-black light, verbatim: 'These trees do best in full sun to light shade.' (UF/IFAS Gardening Solutions, Mulberry page, Planting and Care section)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "report",
+    "title": "Haskap in the Garden",
+    "author": [
+      {
+        "family": "Lauritzen",
+        "given": "Elisa"
+      },
+      {
+        "family": "Maughan",
+        "given": "Tiffany"
+      },
+      {
+        "family": "Black",
+        "given": "Brent"
+      }
+    ],
+    "publisher": "Utah State University Extension",
+    "issued": {
+      "date-parts": [
+        [
+          2015
+        ]
+      ]
+    },
+    "URL": "https://extension.usu.edu/yardandgarden/research/haskap-in-the-garden.pdf",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "usu-2015-haskap-in-the-garden",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "haskap spacing, verbatim: 'For most cultivars, leaving 3 to 4 feet between plants within the row and 6 to 10 feet between rows is sufficient.' (Utah State University Extension, Haskap in the Garden, section Planting and Spacing, page 2)",
+        "haskap height, verbatim: 'They can grow to be 6 feet high and wide and the form varies significantly, from low-growing to upright, depending on the variety.' (Utah State University Extension, Haskap in the Garden, section Haskap Plants, page 1)",
+        "haskap width, verbatim: 'They can grow to be 6 feet high and wide and the form varies significantly, from low-growing to upright, depending on the variety.' (Utah State University Extension, Haskap in the Garden, section Haskap Plants, page 1)",
+        "haskap harvestSeason, verbatim: 'Berries ripen in early to mid-June, usually just before strawberries begin producing.' (Utah State University Extension, Haskap in the Garden, section Haskap Plants, page 1)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "webpage",
+    "title": "Honeyberries (crop profile)",
+    "author": [
+      {
+        "literal": "University of Wisconsin-Madison Division of Extension, Crops and Soils"
+      }
+    ],
+    "publisher": "University of Wisconsin-Madison Division of Extension",
+    "URL": "https://cropsandsoils.extension.wisc.edu/honeyberries/",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "uwextension-honeyberries",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "haskap yearsToFirstHarvest, verbatim: 'Plants will begin bearing a few fruit in years one and two, but three to four years are required for large quantities.' (UW-Madison Division of Extension, Honeyberries crop profile, first body paragraph)",
+        "haskap coldLimit, verbatim: 'Plants are extremely cold hardy and can be grown in USDA zones 1-8.' (UW-Madison Division of Extension, Honeyberries crop profile, first body paragraph)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "webpage",
+    "title": "Haskaps (Gardening at USask)",
+    "author": [
+      {
+        "literal": "University of Saskatchewan, College of Agriculture and Bioresources"
+      }
+    ],
+    "publisher": "University of Saskatchewan",
+    "URL": "https://gardening.usask.ca/gardening-advice/gardenline-nested-pages/food-plant-pages/fruit/haskap.php",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "usask-gardening-haskaps",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "haskap light, verbatim: 'Haskaps do best full sun to thrive. They can grow in part sun, but you will get less fruit. They are not suited to part shade or very shady conditions.' (USask Gardening (Gardenline), Haskaps page, Planting haskaps tab, Site selection)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "report",
+    "title": "Growing Pistachios in New Mexico (Circular 532)",
+    "author": [
+      {
+        "family": "Herrera",
+        "given": "Esteban"
+      }
+    ],
+    "publisher": "New Mexico State University Cooperative Extension Service",
+    "issued": {
+      "date-parts": [
+        [
+          1997
+        ]
+      ]
+    },
+    "URL": "https://pubs.nmsu.edu/_circulars/CR532/index.html",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "nmsu-1997-growing-pistachios-new-mexico",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "pistachio spacing, verbatim: 'Tree spacing in New Mexico varies mostly from 17 feet by 17 feet to 20 feet by 20 feet (few growers have planted to 24 feet by 24 feet).' (NMSU Circular 532, section Spacing and Planting Procedures)",
+        "pistachio height, verbatim: 'Pistachio trees are long-lived, tap-rooted and can grow to 20-30 feet tall.' (NMSU Circular 532, section Soil and Water Requirements)",
+        "pistachio yearsToFirstHarvest, verbatim: 'Pistachio trees begin bearing the fourth or fifth year after budding.' (NMSU Circular 532, section Harvest)",
+        "pistachio harvestSeason, verbatim: 'Depending on the season, the last irrigation is usually done the first or second half of August, and harvest starts in late August to early September.' (NMSU Circular 532, section Soil and Water Requirements)",
+        "pistachio coldLimit, verbatim: 'Also, temperatures below 10° F can kill the tree, especially young trees.' (NMSU Circular 532, section Climate)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "webpage",
+    "title": "Pistachio (Pistacia vera), TreeBrowser",
+    "author": [
+      {
+        "literal": "Utah State University Extension, TreeBrowser"
+      }
+    ],
+    "publisher": "Utah State University Extension",
+    "URL": "https://extension.usu.edu/treebrowser/catalog/pistachio",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "usu-extension-treebrowser-pistachio",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "pistachio light, verbatim: 'Prefers full sun and well-drained soils.' (Utah State University Extension TreeBrowser, Pistachio (Pistacia vera) page, General description)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "webpage",
+    "title": "How to grow garlic chives (Allium tuberosum)",
+    "author": [
+      {
+        "literal": "University of New Hampshire Extension"
+      }
+    ],
+    "publisher": "University of New Hampshire Extension",
+    "URL": "https://extension.unh.edu/resource/how-grow-garlic-chives-allium-tuberosum",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "unh-extension-garlic-chives",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "garlic-chives spacing, verbatim: 'Sow lightly, and thin to 12 inches apart on all sides when seedlings are 2” tall.' (Planting paragraph (the Profile list on the same page also gives Plant Spacing: 12 inches and Row Spacing: 12 inches))",
+        "garlic-chives height, verbatim: 'Plant Size: 18-24 inches tall; 12 inches wide' (Profile list, Plant Size line)",
+        "garlic-chives width, verbatim: 'Plant Size: 18-24 inches tall; 12 inches wide' (Profile list, Plant Size line)",
+        "garlic-chives coldLimit, verbatim: 'Hardy to USDA Zone 3.' (Planting paragraph)",
+        "garlic-chives light, verbatim: 'Plant seeds in moist soil with good drainage, in full sun to part shade.' (Planting paragraph (the Profile list gives Sun: Full sun to part shade))"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "webpage",
+    "title": "Asian Vegetables: Selected Fruit and Leafy Types",
+    "author": [
+      {
+        "family": "Cantwell",
+        "given": "Marita"
+      },
+      {
+        "family": "Nie",
+        "given": "Xunli"
+      },
+      {
+        "family": "Zong",
+        "given": "Ru Jing"
+      },
+      {
+        "family": "Yamaguchi",
+        "given": "Mas"
+      }
+    ],
+    "publisher": "Purdue University Center for New Crops and Plant Products (reprint of a chapter in J. Janick, ed., Progress in new crops, ASHS Press, pp. 488-495)",
+    "issued": {
+      "date-parts": [
+        [
+          1996
+        ]
+      ]
+    },
+    "URL": "https://hort.purdue.edu/newcrop/proceedings1996/V3-488.html",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "purdue-1996-asian-vegetables",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "garlic-chives yearsToFirstHarvest, verbatim: 'Limited harvesting is done during the first year's growth so that reserves build up in the roots.' (Chinese chives section (Purdue NewCROP copy of Cantwell et al. 1996, pp. 488-495))"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "webpage",
+    "title": "Garlic Chives, Allium tuberosum",
+    "author": [
+      {
+        "family": "Mahr",
+        "given": "Susan"
+      }
+    ],
+    "publisher": "University of Wisconsin-Madison Division of Extension, Wisconsin Horticulture",
+    "URL": "https://hort.extension.wisc.edu/articles/garlic-chives-allium-tuberosum/",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "uwmadison-extension-mahr-garlic-chives",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "garlic-chives harvestSeason, verbatim: 'Leaves can be harvested to eat anytime they are green.' (Second paragraph of the article)",
+        "garlic-chives invasiveStatus, verbatim: 'This plant can be invasive under some conditions, so should be planted with care.' (Paragraph after the photo caption Garlic chives coming up in spring)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "webpage",
+    "title": "Growing tomatillos and ground cherries in home gardens",
+    "author": [
+      {
+        "family": "MacKenzie",
+        "given": "Jill"
+      }
+    ],
+    "publisher": "University of Minnesota Extension",
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "URL": "https://extension.umn.edu/vegetables/growing-tomatillos-and-ground-cherries",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "umn-extension-mackenzie-ground-cherries",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "ground-cherry spacing, verbatim: 'Allow ground cherry plants 18 to 24 inches of space in all directions.' (Planting, Transplanting section)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "webpage",
+    "title": "Growing Ground Cherries",
+    "author": [
+      {
+        "family": "Gibson",
+        "given": "Mary Jo R."
+      }
+    ],
+    "publisher": "Penn State Extension",
+    "issued": {
+      "date-parts": [
+        [
+          2026
+        ]
+      ]
+    },
+    "URL": "https://extension.psu.edu/growing-ground-cherries",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "psu-extension-gibson-ground-cherries",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "ground-cherry height, verbatim: 'Although most are 1 to 3 feet tall, they sprawl.' (Body text, paragraph beginning As you plan your garden)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "webpage",
+    "title": "Ground Cherry",
+    "author": [
+      {
+        "literal": "K-State Research and Extension, Butler County"
+      }
+    ],
+    "publisher": "Kansas State University, K-State Research and Extension, Butler County",
+    "URL": "https://www.butler.k-state.edu/horticulture/gardener-resources/seed-libraries/groundcherry.html",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "kstate-butler-county-ground-cherry",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "ground-cherry daysToMaturity, verbatim: 'Usually, fruits will ripen ten to eleven weeks after transplanting outdoors.' (Harvest and Storage section)",
+        "ground-cherry light, verbatim: 'Sunlight: Ground cherries prefer eight hours of direct light on a daily basis.' (Growing notes, Sunlight entry)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "report",
+    "title": "Ground Cherries (Crow Wing County Master Gardener Volunteer Program plant guide)",
+    "author": [
+      {
+        "family": "Lee",
+        "given": "Jennifer"
+      }
+    ],
+    "publisher": "University of Minnesota Extension, Crow Wing County Master Gardener Volunteer Program",
+    "issued": {
+      "date-parts": [
+        [
+          2020
+        ]
+      ]
+    },
+    "URL": "https://crowwingmastergardeners.org/wp-content/uploads/2025/04/Plant-Guide-Ground-Cherries.pdf",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "umn-extension-crow-wing-2020-ground-cherries",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "ground-cherry coldLimit, verbatim: 'Indeterminate – Ground cherries continue to grow all season and continue producing fruit until killed by frost' (Plant Selection box, first bullet)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "report",
+    "title": "Garden Cress (Home Gardening Series, FSA6084)",
+    "author": [
+      {
+        "family": "Andersen",
+        "given": "Craig R."
+      }
+    ],
+    "publisher": "University of Arkansas System Division of Agriculture, Cooperative Extension Service",
+    "URL": "https://www.uaex.uada.edu/publications/pdf/FSA-6084.pdf",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "uaex-andersen-garden-cress",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "cress spacing, verbatim: 'Spacing – 1 to 2 inches' (Page 1, Culture box (the same page says Sow 10 to 15 seeds per foot of row and Garden cress is not usually thinned))",
+        "cress daysToMaturity, verbatim: 'Broad Leaved 10-40' (Page 2, Cultivars table, column Days to Maturity, row Garden Cress Broad Leaved (the Curled Cressida row gives 10-30))"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "article-journal",
+    "title": "Botanical description of garden cress (Lepidium sativum L.) plant and physical characteristics of its seeds",
+    "author": [
+      {
+        "family": "Vaishnavi"
+      },
+      {
+        "family": "Gupta",
+        "given": "Radhna"
+      },
+      {
+        "family": "Choudhary",
+        "given": "Preeti"
+      }
+    ],
+    "publisher": "Journal of Pharmacognosy and Phytochemistry",
+    "issued": {
+      "date-parts": [
+        [
+          2020
+        ]
+      ]
+    },
+    "URL": "https://www.phytojournal.com/archives/2020/vol9issue5/PartAH/9-5-426-683.pdf",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "container-title": "Journal of Pharmacognosy and Phytochemistry",
+    "volume": "9",
+    "issue": "5",
+    "page": "2424-2428",
+    "id": "vaishnavi-2020-garden-cress-botanical-description",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "cress height, verbatim: 'The plants that grew were erect, glabrous and grew up to an average height of 50cm.' (Page 2426, Botanical description of garden cress plant (Table 4 on page 2427 gives Height 47-50cm))"
+      ],
+      "caveat": "Read in full for the sentences quoted. The catalog row comments say which figure each sentence gives."
+    }
+  },
+  {
+    "type": "webpage",
+    "title": "Garden cress (Vegetable Growing Guide)",
+    "author": [
+      {
+        "literal": "Cornell University, Home Gardening"
+      }
+    ],
+    "publisher": "Cornell University",
+    "issued": {
+      "date-parts": [
+        [
+          2006
+        ]
+      ]
+    },
+    "URL": "http://www.gardening.cornell.edu/homegardening/scene3673.html",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "cornell-2006-garden-cress",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "cress coldLimit, verbatim: 'Tolerates: frost' (Site and Plant Characteristics tab, Special Considerations)",
+        "cress light, verbatim: 'Prefers part shade during hot summer weather.' (Site and Plant Characteristics tab, Site Characteristics, Sunlight (listed as full sun and part shade))"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "webpage",
+    "title": "Horticulture :: Medicinal Crops :: Stevia",
+    "author": [
+      {
+        "literal": "Tamil Nadu Agricultural University"
+      }
+    ],
+    "publisher": "Tamil Nadu Agricultural University, TNAU Agritech Portal",
+    "URL": "https://agritech.tnau.ac.in/horticulture/horti_medicinal%20crops_stevia.html",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "tnau-stevia-medicinal-crops",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "stevia spacing, verbatim: 'Rooted cuttings are planted at a spacing of 45X45 cm, with a total plant density in the order of 30,000 plants per ha.' (Planting section)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "webpage",
+    "title": "Stevia rebaudiana (Candy Leaf, Stevia, Sugar Leaf, Sweet Herb of Paraguay, Sweet Honey Leaf, Sweet Leaf)",
+    "author": [
+      {
+        "literal": "North Carolina State Extension"
+      }
+    ],
+    "publisher": "North Carolina State Extension Gardener Plant Toolbox",
+    "URL": "https://plants.ces.ncsu.edu/plants/stevia-rebaudiana/",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "ncstate-extension-plant-toolbox-stevia-rebaudiana",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "stevia height, verbatim: 'This plant grows up to 1 to 2 feet tall and equally as wide, and it is typically grown for its sweet tasting leaves that are ground to make a sugar substitute.' (Description, first paragraph (the Dimensions list gives Height: 1 ft. 0 in. - 2 ft. 0 in.))",
+        "stevia width, verbatim: 'This plant grows up to 1 to 2 feet tall and equally as wide, and it is typically grown for its sweet tasting leaves that are ground to make a sugar substitute.' (Description, first paragraph (the Dimensions list gives Width: 1 ft. 0 in. - 2 ft. 0 in.))",
+        "stevia light, verbatim: 'Sweet leaf prefers full sun and will tolerate partial shade and requires moist, well-drained, slightly acidic, organically rich, loamy, sandy soils.' (Description, second paragraph (the Light list gives Full sun and Partial Shade))"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "webpage",
+    "title": "Specialty Cropportunities - Stevia",
+    "author": [
+      {
+        "literal": "Ontario Ministry of Agriculture, Food and Rural Affairs"
+      }
+    ],
+    "publisher": "Ontario Ministry of Agriculture, Food and Rural Affairs",
+    "issued": {
+      "date-parts": [
+        [
+          2012
+        ]
+      ]
+    },
+    "URL": "https://www.omafra.gov.on.ca/CropOp/en/indus_misc/pharm/stev.html",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "omafra-2012-specialty-cropportunities-stevia",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "stevia daysToMaturity, verbatim: '54-104 days depending on day length sensitivity of cultivar.' (Days to harvest entry (the same page gives Propagation method: Transplants))",
+        "stevia coldLimit, verbatim: 'Will not survive temperatures below -3°C.' (Temperature sensitivity entry)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "report",
+    "title": "Stevia Production in North Carolina",
+    "author": [
+      {
+        "family": "Shew",
+        "given": "David"
+      }
+    ],
+    "publisher": "North Carolina State University, Department of Plant Pathology and Center for Environmental Farming Systems",
+    "URL": "https://cefs.ncsu.edu/wp-content/uploads/Stevia-FAQ.pdf",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "ncstate-shew-stevia-production-north-carolina",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "stevia yearsToFirstHarvest, verbatim: 'In the year of establishment, the crop is harvested once in September (sometimes twice).' (Page 2, answer to question 4 (How is stevia harvested and prepared for market?))",
+        "stevia harvestSeason, verbatim: 'After the first year, it is usually harvested twice per growing season, July and September, with a combine.' (Page 2, answer to question 4. Region: North Carolina, mostly the eastern counties listed in the answer to question 5)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "report",
+    "title": "Herbs in Southern Gardens (Bulletin 1170)",
+    "author": [
+      {
+        "family": "Dorn",
+        "given": "Sheri"
+      }
+    ],
+    "publisher": "University of Georgia Cooperative Extension",
+    "issued": {
+      "date-parts": [
+        [
+          2025
+        ]
+      ]
+    },
+    "URL": "https://fieldreport.caes.uga.edu/publications/B1170/herbs-in-southern-gardens/",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "uga-2025-dorn-herbs-in-southern-gardens",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "lemon-verbena spacing, verbatim: 'Lemon Verbena (p) Spring 3–4 ft Seed, cutting 3–5 ft Branching/woody Full sun, partial shade' (Table Herb Cultivation Recommendations, column Spacing, row Lemon Verbena (p))"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "webpage",
+    "title": "Aloysia citriodora (Lemon Beebrush, Lemon Verbena)",
+    "author": [
+      {
+        "literal": "North Carolina State Extension"
+      }
+    ],
+    "publisher": "North Carolina State Extension Gardener Plant Toolbox",
+    "URL": "https://plants.ces.ncsu.edu/plants/aloysia-citriodora/",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "ncstate-extension-plant-toolbox-aloysia-citriodora",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "lemon-verbena height, verbatim: 'Lemon verbena will grow 6 to 8 feet tall and wide in the ground but 2 to 4 feet tall and wide in a pot.' (Description, second paragraph (the Dimensions list gives Height: 6 ft. 0 in. - 8 ft. 0 in.))",
+        "lemon-verbena width, verbatim: 'Lemon verbena will grow 6 to 8 feet tall and wide in the ground but 2 to 4 feet tall and wide in a pot.' (Description, second paragraph (the Dimensions list gives Width: 6 ft. 0 in. - 8 ft. 0 in.))",
+        "lemon-verbena coldLimit, verbatim: 'In zones 8 and higher, it can be grown outdoors.' (Description, second paragraph)"
+      ],
+      "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "webpage",
+    "title": "Lemon Verbena (Herb Gardening)",
+    "author": [
+      {
+        "literal": "University of Illinois Extension"
+      }
+    ],
+    "publisher": "University of Illinois Extension",
+    "URL": "https://extension.illinois.edu/herbs/lemon-verbena",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          1
+        ]
+      ]
+    },
+    "id": "illinois-extension-lemon-verbena",
+    "note": "Retrieved 2026-10-01 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "lemon-verbena harvestSeason, verbatim: 'Harvest leaves as needed throughout the season.' (Harvesting section)",
+        "lemon-verbena light, verbatim: 'Outdoors, place the plant in a full sun location.' (Growing: Tender Perennial paragraph)"
       ],
       "caveat": "Published outside a peer-reviewed journal."
     }

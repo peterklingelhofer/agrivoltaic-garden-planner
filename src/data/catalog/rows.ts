@@ -289,6 +289,44 @@ export const CROP_ROWS: readonly CropRow[] = [
     { harvestDays: 60, dtmRef: 'transplant' },
   ],
   [
+    'ground-cherry',
+    'Physalis grisea',
+    'Solanaceae',
+    // The sources call it Physalis pruinosa, but WCVP's P. pruinosa L. is native to Mexico,
+    // Central and South America, while P. grisea is native across the eastern and central US, the
+    // plant the sources describe and the garden ground cherry under current taxonomy
+    'ground cherry|husk cherry',
+    // laubGroup, dliClass, habit, archetype, DLI figures and tier as tomatillo, the same genus
+    'fruity-vegetables',
+    'solanaceae',
+    'bush',
+    'warm',
+    14,
+    20,
+    28,
+    'C',
+    // K-State Research and Extension: "Sunlight: Ground cherries prefer eight hours of direct
+    // light on a daily basis"
+    0,
+    // K-State Research and Extension: "Usually, fruits will ripen ten to eleven weeks after
+    // transplanting outdoors", 70 to 77 days, the 74-day midpoint
+    74,
+    // UMN Extension: "Allow ground cherry plants 18 to 24 inches of space in all directions", the
+    // 21 in midpoint
+    53,
+    // Penn State Extension: "Although most are 1 to 3 feet tall, they sprawl", the 2 ft midpoint
+    0.61,
+    // as tomatillo: no source gives ground cherry a spread
+    1,
+    {
+      // the name the sources use, kept so a grower who types it finds this row
+      synonyms: ['Physalis pruinosa'],
+      // as tomatillo
+      harvestDays: 60,
+      dtmRef: 'transplant',
+    },
+  ],
+  [
     'cucumber',
     'Cucumis sativus',
     'Cucurbitaceae',
@@ -349,6 +387,79 @@ export const CROP_ROWS: readonly CropRow[] = [
     // NC State Extension Plant Toolbox: "Width: 3 ft. 0 in. - 6 ft. 0 in.", the 4.5 ft midpoint
     1.37,
     { harvestDays: 45 },
+  ],
+  [
+    'bottle-gourd',
+    'Lagenaria siceraria',
+    'Cucurbitaceae',
+    'bottle gourd|calabash gourd|cucuzzi|long squash',
+    // laubGroup, dliClass, habit, archetype, DLI figures and tier as bitter-melon, the catalog's
+    // other trellised gourd
+    'fruity-vegetables',
+    'cucurbits',
+    'vining-trellised',
+    'warm',
+    15,
+    20,
+    30,
+    'C',
+    // NC State Extension Plant Toolbox: "Bottle gourd does best in sandy or loamy, well-drained,
+    // soil in full sun and will tolerate hot, humid summers"
+    0,
+    // PROTA (Morimoto and Mvere 2004, read on the Pl@ntUse mirror), a reference work outside the
+    // extension sources this catalog draws on, none of which gives a day count: "For use as a
+    // vegetable, fruit harvesting starts three months after sowing", 90 days
+    90,
+    // NC State Extension Plant Toolbox: "Plant several seeds in mounds 3 feet apart if growing on
+    // supports", the trellised spacing
+    91,
+    // a 6 ft trellis, as luffa: the support's height, where bitter-melon's 4.88 is a vine length.
+    // UF/IFAS HS1272 gives the vine's own length, "can be up to 30 feet in length", and NC
+    // State's "Height: 0 ft. 9 in. - 1 ft. 6 in." reads as a slip
+    1.83,
+    // NC State Extension Plant Toolbox: "Width: 10 ft. 0 in. - 16 ft. 0 in.", the 13 ft midpoint
+    3.96,
+    {
+      // as bitter-melon
+      harvestDays: 45,
+    },
+  ],
+  [
+    'luffa',
+    'Luffa aegyptiaca',
+    'Cucurbitaceae',
+    'luffa|loofah|sponge gourd',
+    // laubGroup, dliClass, habit, archetype, DLI figures and tier as bitter-melon, the catalog's
+    // other trellised gourd
+    'fruity-vegetables',
+    'cucurbits',
+    'vining-trellised',
+    'warm',
+    15,
+    20,
+    30,
+    'C',
+    // NC State Extension: "Luffa gourds require a well-drained soil in a location where they will
+    // have full sun and good air circulation"
+    0,
+    // UF/IFAS HS1285: "only young, immature fruits, which require the hot growing season of about
+    // two to three months, can be harvested for consumption as a vegetable", the 2.5-month
+    // midpoint. The source doesn't say whether it counts from sowing or transplanting, so sowing
+    // is assumed
+    75,
+    // UF/IFAS HS1285: "For planting or transplanting, the distance between plants is usually 3
+    // feet, and the distance between rows is 6 feet", sqrt(3 x 6) = 4.24 ft
+    129,
+    // UF/IFAS HS1285: "Vertical trellises (Figure 11) of 6 feet in height are recommended because
+    // they substantially increase fruit yield (Davis 1994)", the trellis's height, not the vine's
+    // length
+    1.83,
+    // NC State Extension Plant Toolbox: "Width: 1 ft. 0 in. - 3 ft. 0 in.", the 2 ft midpoint
+    0.61,
+    {
+      // as bitter-melon
+      harvestDays: 45,
+    },
   ],
   [
     'chayote',
@@ -502,6 +613,44 @@ export const CROP_ROWS: readonly CropRow[] = [
     1.5,
     0.6,
     { harvestDays: 60 },
+  ],
+  [
+    'roselle',
+    'Hibiscus sabdariffa',
+    'Malvaceae',
+    'roselle|jamaica sorrel|florida cranberry',
+    // laubGroup, dliClass, habit, archetype, DLI figures and tier as okra, the same family's
+    // fruiting annual
+    'fruity-vegetables',
+    'cucurbits',
+    'upright-herb',
+    'hot',
+    16,
+    20,
+    30,
+    'C',
+    // UF/IFAS Gardening Solutions: "Be aware that this plant does not do well in the shade and
+    // needs plenty of sunlight to thrive"
+    0,
+    // UF/IFAS HS659: "It is usually started in April or in late August in Florida, requiring about
+    // 4 months to mature", 4 months = 120 days from sowing
+    120,
+    // University of the District of Columbia fact sheet: "plants should be spaced at least 3-4
+    // feet apart", the 3.5 ft midpoint
+    107,
+    // UF/IFAS HS659: "The okra-like plant is an annual, 5-7 feet in height", the 6 ft midpoint
+    1.83,
+    // UF/IFAS Pasco County: "roselle can easily grow 4 to 7 feet tall and 3 to 5 feet wide", the
+    // 4 ft midpoint
+    1.22,
+    {
+      // WCVP (June 2026) files Hibiscus sabdariffa L. as a synonym of Sabdariffa gossypiifolia
+      // (Mill.) M.M.Hanes & R.L.Barrett, the 2024 split of the genus. The row keeps the name its
+      // sources use and carries WCVP's as a synonym
+      synonyms: ['Sabdariffa gossypiifolia'],
+      // as okra, no source gives roselle a picking period
+      harvestDays: 60,
+    },
   ],
 
   // Grain and fresh legumes
@@ -713,6 +862,41 @@ export const CROP_ROWS: readonly CropRow[] = [
     {
       nfix: true,
       laubNote: IMMATURE_POD_NOTE,
+    },
+  ],
+  [
+    'soybean',
+    'Glycine max',
+    'Fabaceae',
+    'soybean|soya bean',
+    // laubGroup, dliClass, habit, archetype, DLI figures and tier as soybean-edamame, the same
+    // species grown on to dry grain
+    'grain-legumes',
+    'grain-legumes',
+    'upright-herb',
+    'warm',
+    14,
+    20,
+    28,
+    'C',
+    // NC State Extension Plant Toolbox: "Soybean grows readily in most garden soils in full sun"
+    0,
+    // FAO-56 Table 11, soybeans: "20 30/35 60 25 140 May Central USA", the 140-day total from a
+    // May planting to dry grain
+    140,
+    // Purdue AY-217-W: "growers should have no less than 100,000 uniformly standing plants per
+    // acre in 7.5- and 15-inch rows", 4047 m2 / 100,000 = 0.0405 m2 a plant, sqrt(0.0405) =
+    // 0.20 m
+    20,
+    // USDA PLANTS characteristics: "Height, Mature (feet) | 3.0"
+    0.91,
+    // NC State Extension Plant Toolbox: "Width: 0 ft. 9 in. - 2 ft. 0 in.", the 16.5 in midpoint
+    0.42,
+    {
+      // FAO-56 Table 22, soybeans: Zr 0.6-1.3 m, p 0.50, the 0.95 m midpoint
+      zr: 0.95,
+      p: 0.5,
+      nfix: true,
     },
   ],
   [
@@ -1588,6 +1772,44 @@ export const CROP_ROWS: readonly CropRow[] = [
       harvest: { wholeSeason: true, citations: ['illinois-extension-herbs-chives'] },
     },
   ],
+  [
+    'garlic-chives',
+    'Allium tuberosum',
+    'Amaryllidaceae',
+    'garlic chives|chinese chives',
+    // laubGroup, dliClass, habit, archetype, DLI figures and tier as chives, the same genus's
+    // perennial leaf allium
+    'leafy-vegetables',
+    'alliums',
+    'clumping-grass',
+    'cool-perennial',
+    6,
+    12,
+    18,
+    'C',
+    // UNH Extension: "Plant seeds in moist soil with good drainage, in full sun to part shade"
+    1,
+    // as chives
+    80,
+    // UNH Extension: "thin to 12 inches apart on all sides when seedlings are 2” tall"
+    30,
+    // UNH Extension: "Plant Size: 18-24 inches tall", the 21 in midpoint
+    0.53,
+    // the same line: "12 inches wide"
+    0.3,
+    {
+      // Invasive status: on no list. UW-Madison Extension: "This plant can be invasive under some
+      // conditions, so should be planted with care"
+      life: 'perennial',
+      // Cantwell et al. 1996 (Purdue NewCROP): "Limited harvesting is done during the first
+      // year's growth so that reserves build up in the roots", light cutting in the first year
+      yearsToMature: 0,
+      // UNH Extension: "Hardy to USDA Zone 3", the zone 3a floor
+      coldC: -40,
+      // UW-Madison Extension: "Leaves can be harvested to eat anytime they are green"
+      harvest: { wholeSeason: true, citations: ['uwmadison-extension-mahr-garlic-chives'] },
+    },
+  ],
 
   // Leafy greens
   [
@@ -1784,6 +2006,37 @@ export const CROP_ROWS: readonly CropRow[] = [
     { succession: 10 },
   ],
   [
+    'cress',
+    'Lepidium sativum',
+    'Brassicaceae',
+    'cress|garden cress',
+    // laubGroup, dliClass, habit, archetype, DLI figures and tier as arugula, the same family's
+    // quick salad green
+    'leafy-vegetables',
+    'leafy-greens',
+    'rosette',
+    'cool',
+    5,
+    10,
+    16,
+    'C',
+    // Cornell: "Prefers part shade during hot summer weather"
+    2,
+    // University of Arkansas FSA6084, Cultivars table, Days to Maturity for broad-leaved garden
+    // cress, "Broad Leaved 10-40", the 25-day midpoint from sowing
+    25,
+    // University of Arkansas FSA6084: "Spacing - 1 to 2 inches", the 1.5 in midpoint
+    4,
+    // as arugula: the one height a source gives, 50 cm, is a seed crop's (Vaishnavi et al. 2020)
+    0.25,
+    // as arugula: no source gives cress a spread
+    0.2,
+    {
+      // as arugula
+      succession: 10,
+    },
+  ],
+  [
     'mizuna',
     'Brassica rapa',
     'Brassicaceae',
@@ -1949,6 +2202,42 @@ export const CROP_ROWS: readonly CropRow[] = [
     // NC State Extension Plant Toolbox: "Width: 2 ft. 0 in. - 3 ft. 0 in.", the 2.5 ft midpoint
     0.76,
     { harvestDays: 90 },
+  ],
+  [
+    'jute-mallow',
+    'Corchorus olitorius',
+    'Malvaceae',
+    'jute mallow|molokhia',
+    // dliClass, laubGroup, archetype, DLI figures and tier as malabar-spinach, the catalog's other
+    // warm-season leaf crop. No usable ECOCROP sheet, so the envelope is malabar-spinach's too,
+    // the warm archetype's
+    'leafy-vegetables',
+    'leafy-greens',
+    'upright-herb',
+    'warm',
+    8,
+    14,
+    20,
+    'C',
+    // UMN Community Plant Breeding Team: "Full sun and fertile, well-draining soil"
+    0,
+    // UMN Extension: "Days to harvest: 40-60 days for bunched greens", the 50-day midpoint. The
+    // page doesn't say whether it counts from sowing or transplanting, so sowing is assumed
+    50,
+    // UMN Extension: "Row spacing: 30-36 inches. Within-row plant spacing: 2-3 inches for
+    // bunched greens, 6-12 inches for continual harvest", the 33 in row midpoint by the 9 in
+    // midpoint of the continual-harvest spacing, sqrt(33 x 9) = 17.2 in
+    44,
+    // Duke 1983 (Purdue NewCROP): "Annual, much-branched herb 90-120 cm tall", the 105 cm
+    // midpoint
+    1.05,
+    // as okra, the same family's upright annual: no source gives jute mallow a spread
+    0.6,
+    {
+      // as malabar-spinach. UMN Extension: "For continuous leaf harvest, start harvesting
+      // individually at 40 days and continue throughout the summer"
+      harvestDays: 90,
+    },
   ],
   [
     'sorrel',
@@ -2311,6 +2600,41 @@ export const CROP_ROWS: readonly CropRow[] = [
     },
   ],
   [
+    'stevia',
+    'Stevia rebaudiana',
+    'Asteraceae',
+    'stevia|sweet leaf|candyleaf',
+    // laubGroup, dliClass, habit and archetype as basil, the catalog's warm-season leaf herb. DLI
+    // figures and tier as oregano, a full-sun leafy-greens herb, since basil's are its own Tier A
+    'leafy-vegetables',
+    'leafy-greens',
+    'upright-herb',
+    'warm',
+    12,
+    18,
+    25,
+    'C',
+    // NC State Extension Plant Toolbox: "Sweet leaf prefers full sun and will tolerate partial
+    // shade"
+    1,
+    // NC State Extension Plant Toolbox: "The leaves are harvested about 90 days after planting",
+    // counted from transplanting. OMAFRA gives "54-104 days depending on day length sensitivity
+    // of cultivar"
+    90,
+    // TNAU Agritech: "Rooted cuttings are planted at a spacing of 45X45 cm"
+    45,
+    // NC State Extension Plant Toolbox: "This plant grows up to 1 to 2 feet tall and equally as
+    // wide", the 1.5 ft midpoint
+    0.46,
+    // the same sentence
+    0.46,
+    {
+      dtmRef: 'transplant',
+      // OMAFRA: "Will not survive temperatures below -3°C", so it's grown here as an annual
+      coldC: -3,
+    },
+  ],
+  [
     'parsley',
     'Petroselinum crispum',
     'Apiaceae',
@@ -2593,6 +2917,50 @@ export const CROP_ROWS: readonly CropRow[] = [
       // University of Illinois Extension: "The tender tips and foliage can be cut as needed
       // throughout the growing season"
       harvest: { wholeSeason: true, citations: ['illinois-extension-herbs-rosemary'] },
+    },
+  ],
+  [
+    'lemon-verbena',
+    'Aloysia citrodora',
+    'Verbenaceae',
+    'lemon verbena',
+    // laubGroup, dliClass, habit, archetype, DLI figures and tier as rosemary, the catalog's other
+    // woody, frost-tender leaf herb
+    'leafy-vegetables',
+    'leafy-greens',
+    'bush',
+    'subtropical',
+    14,
+    20,
+    28,
+    'C',
+    // University of Illinois Extension: "Outdoors, place the plant in a full sun location"
+    0,
+    200,
+    // UGA Bulletin 1170, herb cultivation table: "Lemon Verbena (p) Spring 3-4 ft", the 3.5 ft
+    // midpoint
+    107,
+    // NC State Extension Plant Toolbox: "Lemon verbena will grow 6 to 8 feet tall and wide in the
+    // ground", the 7 ft midpoint
+    2.13,
+    // the same sentence
+    2.13,
+    {
+      life: 'woody-perennial',
+      // NC State Extension Plant Toolbox: "In zones 8 and higher, it can be grown outdoors", the
+      // zone 8a floor. Wisconsin's zones 8a to 10b agree. Clemson is more cautious, overwintering
+      // it indoors "except near the coast (USDA Zones 9-10)"
+      coldC: -12.2,
+      // ECOCROP sheet 3048, filed under Aloysia triphylla: temperature 14 / 18-28 / 33 C, rainfall
+      // 500 / 600-1800 / 2000 mm, pH 5 / 5.5-7 / 7.5, cycle 365 to 365 days
+      temp: [14, 18, 28, 33],
+      rain: [500, 600, 1800, 2000],
+      ph: [5, 5.5, 7, 7.5],
+      cycle: [365, 365],
+      // ECOCROP sheet 3048 climate zones: Aw, Cs, Do
+      koppen: [...AW, ...CS, ...DO],
+      // University of Illinois Extension: "Harvest leaves as needed throughout the season"
+      harvest: { wholeSeason: true, citations: ['illinois-extension-lemon-verbena'] },
     },
   ],
   [
@@ -3064,6 +3432,58 @@ export const CROP_ROWS: readonly CropRow[] = [
         citations: ['umn-extension-2026-blueberries', 'noaa-ncei-2021-climate-normals-1991-2020'],
       },
       harvestDays: 30,
+    },
+  ],
+  [
+    'haskap',
+    'Lonicera caerulea',
+    'Caprifoliaceae',
+    'haskap|honeyberry|blue honeysuckle',
+    // laubGroup, dliClass, habit, archetype, DLI figures and tier as blueberry, the catalog's
+    // other early bush berry. No usable ECOCROP sheet, so the envelope is currant-black's, the
+    // archetype's with the default pH, since blueberry's is set by its acid soil
+    'berries',
+    'cane-bush-berries',
+    'bush',
+    'cool-perennial',
+    12,
+    20,
+    26,
+    'C',
+    // USask Gardening: "Haskaps do best full sun to thrive. They can grow in part sun, but you
+    // will get less fruit. They are not suited to part shade or very shady conditions"
+    0,
+    1460,
+    // Utah State University Extension: "For most cultivars, leaving 3 to 4 feet between plants
+    // within the row and 6 to 10 feet between rows is sufficient", row midpoint 8 ft x in-row
+    // midpoint 3.5 ft, sqrt(8 x 3.5) = 5.29 ft
+    161,
+    // Utah State University Extension: "They can grow to be 6 feet high and wide"
+    1.83,
+    // the same sentence
+    1.83,
+    {
+      // Heat limits the warm end: Utah State says plants "experience scorching, mildew and
+      // pre-mature leaf drop when grown in warmer climates (above zone 6)"
+      life: 'woody-perennial',
+      // UW-Madison Extension: "Plants will begin bearing a few fruit in years one and two, but
+      // three to four years are required for large quantities", the 1.5-year midpoint of the
+      // first bearing
+      yearsToMature: 1.5,
+      // UW-Madison Extension: "Plants are extremely cold hardy and can be grown in USDA zones
+      // 1-8", the zone 1a floor
+      coldC: -51.1,
+      deciduous: true,
+      // Utah State University Extension, for Utah (Salt Lake City Intl AP, UT, USW00024127, Apr 8
+      // median last spring freeze): "Berries ripen in early to mid-June, usually just before
+      // strawberries begin producing", picking starts 58 days after the freeze and runs 10 days
+      harvest: {
+        afterFreezeDays: 58,
+        // the source's own median season at USW00024127, Apr 8 to Oct 31 (NCEI 1991-2020)
+        seasonDays: 206,
+        citations: ['usu-2015-haskap-in-the-garden', 'noaa-ncei-2021-climate-normals-1991-2020'],
+      },
+      harvestDays: 10,
     },
   ],
 
@@ -3635,6 +4055,54 @@ export const CROP_ROWS: readonly CropRow[] = [
     },
   ],
   [
+    'quince',
+    'Cydonia oblonga',
+    'Rosaceae',
+    'quince',
+    // laubGroup, dliClass, habit, archetype, DLI figures, tier and maxRsr as apple, the same
+    // family's vase-trained tree fruit
+    'fruits',
+    'cane-bush-berries',
+    'vase-tree',
+    'temperate-tree',
+    15,
+    20,
+    30,
+    'C',
+    // Cornell Fruit Resources: "Quinces prefer a fertile site in full sun"
+    0,
+    1825,
+    // Virginia Cooperative Extension 426-841 Table 1, minimum distance between plants: "Quince |
+    // 15 | 1 | 5-6 | 30-40", 15 ft
+    457,
+    // OSU Landscape Plants: "Deciduous tree/shrub, rounded, 15 x 15 ft (4.5 x 4.5 m)"
+    4.57,
+    // the same sentence
+    4.57,
+    {
+      life: 'woody-perennial',
+      // VCE 426-841 Table 1, bearing age: "Quince | 15 | 1 | 5-6 | 30-40", the 5.5-year midpoint
+      yearsToMature: 5.5,
+      // Cornell Fruit Resources: "trees are hardy in Zones 5 to 9", the zone 5a floor
+      coldC: -28.9,
+      maxRsr: 0.1,
+      maxRsrTier: 'C',
+      // OSU Extension, 20 Mediterranean Tastes You Can Grow at Home, for western Oregon (Salem AP
+      // (McNary Field), OR, USW00024232, Apr 3 median last spring freeze): "Harvest in October or
+      // later", picking starts 181 days after the freeze and runs 30 days
+      harvest: {
+        afterFreezeDays: 181,
+        // the source's own median season at USW00024232, Apr 3 to Nov 1 (NCEI 1991-2020)
+        seasonDays: 212,
+        citations: [
+          'osu-extension-mediterranean-edibles',
+          'noaa-ncei-2021-climate-normals-1991-2020',
+        ],
+      },
+      harvestDays: 30,
+    },
+  ],
+  [
     'pear',
     'Pyrus communis',
     'Rosaceae',
@@ -3772,6 +4240,64 @@ export const CROP_ROWS: readonly CropRow[] = [
         ],
       },
       harvestDays: 20,
+    },
+  ],
+  [
+    'pistachio',
+    'Pistacia vera',
+    'Anacardiaceae',
+    'pistachio',
+    // laubGroup, dliClass, habit, archetype, DLI figures, tier and maxRsr as almond, the
+    // catalog's other dry-climate nut tree
+    'fruits',
+    'cane-bush-berries',
+    'vase-tree',
+    'temperate-tree',
+    18,
+    25,
+    35,
+    'C',
+    // Utah State University Extension TreeBrowser: "Prefers full sun and well-drained soils"
+    0,
+    1460,
+    // NMSU Circular 532: "Tree spacing in New Mexico varies mostly from 17 feet by 17 feet to 20
+    // feet by 20 feet", the 18.5 ft midpoint
+    564,
+    // NMSU Circular 532: "Pistachio trees are long-lived, tap-rooted and can grow to 20-30 feet
+    // tall", the 25 ft midpoint
+    7.62,
+    // no source gives pistachio a canopy spread, so the 18.5 ft tree spacing above stands in, as
+    // black-walnut's and cacao's do
+    5.64,
+    {
+      life: 'woody-perennial',
+      // NMSU Circular 532: "Pistachio trees begin bearing the fourth or fifth year after
+      // budding", the midpoint
+      yearsToMature: 4.5,
+      // NMSU Circular 532: "About 1,000 accumulated hours of temperatures at 45° F or below are
+      // required for pistachio trees to break dormancy"
+      chillHours: 1000,
+      // NMSU Circular 532: "Also, temperatures below 10° F can kill the tree, especially young
+      // trees", -12.2 C
+      coldC: -12.2,
+      maxRsr: 0.1,
+      maxRsrTier: 'C',
+      // FAO-56 Table 22, "Pistachios": Zr 1.0-1.5 m, p 0.40, the 1.25 m midpoint
+      zr: 1.25,
+      p: 0.4,
+      // NMSU Circular 532, for southern New Mexico (Alamogordo, NM, USC00290199, Mar 9 median last
+      // spring freeze): "harvest starts in late August to early September", picking starts 169
+      // days after the freeze and runs 11 days
+      harvest: {
+        afterFreezeDays: 169,
+        // the source's own median season at USC00290199, Mar 9 to Nov 18 (NCEI 1991-2020)
+        seasonDays: 254,
+        citations: [
+          'nmsu-1997-growing-pistachios-new-mexico',
+          'noaa-ncei-2021-climate-normals-1991-2020',
+        ],
+      },
+      harvestDays: 11,
     },
   ],
   [
@@ -3973,6 +4499,112 @@ export const CROP_ROWS: readonly CropRow[] = [
         seasonDays: 212,
         citations: [
           'osu-extension-2025-tree-fruits-nuts-home',
+          'noaa-ncei-2021-climate-normals-1991-2020',
+        ],
+      },
+      harvestDays: 30,
+    },
+  ],
+  [
+    'mulberry-red',
+    'Morus rubra',
+    'Moraceae',
+    'red mulberry',
+    // laubGroup, dliClass, habit, DLI figures, tier, deciduous and maxRsr as fig, the same
+    // family's tree fruit. Hardy to zone 5, so the archetype is temperate-tree
+    'fruits',
+    'cane-bush-berries',
+    'spreading-tree',
+    'temperate-tree',
+    15,
+    20,
+    30,
+    'C',
+    // USDA Forest Service FEIS: "Red mulberry grows best in the open, but is somewhat tolerant of
+    // shade"
+    1,
+    1095,
+    // NC State Extension Gardener Handbook ch. 15, Table 15-5, minimum spacing between trees:
+    // "Red Mulberry | 20-30", the 25 ft midpoint
+    762,
+    // Iowa State University Extension: "Height: 30-45 feet", the 37.5 ft midpoint
+    11.4,
+    // same page: "Width: 25-35 feet", the 30 ft midpoint
+    9.14,
+    {
+      // Native to the eastern US and on no invasive list. The USDA Forest Service FEIS review
+      // reads "Invasiveness: Noninvasive"
+      life: 'woody-perennial',
+      // NC State Extension Gardener Handbook ch. 15, Table 15-6, years to harvest: "Mulberry, red
+      // | 8 - 10 | May to June", the 9-year midpoint. Long for a fruit tree, and the only figure
+      // a source gives for red mulberry itself
+      yearsToMature: 9,
+      // Iowa State University Extension: "Hardiness: Zones 5 through 10", the zone 5a floor
+      coldC: -28.9,
+      deciduous: true,
+      maxRsr: 0.1,
+      maxRsrTier: 'C',
+      // NC State Extension Gardener Handbook ch. 15, for North Carolina (Raleigh-Durham
+      // International AP, NC, USW00013722, Mar 31 median last spring freeze), Table 15-6:
+      // "Mulberry, red | 8 - 10 | May to June", picking starts 31 days after the freeze and runs
+      // 60 days
+      harvest: {
+        afterFreezeDays: 31,
+        // the source's own median season at USW00013722, Mar 31 to Nov 4 (NCEI 1991-2020)
+        seasonDays: 218,
+        citations: [
+          'ncsu-extension-parker-2022-tree-fruits-nuts',
+          'noaa-ncei-2021-climate-normals-1991-2020',
+        ],
+      },
+      harvestDays: 60,
+    },
+  ],
+  [
+    'mulberry-black',
+    'Morus nigra',
+    'Moraceae',
+    'black mulberry',
+    // every column and override as mulberry-red, the same genus, except where a figure below
+    // names its own source
+    'fruits',
+    'cane-bush-berries',
+    'spreading-tree',
+    'temperate-tree',
+    15,
+    20,
+    30,
+    'C',
+    // UF/IFAS Gardening Solutions, of mulberries in general: "These trees do best in full sun to
+    // light shade"
+    1,
+    1095,
+    // as mulberry-red: no source gives black mulberry a planting distance
+    762,
+    // UF/IFAS EP618: "can both grow to be medium-sized trees up to 40′ tall", the 40 ft ceiling
+    12.2,
+    // as mulberry-red: no source gives black mulberry a spread
+    9.14,
+    {
+      life: 'woody-perennial',
+      // as mulberry-red: no source gives black mulberry its own bearing age
+      yearsToMature: 9,
+      // UW-Madison Uncommon Fruit: black mulberry "will not tolerate temperatures below zero (Zone
+      // 7)", the zone 7a floor
+      coldC: -17.8,
+      deciduous: true,
+      maxRsr: 0.1,
+      maxRsrTier: 'C',
+      // UGA Bulletin 992, for Georgia (Macon Middle Georgia Regional AP, GA, USW00003813, Mar 21
+      // median last spring freeze), in a paragraph on mulberries in general rather than black
+      // mulberry alone: "The fruit are borne on current season’s growth and ripen in May in
+      // Georgia", picking starts 41 days after the freeze and runs 30 days
+      harvest: {
+        afterFreezeDays: 41,
+        // the source's own median season at USW00003813, Mar 21 to Nov 10 (NCEI 1991-2020)
+        seasonDays: 234,
+        citations: [
+          'uga-2026-b992-minor-fruits-nuts-georgia',
           'noaa-ncei-2021-climate-normals-1991-2020',
         ],
       },
@@ -4808,9 +5440,10 @@ export const CROP_ROWS: readonly CropRow[] = [
 
   // Tropical and subtropical staples (Decision Record 23). Every envelope below is transcribed
   // from the crop's ECOCROP data sheet, cited by EcoPort id. `coldC` is the sheet's killing
-  // temperature during rest and is omitted where the sheet has none. `koppen` is the sheet's
-  // climate zones read through the Trewartha table above. The DLI figures are the sun-label
-  // class inferences every other Tier C row carries, and each growth figure names its sheet
+  // temperature during rest unless the row quotes an extension figure, and is omitted where
+  // neither gives one. `koppen` is the sheet's climate zones read through the Trewartha table
+  // above, or the archetype's where the sheet lists none. The DLI figures are the sun-label class
+  // inferences every other Tier C row carries, and each growth figure names its source
   [
     'cassava',
     'Manihot esculenta',
@@ -5027,6 +5660,70 @@ export const CROP_ROWS: readonly CropRow[] = [
       zr: 0.75,
       p: 0.2,
       laubNote: LAUB_EXCLUDED_NOTE,
+    },
+  ],
+  [
+    'sugarcane',
+    'Saccharum officinarum',
+    'Poaceae',
+    'sugarcane|sugar cane',
+    // laubGroup, dliClass, DLI figures and tier as corn-grain, the other C4 grass. Habit,
+    // archetype and the perennial life as napier-grass, the catalog's other tropical perennial
+    // grass
+    'corn-c4',
+    'corn-c4',
+    'clumping-grass',
+    'subtropical',
+    18,
+    25,
+    35,
+    'C',
+    // UF/IFAS SS-AGR-253: "the more sun the better. Sugarcane planted in partially shaded areas
+    // (such as near buildings, walls, or tall trees) will have reduced growth potential"
+    0,
+    365,
+    // UF/IFAS SS-AGR-253: "in multiple, parallel rows with a distance of from 4 -10 feet between
+    // the rows", the 7 ft midpoint each way, as pigeon-pea: seed pieces are laid end to end in
+    // the furrow and the source gives no in-row distance
+    213,
+    // UF/IFAS Santa Rosa County: "Height: 3 to 12 feet", the 7.5 ft midpoint
+    2.29,
+    // same sheet: "Spread: 3 to 10 feet", the 6.5 ft midpoint
+    1.98,
+    {
+      life: 'perennial',
+      // UF/IFAS SS-AGR-253: "a stalk weighing 2 - 4 pounds with 11 - 12 percent sugar will be
+      // produced in about 12 - 14 months from an original planting", about a year
+      yearsToMature: 1,
+      // Duke 1983 (Purdue NewCROP): "Standing stalks of sugarcane freeze at -4 to -5.5°C (25 to
+      // 22°F) depending on cv and length of exposure", the 23.5 F midpoint, -4.7 C
+      coldC: -4.7,
+      // ECOCROP sheet 1884: temperature 15 / 24-37 / 41 C, rainfall 1000 / 1500-2000 / 5000 mm,
+      // pH 4.5 / 5-8 / 9, cycle 210 to 365 days. The sheet lists no climate zones, so koppen
+      // stays the subtropical archetype's, as napier-grass
+      temp: [15, 24, 37, 41],
+      rain: [1000, 1500, 2000, 5000],
+      ph: [4.5, 5, 8, 9],
+      cycle: [210, 365],
+      // FAO-56 Table 22, sugar cane: Zr 1.2-2.0 m, p 0.65, the 1.6 m midpoint
+      zr: 1.6,
+      p: 0.65,
+      // UF/IFAS SS-AGR-253, for North Florida (Quincy 3 SSW, FL, USC00087429, Mar 13 median last
+      // spring freeze): "sugarcane will be ready for harvest anytime after November 1, but keep an
+      // eye on the weather since you'll want to harvest before a killing freeze", cutting starts
+      // 233 days after the freeze and runs 21 days, to the median first fall freeze
+      harvest: {
+        afterFreezeDays: 233,
+        // the source's own median season at USC00087429, Mar 13 to Nov 22 (NCEI 1991-2020)
+        seasonDays: 254,
+        citations: [
+          'ufifas-2009-backyard-sugarcane-ss-agr-253',
+          'noaa-ncei-2021-climate-normals-1991-2020',
+        ],
+      },
+      harvestDays: 21,
+      // the corn-c4 trials are grain corn, and sugarcane is cut for its stalk
+      laubNote: NO_COMPARABLE_CROP_NOTE,
     },
   ],
   [
@@ -5324,6 +6021,64 @@ export const CROP_ROWS: readonly CropRow[] = [
       // as apple and grape: the 0.1 floor as the tree fruit's own Tier C inference
       maxRsr: 0.1,
       maxRsrTier: 'C',
+      laubNote: OUTSIDE_SCOPE_NOTE,
+    },
+  ],
+  [
+    'guava',
+    'Psidium guajava',
+    'Myrtaceae',
+    'guava',
+    // laubGroup, dliClass, habit, archetype, DLI figures, tier, maxRsr and laubNote as mango, the
+    // catalog's other tropical tree fruit
+    'fruits',
+    'cane-bush-berries',
+    'spreading-tree',
+    'subtropical',
+    15,
+    20,
+    30,
+    'C',
+    // UF/IFAS HS4: "In general, guava trees should be planted in full sun for best growth and
+    // fruit production"
+    0,
+    // ECOCROP sheet 1804 cycle 150 to 365 days, a fruit cycle of the full year, as mango
+    365,
+    // UF/IFAS HS4: "trees should be planted 15 to 25 ft (4.6-7.6 m) away from other trees and
+    // structures and power lines", the 20 ft midpoint
+    610,
+    // UF/IFAS HS4: "Small, single or multi-trunked trees to 20 ft (6.1 m) in height"
+    6.1,
+    // CTAHR RES-035: "A properly pruned and trained tree can be confined to a foliage canopy
+    // approaching 4 meters (11 to 12 feet) in radius", the 11.5 ft midpoint radius doubled to a
+    // 23 ft spread
+    7,
+    {
+      // Invasive status: Florida Invasive Species Council Category I in central and south Florida
+      // ("Psidium guajava guava C, S"), a list with no regulatory force. HEAR's Hawaii-Pacific
+      // Weed Risk Assessment scores it high risk (21)
+      life: 'woody-perennial',
+      // UF/IFAS HS4: "Guava trees generally begin fruit production 3 to 4 years after planting",
+      // the midpoint
+      yearsToMature: 3.5,
+      // UF/IFAS HS4: "Mature trees may withstand short periods of 25° to 26°F (-4° to -3°C)
+      // without much damage", the 25.5 F midpoint, -3.6 C
+      coldC: -3.6,
+      // as mango
+      deciduous: false,
+      // ECOCROP sheet 1804: temperature 10 / 20-33 / 45 C, rainfall 400 / 1000-3000 / 5000 mm,
+      // pH 4 / 5.5-7.5 / 8.5, cycle 150 to 365 days
+      temp: [10, 20, 33, 45],
+      rain: [400, 1000, 3000, 5000],
+      ph: [4, 5.5, 7.5, 8.5],
+      cycle: [150, 365],
+      // ECOCROP sheet 1804 climate zones: Aw, Ar, Bs, Cf, Cs, Cw
+      koppen: [...AW, ...AR, ...BS, ...CF, ...CS, ...CW],
+      maxRsr: 0.1,
+      maxRsrTier: 'C',
+      // No harvest override: UF/IFAS MG373's "Season: August-October, February-March" is south
+      // Florida's, where NCEI's 1991-2020 normals give no median freeze (Homestead, USC00084095,
+      // flag Y), so the row keeps the catalog window, as mango
       laubNote: OUTSIDE_SCOPE_NOTE,
     },
   ],
@@ -5792,6 +6547,59 @@ export const CROP_ROWS: readonly CropRow[] = [
     },
   ],
   [
+    'macadamia',
+    'Macadamia integrifolia',
+    'Proteaceae',
+    'macadamia|macadamia nut',
+    // laubGroup, dliClass, habit, archetype, DLI figures, tier, deciduous, maxRsr and laubNote as
+    // avocado, the catalog's other evergreen subtropical tree crop
+    'fruits',
+    'cane-bush-berries',
+    'spreading-tree',
+    'subtropical',
+    15,
+    20,
+    30,
+    'C',
+    // NC State Extension Plant Toolbox: "Light: Full sun (6 or more hours of direct sunlight a
+    // day)"
+    0,
+    // ECOCROP sheet 1382 cycle 365 to 365 days, a fruit cycle of the full year
+    365,
+    // CTAHR Circular 485: "30 to 35 feet between rows and 16 to 20 feet between trees in the row
+    // are considered reasonable", row midpoint 32.5 ft x in-row midpoint 18 ft, sqrt(32.5 x 18)
+    // = 24.2 ft
+    737,
+    // NC State Extension Plant Toolbox: "Height: 30 ft. 0 in. - 50 ft. 0 in.", the 40 ft midpoint
+    12.2,
+    // same page: "Width: 20 ft. 0 in. - 40 ft. 0 in.", the 30 ft midpoint
+    9.1,
+    {
+      life: 'woody-perennial',
+      // CTAHR F_N-17: "Harvest trees begin bearing fruit at 3-6 years", the midpoint
+      yearsToMature: 4.5,
+      // as avocado: NC State calls macadamia "intolerant of frost", and no source gives it a
+      // temperature
+      coldC: -4,
+      deciduous: false,
+      // ECOCROP sheet 1382: temperature 8 / 10-26 / 35 C, rainfall 700 / 1000-3000 / 3500 mm,
+      // pH 4.5 / 5-6 / 7, cycle 365 to 365 days
+      temp: [8, 10, 26, 35],
+      rain: [700, 1000, 3000, 3500],
+      ph: [4.5, 5, 6, 7],
+      cycle: [365, 365],
+      // ECOCROP sheet 1382 lists no climate zones, so koppen is the subtropical archetype's.
+      // Avocado's tropical pair (Aw, Ar) would refuse the Cfa of southeast Queensland, where the
+      // species is native
+      maxRsr: 0.1,
+      maxRsrTier: 'C',
+      // No harvest override: CTAHR Circular 485's "from about August through January" is
+      // Hawaii's, where NCEI's 1991-2020 normals give no median freeze (Hilo, USW00021504, flag
+      // Y), so the row keeps the catalog window, as mango
+      laubNote: OUTSIDE_SCOPE_NOTE,
+    },
+  ],
+  [
     'coffee',
     'Coffea arabica',
     'Rubiaceae',
@@ -5974,6 +6782,112 @@ export const CROP_ROWS: readonly CropRow[] = [
       zr: 0.7,
       p: 0.35,
       laubNote: OUTSIDE_SCOPE_NOTE,
+    },
+  ],
+  [
+    'pineapple',
+    'Ananas comosus',
+    'Bromeliaceae',
+    'pineapple',
+    // laubGroup, dliClass, archetype, DLI figures, tier, perennial life and laubNote as banana,
+    // the catalog's other tropical fruiting herb. The habit is the plant's own rosette
+    'fruits',
+    'cucurbits',
+    'rosette',
+    'subtropical',
+    14,
+    20,
+    28,
+    'C',
+    // UF/IFAS HS7: "In general, pineapple plants should be planted in full sun for best growth
+    // and fruit production"
+    0,
+    // ECOCROP sheet 402 cycle 330 to 365 days, the 365 end, as banana
+    365,
+    // UF/IFAS HS7: "The distance between individual pineapple plants ranges from 12 to 36
+    // inches", the 24 in midpoint
+    61,
+    // UF/IFAS HS7: "Adult plants may be 3 to 6 feet ... high and wide", the 4.5 ft midpoint
+    1.37,
+    // the same sentence
+    1.37,
+    {
+      life: 'perennial',
+      // UF/IFAS HS7: "The time from planting to harvest of the fruit ranges from 18 to 36 months
+      // in subtropical climates", the 27-month midpoint
+      yearsToMature: 2.25,
+      // UF/IFAS HS7: "Pineapple plants do not tolerate freezing temperatures below 28°F", -2.2 C
+      coldC: -2.2,
+      // ECOCROP sheet 402: temperature 10 / 21-30 / 36 C, rainfall 550 / 800-2500 / 3500 mm,
+      // pH 3.5 / 4.5-8 / 9, cycle 330 to 365 days
+      temp: [10, 21, 30, 36],
+      rain: [550, 800, 2500, 3500],
+      ph: [3.5, 4.5, 8, 9],
+      cycle: [330, 365],
+      // ECOCROP sheet 402 climate zones: Aw, Ar, Cf
+      koppen: [...AW, ...AR, ...CF],
+      // FAO-56 Table 22, pineapple: Zr 0.3-0.6 m, p 0.50, the 0.45 m midpoint
+      zr: 0.45,
+      p: 0.5,
+      // CTAHR F&N-7, for Hawaii's frost-free plantations: "Fruits are harvested year-round for
+      // fresh market and canning operations"
+      harvest: { wholeSeason: true, citations: ['ctahr-2002-pineapple-cultivation-hawaii'] },
+      laubNote: OUTSIDE_SCOPE_NOTE,
+    },
+  ],
+  [
+    'passion-fruit',
+    'Passiflora edulis',
+    'Passifloraceae',
+    'passion fruit|maracuya',
+    // laubGroup, dliClass, habit, DLI figures and tier as kiwifruit, the catalog's other
+    // trellised fruiting vine. A frost-tender evergreen, so the archetype is subtropical
+    'fruits',
+    'cane-bush-berries',
+    'vining-trellised',
+    'subtropical',
+    10,
+    18,
+    25,
+    'C',
+    // UF/IFAS FPS456: "This plant does require a position in the landscape that receives full sun
+    // for best flowering and fruit production"
+    0,
+    // as mango, a fruit cycle of the full year: ECOCROP sheet 1633 gives a cycle of 0 to 0 days
+    365,
+    // UF/IFAS HS60: "In Florida, passion vines are planted 3-4.5 m (10-15 ft.) apart in rows
+    // 4.5-6 m (1 5-20 ft.) apart", the "1 5" a misprint for 15 as the metric figure shows. In-row
+    // midpoint 12.5 ft x row midpoint 17.5 ft, sqrt(12.5 x 17.5) = 14.8 ft
+    451,
+    // UF/IFAS HS60: "Ideally they should be long enough to provide a trellis height of 1.5 m (5
+    // ft.)", the trellis the vine is trained onto
+    1.52,
+    // UF/IFAS MG373 Table 1 recommends planting passion fruit "12-20+" ft from the nearest
+    // structure or tree, the 16 ft midpoint. No source gives the vine's own spread, so this
+    // planting distance stands in
+    4.88,
+    {
+      // Invasive status: on no state list. The UF/IFAS Assessment of Non-Native Plants in
+      // Florida's Natural Areas rates it "High Invasion Risk": "Predicted to be invasive and not
+      // recommended by IFAS". HEAR's Hawaii-Pacific Weed Risk Assessment scores it low risk (6)
+      life: 'woody-perennial',
+      // UF/IFAS MG373: "Vines begin to bear within 3-6 months of planting", the 4.5-month
+      // midpoint
+      yearsToMature: 0.375,
+      // UF/IFAS FPS456: "USDA hardiness zones: 9B through 11", the zone 9b floor
+      coldC: -3.9,
+      // ECOCROP sheet 1633: temperature 18 / 20-30 / 34 C, rainfall 600 / 900-2000 / 2500 mm,
+      // pH 5.5 / 6-8 / 8.5. Its cycle reads 0 to 0 days, so the cycle is mango's, the catalog's
+      // year-round fruit cycle
+      temp: [18, 20, 30, 34],
+      rain: [600, 900, 2000, 2500],
+      ph: [5.5, 6, 8, 8.5],
+      cycle: [150, 365],
+      // ECOCROP sheet 1633 climate zones: Aw, Ar, Cf, Cs
+      koppen: [...AW, ...AR, ...CF, ...CS],
+      // No harvest override: MG373's "Season June-December" is south Florida's, where NCEI's
+      // 1991-2020 normals give no median freeze (Homestead, USC00084095, flag Y), so the row
+      // keeps the catalog window, as mango
     },
   ],
 
@@ -6184,6 +7098,62 @@ export const CROP_ROWS: readonly CropRow[] = [
     0.5,
     0.3,
     { role: 'cover', life: 'perennial', coldC: -29, nfix: true },
+  ],
+  [
+    'alfalfa',
+    'Medicago sativa',
+    'Fabaceae',
+    'alfalfa|lucerne',
+    // laubGroup, dliClass, habit, archetype, DLI figures, tier and shade as clover-red, the other
+    // perennial legume cover. No source gives alfalfa a light requirement
+    'forages',
+    'forages-c3-pasture',
+    'upright-herb',
+    'cool-perennial',
+    8,
+    14,
+    20,
+    'C',
+    1,
+    365,
+    // OSU Forage Information System: "For pure stands, a seeding rate of 12-15 lb/a (26.5-33
+    // kg/ha) planted in 6-inch rows is usually sufficient for a good stand of alfalfa", the 6 in
+    // drill row
+    15,
+    // USDA NRCS Plant Fact Sheet: "Alfalfa’s stems are erect and grow from a woody crown to about
+    // 2 to 3 feet tall", the 2.5 ft midpoint
+    0.76,
+    // as clover-red: no source gives one alfalfa plant a spread
+    0.3,
+    {
+      // Cut for hay, so the harvest window below is when to cut. Invasive status: on no
+      // regulatory list. The USDA Forest Service's Alaska invasiveness ranking (R10-TP-143), which
+      // has no regulatory force, scores subspecies sativa 59 of 100, "Modestly Invasive"
+      role: 'cover',
+      life: 'perennial',
+      // UMN Extension: "Direct-seeded alfalfa should be harvested about 60 days following seeding
+      // and additional harvests taken before early September", a cut in the seeding year
+      yearsToMature: 0,
+      // OSU Forage Information System: "USDA Plant Hardiness zone 3 for most cold-tolerant
+      // types", the zone 3a floor
+      coldC: -40,
+      nfix: true,
+      // FAO-56 Table 22, alfalfa for hay: Zr 1.0-2.0 m, p 0.55, the 1.5 m midpoint
+      zr: 1.5,
+      p: 0.55,
+      // University of Missouri Extension G4550, for central Missouri (Columbia Regional AP, MO,
+      // USW00003945, Apr 7 median last spring freeze): "For established stands, take the first
+      // (May 10 to 20) and second (June 15 to 25) cuttings when the plants are just beginning to
+      // bloom. For persistence of the stand, make two more harvests at about 35-day intervals
+      // before Sept. 15", cutting starts 33 days after the freeze and runs 128 days
+      harvest: {
+        afterFreezeDays: 33,
+        // the source's own median season at USW00003945, Apr 7 to Oct 29 (NCEI 1991-2020)
+        seasonDays: 205,
+        citations: ['mu-2017-alfalfa-g4550', 'noaa-ncei-2021-climate-normals-1991-2020'],
+      },
+      harvestDays: 128,
+    },
   ],
   [
     'phacelia',

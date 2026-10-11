@@ -46,7 +46,7 @@ describe('crop catalog', () => {
       )
       // a row above tier C has to name the work it read the number off. A tier C row may name
       // nothing, which is the ordinary case: the two extension documents print a band for five rows
-      // and this catalog holds 209
+      // and this catalog holds 230
       if (crop.light.dliMinMolM2Day.tier !== 'C') {
         expect(crop.light.dliMinMolM2Day.citations.length, String(crop.id)).toBeGreaterThan(0)
       }

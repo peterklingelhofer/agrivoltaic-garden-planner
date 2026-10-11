@@ -110,9 +110,9 @@ describe('soil pH intersection', () => {
       .sort()
     // the acid guild, plus the tropical staples whose ECOCROP envelopes reach pH 4 to 4.5
     // (cassava 4 to 9, taro 4.3 to 8.2, banana 4 to 8.4, coffee 4.3 to 8.4, cacao 4 to 8,
-    // orange 4 to 8.3, tea 4 to 6, and so on), plus lime at its own 5 floor, which is a fact
-    // about those crops and the reason a blueberry bed isn't the dead end for them that it's
-    // for a tomato. Olive's floor is 5.3, so it stays out
+    // orange 4 to 8.3, tea 4 to 6, pineapple 3.5 to 9, and so on), plus lime and lemon verbena
+    // at their own 5 floor, which is a fact about those crops and the reason a blueberry bed
+    // isn't the dead end for them that it's for a tomato. Olive's floor is 5.3, so it stays out
     expect(compatible).toEqual([
       'avocado',
       'banana',
@@ -120,9 +120,12 @@ describe('soil pH intersection', () => {
       'cassava',
       'coffee',
       'cranberry',
+      'guava',
+      'lemon-verbena',
       'lime',
       'lingonberry',
       'lowbush-blueberry',
+      'macadamia',
       'mango',
       'moringa',
       'mung-bean',
@@ -130,10 +133,12 @@ describe('soil pH intersection', () => {
       'papaya',
       'pearl-millet',
       'pigeon-pea',
+      'pineapple',
       'plantain',
       'rice-upland',
       'sesame',
       'sorghum-grain',
+      'sugarcane',
       'sweetfern',
       'taro',
       'tea',
