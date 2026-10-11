@@ -40,13 +40,6 @@ const zoneWords = (rating: TemperatureHardinessRating): string =>
     : `${rating.scheme} ${rating.zoneLabel}`
 
 /**
- * What the example is, said where the visitor would otherwise search for a place that is already on
- * screen: a step that opens on Amherst has to say whose garden that is
- */
-const EXAMPLE_SUBTITLE =
-  'This is an example garden for Amherst. Search for your own place to start yours.'
-
-/**
  * A geocoder label as a name and the region under it: "Springfield, Illinois" is the town in
  * bold and the state in small type, and the coordinates aren't printed at all. Two Springfields
  * are told apart by their region, which is how a person tells them apart
@@ -57,6 +50,14 @@ const splitLabel = (label: string): readonly [string, string | undefined] => {
     ? [label, undefined]
     : [label.slice(0, comma).trim(), label.slice(comma + 1).trim() || undefined]
 }
+
+/**
+ * What the example is, said where the visitor would otherwise search for a place that is already on
+ * screen: a step that opens on the example has to say whose garden that is. The town is the one the
+ * loaded example was made for, which the browser's time zone picks from three
+ */
+const exampleSubtitle = (siteLabel: string): string =>
+  `This is an example garden for ${splitLabel(siteLabel)[0]}. Search for your own place to start yours.`
 
 /**
  * What a place typed in as coordinates is called. The label moves with the location it names, so
@@ -165,6 +166,8 @@ export const SitePanel = (): ReactElement => {
 
   const resolved = site.status === 'ready' ? site.value : null
   const example = useAppStore(showingExample)
+  // the place the loaded example was made for. `showingExample` already holds that there is one
+  const exampleSite = useAppStore((s) => s.exampleProvenance?.siteLabel ?? null)
   const siteText = siteNoticeText(site, SITE_IDLE, pending)
   const weatherText = siteNoticeText(weather, WEATHER_IDLE, pending)
   // the weather record the elevation came with, named in the readout when it carried none
@@ -184,7 +187,7 @@ export const SitePanel = (): ReactElement => {
       id="site"
       title="Where is the garden?"
       titleVisible={false}
-      subtitle={example ? EXAMPLE_SUBTITLE : undefined}
+      subtitle={example && exampleSite !== null ? exampleSubtitle(exampleSite) : undefined}
     >
       <TextField
         testId="control-site-search"

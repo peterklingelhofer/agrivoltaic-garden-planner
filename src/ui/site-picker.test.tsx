@@ -226,6 +226,37 @@ describe('the example garden', () => {
       vi.unstubAllGlobals()
     }
   })
+
+  /**
+   * The browser's time zone picks one of three examples, and the step named Amherst over all of
+   * them. The Phoenix example is served at whichever band's paths are asked for, so it is the one
+   * that loads whatever zone the suite runs in
+   */
+  it('names the town the loaded example was made for', async () => {
+    vi.useRealTimers()
+    vi.stubGlobal('fetch', (input: string) => {
+      if (input.endsWith('.json')) {
+        return Promise.resolve(new Response(shipped(exampleDesignPath('low')).toString('utf8')))
+      }
+      if (input.endsWith('.raster')) {
+        const bytes = shipped(exampleRasterPath('low'))
+        const copy = new ArrayBuffer(bytes.byteLength)
+        new Uint8Array(copy).set(bytes)
+        return Promise.resolve(new Response(copy))
+      }
+      return Promise.resolve(new Response('', { status: 404 }))
+    })
+    try {
+      await getAppState().loadExample()
+      const example = await mount(<SitePanel />)
+      const text = example.get('panel-site').textContent ?? ''
+      expect(text).toContain('This is an example garden for Phoenix.')
+      expect(text).not.toContain('example garden for Amherst')
+      await example.unmount()
+    } finally {
+      vi.unstubAllGlobals()
+    }
+  })
 })
 
 /**

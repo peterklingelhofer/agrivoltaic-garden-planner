@@ -61,8 +61,13 @@ const SCENE_MARGIN_M = 5 as Meters
 
 export const EXAMPLE_BANNER_TITLE = 'Example garden'
 
-export const EXAMPLE_BANNER_BODY =
-  'This garden is a worked example for Amherst, Massachusetts. The colors on the ground are the sunlight each spot gets over a year with these panels up. Change anything and it becomes your own. Clearing it gives you an empty plot to draw on.'
+/**
+ * What the notice says about the example under it, naming the place that example was made for.
+ * Which of the three opens is the browser's time zone's choice, and a constant naming Amherst sat
+ * over the Phoenix and Bergen gardens too, describing a garden nobody was looking at
+ */
+export const exampleBannerBody = (siteLabel: string): string =>
+  `This garden is a worked example for ${siteLabel}. The colors on the ground are the sunlight each spot gets over a year with these panels up. Change anything and it becomes your own. Clearing it gives you an empty plot to draw on.`
 
 /**
  * What the shipped asset says about itself. Every field is a record of how the raster beside it

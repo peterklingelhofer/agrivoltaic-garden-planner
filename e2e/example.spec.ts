@@ -47,7 +47,11 @@ test('the example garden is on screen before the first click, and says it is an 
   await openExample(page)
 
   await expect(example(page)).toContainText('Example garden')
-  await expect(example(page)).toContainText('worked example for Amherst')
+  // the browser's time zone picks which of the three examples opens, a browser in UTC gets
+  // Phoenix, and the notice names the same place the top bar does, whichever that is
+  const place = await page.getByTestId('readout-toolbar-site').innerText()
+  expect(['Phoenix, Arizona', 'Amherst, Massachusetts', 'Bergen, Norway']).toContain(place)
+  await expect(example(page)).toContainText(`worked example for ${place}.`)
 
   // a DLI surface has to say where its numbers came from wherever it is read, and for this one
   // the answer is the app's own light check run on the place's weather, in words a gardener
@@ -57,8 +61,7 @@ test('the example garden is on screen before the first click, and says it is an 
   await page.getByTestId('action-example-provenance').click()
   const provenance = page.getByTestId('readout-example-provenance')
   await expect(provenance).toContainText('light check')
-  // whichever band's example the browser's time zone opened on, it names that place's weather
-  await expect(provenance).toContainText(/a typical year of .+ weather/)
+  await expect(provenance).toContainText(`a typical year of ${place} weather`)
 
   // the raster arrived with the design: the simulation reads ready without a bake being run
   await expect(page.getByTestId('app-root')).toHaveAttribute('data-sim-state', 'ready')
@@ -69,7 +72,9 @@ test('the example garden is on screen before the first click, and says it is an 
   // the column is open on its first question, and the site panel says whose garden this is, so the
   // visitor doesn't search for a place that is already on screen
   await expect(page.getByTestId('panel-step-place')).not.toHaveAttribute('hidden', '')
-  await expect(page.getByTestId('panel-site')).toContainText('example garden for Amherst')
+  await expect(page.getByTestId('panel-site')).toContainText(
+    `example garden for ${place.split(',')[0]}.`,
+  )
 
   // nothing about the example is the visitor's work, so nothing about it is written down
   expect(await storedDesign(page)).toBeNull()

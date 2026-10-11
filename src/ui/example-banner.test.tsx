@@ -2,6 +2,7 @@
 import { readFileSync } from 'node:fs'
 import { afterEach, beforeEach, describe, expect, it } from 'bun:test'
 import { vi } from '../../test/vi'
+import type { LatitudeBand } from '../data/timezone-bands'
 import { exampleDesignPath, exampleRasterPath } from '../state/example'
 import { getAppState, resetAppStore, showingExample, useAppStore } from '../state/store'
 import { ExampleBanner } from './ExampleBanner'
@@ -132,6 +133,45 @@ describe('the fold', () => {
       harness.get('readout-example-provenance').closest('.example-banner-body-wrap'),
     ).not.toBeNull()
     expect(harness.find('action-example-expand')).not.toBeNull()
+  })
+})
+
+/**
+ * One band's shipped example, answered at whichever band's paths are asked for. Which band the
+ * store asks for first is the time zone the suite runs in, so this is what makes the example that
+ * loads the band's own on any machine
+ */
+const serveBand = (band: LatitudeBand): void => {
+  vi.stubGlobal('fetch', (input: string) => {
+    if (input.endsWith('.json')) {
+      return Promise.resolve(new Response(shipped(exampleDesignPath(band)).toString('utf8')))
+    }
+    if (input.endsWith('.raster')) {
+      const bytes = shipped(exampleRasterPath(band))
+      const copy = new ArrayBuffer(bytes.byteLength)
+      new Uint8Array(copy).set(bytes)
+      return Promise.resolve(new Response(copy))
+    }
+    return Promise.resolve(new Response('', { status: 404 }))
+  })
+}
+
+describe('whose garden the notice says it is', () => {
+  /**
+   * The browser's time zone picks one of three examples, and the notice named Amherst over all of
+   * them: a visitor in Arizona read "a worked example for Amherst, Massachusetts" over Phoenix
+   */
+  it.each([
+    ['low', 'Phoenix, Arizona'],
+    ['temperate', 'Amherst, Massachusetts'],
+    ['high', 'Bergen, Norway'],
+  ] as const)('names the place the %s example was made for', async (band, place) => {
+    serveBand(band)
+    const harness = await withExample()
+    const body = harness.get('panel-example').textContent ?? ''
+    expect(body).toContain(`worked example for ${place}.`)
+    const others = ['Phoenix', 'Amherst', 'Bergen'].filter((town) => !place.startsWith(town))
+    for (const other of others) expect(body).not.toContain(other)
   })
 })
 

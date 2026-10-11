@@ -1,5 +1,5 @@
 import { useState, type ReactElement } from 'react'
-import { EXAMPLE_BANNER_BODY, EXAMPLE_BANNER_TITLE } from '../state/example'
+import { EXAMPLE_BANNER_TITLE, exampleBannerBody } from '../state/example'
 import { showingExample, useAppStore } from '../state/store'
 import { Action } from './controls'
 
@@ -67,7 +67,7 @@ export const ExampleBanner = (): ReactElement | null => {
         {expanded ? 'Less' : 'About this example'}
       </button>
       <div className="example-banner-body-wrap">
-        <p className="example-banner-body">{EXAMPLE_BANNER_BODY}</p>
+        <p className="example-banner-body">{exampleBannerBody(provenance.siteLabel)}</p>
         {/*
           The provenance, one press away.
           It stays on this surface because a DLI field with no provenance is indistinguishable from
