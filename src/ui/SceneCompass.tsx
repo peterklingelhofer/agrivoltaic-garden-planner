@@ -10,8 +10,8 @@ import { COMPASS_ELEMENT_ID } from '../state/compass'
  * the id it writes to.
  *
  * `aria-hidden`: a rotating arrow says nothing to a screen reader, and the canvas already carries
- * its own label. Two elements, because the outer one is placed with a transform of its own and
- * the needle's rotation must not overwrite it
+ * its own label. Two elements, so the rotation written to the needle every frame never touches
+ * the box that places it, which is the garden's corner on a laptop and the top bar on a phone
  */
 export const SceneCompass = (): ReactElement => (
   <div className="scene-compass" aria-hidden="true">

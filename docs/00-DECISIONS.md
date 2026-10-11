@@ -1220,9 +1220,9 @@ applied to beam, diffuse and sky view alike through a solid box, which the entri
 Three readings of the index are this app's own and the card says so: the 15th standing for the whole
 month, the 21-day mean centered on each day, and the deficit term held at its moist value.
 
-A compass at the view's left edge turns with the camera, and on a touch screen a tap within 24
-screen px of a bed's projected footprint selects the nearest bed, measured on the screen so a tap on
-a bed's floating label selects the bed under it.
+A compass in the view's bottom-right corner, and in the top bar on a phone, turns with the camera,
+and on a touch screen a tap within 24 screen px of a bed's projected footprint selects the nearest
+bed, measured on the screen so a tap on a bed's floating label selects the bed under it.
 
 ## 27. The interface is set in Ubuntu Sans
 

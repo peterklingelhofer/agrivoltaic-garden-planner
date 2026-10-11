@@ -289,9 +289,12 @@ body {
   min-height: 0;
   background: linear-gradient(#93b6dd, #cfd9d0);
 
-  /* the one fact about the furniture over the canvas, stated once where everything stacked on
-     it can read it */
+  /* the facts about the furniture over the canvas, stated once where everything stacked on
+     it can read them */
   --banner-width: 340px;
+  /* how far in from the right edge the cards along the foot stop, so the compass keeps the corner:
+     its 40px, its 12px inset, and 8px between */
+  --compass-clear: 60px;
 }
 
 .canvas-host canvas {
@@ -329,13 +332,13 @@ body {
 /*
  * The one line of instruction a drawing mode owes whoever is in it.
  *
- * Bottom right, which is the only corner of the canvas nothing else claims: the example banner
- * takes the top right and the legend the top left. It never takes the pointer, because the
- * ground under it is where the next corner goes
+ * Bottom right, beside the compass in the corner: the example banner takes the top right and the
+ * legend the top left. It never takes the pointer, because the ground under it is where the next
+ * corner goes
  */
 .scene-hint {
   position: absolute;
-  right: 12px;
+  right: var(--compass-clear);
   bottom: 12px;
   z-index: 2;
   max-width: 320px;
@@ -367,21 +370,20 @@ body {
 }
 
 /*
- * A small N arrow at the left edge, halfway down, rotated to the camera's heading every drawn
- * frame by `CompassBridge`. Every corner of the canvas is spoken for at some width or moment:
- * the legend top left, the example banner top right, the hint and the selected-bed prompt along
- * the foot, the cold open and the preflight note bottom left. The middle of the left edge is
- * the one place nothing else stands, on a laptop or a phone. Never takes the pointer, for the
- * same reason none of them do
+ * A small N arrow in the bottom-right corner, rotated to the camera's heading every drawn frame
+ * by `CompassBridge`. It sat halfway down the left edge, the one place nothing else stood, and
+ * read as stranded there. The corner is where a map keeps its compass, and the cards that also
+ * use the foot stop short of it: the drawing hint stands beside it and the cold open is inset
+ * by the same `--compass-clear` on both sides, so it stays centered. On a phone it moves into the
+ * top bar: see the 760px block. Never takes the pointer, for the same reason none of them do
  */
 .scene-compass {
   position: absolute;
-  left: 12px;
-  top: 50%;
+  right: 12px;
+  bottom: 12px;
   z-index: 2;
   width: 40px;
   height: 40px;
-  transform: translateY(-50%);
   pointer-events: none;
 }
 
@@ -675,7 +677,9 @@ body {
  * `.legend` top left, and both hang from the top edge. Along the foot it clears both: the banner is
  * about 107px tall closed and 306px with both its folds open, so the two meet only in a window
  * under about 490px tall with both folds open. Kept to the column beside the banner, it was 149px
- * wide and 283px tall in a 905px window, so it spans the foot and stops at 640px.
+ * wide and 283px tall in a 905px window, so it spans the foot and stops at 640px. The compass
+ * holds the bottom-right corner, so the foot it spans is inset by `--compass-clear` on both
+ * sides: on one side only, the card would sit off-center wherever the 640px cap doesn't bind.
  *
  * `pointer-events: none` for the same reason `.scene-tooltip` has it: this talks about the
  * ground, and taking the pointer would make the ground it is talking about unclickable.
@@ -690,8 +694,8 @@ body {
  */
 .cold-open {
   position: absolute;
-  left: 12px;
-  right: 12px;
+  left: var(--compass-clear);
+  right: var(--compass-clear);
   bottom: 12px;
   z-index: 1;
   pointer-events: none;
@@ -3055,10 +3059,29 @@ details.wizard-advanced > summary:focus-visible {
     gap: 4px;
   }
 
-  /* the same edge, a little closer to it, as the rest of the furniture is on a phone */
+  /*
+   * The compass moves into the top bar, at its right end beside the place name.
+   *
+   * No corner of the garden is free on a phone: the drawing tools take the top row and the example
+   * notice the width under them, and the color key and the selected-bed prompt take the foot. At
+   * 320px the tools are 294px of the row, so nothing fits beside them either. The bar has room,
+   * and the compass is docked into it the way the drawing tools are docked onto the garden, with
+   * `position: fixed`, so there is still one element for `CompassBridge` to find. It goes when the
+   * garden does, with the rest of the garden's furniture, and the room kept for it in the bar
+   * stays, so the place name doesn't shift every time the garden tab is pressed
+   */
   .scene-compass {
-    left: auto;
-    right: 8px;
+    position: fixed;
+    top: 6px;
+    right: 12px;
+    bottom: auto;
+    width: 36px;
+    height: 36px;
+  }
+
+  /* the corner of the garden is free again, so the cards along its foot run to the edge */
+  .canvas-host {
+    --compass-clear: 12px;
   }
 
   /*
@@ -3085,10 +3108,12 @@ details.wizard-advanced > summary:focus-visible {
   }
 
   /* it gives way first, because the name of the place is the one thing here that is also
-     written in full on the step below it */
+     written in full on the step below it. It stops short of the compass docked at the bar's right
+     end: the compass's 36px and the bar's own 10px gap */
   .toolbar-site {
     flex: 1 1 auto;
     min-width: 0;
+    margin-right: 46px;
     text-align: right;
     overflow: hidden;
     text-overflow: ellipsis;
