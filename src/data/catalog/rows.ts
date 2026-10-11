@@ -4074,9 +4074,13 @@ export const CROP_ROWS: readonly CropRow[] = [
   ],
   [
     'blackberry',
-    'Rubus fruticosus',
+    'Rubus spp.',
     'Rosaceae',
     'blackberry',
+    // Strik et al. 2007 (HortTechnology) write "blackberry (Rubus spp.)", and "Natural hybrids of
+    // wild species provided several of the first named cultivars". The federal noxious weed list,
+    // 7 CFR 360.200, names "Rubus fruticosus Linnaeus (complex) (wild blackberry)", the European
+    // bramble, so the garden crop goes by the genus its cultivars share
     'berries',
     'cane-bush-berries',
     'caned',

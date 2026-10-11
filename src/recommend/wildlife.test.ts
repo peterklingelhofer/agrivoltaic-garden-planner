@@ -106,8 +106,9 @@ describe('the shipped native ranges', () => {
           botanicalArea: CALIFORNIA,
         }) === null,
     )
-    // every catalog binomial now matches an accepted name in the checklist, so this list is
-    // empty, and a crop appearing here is a change somebody has to argue for
-    expect(unknown.map((crop) => crop.id as CropId)).toEqual([])
+    // every catalog binomial matches an accepted name in the checklist but blackberry's. Its
+    // cultivars are hybrids of several wild species, so the row goes by the genus and has no
+    // single range. Any other crop appearing here is a change somebody has to argue for
+    expect(unknown.map((crop) => crop.id as CropId)).toEqual(['blackberry' as CropId])
   })
 })

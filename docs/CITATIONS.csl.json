@@ -22509,5 +22509,102 @@
       ],
       "caveat": "A review of the crop by the USDA ARS curator at Corvallis, with no trial of its own. License CC BY-NC 4.0."
     }
+  },
+  {
+    "type": "article-journal",
+    "title": "Worldwide Blackberry Production",
+    "author": [
+      {
+        "family": "Strik",
+        "given": "Bernadine C."
+      },
+      {
+        "family": "Clark",
+        "given": "John R."
+      },
+      {
+        "family": "Finn",
+        "given": "Chad E."
+      },
+      {
+        "family": "Bañados",
+        "given": "M. Pilar"
+      }
+    ],
+    "container-title": "HortTechnology",
+    "volume": "17",
+    "issue": "2",
+    "page": "205-213",
+    "issued": {
+      "date-parts": [
+        [
+          2007
+        ]
+      ]
+    },
+    "DOI": "10.21273/HORTTECH.17.2.205",
+    "URL": "https://doi.org/10.21273/HORTTECH.17.2.205",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          11
+        ]
+      ]
+    },
+    "id": "strik2007-worldwide-blackberry",
+    "note": "Retrieved 2026-10-11 from the copy Oregon State University hosts and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "crossref-verified",
+      "accessLevel": "open-access",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "blackberry acceptedName, verbatim: 'A survey of worldwide blackberry (Rubus spp.) production was conducted in 2005.' (Summary, page 205)",
+        "blackberry acceptedName, verbatim: 'Natural hybrids of wild species provided several of the first named cultivars' (page 205)"
+      ],
+      "caveat": "A survey of the world’s plantings, with no trial of its own."
+    }
+  },
+  {
+    "type": "regulation",
+    "title": "7 CFR 360.200: Designation of noxious weeds",
+    "author": [
+      {
+        "literal": "Animal and Plant Health Inspection Service, US Department of Agriculture"
+      }
+    ],
+    "publisher": "Electronic Code of Federal Regulations, Office of the Federal Register",
+    "URL": "https://www.ecfr.gov/current/title-7/subtitle-B/chapter-III/part-360/section-360.200",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          11
+        ]
+      ]
+    },
+    "issued": {
+      "date-parts": [
+        [
+          2018
+        ]
+      ]
+    },
+    "id": "ecfr-7cfr-360-200-noxious-weeds",
+    "note": "Retrieved 2026-10-11 through the eCFR versioner API, the section as amended 2018-03-15, and read in full.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "blackberry acceptedName, verbatim: 'Rubus fruticosus Linnaeus (complex) (wild blackberry)' (paragraph (c)), the listing the blackberry row's name stays clear of",
+        "the catalog rule in the decision record, verbatim: 'a scientific name is intended to include all subordinate taxa within the taxon' (footnote 1). Checked 2026-10-11 against every catalog accepted name and synonym: once the blackberry row took the genus name, it names none of them"
+      ],
+      "caveat": "A federal regulation, the list of federal noxious weeds."
+    }
   }
 ]

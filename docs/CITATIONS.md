@@ -1,6 +1,6 @@
 # Citation corpus
 
-521 sources (173 crossref-verified, 1 datacite-verified, 16 unverified, 331 url-verified). Machine-readable companion: [`CITATIONS.csl.json`](./CITATIONS.csl.json) (CSL-JSON).
+523 sources (174 crossref-verified, 1 datacite-verified, 16 unverified, 332 url-verified). Machine-readable companion: [`CITATIONS.csl.json`](./CITATIONS.csl.json) (CSL-JSON).
 A record enters this corpus verified against the Crossref REST API, against the DataCite REST API,
 or by a fetch of the authoritative publisher, standards-body or government URL, with an Internet
 Archive snapshot standing in where a live page withholds its text.
@@ -45,23 +45,23 @@ Physics, geodata and software sources carry `null`: the scheme does not apply to
 
 | Verification | n |
 |---|---|
-| crossref-verified | 173 |
+| crossref-verified | 174 |
 | datacite-verified | 1 |
 | unverified | 16 |
-| url-verified | 331 |
-| **total** | **521** |
+| url-verified | 332 |
+| **total** | **523** |
 
 | Access level | n |
 |---|---|
-| open-access | 76 |
+| open-access | 77 |
 | paywalled | 115 |
-| public-domain | 330 |
+| public-domain | 331 |
 
 | Evidence tier | n |
 |---|---|
 | A | 40 |
 | B | 74 |
-| C | 313 |
+| C | 315 |
 | null (not applicable) | 94 |
 
 ---
@@ -1002,7 +1002,7 @@ Yavari, Rouhangiz; Zaliwciw, Demetrius; Cibin, Raj; McPhillips, Lauren. (2022). 
 
 ## Horticulture & crop physiology
 
-362 sources.
+364 sources.
 
 #### `adhikary2025-clubroot-review`
 
@@ -1435,6 +1435,17 @@ Duke, James A. (1983). *Handbook of Energy Crops*. Unpublished; hosted by Purdue
   - cassava, verbatim: 'Shrub or small tree, 1.3-5 m tall'; spacing 'usually 1.20 m to 1.50 m by 80 cm for good cvs on fertile soils; 1 m each way for weak cvs on poor soils'; 'Cassava is harvested in 10-14 months, depending on the cv, the cultural practices and the purpose of the crop'; cassava is 'reported to tolerate' shade
   - rice, verbatim: 'Erect annual grass, to 1.2 m tall'; transplanted 'spaced 10-20 cm apart in 20-30 cm rows'; 'From planting to harvest varies: 4 months in Italy, 6 months in monsoon regions of Asia, and 135 days for some cvs in the US'
 - **Caveat:** An unpublished 1983 compilation, served by a land-grant site. Its climate ranges are means of reported cases and aren't used here. Only the descriptive height, spacing and harvest statements are cited.
+
+#### `ecfr-7cfr-360-200-noxious-weeds`
+
+Animal and Plant Health Inspection Service, US Department of Agriculture. (2018). *7 CFR 360.200: Designation of noxious weeds*. Electronic Code of Federal Regulations, Office of the Federal Register
+
+- URL: <https://www.ecfr.gov/current/title-7/subtitle-B/chapter-III/part-360/section-360.200>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - blackberry acceptedName, verbatim: 'Rubus fruticosus Linnaeus (complex) (wild blackberry)' (paragraph (c)), the listing the blackberry row's name stays clear of
+  - the catalog rule in the decision record, verbatim: 'a scientific name is intended to include all subordinate taxa within the taxon' (footnote 1). Checked 2026-10-11 against every catalog accepted name and synonym: once the blackberry row took the genus name, it names none of them
+- **Caveat:** A federal regulation, the list of federal noxious weeds.
 
 #### `elevitch-manner-2006-jackfruit-species-profile`
 
@@ -3391,6 +3402,17 @@ Sperling, Calvin R.; King, Steven R. (1990). *Andean Tuber Crops: Worldwide Pote
 - Backs:
   - oca spacing, verbatim: 'Planting is done in rows or hills 80-100 cm apart with plants spaced 40-60 cm apart in the rows (Rea 1975).' (Section 'Cultural Practices' under 'Agricultural Requirements' (pages 428-435 of Advances in New Crops, Timber Press, 19)
 - **Caveat:** Published outside a peer-reviewed journal.
+
+#### `strik2007-worldwide-blackberry`
+
+Strik, Bernadine C.; Clark, John R.; Finn, Chad E.; Bañados, M. Pilar. (2007). *Worldwide Blackberry Production*. HortTechnology 17: 205-213
+
+- DOI: [10.21273/HORTTECH.17.2.205](https://doi.org/10.21273/HORTTECH.17.2.205)
+- Verification: Crossref-verified | Access: open-access, evidence tier **C**
+- Backs:
+  - blackberry acceptedName, verbatim: 'A survey of worldwide blackberry (Rubus spp.) production was conducted in 2005.' (Summary, page 205)
+  - blackberry acceptedName, verbatim: 'Natural hybrids of wild species provided several of the first named cultivars' (page 205)
+- **Caveat:** A survey of the world’s plantings, with no trial of its own.
 
 #### `tamu-2011-rodriguez-harvesting-oriental-persimmons`
 
