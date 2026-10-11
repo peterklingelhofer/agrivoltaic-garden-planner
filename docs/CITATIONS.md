@@ -2028,7 +2028,7 @@ Khan, Zeyaur R.; Midega, Charles A. O.; Bruce, Toby J. A.; Hooper, Antony M.; Pi
 
 #### `klein2007-pollinators`
 
-Klein, Alexandra-Maria; Vaissière, Bernard E.; Cane, James H.; Steffan-Dewenter, Ingolf; Cunningham, Saul A.; Kremen, Claude; Tscharntke, Teja. (2007). *Importance of pollinators in changing landscapes for world crops*. Proceedings of the Royal Society B: Biological Sciences 274: 303-313
+Klein, Alexandra-Maria; Vaissière, Bernard E.; Cane, James H.; Steffan-Dewenter, Ingolf; Cunningham, Saul A.; Kremen, Claire; Tscharntke, Teja. (2007). *Importance of pollinators in changing landscapes for world crops*. Proceedings of the Royal Society B: Biological Sciences 274: 303-313
 
 - DOI: [10.1098/rspb.2006.3721](https://doi.org/10.1098/rspb.2006.3721)
 - Verification: Crossref-verified | Access: open-access, evidence tier **A**
