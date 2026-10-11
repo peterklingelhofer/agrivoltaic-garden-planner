@@ -22420,5 +22420,93 @@
       ],
       "caveat": "A scholarly monograph (IPK and IPGRI), outside the usual extension, USDA and FAO classes. The catalog row comments say which figure each sentence gives."
     }
+  },
+  {
+    "type": "report",
+    "title": "Deciduous Fruit & Nuts for the Low Desert (az1269)",
+    "author": [
+      {
+        "family": "Bradley",
+        "given": "Lucy"
+      },
+      {
+        "family": "Maurer",
+        "given": "Michael"
+      }
+    ],
+    "publisher": "The University of Arizona Cooperative Extension",
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "URL": "https://www.extension.arizona.edu/sites/default/files/2025-05/az1269_Deciduous-Fruit-and-Nuts-for-the-Low-Desert.pdf",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          11
+        ]
+      ]
+    },
+    "id": "uarizona-2024-deciduous-fruit-nuts-low-desert",
+    "note": "Retrieved 2026-10-11 and read in full for the sentences quoted. Revised May 2024 by Anne Lesenne, first published 2002.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "quince chillHours, verbatim: 'Cold hardy, yet low chilling requirement of 300 hours.' (az1269, under both Orange Quince and Pineapple Quince, page 3, and the chart's Chilling Hours column, page 7)"
+      ],
+      "caveat": "Extension publication, reviewed by University faculty and not peer reviewed. It lists low-chill cultivars for the Arizona low desert, so the 300 hours are those cultivars’ figure, and it names no origin for it. It counts the hours between 32 and 45 F from November 1 to February 15."
+    }
+  },
+  {
+    "type": "article-journal",
+    "title": "Blue Honeysuckle: A New Berry Crop for North America",
+    "author": [
+      {
+        "family": "Hummer",
+        "given": "Kim E."
+      }
+    ],
+    "container-title": "Journal of the American Pomological Society",
+    "volume": "60",
+    "issue": "1",
+    "page": "3-8",
+    "issued": {
+      "date-parts": [
+        [
+          2006
+        ]
+      ]
+    },
+    "DOI": "10.71318/apom.2006.60.1.3",
+    "URL": "https://doi.org/10.71318/apom.2006.60.1.3",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          11
+        ]
+      ]
+    },
+    "id": "hummer2006-blue-honeysuckle",
+    "note": "Retrieved 2026-10-11 and read in full for the sentences quoted.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "crossref-verified",
+      "accessLevel": "open-access",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "haskap chill, verbatim: 'Notwithstanding this cold hardiness, the buds have a very short chilling, i.e., rest, requirement. In St. Petersburg, rest is satisfied by late October or early November (6).' (page 5), why the row carries no chill figure"
+      ],
+      "caveat": "A review of the crop by the USDA ARS curator at Corvallis, with no trial of its own. License CC BY-NC 4.0."
+    }
   }
 ]

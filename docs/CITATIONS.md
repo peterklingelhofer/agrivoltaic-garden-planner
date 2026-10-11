@@ -1,6 +1,6 @@
 # Citation corpus
 
-519 sources (172 crossref-verified, 1 datacite-verified, 17 unverified, 329 url-verified). Machine-readable companion: [`CITATIONS.csl.json`](./CITATIONS.csl.json) (CSL-JSON).
+521 sources (173 crossref-verified, 1 datacite-verified, 17 unverified, 330 url-verified). Machine-readable companion: [`CITATIONS.csl.json`](./CITATIONS.csl.json) (CSL-JSON).
 A record enters this corpus verified against the Crossref REST API, against the DataCite REST API,
 or by a fetch of the authoritative publisher, standards-body or government URL, with an Internet
 Archive snapshot standing in where a live page withholds its text.
@@ -45,23 +45,23 @@ Physics, geodata and software sources carry `null`: the scheme does not apply to
 
 | Verification | n |
 |---|---|
-| crossref-verified | 172 |
+| crossref-verified | 173 |
 | datacite-verified | 1 |
 | unverified | 17 |
-| url-verified | 329 |
-| **total** | **519** |
+| url-verified | 330 |
+| **total** | **521** |
 
 | Access level | n |
 |---|---|
-| open-access | 75 |
+| open-access | 76 |
 | paywalled | 115 |
-| public-domain | 329 |
+| public-domain | 330 |
 
 | Evidence tier | n |
 |---|---|
 | A | 40 |
 | B | 74 |
-| C | 311 |
+| C | 313 |
 | null (not applicable) | 94 |
 
 ---
@@ -1002,7 +1002,7 @@ Yavari, Rouhangiz; Zaliwciw, Demetrius; Cibin, Raj; McPhillips, Lauren. (2022). 
 
 ## Horticulture & crop physiology
 
-360 sources.
+362 sources.
 
 #### `adhikary2025-clubroot-review`
 
@@ -1777,6 +1777,16 @@ Hooks, Cerruti R. R.; Wang, Koon-Hui; Ploeg, Antoon; McSorley, Robert. (2010). *
   - outcomes are highly variable, ranging from more effective than nematicides or soil fumigants to a negative impact on cash crop growth and yield
   - the named sources of that variability: how the marigold is used (intercrop vs cover crop vs soil amendment), seeding rate, interval between marigold and cash crop, cultivar, nematode species or race, temperature and marigold plant age
 - **Caveat:** It's a literature review and isn't a trial. The abstract's own conclusion is that the mechanism is uncertain and the results contradictory. Elsevier paywalls the full text, and this entry rests on the abstract and the Crossref record. The abstract addresses plant-parasitic nematodes generally. It doesn't single out root-knot nematode (Meloidogyne), and it doesn't use the phrase 'full-season'. So it can't back a companion rule that claims root-knot-specific suppression from a full-season stand. It's tier B because the results are replicated but strongly context-dependent, with management preconditions. Tier A needs a characterized mechanism, and the review states that this one isn't.
+
+#### `hummer2006-blue-honeysuckle`
+
+Hummer, Kim E.. (2006). *Blue Honeysuckle: A New Berry Crop for North America*. Journal of the American Pomological Society 60: 3-8
+
+- DOI: [10.71318/apom.2006.60.1.3](https://doi.org/10.71318/apom.2006.60.1.3)
+- Verification: Crossref-verified | Access: open-access, evidence tier **C**
+- Backs:
+  - haskap chill, verbatim: 'Notwithstanding this cold hardiness, the buds have a very short chilling, i.e., rest, requirement. In St. Petersburg, rest is satisfied by late October or early November (6).' (page 5), why the row carries no chill figure
+- **Caveat:** A review of the crop by the USDA ARS curator at Corvallis, with no trial of its own. License CC BY-NC 4.0.
 
 #### `iastate-extension-2015-aronia`
 
@@ -3568,6 +3578,16 @@ Andersen, Craig R.. (n.d.). *Salsify (FSA6094, Home Gardening Series)*. Universi
 - Backs:
   - salsify coldLimit, verbatim: 'Because of its ability to withstand a hard freeze in the winter, salsify may be harvested until early spring.' (Page 1, introduction)
 - **Caveat:** Published outside a peer-reviewed journal.
+
+#### `uarizona-2024-deciduous-fruit-nuts-low-desert`
+
+Bradley, Lucy; Maurer, Michael. (2024). *Deciduous Fruit & Nuts for the Low Desert (az1269)*. The University of Arizona Cooperative Extension
+
+- URL: <https://www.extension.arizona.edu/sites/default/files/2025-05/az1269_Deciduous-Fruit-and-Nuts-for-the-Low-Desert.pdf>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - quince chillHours, verbatim: 'Cold hardy, yet low chilling requirement of 300 hours.' (az1269, under both Orange Quince and Pineapple Quince, page 3, and the chart's Chilling Hours column, page 7)
+- **Caveat:** Extension publication, reviewed by University faculty and not peer reviewed. It lists low-chill cultivars for the Arizona low desert, so the 300 hours are those cultivars’ figure, and it names no origin for it. It counts the hours between 32 and 45 F from November 1 to February 15.
 
 #### `ucanr-2008-artichoke`
 

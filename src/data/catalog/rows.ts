@@ -4189,6 +4189,9 @@ export const CROP_ROWS: readonly CropRow[] = [
       // UW-Madison Extension: "Plants are extremely cold hardy and can be grown in USDA zones
       // 1-8", the zone 1a floor
       coldC: -51.1,
+      // No chillHours, so chillGate leaves the row alone. Hummer 2006: "the buds have a very short
+      // chilling, i.e., rest, requirement. In St. Petersburg, rest is satisfied by late October or
+      // early November". No source read gives the requirement in hours
       deciduous: true,
       // Utah State University Extension, for Utah (Salt Lake City Intl AP, UT, USW00024127, Apr 8
       // median last spring freeze): "Berries ripen in early to mid-June, usually just before
@@ -4848,6 +4851,10 @@ export const CROP_ROWS: readonly CropRow[] = [
       yearsToMature: 5.5,
       // Cornell Fruit Resources: "trees are hardy in Zones 5 to 9", the zone 5a floor
       coldC: -28.9,
+      // University of Arizona Extension az1269, of the Orange and Pineapple cultivars it lists for
+      // the low desert: "Cold hardy, yet low chilling requirement of 300 hours". It counts the
+      // hours between 32 and 45 F from November 1 to February 15, the band chillingHours counts
+      chillHours: 300,
       maxRsr: 0.1,
       maxRsrTier: 'C',
       // OSU Extension, 20 Mediterranean Tastes You Can Grow at Home, for western Oregon (Salem AP

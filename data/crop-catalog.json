@@ -4321,6 +4321,7 @@
         "life": "woody-perennial",
         "yearsToMature": 5.5,
         "coldC": -28.9,
+        "chillHours": 300,
         "maxRsr": 0.1,
         "maxRsrTier": "C",
         "harvest": {
