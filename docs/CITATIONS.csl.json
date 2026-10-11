@@ -22403,23 +22403,24 @@
         [
           2026,
           10,
-          1
+          11
         ]
       ]
     },
-    "note": "Read in full, for the sentences quoted, from a copy saved during the 2026-10-01 research. The copy's download address wasn't recorded, so the entry has no URL.",
+    "note": "Retrieved 2026-10-11 from CGSpace, the CGIAR repository, and read in full for the sentences quoted.",
     "id": "hermann-heller-1997-andean-roots-tubers",
     "custom": {
       "group": "horticulture",
-      "verification": "unverified",
+      "verification": "url-verified",
       "accessLevel": "public-domain",
       "evidenceTier": "C",
       "backsClaims": [
-        "jicama spacing, verbatim: 'the plant population of both species in the trials was 110 000 plants/ha and the plants were reproductively pruned' (Chapter 'Ahipa (Pachyrhizus ahipa (Wedd.) Parodi)' (M. Sørensen, W. J. Grüneberg and B. Ørting), section 4.1 Biological )",
-        "jicama daysToMaturity, verbatim: 'Castellanos et al. (1997) conducted the first field test quantifying the actual amount of nitrogen fixed by two accessions of P. ahipa (reproductively pruned and [...] harvested after 154 days): 58-80 kg N/ha (or 60-76 g N/t biomass per day), and three cultivars of P. erosus (reproductively pruned h' (Chapter 'Ahipa (Pachyrhizus ahipa (Wedd.) Parodi)' (M. Sørensen, W. J. Grüneberg and B. Ørting), section 4.1 Biological )"
+        "jicama spacing, verbatim: 'the plant population of both species in the trials was 110 000 plants/ha and the plants were reproductively pruned' (Chapter 'Ahipa (Pachyrhizus ahipa (Wedd.) Parodi)' (M. Sørensen, W. J. Grüneberg and B. Ørting), section 4.1 Biological nitrogen fixation, page 27)",
+        "jicama daysToMaturity, verbatim: 'Castellanos et al. (1997) conducted the first field test quantifying the actual amount of nitrogen fixed by two accessions of P. ahipa (reproductively pruned and [...] harvested after 154 days): 58-80 kg N/ha (or 60-76 g N/t biomass per day), and three cultivars of P. erosus (reproductively pruned harvested after 154-168 days): 162-215 kg N/ha' (Chapter 'Ahipa (Pachyrhizus ahipa (Wedd.) Parodi)' (M. Sørensen, W. J. Grüneberg and B. Ørting), section 4.1 Biological nitrogen fixation, pages 26 and 27, the omission being the page break)"
       ],
       "caveat": "A scholarly monograph (IPK and IPGRI), outside the usual extension, USDA and FAO classes. The catalog row comments say which figure each sentence gives."
-    }
+    },
+    "URL": "https://hdl.handle.net/10568/104208"
   },
   {
     "type": "report",

@@ -1,6 +1,6 @@
 # Citation corpus
 
-521 sources (173 crossref-verified, 1 datacite-verified, 17 unverified, 330 url-verified). Machine-readable companion: [`CITATIONS.csl.json`](./CITATIONS.csl.json) (CSL-JSON).
+521 sources (173 crossref-verified, 1 datacite-verified, 16 unverified, 331 url-verified). Machine-readable companion: [`CITATIONS.csl.json`](./CITATIONS.csl.json) (CSL-JSON).
 A record enters this corpus verified against the Crossref REST API, against the DataCite REST API,
 or by a fetch of the authoritative publisher, standards-body or government URL, with an Internet
 Archive snapshot standing in where a live page withholds its text.
@@ -47,8 +47,8 @@ Physics, geodata and software sources carry `null`: the scheme does not apply to
 |---|---|
 | crossref-verified | 173 |
 | datacite-verified | 1 |
-| unverified | 17 |
-| url-verified | 330 |
+| unverified | 16 |
+| url-verified | 331 |
 | **total** | **521** |
 
 | Access level | n |
@@ -1727,10 +1727,11 @@ US Forest Service, Pacific Island Ecosystems at Risk (PIER). (2011). *Setaria it
 
 Hermann, M.; Heller, J.. (1997). *Andean roots and tubers: Ahipa, arracacha, maca and yacon (Promoting the conservation and use of underutilized and neglected crops 21)*. Institute of Plant Genetics and Crop Plant Research (IPK), Gatersleben, Germany, and International Plant Genetic Resources Institute (IPGRI), Rome, Italy
 
-- Verification: UNVERIFIED | Access: public-domain, evidence tier **C**
+- URL: <https://hdl.handle.net/10568/104208>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - jicama spacing, verbatim: 'the plant population of both species in the trials was 110 000 plants/ha and the plants were reproductively pruned' (Chapter 'Ahipa (Pachyrhizus ahipa (Wedd.) Parodi)' (M. Sørensen, W. J. Grüneberg and B. Ørting), section 4.1 Biological )
-  - jicama daysToMaturity, verbatim: 'Castellanos et al. (1997) conducted the first field test quantifying the actual amount of nitrogen fixed by two accessions of P. ahipa (reproductively pruned and [...] harvested after 154 days): 58-80 kg N/ha (or 60-76 g N/t biomass per day), and three cultivars of P. erosus (reproductively pruned h' (Chapter 'Ahipa (Pachyrhizus ahipa (Wedd.) Parodi)' (M. Sørensen, W. J. Grüneberg and B. Ørting), section 4.1 Biological )
+  - jicama spacing, verbatim: 'the plant population of both species in the trials was 110 000 plants/ha and the plants were reproductively pruned' (Chapter 'Ahipa (Pachyrhizus ahipa (Wedd.) Parodi)' (M. Sørensen, W. J. Grüneberg and B. Ørting), section 4.1 Biological nitrogen fixation, page 27)
+  - jicama daysToMaturity, verbatim: 'Castellanos et al. (1997) conducted the first field test quantifying the actual amount of nitrogen fixed by two accessions of P. ahipa (reproductively pruned and [...] harvested after 154 days): 58-80 kg N/ha (or 60-76 g N/t biomass per day), and three cultivars of P. erosus (reproductively pruned harvested after 154-168 days): 162-215 kg N/ha' (Chapter 'Ahipa (Pachyrhizus ahipa (Wedd.) Parodi)' (M. Sørensen, W. J. Grüneberg and B. Ørting), section 4.1 Biological nitrogen fixation, pages 26 and 27, the omission being the page break)
 - **Caveat:** A scholarly monograph (IPK and IPGRI), outside the usual extension, USDA and FAO classes. The catalog row comments say which figure each sentence gives.
 
 #### `hoanghua2024-white-rot`
