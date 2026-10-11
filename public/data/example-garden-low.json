@@ -1,16 +1,16 @@
 {
   "version": 5,
-  "savedAtUtcMillis": 1791733738217,
+  "savedAtUtcMillis": 1791735612792,
   "sceneTimeUtcMillis": 1723491000000,
   "example": {
     "label": "Example agrivoltaic garden, Phoenix, Arizona",
-    "generatedAtUtc": "2026-10-11T15:48:58.217Z",
+    "generatedAtUtc": "2026-10-11T16:20:12.792Z",
     "generator": "scripts/bake-example-garden.mjs",
     "siteLabel": "Phoenix, Arizona",
     "weather": "open-meteo typical meteorological year, 8760 hours",
     "backend": "tregenza-mf1",
     "targetCellSizeM": 0.4,
-    "bakeElapsedMs": 2100,
+    "bakeElapsedMs": 2047,
     "quantizationErrorMolM2Day": 0.006275177001953125,
     "notes": [
       "70 x 90 cells at 0.4 m, baked on the CPU reference backend",
@@ -131,8 +131,8 @@
               "role": "target-crop",
               "tier": "overstory",
               "sowDay": 152,
-              "harvestStartDay": 241,
-              "harvestEndDay": 286,
+              "harvestStartDay": 316,
+              "harvestEndDay": 353,
               "plantCount": 14
             }
           ]
@@ -187,8 +187,8 @@
               "role": "target-crop",
               "tier": "overstory",
               "sowDay": 152,
-              "harvestStartDay": 241,
-              "harvestEndDay": 286,
+              "harvestStartDay": 316,
+              "harvestEndDay": 353,
               "plantCount": 14
             },
             {
@@ -310,8 +310,8 @@
               "role": "target-crop",
               "tier": "overstory",
               "sowDay": 152,
-              "harvestStartDay": 241,
-              "harvestEndDay": 286,
+              "harvestStartDay": 316,
+              "harvestEndDay": 353,
               "plantCount": 14
             },
             {

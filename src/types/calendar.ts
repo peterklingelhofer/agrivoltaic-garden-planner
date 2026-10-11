@@ -25,6 +25,19 @@ export type CalendarBasis =
   | { readonly kind: 'light-window'; readonly firstAdequateMonth: number }
   | { readonly kind: 'days-to-maturity'; readonly backedOffDays: Days }
   | {
+      readonly kind: 'day-length'
+      readonly criticalHours: number
+      /** The first day of the run of short days the harvest counts from */
+      readonly shortFrom: DayOfYear
+      readonly toHarvestDays: number
+      /** The crop's days to maturity here, the other of the two days */
+      readonly maturityDays: Days
+      /** Where the day lengths were read, so another sowing can be dated the same way */
+      readonly latitudeDeg: number
+      /** Which of the two days came later and so dated this harvest, a tie going to maturity */
+      readonly datedBy: 'short-days' | 'maturity'
+    }
+  | {
       readonly kind: 'harvest-calendar'
       /** Null for a whole-season crop, which has no single after-freeze figure */
       readonly afterFreezeDays: number | null

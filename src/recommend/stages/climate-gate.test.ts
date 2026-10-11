@@ -19,6 +19,7 @@ import {
   photoperiodGate,
   seasonGddGate,
   seasonLengthDays,
+  shortDaysFrom,
 } from './climate-gate'
 
 const catalogPromise = loadCropCatalog()
@@ -311,6 +312,63 @@ describe('a short-day crop needs its days to a harvest before the first fall fre
     )
     expect(roots.limiting?.explanation).toBe(
       "Days here never get shorter than 10 hours, which this crop needs to form the roots or tubers it's grown for",
+    )
+  })
+
+  it('finds the first day that starts a run of short days long enough for a harvest', async () => {
+    const trigger = need(await catalogPromise, 'winged-bean').photoperiod
+    if (trigger === null) throw new Error('winged bean carries no day-length figures')
+    expect(shortDaysFrom(trigger, 42.37, 172)).toBe(251)
+    expect(shortDaysFrom(trigger, -42.37, 355)).toBe(65)
+    // days at 25.76 N are shorter than 12.75 hours from day 236 (Aug 24) to day 110 (Apr 20),
+    // across the new year: 240 days in one run
+    expect(shortDaysFrom(trigger, 25.76, 172)).toBe(236)
+    // a start inside the run counts from itself while the run still has 71 days left, the 70.5
+    // days to a harvest rounded up: day 40 has 71, day 41 has 70 and waits for August
+    expect(shortDaysFrom(trigger, 25.76, 300)).toBe(300)
+    expect(shortDaysFrom(trigger, 25.76, 40)).toBe(40)
+    expect(shortDaysFrom(trigger, 25.76, 41)).toBe(236)
+    // days at 5 N stay under 12.75 hours all year, which is one run that has started
+    expect(shortDaysFrom(trigger, 5, 172)).toBe(172)
+  })
+
+  it('finds no run where the short days are fewer than the days to a harvest', async () => {
+    const trigger = need(await catalogPromise, 'winged-bean').photoperiod
+    if (trigger === null) throw new Error('winged bean carries no day-length figures')
+    expect(shortDaysFrom({ ...trigger, toHarvestDays: 240 }, 25.76, 172)).toBe(236)
+    expect(shortDaysFrom({ ...trigger, toHarvestDays: 241 }, 25.76, 172)).toBeNull()
+    expect(shortDaysFrom({ ...trigger, criticalHours: 10 }, 5, 172)).toBeNull()
+  })
+
+  it('refuses a site whose days never stay short long enough, frost or not', async () => {
+    const catalog = await catalogPromise
+    const bean = need(catalog, 'winged-bean')
+    const location = {
+      latitudeDeg: 25.76 as DegreesLatitude,
+      longitudeDeg: -80.19 as DegreesLongitude,
+    }
+    const frostFree = frostFreeSiteFixture({ location })
+    // the one run of short days at 25.76 N is 240 days, and this crop needs 300 to a harvest
+    for (const site of [frostFree, siteFixture({ location })]) {
+      const outcome = photoperiodGate(withTrigger(bean, { toHarvestDays: 300 }), site, 50)
+      expect(outcome.passed).toBe(false)
+      expect(outcome.limiting?.cause).toEqual({ kind: 'photoperiod' })
+      expect(outcome.limiting?.membership).toBe(0)
+      expect(outcome.limiting?.explanation).toBe(
+        'Days here never stay shorter than 12.75 hours long enough for this crop to flower',
+      )
+    }
+    // a harvest the run holds is no reason to refuse a frost-free site, as before
+    expect(photoperiodGate(withTrigger(bean, { toHarvestDays: 240 }), frostFree, 50).passed).toBe(
+      true,
+    )
+    // and days that never get shorter at all are refused at a frost-free site too
+    const tropics = frostFreeSiteFixture({
+      location: { latitudeDeg: 5 as DegreesLatitude, longitudeDeg: -75 as DegreesLongitude },
+    })
+    const outcome = photoperiodGate(withTrigger(bean, { criticalHours: 10 }), tropics, 50)
+    expect(outcome.limiting?.explanation).toBe(
+      'Days here never get shorter than 10 hours, which this crop needs to flower',
     )
   })
 

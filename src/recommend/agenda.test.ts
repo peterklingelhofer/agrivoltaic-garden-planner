@@ -10,7 +10,13 @@ import type { Celsius, DayOfYear, DegreeDaysC, DegreesLatitude, SquareMeters } f
 import { buildAgenda, fieldWindow, supplyKind, WEEK_DAYS } from './agenda'
 import { bedCalendar, forwardDays, wrapDayOfYear } from './calendar'
 import { calendarFor, derivePlanting, plantingDensity } from './planting'
-import { bedFixture, bedLightFixture, FROST_EVERY_YEAR, siteFixture } from './testkit'
+import {
+  bedFixture,
+  bedLightFixture,
+  FROST_EVERY_YEAR,
+  hotDesertSiteFixture,
+  siteFixture,
+} from './testkit'
 
 const catalogPromise = loadCropCatalog()
 
@@ -231,6 +237,29 @@ describe("a crop's harvest waits for its own next sowing", () => {
     const actions = flat(agendaOf([crop], field.recommended)).map((item) => item.action)
     expect(actions).toContain('first-harvest')
     expect(actions).toContain('harvest-ends')
+  })
+})
+
+describe('a short-day crop', () => {
+  it('dates both harvest jobs from the short days and names their sources', async () => {
+    const bean = await need('winged-bean')
+    const items = flat(agendaOf([bean], 100, { site: hotDesertSiteFixture(), percentile: 50 }))
+    const harvests = items.filter(
+      (item) => item.action === 'first-harvest' || item.action === 'harvest-ends',
+    )
+    // sown June 1, the days at Phoenix first drop under 12.75 hours on September 2, and the first
+    // fall freeze at the 50 percent level is day 334
+    expect(harvests.map((item) => [item.action, item.day])).toEqual([
+      ['first-harvest', 316],
+      ['harvest-ends', 334],
+    ])
+    for (const item of harvests) {
+      expect(item.basis.kind).toBe('day-length')
+      expect(item.citations).toEqual([
+        'tribhuvan2026-winged-bean-photoperiod',
+        'nakamura1989-winged-bean-okinawa',
+      ])
+    }
   })
 })
 

@@ -123,5 +123,36 @@ describe('every citekey the runtime hands to a renderer resolves', () => {
         expect(CORPUS.has(id), `${basis.kind} cites ${id}`).toBe(true)
       }
     }
+
+    // these two cite the crop's own sources, so against the first crop they resolve nothing and
+    // each has to be checked against a crop that carries some
+    const bean = catalog.find((entry) => entry.id === 'winged-bean')
+    const perennial = catalog.find((entry) => entry.perennialHarvest !== null)
+    if (bean === undefined || perennial === undefined) throw new Error('missing fixture crop')
+    const ownSources: readonly (readonly [Crop, CalendarBasis])[] = [
+      [
+        bean,
+        {
+          kind: 'day-length',
+          criticalHours: 12.75,
+          shortFrom: 245 as never,
+          toHarvestDays: 70.5,
+          maturityDays: 77 as never,
+          latitudeDeg: 33.45,
+          datedBy: 'short-days',
+        },
+      ],
+      [
+        perennial,
+        { kind: 'harvest-calendar', afterFreezeDays: 53, sourceSeasonDays: 178, percentile: 50 },
+      ],
+    ]
+    for (const [owner, basis] of ownSources) {
+      const cited = calendarCitationsFor(basis, owner)
+      expect(cited.length, `${basis.kind} cites nothing for ${owner.id}`).toBeGreaterThan(0)
+      for (const id of cited) {
+        expect(CORPUS.has(id), `${basis.kind} cites ${id}`).toBe(true)
+      }
+    }
   })
 })

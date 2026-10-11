@@ -6,7 +6,7 @@ import type { Bed, Planting } from '../types/garden'
 import type { BedId, CropId, CultivarId, PlantingId } from '../types/ids'
 import type { PvArray } from '../types/pv'
 import type { DayOfYear } from '../types/units'
-import { forwardDays, wrapDayOfYear } from './calendar'
+import { forwardDays, shortDayHarvestLag, wrapDayOfYear } from './calendar'
 import { assignCanopyTier } from './stages/space'
 
 /**
@@ -210,16 +210,29 @@ export const derivePlanting = (draft: PlantingDraft): Derivation<Planting> => {
   const sowInsideHarvest =
     forwardDays(calendar.harvest.start, sowDay) <=
     forwardDays(calendar.harvest.start, calendar.harvest.end)
+  // a short-day crop is dated from this sowing by the calendar's own rule, so a later sowing that
+  // still comes before the run of short days keeps the calendar's harvest
+  const basis = calendar.harvest.basis
+  const shortDays =
+    basis.kind === 'day-length'
+      ? shortDayHarvestLag(crop, basis.latitudeDeg, sowDay, basis.maturityDays)
+      : null
   const harvestStartDay = perennial
     ? sowInsideHarvest
       ? sowDay
       : calendar.harvest.start
-    : wrapDayOfYear(sowDay + forwardDays(calendarSow, calendar.harvest.start))
+    : wrapDayOfYear(
+        sowDay + (shortDays?.lagDays ?? forwardDays(calendarSow, calendar.harvest.start)),
+      )
   const harvestEndDay =
     draft.harvestEndDay ??
     (perennial
       ? calendar.harvest.end
-      : wrapDayOfYear(sowDay + forwardDays(calendarSow, calendar.harvest.end)))
+      : wrapDayOfYear(
+          shortDays === null
+            ? sowDay + forwardDays(calendarSow, calendar.harvest.end)
+            : harvestStartDay + forwardDays(calendar.harvest.start, calendar.harvest.end),
+        ))
   // an annual sown too late to reach its own harvest end is refused. A perennial's picking season
   // recurs on its own and is never refused for the day it went into the bed
   if (!perennial && forwardDays(sowDay, harvestStartDay) > forwardDays(sowDay, harvestEndDay)) {

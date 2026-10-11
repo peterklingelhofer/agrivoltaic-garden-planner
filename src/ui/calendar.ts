@@ -93,7 +93,9 @@ export const basisKindLabel = (basis: CalendarBasis): string =>
           ? 'light window'
           : basis.kind === 'harvest-calendar'
             ? 'harvest calendar'
-            : 'days to maturity'
+            : basis.kind === 'day-length'
+              ? 'day length'
+              : 'days to maturity'
 
 /** Decision Record 7: no date is shown without the rule that produced it */
 export const basisLabel = (basis: CalendarBasis): string => {
@@ -131,6 +133,12 @@ export const basisLabel = (basis: CalendarBasis): string => {
     const percent =
       sourceSeasonDays === null ? 0 : Math.round((100 * afterFreezeDays) / sourceSeasonDays)
     return `${percent}% of the way through the frost-free season, where an extension harvest calendar places it, ${percentile}% frost risk`
+  }
+  if (basis.kind === 'day-length') {
+    const shorter = `shorter than ${basis.criticalHours} hours from ${dayLabel(basis.shortFrom)}`
+    return basis.datedBy === 'short-days'
+      ? `days ${shorter}, then ${Math.round(basis.toHarvestDays)} days to a first harvest`
+      : `${basis.maturityDays} days to maturity, with days already ${shorter}`
   }
   return `${basis.backedOffDays} days, counted from the crop's days to maturity`
 }

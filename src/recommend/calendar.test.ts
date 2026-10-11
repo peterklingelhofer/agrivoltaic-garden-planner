@@ -11,6 +11,7 @@ import type {
   Days,
   DegreeDaysC,
   DegreesLatitude,
+  DegreesLongitude,
   Millimeters,
   MolPerM2Day,
 } from '../types/units'
@@ -19,22 +20,27 @@ import { frostExceedanceCurve } from '../data/agronomy'
 import {
   adequateLightWindow,
   CALENDAR_PROVENANCE_NOTE,
+  citationsFor,
   cropCalendar,
   forwardDays,
   FROST_FREE_NOTE,
+  frostHardy,
   INDOOR_RAISING_DAYS,
   seasonAnchors,
   seasonOrigin,
+  shortDayHarvestLag,
   siteMaturityDays,
   successionDays,
   wetSeasonNote,
 } from './calendar'
+import { photoperiodGate } from './stages/climate-gate'
 import {
   bedFixture,
   bedLightFixture,
   dailyMinimaFixture,
   FROST_EVERY_YEAR,
   frostFreeSiteFixture,
+  hotDesertSiteFixture,
   monthly,
   plotFixture,
   siteFixture,
@@ -841,6 +847,219 @@ describe('successions and harvest', () => {
     expect(forwardDays(calendar.harvest.start, calendar.harvest.end)).toBeLessThanOrEqual(
       forwardDays(calendar.harvest.start, anchors.firstFallFreeze),
     )
+  })
+})
+
+/**
+ * Winged bean flowers once days are shorter than 12.75 hours and gives a first pod 70.5 days after
+ * that (Decision Record 29). Its harvest is the later of that date and its days to maturity, both
+ * counted from its sowing. Dated by maturity alone, a June 1 sowing at Phoenix was picked from
+ * August 29, days before the days there first dropped under 12.75 hours on September 2
+ */
+describe('a short-day crop', () => {
+  const miamiLocation = {
+    latitudeDeg: 25.76 as DegreesLatitude,
+    longitudeDeg: -80.19 as DegreesLongitude,
+  }
+  const lightOf = (site: ReturnType<typeof siteFixture>): ReturnType<typeof bedLightFixture> =>
+    bedLightFixture('bed-a', 0, 36, site.normals.monthlyMeanDliMolM2Day)
+
+  it('is picked from the first short days at a site with frost that the gate admits', async () => {
+    const catalog = await catalogPromise
+    const bean = need(catalog, 'winged-bean')
+    const phoenix = hotDesertSiteFixture()
+    expect(photoperiodGate(bean, phoenix, 50).passed).toBe(true)
+    const calendar = cropCalendar({
+      crop: bean,
+      site: phoenix,
+      light: lightOf(phoenix),
+      percentile: 50,
+    })
+    // sown June 1 (day 152), the days first drop under 12.75 hours on September 2 (day 245), and
+    // 70.5 days on is day 315.5, which rounds to November 12. The 77 days to maturity said day 229
+    expect(sowDay(calendar)).toBe(152)
+    expect(calendar.harvest.start).toBe(316)
+    // the first fall freeze at the 50 percent level, day 334, ends the 45 days of picking early
+    expect(calendar.harvest.end).toBe(334)
+    expect(calendar.harvest.basis).toEqual({
+      kind: 'day-length',
+      criticalHours: 12.75,
+      shortFrom: 245,
+      toHarvestDays: 70.5,
+      maturityDays: 77,
+      latitudeDeg: 33.45,
+      datedBy: 'short-days',
+    })
+    expect(citationsFor(calendar.harvest.basis, bean)).toEqual([
+      'tribhuvan2026-winged-bean-photoperiod',
+      'nakamura1989-winged-bean-okinawa',
+    ])
+    // a crop with no day-length figures has none to cite
+    expect(citationsFor(calendar.harvest.basis, need(catalog, 'tomato'))).toEqual([])
+  })
+
+  it('waits for the run of short days that a summer sowing meets at a frost-free site', async () => {
+    const bean = need(await catalogPromise, 'winged-bean')
+    const miami = frostFreeSiteFixture({ location: miamiLocation })
+    const calendar = cropCalendar({
+      crop: bean,
+      site: miami,
+      light: lightOf(miami),
+      percentile: 50,
+    })
+    // the rains name June 1 (day 152) and the run of days under 12.75 hours starts on August 24
+    // (day 236), so the pod comes 84 + 70.5 days after the sowing, on day 306.5. No frost cuts the
+    // 45 days of picking
+    expect(sowDay(calendar)).toBe(152)
+    expect(calendar.harvest.start).toBe(307)
+    expect(calendar.harvest.end).toBe(352)
+    expect(calendar.harvest.basis).toEqual({
+      kind: 'day-length',
+      criticalHours: 12.75,
+      shortFrom: 236,
+      toHarvestDays: 70.5,
+      maturityDays: 85,
+      latitudeDeg: 25.76,
+      datedBy: 'short-days',
+    })
+  })
+
+  it('counts from the sowing when it falls inside a run that lasts', async () => {
+    const bean = need(await catalogPromise, 'winged-bean')
+    const wet = frostFreeSiteFixture({ location: miamiLocation })
+    // rain even through the year puts the sowing on the coldest month's first day, December 1
+    // (day 335), with 141 days of the run left. The 112 days to maturity here outlast the 70.5
+    const miami = frostFreeSiteFixture({
+      location: miamiLocation,
+      normals: {
+        ...wet.normals,
+        monthlyPrecipMm: new Array(12).fill(60).map((value) => value as Millimeters),
+      },
+    })
+    const calendar = cropCalendar({
+      crop: bean,
+      site: miami,
+      light: lightOf(miami),
+      percentile: 50,
+    })
+    expect(sowDay(calendar)).toBe(335)
+    expect(calendar.harvest.start).toBe(82)
+    expect(calendar.harvest.end).toBe(127)
+    expect(calendar.harvest.basis).toMatchObject({
+      kind: 'day-length',
+      shortFrom: 335,
+      maturityDays: 112,
+      datedBy: 'maturity',
+    })
+  })
+
+  it('takes the later of the days to maturity and the days to a pod from the first run', async () => {
+    const bean = need(await catalogPromise, 'winged-bean')
+    // a June 1 sowing waits 84 days for the run that starts on day 236, then 70.5 more
+    expect(shortDayHarvestLag(bean, 25.76, 152, 85)).toEqual({ lagDays: 154.5, shortFrom: 236 })
+    // a sowing inside the run counts from itself, and 85 days to maturity outlast 70.5 but 60 don't
+    expect(shortDayHarvestLag(bean, 25.76, 300, 85)).toEqual({ lagDays: 85, shortFrom: 300 })
+    expect(shortDayHarvestLag(bean, 25.76, 300, 60)).toEqual({ lagDays: 70.5, shortFrom: 300 })
+    // day 40 has 71 days of the run left and counts from itself, day 41 has 70 and waits for August
+    expect(shortDayHarvestLag(bean, 25.76, 40, 85)).toEqual({ lagDays: 85, shortFrom: 40 })
+    expect(shortDayHarvestLag(bean, 25.76, 41, 85)).toEqual({ lagDays: 265.5, shortFrom: 236 })
+  })
+
+  it('has no lag for a crop with no day-length figures or a site with no run long enough', async () => {
+    const catalog = await catalogPromise
+    expect(shortDayHarvestLag(need(catalog, 'tomato'), 25.76, 152, 85)).toBeNull()
+    const bean = need(catalog, 'winged-bean')
+    if (bean.photoperiod === null) throw new Error('winged bean carries no day-length figures')
+    // the run at 25.76 N is 240 days long
+    const tooLong = { ...bean, photoperiod: { ...bean.photoperiod, toHarvestDays: 241 } }
+    expect(shortDayHarvestLag(tooLong, 25.76, 152, 85)).toBeNull()
+  })
+
+  it('gets no windows where the days shorten too late for a harvest before the freeze', async () => {
+    const bean = need(await catalogPromise, 'winged-bean')
+    const calendar = calendarFor(bean)
+    expect(calendar.plantings).toEqual([])
+    // the pod comes on day 322 (Nov 18, 71 days after the days shorten on Sep 8) and the first
+    // fall freeze at the 20 percent level is day 280, so the harvest lands 42 days late
+    expect(calendar.feasibility).toEqual({ kind: 'season-too-short', shortfallDays: 42 })
+    expect(calendar.notes.at(-1)).toBe(
+      photoperiodGate(bean, siteFixture(), 20).limiting?.explanation,
+    )
+    expect(calendar.notes.at(-1)).toContain('Sep 8')
+    // the freeze is day 275 to 295 from the 10 to the 50 percent level
+    const shortfalls = ([10, 20, 30, 40, 50] as const).map(
+      (percentile) => calendarFor(bean, percentile).feasibility,
+    )
+    expect(shortfalls).toEqual(
+      [47, 42, 37, 32, 27].map((shortfallDays) => ({ kind: 'season-too-short', shortfallDays })),
+    )
+  })
+
+  it('measures how late the harvest lands forward from the sowing across the new year', async () => {
+    const bean = need(await catalogPromise, 'winged-bean')
+    const openSky = [40, 36, 28, 20, 14, 11, 12, 16, 22, 30, 36, 40]
+    const southern = siteFixture({
+      location: { latitudeDeg: -37.8 as DegreesLatitude, longitudeDeg: 145 as DegreesLongitude },
+      frost: [
+        {
+          ...FROST_EVERY_YEAR,
+          thresholdC: 0 as Celsius,
+          lastSpringFreeze: { 10: 288, 20: 283, 30: 278, 40: 273, 50: 268 } as never,
+          firstFallFreeze: { 10: 100, 20: 105, 30: 110, 40: 115, 50: 120 } as never,
+          frostFreeDays: { 10: 177, 20: 187, 30: 197, 40: 207, 50: 217 } as never,
+        },
+      ],
+      normals: {
+        ...siteFixture().normals,
+        monthlyMeanTempC: [24, 23, 21, 17, 13, 10, 9, 10, 12, 15, 18, 22].map((v) => v as Celsius),
+        monthlyMeanDliMolM2Day: openSky,
+      },
+      seasonGdd: { base4C: 5000 as DegreeDaysC, base10C: 3400 as DegreeDaysC, percentile: 20 },
+    })
+    const light = bedLightFixture('bed-a', 0, 36, openSky)
+    // the days at 37.8 S shorten on March 3, so the pod comes on day 133 (May 13), after the new
+    // year from a spring sowing and 33 to 13 days past a first fall freeze on day 100 to 120
+    const calendars = ([10, 20, 30, 40, 50] as const).map((percentile) =>
+      cropCalendar({ crop: bean, site: southern, light, percentile }),
+    )
+    expect(calendars.map((calendar) => calendar.feasibility)).toEqual(
+      [33, 28, 23, 18, 13].map((shortfallDays) => ({ kind: 'season-too-short', shortfallDays })),
+    )
+    expect(calendars[1]?.notes.at(-1)).toContain('Mar 3')
+  })
+
+  it('has windows exactly where the gate admits it at a site with frost', async () => {
+    const bean = need(await catalogPromise, 'winged-bean')
+    for (const site of [hotDesertSiteFixture(), siteFixture()])
+      for (const percentile of [10, 20, 30, 40, 50] as const) {
+        const calendar = cropCalendar({ crop: bean, site, light: lightOf(site), percentile })
+        expect(calendar.plantings.length > 0, `${site.label} at ${String(percentile)}`).toBe(
+          photoperiodGate(bean, site, percentile).passed,
+        )
+      }
+  })
+
+  it('leaves a frost-hardy short-day crop its window, since the frost does not end its picking', async () => {
+    const bean = need(await catalogPromise, 'winged-bean')
+    expect(frostHardy(bean, 0)).toBe(false)
+    const hardy = { ...bean, frostOffsetDays: -14 as Days }
+    expect(frostHardy(hardy, 0)).toBe(true)
+    const calendar = calendarFor(hardy)
+    expect(calendar.feasibility.kind).toBe('fits')
+    expect(calendar.harvest.start).toBe(322)
+    expect(calendar.harvest.basis.kind).toBe('day-length')
+  })
+
+  it('keeps the days to maturity of a crop with no day-length figures', async () => {
+    const tomato = need(await catalogPromise, 'tomato')
+    expect(tomato.photoperiod).toBeNull()
+    const calendar = calendarFor(tomato)
+    expect(calendar.harvest).toEqual({
+      start: 225,
+      end: 280,
+      basis: { kind: 'days-to-maturity', backedOffDays: 93 },
+    })
+    expect(citationsFor(calendar.harvest.basis, tomato)).toEqual(['open-meteo'])
   })
 })
 

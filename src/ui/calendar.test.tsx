@@ -162,6 +162,30 @@ describe('basis and feasibility', () => {
     ).toBe('harvest calendar')
   })
 
+  it("says which of the two days dated a short-day crop's harvest", () => {
+    const basis = {
+      kind: 'day-length',
+      criticalHours: 12.75,
+      shortFrom: dayOfYear(245),
+      toHarvestDays: 70.5,
+      maturityDays: days(77),
+      latitudeDeg: 33.45,
+      datedBy: 'short-days',
+    } as const
+    expect(basisLabel(basis)).toBe(
+      'days shorter than 12.75 hours from Sep 2, then 71 days to a first harvest',
+    )
+    expect(
+      basisLabel({
+        ...basis,
+        shortFrom: dayOfYear(15),
+        maturityDays: days(78),
+        datedBy: 'maturity',
+      }),
+    ).toBe('78 days to maturity, with days already shorter than 12.75 hours from Jan 15')
+    expect(basisKindLabel(basis)).toBe('day length')
+  })
+
   it("refuses to call a crop plantable when it can't finish", () => {
     const short = feasibilitySummary({ kind: 'season-too-short', shortfallDays: days(18) })
     expect(short.plantable).toBe(false)

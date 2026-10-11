@@ -1,6 +1,6 @@
 import { beforeAll, describe, expect, it } from 'bun:test'
 import { cropById, loadCropCatalog } from '../data/crops'
-import type { BedCalendar } from '../types/calendar'
+import type { BedCalendar, CropCalendar } from '../types/calendar'
 import type { Crop } from '../types/crop'
 import type { Bed } from '../types/garden'
 import type { BedId, CropId, PlantingId } from '../types/ids'
@@ -22,6 +22,7 @@ import {
   bedLightFixture,
   FROST_EVERY_YEAR,
   frostFreeSiteFixture,
+  hotDesertSiteFixture,
   siteFixture,
 } from './testkit'
 
@@ -276,6 +277,80 @@ describe('a perennial sown inside its own harvest window', () => {
     if (!derived.ok) return
     expect(derived.value.harvestStartDay).toBe(sowDay)
     expect(derived.value.harvestEndDay).toBe(calendar.harvest.end)
+  })
+})
+
+/**
+ * A short-day crop's harvest counts from its own sowing, as the later of its days to maturity and
+ * its days from the first run of short days that lasts (Decision Record 29). A sowing that still
+ * comes before the run waits for it, so it keeps the calendar's harvest, and one inside a run that
+ * lasts counts from itself
+ */
+describe('a short-day crop sown on another day', () => {
+  const bed = beds[0] as Bed
+  const phoenix = hotDesertSiteFixture()
+  const beanCalendar = (): CropCalendar =>
+    cropCalendar({
+      crop: cropOf('winged-bean'),
+      site: phoenix,
+      light: bedLightFixture(bed.id as string, 0, 36, phoenix.normals.monthlyMeanDliMolM2Day),
+      percentile: 50,
+    })
+  const derive = (calendar: CropCalendar, sowDay: number, harvestEndDay?: number) =>
+    derivePlanting({
+      id: plantingIdFor(bed.id, cropOf('winged-bean').id, sowDay as DayOfYear),
+      bed,
+      crop: cropOf('winged-bean'),
+      arrays: [],
+      calendar,
+      sowDay: sowDay as DayOfYear,
+      ...(harvestEndDay === undefined ? {} : { harvestEndDay: harvestEndDay as DayOfYear }),
+    })
+
+  it("keeps the calendar's harvest for a later sowing that still comes before the run", () => {
+    const calendar = beanCalendar()
+    // the days at Phoenix first drop under 12.75 hours on September 2 (day 245), so a pod comes on
+    // November 12 (day 316) for a sowing on June 1 (day 152) and for one on July 19 (day 200).
+    // Carrying the calendar's 164 day lag to the later sowing would have picked on day 364
+    expect(calendar.harvest.start).toBe(316)
+    expect(calendar.harvest.end).toBe(334)
+    for (const sowDay of [152, 200]) {
+      const derived = derive(calendar, sowDay)
+      expect(derived.ok).toBe(true)
+      if (!derived.ok) return
+      expect(derived.value.harvestStartDay).toBe(316)
+      expect(derived.value.harvestEndDay).toBe(334)
+    }
+  })
+
+  it('dates a sowing inside a run that lasts from the sowing itself', () => {
+    // September 7 (day 250) is inside the run, so the 77 days to maturity count from it: day 327,
+    // and the calendar's 18 days of picking go with it
+    const derived = derive(beanCalendar(), 250)
+    expect(derived.ok).toBe(true)
+    if (!derived.ok) return
+    expect(derived.value.harvestStartDay).toBe(327)
+    expect(derived.value.harvestEndDay).toBe(345)
+  })
+
+  it("holds a plan slot's harvest end to the short-day date", () => {
+    const calendar = beanCalendar()
+    const early = derive(calendar, 250, 320)
+    expect(early.ok).toBe(false)
+    if (early.ok) return
+    expect(early.reason).toContain("isn't ready to pick until Nov 23")
+    const named = derive(calendar, 250, 340)
+    expect(named.ok && named.value.harvestEndDay).toBe(340)
+  })
+
+  it('is refused where the days shorten too late for a harvest before the freeze', () => {
+    // the 42.37 N fixture: the days shorten on September 8 and the pod comes after the frost
+    const calendar = calendarFor(calendarsFor(), bed.id, cropOf('winged-bean').id)
+    expect(calendar?.feasibility.kind).toBe('season-too-short')
+    const derived = derive(calendar as CropCalendar, 152)
+    expect(derived.ok).toBe(false)
+    if (derived.ok) return
+    expect(derived.reason).toContain(feasibilityWords('season-too-short'))
   })
 })
 

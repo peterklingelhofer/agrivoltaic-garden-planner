@@ -1316,13 +1316,14 @@ to those coefficients.
 
 ## 29. Short days gate a short-day crop
 
-A crop whose flowering, or whose harvested root or tuber, starts only once days shorten has to
-reach that point and then a harvest before the fall freeze. `photoperiodGate` in
+A crop whose flowering, or whose harvested root or tuber, starts only once days shorten has to reach
+that point and then a harvest before the fall freeze. `photoperiodGate` in
 `src/recommend/stages/climate-gate.ts` finds the first day past midsummer (June 21 in the north,
-December 21 in the south) whose day length is shorter than the crop's critical length, adds the
-crop's days from there to a first harvest, and refuses the crop when that lands after the site's
-first fall freeze at the chosen percentile. A frost-free site passes, and so does a crop with no
-day-length figures. Where days never get that short, the crop is refused.
+December 21 in the south) that starts a run of days shorter than the crop's critical length, a run
+that lasts the crop's days to a first harvest. It adds those days, and refuses the crop when that
+lands after the site's first fall freeze at the chosen percentile. A crop with no day-length figures
+passes, and so does a frost-free site whose days get short enough. Where days never stay that short
+for the crop's days to a harvest, the crop is refused, frost or not.
 
 **Winged bean is the one crop gated.** UF/IFAS HS561 says most varieties "need short days to
 initiate flowering", and NRC 1981 says good harvests come in south Florida "but almost nowhere else
@@ -1344,6 +1345,14 @@ Florida site keeps it.
 refraction and no twilight. Tribhuvan et al. give natural day lengths, a few minutes from the
 geometric day. Nakamura and Abe's photoperiods include civil twilight, about an hour more, and the
 gate takes only their day counts.
+
+**The calendar.** A short-day crop's first harvest is the later of two days, both counted from its
+sowing: its days to maturity, and its short-day date. That's the first run of days shorter than
+its critical length, at or after the sowing, that lasts its days to a harvest, plus those days.
+Sown in spring, it waits for autumn's run. Sown inside a run that lasts, it counts from the
+sowing. The gate and the calendar share one function, `shortDaysFrom`, so a crop the gate admits
+gets a harvest date before the frost, and every such date names its day-length sources. Where the
+gate refuses the crop, its calendar gives no dates and carries the gate's own sentence.
 
 **What stays ungated.**
 - Roselle. Its sources give a critical length, 12 hours in some and 13 in FAO's, and two weeks from

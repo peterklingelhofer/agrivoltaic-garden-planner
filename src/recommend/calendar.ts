@@ -26,7 +26,7 @@ import type { Crop, DliClass, ThermalRequirement } from '../types/crop'
 import type { BedLight } from '../types/light'
 import type { ExceedancePercentile, Site } from '../types/site'
 import type { DayOfYear, Days } from '../types/units'
-import { seasonGddAvailable } from './stages/climate-gate'
+import { photoperiodGate, seasonGddAvailable, shortDaysFrom } from './stages/climate-gate'
 
 /**
  * Every date is a day of year on a 365 day circle, and
@@ -239,6 +239,11 @@ export const citationsFor = (basis: CalendarBasis, crop: Crop): readonly Citatio
       return crop.light.dliMinMolM2Day.citations
     case 'harvest-calendar':
       return [...(crop.perennialHarvest?.citations ?? []), ...FROST_CITATIONS]
+    case 'day-length':
+      return [
+        ...(crop.photoperiod?.criticalCitations ?? []),
+        ...(crop.photoperiod?.toHarvestCitations ?? []),
+      ]
     case 'catalog-window':
       return []
   }
@@ -615,13 +620,39 @@ const plantingCeiling = (input: DatedInput, fieldDays: number): DatedBasis => {
   )
 }
 
+/**
+ * A short-day crop's first harvest comes the later of two days after its sowing: its days to
+ * maturity, and its short-day date, the first run of short days that lasts (`shortDaysFrom`) plus
+ * its days from there to a harvest. A sowing inside a run that lasts counts from itself. Null for
+ * a crop with no day-length figures, and where no run lasts long enough, which the gate refuses
+ * first (Decision Record 29)
+ */
+export const shortDayHarvestLag = (
+  crop: Crop,
+  latitudeDeg: number,
+  sowDay: number,
+  maturityDays: number,
+): { readonly lagDays: number; readonly shortFrom: DayOfYear } | null => {
+  const trigger = crop.photoperiod
+  if (trigger === null) return null
+  const shortFrom = shortDaysFrom(trigger, latitudeDeg, sowDay)
+  if (shortFrom === null) return null
+  return {
+    lagDays: Math.max(maturityDays, forwardDays(sowDay, shortFrom) + trigger.toHarvestDays),
+    shortFrom,
+  }
+}
+
 const harvestWindow = (
   crop: Crop,
   anchors: SeasonAnchors,
+  latitudeDeg: number,
   sowDay: DayOfYear,
   fieldDays: number,
 ): HarvestWindow => {
-  const start = wrapDayOfYear(sowDay + fieldDays)
+  const trigger = crop.photoperiod
+  const lag = shortDayHarvestLag(crop, latitudeDeg, sowDay, fieldDays)
+  const start = wrapDayOfYear(sowDay + (lag?.lagDays ?? fieldDays))
   const end = wrapDayOfYear(start + crop.harvestDurationDays)
   const cut =
     !anchors.frostFree &&
@@ -630,7 +661,18 @@ const harvestWindow = (
   return {
     start,
     end: cut ? anchors.firstFallFreeze : end,
-    basis: { kind: 'days-to-maturity', backedOffDays: fieldDays as Days },
+    basis:
+      lag === null || trigger === null
+        ? { kind: 'days-to-maturity', backedOffDays: fieldDays as Days }
+        : {
+            kind: 'day-length',
+            criticalHours: trigger.criticalHours,
+            shortFrom: lag.shortFrom,
+            toHarvestDays: trigger.toHarvestDays,
+            maturityDays: fieldDays as Days,
+            latitudeDeg,
+            datedBy: lag.lagDays > fieldDays ? 'short-days' : 'maturity',
+          },
   }
 }
 
@@ -641,7 +683,7 @@ interface AnnualInput extends DatedInput {
 }
 
 const annualCalendar = (input: AnnualInput): CropCalendar => {
-  const { crop, anchors, lit, notes, fieldDays, raisingDays, forced, percentile } = input
+  const { crop, site, anchors, lit, notes, fieldDays, raisingDays, forced, percentile } = input
   const spring = plantingFloor(input)
   const ceiling = plantingCeiling(input, fieldDays)
   /*
@@ -686,6 +728,29 @@ const annualCalendar = (input: AnnualInput): CropCalendar => {
     )
   }
 
+  const harvest = harvestWindow(crop, anchors, site.location.latitudeDeg, floor.day, fieldDays)
+  /*
+    A frost-tender short-day crop whose day length puts the first harvest past the first fall
+    freeze is refused by the gate for that reason, and the calendar says the same instead of
+    drawing a harvest the frost takes. The gate does the deciding. The shortfall is how far past
+    the freeze the harvest lands, from this sowing, and at least a day
+  */
+  if (harvest.basis.kind === 'day-length' && !frostHardy(crop, anchors.thresholdC)) {
+    const refusal = photoperiodGate(crop, site, percentile).limiting
+    if (refusal !== null) {
+      const late =
+        forwardDays(floor.day, harvest.start) - forwardDays(floor.day, anchors.firstFallFreeze)
+      notes.push(refusal.explanation)
+      return barren(
+        crop,
+        anchors,
+        percentile,
+        { kind: 'season-too-short', shortfallDays: Math.max(late, 1) as Days },
+        notes,
+      )
+    }
+  }
+
   const plantings: PlantingWindow[] = []
   const indoorStart = wrapDayOfYear(floor.day - raisingDays)
   if (raisingDays > 0) {
@@ -724,7 +789,7 @@ const annualCalendar = (input: AnnualInput): CropCalendar => {
     cropId: crop.id,
     plantings,
     successions: successionDays(crop, floor.day, ceiling.day),
-    harvest: harvestWindow(crop, anchors, floor.day, fieldDays),
+    harvest,
     feasibility: forced
       ? {
           kind: 'needs-indoor-start',
@@ -1075,7 +1140,7 @@ const frostFreeCalendar = (input: CalendarInput, anchors: SeasonAnchors): CropCa
     cropId: crop.id,
     plantings,
     successions: successionDays(crop, first.start, latestIn(first)),
-    harvest: harvestWindow(crop, anchors, first.start, fieldDays),
+    harvest: harvestWindow(crop, anchors, site.location.latitudeDeg, first.start, fieldDays),
     feasibility: { kind: 'fits', slackDays: forwardDays(first.start, latestIn(first)) as Days },
     frostRiskPercentile: percentile,
     notes: withWet(wetNoteFor(first)),
