@@ -987,7 +987,12 @@ body {
 }
 
 /* In the viewport: the sidebar is a scroll box and it clipped every bubble
-   opened near its top or its foot. `InfoTip` measures the trigger and writes top and left */
+   opened near its top or its foot. `InfoTip` measures the trigger and writes top and left.
+
+   It is a child of the i, so it inherits the text styles of wherever the i stands, and the ones
+   that change how a sentence lays out are set back here. `.with-tip` keeps a word and its i on
+   one line with `nowrap`, and the bubble inherited it: the sentence ran on one line straight out
+   of the 240px box and across the garden, with nothing behind it */
 .infotip-bubble {
   position: fixed;
   z-index: 4;
@@ -1003,6 +1008,9 @@ body {
   font-style: normal;
   line-height: 1.4;
   text-align: left;
+  white-space: normal;
+  text-transform: none;
+  letter-spacing: normal;
   box-shadow: 0 2px 10px rgb(0 0 0 / 18%);
 }
 
