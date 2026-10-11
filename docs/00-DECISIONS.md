@@ -13,6 +13,7 @@ disagrees with this file, this file wins. Every source named here has an entry i
 | Light simulation | Full annual DLI map |
 | Design scale | One garden: beds, a few dozen panels, a single site |
 | Surfaces | 3D canvas, plant recommender, the layout search of record 10c |
+| Catalog | A crop that's invasive or weedy in part of the US stays in unless the federal noxious weed list (7 CFR 360.200) names it, and its row comment gives each listing, its source and whether that list has regulatory force |
 
 ## 2. Physics and model choices
 
