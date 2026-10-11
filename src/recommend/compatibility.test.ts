@@ -108,24 +108,32 @@ describe('soil pH intersection', () => {
       )
       .map((candidate) => candidate.id as string)
       .sort()
-    // the acid guild, plus the tropical staples whose ECOCROP envelopes reach pH 4 to 4.5
-    // (cassava 4 to 9, taro 4.3 to 8.2, banana 4 to 8.4, coffee 4.3 to 8.4, cacao 4 to 8,
-    // orange 4 to 8.3, tea 4 to 6, pineapple 3.5 to 9, and so on), plus lime and lemon verbena
-    // at their own 5 floor, which is a fact about those crops and the reason a blueberry bed
-    // isn't the dead end for them that it's for a tomato. Olive's floor is 5.3, so it stays out
+    // the acid guild, plus the tropical staples whose ECOCROP envelopes reach down to pH 3.5 to
+    // 4.5 (cassava 4 to 9, taro 4.3 to 8.2, banana 4 to 8.4, coffee 4.3 to 8.4, cacao 4 to 8,
+    // orange 4 to 8.3, tea 4 to 6, pineapple 3.5 to 9, cashew 3.8 to 8.7, and so on), plus lime,
+    // lemon verbena, lychee and adzuki bean at their own 5 floor, which is a fact about those
+    // crops and the reason a blueberry bed isn't the dead end for them that it's for a tomato.
+    // Olive's floor is 5.3, so it stays out
     expect(compatible).toEqual([
+      'adzuki-bean',
       'avocado',
       'banana',
+      'breadfruit',
       'cacao',
+      'cashew',
       'cassava',
+      'coconut',
       'coffee',
       'cranberry',
       'guava',
+      'jackfruit',
       'lemon-verbena',
       'lime',
       'lingonberry',
       'lowbush-blueberry',
+      'lychee',
       'macadamia',
+      'malanga',
       'mango',
       'moringa',
       'mung-bean',
@@ -144,6 +152,7 @@ describe('soil pH intersection', () => {
       'tea',
       'teaberry',
       'teff',
+      'vanilla',
       'yam-greater',
     ])
   })

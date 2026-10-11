@@ -109,7 +109,7 @@ data across every RSR the app defines (5% to 90%):
   40%, forages through 25% and leafy vegetables through 15%, peaking at 116.1%, 115.5%, 108.3%,
   103.7% and 101.3%. For these five groups the gate does what Decision Record 6 describes: a
   water-limited site can show a modeled benefit, and a non-water-limited site is held at parity.
-  Leafy vegetables is the one to watch, because it holds 71 of the 230 catalog rows and its
+  Leafy vegetables is the one to watch, because it holds 78 of the 264 catalog rows and its
   upper 95% bound exceeds 100% from 5% to 65% RSR, so the gate moves its band across most of the
   usable range.
 - **Corn and grain legumes** never rise above 100% at any RSR, central estimate or 95% upper bound.
@@ -162,8 +162,8 @@ regression tests, and nowhere else:
   an interval across replicate plots, and comparing a draw would need the single-season realization
   a trial never publishes.
 - **The DLI gate** that decides whether a crop can grow in a bed is a different mechanism from the
-  shade-yield curve this file checks, and it rests on thinner evidence. 225 of the 230 per-crop DLI
-  rows are Tier C. 219 of them cite nothing for light: the figure is the crop's garden sun label,
+  shade-yield curve this file checks, and it rests on thinner evidence. 259 of the 264 per-crop DLI
+  rows are Tier C. 253 of them cite nothing for light: the figure is the crop's garden sun label,
   converted into a band by the app's own arithmetic, and the row says no cited work measured it. The
   other six cite the documents their numbers come from: tomato, both peppers, cucumber and spinach
   cite the Virginia Cooperative Extension (VCE), Purdue and Runkle greenhouse guidance, and

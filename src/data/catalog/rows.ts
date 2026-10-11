@@ -708,6 +708,47 @@ export const CROP_ROWS: readonly CropRow[] = [
     },
   ],
   [
+    'lablab',
+    'Lablab purpureus',
+    'Fabaceae',
+    'hyacinth bean|lablab|indian bean',
+    // laubGroup, dliClass, habit, archetype, DLI figures, tier and laubNote as bean-pole, the
+    // catalog's other twining bean picked as young pods. University of Arkansas: "Its roots will
+    // survive over winter in zone 8 if plants are well mulched but mostly the vine is grown as an
+    // annual"
+    'grain-legumes',
+    'grain-legumes',
+    'vining-trellised',
+    'warm',
+    12,
+    18,
+    25,
+    'C',
+    // CTAHR SA-GM-7: "Lablab is also shade tolerant", where Arkansas and NC State ask full sun
+    1,
+    // University of Arkansas: "It takes about 90 days from planting until the first pods are
+    // produced", from sowing
+    90,
+    // USDA NRCS Plant Guide: "on rows 2.5 ft wide with roughly 1 to 1.5 ft between plants (Cook
+    // et al., 2005)", 2.5 ft rows x the 1.25 ft in-row midpoint, sqrt(2.5 x 1.25) = 1.77 ft
+    54,
+    // NC State Extension Plant Toolbox: "Height: 10 ft. 0 in. - 25 ft. 0 in.", the 17.5 ft
+    // midpoint, the vine's reach up its support rather than a trellis height
+    5.33,
+    // NC State Extension Plant Toolbox: "Width: 3 ft. 0 in. - 6 ft. 0 in.", the 4.5 ft midpoint
+    1.37,
+    {
+      // Invasive status: on no state list. HEAR's PIER weed risk assessment says Evaluate (5),
+      // and CTAHR SA-GM-7 warns that climbing varieties tend to be invasive. The synonym is the
+      // name NC State, NRCS and Arkansas also use
+      synonyms: ['Dolichos lablab'],
+      // as bean-pole: weeks of picking
+      harvestDays: 45,
+      nfix: true,
+      laubNote: IMMATURE_POD_NOTE,
+    },
+  ],
+  [
     'lima-bean',
     'Phaseolus lunatus',
     'Fabaceae',
@@ -739,6 +780,45 @@ export const CROP_ROWS: readonly CropRow[] = [
       // FAO-56 Table 22, "Beans, lima, large vines": Zr 0.8-1.2 m, p 0.45, the 1.0 m midpoint
       zr: 1,
       p: 0.45,
+      nfix: true,
+      laubNote: IMMATURE_POD_NOTE,
+    },
+  ],
+  [
+    'winged-bean',
+    'Psophocarpus tetragonolobus',
+    'Fabaceae',
+    'winged bean|goa bean',
+    // laubGroup, dliClass, habit, DLI figures, tier and laubNote as lima-bean, the catalog's
+    // other trellised tropical bean. UF/IFAS HS561: "Since most varieties of winged beans need
+    // short days to initiate flowering, yet are frost sensitive, they must be grown during the
+    // winter in South Florida while the days are short". The archetype is cowpea's hot, not lima
+    // bean's warm: ECOCROP sheet 1807 lists only tropical and subtropical zones (Aw, Ar, Cf, Cs,
+    // Cw), and warm would admit the continental Dfa and Dfb
+    'grain-legumes',
+    'grain-legumes',
+    'vining-trellised',
+    'hot',
+    12,
+    18,
+    25,
+    'C',
+    // as lima-bean: no source gives winged bean a light requirement
+    0,
+    // Bassal et al. 2020 (Plants review): "In the first 6 weeks, Psophocarpus tetragonolobus
+    // grows slowly, and after 10-12 weeks of planting, the fruit can be harvested", the 11-week
+    // midpoint, 77 days to the first green pods
+    77,
+    // Bassal et al. 2020: "The distance between seeds is around 50 cm"
+    50,
+    // Bassal et al. 2020: "Winged bean is a climbing twinning plant (climb up to 3-5 m)", the 4 m
+    // midpoint, the trellis to plan for
+    4,
+    // as lima-bean: no source gives winged bean a spread
+    0.3,
+    {
+      // as lima-bean: weeks of picking
+      harvestDays: 45,
       nfix: true,
       laubNote: IMMATURE_POD_NOTE,
     },
@@ -840,6 +920,46 @@ export const CROP_ROWS: readonly CropRow[] = [
     0.6,
     0.4,
     { harvestDays: 30, nfix: true },
+  ],
+  [
+    'tepary-bean',
+    'Phaseolus acutifolius',
+    'Fabaceae',
+    'tepary bean|tepary',
+    // laubGroup, dliClass, habit, archetype, DLI figures and tier as cowpea, the catalog's other
+    // heat- and drought-adapted dry bean, and no cold floor, as cowpea: no source gives one
+    'grain-legumes',
+    'grain-legumes',
+    'bush',
+    'hot',
+    14,
+    20,
+    28,
+    'C',
+    // FAO 1994 (Neglected crops, Debouck), of the cultivated form: "heliophyte and has
+    // characteristics that allow it to tolerate excessive sun"
+    0,
+    // FAO 1994: "ripening at 60 to 80 days", the 70-day midpoint to the dry seed, counted from
+    // sowing. Agriculture Canada 1992 gives 86 to 115 days on the Canadian prairies
+    70,
+    // as cowpea: Agriculture Canada 1992 gives rows and a seeding rate by weight, with no plant
+    // spacing: "For effective weed control with row crop equipment, seed at a rate of 25-35
+    // kg/ha in rows 60-90 cm apart"
+    20,
+    // Agriculture Canada 1992: "The plant is 35-50 cm high, with vines that receive ample
+    // moisture and that measure up to 115 cm long", the 42.5 cm midpoint
+    0.43,
+    // as cowpea: no source gives tepary bean a spread
+    0.4,
+    {
+      // as cowpea
+      harvestDays: 30,
+      // FAO-56 Table 22 has no tepary row, so the generic "Beans, dry and Pulses": Zr 0.6-0.9 m,
+      // p 0.45, the 0.75 m midpoint, as adzuki-bean
+      zr: 0.75,
+      p: 0.45,
+      nfix: true,
+    },
   ],
   [
     'soybean-edamame',
@@ -958,6 +1078,43 @@ export const CROP_ROWS: readonly CropRow[] = [
     0.5,
     0.6,
     { nfix: true },
+  ],
+  [
+    'bambara-groundnut',
+    'Vigna subterranea',
+    'Fabaceae',
+    'bambara groundnut|bambara bean|jugo bean',
+    // laubGroup, dliClass, habit, archetype, DLI figures and tier as peanut, which sets its pods
+    // underground as this does
+    'grain-legumes',
+    'grain-legumes',
+    'bush',
+    'hot',
+    14,
+    20,
+    28,
+    'C',
+    // UF/IFAS HS547: "It needs bright sunshine, high temperatures, at least 4 months free of
+    // frost, and frequent rains to grow best"
+    0,
+    // UF/IFAS HS547: "When grown like the peanut, Bambara groundnuts take about 3-6 months to
+    // mature, depending on climatic conditions and the cultivar", the 4.5-month midpoint, 135
+    // days from sowing
+    135,
+    // Olanrewaju et al. 2021, an IITA field trial's layout rather than a grower's spacing: "The
+    // length of each plot was 3 m with 0.3 m spacing between each plant and a row spacing of 0.7
+    // m between each plot", sqrt(0.3 x 0.7) = 0.46 m
+    46,
+    // Olanrewaju et al. 2021: "It has both prostrate and erect forms and grows to a height of
+    // 0.30-0.35 m", the midpoint
+    0.325,
+    // as peanut: no source gives bambara groundnut a spread
+    0.6,
+    {
+      // the name UF/IFAS HS547 uses
+      synonyms: ['Voandzeia subterranea'],
+      nfix: true,
+    },
   ],
 
   // Cereals and pseudocereals
@@ -1261,6 +1418,45 @@ export const CROP_ROWS: readonly CropRow[] = [
       laubNote: OILSEED_NOTE,
     },
   ],
+  [
+    'safflower',
+    'Carthamus tinctorius',
+    'Asteraceae',
+    'safflower',
+    // laubGroup, dliClass, habit, archetype, DLI figures, tier and laubNote as sunflower, the
+    // same family's oilseed, with the oilseed Laub treatment flax and canola carry. OSU EM 8792:
+    // "plants cannot withstand freezing temperatures after flowering", so no cold floor, as
+    // sunflower
+    'c3-cereals',
+    'c3-cereals',
+    'upright-herb',
+    'warm',
+    18,
+    25,
+    35,
+    'C',
+    // OSU EM 8792: "Safflower is a sun-loving crop, and high temperatures and bright sunny days in
+    // July through early September speed development"
+    0,
+    // OSU EM 8792: "Seeding to maturity takes 120 to 150 days or longer", the 135-day midpoint to
+    // the dry seed
+    135,
+    // Tamil Nadu Agricultural University: "Adopt a spacing of 45 cm between rows and 15 cm
+    // between plants", sqrt(45 x 15) = 26 cm
+    26,
+    // OSU EM 8792: "It stands 1 to 4 feet tall at maturity", the 2.5 ft midpoint
+    0.76,
+    // as sunflower: no source gives safflower a spread
+    0.6,
+    {
+      // Invasive status: on no state list read. HEAR's PIER pages record a Hawaii-Pacific Weed
+      // Risk Assessment of high risk (8), with no invaded habitat known
+      // FAO-56 Table 22, "Safflower": Zr 1.0-2.0 m, p 0.60, the 1.5 m midpoint
+      zr: 1.5,
+      p: 0.6,
+      laubNote: OILSEED_NOTE,
+    },
+  ],
 
   // Root, tuber and bulb
   [
@@ -1295,6 +1491,81 @@ export const CROP_ROWS: readonly CropRow[] = [
     },
   ],
   [
+    'oca',
+    'Oxalis tuberosa',
+    'Oxalidaceae',
+    'oca|new zealand yam',
+    // laubGroup, dliClass, habit, archetype and DLI figures as potato, the catalog's other crop
+    // planted from a seed tuber, at tier C: potato's tier B and its shade ceiling rest on a trial
+    // of potato itself
+    'tubers-root-crops',
+    'root-tuber',
+    'upright-herb',
+    // OSU News (Jim Myers, OSU Extension): "It can't survive frost but tubers will overwinter in
+    // the ground as long as they do not freeze", so the tops are an annual's, as potato's
+    'cool',
+    12,
+    18,
+    25,
+    'C',
+    // as potato: no source gives oca a light requirement
+    1,
+    // FAO 1994 (Neglected crops, Arbizu and Tapia): "The extensive growing period of seven to
+    // eight months exposes the crop for a longer time to attack from biotic and abiotic
+    // factors", the 7.5-month midpoint, 225 days from planting a tuber. Andean types form tubers
+    // only in days shorter than about 12 hours (NRC 1989), so a short season fails the season
+    // check, as it should
+    225,
+    // Sperling and King 1990 (Purdue NewCROP): "Planting is done in rows or hills 80-100 cm apart
+    // with plants spaced 40-60 cm apart in the rows (Rea 1975)", row midpoint 90 cm x in-row
+    // midpoint 50 cm, sqrt(90 x 50) = 67 cm
+    67,
+    // National Research Council 1989, outside the usual source classes and the one source that
+    // sizes oca: "Oca is a compact, perennial, tuberous herb, usually 20-30 cm high", the 25 cm
+    // midpoint
+    0.25,
+    // as potato: no source gives oca a spread
+    0.5,
+  ],
+  [
+    'crosne',
+    'Stachys affinis',
+    'Lamiaceae',
+    'crosne|chinese artichoke|japanese artichoke',
+    // laubGroup, dliClass, habit, archetype and DLI figures as potato, the catalog's other crop
+    // planted from a seed tuber, at tier C as oca
+    'tubers-root-crops',
+    'root-tuber',
+    'upright-herb',
+    // Agriculture Canada 1992: "The tubers also overwinter extremely well in the field as long as
+    // they are planted in a well-drained area", with no temperature, so no cold floor is claimed
+    'cool',
+    12,
+    18,
+    25,
+    'C',
+    // Wiśniewski and Harasym 2024 (Molecules review): "They prefer well-drained soil in a sunny
+    // location and thrive best in ordinary garden soil that is not too heavy"
+    0,
+    // Agriculture Canada 1992: "Harvest Japanese artichokes 100-130 days after planting by
+    // mechanically lifting the tubers out of the ground", the 115-day midpoint from planting a
+    // tuber
+    115,
+    // Agriculture Canada 1992: "Plant in early May, in rows 45 cm apart for easy mechanical weed
+    // control, and allow 15-30 cm within rows", 45 cm rows x the 22.5 cm in-row midpoint,
+    // sqrt(45 x 22.5) = 32 cm
+    32,
+    // Agriculture Canada 1992: "The plant is 30-45 cm high, usually 34-40 cm", the usual 37 cm
+    // midpoint
+    0.37,
+    // as potato: no source gives crosne a spread
+    0.5,
+    {
+      // the names Wiśniewski and Harasym 2024 give as synonyms
+      synonyms: ['Stachys sieboldii', 'Stachys tuberifera'],
+    },
+  ],
+  [
     'sweet-potato',
     'Ipomoea batatas',
     'Convolvulaceae',
@@ -1313,6 +1584,41 @@ export const CROP_ROWS: readonly CropRow[] = [
     0.3,
     1.5,
     { zr: 1.25, p: 0.65 },
+  ],
+  [
+    'jicama',
+    'Pachyrhizus erosus',
+    'Fabaceae',
+    'jicama|mexican yam bean|yam bean',
+    // laubGroup, dliClass, archetype, DLI figures and tier as sweet-potato, the catalog's other
+    // frost-tender root crop lifted once per planting, and its light and cold too, since no saved
+    // source gives jicama either. The habit is a climber's, as yam-greater, the catalog's
+    // climbing root crop
+    'tubers-root-crops',
+    'root-tuber',
+    'vining-trellised',
+    'hot',
+    14,
+    20,
+    28,
+    'C',
+    // as sweet-potato
+    0,
+    // Hermann and Heller 1997 (an IPGRI monograph, outside the usual source classes), on a field
+    // trial with the flowers removed: "three cultivars of P. erosus (reproductively pruned
+    // harvested after 154-168 days): 162-215 kg N/ha", the 161-day midpoint, from sowing
+    161,
+    // the same trial: "the plant population of both species in the trials was 110 000 plants/ha",
+    // a field population covering both species, sqrt(10,000 / 110,000) m = 0.30 m
+    30,
+    // as yam-greater: no saved source sizes jicama itself
+    2,
+    // as yam-greater, for the same reason
+    0.5,
+    {
+      // the 162-215 kg N/ha the trial sentence above reports for P. erosus itself
+      nfix: true,
+    },
   ],
   [
     'carrot',
@@ -1436,6 +1742,87 @@ export const CROP_ROWS: readonly CropRow[] = [
     { life: 'biennial' },
   ],
   [
+    'salsify',
+    'Tragopogon porrifolius',
+    'Asteraceae',
+    'salsify|oyster plant|vegetable oyster',
+    // laubGroup, dliClass, habit, archetype, DLI figures and tier as parsnip, the catalog's other
+    // biennial root lifted in its first season
+    'tubers-root-crops',
+    'root-tuber',
+    'rosette',
+    // University of Arkansas FSA6094: "Because of its ability to withstand a hard freeze in the
+    // winter, salsify may be harvested until early spring", with no temperature, so no cold floor
+    'cool',
+    8,
+    14,
+    20,
+    'C',
+    // NC State Extension Plant Toolbox: "Purple Goat's Beard performs best in full sun and sandy,
+    // loamy, and clay soils. ... Full sun (6 or more hours of direct sunlight a day) Partial Shade
+    // (Direct sunlight only part of the day, 2-6 hours)"
+    1,
+    // UF/IFAS HS662: "Salsify requires a long growing season of 120 to 150 days from seeding to
+    // harvest", the 135-day midpoint
+    135,
+    // UF/IFAS HS662: "The seedlings should be thinned to 3-4 inches apart in rows 18-24 inches
+    // apart", the 3.5 in midpoint x the 21 in row midpoint, sqrt(3.5 x 21) = 8.6 in
+    22,
+    // as parsnip: NC State's "up to 4 feet tall" is the flowering plant's in its second year, and
+    // the root is lifted from the first-year rosette, which no source sizes
+    0.4,
+    // as parsnip: no source gives salsify a spread
+    0.2,
+    {
+      // Invasive status: on no regulatory list. The Hawaii-Pacific Weed Risk Assessment (Plant
+      // Pono) scores it high risk (6.5): "Tragopogon porrifolius is naturalized in Hawaiʻi and
+      // possesses traits that are cause for concern in tropical island ecosystems"
+      life: 'biennial',
+    },
+  ],
+  [
+    'burdock',
+    'Arctium lappa',
+    'Asteraceae',
+    'burdock|gobo|great burdock',
+    // laubGroup, dliClass, habit, archetype, DLI figures and tier as parsnip, the catalog's other
+    // biennial root lifted in its first season. No usable ECOCROP sheet, so the envelope is the
+    // archetype's too
+    'tubers-root-crops',
+    'root-tuber',
+    'rosette',
+    'cool',
+    8,
+    14,
+    20,
+    'C',
+    // NC State Extension Plant Toolbox: "It prefers full sun locations with moist, well drained
+    // soil rich in organic matter and nitrogen. ... Full sun (6 or more hours of direct sunlight a
+    // day) Partial Shade (Direct sunlight only part of the day, 2-6 hours)"
+    1,
+    // OMAFRA Specialty Cropportunities: "Days to harvest 90-120 days ... Roots become woody beyond
+    // this time", the 105-day midpoint from sowing
+    105,
+    // OMAFRA Specialty Cropportunities: "In-row spacing 15-30 cm Between row spacing 60-90 cm",
+    // the 22.5 cm in-row midpoint x the 75 cm row midpoint, sqrt(22.5 x 75) = 41 cm
+    41,
+    // as parsnip: NC State's "Height: 2 ft. 0 in. - 10 ft. 0 in." and "Width: 2 ft. 0 in. - 4 ft.
+    // 0 in." are the second-year flowering plant's, and the root is dug from the first-year
+    // rosette, which no source sizes
+    0.4,
+    // as parsnip, for the same reason
+    0.2,
+    {
+      // Invasive status: on no regulatory list. The Hawaii-Pacific Weed Risk Assessment (Plant
+      // Pono) scores it high risk (9): "In Hawai‘i, A. lappa is considered a high-risk species and
+      // is not recommended for cultivation"
+      life: 'biennial',
+      // NC State Extension Plant Toolbox: "USDA Plant Hardiness Zone: 3a, 3b, 4a, 4b, 5a, 5b, 6a,
+      // 6b, 7a, 7b, 8a, 8b, 9a, 9b, 10a, 10b", the zone 3a floor
+      coldC: -40,
+    },
+  ],
+  [
     'celeriac',
     'Apium graveolens',
     'Apiaceae',
@@ -1494,6 +1881,44 @@ export const CROP_ROWS: readonly CropRow[] = [
     2.5,
     0.6,
     { life: 'perennial', coldC: -30 },
+  ],
+  [
+    'yacon',
+    'Smallanthus sonchifolius',
+    'Asteraceae',
+    'yacon|peruvian ground apple',
+    // laubGroup, dliClass, habit and DLI figures as jerusalem-artichoke, the catalog's other tall
+    // Asteraceae root crop. Unlike that hardy perennial it's lifted once per planting and frost
+    // burns its tops, so the archetype is warm, an annual's. Fernández et al. 2006: "The first
+    // frosts (-1°C) in autumn can cause yacon frost burns on the overground parts"
+    'tubers-root-crops',
+    'root-tuber',
+    'upright-herb',
+    'warm',
+    12,
+    18,
+    26,
+    'C',
+    // UF/IFAS HS1435: "the crop can reduce soil erosion and tolerate partial shade and, hence, is
+    // ideal for agroforestry systems (Hermann and Heller 1997)"
+    1,
+    // UF/IFAS HS1435: "This crop takes approximately 180 days from planting to maturity in
+    // Florida", counted from setting out rooted cuttings or sprouted corms
+    180,
+    // UF/IFAS HS1435: "can be planted in beds with 3- or 4-foot center-to-center spacing (Chqoue
+    // Delago et al. 2013) with 30-40 inches for plant spacing", the 42 in bed midpoint x the 35 in
+    // plant midpoint, sqrt(42 x 35) = 38.3 in
+    97,
+    // UC Cooperative Extension Alameda County: "the plant typically grows 4 to 8 feet tall,
+    // depending on variety", the 6 ft midpoint
+    1.83,
+    // as jerusalem-artichoke: no source gives yacon a spread
+    0.6,
+    {
+      // the name USDA PLANTS and ECOCROP file it under
+      synonyms: ['Polymnia sonchifolia'],
+      dtmRef: 'transplant',
+    },
   ],
   [
     'horseradish',
@@ -2057,6 +2482,46 @@ export const CROP_ROWS: readonly CropRow[] = [
     { synonyms: ['Brassica rapa var. nipposinica'], succession: 14 },
   ],
   [
+    'shungiku',
+    'Glebionis coronaria',
+    'Asteraceae',
+    'shungiku|garland chrysanthemum|crown daisy',
+    // laubGroup, dliClass, archetype, DLI figures and tier as mizuna, the catalog's other cool
+    // Asian leaf green. The habit is upright, as the height sentence below describes
+    'leafy-vegetables',
+    'leafy-greens',
+    'upright-herb',
+    'cool',
+    5,
+    10,
+    16,
+    'C',
+    // PROSEA (Plant Resources of South-East Asia, a scholarly reference outside the usual source
+    // classes): "It grows relatively well at low light levels. ... Tangho is suitable for
+    // intercropping because it is shade-tolerant"
+    2,
+    // PROSEA: "plants are harvested when they are vegetatively mature (15-25 cm high at 6-8 weeks
+    // from sowing)", the 7-week midpoint, 49 days
+    49,
+    // PROSEA: "Plant spacing depends on harvesting stage (seedlings or mature plants) and
+    // harvesting method (pulling or repeated cuts) but varies from 5-15 cm × 5-15 cm", the 10 cm
+    // midpoint each way
+    10,
+    // PROSEA: "An erect, densely leafy, branched, annual herb, 20-60 cm tall in the vegetative
+    // stage, up to ca. 90 cm when flowering", the vegetative 40 cm midpoint
+    0.4,
+    // as mizuna: no source gives shungiku a spread
+    0.3,
+    {
+      // Invasive status: the Cal-IPC Inventory, which has no regulatory authority, rates it
+      // Limited ("Glebionis coronaria | garland Chrysanthemum, crown daisy | Limited"). The
+      // synonym is the name PROSEA and ECOCROP use
+      synonyms: ['Chrysanthemum coronarium'],
+      // as mizuna
+      succession: 14,
+    },
+  ],
+  [
     'tatsoi',
     'Brassica rapa',
     'Brassicaceae',
@@ -2133,6 +2598,52 @@ export const CROP_ROWS: readonly CropRow[] = [
     25,
     0.3,
     0.3,
+  ],
+  [
+    'dandelion',
+    'Taraxacum officinale',
+    'Asteraceae',
+    'dandelion|common dandelion',
+    // laubGroup, dliClass, habit, DLI figures and tier as radicchio, the same family's leaf crop.
+    // The perennial life and archetype are sorrel's, the catalog's perennial leaf crop picked all
+    // season. WCVP resolves this name only to Taraxacum sect. Taraxacum, so its native range may
+    // read as unknown
+    'leafy-vegetables',
+    'leafy-greens',
+    'rosette',
+    'cool-perennial',
+    6,
+    12,
+    17,
+    'C',
+    // NC State Extension Plant Toolbox: "Dandelion grows in full sun and forms a deep taproot that
+    // can break up compact soils"
+    0,
+    // UW-Madison Extension: "Your crop should be ready in 85 to 95 days", the 90-day midpoint
+    // from sowing
+    90,
+    // UW-Madison Extension: "Space the plants six to nine inches apart in rows twelve inches
+    // apart", the 7.5 in midpoint x the 12 in rows, sqrt(7.5 x 12) = 9.5 in
+    24,
+    // NC State Extension Plant Toolbox: "Height: 0 ft. 2 in. - 0 ft. 6 in.", the 4 in midpoint
+    0.1,
+    // Magness et al. 1971 (Purdue NewCROP): "Cultivated forms may have rosettes of leaves
+    // spreading to 18 to 24 inches on established plants", the 21 in midpoint
+    0.53,
+    {
+      // Invasive status: on no state noxious weed list. The Alaska Exotic Plants Information
+      // Clearinghouse, which has no regulatory force, ranks it 58 of 100, "Modestly Invasive"
+      // ("Taraxacum officinale F.H. Wigg. TAOF common dandelion 58 Asteraceae 1916 Alaska"). HEAR's
+      // PIER pages cite it as invasive on the main Hawaiian islands, and the Hawaii-Pacific Weed
+      // Risk Assessment scores it high risk (20)
+      life: 'perennial',
+      // as sorrel: UW-Madison Extension says "They withstand frost and freezes and tolerate
+      // crowding" and gives no temperature
+      coldC: -34,
+      // Purdue NewCROP (Simon et al. 1984): "leaves and flower heads are gathered from cultivated
+      // and wild plants throughout the growing season"
+      harvest: { wholeSeason: true, citations: ['purdue-newcrop-simon-1984-dandelion'] },
+    },
   ],
   [
     'celery',
@@ -2679,6 +3190,49 @@ export const CROP_ROWS: readonly CropRow[] = [
     { succession: 14 },
   ],
   [
+    'culantro',
+    'Eryngium foetidum',
+    'Apiaceae',
+    'culantro|recao|sawtooth coriander',
+    // laubGroup, dliClass, habit, DLI figures and tier as cilantro, the same family's shade-loving
+    // leaf herb. Not cilantro's cool archetype, whose Koppen list admits no tropical climate:
+    // culantro is a tropical crop, its sources Puerto Rico's, so the archetype is hot, which
+    // admits Aw and Am. No ECOCROP sheet, so the envelope is the archetype's
+    'leafy-vegetables',
+    'understory-herbs',
+    'upright-herb',
+    'hot',
+    5,
+    10,
+    16,
+    'C',
+    // UF/IFAS Gardening Solutions: "Contrary to most herbs and vegetables, culantro does best in a
+    // shady area. Shade also aides in keeping your plant from bolting"
+    2,
+    // University of Puerto Rico Publicación 162: "El recao tarda de tres a cuatro meses desde la
+    // siembra hasta la primera cosecha" (three to four months from planting to the first cut),
+    // the 3.5-month midpoint, 105 days from setting out transplants, the bulletin's usual method
+    105,
+    // University of Puerto Rico Publicación 162, the growers' usual spacings: "6 pulgadas entre
+    // hilera x 6 pulgadas entre plantas" (6 in between rows by 6 in between plants), then 5 by 5
+    // in, the two square layouts' 5.5 in midpoint
+    14,
+    // Rodrigues et al. 2022 (a literature review): "classified as a rustic tropical vegetable of
+    // herbaceous habit, measuring 45 cm in height"
+    0.45,
+    // as cilantro: no source gives culantro a spread
+    0.2,
+    {
+      // Invasive status: on no state list. HEAR's PIER pages cite it as introduced and invasive on
+      // O'ahu ("O‘ahu Island introduced invasive cultivated", Wagner et al. 1999)
+      dtmRef: 'transplant',
+      // as basil, cut over a season: University of Puerto Rico Publicación 162, "Al cabo de dos
+      // meses, la planta ha crecido de nuevo, dando paso a nuevas cosechas" (after two months the
+      // plant has regrown, giving way to new harvests). No succession sowing, unlike cilantro
+      harvestDays: 90,
+    },
+  ],
+  [
     'dill',
     'Anethum graveolens',
     'Apiaceae',
@@ -2697,6 +3251,81 @@ export const CROP_ROWS: readonly CropRow[] = [
     1,
     0.3,
     { succession: 21 },
+  ],
+  [
+    'cumin',
+    'Cuminum cyminum',
+    'Apiaceae',
+    'cumin|jeera',
+    // laubGroup, dliClass, habit, DLI figures and tier as dill, the same family's annual herb. NC
+    // State Extension Plant Toolbox: "It is vulnerable to frost, and needs 120 days of frost-free
+    // weather from planting to harvesting", so the archetype is warm, where dill's is cool
+    'leafy-vegetables',
+    'leafy-greens',
+    'upright-herb',
+    'warm',
+    10,
+    16,
+    22,
+    'C',
+    // NC State Extension Plant Toolbox: "Full sun (6 or more hours of direct sunlight a day)"
+    0,
+    // the same sentence's 120 days, to the dry seed, counted from sowing since the page says
+    // cumin doesn't transplant well. Cut once for seed, so no succession sowing as dill's
+    120,
+    // NC State Extension Plant Toolbox: "When seedlings are 2 inches tall, thin them to 1 plant
+    // every 4 to 8 inches", the 6 in midpoint. UGA Bulletin 1170 lists 12-18 in without saying
+    // whether between plants or rows
+    15,
+    // Tamil Nadu Agricultural University: "It is an herbaceous annual plant, with a slender
+    // branched stem 20-30 cm tall", the 25 cm midpoint
+    0.25,
+    // as dill, inside NC State's "Available Space To Plant: Less than 12 inches", a planting
+    // class rather than a spread
+    0.3,
+  ],
+  [
+    'caraway',
+    'Carum carvi',
+    'Apiaceae',
+    'caraway',
+    // laubGroup, dliClass, habit, archetype, DLI figures and tier as dill, the same family's
+    // upright herb. The biennial life and its dating are parsley's, the catalog's other biennial
+    // Apiaceae herb
+    'leafy-vegetables',
+    'leafy-greens',
+    'upright-herb',
+    'cool',
+    10,
+    16,
+    22,
+    'C',
+    // NC State Extension Plant Toolbox: "Carawy will grow 1 to 2 feet tall and spread 1 foot wide
+    // and prefers full sun to light shade in moist well-drained garden soil"
+    1,
+    // as parsley, which the catalog dates within its first season: no source gives days from
+    // sowing, and the seed comes the next year. Illinois Extension: "Caraway is a biennial plant
+    // that produces seeds the second season after planting"
+    75,
+    // UGA Bulletin 1170, herb cultivation table: "Caraway (b) Spring, fall 8-12 in.", the 10 in
+    // midpoint
+    25,
+    // Illinois Extension: "The second season the plant grows to 2 to 3 feet tall and produces a
+    // large, flat-topped flower head with white flowers", the 2.5 ft midpoint
+    0.76,
+    // NC State Extension Plant Toolbox, the sentence above: "spread 1 foot wide"
+    0.3,
+    {
+      // Invasive status: Colorado's state noxious weed List B names it ("List B Species ... Wild
+      // caraway Carum carvi"), species the state requires managed to stop their spread. On no
+      // federal list
+      life: 'biennial',
+      // as parsley
+      harvestDays: 120,
+      // NC State Extension Plant Toolbox: "USDA Plant Hardiness Zone: 4a, 4b, 5a, 5b, 6a, 6b, 7a,
+      // 7b, 8a, 8b, 9a, 9b", the zone 4a floor
+      coldC: -34.4,
+    },
   ],
   [
     'mint',
@@ -3167,6 +3796,43 @@ export const CROP_ROWS: readonly CropRow[] = [
     0.25,
   ],
   [
+    'epazote',
+    'Dysphania ambrosioides',
+    'Amaranthaceae',
+    'epazote|mexican tea|wormseed',
+    // laubGroup, dliClass, habit, archetype, DLI figures and tier as summer-savory, the catalog's
+    // other warm annual leaf herb grown in full sun. SIAP 2019: "no tolera las heladas" (it
+    // doesn't tolerate frost), where Texas A&M's HortUpdate says it "can withstand some frost"
+    'leafy-vegetables',
+    'leafy-greens',
+    'upright-herb',
+    'warm',
+    12,
+    18,
+    25,
+    'C',
+    // NC State Extension Plant Toolbox: "This plant does best in full sun and moderately fertile
+    // moist well-drained soil"
+    0,
+    // Prairie View A&M University: "About 50 days after planting", read from sowing, since the
+    // fact sheet allows direct seeding or transplanting and doesn't say which it counts from
+    50,
+    // Prairie View A&M University: "Plant 200 plants/m2 (19 plants/ft2). Space plants 5-8 cm.
+    // (2-3 in.) apart", the 6.5 cm midpoint, and the density agrees, sqrt(1 / 200) m = 7.1 cm
+    7,
+    // Prairie View A&M University: "Annual or short-lived erect perennial plant that grows up to 1
+    // m (3 ft.) or taller and strongly odorous", the stated 1 m
+    1,
+    // as summer-savory: no source gives epazote a spread
+    0.25,
+    {
+      // Invasive status: on no state list. HEAR's PIER pages cite it as introduced and invasive on
+      // the main Hawaiian islands ("O‘ahu Island introduced invasive", Wagner et al. 1999). The
+      // synonym is the name Prairie View A&M, NC State, Illinois Extension and ECOCROP use
+      synonyms: ['Chenopodium ambrosioides'],
+    },
+  ],
+  [
     'bay-laurel',
     'Laurus nobilis',
     'Lauraceae',
@@ -3265,6 +3931,56 @@ export const CROP_ROWS: readonly CropRow[] = [
       // dry is when the flowers are just past full bloom, as the oil content in the leaves is the
       // highest at that time, but they can be used at any time"
       harvest: { wholeSeason: true, citations: ['mahr-2025-anise-hyssop'] },
+    },
+  ],
+  [
+    'catnip',
+    'Nepeta cataria',
+    'Lamiaceae',
+    'catnip|catmint',
+    // laubGroup, dliClass, habit, archetype, DLI figures and tier as anise-hyssop, the same
+    // family's upright hardy perennial
+    'leafy-vegetables',
+    'leafy-greens',
+    'upright-herb',
+    'hardy-perennial',
+    10,
+    16,
+    24,
+    'C',
+    // NC State Extension Plant Toolbox: "‘Cataria’ catmint requires good drainage and full sun to
+    // part shade but tolerates many soil types. The plant is resistant to drought, dry soil, and
+    // air pollution but is somewhat intolerant of heat and humidity, so give it some afternoon
+    // shade"
+    1,
+    // as anise-hyssop
+    120,
+    // UGA Bulletin 1170, herb cultivation table: "Catnip (p) Spring 18 in."
+    46,
+    // UW-Madison Extension: "Plants can grow up to 3 feet tall and wide under ideal conditions",
+    // the stated 3 ft
+    0.91,
+    // the same sentence
+    0.91,
+    {
+      life: 'perennial',
+      // UW-Madison Extension: "Catnip is a vigorous and weedy herbaceous perennial native to
+      // Eurasia in the mint family (Lamiaceae) that is hardy in zones 3a to 9b", the zone 3a floor
+      coldC: -40,
+      // Ferguson et al. 1990 (Purdue NewCROP), for North Carolina (Raleigh-Durham International
+      // AP, NC, USW00013722, Mar 31 median last spring freeze): "Catnip is usually ready to
+      // harvest in August a time when the weather is too humid in North Carolina for proper
+      // curing", picking starts 123 days after the freeze and runs 30 days
+      harvest: {
+        afterFreezeDays: 123,
+        // the source's own median season at USW00013722, Mar 31 to Nov 4 (NCEI 1991-2020)
+        seasonDays: 218,
+        citations: [
+          'ferguson-1990-catnip-north-carolina',
+          'noaa-ncei-2021-climate-normals-1991-2020',
+        ],
+      },
+      harvestDays: 30,
     },
   ],
 
@@ -3849,6 +4565,53 @@ export const CROP_ROWS: readonly CropRow[] = [
         ],
       },
       harvestDays: 31,
+    },
+  ],
+  [
+    'goji',
+    'Lycium barbarum',
+    'Solanaceae',
+    'goji|goji berry|wolfberry|matrimony vine',
+    // laubGroup, dliClass, habit, archetype, DLI figures and tier as elderberry, the catalog's
+    // other cool-perennial berry shrub. No usable ECOCROP sheet, so the envelope is the
+    // archetype's
+    'berries',
+    'cane-bush-berries',
+    'bush',
+    'cool-perennial',
+    8,
+    14,
+    22,
+    'C',
+    // Utah State University Extension: "Plant goji in a location with full sun (although some
+    // shade can be tolerated)"
+    0,
+    // as elderberry
+    1095,
+    // Utah State University Extension: "If establishing multiple rows, leave 2 to 4 feet between
+    // plants within a row and 6 to 8 feet between rows", in-row midpoint 3 ft x row midpoint
+    // 7 ft, sqrt(3 x 7) = 4.58 ft
+    140,
+    // Utah State University Extension: "When pruned, plants are typically 3 to 6 feet tall but if
+    // left without cultivation they can reach 12 feet", the pruned 4.5 ft midpoint
+    1.37,
+    // Utah State University Extension, the room one plant needs: "about 4 to 5 feet in all
+    // directions", the 4.5 ft midpoint, since no source measures a spread
+    1.37,
+    {
+      // Invasive status: on no state list. The National Park Service's Mid-Atlantic Exotic Plant
+      // Management Team lists it ("matrimony vine (Lycium barbarum L.)"), a working list with no
+      // rule attached, and HEAR's PIER weed risk assessment scores it high risk (12)
+      life: 'woody-perennial',
+      // Utah State University Extension: "Both begin bearing 1 to 2 years after planting, although
+      // they will not reach full production for 3 to 5 years", the midpoint
+      yearsToMature: 1.5,
+      // Utah State University Extension: "Goji are recommended for zones 4 to 7", the zone 4a
+      // floor
+      coldC: -34.4,
+      deciduous: true,
+      // No harvest override: Utah State's "They will fruit from mid-summer to late fall" gives
+      // season words and no months, so the row keeps the catalog window
     },
   ],
   [
@@ -4660,6 +5423,57 @@ export const CROP_ROWS: readonly CropRow[] = [
     },
   ],
   [
+    'jujube',
+    'Ziziphus jujuba',
+    'Rhamnaceae',
+    'jujube|chinese date',
+    // laubGroup, dliClass, habit, DLI figures, tier and maxRsr as pomegranate, the catalog's other
+    // small, drought-tolerant fruit tree of warm, dry climates. Hardy to -20 F, a temperate
+    // tree's hardiness, so the archetype is temperate-tree where pomegranate's is subtropical. No
+    // usable ECOCROP sheet, so the envelope is the archetype's
+    'fruits',
+    'cane-bush-berries',
+    'spreading-tree',
+    'temperate-tree',
+    15,
+    20,
+    30,
+    'C',
+    // Texas A&M AgriLife Extension: "The plants grow best under full sun and in well-drained
+    // soils"
+    0,
+    // a fruit cycle of the full year, as pomegranate
+    365,
+    // Texas A&M AgriLife Extension: "Space them 6 to 12 feet apart", the 9 ft midpoint
+    274,
+    // NMSU Guide H-330: "Jujube is a deciduous fruit/ornamental tree, 15 to 30 ft in height, with
+    // very hard, strong wood", the 22.5 ft midpoint
+    6.86,
+    // NC State Extension Plant Toolbox: "Width: 10 ft. 0 in. - 30 ft. 0 in.", the 20 ft midpoint
+    6.1,
+    {
+      life: 'woody-perennial',
+      // NMSU Guide H-330: "Most cultivars will produce a few fruits in the second year"
+      yearsToMature: 2,
+      // UF/IFAS HS1477: "Established trees are cold tolerant to -20°F (-29°C), yet they grow well
+      // in hot, humid conditions", -28.9 C. The University of Arizona gives -28 F
+      coldC: -28.9,
+      maxRsr: 0.1,
+      maxRsrTier: 'C',
+      // UF/IFAS HS1477, for Florida (Gainesville Regional AP, FL, USW00012816, Mar 3 median last
+      // spring freeze): "Fruits are borne on new growth (Figure 14) and expand through the summer
+      // months, typically ripening in August and September in Florida", picking starts 151 days
+      // after the freeze and runs 60 days
+      harvest: {
+        afterFreezeDays: 151,
+        // the source's own median season at USW00012816, Mar 3 to Dec 2 (NCEI 1991-2020)
+        seasonDays: 274,
+        citations: ['ufifas-2024-jujube-florida', 'noaa-ncei-2021-climate-normals-1991-2020'],
+      },
+      harvestDays: 60,
+    },
+  ],
+  [
     'hazelnut',
     'Corylus avellana',
     'Betulaceae',
@@ -5140,6 +5954,52 @@ export const CROP_ROWS: readonly CropRow[] = [
     },
   ],
   [
+    'sea-buckthorn',
+    'Hippophae rhamnoides',
+    'Elaeagnaceae',
+    'sea buckthorn|seaberry',
+    // laubGroup, dliClass, habit, archetype, DLI figures and tier as aronia, the catalog's other
+    // hardy cool-perennial berry shrub
+    'berries',
+    'cane-bush-berries',
+    'bush',
+    'cool-perennial',
+    8,
+    14,
+    22,
+    'C',
+    // NDSU Extension F2195: "Light: Full sun to partial shade"
+    1,
+    // as aronia
+    1095,
+    // Manitoba Agriculture: "Plants should be spaced three feet (1 m) between plants and 13 feet
+    // (4 m) between rows", sqrt(3 x 13) = 6.24 ft
+    190,
+    // Manitoba Agriculture: "The sea buckthorn is a medium deciduous shrub six to 13 feet (2 to 4
+    // m) in height", the 9.5 ft midpoint
+    2.9,
+    // UConn Plant Database's "10' to 25' tall with an equal or greater width" is a landscape plant
+    // of up to 25 ft, against the cultivated 6 to 13 ft above, so this row's own spacing, sqrt(3 x
+    // 13) = 6.24 ft, stands in for its width, as black walnut's does
+    1.9,
+    {
+      // Invasive status: Maine's Do Not Sell list (Chapter 273, from January 1, 2024): "The
+      // invasive plants listed below are illegal to import, export, buy, sell or intentionally
+      // propagate for sale or distribution in Maine ... Hippophae rhamnoides | Sea buckthorn |
+      // January 1, 2024". HEAR's PIER weed risk assessment scores it high risk (9.5)
+      life: 'woody-perennial',
+      // Manitoba Agriculture: "Sea buckthorn plants are very hardy and can withstand temperatures
+      // of -45 to 103 °F (-43 to 40 °C)", -45 F = -42.8 C
+      coldC: -42.8,
+      // as aronia: no source gives years to first fruit
+      yearsToMature: 4,
+      // the deciduous shrub of the height sentence
+      deciduous: true,
+      // No harvest override: the USDA Forest Service seed manual's "ripen in September or
+      // October" names no region, so the row keeps the catalog window
+    },
+  ],
+  [
     'hardy-kiwi',
     'Actinidia arguta',
     'Actinidiaceae',
@@ -5532,6 +6392,57 @@ export const CROP_ROWS: readonly CropRow[] = [
     },
   ],
   [
+    'malanga',
+    'Xanthosoma sagittifolium',
+    'Araceae',
+    'malanga|tannia|yautia|cocoyam',
+    // laubGroup, dliClass, habit, archetype, DLI figures, tier and laubNote as taro, the same
+    // family's corm crop
+    'tubers-root-crops',
+    'root-tuber',
+    'upright-herb',
+    'hot',
+    8,
+    14,
+    20,
+    'C',
+    // FAO 1994 (Neglected crops, Giacometti and León): "The Xanthosoma species are plants of the
+    // tropical rain forest and, although in their natural habitat they grow under the forest
+    // canopy, under cultivation they are usually sown with full exposure to sunlight"
+    1,
+    // UF/IFAS Vegetable Production Handbook ch. 15: "it is typically planted in the spring
+    // because the crop requires 9-10 months to reach maturity and can be injured by frosts", the
+    // 9.5-month midpoint, 285 days from planting
+    285,
+    // UF/IFAS Vegetable Production Handbook ch. 15, Table 5, malanga column: "Distance between
+    // rows (in) 48 52 52 Distance between plants (ft) 2 1 1", 52 in rows x 12 in plants,
+    // sqrt(52 x 12) = 25 in
+    63,
+    // Prairie View A&M University: "It can be 1.3 to 2.5 meters tall", the 1.9 m midpoint
+    1.9,
+    // as taro: no source gives malanga a spread
+    1,
+    {
+      // Invasive status: Florida Invasive Species Council 2025 Category II in north, central and
+      // south Florida ("Xanthosoma sagittifolium | arrowleaf elephant's ear | N, C, S | II"), a
+      // list with no regulatory force
+      life: 'perennial',
+      // as taro: harvested in its first year
+      yearsToMature: 1,
+      // ECOCROP sheet 2168 killing temperature during rest, as mango. UF/IFAS gives no degrees
+      coldC: 0,
+      // ECOCROP sheet 2168: temperature 10 / 20-28 / 35 C, rainfall 750 / 1000-2000 / 6000 mm,
+      // pH 4.5 / 5.5-7 / 7.8, cycle 120 to 365 days
+      temp: [10, 20, 28, 35],
+      rain: [750, 1000, 2000, 6000],
+      ph: [4.5, 5.5, 7, 7.8],
+      cycle: [120, 365],
+      // ECOCROP sheet 2168 climate zones: Aw, Ar
+      koppen: [...AW, ...AR],
+      laubNote: OUTSIDE_SCOPE_NOTE,
+    },
+  ],
+  [
     'yam-greater',
     'Dioscorea alata',
     'Dioscoreaceae',
@@ -5852,6 +6763,74 @@ export const CROP_ROWS: readonly CropRow[] = [
     },
   ],
   [
+    'grapefruit',
+    'Citrus x paradisi',
+    'Rutaceae',
+    'grapefruit',
+    // laubGroup, dliClass, habit, archetype, DLI figures, tier and maxRsr as orange
+    'fruits',
+    'cane-bush-berries',
+    'spreading-tree',
+    'subtropical',
+    15,
+    20,
+    30,
+    'C',
+    // UF/IFAS HS132: "Citrus trees tolerate light shade but will be more productive if grown in
+    // full sunlight", said of all citrus. NC State's Plant Toolbox asks full sun for grapefruit
+    1,
+    // ECOCROP sheet 717 cycle 60 to 365 days, a fruit cycle of the full year, as orange
+    365,
+    // UF/IFAS HS132: "For home plantings, the spacing recommended should be a minimum of 15 feet
+    // between trees", the stated minimum
+    457,
+    // NC State Extension Plant Toolbox: "Height: 15 ft. 0 in. - 30 ft. 0 in.", the 22.5 ft
+    // midpoint
+    6.86,
+    // NC State Extension Plant Toolbox: "Width: 15 ft. 0 in. - 30 ft. 0 in.", the 22.5 ft
+    // midpoint
+    6.86,
+    {
+      life: 'woody-perennial',
+      // Clemson HGIC 1364: "Young, grafted oranges, grapefruits, and mandarins must grow for 5
+      // years before they will flower and produce fruit". Texas A&M (Sauls) has most budded
+      // trees bearing by the third year
+      yearsToMature: 5,
+      // UC Cooperative Extension, Sacramento County (GN127): "Citrus tree leaves and branches can
+      // be damaged below the temperatures shown on page 4 (these are not hard and fast figures)
+      // ... Lemons and grapefruit 26°F", -3.3 C
+      coldC: -3.3,
+      deciduous: false,
+      // ECOCROP sheet 717: temperature 13 / 18-32 / 42 C, rainfall 300 / 1500-2300 / 4000 mm,
+      // pH 6 / 6.5-7.3 / 8.3, cycle 60 to 365 days
+      temp: [13, 18, 32, 42],
+      rain: [300, 1500, 2300, 4000],
+      ph: [6, 6.5, 7.3, 8.3],
+      cycle: [60, 365],
+      // ECOCROP sheet 717 climate zones: Aw, Ar, Bs, Cs
+      koppen: [...AW, ...AR, ...BS, ...CS],
+      // FAO-56 Table 22, "Citrus - 70% canopy": Zr 1.2-1.5 m, p 0.50, the 1.35 m midpoint
+      zr: 1.35,
+      p: 0.5,
+      maxRsr: 0.1,
+      maxRsrTier: 'C',
+      // UF/IFAS HS132 Table 1, for Florida, with Orlando standing in (Orlando Intl AP, FL,
+      // USW00012815, Jan 25 median last spring freeze): "Marsh (White flesh) ... Midseason
+      // (Nov-May)", picking starts 280 days after the freeze and runs 211 days
+      harvest: {
+        afterFreezeDays: 280,
+        // the source's own median season at USW00012815, Jan 25 to Jan 10 (NCEI 1991-2020), the
+        // first fall freeze falling in the next January
+        seasonDays: 350,
+        citations: [
+          'ufifas-2015-citrus-culture-home-landscape',
+          'noaa-ncei-2021-climate-normals-1991-2020',
+        ],
+      },
+      harvestDays: 211,
+    },
+  ],
+  [
     'lime',
     'Citrus x latifolia',
     'Rutaceae',
@@ -6079,6 +7058,287 @@ export const CROP_ROWS: readonly CropRow[] = [
       // No harvest override: UF/IFAS MG373's "Season: August-October, February-March" is south
       // Florida's, where NCEI's 1991-2020 normals give no median freeze (Homestead, USC00084095,
       // flag Y), so the row keeps the catalog window, as mango
+      laubNote: OUTSIDE_SCOPE_NOTE,
+    },
+  ],
+  [
+    'jackfruit',
+    'Artocarpus heterophyllus',
+    'Moraceae',
+    'jackfruit|jack',
+    // laubGroup, dliClass, habit, archetype, DLI figures, tier, maxRsr and laubNote as mango, the
+    // catalog's other tropical tree fruit
+    'fruits',
+    'cane-bush-berries',
+    'spreading-tree',
+    'subtropical',
+    15,
+    20,
+    30,
+    'C',
+    // UF/IFAS HS882: "In general, jackfruit trees should be planted in full sun for best growth
+    // and fruit production"
+    0,
+    // ECOCROP sheet 459 cycle 210 to 365 days, a fruit cycle of the full year, as mango
+    365,
+    // UF/IFAS HS882: "If little or no pruning is planned, then jackfruit in the home landscape
+    // should be planted 25 to 30 feet (7.6-9.1 m) away from other trees and structures", the
+    // 27.5 ft midpoint
+    838,
+    // UF/IFAS HS882: "Erect, evergreen, fairly large tree, 30 to 40 feet (9-12 m) tall in
+    // Florida", the 35 ft midpoint
+    10.67,
+    // Elevitch and Manner 2006 (Permanent Agriculture Resources), outside the usual source
+    // classes and the one source that gives a spread: "The canopy diameter at 5 years old ranges
+    // from 3.5-6.7 m (11-22 ft) and can reach 10 m or more in older trees", the stated floor
+    10,
+    {
+      life: 'woody-perennial',
+      // UF/IFAS HS882: "Jackfruit from seed may be more precocious than many other fruit, and
+      // trees may begin production in the 3rd to 4th year", the midpoint
+      yearsToMature: 3.5,
+      // UF/IFAS HS882: "Jackfruit leaves may be damaged at 32°F (0°C), branches at 30°F (-1°C),
+      // and branches and trees may be killed at 28°F (-2°C)", 28 F = -2.2 C
+      coldC: -2.2,
+      // evergreen, as the height sentence says
+      deciduous: false,
+      // ECOCROP sheet 459: temperature 16 / 20-30 / 34 C, rainfall 700 / 1500-3000 / 4200 mm,
+      // pH 4.3 / 5.5-7.5 / 8, cycle 210 to 365 days
+      temp: [16, 20, 30, 34],
+      rain: [700, 1500, 3000, 4200],
+      ph: [4.3, 5.5, 7.5, 8],
+      cycle: [210, 365],
+      // ECOCROP sheet 459 climate zones: Aw, Ar, Cf, Cs, Cw
+      koppen: [...AW, ...AR, ...CF, ...CS, ...CW],
+      maxRsr: 0.1,
+      maxRsrTier: 'C',
+      // No harvest override: UF/IFAS HS882's "The main fruiting season is in summer and fall" is
+      // south Florida's, where NCEI's 1991-2020 normals give no median freeze (Miami Intl AP,
+      // USW00012839, flag Y), so the row keeps the catalog window, as mango
+      laubNote: OUTSIDE_SCOPE_NOTE,
+    },
+  ],
+  [
+    'breadfruit',
+    'Artocarpus altilis',
+    'Moraceae',
+    'breadfruit|ulu',
+    // laubGroup, dliClass, habit, archetype, DLI figures, tier, maxRsr and laubNote as mango, the
+    // catalog's other tropical tree fruit
+    'fruits',
+    'cane-bush-berries',
+    'spreading-tree',
+    'subtropical',
+    15,
+    20,
+    30,
+    'C',
+    // Ragone 2006 (Permanent Agriculture Resources, outside the usual source classes): "The tree
+    // does best in full sun and forms the overstory canopy in traditional mixed agroforests"
+    0,
+    // ECOCROP sheet 3423 cycle 300 to 365 days, a fruit cycle of the full year, as mango
+    365,
+    // University of Guam 2020: "A recommended spacing is 25 feet between trees in the rows and
+    // 50 feet between rows", the 25 ft between trees: the 50 ft rows leave room for vehicles,
+    // which a garden bed doesn't need
+    762,
+    // USDA NRCS Florida Plant Materials Fact Sheet 6, breadfruit: "unpruned to 40-50 ft (12-15
+    // m)", the 45 ft midpoint
+    13.72,
+    // Ragone 2006: "The canopy is generally about two-thirds of the height", two thirds of the
+    // 45 ft height above, 30 ft, since no source gives the spread in feet or meters
+    9.14,
+    {
+      life: 'woody-perennial',
+      // USDA NRCS Florida Plant Materials Fact Sheet 6: "vegetative or grafted trees- 2-4 yr", the
+      // midpoint
+      yearsToMature: 3,
+      // USDA NRCS Florida Plant Materials Fact Sheet 6: "Killed <40 F (4.4 C)"
+      coldC: 4.4,
+      // as mango
+      deciduous: false,
+      // ECOCROP sheet 3423: temperature 16 / 21-33 / 40 C, rainfall 1000 / 1500-3000 / 3500 mm,
+      // pH 4.3 / 5.5-6.5 / 8.7, cycle 300 to 365 days
+      temp: [16, 21, 33, 40],
+      rain: [1000, 1500, 3000, 3500],
+      ph: [4.3, 5.5, 6.5, 8.7],
+      cycle: [300, 365],
+      // ECOCROP sheet 3423 climate zones: Aw, Ar
+      koppen: [...AW, ...AR],
+      maxRsr: 0.1,
+      maxRsrTier: 'C',
+      // No harvest override: the USDA Forest Service's "Fruits mature mainly from June to August
+      // in Hawaii" is lowland Hawaii's, where NCEI's 1991-2020 normals give no median freeze
+      // (Honolulu Intl AP, USW00022521, flag Y), so the row keeps the catalog window, as mango
+      laubNote: OUTSIDE_SCOPE_NOTE,
+    },
+  ],
+  [
+    'coconut',
+    'Cocos nucifera',
+    'Arecaceae',
+    'coconut|coconut palm',
+    // laubGroup, dliClass, archetype, DLI figures, tier, maxRsr and laubNote as mango, the
+    // catalog's other tropical tree fruit. The habit is columnar-tree, the nearest to a palm's
+    // single trunk and crown, since the catalog has no palm habit
+    'fruits',
+    'cane-bush-berries',
+    'columnar-tree',
+    'subtropical',
+    15,
+    20,
+    30,
+    'C',
+    // UF/IFAS HS40: "Coconut palms require full sunlight and are tolerant to wind and to
+    // temporary flooding"
+    0,
+    // ECOCROP sheet 744 cycle 270 to 365 days, a fruit cycle of the full year, as mango
+    365,
+    // UF/IFAS HS40: "Commercially, the trees are planted at spacings of 18-30 feet (5.5-9.1 m)
+    // apart", the 24 ft midpoint
+    732,
+    // CTAHR Circular 478: "Dwarf coconut palms rarely grow to be more than 25 feet and bear fruit
+    // a little sooner", the dwarf type it recommends for home gardens
+    7.62,
+    // Chan and Elevitch 2006 (Permanent Agriculture Resources), outside the usual source classes
+    // and the one source that gives a spread: "The canopy has a diameter of 8-9 m (26-30 ft)",
+    // the 8.5 m midpoint, measured on the tall type
+    8.5,
+    {
+      // Invasive status: Florida Invasive Species Council Category II in south Florida ("Cocos
+      // nucifera coconut palm S"), a list with no regulatory force
+      life: 'woody-perennial',
+      // UF/IFAS HS40: "The coconut palm starts fruiting 6-10 years after the seed germinates and
+      // reaches full production at 15-20 years of age", the 8-year midpoint
+      yearsToMature: 8,
+      // UF/IFAS HS40: "Coconut palms will be injured and may be killed by temperatures below 32°F
+      // (0°C)"
+      coldC: 0,
+      // evergreen, as mango, where the habit's default is deciduous
+      deciduous: false,
+      // ECOCROP sheet 744: temperature 14 / 22-34 / 38 C, rainfall 650 / 1200-2400 / 4000 mm,
+      // pH 4.3 / 5-8 / 8.7, cycle 270 to 365 days
+      temp: [14, 22, 34, 38],
+      rain: [650, 1200, 2400, 4000],
+      ph: [4.3, 5, 8, 8.7],
+      cycle: [270, 365],
+      // ECOCROP sheet 744 climate zones: Aw, Ar
+      koppen: [...AW, ...AR],
+      maxRsr: 0.1,
+      maxRsrTier: 'C',
+      // UF/IFAS HS40: "Harvesting of coconuts occurs throughout the year"
+      harvest: { wholeSeason: true, citations: ['ufifas-2020-coconut-palm-florida'] },
+      laubNote: OUTSIDE_SCOPE_NOTE,
+    },
+  ],
+  [
+    'cashew',
+    'Anacardium occidentale',
+    'Anacardiaceae',
+    'cashew',
+    // laubGroup, dliClass, habit, archetype, DLI figures, tier, maxRsr and laubNote as mango, the
+    // same family's tropical tree fruit
+    'fruits',
+    'cane-bush-berries',
+    'spreading-tree',
+    'subtropical',
+    15,
+    20,
+    30,
+    'C',
+    // UF/IFAS HS377: "In general, cashew trees should be planted in full sun for best growth and
+    // fruit production"
+    0,
+    // a fruit cycle of the full year, as mango, though ECOCROP sheet 401 gives 190 to 260 days
+    365,
+    // UF/IFAS HS377: "Cashew trees in the home landscape should be planted 15 to 20 feet or more
+    // (4.6 to 6.1 m) away from buildings, electrical wires, or other trees", the 17.5 ft midpoint
+    533,
+    // UF/IFAS HS377: "Under ideal tropical conditions, the cashew is an attractive, erect, 20- to
+    // 35-ft. evergreen tree", the 27.5 ft midpoint
+    8.38,
+    // no source gives cashew a canopy spread, so the 17.5 ft spacing above stands in, as
+    // pistachio's does
+    5.33,
+    {
+      life: 'woody-perennial',
+      // UF/IFAS HS377: "Seedling trees usually begin fruit production after 3 to 4 years", the
+      // midpoint
+      yearsToMature: 3.5,
+      // as mango: UF/IFAS HS377 says "The tree will not tolerate even short exposures to frost
+      // (freezing temperatures)" and gives no degrees, and ECOCROP sheet 401 has no killing
+      // temperature
+      coldC: -1,
+      // evergreen, as the height sentence says
+      deciduous: false,
+      // ECOCROP sheet 401: temperature 5 / 15-35 / 46 C, rainfall 400 / 750-1600 / 4000 mm,
+      // pH 3.8 / 4.5-6.5 / 8.7, cycle 190 to 260 days
+      temp: [5, 15, 35, 46],
+      rain: [400, 750, 1600, 4000],
+      ph: [3.8, 4.5, 6.5, 8.7],
+      cycle: [190, 260],
+      // ECOCROP sheet 401 climate zones: Aw, Bs, Cs, Cw
+      koppen: [...AW, ...BS, ...CS, ...CW],
+      maxRsr: 0.1,
+      maxRsrTier: 'C',
+      // No harvest override: the FAO monograph's "In India the main crop is ready for harvest
+      // between March and April" is India's, which no NCEI station covers, and UF/IFAS HS377
+      // limits US planting to frost-free places, so the row keeps the catalog window, as mango
+      laubNote: OUTSIDE_SCOPE_NOTE,
+    },
+  ],
+  [
+    'lychee',
+    'Litchi chinensis',
+    'Sapindaceae',
+    'lychee|litchi',
+    // laubGroup, dliClass, habit, archetype, DLI figures, tier, maxRsr and laubNote as mango, the
+    // catalog's other tropical tree fruit
+    'fruits',
+    'cane-bush-berries',
+    'spreading-tree',
+    'subtropical',
+    15,
+    20,
+    30,
+    'C',
+    // UF/IFAS HS6: "In general, lychee trees should be planted in full sun for best growth and
+    // fruit production"
+    0,
+    // a fruit cycle of the full year, as mango, though ECOCROP sheet 1357 gives 100 to 270 days
+    365,
+    // UF/IFAS HS6: "Lychee trees in the home landscape should be planted 25 to 30 feet or more
+    // (7.6 to 9.1 m) away from buildings, other trees, and electrical wires", the 27.5 ft
+    // midpoint
+    838,
+    // UF/IFAS ENH-523: "Lychee trees can eventually reach 30 to 50-feet in height with a 30 to
+    // 50-foot spread", the 40 ft midpoint
+    12.19,
+    // the same sentence, the 40 ft midpoint
+    12.19,
+    {
+      life: 'woody-perennial',
+      // UF/IFAS HS6: "Air-layered or grafted trees begin to bear fruit in 3 to 5 years", the
+      // midpoint
+      yearsToMature: 4,
+      // UF/IFAS HS6: "temperatures down to 24° to 25°F (-3° to -4°C) cause extensive damage or
+      // death to large trees if exposed for several hours", the 24.5 F midpoint, -4.2 C
+      coldC: -4.2,
+      // as mango
+      deciduous: false,
+      // ECOCROP sheet 1357: temperature 15 / 20-35 / 40 C, rainfall 700 / 1000-1700 / 2800 mm,
+      // pH 5 / 5.5-6.5 / 8.5, cycle 100 to 270 days
+      temp: [15, 20, 35, 40],
+      rain: [700, 1000, 1700, 2800],
+      ph: [5, 5.5, 6.5, 8.5],
+      cycle: [100, 270],
+      // ECOCROP sheet 1357 climate zones: Aw, Cf, Cs, Cw
+      koppen: [...AW, ...CF, ...CS, ...CW],
+      maxRsr: 0.1,
+      maxRsrTier: 'C',
+      // No harvest override: UF/IFAS HS6's "Mid-May to early July in Florida, depending upon
+      // variety" is south Florida's, where NCEI's 1991-2020 normals give no median freeze (Miami
+      // Intl AP, USW00012839, flag Y), so the row keeps the catalog window, as mango
       laubNote: OUTSIDE_SCOPE_NOTE,
     },
   ],
@@ -6330,6 +7590,55 @@ export const CROP_ROWS: readonly CropRow[] = [
     },
   ],
   [
+    'foxtail-millet',
+    'Setaria italica',
+    'Poaceae',
+    'foxtail millet|italian millet',
+    // laubGroup, dliClass, habit, archetype, DLI figures and tier as finger-millet, the catalog's
+    // other small-grained millet. University of Kentucky AGR-233: "Foxtail millet should be
+    // planted after there is no chance of frost and when the soil temperature has reached at
+    // least 65ºF"
+    'corn-c4',
+    'forages-c3-pasture',
+    'clumping-grass',
+    'hot',
+    12,
+    20,
+    30,
+    'C',
+    // as finger-millet: no source gives foxtail millet a light requirement
+    0,
+    // University of Missouri Extension G4164: "Maturity varies with foxtail, proso, Japanese and
+    // browntop millet being the fastest maturing types (60-90 days depending on planting date and
+    // variety and weather)", the 75-day midpoint from planting
+    75,
+    // ICAR-IIMR package of practices: "25-30 cm between rows and 8-10 cm between plants within a
+    // row", row midpoint 27.5 cm x in-row midpoint 9 cm, sqrt(27.5 x 9) = 15.7 cm
+    16,
+    // USDA NRCS Plant Guide: "It is an introduced, annual, warm-season crop that grows 2-5 ft
+    // (60-152 cm) tall", the 3.5 ft midpoint
+    1.07,
+    // as finger-millet: no source gives foxtail millet a spread
+    0.4,
+    {
+      // Invasive status: on no state list. The NRCS Plant Guide says it is considered invasive
+      // in some US regions and its use is discouraged in Tennessee, and HEAR's PIER pages record
+      // the Hawaii-Pacific Weed Risk Assessment as "High risk, score 9"
+      // ECOCROP sheet 9732: temperature 5 / 16-26 / 35 C, rainfall 300 / 500-700 / 4000 mm,
+      // pH 5.5 / 6-6.8 / 8.3, cycle 60 to 120 days
+      temp: [5, 16, 26, 35],
+      rain: [300, 500, 700, 4000],
+      ph: [5.5, 6, 6.8, 8.3],
+      cycle: [60, 120],
+      // ECOCROP sheet 9732 climate zones: Aw, Bs, Cs
+      koppen: [...AW, ...BS, ...CS],
+      // FAO-56 Table 22 has no foxtail millet row, so the generic "Millet", as finger-millet:
+      // Zr 1.0-2.0 m, p 0.55, the 1.5 m midpoint
+      zr: 1.5,
+      p: 0.55,
+    },
+  ],
+  [
     'sorghum-grain',
     'Sorghum bicolor',
     'Poaceae',
@@ -6400,6 +7709,57 @@ export const CROP_ROWS: readonly CropRow[] = [
       harvestDays: 30,
       nfix: true,
       laubNote: LAUB_EXCLUDED_NOTE,
+    },
+  ],
+  [
+    'adzuki-bean',
+    'Vigna angularis',
+    'Fabaceae',
+    'adzuki bean|azuki bean|red bean',
+    // laubGroup, dliClass, habit, archetype, DLI figures, tier and harvestDays as mung-bean, the
+    // same genus's dry bean. No laubNote: the grain-legume trials measured dry seed, the harvest
+    // here, and mung-bean's note is for a species Laub et al. exclude by name. UF/IFAS HS549:
+    // "They need cool nights for best production, but will not tolerate frosts and freezes"
+    'grain-legumes',
+    'grain-legumes',
+    'bush',
+    'hot',
+    14,
+    20,
+    28,
+    'C',
+    // ECOCROP sheet 2147 light 'very bright' to 'clear skies', as mung-bean takes its sheet's
+    0,
+    // UF/IFAS HS549: "Adzuki beans need about 120 days from sowing to the time the seeds and pods
+    // are dry"
+    120,
+    // UF/IFAS HS549: "Sow seeds 3/4-1 inch deep, thinning the plants to stand about 2-3 inches
+    // apart in the row" and "Space rows 12-18 inches apart", the 2.5 in midpoint x the 15 in row
+    // midpoint, sqrt(2.5 x 15) = 6.1 in
+    16,
+    // UF/IFAS HS549: "The plant is erect, 1-2 feet high, although some gardeners have reported
+    // them to be indeterminate, growing and producing until frost", the 1.5 ft midpoint
+    0.46,
+    // as mung-bean: no source gives adzuki bean a spread
+    0.4,
+    {
+      // the name UF/IFAS HS549 files it under
+      synonyms: ['Phaseolus angularis'],
+      // ECOCROP sheet 2147: temperature 5 / 15-30 / 36 C, rainfall 530 / 900-1300 / 1800 mm,
+      // pH 5 / 5.5-6.5 / 7.5, cycle 60 to 190 days
+      temp: [5, 15, 30, 36],
+      rain: [530, 900, 1300, 1800],
+      ph: [5, 5.5, 6.5, 7.5],
+      cycle: [60, 190],
+      // ECOCROP sheet 2147 climate zones: Aw, Ar, Cf, Cs, Cw, Do, Dc, Df, Dw. Do and Cf both read
+      // onto Cfb, and Dc and Df both read onto Dfb, so the list is deduped
+      koppen: [...new Set([...AW, ...AR, ...CF, ...CS, ...CW, ...DO, ...DC, ...DF, ...DW])],
+      harvestDays: 30,
+      // FAO-56 Table 22 has no adzuki row, so the generic "Beans, dry and Pulses": Zr 0.6-0.9 m,
+      // p 0.45, the 0.75 m midpoint
+      zr: 0.75,
+      p: 0.45,
+      nfix: true,
     },
   ],
   [
@@ -6637,6 +7997,114 @@ export const CROP_ROWS: readonly CropRow[] = [
       // ECOCROP sheet 749 climate zones: Aw, Cf, Cw
       koppen: [...AW, ...CF, ...CW],
       laubNote: LAUB_EXCLUDED_NOTE,
+    },
+  ],
+  [
+    'black-pepper',
+    'Piper nigrum',
+    'Piperaceae',
+    'black pepper|peppercorn',
+    // laubGroup, dliClass, archetype, DLI figures and tier as coffee, the catalog's other
+    // shade-grown tropical crop, with cacao's laubNote, since coffee's is for a species Laub et
+    // al. exclude by name. The habit is a climber's, trained up a living support
+    'berries',
+    'cane-bush-berries',
+    'vining-trellised',
+    'subtropical',
+    6,
+    12,
+    18,
+    'C',
+    // Kerala Agricultural University 2016: "When pepper is grown in open places, shading and
+    // watering of the young seedlings may be done during summer months for the first 1 to 3
+    // years according to necessity"
+    2,
+    // ECOCROP sheet 1714 cycle 180 to 270 days, the 225 midpoint, as coffee takes its sheet's
+    225,
+    // Kerala Agricultural University 2016: "The spacing recommended is 3 m x 3 m on plain lands",
+    // the spacing of the supports, two vines to each
+    300,
+    // Tamil Nadu Agricultural University: "Prune excessive foliage of the standards and limit the
+    // height of the standards to about 6 m", the support the vine is trained up
+    6,
+    // no source gives the vine a spread, so the 3 m spacing of its support stands in, as
+    // passion-fruit's planting distance does
+    3,
+    {
+      life: 'woody-perennial',
+      // Tamil Nadu Agricultural University: "Pepper vines start yielding usually from the 3rd or
+      // 4th year", the midpoint
+      yearsToMature: 3.5,
+      // Kerala Agricultural University 2016: "The plant tolerates a minimum temperature of 10oC
+      // and maximum of 40oC, the optimum being 20 - 30oC"
+      coldC: 10,
+      // ECOCROP sheet 1714: temperature 10 / 22-35 / 40 C, rainfall 2000 / 2500-4000 / 5500 mm,
+      // pH 5 / 6-7 / 7.5, cycle 180 to 270 days
+      temp: [10, 22, 35, 40],
+      rain: [2000, 2500, 4000, 5500],
+      ph: [5, 6, 7, 7.5],
+      cycle: [180, 270],
+      // ECOCROP sheet 1714 climate zones: Aw, Ar
+      koppen: [...AW, ...AR],
+      // No harvest override: Tamil Nadu Agricultural University's "Harvesting is done from the
+      // November to February in the plains and January to March in the hills" is south India's,
+      // which no NCEI station covers, so the row keeps the catalog window, as mango
+      laubNote: OUTSIDE_SCOPE_NOTE,
+    },
+  ],
+  [
+    'vanilla',
+    'Vanilla planifolia',
+    'Orchidaceae',
+    'vanilla|vanilla orchid',
+    // laubGroup, dliClass, habit, archetype, DLI figures, tier and laubNote as black-pepper, the
+    // catalog's other tropical climber grown in shade, after coffee
+    'berries',
+    'cane-bush-berries',
+    'vining-trellised',
+    'subtropical',
+    6,
+    12,
+    18,
+    'C',
+    // Childers 1948 (USDA, Puerto Rico): "Vanilla appears to grow and fruit best under shade
+    // admitting from one-third to one-half full sunlight"
+    2,
+    // ECOCROP sheet 2131 cycle 180 to 300 days, the 240 midpoint, as coffee takes its sheet's
+    240,
+    // UF/IFAS HS1348: "Spacing recommendations are to plant vines 1-3 m (3-10 ft) apart with
+    // 2.5-3 m (8-10 ft) between rows", the 2 m in-row midpoint x the 2.75 m row midpoint,
+    // sqrt(2 x 2.75) = 2.35 m
+    235,
+    // UF/IFAS HS1348: "Supports vary in height but are usually no more than 2 m (6 ft) tall to
+    // facilitate pollination once vines mature", the support the vine is looped along
+    2,
+    // no source gives the vine a spread, so the 2 m in-row spacing above stands in, as
+    // black-pepper's does
+    2,
+    {
+      // a herbaceous perennial, as banana and pineapple, where coffee and pepper are woody
+      life: 'perennial',
+      // Childers 1948: "They usually begin fruiting the third year after planting and continue
+      // fruiting for the next 3 to 5 years before dying"
+      yearsToMature: 3,
+      // the freezing point, as coffee: UF/IFAS HS1348 says "Vanilla is sensitive to chilling and
+      // can be killed by freezing temperatures" and gives no degrees, and ECOCROP sheet 2131 has
+      // no killing temperature
+      coldC: 0,
+      // ECOCROP sheet 2131: temperature 10 / 21-30 / 33 C, rainfall 1500 / 2000-2500 / 3000 mm,
+      // pH 4.3 / 5.5-7 / 8, cycle 180 to 300 days
+      temp: [10, 21, 30, 33],
+      rain: [1500, 2000, 2500, 3000],
+      ph: [4.3, 5.5, 7, 8],
+      cycle: [180, 300],
+      // ECOCROP sheet 2131 climate zones: Aw, Ar
+      koppen: [...AW, ...AR],
+      // No harvest override: Childers 1948's "The harvesting season in Puerto Rico usually begins
+      // in September and continues to the following June" is Puerto Rico's, where NCEI's
+      // 1991-2020 normals give no median freeze (San Juan, RQW00011641, flag Y), so the row keeps
+      // the catalog window, as mango
+      laubNote: OUTSIDE_SCOPE_NOTE,
     },
   ],
   [
@@ -7324,6 +8792,46 @@ export const CROP_ROWS: readonly CropRow[] = [
     { role: 'cover' },
   ],
   [
+    'sunn-hemp',
+    'Crotalaria juncea',
+    'Fabaceae',
+    'sunn hemp',
+    // laubGroup, dliClass, archetype, DLI figures, tier and role as sorghum-sudangrass, the
+    // catalog's hot-season cover crop, with buckwheat's upright-herb habit for a branched, erect
+    // annual
+    'forages',
+    'forages-c3-pasture',
+    'upright-herb',
+    'hot',
+    12,
+    20,
+    30,
+    'C',
+    // NC State Extension Plant Toolbox: "Sunn hemp needs full sun"
+    0,
+    // USDA NRCS Plant Guide: "When grown as a summer annual, sunn hemp can produce over 5,000
+    // pounds of biomass and 100 pounds of nitrogen per acre. It can produce this amount within 60
+    // to 90 days", the 75-day midpoint to the cover's biomass
+    75,
+    // USDA NRCS Plant Guide: "If drilled, the rate should be 30 to 50 pounds per acre in 6-inch
+    // rows", the 6 in drill row, as alfalfa's
+    15,
+    // USDA NRCS Plant Guide: "Branched, erect, herbaceous shrubby annual growing 3 to 9 feet high
+    // with bright green simple, elliptical leaves", the 6 ft midpoint
+    1.83,
+    // NC State Extension Plant Toolbox: "Width: 0 ft. 6 in. - 1 ft. 0 in.", the 9 in midpoint
+    0.23,
+    {
+      // Invasive status: Arkansas lists the genus as a noxious weed, 2 CAR 50-101(d): "(23)
+      // Crotalaria (Crotalaria spp.)". On no federal list
+      role: 'cover',
+      // UF/IFAS SL 306: "Growth may be slowed by cool weather, and the plant is susceptible to
+      // freezing injuries when the temperature is less than 28°F", -2.2 C
+      coldC: -2.2,
+      nfix: true,
+    },
+  ],
+  [
     'desmodium',
     'Desmodium intortum',
     'Fabaceae',
@@ -7437,6 +8945,44 @@ export const CROP_ROWS: readonly CropRow[] = [
       role: 'insectary',
       life: 'perennial',
       coldC: -37,
+      laubNote: NO_HARVEST_NOTE,
+    },
+  ],
+  [
+    'echinacea',
+    'Echinacea purpurea',
+    'Asteraceae',
+    'purple coneflower|echinacea|eastern purple coneflower',
+    // laubGroup, dliClass, habit, archetype, DLI figures, tier, role and laubNote as
+    // bergamot-wild, the catalog's other prairie insectary perennial, and its envelope too: the
+    // ECOCROP sheet lists Cs alone, which would misplace a plant native to the central and
+    // eastern US
+    'forages',
+    'forages-c3-pasture',
+    'upright-herb',
+    'hardy-perennial',
+    10,
+    16,
+    24,
+    'C',
+    // NC State Extension Plant Toolbox: "It is drought tolerant once established and can grow in
+    // full sun to partial shade"
+    1,
+    // as bergamot-wild: nothing is harvested
+    365,
+    // USDA NRCS Plant Guide: "the hardy seedlings, now with a four-to-six inch root system, may
+    // be transplanted into the field or garden one or two feet apart", the 1.5 ft midpoint
+    46,
+    // NC State Extension Plant Toolbox: "Height: 3 ft. 0 in. - 4 ft. 0 in.", the 3.5 ft midpoint
+    1.07,
+    // NC State Extension Plant Toolbox: "Width: 1 ft. 0 in. - 2 ft. 0 in.", the 1.5 ft midpoint
+    0.46,
+    {
+      role: 'insectary',
+      life: 'perennial',
+      // NC State Extension Plant Toolbox: "USDA Plant Hardiness Zone: 3a, 3b, 4a, 4b, 5a, 5b, 6a,
+      // 6b, 7a, 7b, 8a, 8b", the zone 3a floor
+      coldC: -40,
       laubNote: NO_HARVEST_NOTE,
     },
   ],

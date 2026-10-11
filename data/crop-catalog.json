@@ -531,6 +531,33 @@
       }
     },
     {
+      "id": "lablab",
+      "acceptedName": "Lablab purpureus",
+      "family": "Fabaceae",
+      "commonNames": "hyacinth bean|lablab|indian bean",
+      "laubGroup": "grain-legumes",
+      "dliClass": "grain-legumes",
+      "habit": "vining-trellised",
+      "archetype": "warm",
+      "dliMin": 12,
+      "dliTargetLow": 18,
+      "dliTargetHigh": 25,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 90,
+      "spacingCm": 54,
+      "heightM": 5.33,
+      "widthM": 1.37,
+      "overrides": {
+        "synonyms": [
+          "Dolichos lablab"
+        ],
+        "harvestDays": 45,
+        "nfix": true,
+        "laubNote": "The grain-legume trials in the meta-analysis measured dry seed, and this crop is picked as an immature pod or a green seed, which is a different sink (where the plant sends its sugars)"
+      }
+    },
+    {
       "id": "lima-bean",
       "acceptedName": "Phaseolus lunatus",
       "family": "Fabaceae",
@@ -552,6 +579,30 @@
         "harvestDays": 45,
         "zr": 1,
         "p": 0.45,
+        "nfix": true,
+        "laubNote": "The grain-legume trials in the meta-analysis measured dry seed, and this crop is picked as an immature pod or a green seed, which is a different sink (where the plant sends its sugars)"
+      }
+    },
+    {
+      "id": "winged-bean",
+      "acceptedName": "Psophocarpus tetragonolobus",
+      "family": "Fabaceae",
+      "commonNames": "winged bean|goa bean",
+      "laubGroup": "grain-legumes",
+      "dliClass": "grain-legumes",
+      "habit": "vining-trellised",
+      "archetype": "hot",
+      "dliMin": 12,
+      "dliTargetLow": 18,
+      "dliTargetHigh": 25,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 77,
+      "spacingCm": 50,
+      "heightM": 4,
+      "widthM": 0.3,
+      "overrides": {
+        "harvestDays": 45,
         "nfix": true,
         "laubNote": "The grain-legume trials in the meta-analysis measured dry seed, and this crop is picked as an immature pod or a green seed, which is a different sink (where the plant sends its sugars)"
       }
@@ -649,6 +700,31 @@
       "widthM": 0.4,
       "overrides": {
         "harvestDays": 30,
+        "nfix": true
+      }
+    },
+    {
+      "id": "tepary-bean",
+      "acceptedName": "Phaseolus acutifolius",
+      "family": "Fabaceae",
+      "commonNames": "tepary bean|tepary",
+      "laubGroup": "grain-legumes",
+      "dliClass": "grain-legumes",
+      "habit": "bush",
+      "archetype": "hot",
+      "dliMin": 14,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 28,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 70,
+      "spacingCm": 20,
+      "heightM": 0.43,
+      "widthM": 0.4,
+      "overrides": {
+        "harvestDays": 30,
+        "zr": 0.75,
+        "p": 0.45,
         "nfix": true
       }
     },
@@ -762,6 +838,31 @@
       "heightM": 0.5,
       "widthM": 0.6,
       "overrides": {
+        "nfix": true
+      }
+    },
+    {
+      "id": "bambara-groundnut",
+      "acceptedName": "Vigna subterranea",
+      "family": "Fabaceae",
+      "commonNames": "bambara groundnut|bambara bean|jugo bean",
+      "laubGroup": "grain-legumes",
+      "dliClass": "grain-legumes",
+      "habit": "bush",
+      "archetype": "hot",
+      "dliMin": 14,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 28,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 135,
+      "spacingCm": 46,
+      "heightM": 0.325,
+      "widthM": 0.6,
+      "overrides": {
+        "synonyms": [
+          "Voandzeia subterranea"
+        ],
         "nfix": true
       }
     },
@@ -1025,6 +1126,30 @@
       }
     },
     {
+      "id": "safflower",
+      "acceptedName": "Carthamus tinctorius",
+      "family": "Asteraceae",
+      "commonNames": "safflower",
+      "laubGroup": "c3-cereals",
+      "dliClass": "c3-cereals",
+      "habit": "upright-herb",
+      "archetype": "warm",
+      "dliMin": 18,
+      "dliTargetLow": 25,
+      "dliTargetHigh": 35,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 135,
+      "spacingCm": 26,
+      "heightM": 0.76,
+      "widthM": 0.6,
+      "overrides": {
+        "zr": 1.5,
+        "p": 0.6,
+        "laubNote": "No group in the meta-analysis holds an oilseed, so this crop uses the nearest grain curve as a proxy"
+      }
+    },
+    {
       "id": "potato",
       "acceptedName": "Solanum tuberosum",
       "family": "Solanaceae",
@@ -1057,6 +1182,50 @@
       }
     },
     {
+      "id": "oca",
+      "acceptedName": "Oxalis tuberosa",
+      "family": "Oxalidaceae",
+      "commonNames": "oca|new zealand yam",
+      "laubGroup": "tubers-root-crops",
+      "dliClass": "root-tuber",
+      "habit": "upright-herb",
+      "archetype": "cool",
+      "dliMin": 12,
+      "dliTargetLow": 18,
+      "dliTargetHigh": 25,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 225,
+      "spacingCm": 67,
+      "heightM": 0.25,
+      "widthM": 0.5
+    },
+    {
+      "id": "crosne",
+      "acceptedName": "Stachys affinis",
+      "family": "Lamiaceae",
+      "commonNames": "crosne|chinese artichoke|japanese artichoke",
+      "laubGroup": "tubers-root-crops",
+      "dliClass": "root-tuber",
+      "habit": "upright-herb",
+      "archetype": "cool",
+      "dliMin": 12,
+      "dliTargetLow": 18,
+      "dliTargetHigh": 25,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 115,
+      "spacingCm": 32,
+      "heightM": 0.37,
+      "widthM": 0.5,
+      "overrides": {
+        "synonyms": [
+          "Stachys sieboldii",
+          "Stachys tuberifera"
+        ]
+      }
+    },
+    {
       "id": "sweet-potato",
       "acceptedName": "Ipomoea batatas",
       "family": "Convolvulaceae",
@@ -1077,6 +1246,28 @@
       "overrides": {
         "zr": 1.25,
         "p": 0.65
+      }
+    },
+    {
+      "id": "jicama",
+      "acceptedName": "Pachyrhizus erosus",
+      "family": "Fabaceae",
+      "commonNames": "jicama|mexican yam bean|yam bean",
+      "laubGroup": "tubers-root-crops",
+      "dliClass": "root-tuber",
+      "habit": "vining-trellised",
+      "archetype": "hot",
+      "dliMin": 14,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 28,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 161,
+      "spacingCm": 30,
+      "heightM": 2,
+      "widthM": 0.5,
+      "overrides": {
+        "nfix": true
       }
     },
     {
@@ -1213,6 +1404,51 @@
       }
     },
     {
+      "id": "salsify",
+      "acceptedName": "Tragopogon porrifolius",
+      "family": "Asteraceae",
+      "commonNames": "salsify|oyster plant|vegetable oyster",
+      "laubGroup": "tubers-root-crops",
+      "dliClass": "root-tuber",
+      "habit": "rosette",
+      "archetype": "cool",
+      "dliMin": 8,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 20,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 135,
+      "spacingCm": 22,
+      "heightM": 0.4,
+      "widthM": 0.2,
+      "overrides": {
+        "life": "biennial"
+      }
+    },
+    {
+      "id": "burdock",
+      "acceptedName": "Arctium lappa",
+      "family": "Asteraceae",
+      "commonNames": "burdock|gobo|great burdock",
+      "laubGroup": "tubers-root-crops",
+      "dliClass": "root-tuber",
+      "habit": "rosette",
+      "archetype": "cool",
+      "dliMin": 8,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 20,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 105,
+      "spacingCm": 41,
+      "heightM": 0.4,
+      "widthM": 0.2,
+      "overrides": {
+        "life": "biennial",
+        "coldC": -40
+      }
+    },
+    {
       "id": "celeriac",
       "acceptedName": "Apium graveolens",
       "family": "Apiaceae",
@@ -1277,6 +1513,31 @@
       "overrides": {
         "life": "perennial",
         "coldC": -30
+      }
+    },
+    {
+      "id": "yacon",
+      "acceptedName": "Smallanthus sonchifolius",
+      "family": "Asteraceae",
+      "commonNames": "yacon|peruvian ground apple",
+      "laubGroup": "tubers-root-crops",
+      "dliClass": "root-tuber",
+      "habit": "upright-herb",
+      "archetype": "warm",
+      "dliMin": 12,
+      "dliTargetLow": 18,
+      "dliTargetHigh": 26,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 180,
+      "spacingCm": 97,
+      "heightM": 1.83,
+      "widthM": 0.6,
+      "overrides": {
+        "synonyms": [
+          "Polymnia sonchifolia"
+        ],
+        "dtmRef": "transplant"
       }
     },
     {
@@ -1864,6 +2125,31 @@
       }
     },
     {
+      "id": "shungiku",
+      "acceptedName": "Glebionis coronaria",
+      "family": "Asteraceae",
+      "commonNames": "shungiku|garland chrysanthemum|crown daisy",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "upright-herb",
+      "archetype": "cool",
+      "dliMin": 5,
+      "dliTargetLow": 10,
+      "dliTargetHigh": 16,
+      "tier": "C",
+      "shade": 2,
+      "daysToMaturity": 49,
+      "spacingCm": 10,
+      "heightM": 0.4,
+      "widthM": 0.3,
+      "overrides": {
+        "synonyms": [
+          "Chrysanthemum coronarium"
+        ],
+        "succession": 14
+      }
+    },
+    {
       "id": "tatsoi",
       "acceptedName": "Brassica rapa",
       "family": "Brassicaceae",
@@ -1950,6 +2236,35 @@
       "spacingCm": 25,
       "heightM": 0.3,
       "widthM": 0.3
+    },
+    {
+      "id": "dandelion",
+      "acceptedName": "Taraxacum officinale",
+      "family": "Asteraceae",
+      "commonNames": "dandelion|common dandelion",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "rosette",
+      "archetype": "cool-perennial",
+      "dliMin": 6,
+      "dliTargetLow": 12,
+      "dliTargetHigh": 17,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 90,
+      "spacingCm": 24,
+      "heightM": 0.1,
+      "widthM": 0.53,
+      "overrides": {
+        "life": "perennial",
+        "coldC": -34,
+        "harvest": {
+          "wholeSeason": true,
+          "citations": [
+            "purdue-newcrop-simon-1984-dandelion"
+          ]
+        }
+      }
     },
     {
       "id": "celery",
@@ -2491,6 +2806,29 @@
       }
     },
     {
+      "id": "culantro",
+      "acceptedName": "Eryngium foetidum",
+      "family": "Apiaceae",
+      "commonNames": "culantro|recao|sawtooth coriander",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "understory-herbs",
+      "habit": "upright-herb",
+      "archetype": "hot",
+      "dliMin": 5,
+      "dliTargetLow": 10,
+      "dliTargetHigh": 16,
+      "tier": "C",
+      "shade": 2,
+      "daysToMaturity": 105,
+      "spacingCm": 14,
+      "heightM": 0.45,
+      "widthM": 0.2,
+      "overrides": {
+        "dtmRef": "transplant",
+        "harvestDays": 90
+      }
+    },
+    {
       "id": "dill",
       "acceptedName": "Anethum graveolens",
       "family": "Apiaceae",
@@ -2510,6 +2848,49 @@
       "widthM": 0.3,
       "overrides": {
         "succession": 21
+      }
+    },
+    {
+      "id": "cumin",
+      "acceptedName": "Cuminum cyminum",
+      "family": "Apiaceae",
+      "commonNames": "cumin|jeera",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "upright-herb",
+      "archetype": "warm",
+      "dliMin": 10,
+      "dliTargetLow": 16,
+      "dliTargetHigh": 22,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 120,
+      "spacingCm": 15,
+      "heightM": 0.25,
+      "widthM": 0.3
+    },
+    {
+      "id": "caraway",
+      "acceptedName": "Carum carvi",
+      "family": "Apiaceae",
+      "commonNames": "caraway",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "upright-herb",
+      "archetype": "cool",
+      "dliMin": 10,
+      "dliTargetLow": 16,
+      "dliTargetHigh": 22,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 75,
+      "spacingCm": 25,
+      "heightM": 0.76,
+      "widthM": 0.3,
+      "overrides": {
+        "life": "biennial",
+        "harvestDays": 120,
+        "coldC": -34.4
       }
     },
     {
@@ -3011,6 +3392,30 @@
       "widthM": 0.25
     },
     {
+      "id": "epazote",
+      "acceptedName": "Dysphania ambrosioides",
+      "family": "Amaranthaceae",
+      "commonNames": "epazote|mexican tea|wormseed",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "upright-herb",
+      "archetype": "warm",
+      "dliMin": 12,
+      "dliTargetLow": 18,
+      "dliTargetHigh": 25,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 50,
+      "spacingCm": 7,
+      "heightM": 1,
+      "widthM": 0.25,
+      "overrides": {
+        "synonyms": [
+          "Chenopodium ambrosioides"
+        ]
+      }
+    },
+    {
       "id": "bay-laurel",
       "acceptedName": "Laurus nobilis",
       "family": "Lauraceae",
@@ -3132,6 +3537,38 @@
             "mahr-2025-anise-hyssop"
           ]
         }
+      }
+    },
+    {
+      "id": "catnip",
+      "acceptedName": "Nepeta cataria",
+      "family": "Lamiaceae",
+      "commonNames": "catnip|catmint",
+      "laubGroup": "leafy-vegetables",
+      "dliClass": "leafy-greens",
+      "habit": "upright-herb",
+      "archetype": "hardy-perennial",
+      "dliMin": 10,
+      "dliTargetLow": 16,
+      "dliTargetHigh": 24,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 120,
+      "spacingCm": 46,
+      "heightM": 0.91,
+      "widthM": 0.91,
+      "overrides": {
+        "life": "perennial",
+        "coldC": -40,
+        "harvest": {
+          "afterFreezeDays": 123,
+          "seasonDays": 218,
+          "citations": [
+            "ferguson-1990-catnip-north-carolina",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 30
       }
     },
     {
@@ -3657,6 +4094,31 @@
           ]
         },
         "harvestDays": 31
+      }
+    },
+    {
+      "id": "goji",
+      "acceptedName": "Lycium barbarum",
+      "family": "Solanaceae",
+      "commonNames": "goji|goji berry|wolfberry|matrimony vine",
+      "laubGroup": "berries",
+      "dliClass": "cane-bush-berries",
+      "habit": "bush",
+      "archetype": "cool-perennial",
+      "dliMin": 8,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 22,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 1095,
+      "spacingCm": 140,
+      "heightM": 1.37,
+      "widthM": 1.37,
+      "overrides": {
+        "life": "woody-perennial",
+        "yearsToMature": 1.5,
+        "coldC": -34.4,
+        "deciduous": true
       }
     },
     {
@@ -4308,6 +4770,41 @@
       }
     },
     {
+      "id": "jujube",
+      "acceptedName": "Ziziphus jujuba",
+      "family": "Rhamnaceae",
+      "commonNames": "jujube|chinese date",
+      "laubGroup": "fruits",
+      "dliClass": "cane-bush-berries",
+      "habit": "spreading-tree",
+      "archetype": "temperate-tree",
+      "dliMin": 15,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 30,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 365,
+      "spacingCm": 274,
+      "heightM": 6.86,
+      "widthM": 6.1,
+      "overrides": {
+        "life": "woody-perennial",
+        "yearsToMature": 2,
+        "coldC": -28.9,
+        "maxRsr": 0.1,
+        "maxRsrTier": "C",
+        "harvest": {
+          "afterFreezeDays": 151,
+          "seasonDays": 274,
+          "citations": [
+            "ufifas-2024-jujube-florida",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 60
+      }
+    },
+    {
       "id": "hazelnut",
       "acceptedName": "Corylus avellana",
       "family": "Betulaceae",
@@ -4663,6 +5160,31 @@
           ]
         },
         "harvestDays": 21
+      }
+    },
+    {
+      "id": "sea-buckthorn",
+      "acceptedName": "Hippophae rhamnoides",
+      "family": "Elaeagnaceae",
+      "commonNames": "sea buckthorn|seaberry",
+      "laubGroup": "berries",
+      "dliClass": "cane-bush-berries",
+      "habit": "bush",
+      "archetype": "cool-perennial",
+      "dliMin": 8,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 22,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 1095,
+      "spacingCm": 190,
+      "heightM": 2.9,
+      "widthM": 1.9,
+      "overrides": {
+        "life": "woody-perennial",
+        "coldC": -42.8,
+        "yearsToMature": 4,
+        "deciduous": true
       }
     },
     {
@@ -5029,6 +5551,58 @@
           "Am",
           "Cfa",
           "Cfb"
+        ],
+        "laubNote": "The meta-analysis took data from temperate and subtropical sites only, and this crop is grown outside that range, so the curve is an extrapolation"
+      }
+    },
+    {
+      "id": "malanga",
+      "acceptedName": "Xanthosoma sagittifolium",
+      "family": "Araceae",
+      "commonNames": "malanga|tannia|yautia|cocoyam",
+      "laubGroup": "tubers-root-crops",
+      "dliClass": "root-tuber",
+      "habit": "upright-herb",
+      "archetype": "hot",
+      "dliMin": 8,
+      "dliTargetLow": 14,
+      "dliTargetHigh": 20,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 285,
+      "spacingCm": 63,
+      "heightM": 1.9,
+      "widthM": 1,
+      "overrides": {
+        "life": "perennial",
+        "yearsToMature": 1,
+        "coldC": 0,
+        "temp": [
+          10,
+          20,
+          28,
+          35
+        ],
+        "rain": [
+          750,
+          1000,
+          2000,
+          6000
+        ],
+        "ph": [
+          4.5,
+          5.5,
+          7,
+          7.8
+        ],
+        "cycle": [
+          120,
+          365
+        ],
+        "koppen": [
+          "Aw",
+          "Af",
+          "Am"
         ],
         "laubNote": "The meta-analysis took data from temperate and subtropical sites only, and this crop is grown outside that range, so the curve is an extrapolation"
       }
@@ -5412,6 +5986,75 @@
       }
     },
     {
+      "id": "grapefruit",
+      "acceptedName": "Citrus x paradisi",
+      "family": "Rutaceae",
+      "commonNames": "grapefruit",
+      "laubGroup": "fruits",
+      "dliClass": "cane-bush-berries",
+      "habit": "spreading-tree",
+      "archetype": "subtropical",
+      "dliMin": 15,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 30,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 365,
+      "spacingCm": 457,
+      "heightM": 6.86,
+      "widthM": 6.86,
+      "overrides": {
+        "life": "woody-perennial",
+        "yearsToMature": 5,
+        "coldC": -3.3,
+        "deciduous": false,
+        "temp": [
+          13,
+          18,
+          32,
+          42
+        ],
+        "rain": [
+          300,
+          1500,
+          2300,
+          4000
+        ],
+        "ph": [
+          6,
+          6.5,
+          7.3,
+          8.3
+        ],
+        "cycle": [
+          60,
+          365
+        ],
+        "koppen": [
+          "Aw",
+          "Af",
+          "Am",
+          "BSh",
+          "BSk",
+          "Csa",
+          "Csb"
+        ],
+        "zr": 1.35,
+        "p": 0.5,
+        "maxRsr": 0.1,
+        "maxRsrTier": "C",
+        "harvest": {
+          "afterFreezeDays": 280,
+          "seasonDays": 350,
+          "citations": [
+            "ufifas-2015-citrus-culture-home-landscape",
+            "noaa-ncei-2021-climate-normals-1991-2020"
+          ]
+        },
+        "harvestDays": 211
+      }
+    },
+    {
       "id": "lime",
       "acceptedName": "Citrus x latifolia",
       "family": "Rutaceae",
@@ -5656,6 +6299,301 @@
           "Am",
           "BSh",
           "BSk",
+          "Cfa",
+          "Cfb",
+          "Csa",
+          "Csb",
+          "Cwa",
+          "Cwb"
+        ],
+        "maxRsr": 0.1,
+        "maxRsrTier": "C",
+        "laubNote": "The meta-analysis took data from temperate and subtropical sites only, and this crop is grown outside that range, so the curve is an extrapolation"
+      }
+    },
+    {
+      "id": "jackfruit",
+      "acceptedName": "Artocarpus heterophyllus",
+      "family": "Moraceae",
+      "commonNames": "jackfruit|jack",
+      "laubGroup": "fruits",
+      "dliClass": "cane-bush-berries",
+      "habit": "spreading-tree",
+      "archetype": "subtropical",
+      "dliMin": 15,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 30,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 365,
+      "spacingCm": 838,
+      "heightM": 10.67,
+      "widthM": 10,
+      "overrides": {
+        "life": "woody-perennial",
+        "yearsToMature": 3.5,
+        "coldC": -2.2,
+        "deciduous": false,
+        "temp": [
+          16,
+          20,
+          30,
+          34
+        ],
+        "rain": [
+          700,
+          1500,
+          3000,
+          4200
+        ],
+        "ph": [
+          4.3,
+          5.5,
+          7.5,
+          8
+        ],
+        "cycle": [
+          210,
+          365
+        ],
+        "koppen": [
+          "Aw",
+          "Af",
+          "Am",
+          "Cfa",
+          "Cfb",
+          "Csa",
+          "Csb",
+          "Cwa",
+          "Cwb"
+        ],
+        "maxRsr": 0.1,
+        "maxRsrTier": "C",
+        "laubNote": "The meta-analysis took data from temperate and subtropical sites only, and this crop is grown outside that range, so the curve is an extrapolation"
+      }
+    },
+    {
+      "id": "breadfruit",
+      "acceptedName": "Artocarpus altilis",
+      "family": "Moraceae",
+      "commonNames": "breadfruit|ulu",
+      "laubGroup": "fruits",
+      "dliClass": "cane-bush-berries",
+      "habit": "spreading-tree",
+      "archetype": "subtropical",
+      "dliMin": 15,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 30,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 365,
+      "spacingCm": 762,
+      "heightM": 13.72,
+      "widthM": 9.14,
+      "overrides": {
+        "life": "woody-perennial",
+        "yearsToMature": 3,
+        "coldC": 4.4,
+        "deciduous": false,
+        "temp": [
+          16,
+          21,
+          33,
+          40
+        ],
+        "rain": [
+          1000,
+          1500,
+          3000,
+          3500
+        ],
+        "ph": [
+          4.3,
+          5.5,
+          6.5,
+          8.7
+        ],
+        "cycle": [
+          300,
+          365
+        ],
+        "koppen": [
+          "Aw",
+          "Af",
+          "Am"
+        ],
+        "maxRsr": 0.1,
+        "maxRsrTier": "C",
+        "laubNote": "The meta-analysis took data from temperate and subtropical sites only, and this crop is grown outside that range, so the curve is an extrapolation"
+      }
+    },
+    {
+      "id": "coconut",
+      "acceptedName": "Cocos nucifera",
+      "family": "Arecaceae",
+      "commonNames": "coconut|coconut palm",
+      "laubGroup": "fruits",
+      "dliClass": "cane-bush-berries",
+      "habit": "columnar-tree",
+      "archetype": "subtropical",
+      "dliMin": 15,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 30,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 365,
+      "spacingCm": 732,
+      "heightM": 7.62,
+      "widthM": 8.5,
+      "overrides": {
+        "life": "woody-perennial",
+        "yearsToMature": 8,
+        "coldC": 0,
+        "deciduous": false,
+        "temp": [
+          14,
+          22,
+          34,
+          38
+        ],
+        "rain": [
+          650,
+          1200,
+          2400,
+          4000
+        ],
+        "ph": [
+          4.3,
+          5,
+          8,
+          8.7
+        ],
+        "cycle": [
+          270,
+          365
+        ],
+        "koppen": [
+          "Aw",
+          "Af",
+          "Am"
+        ],
+        "maxRsr": 0.1,
+        "maxRsrTier": "C",
+        "harvest": {
+          "wholeSeason": true,
+          "citations": [
+            "ufifas-2020-coconut-palm-florida"
+          ]
+        },
+        "laubNote": "The meta-analysis took data from temperate and subtropical sites only, and this crop is grown outside that range, so the curve is an extrapolation"
+      }
+    },
+    {
+      "id": "cashew",
+      "acceptedName": "Anacardium occidentale",
+      "family": "Anacardiaceae",
+      "commonNames": "cashew",
+      "laubGroup": "fruits",
+      "dliClass": "cane-bush-berries",
+      "habit": "spreading-tree",
+      "archetype": "subtropical",
+      "dliMin": 15,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 30,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 365,
+      "spacingCm": 533,
+      "heightM": 8.38,
+      "widthM": 5.33,
+      "overrides": {
+        "life": "woody-perennial",
+        "yearsToMature": 3.5,
+        "coldC": -1,
+        "deciduous": false,
+        "temp": [
+          5,
+          15,
+          35,
+          46
+        ],
+        "rain": [
+          400,
+          750,
+          1600,
+          4000
+        ],
+        "ph": [
+          3.8,
+          4.5,
+          6.5,
+          8.7
+        ],
+        "cycle": [
+          190,
+          260
+        ],
+        "koppen": [
+          "Aw",
+          "BSh",
+          "BSk",
+          "Csa",
+          "Csb",
+          "Cwa",
+          "Cwb"
+        ],
+        "maxRsr": 0.1,
+        "maxRsrTier": "C",
+        "laubNote": "The meta-analysis took data from temperate and subtropical sites only, and this crop is grown outside that range, so the curve is an extrapolation"
+      }
+    },
+    {
+      "id": "lychee",
+      "acceptedName": "Litchi chinensis",
+      "family": "Sapindaceae",
+      "commonNames": "lychee|litchi",
+      "laubGroup": "fruits",
+      "dliClass": "cane-bush-berries",
+      "habit": "spreading-tree",
+      "archetype": "subtropical",
+      "dliMin": 15,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 30,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 365,
+      "spacingCm": 838,
+      "heightM": 12.19,
+      "widthM": 12.19,
+      "overrides": {
+        "life": "woody-perennial",
+        "yearsToMature": 4,
+        "coldC": -4.2,
+        "deciduous": false,
+        "temp": [
+          15,
+          20,
+          35,
+          40
+        ],
+        "rain": [
+          700,
+          1000,
+          1700,
+          2800
+        ],
+        "ph": [
+          5,
+          5.5,
+          6.5,
+          8.5
+        ],
+        "cycle": [
+          100,
+          270
+        ],
+        "koppen": [
+          "Aw",
           "Cfa",
           "Cfb",
           "Csa",
@@ -6006,6 +6944,58 @@
       }
     },
     {
+      "id": "foxtail-millet",
+      "acceptedName": "Setaria italica",
+      "family": "Poaceae",
+      "commonNames": "foxtail millet|italian millet",
+      "laubGroup": "corn-c4",
+      "dliClass": "forages-c3-pasture",
+      "habit": "clumping-grass",
+      "archetype": "hot",
+      "dliMin": 12,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 30,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 75,
+      "spacingCm": 16,
+      "heightM": 1.07,
+      "widthM": 0.4,
+      "overrides": {
+        "temp": [
+          5,
+          16,
+          26,
+          35
+        ],
+        "rain": [
+          300,
+          500,
+          700,
+          4000
+        ],
+        "ph": [
+          5.5,
+          6,
+          6.8,
+          8.3
+        ],
+        "cycle": [
+          60,
+          120
+        ],
+        "koppen": [
+          "Aw",
+          "BSh",
+          "BSk",
+          "Csa",
+          "Csb"
+        ],
+        "zr": 1.5,
+        "p": 0.55
+      }
+    },
+    {
       "id": "sorghum-grain",
       "acceptedName": "Sorghum bicolor",
       "family": "Poaceae",
@@ -6104,6 +7094,71 @@
         "harvestDays": 30,
         "nfix": true,
         "laubNote": "Laub et al. 2022 name this species among the crops they excluded as not relevant for temperate regions, so the curve runs past the data it was fitted on"
+      }
+    },
+    {
+      "id": "adzuki-bean",
+      "acceptedName": "Vigna angularis",
+      "family": "Fabaceae",
+      "commonNames": "adzuki bean|azuki bean|red bean",
+      "laubGroup": "grain-legumes",
+      "dliClass": "grain-legumes",
+      "habit": "bush",
+      "archetype": "hot",
+      "dliMin": 14,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 28,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 120,
+      "spacingCm": 16,
+      "heightM": 0.46,
+      "widthM": 0.4,
+      "overrides": {
+        "synonyms": [
+          "Phaseolus angularis"
+        ],
+        "temp": [
+          5,
+          15,
+          30,
+          36
+        ],
+        "rain": [
+          530,
+          900,
+          1300,
+          1800
+        ],
+        "ph": [
+          5,
+          5.5,
+          6.5,
+          7.5
+        ],
+        "cycle": [
+          60,
+          190
+        ],
+        "koppen": [
+          "Aw",
+          "Af",
+          "Am",
+          "Cfa",
+          "Cfb",
+          "Csa",
+          "Csb",
+          "Cwa",
+          "Cwb",
+          "Dfb",
+          "Dfa",
+          "Dwa",
+          "Dwb"
+        ],
+        "harvestDays": 30,
+        "zr": 0.75,
+        "p": 0.45,
+        "nfix": true
       }
     },
     {
@@ -6387,6 +7442,110 @@
           "Cwb"
         ],
         "laubNote": "Laub et al. 2022 name this species among the crops they excluded as not relevant for temperate regions, so the curve runs past the data it was fitted on"
+      }
+    },
+    {
+      "id": "black-pepper",
+      "acceptedName": "Piper nigrum",
+      "family": "Piperaceae",
+      "commonNames": "black pepper|peppercorn",
+      "laubGroup": "berries",
+      "dliClass": "cane-bush-berries",
+      "habit": "vining-trellised",
+      "archetype": "subtropical",
+      "dliMin": 6,
+      "dliTargetLow": 12,
+      "dliTargetHigh": 18,
+      "tier": "C",
+      "shade": 2,
+      "daysToMaturity": 225,
+      "spacingCm": 300,
+      "heightM": 6,
+      "widthM": 3,
+      "overrides": {
+        "life": "woody-perennial",
+        "yearsToMature": 3.5,
+        "coldC": 10,
+        "temp": [
+          10,
+          22,
+          35,
+          40
+        ],
+        "rain": [
+          2000,
+          2500,
+          4000,
+          5500
+        ],
+        "ph": [
+          5,
+          6,
+          7,
+          7.5
+        ],
+        "cycle": [
+          180,
+          270
+        ],
+        "koppen": [
+          "Aw",
+          "Af",
+          "Am"
+        ],
+        "laubNote": "The meta-analysis took data from temperate and subtropical sites only, and this crop is grown outside that range, so the curve is an extrapolation"
+      }
+    },
+    {
+      "id": "vanilla",
+      "acceptedName": "Vanilla planifolia",
+      "family": "Orchidaceae",
+      "commonNames": "vanilla|vanilla orchid",
+      "laubGroup": "berries",
+      "dliClass": "cane-bush-berries",
+      "habit": "vining-trellised",
+      "archetype": "subtropical",
+      "dliMin": 6,
+      "dliTargetLow": 12,
+      "dliTargetHigh": 18,
+      "tier": "C",
+      "shade": 2,
+      "daysToMaturity": 240,
+      "spacingCm": 235,
+      "heightM": 2,
+      "widthM": 2,
+      "overrides": {
+        "life": "perennial",
+        "yearsToMature": 3,
+        "coldC": 0,
+        "temp": [
+          10,
+          21,
+          30,
+          33
+        ],
+        "rain": [
+          1500,
+          2000,
+          2500,
+          3000
+        ],
+        "ph": [
+          4.3,
+          5.5,
+          7,
+          8
+        ],
+        "cycle": [
+          180,
+          300
+        ],
+        "koppen": [
+          "Aw",
+          "Af",
+          "Am"
+        ],
+        "laubNote": "The meta-analysis took data from temperate and subtropical sites only, and this crop is grown outside that range, so the curve is an extrapolation"
       }
     },
     {
@@ -7138,6 +8297,30 @@
       }
     },
     {
+      "id": "sunn-hemp",
+      "acceptedName": "Crotalaria juncea",
+      "family": "Fabaceae",
+      "commonNames": "sunn hemp",
+      "laubGroup": "forages",
+      "dliClass": "forages-c3-pasture",
+      "habit": "upright-herb",
+      "archetype": "hot",
+      "dliMin": 12,
+      "dliTargetLow": 20,
+      "dliTargetHigh": 30,
+      "tier": "C",
+      "shade": 0,
+      "daysToMaturity": 75,
+      "spacingCm": 15,
+      "heightM": 1.83,
+      "widthM": 0.23,
+      "overrides": {
+        "role": "cover",
+        "coldC": -2.2,
+        "nfix": true
+      }
+    },
+    {
       "id": "desmodium",
       "acceptedName": "Desmodium intortum",
       "family": "Fabaceae",
@@ -7260,6 +8443,31 @@
         "role": "insectary",
         "life": "perennial",
         "coldC": -37,
+        "laubNote": "The forages curve is a biomass-yield response measured on cut hay and pasture. Nothing is harvested from this planting, so a relative yield means nothing for it"
+      }
+    },
+    {
+      "id": "echinacea",
+      "acceptedName": "Echinacea purpurea",
+      "family": "Asteraceae",
+      "commonNames": "purple coneflower|echinacea|eastern purple coneflower",
+      "laubGroup": "forages",
+      "dliClass": "forages-c3-pasture",
+      "habit": "upright-herb",
+      "archetype": "hardy-perennial",
+      "dliMin": 10,
+      "dliTargetLow": 16,
+      "dliTargetHigh": 24,
+      "tier": "C",
+      "shade": 1,
+      "daysToMaturity": 365,
+      "spacingCm": 46,
+      "heightM": 1.07,
+      "widthM": 0.46,
+      "overrides": {
+        "role": "insectary",
+        "life": "perennial",
+        "coldC": -40,
         "laubNote": "The forages curve is a biomass-yield response measured on cut hay and pasture. Nothing is harvested from this planting, so a relative yield means nothing for it"
       }
     },
