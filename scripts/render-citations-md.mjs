@@ -36,12 +36,15 @@ const names = (authors) =>
 
 const year = (issued) => issued?.['date-parts']?.[0]?.[0] ?? 'n.d.'
 
+// an author list ending in an initial, or a title ending in a question, already has its stop
+const stop = (text) => (/[.?!]$/.test(text) ? '' : '.')
+
 const reference = (e) => {
   const parts = []
   const who = names(e.author)
-  if (who) parts.push(`${who}.`)
+  if (who) parts.push(`${who}${stop(who)}`)
   parts.push(`(${year(e.issued)}).`)
-  parts.push(`*${e.title}*.`)
+  parts.push(`*${e.title}*${stop(e.title)}`)
   // publisher is only informative when there's no journal to name
   const venue = e['container-title'] ?? e.publisher
   const where = [venue, e.number].filter(Boolean).join(' ')

@@ -93,7 +93,7 @@ Amaducci, Stefano; Yin, Xinyou; Colauzzi, Michele. (2018). *Agrivoltaic systems 
 
 #### `barron-gafford2019-arizona`
 
-Barron-Gafford, Greg A.; Pavao-Zuckerman, Mitchell A.; Minor, Rebecca L.; Sutter, Leland F.. (2019). *Agrivoltaics provide mutual benefits across the food-energy-water nexus in drylands*. Nature Sustainability 2: 848-855
+Barron-Gafford, Greg A.; Pavao-Zuckerman, Mitchell A.; Minor, Rebecca L.; Sutter, Leland F. (2019). *Agrivoltaics provide mutual benefits across the food-energy-water nexus in drylands*. Nature Sustainability 2: 848-855
 
 - DOI: [10.1038/s41893-019-0364-5](https://doi.org/10.1038/s41893-019-0364-5)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **B**
@@ -119,7 +119,7 @@ Ben Naim, Yariv; Ladell, Chanani; Cohen, Yigal. (2025). *Agri-Photovoltaic techn
 
 #### `both2025-nj-lessons`
 
-Both, A. J.; Bamka, Bill; Besancon, Thierry; Birnie, Dunbar P.; Burgher, Clint; Gimenez, Daniel; Guran, Serpil; Kornitas, Michael; Nitzsche, Pete; Robinson, David; Rucker, W. Ross; Schoolman, Ethan; Specca, David; Sullivan, Kevin P.; Ward, Daniel L.; Westendorf, Mike; Wyenandt, Christian A.. (2025). *Lessons Learned from Three Agrivoltaic Installations in New Jersey*. AgriVoltaics Conference Proceedings 3
+Both, A. J.; Bamka, Bill; Besancon, Thierry; Birnie, Dunbar P.; Burgher, Clint; Gimenez, Daniel; Guran, Serpil; Kornitas, Michael; Nitzsche, Pete; Robinson, David; Rucker, W. Ross; Schoolman, Ethan; Specca, David; Sullivan, Kevin P.; Ward, Daniel L.; Westendorf, Mike; Wyenandt, Christian A. (2025). *Lessons Learned from Three Agrivoltaic Installations in New Jersey*. AgriVoltaics Conference Proceedings 3
 
 - DOI: [10.52825/agripv.v3i.1357](https://doi.org/10.52825/agripv.v3i.1357)
 - Verification: Crossref-verified | Access: open-access
@@ -237,7 +237,7 @@ Grommes, Eva-Maria; Schemann, Fabian; Klag, Felix; Nows, Sven; Blieske, Ulf. (20
 
 #### `hassanpour-adeh2018-oregon`
 
-Hassanpour Adeh, Elnaz; Selker, John S.; Higgins, Chad W.. (2018). *Remarkable agrivoltaic influence on soil moisture, micrometeorology and water-use efficiency*. PLOS ONE 13: e0203256
+Hassanpour Adeh, Elnaz; Selker, John S.; Higgins, Chad W. (2018). *Remarkable agrivoltaic influence on soil moisture, micrometeorology and water-use efficiency*. PLOS ONE 13: e0203256
 
 - DOI: [10.1371/journal.pone.0203256](https://doi.org/10.1371/journal.pone.0203256)
 - Verification: Crossref-verified | Access: open-access, evidence tier **B**
@@ -313,7 +313,7 @@ Marrou, Hélène; Wery, Jacques; Dufour, Lydie; Dupraz, Christian. (2013). *Prod
 
 #### `marrou2013-microclimate`
 
-Marrou, Hélène; Guilioni, Lydie; Dufour, Lydie; Dupraz, Christian; Wery, Jacques. (2013). *Microclimate under agrivoltaic systems: Is crop growth rate affected in the partial shade of solar panels?*. Agricultural and Forest Meteorology 177: 117-132
+Marrou, Hélène; Guilioni, Lydie; Dufour, Lydie; Dupraz, Christian; Wery, Jacques. (2013). *Microclimate under agrivoltaic systems: Is crop growth rate affected in the partial shade of solar panels?* Agricultural and Forest Meteorology 177: 117-132
 
 - DOI: [10.1016/j.agrformet.2013.04.012](https://doi.org/10.1016/j.agrformet.2013.04.012)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **B**
@@ -323,7 +323,7 @@ Marrou, Hélène; Guilioni, Lydie; Dufour, Lydie; Dupraz, Christian; Wery, Jacqu
 
 #### `marrou2013-water-flows`
 
-Marrou, Hélène; Dufour, Lydie; Wery, Jacques. (2013). *How does a shelter of solar panels influence water flows in a soil-crop system?*. European Journal of Agronomy 50: 38-51
+Marrou, Hélène; Dufour, Lydie; Wery, Jacques. (2013). *How does a shelter of solar panels influence water flows in a soil-crop system?* European Journal of Agronomy 50: 38-51
 
 - DOI: [10.1016/j.eja.2013.05.004](https://doi.org/10.1016/j.eja.2013.05.004)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **B**
@@ -333,7 +333,7 @@ Marrou, Hélène; Dufour, Lydie; Wery, Jacques. (2013). *How does a shelter of s
 
 #### `mata2026-rutgers-solanaceous`
 
-Mata, Rebeca; Ward, Daniel L.; Wyenandt, Christian A.. (2026). *First Year Observations of Growing Solanaceous Vegetable Crops in an Agrivoltaic System in New Jersey*. AgriVoltaics Conference Proceedings 4
+Mata, Rebeca; Ward, Daniel L.; Wyenandt, Christian A. (2026). *First Year Observations of Growing Solanaceous Vegetable Crops in an Agrivoltaic System in New Jersey*. AgriVoltaics Conference Proceedings 4
 
 - DOI: [10.52825/agripv.v4i.2829](https://doi.org/10.52825/agripv.v4i.2829)
 - Verification: Crossref-verified | Access: open-access, evidence tier **B**
@@ -522,7 +522,7 @@ Arena, Rosario; Aneli, Stefano; Gagliano, Antonio; Tina, Giuseppe Marco. (2024).
 
 #### `bennett1982-refraction`
 
-Bennett, G. G.. (1982). *The Calculation of Astronomical Refraction in Marine Navigation*. Journal of Navigation 35: 255-259
+Bennett, G. G. (1982). *The Calculation of Astronomical Refraction in Marine Navigation*. Journal of Navigation 35: 255-259
 
 - DOI: [10.1017/S0373463300022037](https://doi.org/10.1017/S0373463300022037)
 - Verification: Crossref-verified | Access: paywalled
@@ -541,7 +541,7 @@ Blanco-Muriel, Manuel; Alarcón-Padilla, Diego C.; López-Moratalla, Teodoro; La
 
 #### `bright2019-engerer2-global`
 
-Bright, Jamie M.; Engerer, Nicholas A.. (2019). *Engerer2: Global re-parameterisation, update, and validation of an irradiance separation model at different temporal resolutions*. Journal of Renewable and Sustainable Energy 11: 033701
+Bright, Jamie M.; Engerer, Nicholas A. (2019). *Engerer2: Global re-parameterisation, update, and validation of an irradiance separation model at different temporal resolutions*. Journal of Renewable and Sustainable Energy 11: 033701
 
 - DOI: [10.1063/1.5097014](https://doi.org/10.1063/1.5097014)
 - Verification: Crossref-verified | Access: paywalled
@@ -550,7 +550,7 @@ Bright, Jamie M.; Engerer, Nicholas A.. (2019). *Engerer2: Global re-parameteris
 
 #### `britton1976-par-ratio`
 
-Britton, C. M.; Dodd, J. D.. (1976). *Relationships of photosynthetically active radiation and shortwave irradiance*. Agricultural Meteorology 17: 1-7
+Britton, C. M.; Dodd, J. D. (1976). *Relationships of photosynthetically active radiation and shortwave irradiance*. Agricultural Meteorology 17: 1-7
 
 - DOI: [10.1016/0002-1571(76)90080-7](https://doi.org/10.1016/0002-1571(76)90080-7)
 - Verification: Crossref-verified | Access: paywalled
@@ -559,7 +559,7 @@ Britton, C. M.; Dodd, J. D.. (1976). *Relationships of photosynthetically active
 
 #### `cook-mccuen2013-solar-farm-hydrology`
 
-Cook, Lauren M.; McCuen, Richard H.. (2013). *Hydrologic Response of Solar Farms*. Journal of Hydrologic Engineering 18: 536-541
+Cook, Lauren M.; McCuen, Richard H. (2013). *Hydrologic Response of Solar Farms*. Journal of Hydrologic Engineering 18: 536-541
 
 - DOI: [10.1061/(ASCE)HE.1943-5584.0000530](https://doi.org/10.1061/(ASCE)HE.1943-5584.0000530)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **C**
@@ -570,7 +570,7 @@ Cook, Lauren M.; McCuen, Richard H.. (2013). *Hydrologic Response of Solar Farms
 
 #### `dobos2014-pvwatts-v5`
 
-Dobos, Aron P.. (2014). *PVWatts Version 5 Manual*. National Renewable Energy Laboratory NREL/TP-6A20-62641
+Dobos, Aron P. (2014). *PVWatts Version 5 Manual*. National Renewable Energy Laboratory NREL/TP-6A20-62641
 
 - URL: <https://www.nrel.gov/docs/fy14osti/62641.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **B**
@@ -582,7 +582,7 @@ Dobos, Aron P.. (2014). *PVWatts Version 5 Manual*. National Renewable Energy La
 
 #### `engerer2015-engerer2`
 
-Engerer, N. A.. (2015). *Minute resolution estimates of the diffuse fraction of global irradiance for southeastern Australia*. Solar Energy 116: 215-237
+Engerer, N. A. (2015). *Minute resolution estimates of the diffuse fraction of global irradiance for southeastern Australia*. Solar Energy 116: 215-237
 
 - DOI: [10.1016/j.solener.2015.04.012](https://doi.org/10.1016/j.solener.2015.04.012)
 - Verification: Crossref-verified | Access: paywalled
@@ -591,7 +591,7 @@ Engerer, N. A.. (2015). *Minute resolution estimates of the diffuse fraction of 
 
 #### `erbs1982-diffuse-fraction`
 
-Erbs, D. G.; Klein, S. A.; Duffie, J. A.. (1982). *Estimation of the diffuse radiation fraction for hourly, daily and monthly-average global radiation*. Solar Energy 28: 293-302
+Erbs, D. G.; Klein, S. A.; Duffie, J. A. (1982). *Estimation of the diffuse radiation fraction for hourly, daily and monthly-average global radiation*. Solar Energy 28: 293-302
 
 - DOI: [10.1016/0038-092X(82)90302-4](https://doi.org/10.1016/0038-092X(82)90302-4)
 - Verification: Crossref-verified | Access: paywalled
@@ -632,7 +632,7 @@ Grena, Roberto. (2012). *Five new algorithms for the computation of sun position
 
 #### `gueymard2016-separation-validation`
 
-Gueymard, Christian A.; Ruiz-Arias, Jose A.. (2016). *Extensive worldwide validation and climate sensitivity analysis of direct irradiance predictions from 1-min global irradiance*. Solar Energy 128: 1-30
+Gueymard, Christian A.; Ruiz-Arias, Jose A. (2016). *Extensive worldwide validation and climate sensitivity analysis of direct irradiance predictions from 1-min global irradiance*. Solar Energy 128: 1-30
 
 - DOI: [10.1016/j.solener.2015.10.010](https://doi.org/10.1016/j.solener.2015.10.010)
 - Verification: Crossref-verified | Access: paywalled
@@ -641,7 +641,7 @@ Gueymard, Christian A.; Ruiz-Arias, Jose A.. (2016). *Extensive worldwide valida
 
 #### `gueymard2018-solar-constant`
 
-Gueymard, Christian A.. (2018). *A reevaluation of the solar constant based on a 42-year total solar irradiance time series and a reconciliation of spectral irradiance references*. Solar Energy 168: 2-9
+Gueymard, Christian A. (2018). *A reevaluation of the solar constant based on a 42-year total solar irradiance time series and a reconciliation of spectral irradiance references*. Solar Energy 168: 2-9
 
 - DOI: [10.1016/j.solener.2018.04.001](https://doi.org/10.1016/j.solener.2018.04.001)
 - Verification: Crossref-verified | Access: paywalled
@@ -650,7 +650,7 @@ Gueymard, Christian A.. (2018). *A reevaluation of the solar constant based on a
 
 #### `hay1980-transposition`
 
-Hay, John E.; Davies, John A.. (1980). *Calculation of the solar radiation incident on an inclined surface*. Proceedings of the First Canadian Solar Radiation Data Workshop 59-72
+Hay, John E.; Davies, John A. (1980). *Calculation of the solar radiation incident on an inclined surface*. Proceedings of the First Canadian Solar Radiation Data Workshop 59-72
 
 - Verification: UNVERIFIED | Access: paywalled
 - Backs:
@@ -659,7 +659,7 @@ Hay, John E.; Davies, John A.. (1980). *Calculation of the solar radiation incid
 
 #### `jacovides2003-par-mediterranean`
 
-Jacovides, C. P.; Tymvios, F. S.; Asimakopoulos, D. N.. (2003). *Global photosynthetically active radiation and its relationship with global solar radiation in the Eastern Mediterranean basin*. Theoretical and Applied Climatology 74: 227-233
+Jacovides, C. P.; Tymvios, F. S.; Asimakopoulos, D. N. (2003). *Global photosynthetically active radiation and its relationship with global solar radiation in the Eastern Mediterranean basin*. Theoretical and Applied Climatology 74: 227-233
 
 - DOI: [10.1007/s00704-002-0685-5](https://doi.org/10.1007/s00704-002-0685-5)
 - Verification: Crossref-verified | Access: paywalled
@@ -669,7 +669,7 @@ Jacovides, C. P.; Tymvios, F. S.; Asimakopoulos, D. N.. (2003). *Global photosyn
 
 #### `jacovides2004-par-cyprus`
 
-Jacovides, C. P.; Timvios, F. S.; Papaioannou, G.; Asimakopoulos, D. N.; Theofilou, C. M.. (2004). *Ratio of PAR to broadband solar radiation measured in Cyprus*. Agricultural and Forest Meteorology 121: 135-140
+Jacovides, C. P.; Timvios, F. S.; Papaioannou, G.; Asimakopoulos, D. N.; Theofilou, C. M. (2004). *Ratio of PAR to broadband solar radiation measured in Cyprus*. Agricultural and Forest Meteorology 121: 135-140
 
 - DOI: [10.1016/j.agrformet.2003.10.001](https://doi.org/10.1016/j.agrformet.2003.10.001)
 - Verification: Crossref-verified | Access: paywalled
@@ -679,7 +679,7 @@ Jacovides, C. P.; Timvios, F. S.; Papaioannou, G.; Asimakopoulos, D. N.; Theofil
 
 #### `kasten1989-airmass`
 
-Kasten, Fritz; Young, Andrew T.. (1989). *Revised optical air mass tables and approximation formula*. Applied Optics 28: 4735-4738
+Kasten, Fritz; Young, Andrew T. (1989). *Revised optical air mass tables and approximation formula*. Applied Optics 28: 4735-4738
 
 - DOI: [10.1364/AO.28.004735](https://doi.org/10.1364/AO.28.004735)
 - Verification: Crossref-verified | Access: paywalled
@@ -688,7 +688,7 @@ Kasten, Fritz; Young, Andrew T.. (1989). *Revised optical air mass tables and ap
 
 #### `khan2019-ground-sculpting`
 
-Khan, M. Ryyan; Sakr, Enas; Sun, Xingshu; Bermel, Peter; Alam, Muhammad A.. (2019). *Ground sculpting to enhance energy yield of vertical bifacial solar farms*. Applied Energy 241: 592-598
+Khan, M. Ryyan; Sakr, Enas; Sun, Xingshu; Bermel, Peter; Alam, Muhammad A. (2019). *Ground sculpting to enhance energy yield of vertical bifacial solar farms*. Applied Energy 241: 592-598
 
 - DOI: [10.1016/j.apenergy.2019.01.168](https://doi.org/10.1016/j.apenergy.2019.01.168)
 - Verification: Crossref-verified | Access: paywalled
@@ -698,7 +698,7 @@ Khan, M. Ryyan; Sakr, Enas; Sun, Xingshu; Bermel, Peter; Alam, Muhammad A.. (201
 
 #### `king2004-sapm`
 
-King, David L.; Boyson, William E.; Kratochvil, Jay A.. (2004). *Photovoltaic Array Performance Model*. Sandia National Laboratories SAND2004-3535
+King, David L.; Boyson, William E.; Kratochvil, Jay A. (2004). *Photovoltaic Array Performance Model*. Sandia National Laboratories SAND2004-3535
 
 - URL: <https://www.osti.gov/biblio/919131>
 - Verification: URL-verified | Access: public-domain, evidence tier **B**
@@ -708,7 +708,7 @@ King, David L.; Boyson, William E.; Kratochvil, Jay A.. (2004). *Photovoltaic Ar
 
 #### `king2007-sandia-inverter`
 
-King, David L.; Gonzalez, Sigifredo; Galbraith, Gary M.; Boyson, William E.. (2007). *Performance Model for Grid-Connected Photovoltaic Inverters*. Sandia National Laboratories SAND2007-5036
+King, David L.; Gonzalez, Sigifredo; Galbraith, Gary M.; Boyson, William E. (2007). *Performance Model for Grid-Connected Photovoltaic Inverters*. Sandia National Laboratories SAND2007-5036
 
 - URL: <https://www.osti.gov/biblio/920449>
 - Verification: URL-verified | Access: public-domain, evidence tier **B**
@@ -718,7 +718,7 @@ King, David L.; Gonzalez, Sigifredo; Galbraith, Gary M.; Boyson, William E.. (20
 
 #### `korczynski2002-dli-maps`
 
-Korczynski, Paul C.; Logan, Joanne; Faust, James E.. (2002). *Mapping Monthly Distribution of Daily Light Integrals across the Contiguous United States*. HortTechnology 12: 12-16
+Korczynski, Paul C.; Logan, Joanne; Faust, James E. (2002). *Mapping Monthly Distribution of Daily Light Integrals across the Contiguous United States*. HortTechnology 12: 12-16
 
 - DOI: [10.21273/HORTTECH.12.1.12](https://doi.org/10.21273/HORTTECH.12.1.12)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **C**
@@ -727,7 +727,7 @@ Korczynski, Paul C.; Logan, Joanne; Faust, James E.. (2002). *Mapping Monthly Di
 
 #### `liu1963-flat-plate`
 
-Liu, Benjamin Y. H.; Jordan, Richard C.. (1963). *The long-term average performance of flat-plate solar-energy collectors*. Solar Energy 7: 53-74
+Liu, Benjamin Y. H.; Jordan, Richard C. (1963). *The long-term average performance of flat-plate solar-energy collectors*. Solar Energy 7: 53-74
 
 - DOI: [10.1016/0038-092X(63)90006-9](https://doi.org/10.1016/0038-092X(63)90006-9)
 - Verification: Crossref-verified | Access: paywalled
@@ -736,7 +736,7 @@ Liu, Benjamin Y. H.; Jordan, Richard C.. (1963). *The long-term average performa
 
 #### `loutzenhiser2007-transposition-validation`
 
-Loutzenhiser, P. G.; Manz, H.; Felsmann, C.; Strachan, P. A.; Frank, T.; Maxwell, G. M.. (2007). *Empirical validation of models to compute solar irradiance on inclined surfaces for building energy simulation*. Solar Energy 81: 254-267
+Loutzenhiser, P. G.; Manz, H.; Felsmann, C.; Strachan, P. A.; Frank, T.; Maxwell, G. M. (2007). *Empirical validation of models to compute solar irradiance on inclined surfaces for building energy simulation*. Solar Energy 81: 254-267
 
 - DOI: [10.1016/j.solener.2006.03.009](https://doi.org/10.1016/j.solener.2006.03.009)
 - Verification: Crossref-verified | Access: paywalled
@@ -754,7 +754,7 @@ Marion, Bill; MacAlpine, Sara; Deline, Chris; Asgharzadeh, Amir; Toor, Fatima; R
 
 #### `maxwell1987-disc`
 
-Maxwell, Eugene L.. (1987). *A Quasi-Physical Model for Converting Hourly Global Horizontal to Direct Normal Insolation*. Solar Energy Research Institute SERI/TR-215-3087
+Maxwell, Eugene L. (1987). *A Quasi-Physical Model for Converting Hourly Global Horizontal to Direct Normal Insolation*. Solar Energy Research Institute SERI/TR-215-3087
 
 - Verification: UNVERIFIED | Access: public-domain
 - Backs:
@@ -763,7 +763,7 @@ Maxwell, Eugene L.. (1987). *A Quasi-Physical Model for Converting Hourly Global
 
 #### `mccree1971-action-spectrum`
 
-McCree, K. J.. (1971). *The action spectrum, absorptance and quantum yield of photosynthesis in crop plants*. Agricultural Meteorology 9: 191-216
+McCree, K. J. (1971). *The action spectrum, absorptance and quantum yield of photosynthesis in crop plants*. Agricultural Meteorology 9: 191-216
 
 - DOI: [10.1016/0002-1571(71)90022-7](https://doi.org/10.1016/0002-1571(71)90022-7)
 - Verification: Crossref-verified | Access: paywalled
@@ -774,7 +774,7 @@ McCree, K. J.. (1971). *The action spectrum, absorptance and quantum yield of ph
 
 #### `mccree1972-par-definitions`
 
-McCree, K. J.. (1972). *Test of current definitions of photosynthetically active radiation against leaf photosynthesis data*. Agricultural Meteorology 10: 443-453
+McCree, K. J. (1972). *Test of current definitions of photosynthetically active radiation against leaf photosynthesis data*. Agricultural Meteorology 10: 443-453
 
 - DOI: [10.1016/0002-1571(72)90045-3](https://doi.org/10.1016/0002-1571(72)90045-3)
 - Verification: Crossref-verified | Access: paywalled
@@ -784,7 +784,7 @@ McCree, K. J.. (1972). *Test of current definitions of photosynthetically active
 
 #### `meek1984-par-ratio`
 
-Meek, D. W.; Hatfield, J. L.; Howell, T. A.; Idso, S. B.; Reginato, R. J.. (1984). *A Generalized Relationship between Photosynthetically Active Radiation and Solar Radiation*. Agronomy Journal 76: 939-945
+Meek, D. W.; Hatfield, J. L.; Howell, T. A.; Idso, S. B.; Reginato, R. J. (1984). *A Generalized Relationship between Photosynthetically Active Radiation and Solar Radiation*. Agronomy Journal 76: 939-945
 
 - DOI: [10.2134/agronj1984.00021962007600060018x](https://doi.org/10.2134/agronj1984.00021962007600060018x)
 - Verification: Crossref-verified | Access: paywalled
@@ -794,7 +794,7 @@ Meek, D. W.; Hatfield, J. L.; Howell, T. A.; Idso, S. B.; Reginato, R. J.. (1984
 
 #### `michalsky1988-almanac`
 
-Michalsky, Joseph J.. (1988). *The Astronomical Almanac's algorithm for approximate solar position (1950-2050)*. Solar Energy 40: 227-235
+Michalsky, Joseph J. (1988). *The Astronomical Almanac's algorithm for approximate solar position (1950-2050)*. Solar Energy 40: 227-235
 
 - DOI: [10.1016/0038-092X(88)90045-X](https://doi.org/10.1016/0038-092X(88)90045-X)
 - Verification: Crossref-verified | Access: paywalled
@@ -883,7 +883,7 @@ Reda, Ibrahim; Andreas, Afshin. (2008). *Solar Position Algorithm for Solar Radi
 
 #### `reindl1990-tilted-surface`
 
-Reindl, D. T.; Beckman, W. A.; Duffie, J. A.. (1990). *Evaluation of hourly tilted surface radiation models*. Solar Energy 45: 9-17
+Reindl, D. T.; Beckman, W. A.; Duffie, J. A. (1990). *Evaluation of hourly tilted surface radiation models*. Solar Energy 45: 9-17
 
 - DOI: [10.1016/0038-092X(90)90061-G](https://doi.org/10.1016/0038-092X(90)90061-G)
 - Verification: Crossref-verified | Access: paywalled
@@ -902,7 +902,7 @@ Reinhart, Christoph F.; Walkenhorst, Oliver. (2001). *Validation of dynamic RADI
 
 #### `sager1988-photon-conversion`
 
-Sager, J. C.; Smith, W. O.; Edwards, J. L.; Cyr, K. L.. (1988). *Photosynthetic Efficiency and Phytochrome Photoequilibria Determination Using Spectral Data*. Transactions of the ASAE 31: 1882-1889
+Sager, J. C.; Smith, W. O.; Edwards, J. L.; Cyr, K. L. (1988). *Photosynthetic Efficiency and Phytochrome Photoequilibria Determination Using Spectral Data*. Transactions of the ASAE 31: 1882-1889
 
 - DOI: [10.13031/2013.30952](https://doi.org/10.13031/2013.30952)
 - Verification: Crossref-verified | Access: paywalled
@@ -923,7 +923,7 @@ Sengupta, Manajit; Xie, Yu; Lopez, Anthony; Habte, Aron; Maclaurin, Galen; Shelb
 
 #### `spencer1971-fourier`
 
-Spencer, J. W.. (1971). *Fourier series representation of the position of the sun*. Search 2: 172
+Spencer, J. W. (1971). *Fourier series representation of the position of the sun*. Search 2: 172
 
 - Verification: UNVERIFIED | Access: paywalled
 - Backs:
@@ -951,7 +951,7 @@ Szarek, Kamil; Jouttijärvi, Sami; Karttunen, Ville; Hynnä, Aleksi. (2026). *Pe
 
 #### `thevenard2006-ground-reflectivity`
 
-Thevenard, D.; Haddad, K.. (2006). *Ground reflectivity in the context of building energy simulation*. Energy and Buildings 38: 972-980
+Thevenard, D.; Haddad, K. (2006). *Ground reflectivity in the context of building energy simulation*. Energy and Buildings 38: 972-980
 
 - DOI: [10.1016/j.enbuild.2005.11.007](https://doi.org/10.1016/j.enbuild.2005.11.007)
 - Verification: Crossref-verified | Access: paywalled
@@ -961,7 +961,7 @@ Thevenard, D.; Haddad, K.. (2006). *Ground reflectivity in the context of buildi
 
 #### `torres-lopez-purdue-dli`
 
-Torres, Ariana P.; Lopez, Roberto G.. (n.d.). *Measuring Daily Light Integral in a Greenhouse*. Commercial Greenhouse Production HO-238-W
+Torres, Ariana P.; Lopez, Roberto G. (n.d.). *Measuring Daily Light Integral in a Greenhouse*. Commercial Greenhouse Production HO-238-W
 
 - URL: <https://www.extension.purdue.edu/extmedia/ho/ho-238-w.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -974,7 +974,7 @@ Torres, Ariana P.; Lopez, Roberto G.. (n.d.). *Measuring Daily Light Integral in
 
 #### `torres-purdue-dli-b`
 
-Torres, Ariana P.; Currey, Christopher J.; Lopez, Roberto G.; Faust, James E.. (2010). *Measuring Daily Light Integral (DLI)*. Commercial Greenhouse Production HO-238-B-W
+Torres, Ariana P.; Currey, Christopher J.; Lopez, Roberto G.; Faust, James E. (2010). *Measuring Daily Light Integral (DLI)*. Commercial Greenhouse Production HO-238-B-W
 
 - URL: <https://www.extension.purdue.edu/extmedia/ho/ho-238-b-w.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -984,7 +984,7 @@ Torres, Ariana P.; Currey, Christopher J.; Lopez, Roberto G.; Faust, James E.. (
 
 #### `tregenza1987-sky-subdivision`
 
-Tregenza, P. R.. (1987). *Subdivision of the sky hemisphere for luminance measurements*. Lighting Research & Technology 19: 13-14
+Tregenza, P. R. (1987). *Subdivision of the sky hemisphere for luminance measurements*. Lighting Research & Technology 19: 13-14
 
 - DOI: [10.1177/096032718701900103](https://doi.org/10.1177/096032718701900103)
 - Verification: Crossref-verified | Access: paywalled
@@ -1088,7 +1088,7 @@ Bassal, Hussein; Merah, Othmane; Ali, Aqeel M.; Hijazi, Akram; El Omar, Fawaz. (
 
 #### `bleasdale1960-population-yield`
 
-Bleasdale, J. K. A.; Nelder, J. A.. (1960). *Plant Population and Crop Yield*. Nature 188: 342
+Bleasdale, J. K. A.; Nelder, J. A. (1960). *Plant Population and Crop Yield*. Nature 188: 342
 
 - DOI: [10.1038/188342a0](https://doi.org/10.1038/188342a0)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **A**
@@ -1097,7 +1097,7 @@ Bleasdale, J. K. A.; Nelder, J. A.. (1960). *Plant Population and Crop Yield*. N
 
 #### `both1997-cornell-lettuce-light`
 
-Both, A. J.; Albright, L. D.; Langhans, R. W.; Reiser, R. A.; Vinzant, B. G.. (1997). *Hydroponic lettuce production influenced by integrated supplemental light levels in a controlled environment agriculture facility: experimental results*. Acta Horticulturae 418: 45-52
+Both, A. J.; Albright, L. D.; Langhans, R. W.; Reiser, R. A.; Vinzant, B. G. (1997). *Hydroponic lettuce production influenced by integrated supplemental light levels in a controlled environment agriculture facility: experimental results*. Acta Horticulturae 418: 45-52
 
 - DOI: [10.17660/ActaHortic.1997.418.5](https://doi.org/10.17660/ActaHortic.1997.418.5)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **A**
@@ -1107,7 +1107,7 @@ Both, A. J.; Albright, L. D.; Langhans, R. W.; Reiser, R. A.; Vinzant, B. G.. (1
 
 #### `brechner2013-cornell-lettuce-handbook`
 
-Brechner, Melissa; Both, A. J.. (2013). *Hydroponic Lettuce Handbook*. Cornell University Controlled Environment Agriculture Program
+Brechner, Melissa; Both, A. J. (2013). *Hydroponic Lettuce Handbook*. Cornell University Controlled Environment Agriculture Program
 
 - URL: <https://cpb-us-e1.wpmucdn.com/blogs.cornell.edu/dist/8/8824/files/2019/06/Cornell-CEA-Lettuce-Handbook-.pdf>
 - Verification: URL-verified | Access: open-access, evidence tier **B**
@@ -1149,7 +1149,7 @@ Chamberlain, James L.; Beegle, Dana; Lajeunesse Connette, Katie. (2014). *Forest
 
 #### `chan-elevitch-2006-coconut-species-profile`
 
-Chan, Edwin; Elevitch, Craig R.. (2006). *Cocos nucifera (coconut), Species Profiles for Pacific Island Agroforestry, ver. 2.1*. Permanent Agriculture Resources (Agroforestry Net), Holualoa, Hawaii (listed on the CTAHR Master Gardener plants page, University of Hawaii)
+Chan, Edwin; Elevitch, Craig R. (2006). *Cocos nucifera (coconut), Species Profiles for Pacific Island Agroforestry, ver. 2.1*. Permanent Agriculture Resources (Agroforestry Net), Holualoa, Hawaii (listed on the CTAHR Master Gardener plants page, University of Hawaii)
 
 - URL: <https://agroforestry.org/images/pdfs/Cocos-coconut.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -1183,7 +1183,7 @@ Tanner, Cory. (2025). *Pomegranate (Punica granatum): How to Grow, Care for, and
 
 #### `cockshull1992-tomato-shading`
 
-Cockshull, K. E.; Graves, C. J.; Cave, C. R. J.. (1992). *The influence of shading on yield of glasshouse tomatoes*. Journal of Horticultural Science 67: 11-24
+Cockshull, K. E.; Graves, C. J.; Cave, C. R. J. (1992). *The influence of shading on yield of glasshouse tomatoes*. Journal of Horticultural Science 67: 11-24
 
 - DOI: [10.1080/00221589.1992.11516215](https://doi.org/10.1080/00221589.1992.11516215)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **B**
@@ -1236,7 +1236,7 @@ Cornell University, Department of Horticulture. (n.d.). *Quinces (Cydonia oblong
 
 #### `crane-ifas-lemon-hs1153`
 
-Crane, Jonathan H.. (n.d.). *Lemon Growing in the Florida Home Landscape*. University of Florida IFAS Extension HS1153/HS402
+Crane, Jonathan H. (n.d.). *Lemon Growing in the Florida Home Landscape*. University of Florida IFAS Extension HS1153/HS402
 
 - URL: <https://ask.ifas.ufl.edu/publication/HS402>
 - Verification: URL-verified | Access: public-domain
@@ -1264,7 +1264,7 @@ Crane, Jonathan H.; Wasielewski, Jeff; Balerdi, Carlos F.; Maguire, Ian. (n.d.).
 
 #### `crane-ifas-papaya-hs11`
 
-Crane, Jonathan H.. (n.d.). *Papaya Growing in the Florida Home Landscape*. University of Florida IFAS Extension HS11/MG054
+Crane, Jonathan H. (n.d.). *Papaya Growing in the Florida Home Landscape*. University of Florida IFAS Extension HS11/MG054
 
 - URL: <https://ask.ifas.ufl.edu/publication/MG054>
 - Verification: URL-verified | Access: public-domain
@@ -1288,7 +1288,7 @@ Cryan, Jessica; Musselman, Erin; Baumgardner, Ann; Osborn, Sara. (2024). *Yield,
 
 #### `ctahr-1983-guava-in-hawaii`
 
-Shigeura, Gordon T.; Bullock, Richard M.. (1983). *Guava (Psidium guajava L.) in Hawaii: History and Production (Research Extension Series 035)*. Hawaii Institute of Tropical Agriculture and Human Resources, University of Hawaii
+Shigeura, Gordon T.; Bullock, Richard M. (1983). *Guava (Psidium guajava L.) in Hawaii: History and Production (Research Extension Series 035)*. Hawaii Institute of Tropical Agriculture and Human Resources, University of Hawaii
 
 - URL: <https://www3.ctahr.hawaii.edu/oc/freepubs/pdf/RES-035.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -1308,7 +1308,7 @@ Valenzuela, Hector; Smith, Jody. (2002). *Green Manure Crops: Lablab (SA-GM-7)*.
 
 #### `ctahr-2002-pineapple-cultivation-hawaii`
 
-Bartholomew, Duane P.; Rohrbach, Kenneth G.; Evans, Dale O.. (2002). *Pineapple Cultivation in Hawaii (F&N-7)*. College of Tropical Agriculture and Human Resources, University of Hawaii at Manoa
+Bartholomew, Duane P.; Rohrbach, Kenneth G.; Evans, Dale O. (2002). *Pineapple Cultivation in Hawaii (F&N-7)*. College of Tropical Agriculture and Human Resources, University of Hawaii at Manoa
 
 - URL: <https://www.ctahr.hawaii.edu/oc/freepubs/pdf/f_n-7.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -1318,7 +1318,7 @@ Bartholomew, Duane P.; Rohrbach, Kenneth G.; Evans, Dale O.. (2002). *Pineapple 
 
 #### `ctahr-2009-cacao-economics-kona`
 
-Fleming, Kent; Smith, Virginia Easton; Bittenbender, H. C.. (2009). *The Economics of Cacao Production in Kona (AB-17)*. University of Hawai'i College of Tropical Agriculture and Human Resources (CTAHR)
+Fleming, Kent; Smith, Virginia Easton; Bittenbender, H. C. (2009). *The Economics of Cacao Production in Kona (AB-17)*. University of Hawai'i College of Tropical Agriculture and Human Resources (CTAHR)
 
 - URL: <https://www.ctahr.hawaii.edu/oc/freepubs/pdf/AB-17.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -1338,7 +1338,7 @@ Clifford, Patti; Kobayashi, Kent. (2010). *Non-Invasive Fruit Trees for Gardens 
 
 #### `ctahr-circular-485-macadamia`
 
-Hamilton, Richard A.; Ito, Philip J.; Chia, C. L.. (n.d.). *Macadamia: Hawaii's Dessert Nut (Circular 485)*. College of Tropical Agriculture and Human Resources, University of Hawaii at Manoa
+Hamilton, Richard A.; Ito, Philip J.; Chia, C. L. (n.d.). *Macadamia: Hawaii's Dessert Nut (Circular 485)*. College of Tropical Agriculture and Human Resources, University of Hawaii at Manoa
 
 - URL: <https://www3.ctahr.hawaii.edu/oc/freepubs/pdf/C1-485.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -1349,7 +1349,7 @@ Hamilton, Richard A.; Ito, Philip J.; Chia, C. L.. (n.d.). *Macadamia: Hawaii's 
 
 #### `ctahr-coconut-as-an-ornamental`
 
-Watson, Donald P.. (n.d.). *Coconut as an Ornamental (Circular 478)*. Hawaii Cooperative Extension Service, College of Tropical Agriculture and Human Resources, University of Hawaii
+Watson, Donald P. (n.d.). *Coconut as an Ornamental (Circular 478)*. Hawaii Cooperative Extension Service, College of Tropical Agriculture and Human Resources, University of Hawaii
 
 - URL: <https://www.ctahr.hawaii.edu/oc/freepubs/pdf/C1-478.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -1371,7 +1371,7 @@ University of Hawaii Cooperative Extension Service. (1998). *Upland Taro*. Colle
 
 #### `de-melo-abreu2004-olive-chilling`
 
-De Melo-Abreu, J. P.; Barranco, D.; Cordeiro, A. M.; Tous, J.; Rogado, B. M.; Villalobos, F. J.. (2004). *Modelling olive flowering date using chilling for dormancy release and thermal time*. Agricultural and Forest Meteorology 125: 117-127
+De Melo-Abreu, J. P.; Barranco, D.; Cordeiro, A. M.; Tous, J.; Rogado, B. M.; Villalobos, F. J. (2004). *Modelling olive flowering date using chilling for dormancy release and thermal time*. Agricultural and Forest Meteorology 125: 117-127
 
 - DOI: [10.1016/j.agrformet.2004.02.009](https://doi.org/10.1016/j.agrformet.2004.02.009)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **A**
@@ -1381,7 +1381,7 @@ De Melo-Abreu, J. P.; Barranco, D.; Cordeiro, A. M.; Tous, J.; Rogado, B. M.; Vi
 
 #### `dou2018-basil-dli`
 
-Dou, Haijie; Niu, Genhua; Gu, Mengmeng; Masabni, Joseph G.. (2018). *Responses of Sweet Basil to Different Daily Light Integrals in Photosynthesis, Morphology, Yield, and Nutritional Quality*. HortScience 53: 496-503
+Dou, Haijie; Niu, Genhua; Gu, Mengmeng; Masabni, Joseph G. (2018). *Responses of Sweet Basil to Different Daily Light Integrals in Photosynthesis, Morphology, Yield, and Nutritional Quality*. HortScience 53: 496-503
 
 - DOI: [10.21273/HORTSCI12785-17](https://doi.org/10.21273/HORTSCI12785-17)
 - Verification: Crossref-verified | Access: open-access, evidence tier **A**
@@ -1392,7 +1392,7 @@ Dou, Haijie; Niu, Genhua; Gu, Mengmeng; Masabni, Joseph G.. (2018). *Responses o
 
 #### `duke-1983-cacao-energy-crops`
 
-Duke, James A.. (1983). *Handbook of Energy Crops: Theobroma cacao (unpublished)*. Purdue University Center for New Crops & Plants Products (NewCROP)
+Duke, James A. (1983). *Handbook of Energy Crops: Theobroma cacao (unpublished)*. Purdue University Center for New Crops & Plants Products (NewCROP)
 
 - URL: <https://www.hort.purdue.edu/newcrop/duke_energy/Theobroma_cacao.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -1407,7 +1407,7 @@ Duke, James A.. (1983). *Handbook of Energy Crops: Theobroma cacao (unpublished)
 
 #### `duke-1983-handbook-of-energy-crops-corchorus-olitorius`
 
-Duke, James A.. (1983). *Corchorus olitorius L., in Handbook of Energy Crops (unpublished)*. Purdue University Center for New Crops and Plant Products (NewCROP)
+Duke, James A. (1983). *Corchorus olitorius L., in Handbook of Energy Crops (unpublished)*. Purdue University Center for New Crops and Plant Products (NewCROP)
 
 - URL: <https://hort.purdue.edu/newcrop/duke_energy/Corchorus_olitorius.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -1417,7 +1417,7 @@ Duke, James A.. (1983). *Corchorus olitorius L., in Handbook of Energy Crops (un
 
 #### `duke-1983-handbook-of-energy-crops-saccharum-officinarum`
 
-Duke, James A.. (1983). *Saccharum officinarum L., in Handbook of Energy Crops (unpublished)*. Purdue University Center for New Crops and Plant Products (NewCROP)
+Duke, James A. (1983). *Saccharum officinarum L., in Handbook of Energy Crops (unpublished)*. Purdue University Center for New Crops and Plant Products (NewCROP)
 
 - URL: <https://hort.purdue.edu/newcrop/duke_energy/Saccharum_officinarum.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -1427,7 +1427,7 @@ Duke, James A.. (1983). *Saccharum officinarum L., in Handbook of Energy Crops (
 
 #### `duke1983-energy-crops-purdue`
 
-Duke, James A.. (1983). *Handbook of Energy Crops*. Unpublished; hosted by Purdue University NewCROP
+Duke, James A. (1983). *Handbook of Energy Crops*. Unpublished; hosted by Purdue University NewCROP
 
 - URL: <https://hort.purdue.edu/newcrop/duke_energy/dukeindex.html>
 - Verification: URL-verified | Access: open-access, evidence tier **C**
@@ -1438,7 +1438,7 @@ Duke, James A.. (1983). *Handbook of Energy Crops*. Unpublished; hosted by Purdu
 
 #### `elevitch-manner-2006-jackfruit-species-profile`
 
-Elevitch, Craig R.; Manner, Harley I.. (2006). *Artocarpus heterophyllus (jackfruit), Species Profiles for Pacific Island Agroforestry, ver. 1.1*. Permanent Agriculture Resources (Agroforestry Net), Holualoa, Hawaii (listed on the CTAHR Master Gardener plants page, University of Hawaii)
+Elevitch, Craig R.; Manner, Harley I. (2006). *Artocarpus heterophyllus (jackfruit), Species Profiles for Pacific Island Agroforestry, ver. 1.1*. Permanent Agriculture Resources (Agroforestry Net), Holualoa, Hawaii (listed on the CTAHR Master Gardener plants page, University of Hawaii)
 
 - URL: <https://agroforestry.org/images/pdfs/A.heterophyllus-jackfruit.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -1463,7 +1463,7 @@ Erdei, Anna L.; David, Aneth B.; Savvidou, Eleni C.; Dzemedzionaite, Vaida; Chak
 
 #### `ernst2018-clubroot-spores`
 
-Ernst, T. W.; Kher, S.; Stanton, D.; Rennie, D. C.. (2018). *Plasmodiophora brassicae resting spore dynamics in clubroot resistant canola (Brassica napus) cropping systems*. Plant Pathology 68: 399-408
+Ernst, T. W.; Kher, S.; Stanton, D.; Rennie, D. C. (2018). *Plasmodiophora brassicae resting spore dynamics in clubroot resistant canola (Brassica napus) cropping systems*. Plant Pathology 68: 399-408
 
 - DOI: [10.1111/ppa.12949](https://doi.org/10.1111/ppa.12949)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **A**
@@ -1473,7 +1473,7 @@ Ernst, T. W.; Kher, S.; Stanton, D.; Rennie, D. C.. (2018). *Plasmodiophora bras
 
 #### `fao-1994-neglected-crops-1492`
 
-Hernández Bermejo, J. E.; León, J.. (1994). *Neglected crops: 1492 from a different perspective (FAO Plant Production and Protection Series No. 26)*. Food and Agriculture Organization of the United Nations
+Hernández Bermejo, J. E.; León, J. (1994). *Neglected crops: 1492 from a different perspective (FAO Plant Production and Protection Series No. 26)*. Food and Agriculture Organization of the United Nations
 
 - URL: <https://openknowledge.fao.org/server/api/core/bitstreams/fbde779c-8968-4a7d-8df8-de28c2196aac/content>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -1496,7 +1496,7 @@ Food and Agriculture Organization of the United Nations. (n.d.). *Minor oil crop
 
 #### `farazdaghi1968-competition-yield`
 
-Farazdaghi, H.; Harris, P. M.. (1968). *Plant Competition and Crop Yield*. Nature 217: 289-290
+Farazdaghi, H.; Harris, P. M. (1968). *Plant Competition and Crop Yield*. Nature 217: 289-290
 
 - DOI: [10.1038/217289a0](https://doi.org/10.1038/217289a0)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **A**
@@ -1506,7 +1506,7 @@ Farazdaghi, H.; Harris, P. M.. (1968). *Plant Competition and Crop Yield*. Natur
 
 #### `ferguson-1990-catnip-north-carolina`
 
-Ferguson, J.M.; Weeks, W.W.; Fike, W.T.. (1990). *Production of catnip in North Carolina*. Timber Press, in Advances in new crops (J. Janick and J.E. Simon, eds.), pp. 527-528, hosted by Purdue University NewCROP
+Ferguson, J.M.; Weeks, W.W.; Fike, W.T. (1990). *Production of catnip in North Carolina*. Timber Press, in Advances in new crops (J. Janick and J.E. Simon, eds.), pp. 527-528, hosted by Purdue University NewCROP
 
 - URL: <https://hort.purdue.edu/newcrop/proceedings1990/V1-527.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -1517,7 +1517,7 @@ Ferguson, J.M.; Weeks, W.W.; Fike, W.T.. (1990). *Production of catnip in North 
 
 #### `fernandez-2006-yacon-central-europe`
 
-Fernández, E. C.; Viehmannová, I.; Lachman, J.; Milella, L.. (2006). *Yacon [Smallanthus sonchifolius (Poeppig & Endlicher) H. Robinson]: a new crop in the Central Europe*. Plant, Soil and Environment 52(12):564-570 (Czech Academy of Agricultural Sciences)
+Fernández, E. C.; Viehmannová, I.; Lachman, J.; Milella, L. (2006). *Yacon [Smallanthus sonchifolius (Poeppig & Endlicher) H. Robinson]: a new crop in the Central Europe*. Plant, Soil and Environment 52(12):564-570 (Czech Academy of Agricultural Sciences)
 
 - URL: <https://pse.agriculturejournals.cz/pdfs/pse/2006/12/05.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -1527,7 +1527,7 @@ Fernández, E. C.; Viehmannová, I.; Lachman, J.; Milella, L.. (2006). *Yacon [S
 
 #### `fiedler2007-insectary`
 
-Fiedler, Anna K.; Landis, Douglas A.. (2007). *Attractiveness of Michigan Native Plants to Arthropod Natural Enemies and Herbivores*. Environmental Entomology 36: 751-765
+Fiedler, Anna K.; Landis, Douglas A. (2007). *Attractiveness of Michigan Native Plants to Arthropod Natural Enemies and Herbivores*. Environmental Entomology 36: 751-765
 
 - DOI: [10.1093/ee/36.4.751](https://doi.org/10.1093/ee/36.4.751)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **A**
@@ -1537,7 +1537,7 @@ Fiedler, Anna K.; Landis, Douglas A.. (2007). *Attractiveness of Michigan Native
 
 #### `finch-collier2000-landings`
 
-Finch, Stan; Collier, Rosemary H.. (2000). *Host-plant selection by insects - a theory based on 'appropriate/inappropriate landings' by pest insects of cruciferous plants*. Entomologia Experimentalis et Applicata 96: 91-102
+Finch, Stan; Collier, Rosemary H. (2000). *Host-plant selection by insects - a theory based on 'appropriate/inappropriate landings' by pest insects of cruciferous plants*. Entomologia Experimentalis et Applicata 96: 91-102
 
 - DOI: [10.1046/j.1570-7458.2000.00684.x](https://doi.org/10.1046/j.1570-7458.2000.00684.x)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **A**
@@ -1546,7 +1546,7 @@ Finch, Stan; Collier, Rosemary H.. (2000). *Host-plant selection by insects - a 
 
 #### `finch-collier2003`
 
-Finch, Stan; Billiald, Helen; Collier, Rosemary H.. (2003). *Companion planting - do aromatic plants disrupt host-plant finding by the cabbage root fly and the onion fly more effectively than non-aromatic plants?*. Entomologia Experimentalis et Applicata 109: 183-195
+Finch, Stan; Billiald, Helen; Collier, Rosemary H. (2003). *Companion planting - do aromatic plants disrupt host-plant finding by the cabbage root fly and the onion fly more effectively than non-aromatic plants?* Entomologia Experimentalis et Applicata 109: 183-195
 
 - DOI: [10.1046/j.0013-8703.2003.00102.x](https://doi.org/10.1046/j.0013-8703.2003.00102.x)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **A**
@@ -1589,7 +1589,7 @@ Gao, Wei; He, Dongxian; Ji, Fang; Zhang, Sen; Zheng, Jianfeng. (2020). *Effects 
 
 #### `garbuzov2014-attractiveness`
 
-Garbuzov, Mihail; Ratnieks, Francis L. W.. (2014). *Quantifying variation among garden plants in attractiveness to bees and other flower-visiting insects*. Functional Ecology 28: 364-374
+Garbuzov, Mihail; Ratnieks, Francis L. W. (2014). *Quantifying variation among garden plants in attractiveness to bees and other flower-visiting insects*. Functional Ecology 28: 364-374
 
 - DOI: [10.1111/1365-2435.12178](https://doi.org/10.1111/1365-2435.12178)
 - Verification: Crossref-verified | Access: open-access, evidence tier **A**
@@ -1599,7 +1599,7 @@ Garbuzov, Mihail; Ratnieks, Francis L. W.. (2014). *Quantifying variation among 
 
 #### `gimsing2006-glucosinolate-soil`
 
-Gimsing, A. L.; Kirkegaard, J. A.. (2006). *Glucosinolate and isothiocyanate concentration in soil following incorporation of Brassica biofumigants*. Soil Biology and Biochemistry 38: 2255-2264
+Gimsing, A. L.; Kirkegaard, J. A. (2006). *Glucosinolate and isothiocyanate concentration in soil following incorporation of Brassica biofumigants*. Soil Biology and Biochemistry 38: 2255-2264
 
 - DOI: [10.1016/j.soilbio.2006.01.024](https://doi.org/10.1016/j.soilbio.2006.01.024)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **B**
@@ -1624,7 +1624,7 @@ Govaerts, Rafaël; Nic Lughadha, Eimear; Black, Nicholas; Turner, Robert; Paton,
 
 #### `hargreaves1985-reference-et`
 
-Hargreaves, George H.; Samani, Zohrab A.. (1985). *Reference Crop Evapotranspiration from Temperature*. Applied Engineering in Agriculture 1: 96-99
+Hargreaves, George H.; Samani, Zohrab A. (1985). *Reference Crop Evapotranspiration from Temperature*. Applied Engineering in Agriculture 1: 96-99
 
 - DOI: [10.13031/2013.26773](https://doi.org/10.13031/2013.26773)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **B**
@@ -1634,7 +1634,7 @@ Hargreaves, George H.; Samani, Zohrab A.. (1985). *Reference Crop Evapotranspira
 
 #### `harrington-soil-temperature-germination`
 
-Harrington, J. F.. (2013). *Soil temperature conditions for vegetable seed germination*. Oregon State University Extension Service
+Harrington, J. F. (2013). *Soil temperature conditions for vegetable seed germination*. Oregon State University Extension Service
 
 - URL: <https://extension.oregonstate.edu/gardening/soil-compost/soil-temperature-conditions-vegetable-seed-germination>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -1725,7 +1725,7 @@ US Forest Service, Pacific Island Ecosystems at Risk (PIER). (2011). *Setaria it
 
 #### `hermann-heller-1997-andean-roots-tubers`
 
-Hermann, M.; Heller, J.. (1997). *Andean roots and tubers: Ahipa, arracacha, maca and yacon (Promoting the conservation and use of underutilized and neglected crops 21)*. Institute of Plant Genetics and Crop Plant Research (IPK), Gatersleben, Germany, and International Plant Genetic Resources Institute (IPGRI), Rome, Italy
+Hermann, M.; Heller, J. (1997). *Andean roots and tubers: Ahipa, arracacha, maca and yacon (Promoting the conservation and use of underutilized and neglected crops 21)*. Institute of Plant Genetics and Crop Plant Research (IPK), Gatersleben, Germany, and International Plant Genetic Resources Institute (IPGRI), Rome, Italy
 
 - URL: <https://hdl.handle.net/10568/104208>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -1736,7 +1736,7 @@ Hermann, M.; Heller, J.. (1997). *Andean roots and tubers: Ahipa, arracacha, mac
 
 #### `hoanghua2024-white-rot`
 
-Hoang Hua, Giang; Wilson, Christopher R.; Dung, Jeremiah K. S.. (2024). *Evaluation of Bait Crops for the Integrated Management of White Rot (Sclerotium cepivorum) in Onion*. Plant Disease 108: 118-124
+Hoang Hua, Giang; Wilson, Christopher R.; Dung, Jeremiah K. S. (2024). *Evaluation of Bait Crops for the Integrated Management of White Rot (Sclerotium cepivorum) in Onion*. Plant Disease 108: 118-124
 
 - DOI: [10.1094/PDIS-04-23-0688-RE](https://doi.org/10.1094/PDIS-04-23-0688-RE)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **B**
@@ -1747,7 +1747,7 @@ Hoang Hua, Giang; Wilson, Christopher R.; Dung, Jeremiah K. S.. (2024). *Evaluat
 
 #### `holden2012-trap-crop-design`
 
-Holden, Matthew H.; Ellner, Stephen P.; Lee, Doo-Hyung; Nyrop, Jan P.; Sanderson, John P.. (2012). *Designing an effective trap cropping strategy: the effects of attraction, retention and plant spatial distribution*. Journal of Applied Ecology 49: 715-722
+Holden, Matthew H.; Ellner, Stephen P.; Lee, Doo-Hyung; Nyrop, Jan P.; Sanderson, John P. (2012). *Designing an effective trap cropping strategy: the effects of attraction, retention and plant spatial distribution*. Journal of Applied Ecology 49: 715-722
 
 - DOI: [10.1111/j.1365-2664.2012.02137.x](https://doi.org/10.1111/j.1365-2664.2012.02137.x)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **B**
@@ -1757,7 +1757,7 @@ Holden, Matthew H.; Ellner, Stephen P.; Lee, Doo-Hyung; Nyrop, Jan P.; Sanderson
 
 #### `holliday1960-population-yield`
 
-Holliday, R.. (1960). *Plant Population and Crop Yield*. Nature 186: 22-24
+Holliday, R. (1960). *Plant Population and Crop Yield*. Nature 186: 22-24
 
 - DOI: [10.1038/186022b0](https://doi.org/10.1038/186022b0)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **A**
@@ -1781,7 +1781,7 @@ Hooks, Cerruti R. R.; Wang, Koon-Hui; Ploeg, Antoon; McSorley, Robert. (2010). *
 
 #### `hummer2006-blue-honeysuckle`
 
-Hummer, Kim E.. (2006). *Blue Honeysuckle: A New Berry Crop for North America*. Journal of the American Pomological Society 60: 3-8
+Hummer, Kim E. (2006). *Blue Honeysuckle: A New Berry Crop for North America*. Journal of the American Pomological Society 60: 3-8
 
 - DOI: [10.71318/apom.2006.60.1.3](https://doi.org/10.71318/apom.2006.60.1.3)
 - Verification: Crossref-verified | Access: open-access, evidence tier **C**
@@ -1801,7 +1801,7 @@ Hannan, Joe. (2015). *Growing Aronia in Iowa*. Iowa State University Extension a
 
 #### `iastate-extension-2019-chinese-chestnut`
 
-O'Malley, Patrick. (2019). *What is Chinese Chestnut?*. Iowa State University Extension and Outreach, Yard and Garden
+O'Malley, Patrick. (2019). *What is Chinese Chestnut?* Iowa State University Extension and Outreach, Yard and Garden
 
 - URL: <https://yardandgarden.extension.iastate.edu/article/2019/11/what-chinese-chestnut>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -1966,7 +1966,7 @@ University of Illinois Extension. (n.d.). *Lemon Verbena (Herb Gardening)*. Univ
 
 #### `jose-juglone`
 
-Jose, Shibu; Holzmueller, Eric J.. (2008). *Black Walnut Allelopathy: Implications for Intercropping*. Allelopathy in Sustainable Agriculture and Forestry 303-319
+Jose, Shibu; Holzmueller, Eric J. (2008). *Black Walnut Allelopathy: Implications for Intercropping*. Allelopathy in Sustainable Agriculture and Forestry 303-319
 
 - DOI: [10.1007/978-0-387-77337-7_16](https://doi.org/10.1007/978-0-387-77337-7_16)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **C**
@@ -1999,7 +1999,7 @@ Directorate of Extension, Kerala Agricultural University. (2016). *Package of Pr
 
 #### `kelly2020-lettuce-dli`
 
-Kelly, Nathan; Choe, Daegeun; Meng, Qingwu; Runkle, Erik S.. (2020). *Promotion of lettuce growth under an increasing daily light integral depends on the combination of the photosynthetic photon flux density and photoperiod*. Scientia Horticulturae 272: 109565
+Kelly, Nathan; Choe, Daegeun; Meng, Qingwu; Runkle, Erik S. (2020). *Promotion of lettuce growth under an increasing daily light integral depends on the combination of the photosynthetic photon flux density and photoperiod*. Scientia Horticulturae 272: 109565
 
 - DOI: [10.1016/j.scienta.2020.109565](https://doi.org/10.1016/j.scienta.2020.109565)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **A**
@@ -2010,7 +2010,7 @@ Kelly, Nathan; Choe, Daegeun; Meng, Qingwu; Runkle, Erik S.. (2020). *Promotion 
 
 #### `khan2008-push-pull-economics`
 
-Khan, Zeyaur R.; Midega, Charles A. O.; Njuguna, Elizabeth M.; Amudavi, David M.. (2008). *Economic performance of the 'push-pull' technology for stemborer and Striga control in smallholder farming systems in western Kenya*. Crop Protection 27: 1084-1097
+Khan, Zeyaur R.; Midega, Charles A. O.; Njuguna, Elizabeth M.; Amudavi, David M. (2008). *Economic performance of the 'push-pull' technology for stemborer and Striga control in smallholder farming systems in western Kenya*. Crop Protection 27: 1084-1097
 
 - DOI: [10.1016/j.cropro.2008.01.005](https://doi.org/10.1016/j.cropro.2008.01.005)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **A**
@@ -2019,7 +2019,7 @@ Khan, Zeyaur R.; Midega, Charles A. O.; Njuguna, Elizabeth M.; Amudavi, David M.
 
 #### `khan2008-push-pull-onfarm`
 
-Khan, Zeyaur R.; Midega, Charles A. O.; Amudavi, David M.; Hassanali, Ahmed; Pickett, John A.. (2008). *On-farm evaluation of the 'push-pull' technology for the control of stemborers and striga weed on maize in western Kenya*. Field Crops Research 106: 224-233
+Khan, Zeyaur R.; Midega, Charles A. O.; Amudavi, David M.; Hassanali, Ahmed; Pickett, John A. (2008). *On-farm evaluation of the 'push-pull' technology for the control of stemborers and striga weed on maize in western Kenya*. Field Crops Research 106: 224-233
 
 - DOI: [10.1016/j.fcr.2007.12.002](https://doi.org/10.1016/j.fcr.2007.12.002)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **A**
@@ -2028,7 +2028,7 @@ Khan, Zeyaur R.; Midega, Charles A. O.; Amudavi, David M.; Hassanali, Ahmed; Pic
 
 #### `khan2010-push-pull`
 
-Khan, Zeyaur R.; Midega, Charles A. O.; Bruce, Toby J. A.; Hooper, Antony M.; Pickett, John A.. (2010). *Exploiting phytochemicals for developing a 'push-pull' crop protection strategy for cereal farmers in Africa*. Journal of Experimental Botany 61: 4185-4196
+Khan, Zeyaur R.; Midega, Charles A. O.; Bruce, Toby J. A.; Hooper, Antony M.; Pickett, John A. (2010). *Exploiting phytochemicals for developing a 'push-pull' crop protection strategy for cereal farmers in Africa*. Journal of Experimental Botany 61: 4185-4196
 
 - DOI: [10.1093/jxb/erq229](https://doi.org/10.1093/jxb/erq229)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **A**
@@ -2060,7 +2060,7 @@ K-State Research and Extension, Butler County. (n.d.). *Ground Cherry*. Kansas S
 
 #### `ksu-extension-2010-organic-pawpaw`
 
-Pomper, Kirk W.; Crabtree, Sheri B.; Lowe, Jeremy D.. (2010). *Organic Production of Pawpaw*. Kentucky State University Cooperative Extension Program
+Pomper, Kirk W.; Crabtree, Sheri B.; Lowe, Jeremy D. (2010). *Organic Production of Pawpaw*. Kentucky State University Cooperative Extension Program
 
 - URL: <https://www.kysu.edu/wp-content/uploads/2017/09/OrganicPawpawPBI-004-New-2.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -2126,7 +2126,7 @@ LSU AgCenter. (2017). *Beans (Pub. 2309)*. Louisiana State University Agricultur
 
 #### `lsuagcenter-2017-mirlitons`
 
-Timmerman, Anna. (2017). *Got Mirlitons? Or Chayote? How About Alligator Pears?*. LSU AgCenter (Jefferson Parish Extension, "GNO Gardening" newsletter)
+Timmerman, Anna. (2017). *Got Mirlitons? Or Chayote? How About Alligator Pears?* LSU AgCenter (Jefferson Parish Extension, "GNO Gardening" newsletter)
 
 - URL: <https://www.lsuagcenter.com/~/media/system/0/7/6/8/076829d1e19d5482e65dc24f45dfa6ae/january%202017pdf.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -2136,7 +2136,7 @@ Timmerman, Anna. (2017). *Got Mirlitons? Or Chayote? How About Alligator Pears?*
 
 #### `magness-1971-food-and-feed-crops-dandelion`
 
-Magness, J.R.; Markle, G.M.; Compton, C.C.. (1971). *Dandelion (Food and feed crops of the United States)*. Purdue University Center for New Crops and Plant Products (NewCROP), reproducing Magness et al. 1971
+Magness, J.R.; Markle, G.M.; Compton, C.C. (1971). *Dandelion (Food and feed crops of the United States)*. Purdue University Center for New Crops and Plant Products (NewCROP), reproducing Magness et al. 1971
 
 - URL: <https://hort.purdue.edu/newcrop/Crops/Dandelion.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -2187,7 +2187,7 @@ Mansion-Vaquié, Agathe; Ferrer, Astrid; Ramon-Portugal, Felipe; Wezel, Alexande
 
 #### `marcelis2006-light-response`
 
-Marcelis, L. F. M.; Broekhuijsen, A. G. M.; Meinen, E.; Nijs, E. M. F. M.; Raaphorst, M. G. M.. (2006). *Quantification of the growth response to light quantity of greenhouse grown crops*. Acta Horticulturae 97-104
+Marcelis, L. F. M.; Broekhuijsen, A. G. M.; Meinen, E.; Nijs, E. M. F. M.; Raaphorst, M. G. M. (2006). *Quantification of the growth response to light quantity of greenhouse grown crops*. Acta Horticulturae 97-104
 
 - DOI: [10.17660/ActaHortic.2006.711.9](https://doi.org/10.17660/ActaHortic.2006.711.9)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **B**
@@ -2210,7 +2210,7 @@ Martin-Guay, Marc-Olivier; Paquette, Alain; Dupras, Jérôme; Rivest, David. (20
 
 #### `morra2002-isothiocyanate-release`
 
-Morra, M. J.; Kirkegaard, J. A.. (2002). *Isothiocyanate release from soil-incorporated Brassica tissues*. Soil Biology and Biochemistry 34: 1683-1690
+Morra, M. J.; Kirkegaard, J. A. (2002). *Isothiocyanate release from soil-incorporated Brassica tissues*. Soil Biology and Biochemistry 34: 1683-1690
 
 - DOI: [10.1016/S0038-0717(02)00153-0](https://doi.org/10.1016/S0038-0717(02)00153-0)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **B**
@@ -2233,7 +2233,7 @@ Palmer, Dara. (2018). *Growing Serviceberries*. Montana State University Extensi
 
 #### `mt-pleasant2010-iroquoian`
 
-Mt. Pleasant, Jane; Burt, Robert F.. (2010). *Estimating Productivity of Traditional Iroquoian Cropping Systems from Field Experiments and Historical Literature*. Journal of Ethnobiology 30: 52-79
+Mt. Pleasant, Jane; Burt, Robert F. (2010). *Estimating Productivity of Traditional Iroquoian Cropping Systems from Field Experiments and Historical Literature*. Journal of Ethnobiology 30: 52-79
 
 - DOI: [10.2993/0278-0771-30.1.52](https://doi.org/10.2993/0278-0771-30.1.52)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **B**
@@ -2243,7 +2243,7 @@ Mt. Pleasant, Jane; Burt, Robert F.. (2010). *Estimating Productivity of Traditi
 
 #### `mu-2017-alfalfa-g4550`
 
-Henning, Jimmy C.; Nelson, C. J.. (2017). *Alfalfa (G4550)*. University of Missouri Extension
+Henning, Jimmy C.; Nelson, C. J. (2017). *Alfalfa (G4550)*. University of Missouri Extension
 
 - URL: <https://extension.missouri.edu/publications/g4550>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -2496,7 +2496,7 @@ NC State Extension. (n.d.). *Linum usitatissimum*. NC State Extension, Plant Too
 
 #### `ncsu-extension-parker-2022-tree-fruits-nuts`
 
-Parker, Michael. (2022). *Tree Fruits and Nuts (Chapter 15), North Carolina Extension Gardener Handbook, 2nd ed.*. NC State Extension
+Parker, Michael. (2022). *Tree Fruits and Nuts (Chapter 15), North Carolina Extension Gardener Handbook, 2nd ed.* NC State Extension
 
 - URL: <https://content.ces.ncsu.edu/extension-gardener-handbook/15-tree-fruit-and-nuts>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -2713,7 +2713,7 @@ NDSU Extension. (n.d.). *Fall Frost Damage to Field Crops*. North Dakota State U
 
 #### `nelson2007-late-seral-herbs`
 
-Nelson, Cara R.; Halpern, Charles B.; Antos, Joseph A.. (2007). *Variation in responses of late-seral herbs to disturbance and environmental stress*. Ecology 88: 2880-2890
+Nelson, Cara R.; Halpern, Charles B.; Antos, Joseph A. (2007). *Variation in responses of late-seral herbs to disturbance and environmental stress*. Ecology 88: 2880-2890
 
 - DOI: [10.1890/06-1989.1](https://doi.org/10.1890/06-1989.1)
 - Verification: Crossref-verified | Access: open-access, evidence tier **B**
@@ -2771,7 +2771,7 @@ National Research Council. (1989). *Lost Crops of the Incas: Little-Known Plants
 
 #### `nrcs-2006-plant-guide-sunn-hemp`
 
-Joy, Robert; Peterson, J. S.. (2006). *Plant guide for sunn hemp (Crotalaria juncea L.)*. USDA Natural Resources Conservation Service, Plant Materials Center and National Plant Data Center
+Joy, Robert; Peterson, J. S. (2006). *Plant guide for sunn hemp (Crotalaria juncea L.)*. USDA Natural Resources Conservation Service, Plant Materials Center and National Plant Data Center
 
 - URL: <https://plants.usda.gov/DocumentLibrary/plantguide/pdf/pg_crju.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -2783,7 +2783,7 @@ Joy, Robert; Peterson, J. S.. (2006). *Plant guide for sunn hemp (Crotalaria jun
 
 #### `nrcs-2012-plant-guide-lablab`
 
-Sheahan, Christopher M.. (2012). *Plant guide for lablab (Lablab purpureus)*. USDA Natural Resources Conservation Service, Cape May Plant Materials Center
+Sheahan, Christopher M. (2012). *Plant guide for lablab (Lablab purpureus)*. USDA Natural Resources Conservation Service, Cape May Plant Materials Center
 
 - URL: <https://plants.usda.gov/DocumentLibrary/plantguide/pdf/pg_lapu6.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -2793,7 +2793,7 @@ Sheahan, Christopher M.. (2012). *Plant guide for lablab (Lablab purpureus)*. US
 
 #### `nrcs-2014-plant-guide-foxtail-millet`
 
-Sheahan, Christopher M.. (2014). *Plant guide for foxtail millet (Setaria italica)*. USDA Natural Resources Conservation Service, Cape May Plant Materials Center
+Sheahan, Christopher M. (2014). *Plant guide for foxtail millet (Setaria italica)*. USDA Natural Resources Conservation Service, Cape May Plant Materials Center
 
 - URL: <https://plants.usda.gov/DocumentLibrary/plantguide/pdf/pg_seit.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -2803,7 +2803,7 @@ Sheahan, Christopher M.. (2014). *Plant guide for foxtail millet (Setaria italic
 
 #### `oikeh-warda-upland-rice-handbook`
 
-Oikeh, S. O.; Nwilene, F. E.; Agunbiade, T. A.; Oladimeji, O.; Ajayi, O.; Semon, M.; Tsunematsu, H.; Samejima, H.. (n.d.). *Growing upland rice: a production handbook*. Africa Rice Center (WARDA)
+Oikeh, S. O.; Nwilene, F. E.; Agunbiade, T. A.; Oladimeji, O.; Ajayi, O.; Semon, M.; Tsunematsu, H.; Samejima, H. (n.d.). *Growing upland rice: a production handbook*. Africa Rice Center (WARDA)
 
 - URL: <https://www.fao.org/fileadmin/user_upload/ivc/docs/uplandrice.pdf>
 - Verification: URL-verified | Access: open-access
@@ -2873,7 +2873,7 @@ Ontario Ministry of Agriculture, Food and Rural Affairs. (2022). *Agronomy Guide
 
 #### `oplinger1990-sesame-afcm`
 
-Oplinger, E. S.; Putnam, D. H.; Kaminski, A. R.; Hanson, C. V.; Oelke, E. A.; Schulte, E. E.; Doll, J. D.. (1990). *Sesame*. Alternative Field Crops Manual
+Oplinger, E. S.; Putnam, D. H.; Kaminski, A. R.; Hanson, C. V.; Oelke, E. A.; Schulte, E. E.; Doll, J. D. (1990). *Sesame*. Alternative Field Crops Manual
 
 - URL: <https://hort.purdue.edu/newcrop/afcm/sesame.html>
 - Verification: URL-verified | Access: public-domain
@@ -2887,7 +2887,7 @@ Oplinger, E. S.; Putnam, D. H.; Kaminski, A. R.; Hanson, C. V.; Oelke, E. A.; Sc
 
 #### `osu-2002-safflower`
 
-Armah-Agyeman, Grace; Loiland, Jim; Karow, Russell S.; Hang, Anne N.. (2002). *Safflower (Dryland Cropping Systems, EM 8792)*. Oregon State University Extension Service
+Armah-Agyeman, Grace; Loiland, Jim; Karow, Russell S.; Hang, Anne N. (2002). *Safflower (Dryland Cropping Systems, EM 8792)*. Oregon State University Extension Service
 
 - URL: <https://extension.oregonstate.edu/sites/extd8/files/documents/em8792.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -2989,7 +2989,7 @@ Strik, Bernadine; Dixon, Emily; Detweiler, Amy Jo; Sanchez, Nicole. (2020). *Gro
 
 #### `osu-extension-2025-tree-fruits-nuts-home`
 
-Olsen, Jeff L.. (2025). *Growing tree fruits and nuts at home*. Oregon State University Extension Service
+Olsen, Jeff L. (2025). *Growing tree fruits and nuts at home*. Oregon State University Extension Service
 
 - URL: <https://extension.oregonstate.edu/catalog/ec-819-growing-tree-fruits-nuts-home>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -3026,7 +3026,7 @@ Oregon State University, Department of Horticulture. (n.d.). *Cydonia oblonga (L
 
 #### `peng2015-clubroot-rotation`
 
-Peng, Gary; Pageau, Denis; Strelkov, Stephen E.; Gossen, Bruce D.. (2015). *A >2-year crop rotation reduces resting spores of Plasmodiophora brassicae in soil and the impact of clubroot on canola*. European Journal of Agronomy 70: 78-84
+Peng, Gary; Pageau, Denis; Strelkov, Stephen E.; Gossen, Bruce D. (2015). *A >2-year crop rotation reduces resting spores of Plasmodiophora brassicae in soil and the impact of clubroot on canola*. European Journal of Agronomy 70: 78-84
 
 - DOI: [10.1016/j.eja.2015.07.007](https://doi.org/10.1016/j.eja.2015.07.007)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **A**
@@ -3037,7 +3037,7 @@ Peng, Gary; Pageau, Denis; Strelkov, Stephen E.; Gossen, Bruce D.. (2015). *A >2
 
 #### `pennisi2020-lettuce-basil-ppfd`
 
-Pennisi, Giuseppina; Pistillo, Alessandro; Orsini, Francesco; Cellini, Antonio; Spinelli, Francesco; Nicola, Silvana; Fernandez, Juan A.; Crepaldi, Andrea; Gianquinto, Giorgio; Marcelis, Leo F. M.. (2020). *Optimal light intensity for sustainable water and energy use in indoor cultivation of lettuce and basil under red and blue LEDs*. Scientia Horticulturae 272: 109508
+Pennisi, Giuseppina; Pistillo, Alessandro; Orsini, Francesco; Cellini, Antonio; Spinelli, Francesco; Nicola, Silvana; Fernandez, Juan A.; Crepaldi, Andrea; Gianquinto, Giorgio; Marcelis, Leo F. M. (2020). *Optimal light intensity for sustainable water and energy use in indoor cultivation of lettuce and basil under red and blue LEDs*. Scientia Horticulturae 272: 109508
 
 - DOI: [10.1016/j.scienta.2020.109508](https://doi.org/10.1016/j.scienta.2020.109508)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **A**
@@ -3069,7 +3069,7 @@ Plant Pono (Coordinating Group on Alien Pest Species). (n.d.). *Tragopogon porri
 
 #### `postma2012-polyculture-roots`
 
-Postma, Johannes A.; Lynch, Jonathan P.. (2012). *Complementarity in root architecture for nutrient uptake in ancient maize/bean and maize/bean/squash polycultures*. Annals of Botany 110: 521-534
+Postma, Johannes A.; Lynch, Jonathan P. (2012). *Complementarity in root architecture for nutrient uptake in ancient maize/bean and maize/bean/squash polycultures*. Annals of Botany 110: 521-534
 
 - DOI: [10.1093/aob/mcs082](https://doi.org/10.1093/aob/mcs082)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **B**
@@ -3079,7 +3079,7 @@ Postma, Johannes A.; Lynch, Jonathan P.. (2012). *Complementarity in root archit
 
 #### `prosea-chrysanthemum-coronarium`
 
-Dasuki, U.A.; van den Bergh, M.H.. (n.d.). *Chrysanthemum coronarium L. (PROSEA)*. Plant Resources of South-East Asia (PROSEA), hosted by Pl@ntUse
+Dasuki, U.A.; van den Bergh, M.H. (n.d.). *Chrysanthemum coronarium L. (PROSEA)*. Plant Resources of South-East Asia (PROSEA), hosted by Pl@ntUse
 
 - URL: <https://uses.plantnet-project.org/en/Chrysanthemum_coronarium_(PROSEA)>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -3093,7 +3093,7 @@ Dasuki, U.A.; van den Bergh, M.H.. (n.d.). *Chrysanthemum coronarium L. (PROSEA)
 
 #### `prota-2004-lagenaria-siceraria`
 
-Morimoto, Y.; Mvere, B.. (2004). *Lagenaria siceraria (Molina) Standl., record from PROTA4U (Plant Resources of Tropical Africa 2: Vegetables), text mirrored on Pl@ntUse*. PROTA Foundation, Wageningen
+Morimoto, Y.; Mvere, B. (2004). *Lagenaria siceraria (Molina) Standl., record from PROTA4U (Plant Resources of Tropical Africa 2: Vegetables), text mirrored on Pl@ntUse*. PROTA Foundation, Wageningen
 
 - URL: <https://plantuse.plantnet.org/en/Lagenaria_siceraria_(PROTA)>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -3104,7 +3104,7 @@ Morimoto, Y.; Mvere, B.. (2004). *Lagenaria siceraria (Molina) Standl., record f
 
 #### `prota-2011-corchorus-olitorius`
 
-Fondio, L.; Grubben, G. J. H.. (2011). *Corchorus olitorius L., PROTA (Plant Resources of Tropical Africa) record, Pl@ntUse mirror*. PROTA Foundation, mirrored by Pl@ntUse (Pl@ntNet)
+Fondio, L.; Grubben, G. J. H. (2011). *Corchorus olitorius L., PROTA (Plant Resources of Tropical Africa) record, Pl@ntUse mirror*. PROTA Foundation, mirrored by Pl@ntUse (Pl@ntNet)
 
 - URL: <https://plantuse.plantnet.org/en/Corchorus_olitorius_(PROTA)>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -3124,7 +3124,7 @@ Schmidt, Claudia; Cornelisse, Sarah; Kime, Lynn. (2026). *Agritourism Diversific
 
 #### `psu-extension-gibson-ground-cherries`
 
-Gibson, Mary Jo R.. (2026). *Growing Ground Cherries*. Penn State Extension
+Gibson, Mary Jo R. (2026). *Growing Ground Cherries*. Penn State Extension
 
 - URL: <https://extension.psu.edu/growing-ground-cherries>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -3154,7 +3154,7 @@ Purdue University Center for New Crops and Plant Products (NewCrop). (1997). *Ch
 
 #### `purdue-2007-soybean-plant-populations-ay217w`
 
-Robinson, Andrew P.; Conley, Shawn P.. (2007). *Soybean Production Systems: Plant Populations and Seeding Rates for Soybeans (AY-217-W)*. Purdue University Cooperative Extension Service
+Robinson, Andrew P.; Conley, Shawn P. (2007). *Soybean Production Systems: Plant Populations and Seeding Rates for Soybeans (AY-217-W)*. Purdue University Cooperative Extension Service
 
 - URL: <https://www.extension.purdue.edu/extmedia/ay/ay-217-w.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -3164,7 +3164,7 @@ Robinson, Andrew P.; Conley, Shawn P.. (2007). *Soybean Production Systems: Plan
 
 #### `purdue-2025-woodmansee-divine-fruit`
 
-Woodmansee, John E.. (2025). *Divine Fruit?*. Purdue Extension, Whitley County
+Woodmansee, John E. (2025). *Divine Fruit?* Purdue Extension, Whitley County
 
 - URL: <https://extension.purdue.edu/news/county/whitley/2025/11/divine-fruit.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -3174,7 +3174,7 @@ Woodmansee, John E.. (2025). *Divine Fruit?*. Purdue Extension, Whitley County
 
 #### `purdue-christmas-hawkins-winter-canola`
 
-Christmas, Ellsworth P.; Hawkins, Stephen S.. (n.d.). *Winter Canola -- An Alternative Crop in Indiana (AY-272)*. Purdue University Cooperative Extension Service
+Christmas, Ellsworth P.; Hawkins, Stephen S. (n.d.). *Winter Canola -- An Alternative Crop in Indiana (AY-272)*. Purdue University Cooperative Extension Service
 
 - URL: <https://www.extension.purdue.edu/extmedia/AY/AY-272.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -3184,7 +3184,7 @@ Christmas, Ellsworth P.; Hawkins, Stephen S.. (n.d.). *Winter Canola -- An Alter
 
 #### `purdue-newcrop-simon-1984-dandelion`
 
-Simon, J.E.; Chadwick, A.F.; Craker, L.E.. (1984). *DANDELION (Aromatic and Medicinal Plants factsheet, from Herbs: An Indexed Bibliography)*. Purdue University Center for New Crops and Plant Products (NewCROP), summarising Archon Books 1984
+Simon, J.E.; Chadwick, A.F.; Craker, L.E. (1984). *DANDELION (Aromatic and Medicinal Plants factsheet, from Herbs: An Indexed Bibliography)*. Purdue University Center for New Crops and Plant Products (NewCROP), summarising Archon Books 1984
 
 - URL: <https://hort.purdue.edu/newcrop/med-aro/factsheets/DANDELION.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -3227,7 +3227,7 @@ Ragone, Diane. (2006). *Artocarpus altilis (breadfruit), Species Profiles for Pa
 
 #### `rodrigues-2022-eryngium-foetidum-review`
 
-Rodrigues, Thiara L. M.; Silva, Maria E. P.; Gurgel, Ely S. C.; Oliveira, Mozaniel S.; Lucas, Flavia C. A.. (2022). *Eryngium foetidum L. (Apiaceae): A Literature Review of Traditional Uses, Chemical Composition, and Pharmacological Activities*. Evidence-based Complementary and Alternative Medicine (Hindawi)
+Rodrigues, Thiara L. M.; Silva, Maria E. P.; Gurgel, Ely S. C.; Oliveira, Mozaniel S.; Lucas, Flavia C. A. (2022). *Eryngium foetidum L. (Apiaceae): A Literature Review of Traditional Uses, Chemical Composition, and Pharmacological Activities*. Evidence-based Complementary and Alternative Medicine (Hindawi)
 
 - URL: <https://pmc.ncbi.nlm.nih.gov/articles/PMC8938054/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -3247,7 +3247,7 @@ Rollings, Rosi; Goulson, Dave. (2019). *Quantifying the attractiveness of garden
 
 #### `rothenberger-mu-g6470-growing-herbs`
 
-Rothenberger, Ray R.. (n.d.). *Growing Herbs at Home*. University of Missouri Extension
+Rothenberger, Ray R. (n.d.). *Growing Herbs at Home*. University of Missouri Extension
 
 - URL: <https://extension.missouri.edu/publications/g6470>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -3302,7 +3302,7 @@ Reiners, Steve; Nitzsche, Peter. (2021). *Growing Tomatoes in the Home Garden*. 
 
 #### `sahli2012-chemlali-olive-chilling`
 
-Sahli, A.; Dakhlaoui, H.; Aïachi Mezghani, M.; Bornaz, S.; Aounallah, M. K.; Hellali, R.. (2012). *Estimation of chilling and heat requirement of 'Chemlali' olive cultivar and its use to predict flowering date*. Acta Horticulturae 155-164
+Sahli, A.; Dakhlaoui, H.; Aïachi Mezghani, M.; Bornaz, S.; Aounallah, M. K.; Hellali, R. (2012). *Estimation of chilling and heat requirement of 'Chemlali' olive cultivar and its use to predict flowering date*. Acta Horticulturae 155-164
 
 - DOI: [10.17660/ActaHortic.2012.949.21](https://doi.org/10.17660/ActaHortic.2012.949.21)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **C**
@@ -3321,7 +3321,7 @@ Unangst-Rufenacht, Graham. (2021). *Seakale: Commercial Opportunities for New Pe
 
 #### `shelton2006-trap-cropping`
 
-Shelton, A. M.; Badenes-Perez, F. R.. (2006). *Concepts and Applications of Trap Cropping in Pest Management*. Annual Review of Entomology 51: 285-308
+Shelton, A. M.; Badenes-Perez, F. R. (2006). *Concepts and Applications of Trap Cropping in Pest Management*. Annual Review of Entomology 51: 285-308
 
 - DOI: [10.1146/annurev.ento.51.110104.150959](https://doi.org/10.1146/annurev.ento.51.110104.150959)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **B**
@@ -3362,7 +3362,7 @@ Singh, Hardeep. (2025). *Moringa Oleifera (Miracle tree)*. UCCE Central Sierra A
 
 #### `snyder1993-sweetfern-feis`
 
-Snyder, S. A.. (1993). *Comptonia peregrina, sweetfern*. Fire Effects Information System
+Snyder, S. A. (1993). *Comptonia peregrina, sweetfern*. Fire Effects Information System
 
 - DOI: [10.2737/feis-species-review-comper](https://doi.org/10.2737/feis-species-review-comper)
 - Verification: Crossref-verified | Access: public-domain, evidence tier **C**
@@ -3373,7 +3373,7 @@ Snyder, S. A.. (1993). *Comptonia peregrina, sweetfern*. Fire Effects Informatio
 
 #### `snyder2005-fao-frost-protection`
 
-Snyder, R. L.; de Melo-Abreu, J. P.. (2005). *Frost protection: fundamentals, practice and economics, Volume 1*. Food and Agriculture Organization of the United Nations FAO Environment and Natural Resources Series 10
+Snyder, R. L.; de Melo-Abreu, J. P. (2005). *Frost protection: fundamentals, practice and economics, Volume 1*. Food and Agriculture Organization of the United Nations FAO Environment and Natural Resources Series 10
 
 - URL: <https://www.fao.org/4/y7223e/y7223e00.htm>
 - Verification: URL-verified | Access: public-domain, evidence tier **A**
@@ -3384,7 +3384,7 @@ Snyder, R. L.; de Melo-Abreu, J. P.. (2005). *Frost protection: fundamentals, pr
 
 #### `sperling-king-1990-andean-tuber-crops`
 
-Sperling, Calvin R.; King, Steven R.. (1990). *Andean Tuber Crops: Worldwide Potential (pages 428-435 in Advances in New Crops, Timber Press)*. Purdue University Center for New Crops and Plant Products (symposium proceedings host)
+Sperling, Calvin R.; King, Steven R. (1990). *Andean Tuber Crops: Worldwide Potential (pages 428-435 in Advances in New Crops, Timber Press)*. Purdue University Center for New Crops and Plant Products (symposium proceedings host)
 
 - URL: <https://hort.purdue.edu/newcrop/proceedings1990/V1-428.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -3425,7 +3425,7 @@ Stein, Larry; Gu, Mengmeng; Li, Qiansheng. (2018). *Jujubes - Easiest Tree Fruit
 
 #### `tamu-sauls-citrus`
 
-Sauls, Julian W.. (n.d.). *Citrus*. Texas A&M AgriLife Extension, Aggie Horticulture
+Sauls, Julian W. (n.d.). *Citrus*. Texas A&M AgriLife Extension, Aggie Horticulture
 
 - URL: <https://aggie-horticulture.tamu.edu/fruit-nut/fact-sheets/citrus/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -3445,7 +3445,7 @@ Tang, Xiaoyan; Zhang, Chaochun; Yu, Yang; Shen, Jianbo. (2020). *Intercropping l
 
 #### `theunissen1994-intercropping-pests`
 
-Theunissen, J.. (1994). *Intercropping in field vegetable crops: Pest management by agrosystem diversification - an overview*. Pesticide Science 42: 65-68
+Theunissen, J. (1994). *Intercropping in field vegetable crops: Pest management by agrosystem diversification - an overview*. Pesticide Science 42: 65-68
 
 - DOI: [10.1002/ps.2780420111](https://doi.org/10.1002/ps.2780420111)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **B**
@@ -3455,7 +3455,7 @@ Theunissen, J.. (1994). *Intercropping in field vegetable crops: Pest management
 
 #### `thilakarathna2016-n-transfer`
 
-Thilakarathna, Malinda S.; McElroy, Michelle S.; Chapagain, Tejendra; Papadopoulos, Yousef A.; Raizada, Manish N.. (2016). *Belowground nitrogen transfer from legumes to non-legumes under managed herbaceous cropping systems. A review*. Agronomy for Sustainable Development 36: 58
+Thilakarathna, Malinda S.; McElroy, Michelle S.; Chapagain, Tejendra; Papadopoulos, Yousef A.; Raizada, Manish N. (2016). *Belowground nitrogen transfer from legumes to non-legumes under managed herbaceous cropping systems. A review*. Agronomy for Sustainable Development 36: 58
 
 - DOI: [10.1007/s13593-016-0396-4](https://doi.org/10.1007/s13593-016-0396-4)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **B**
@@ -3466,7 +3466,7 @@ Thilakarathna, Malinda S.; McElroy, Michelle S.; Chapagain, Tejendra; Papadopoul
 
 #### `tirmenstein1991-lingonberry-feis`
 
-Tirmenstein, D. A.. (1991). *Vaccinium vitis-idaea, lingonberry*. Fire Effects Information System
+Tirmenstein, D. A. (1991). *Vaccinium vitis-idaea, lingonberry*. Fire Effects Information System
 
 - DOI: [10.2737/feis-species-review-vacvit](https://doi.org/10.2737/feis-species-review-vacvit)
 - Verification: Crossref-verified | Access: public-domain, evidence tier **C**
@@ -3477,7 +3477,7 @@ Tirmenstein, D. A.. (1991). *Vaccinium vitis-idaea, lingonberry*. Fire Effects I
 
 #### `tirmenstein1991-lowbush-blueberry-feis`
 
-Tirmenstein, D. A.. (1991). *Vaccinium angustifolium, lowbush blueberry*. Fire Effects Information System
+Tirmenstein, D. A. (1991). *Vaccinium angustifolium, lowbush blueberry*. Fire Effects Information System
 
 - DOI: [10.2737/feis-species-review-vacang](https://doi.org/10.2737/feis-species-review-vacang)
 - Verification: Crossref-verified | Access: public-domain, evidence tier **C**
@@ -3561,7 +3561,7 @@ University of Arkansas Division of Agriculture Cooperative Extension Service. (2
 
 #### `uaex-andersen-garden-cress`
 
-Andersen, Craig R.. (n.d.). *Garden Cress (Home Gardening Series, FSA6084)*. University of Arkansas System Division of Agriculture, Cooperative Extension Service
+Andersen, Craig R. (n.d.). *Garden Cress (Home Gardening Series, FSA6084)*. University of Arkansas System Division of Agriculture, Cooperative Extension Service
 
 - URL: <https://www.uaex.uada.edu/publications/pdf/FSA-6084.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -3572,7 +3572,7 @@ Andersen, Craig R.. (n.d.). *Garden Cress (Home Gardening Series, FSA6084)*. Uni
 
 #### `uaex-salsify-fsa6094`
 
-Andersen, Craig R.. (n.d.). *Salsify (FSA6094, Home Gardening Series)*. University of Arkansas System Division of Agriculture, Cooperative Extension Service
+Andersen, Craig R. (n.d.). *Salsify (FSA6094, Home Gardening Series)*. University of Arkansas System Division of Agriculture, Cooperative Extension Service
 
 - URL: <https://www.uaex.uada.edu/publications/PDF/FSA-6094.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -3616,7 +3616,7 @@ UC Master Gardeners, Sacramento County. (2012). *Growing Citrus in Sacramento (G
 
 #### `ucanr-alameda-yacon-what-is-it`
 
-Silva, Yolanda. (n.d.). *Yacon: What is it?*. UC Cooperative Extension Alameda County and UC Master Gardener Program of Alameda County
+Silva, Yolanda. (n.d.). *Yacon: What is it?* UC Cooperative Extension Alameda County and UC Master Gardener Program of Alameda County
 
 - URL: <https://ucanr.edu/sites/default/files/2019-04/301726.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -3640,7 +3640,7 @@ UCCE Master Gardener Program of Santa Clara County. (n.d.). *Growing Fabulous Ci
 
 #### `ucce-2010-lemon-cost-study-sjv-south`
 
-O'Connell, Neil V.; Kallsen, Craig E.; Klonsky, Karen M.; De Moura, Richard L.. (2010). *Sample Costs to Establish an Orchard and Produce Lemons, San Joaquin Valley South, Low Volume Irrigation*. University of California Cooperative Extension
+O'Connell, Neil V.; Kallsen, Craig E.; Klonsky, Karen M.; De Moura, Richard L. (2010). *Sample Costs to Establish an Orchard and Produce Lemons, San Joaquin Valley South, Low Volume Irrigation*. University of California Cooperative Extension
 
 - URL: <https://coststudyfiles.ucdavis.edu/uploads/cs_public/57/c4/57c4611c-f2bb-4bde-9b77-a343ca9f0a62/lemonvs10.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -3650,7 +3650,7 @@ O'Connell, Neil V.; Kallsen, Craig E.; Klonsky, Karen M.; De Moura, Richard L.. 
 
 #### `uconn-plantdatabase-hippophae-rhamnoides`
 
-Brand, Mark H.. (n.d.). *Hippophae rhamnoides, Common Seabuckthorn*. University of Connecticut Plant Database
+Brand, Mark H. (n.d.). *Hippophae rhamnoides, Common Seabuckthorn*. University of Connecticut Plant Database
 
 - URL: <https://plantdatabase.uconn.edu/detail.php?pid=205>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -3660,7 +3660,7 @@ Brand, Mark H.. (n.d.). *Hippophae rhamnoides, Common Seabuckthorn*. University 
 
 #### `udc-2019-growing-roselle-fact-sheet-001`
 
-Richardson, Matthew L.; Arlotta, Caitlin G.. (2019). *Growing Roselle (Hibiscus sabdariffa) for Home or Business Production in the Mid-Atlantic (Fact Sheet 001)*. University of the District of Columbia
+Richardson, Matthew L.; Arlotta, Caitlin G. (2019). *Growing Roselle (Hibiscus sabdariffa) for Home or Business Production in the Mid-Atlantic (Fact Sheet 001)*. University of the District of Columbia
 
 - URL: <http://docs-do-not-link.udc.edu/causes/Fact_Sheet%20-%20Growing_Roselle.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -3670,7 +3670,7 @@ Richardson, Matthew L.; Arlotta, Caitlin G.. (2019). *Growing Roselle (Hibiscus 
 
 #### `ufifas-1994-adzuki-bean`
 
-Stephens, James M.. (1994). *Bean, Adzuki - Phaseolus angularis (Willd.) W.F. Wight (HS549)*. University of Florida IFAS Extension (EDIS archival copy)
+Stephens, James M. (1994). *Bean, Adzuki - Phaseolus angularis (Willd.) W.F. Wight (HS549)*. University of Florida IFAS Extension (EDIS archival copy)
 
 - DOI: [10.32473/edis-mv016-1994](https://doi.org/10.32473/edis-mv016-1994)
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -3683,7 +3683,7 @@ Stephens, James M.. (1994). *Bean, Adzuki - Phaseolus angularis (Willd.) W.F. Wi
 
 #### `ufifas-1994-bambara-groundnut`
 
-Stephens, James M.. (1994). *Bambara Groundnut - Voandzeia subterranea (L.) Thouars (HS547)*. University of Florida IFAS Extension (EDIS archival copy)
+Stephens, James M. (1994). *Bambara Groundnut - Voandzeia subterranea (L.) Thouars (HS547)*. University of Florida IFAS Extension (EDIS archival copy)
 
 - DOI: [10.32473/edis-mv014-1994](https://doi.org/10.32473/edis-mv014-1994)
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -3695,7 +3695,7 @@ Stephens, James M.. (1994). *Bambara Groundnut - Voandzeia subterranea (L.) Thou
 
 #### `ufifas-1994-roselle-hs659`
 
-Stephens, James M.. (1994). *Roselle, Hibiscus sabdariffa L. (HS659), archival copy reviewed May 2003*. University of Florida Institute of Food and Agricultural Sciences, Florida Cooperative Extension Service
+Stephens, James M. (1994). *Roselle, Hibiscus sabdariffa L. (HS659), archival copy reviewed May 2003*. University of Florida Institute of Food and Agricultural Sciences, Florida Cooperative Extension Service
 
 - URL: <https://journals.flvc.org/edis/article/download/139843/144801/280434>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -3706,7 +3706,7 @@ Stephens, James M.. (1994). *Roselle, Hibiscus sabdariffa L. (HS659), archival c
 
 #### `ufifas-1994-winged-bean`
 
-Stephens, James M.. (1994). *Bean, Winged - Psophocarpus tetragonolobus (L.) D.C. (HS561)*. University of Florida IFAS Extension (EDIS archival copy)
+Stephens, James M. (1994). *Bean, Winged - Psophocarpus tetragonolobus (L.) D.C. (HS561)*. University of Florida IFAS Extension (EDIS archival copy)
 
 - DOI: [10.32473/edis-mv028-1994](https://doi.org/10.32473/edis-mv028-1994)
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -3716,7 +3716,7 @@ Stephens, James M.. (1994). *Bean, Winged - Psophocarpus tetragonolobus (L.) D.C
 
 #### `ufifas-2003-chayote`
 
-Stephens, James M.. (2003). *Chayote — Sechium edule (Jacq.) Sw.*. University of Florida, IFAS Extension (EDIS), publication HS579
+Stephens, James M. (2003). *Chayote — Sechium edule (Jacq.) Sw.* University of Florida, IFAS Extension (EDIS), publication HS579
 
 - URL: <https://journals.flvc.org/edis/article/download/139590/144628/279059>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -3726,7 +3726,7 @@ Stephens, James M.. (2003). *Chayote — Sechium edule (Jacq.) Sw.*. University 
 
 #### `ufifas-2003-salsify`
 
-Stephens, James M.. (2003). *Salsify - Tragopogon porrifolius L. (HS662)*. University of Florida IFAS Extension (EDIS archival copy, reviewed May 2003)
+Stephens, James M. (2003). *Salsify - Tragopogon porrifolius L. (HS662)*. University of Florida IFAS Extension (EDIS archival copy, reviewed May 2003)
 
 - URL: <https://journals.flvc.org/edis/article/view/139847>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -3737,7 +3737,7 @@ Stephens, James M.. (2003). *Salsify - Tragopogon porrifolius L. (HS662)*. Unive
 
 #### `ufifas-2009-backyard-sugarcane-ss-agr-253`
 
-Baucum, L.; Rice, R. W.; Muralles, L.. (2009). *Backyard Sugarcane (SS-AGR-253), archival copy revised October 2009*. University of Florida Institute of Food and Agricultural Sciences, Florida Cooperative Extension Service
+Baucum, L.; Rice, R. W.; Muralles, L. (2009). *Backyard Sugarcane (SS-AGR-253), archival copy revised October 2009*. University of Florida Institute of Food and Agricultural Sciences, Florida Cooperative Extension Service
 
 - URL: <https://ufdcimages.uflib.ufl.edu/IR/00/00/34/15/00001/SC05200.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -3750,7 +3750,7 @@ Baucum, L.; Rice, R. W.; Muralles, L.. (2009). *Backyard Sugarcane (SS-AGR-253),
 
 #### `ufifas-2009-the-passion-fruit-hs60`
 
-Knight, R. J., Jr.; Sauls, Julian W.. (2009). *The Passion Fruit (HS60)*. UF/IFAS Extension, University of Florida
+Knight, R. J., Jr.; Sauls, Julian W. (2009). *The Passion Fruit (HS60)*. UF/IFAS Extension, University of Florida
 
 - URL: <https://ufdcimages.uflib.ufl.edu/IR/00/00/33/95/00001/MG32800.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -3761,7 +3761,7 @@ Knight, R. J., Jr.; Sauls, Julian W.. (2009). *The Passion Fruit (HS60)*. UF/IFA
 
 #### `ufifas-2014-gilman-diospyros-kaki`
 
-Gilman, Edward F.; Watson, Dennis G.. (2014). *Diospyros kaki: Japanese Persimmon (ENH388/ST229)*. UF/IFAS Extension, University of Florida
+Gilman, Edward F.; Watson, Dennis G. (2014). *Diospyros kaki: Japanese Persimmon (ENH388/ST229)*. UF/IFAS Extension, University of Florida
 
 - URL: <https://journals.flvc.org/edis/article/view/141253>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -3785,7 +3785,7 @@ Rouse, Robert E.; Zekri, Mongi. (2015). *Citrus Culture in the Home Landscape (H
 
 #### `ufifas-2016-guava-home-landscape`
 
-Crane, Jonathan H.; Balerdi, Carlos F.. (2016). *Guava Growing in the Florida Home Landscape (HS4, MG045)*. UF/IFAS Extension, University of Florida
+Crane, Jonathan H.; Balerdi, Carlos F. (2016). *Guava Growing in the Florida Home Landscape (HS4, MG045)*. UF/IFAS Extension, University of Florida
 
 - URL: <https://edis.ifas.ufl.edu/publication/MG045>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -3814,7 +3814,7 @@ Crane, Jonathan H.; Balerdi, Carlos F.; Maguire, Ian. (2016). *Jackfruit Growing
 
 #### `ufifas-2016-lychee`
 
-Balerdi, Carlos F.; Maguire, Ian; Crane, Jonathan H.. (2016). *Lychee Growing in the Florida Home Landscape (HS6/MG051)*. University of Florida, Institute of Food and Agricultural Sciences (UF/IFAS) Extension
+Balerdi, Carlos F.; Maguire, Ian; Crane, Jonathan H. (2016). *Lychee Growing in the Florida Home Landscape (HS6/MG051)*. University of Florida, Institute of Food and Agricultural Sciences (UF/IFAS) Extension
 
 - URL: <https://edis.ifas.ufl.edu/publication/MG051>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -3838,7 +3838,7 @@ UF/IFAS Center for Aquatic and Invasive Plants. (2017). *Ziziphus jujuba - UF/IF
 
 #### `ufifas-2018-lychee-fact-sheet`
 
-Gilman, Edward F.; Hilbert, Deborah; Watson, Dennis G.; Klein, Ryan; Koeser, Andrew; McLean, Drew C.. (2018). *Litchi chinensis: Lychee (ENH-523/ST364)*. University of Florida, Institute of Food and Agricultural Sciences (UF/IFAS) Extension
+Gilman, Edward F.; Hilbert, Deborah; Watson, Dennis G.; Klein, Ryan; Koeser, Andrew; McLean, Drew C. (2018). *Litchi chinensis: Lychee (ENH-523/ST364)*. University of Florida, Institute of Food and Agricultural Sciences (UF/IFAS) Extension
 
 - URL: <https://edis.ifas.ufl.edu/publication/ST364>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -3850,7 +3850,7 @@ Gilman, Edward F.; Hilbert, Deborah; Watson, Dennis G.; Klein, Ryan; Koeser, And
 
 #### `ufifas-2019-tropical-fruit-alternatives-to-citrus`
 
-Crane, Jonathan H.; Balerdi, Carlos F.; Orfanedes, Michael S.. (2019). *Tropical and Subtropical Fruit Crops for the Home Landscape: Alternatives to Citrus (HS812, MG373)*. UF/IFAS Extension, University of Florida
+Crane, Jonathan H.; Balerdi, Carlos F.; Orfanedes, Michael S. (2019). *Tropical and Subtropical Fruit Crops for the Home Landscape: Alternatives to Citrus (HS812, MG373)*. UF/IFAS Extension, University of Florida
 
 - URL: <https://edis.ifas.ufl.edu/publication/MG373>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -3863,7 +3863,7 @@ Crane, Jonathan H.; Balerdi, Carlos F.; Orfanedes, Michael S.. (2019). *Tropical
 
 #### `ufifas-2020-coconut-palm-florida`
 
-Broschat, Timothy K.; Crane, Jonathan H.. (2020). *The Coconut Palm in Florida (HS40)*. University of Florida, Institute of Food and Agricultural Sciences (UF/IFAS) Extension, Horticultural Sciences Department (copy hosted at growables.org)
+Broschat, Timothy K.; Crane, Jonathan H. (2020). *The Coconut Palm in Florida (HS40)*. University of Florida, Institute of Food and Agricultural Sciences (UF/IFAS) Extension, Horticultural Sciences Department (copy hosted at growables.org)
 
 - URL: <https://www.growables.org/information/TropicalFruit/documents/CoconutPalm.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -3903,7 +3903,7 @@ Marek, Amanda S.; Bailey, Mark T.; Hansen, Gail. (2022). *Edible Ornamental Land
 
 #### `ufifas-2022-sunn-hemp-cover-crop-florida`
 
-Wang, Qingren; Li, Yuncong; Klassen, Waldemar; Hanlon, Edward A.. (2022). *Sunn Hemp - A Promising Cover Crop in Florida (SL 306)*. University of Florida IFAS Extension
+Wang, Qingren; Li, Yuncong; Klassen, Waldemar; Hanlon, Edward A. (2022). *Sunn Hemp - A Promising Cover Crop in Florida (SL 306)*. University of Florida IFAS Extension
 
 - DOI: [10.32473/edis-tr003-2015](https://doi.org/10.32473/edis-tr003-2015)
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -3936,7 +3936,7 @@ Fisher, Paul; Freyre, Rosanna; Gómez, Celina; Pearson, Brian; Sanchez-Jones, Ta
 
 #### `ufifas-2023-luffa-asian-vegetable-florida`
 
-Liu, Guodong; Li, Yuncong; Migliaccio, Kati W.. (2023). *Luffa: an Asian Vegetable Emerging in Florida (HS1285)*. UF/IFAS Extension, University of Florida
+Liu, Guodong; Li, Yuncong; Migliaccio, Kati W. (2023). *Luffa: an Asian Vegetable Emerging in Florida (HS1285)*. UF/IFAS Extension, University of Florida
 
 - URL: <https://edis.ifas.ufl.edu/publication/HS1285>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -4007,7 +4007,7 @@ Wu, Xingbo; Moon, Pamela; Chambers, Alan; Crane, Jonathan. (2024). *Vanilla Grow
 
 #### `ufifas-2025-cashew-apple`
 
-Balerdi, Carlos F.; Maguire, Ian; McLaughlin, John; Crane, Jonathan H.. (2025). *Cashew Apple Fruit Growing in the Florida Home Landscape (HS1127/HS377)*. University of Florida, Institute of Food and Agricultural Sciences (UF/IFAS) Extension
+Balerdi, Carlos F.; Maguire, Ian; McLaughlin, John; Crane, Jonathan H. (2025). *Cashew Apple Fruit Growing in the Florida Home Landscape (HS1127/HS377)*. University of Florida, Institute of Food and Agricultural Sciences (UF/IFAS) Extension
 
 - URL: <https://edis.ifas.ufl.edu/publication/HS377>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -4031,7 +4031,7 @@ Graves, Keighly; Wilber, Wendy; Wichman, Tom; Lewis, Claire; Hansen, Gail; Klein
 
 #### `ufifas-2025-pineapple-home-landscape`
 
-Crane, Jonathan H.. (2025). *Pineapple Growing in the Florida Home Landscape (HS7, MG055)*. UF/IFAS Extension, University of Florida
+Crane, Jonathan H. (2025). *Pineapple Growing in the Florida Home Landscape (HS7, MG055)*. UF/IFAS Extension, University of Florida
 
 - URL: <https://edis.ifas.ufl.edu/publication/MG055>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -4173,7 +4173,7 @@ Busbee, Larry; Stevens, Sandy; Andrews, Frances; Criss, Josh. (2025). *Sugarcane
 
 #### `uga-2022-pomegranate-production`
 
-MacLean, Dan; Martino, Karina G.; Scherm, Harald; Horton, Dan L.. (2022). *Pomegranate Production (Circular 997)*. University of Georgia Cooperative Extension
+MacLean, Dan; Martino, Karina G.; Scherm, Harald; Horton, Dan L. (2022). *Pomegranate Production (Circular 997)*. University of Georgia Cooperative Extension
 
 - URL: <https://fieldreport.caes.uga.edu/publications/C997/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -4208,7 +4208,7 @@ Dorn, Sheri. (2025). *Herbs in Southern Gardens (Bulletin 1170)*. University of 
 
 #### `uga-2026-b992-minor-fruits-nuts-georgia`
 
-Krewer, Gerard W.; Crocker, Thomas F.; Bertrand, Paul F.; Horton, Dan L.. (2026). *Minor Fruits and Nuts in Georgia (Bulletin 992)*. University of Georgia Cooperative Extension
+Krewer, Gerard W.; Crocker, Thomas F.; Bertrand, Paul F.; Horton, Dan L. (2026). *Minor Fruits and Nuts in Georgia (Bulletin 992)*. University of Georgia Cooperative Extension
 
 - URL: <https://fieldreport.caes.uga.edu/publications/b992/minor-fruits-and-nuts-in-georgia/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -4230,7 +4230,7 @@ Westerfield, Robert. (2022). *Home Garden Planting Chart*. University of Georgia
 
 #### `uga-extension-2024-pecan-home-backyard`
 
-Wells, Lenny; Hudson, William G.; Brock, Jason H.. (2024). *Pecan Trees for the Home or Backyard Orchard (Bulletin 1348)*. University of Georgia Cooperative Extension
+Wells, Lenny; Hudson, William G.; Brock, Jason H. (2024). *Pecan Trees for the Home or Backyard Orchard (Bulletin 1348)*. University of Georgia Cooperative Extension
 
 - URL: <https://extension.uga.edu/publications/detail.html?number=B1348&title=pecan-trees-for-the-home-or-backyard-orchard>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -4263,7 +4263,7 @@ Ernst, Matt. (2017). *Malabar Spinach*. Center for Crop Diversification, Univers
 
 #### `uky-2018-foxtail-millet`
 
-Teutsch, Chris; Smith, Ray; Keene, Tom; Henning, Jimmy C.. (2018). *Foxtail Millet (AGR-233)*. University of Kentucky Cooperative Extension Service
+Teutsch, Chris; Smith, Ray; Keene, Tom; Henning, Jimmy C. (2018). *Foxtail Millet (AGR-233)*. University of Kentucky Cooperative Extension Service
 
 - URL: <https://publications.mgcafe.uky.edu/sites/publications.ca.uky.edu/files/AGR233.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -4343,7 +4343,7 @@ Community Plant Breeding Team, University of Minnesota. (n.d.). *Jute Mallow: Co
 
 #### `umn-extension-2024-currants-gooseberries`
 
-Wimmer, Madeline; Tepe, Emily S.; Hoover, Emily E.. (2024). *Growing currants and gooseberries in the home garden*. University of Minnesota Extension
+Wimmer, Madeline; Tepe, Emily S.; Hoover, Emily E. (2024). *Growing currants and gooseberries in the home garden*. University of Minnesota Extension
 
 - URL: <https://extension.umn.edu/garden-and-home/yard-and-garden/gardening-in-minnesota/growing-currants-and-gooseberries-in-the-home-garden>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -4480,7 +4480,7 @@ University of New Hampshire Extension. (n.d.). *How to grow garlic chives (Alliu
 
 #### `uog-2020-breadfruit-guam`
 
-Bevacqua, Robert F.; Miller, Ross H.. (2020). *Agroforestry on Guam: Breadfruit Cultivation*. University of Guam, Western Pacific Tropical Research Center
+Bevacqua, Robert F.; Miller, Ross H. (2020). *Agroforestry on Guam: Breadfruit Cultivation*. University of Guam, Western Pacific Tropical Research Center
 
 - URL: <https://www.uog.edu/_resources/files/wptrc/Bread_Fruit_Final2.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -4512,7 +4512,7 @@ University of Saskatchewan, College of Agriculture and Bioresources. (n.d.). *Ha
 
 #### `usda-1948-vanilla-culture-puerto-rico`
 
-Childers, Norman F.. (1948). *Vanilla Culture in Puerto Rico (Circular No. 28, Federal Experiment Station in Puerto Rico)*. U.S. Department of Agriculture, Federal Experiment Station in Puerto Rico, Mayaguez
+Childers, Norman F. (1948). *Vanilla Culture in Puerto Rico (Circular No. 28, Federal Experiment Station in Puerto Rico)*. U.S. Department of Agriculture, Federal Experiment Station in Puerto Rico, Mayaguez
 
 - URL: <https://archive.org/details/CAT31289489>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -4534,7 +4534,7 @@ Stevens, Michelle. (2000). *Eastern purple coneflower, Echinacea purpurea (L.) M
 
 #### `usda-nrcs-2006-plant-fact-sheet-alfalfa`
 
-USDA NRCS Plant Materials Program. (2006). *Plant Fact Sheet: Alfalfa, Medicago sativa L.*. USDA Natural Resources Conservation Service
+USDA NRCS Plant Materials Program. (2006). *Plant Fact Sheet: Alfalfa, Medicago sativa L.* USDA Natural Resources Conservation Service
 
 - URL: <https://plants.usda.gov/DocumentLibrary/factsheet/pdf/fs_mesa.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -4556,7 +4556,7 @@ USDA NRCS Brooksville Plant Materials Center. (n.d.). *Florida Plant Materials F
 
 #### `usda-nrcs-hurteau-black-walnut-plant-guide`
 
-Hurteau, Matthew D.. (n.d.). *Plant Guide: Black Walnut (Juglans nigra L.)*. USDA Natural Resources Conservation Service, National Plant Data Center
+Hurteau, Matthew D. (n.d.). *Plant Guide: Black Walnut (Juglans nigra L.)*. USDA Natural Resources Conservation Service, National Plant Data Center
 
 - URL: <https://plants.sc.egov.usda.gov/DocumentLibrary/plantguide/pdf/cs_juni.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -4567,7 +4567,7 @@ Hurteau, Matthew D.. (n.d.). *Plant Guide: Black Walnut (Juglans nigra L.)*. USD
 
 #### `usda-nrcs-pigeonpea-plant-guide`
 
-USDA NRCS Cape May Plant Materials Center. (n.d.). *Plant Guide: Pigeonpea, Cajanus cajan (L.) Millsp.*. United States Department of Agriculture, Natural Resources Conservation Service
+USDA NRCS Cape May Plant Materials Center. (n.d.). *Plant Guide: Pigeonpea, Cajanus cajan (L.) Millsp.* United States Department of Agriculture, Natural Resources Conservation Service
 
 - URL: <https://plants.sc.egov.usda.gov/DocumentLibrary/plantguide/pdf/pg_caca27.pdf>
 - Verification: URL-verified | Access: public-domain
@@ -4600,7 +4600,7 @@ USDA NRCS National Plant Data Team. (n.d.). *PLANTS Profile for Piper nigrum L. 
 
 #### `usfs-1989-hawaii-forest-trees-breadfruit`
 
-Little, Elbert L., Jr.; Skolmen, Roger G.. (1989). *Common Forest Trees of Hawaii (Native and Introduced): 'Ulu, breadfruit, Artocarpus altilis (USDA Forest Service Agriculture Handbook 679)*. USDA Forest Service, 1989 (reprint by College of Tropical Agriculture and Human Resources, University of Hawaii at Manoa, 2003)
+Little, Elbert L., Jr.; Skolmen, Roger G. (1989). *Common Forest Trees of Hawaii (Native and Introduced): 'Ulu, breadfruit, Artocarpus altilis (USDA Forest Service Agriculture Handbook 679)*. USDA Forest Service, 1989 (reprint by College of Tropical Agriculture and Human Resources, University of Hawaii at Manoa, 2003)
 
 - URL: <https://www.ctahr.hawaii.edu/gsp/doc/Forestry/Little_Skolmen_CFT/CFT_Artocarpus_altilis.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -4630,7 +4630,7 @@ Carlson, Matthew L.; Lapina, Irina V.; Shephard, Michael; Conn, Jeffery S.; Dens
 
 #### `usfs-2008-seed-manual-hippophae-rhamnoides`
 
-Busing, Richard T.; Slabaugh, Paul E.. (2008). *Hippophae rhamnoides L.: common seabuckthorn (The Woody Plant Seed Manual, Agriculture Handbook 727)*. USDA Forest Service
+Busing, Richard T.; Slabaugh, Paul E. (2008). *Hippophae rhamnoides L.: common seabuckthorn (The Woody Plant Seed Manual, Agriculture Handbook 727)*. USDA Forest Service
 
 - URL: <https://research.fs.usda.gov/treesearch/32649>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -4759,7 +4759,7 @@ Utah State University Extension, TreeBrowser. (n.d.). *Pistachio (Pistacia vera)
 
 #### `uvah-coaker1984-mixed-cropping`
 
-Uvah, I. I. I.; Coaker, T. H.. (1984). *Effect of mixed cropping on some insect pests of carrots and onions*. Entomologia Experimentalis et Applicata 36: 159-167
+Uvah, I. I. I.; Coaker, T. H. (1984). *Effect of mixed cropping on some insect pests of carrots and onions*. Entomologia Experimentalis et Applicata 36: 159-167
 
 - DOI: [10.1111/j.1570-7458.1984.tb03422.x](https://doi.org/10.1111/j.1570-7458.1984.tb03422.x)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **A**
@@ -4856,7 +4856,7 @@ Appling, Ashley; Latimer, Joyce. (2024). *Herb Culture and Use*. Virginia Cooper
 
 #### `walters2018-basil-species-dli`
 
-Walters, Kellie J.; Currey, Christopher J.. (2018). *Effects of Nutrient Solution Concentration and Daily Light Integral on Growth and Nutrient Concentration of Several Basil Species in Hydroponic Production*. HortScience 53: 1319-1325
+Walters, Kellie J.; Currey, Christopher J. (2018). *Effects of Nutrient Solution Concentration and Daily Light Integral on Growth and Nutrient Concentration of Several Basil Species in Hydroponic Production*. HortScience 53: 1319-1325
 
 - DOI: [10.21273/HORTSCI13126-18](https://doi.org/10.21273/HORTSCI13126-18)
 - Verification: Crossref-verified | Access: open-access, evidence tier **A**
@@ -4867,7 +4867,7 @@ Walters, Kellie J.; Currey, Christopher J.. (2018). *Effects of Nutrient Solutio
 
 #### `weston2013-sorghum-allelopathy`
 
-Weston, Leslie A.; Alsaadawi, Ibrahim S.; Baerson, Scott R.. (2013). *Sorghum Allelopathy-From Ecosystem to Molecule*. Journal of Chemical Ecology 39: 142-153
+Weston, Leslie A.; Alsaadawi, Ibrahim S.; Baerson, Scott R. (2013). *Sorghum Allelopathy-From Ecosystem to Molecule*. Journal of Chemical Ecology 39: 142-153
 
 - DOI: [10.1007/s10886-013-0245-8](https://doi.org/10.1007/s10886-013-0245-8)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **B**
@@ -4882,7 +4882,7 @@ Weston, Leslie A.; Alsaadawi, Ibrahim S.; Baerson, Scott R.. (2013). *Sorghum Al
 
 #### `wilson1988-ireta-yams`
 
-Wilson, Jill E.. (1988). *Rapid Multiplication of Yams (Dioscorea spp.)*. University of the South Pacific Institute for Research, Extension and Training in Agriculture; hosted by the University of Hawaii CTAHR ADAP archive IRETA Publication No. 3/88, Agdex 175-40
+Wilson, Jill E. (1988). *Rapid Multiplication of Yams (Dioscorea spp.)*. University of the South Pacific Institute for Research, Extension and Training in Agriculture; hosted by the University of Hawaii CTAHR ADAP archive IRETA Publication No. 3/88, Agdex 175-40
 
 - URL: <https://www3.ctahr.hawaii.edu/adap/Publications/Ireta_pubs/rapidyams.pdf>
 - Verification: URL-verified | Access: open-access
@@ -4913,7 +4913,7 @@ Strik, Bernadine; Cahn, Helen. (2000). *Growing Kiwifruit (PNW 507)*. Pacific No
 
 #### `wsu-2006-growing-marketing-lavender`
 
-Beus, Curtis E.. (2006). *Growing and Marketing Lavender (EB2005, Farming the Northwest series)*. Washington State University Extension
+Beus, Curtis E. (2006). *Growing and Marketing Lavender (EB2005, Farming the Northwest series)*. Washington State University Extension
 
 - URL: <https://wpcdn.web.wsu.edu/wp-ecommerce/uploads/sites/2/woocommerce_uploads/EB2005-epq142.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -4945,7 +4945,7 @@ Yu, Yang; Stomph, Tjeerd-Jan; Makowski, David; van der Werf, Wopke. (2015). *Tem
 
 #### `zhang-2022-tea-shade-nets-mississippi`
 
-Zhang, Qianwen; Bi, Guihong; Li, Tongyin; Wang, Qiushuang; Xing, Zhiheng; LeCompte, Judson; Harkess, Richard L.. (2022). *Color Shade Nets Affect Plant Growth and Seasonal Leaf Quality of Camellia sinensis Grown in Mississippi, the United States*. Frontiers in Nutrition
+Zhang, Qianwen; Bi, Guihong; Li, Tongyin; Wang, Qiushuang; Xing, Zhiheng; LeCompte, Judson; Harkess, Richard L. (2022). *Color Shade Nets Affect Plant Growth and Seasonal Leaf Quality of Camellia sinensis Grown in Mississippi, the United States*. Frontiers in Nutrition
 
 - URL: <https://pmc.ncbi.nlm.nih.gov/articles/PMC8847693/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
@@ -4956,7 +4956,7 @@ Zhang, Qianwen; Bi, Guihong; Li, Tongyin; Wang, Qiushuang; Xing, Zhiheng; LeComp
 
 #### `zhang2014-three-sisters-roots`
 
-Zhang, Chaochun; Postma, Johannes A.; York, Larry M.; Lynch, Jonathan P.. (2014). *Root foraging elicits niche complementarity-dependent yield advantage in the ancient 'three sisters' polyculture*. Annals of Botany 114: 1719-1733
+Zhang, Chaochun; Postma, Johannes A.; York, Larry M.; Lynch, Jonathan P. (2014). *Root foraging elicits niche complementarity-dependent yield advantage in the ancient 'three sisters' polyculture*. Annals of Botany 114: 1719-1733
 
 - DOI: [10.1093/aob/mcu191](https://doi.org/10.1093/aob/mcu191)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **B**
@@ -4966,7 +4966,7 @@ Zhang, Chaochun; Postma, Johannes A.; York, Larry M.; Lynch, Jonathan P.. (2014)
 
 #### `ziegler1963-comptonia-nitrogen`
 
-Ziegler, H.; Hüser, R.. (1963). *Fixation of Atmospheric Nitrogen by Root Nodules of Comptonia peregrina*. Nature 199: 508
+Ziegler, H.; Hüser, R. (1963). *Fixation of Atmospheric Nitrogen by Root Nodules of Comptonia peregrina*. Nature 199: 508
 
 - DOI: [10.1038/199508a0](https://doi.org/10.1038/199508a0)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **B**
@@ -4992,7 +4992,7 @@ Zimmerman, Cynthia. (2020). *Helpline Hot Topic for June 2020: Moringa Oleifera*
 
 #### `beck2018-koppen`
 
-Beck, Hylke E.; Zimmermann, Niklaus E.; McVicar, Tim R.; Vergopolan, Noemi; Berg, Alexis; Wood, Eric F.. (2018). *Present and future Köppen-Geiger climate classification maps at 1-km resolution*. Scientific Data 5: 180214
+Beck, Hylke E.; Zimmermann, Niklaus E.; McVicar, Tim R.; Vergopolan, Noemi; Berg, Alexis; Wood, Eric F. (2018). *Present and future Köppen-Geiger climate classification maps at 1-km resolution*. Scientific Data 5: 180214
 
 - DOI: [10.1038/sdata.2018.214](https://doi.org/10.1038/sdata.2018.214)
 - Verification: Crossref-verified | Access: open-access
@@ -5001,7 +5001,7 @@ Beck, Hylke E.; Zimmermann, Niklaus E.; McVicar, Tim R.; Vergopolan, Noemi; Berg
 
 #### `best1950-raindrop-size-distribution`
 
-Best, A. C.. (1950). *The size distribution of raindrops*. Quarterly Journal of the Royal Meteorological Society 76: 16-36
+Best, A. C. (1950). *The size distribution of raindrops*. Quarterly Journal of the Royal Meteorological Society 76: 16-36
 
 - DOI: [10.1002/qj.49707632704](https://doi.org/10.1002/qj.49707632704)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **A**
@@ -5025,7 +5025,7 @@ Blocken, Bert; Carmeliet, Jan. (2004). *A review of wind-driven rain research in
 
 #### `canham1994-canopy-light-transmission`
 
-Canham, Charles D.; Finzi, Adrien C.; Pacala, Stephen W.; Burbank, Diane H.. (1994). *Causes and consequences of resource heterogeneity in forests: interspecific variation in light transmission by canopy trees*. Canadian Journal of Forest Research 24: 337-349
+Canham, Charles D.; Finzi, Adrien C.; Pacala, Stephen W.; Burbank, Diane H. (1994). *Causes and consequences of resource heterogeneity in forests: interspecific variation in light transmission by canopy trees*. Canadian Journal of Forest Research 24: 337-349
 
 - DOI: [10.1139/x94-046](https://doi.org/10.1139/x94-046)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **B**
@@ -5035,7 +5035,7 @@ Canham, Charles D.; Finzi, Adrien C.; Pacala, Stephen W.; Burbank, Diane H.. (19
 
 #### `erez1990-dynamic-model`
 
-Erez, A.; Fishman, S.; Linsley-Noakes, G. C.; Allan, P.. (1990). *The dynamic model for rest completion in peach buds*. Acta Horticulturae 165-174
+Erez, A.; Fishman, S.; Linsley-Noakes, G. C.; Allan, P. (1990). *The dynamic model for rest completion in peach buds*. Acta Horticulturae 165-174
 
 - DOI: [10.17660/ActaHortic.1990.276.18](https://doi.org/10.17660/ActaHortic.1990.276.18)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **A**
@@ -5045,7 +5045,7 @@ Erez, A.; Fishman, S.; Linsley-Noakes, G. C.; Allan, P.. (1990). *The dynamic mo
 
 #### `fishman1987-dormancy-math`
 
-Fishman, Svetlana; Erez, Amos; Couvillon, G. A.. (1987). *The temperature dependence of dormancy breaking in plants: Mathematical analysis of a two-step model involving a cooperative transition*. Journal of Theoretical Biology 124: 473-483
+Fishman, Svetlana; Erez, Amos; Couvillon, G. A. (1987). *The temperature dependence of dormancy breaking in plants: Mathematical analysis of a two-step model involving a cooperative transition*. Journal of Theoretical Biology 124: 473-483
 
 - DOI: [10.1016/S0022-5193(87)80221-7](https://doi.org/10.1016/S0022-5193(87)80221-7)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **A**
@@ -5054,7 +5054,7 @@ Fishman, Svetlana; Erez, Amos; Couvillon, G. A.. (1987). *The temperature depend
 
 #### `fishman1987-dormancy-sim`
 
-Fishman, Svetlana; Erez, Amos; Couvillon, G. A.. (1987). *The temperature dependence of dormancy breaking in plants: Computer simulation of processes studied under controlled temperatures*. Journal of Theoretical Biology 126: 309-321
+Fishman, Svetlana; Erez, Amos; Couvillon, G. A. (1987). *The temperature dependence of dormancy breaking in plants: Computer simulation of processes studied under controlled temperatures*. Journal of Theoretical Biology 126: 309-321
 
 - DOI: [10.1016/S0022-5193(87)80237-0](https://doi.org/10.1016/S0022-5193(87)80237-0)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **A**
@@ -5063,7 +5063,7 @@ Fishman, Svetlana; Erez, Amos; Couvillon, G. A.. (1987). *The temperature depend
 
 #### `gunn-kinzer1949-terminal-velocity`
 
-Gunn, Ross; Kinzer, Gilbert D.. (1949). *The terminal velocity of fall for water droplets in stagnant air*. Journal of Meteorology 6: 243-248
+Gunn, Ross; Kinzer, Gilbert D. (1949). *The terminal velocity of fall for water droplets in stagnant air*. Journal of Meteorology 6: 243-248
 
 - DOI: [10.1175/1520-0469(1949)006<0243:TTVOFF>2.0.CO;2](https://doi.org/10.1175/1520-0469(1949)006<0243:TTVOFF>2.0.CO;2)
 - Verification: Crossref-verified | Access: open-access, evidence tier **A**
@@ -5075,7 +5075,7 @@ Gunn, Ross; Kinzer, Gilbert D.. (1949). *The terminal velocity of fall for water
 
 #### `heisler1986-single-tree-irradiance`
 
-Heisler, Gordon M.. (1986). *Effects of individual trees on the solar radiation climate of small buildings*. Urban Ecology 9: 337-359
+Heisler, Gordon M. (1986). *Effects of individual trees on the solar radiation climate of small buildings*. Urban Ecology 9: 337-359
 
 - DOI: [10.1016/0304-4009(86)90008-2](https://doi.org/10.1016/0304-4009(86)90008-2)
 - Verification: Crossref-verified | Access: public-domain, evidence tier **B**
@@ -5085,7 +5085,7 @@ Heisler, Gordon M.. (1986). *Effects of individual trees on the solar radiation 
 
 #### `jolly2005-growing-season-index`
 
-Jolly, William M.; Nemani, Ramakrishna; Running, Steven W.. (2005). *A generalized, bioclimatic index to predict foliar phenology in response to climate*. Global Change Biology 11: 619-632
+Jolly, William M.; Nemani, Ramakrishna; Running, Steven W. (2005). *A generalized, bioclimatic index to predict foliar phenology in response to climate*. Global Change Biology 11: 619-632
 
 - DOI: [10.1111/j.1365-2486.2005.00930.x](https://doi.org/10.1111/j.1365-2486.2005.00930.x)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **B**
@@ -5106,7 +5106,7 @@ Konarska, Janina; Lindberg, Fredrik; Larsson, Annika; Thorsson, Sofia; Holmer, B
 
 #### `luedeling2010-chill-comparability`
 
-Luedeling, Eike; Brown, Patrick H.. (2010). *A global analysis of the comparability of winter chill models for fruit and nut trees*. International Journal of Biometeorology 55: 411-421
+Luedeling, Eike; Brown, Patrick H. (2010). *A global analysis of the comparability of winter chill models for fruit and nut trees*. International Journal of Biometeorology 55: 411-421
 
 - DOI: [10.1007/s00484-010-0352-y](https://doi.org/10.1007/s00484-010-0352-y)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **A**
@@ -5118,7 +5118,7 @@ Luedeling, Eike; Brown, Patrick H.. (2010). *A global analysis of the comparabil
 
 #### `mckenney2001-canada-zones`
 
-McKenney, Daniel W.; Hutchinson, Michael F.; Kesteven, Jennifer L.; Venier, Lisa A.. (2001). *Canada's plant hardiness zones revisited using modern climate interpolation techniques*. Canadian Journal of Plant Science 81: 129-143
+McKenney, Daniel W.; Hutchinson, Michael F.; Kesteven, Jennifer L.; Venier, Lisa A. (2001). *Canada's plant hardiness zones revisited using modern climate interpolation techniques*. Canadian Journal of Plant Science 81: 129-143
 
 - DOI: [10.4141/P00-030](https://doi.org/10.4141/P00-030)
 - Verification: Crossref-verified | Access: paywalled
@@ -5219,7 +5219,7 @@ NOAA National Centers for Environmental Information. (2021). *U.S. Climate Norma
 
 #### `oke1981-canyon-svf`
 
-Oke, T. R.. (1981). *Canyon geometry and the nocturnal urban heat island: Comparison of scale model and field observations*. Journal of Climatology 1: 237-254
+Oke, T. R. (1981). *Canyon geometry and the nocturnal urban heat island: Comparison of scale model and field observations*. Journal of Climatology 1: 237-254
 
 - DOI: [10.1002/joc.3370010304](https://doi.org/10.1002/joc.3370010304)
 - Verification: Crossref-verified | Access: paywalled
@@ -5229,7 +5229,7 @@ Oke, T. R.. (1981). *Canyon geometry and the nocturnal urban heat island: Compar
 
 #### `oke1987-boundary-layer-climates`
 
-Oke, T. R.. (2002). *Boundary Layer Climates*. Routledge
+Oke, T. R. (2002). *Boundary Layer Climates*. Routledge
 
 - DOI: [10.4324/9780203407219](https://doi.org/10.4324/9780203407219)
 - Verification: Crossref-verified | Access: paywalled
@@ -5250,7 +5250,7 @@ Jenkins, Keith. (n.d.). *OPHZ: Oregon PRISM Hardiness Zones*. GitHub
 
 #### `ouellet1967-woody-zonation`
 
-Ouellet, C. E.; Sherk, L. C.. (1967). *Woody ornamental plant zonation: I. Indices of winterhardiness*. Canadian Journal of Plant Science 47: 231-238
+Ouellet, C. E.; Sherk, L. C. (1967). *Woody ornamental plant zonation: I. Indices of winterhardiness*. Canadian Journal of Plant Science 47: 231-238
 
 - DOI: [10.4141/cjps67-044](https://doi.org/10.4141/cjps67-044)
 - Verification: Crossref-verified | Access: paywalled
@@ -5260,7 +5260,7 @@ Ouellet, C. E.; Sherk, L. C.. (1967). *Woody ornamental plant zonation: I. Indic
 
 #### `richardson1974-utah-chill`
 
-Richardson, E. Arlo; Seeley, Schuyler D.; Walker, David R.. (1974). *A model for estimating the completion of rest for 'Redhaven' and 'Elberta' peach trees*. HortScience 9: 331-332
+Richardson, E. Arlo; Seeley, Schuyler D.; Walker, David R. (1974). *A model for estimating the completion of rest for 'Redhaven' and 'Elberta' peach trees*. HortScience 9: 331-332
 
 - DOI: [10.21273/HORTSCI.9.4.331](https://doi.org/10.21273/HORTSCI.9.4.331)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **A**
@@ -5281,7 +5281,7 @@ Richardson, E. Arlo; Seeley, Schuyler D.; Walker, David R.. (1974). *A model for
 
 #### `wang-pruppacher1977-acceleration`
 
-Wang, P. K.; Pruppacher, H. R.. (1977). *Acceleration to terminal velocity of cloud and raindrops*. Journal of Applied Meteorology 16: 275-280
+Wang, P. K.; Pruppacher, H. R. (1977). *Acceleration to terminal velocity of cloud and raindrops*. Journal of Applied Meteorology 16: 275-280
 
 - DOI: [10.1175/1520-0450(1977)016<0275:ATTVOC>2.0.CO;2](https://doi.org/10.1175/1520-0450(1977)016<0275:ATTVOC>2.0.CO;2)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **A**
@@ -5327,7 +5327,7 @@ Armstrong, Chelsey Geralda; Lyons, Natasha; McAlvay, Alex C.; Ritchie, Patrick M
 
 #### `carroll2020-care`
 
-Carroll, Stephanie Russo; Garba, Ibrahim; Figueroa-Rodríguez, Oscar L.. (2020). *The CARE Principles for Indigenous Data Governance*. Data Science Journal 19: 43
+Carroll, Stephanie Russo; Garba, Ibrahim; Figueroa-Rodríguez, Oscar L. (2020). *The CARE Principles for Indigenous Data Governance*. Data Science Journal 19: 43
 
 - DOI: [10.5334/dsj-2020-043](https://doi.org/10.5334/dsj-2020-043)
 - Verification: Crossref-verified | Access: open-access
@@ -5366,7 +5366,7 @@ Denham, Tim; Donohue, Mark. (2023). *Putting the Dark Emu debate into context*. 
 
 #### `fernandes1984-chagga`
 
-Fernandes, E. C. M.; Oktingati, A.; Maghembe, J.. (1984). *The Chagga homegardens: a multistoried agroforestry cropping system on Mt. Kilimanjaro (Northern Tanzania)*. Agroforestry Systems 2: 73-86
+Fernandes, E. C. M.; Oktingati, A.; Maghembe, J. (1984). *The Chagga homegardens: a multistoried agroforestry cropping system on Mt. Kilimanjaro (Northern Tanzania)*. Agroforestry Systems 2: 73-86
 
 - DOI: [10.1007/BF00131267](https://doi.org/10.1007/BF00131267)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **B**
@@ -5417,7 +5417,7 @@ Kolata, Alan L.; Ortloff, Charles. (1989). *Thermal analysis of Tiwanaku raised 
 
 #### `kumar2004-tropical-homegardens`
 
-Kumar, B. M.; Nair, P. K. R.. (2004). *The enigma of tropical homegardens*. Agroforestry Systems 61: 135-152
+Kumar, B. M.; Nair, P. K. R. (2004). *The enigma of tropical homegardens*. Agroforestry Systems 61: 135-152
 
 - DOI: [10.1023/B:AGFO.0000028995.13227.ca](https://doi.org/10.1023/B:AGFO.0000028995.13227.ca)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **B**
@@ -5461,7 +5461,7 @@ Montero, Maria Jesus; Moreno, Gerardo; Bertomeu, Manuel. (2008). *Light distribu
 
 #### `moreno2009-dehesa`
 
-Moreno, Gerardo; Pulido, Fernando J.. (2009). *The Functioning, Management and Persistence of Dehesas*. Agroforestry in Europe 127-160
+Moreno, Gerardo; Pulido, Fernando J. (2009). *The Functioning, Management and Persistence of Dehesas*. Agroforestry in Europe 127-160
 
 - DOI: [10.1007/978-1-4020-8272-6_7](https://doi.org/10.1007/978-1-4020-8272-6_7)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **B**
@@ -5472,7 +5472,7 @@ Moreno, Gerardo; Pulido, Fernando J.. (2009). *The Functioning, Management and P
 
 #### `mueller2025-eastern-ag-complex`
 
-Mueller, Natalie G.. (2025). *The sleeping crops of eastern North America: a new synthesis*. Philosophical Transactions of the Royal Society B: Biological Sciences 380: 20240192
+Mueller, Natalie G. (2025). *The sleeping crops of eastern North America: a new synthesis*. Philosophical Transactions of the Royal Society B: Biological Sciences 380: 20240192
 
 - DOI: [10.1098/rstb.2024.0192](https://doi.org/10.1098/rstb.2024.0192)
 - Verification: Crossref-verified | Access: open-access, evidence tier **B**
@@ -5482,7 +5482,7 @@ Mueller, Natalie G.. (2025). *The sleeping crops of eastern North America: a new
 
 #### `ortloff1993-tiwanaku-collapse`
 
-Ortloff, Charles R.; Kolata, Alan L.. (1993). *Climate and Collapse: Agro-Ecological Perspectives on the Decline of the Tiwanaku State*. Journal of Archaeological Science 20: 195-221
+Ortloff, Charles R.; Kolata, Alan L. (1993). *Climate and Collapse: Agro-Ecological Perspectives on the Decline of the Tiwanaku State*. Journal of Archaeological Science 20: 195-221
 
 - DOI: [10.1006/jasc.1993.1014](https://doi.org/10.1006/jasc.1993.1014)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **B**
@@ -5491,7 +5491,7 @@ Ortloff, Charles R.; Kolata, Alan L.. (1993). *Climate and Collapse: Agro-Ecolog
 
 #### `peyre2006-kerala-homegardens`
 
-Peyre, A.; Guidal, A.; Wiersum, K. F.; Bongers, F.. (2006). *Dynamics of Homegarden Structure and Function in Kerala, India*. Agroforestry Systems 66: 101-115
+Peyre, A.; Guidal, A.; Wiersum, K. F.; Bongers, F. (2006). *Dynamics of Homegarden Structure and Function in Kerala, India*. Agroforestry Systems 66: 101-115
 
 - DOI: [10.1007/s10457-005-2919-x](https://doi.org/10.1007/s10457-005-2919-x)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **B**
