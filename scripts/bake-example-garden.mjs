@@ -423,7 +423,7 @@ const envelope = {
   savedAtUtcMillis: Date.now(),
   sceneTimeUtcMillis: SCENE_TIME_UTC_MILLIS,
   example: {
-    label: 'Example agrivoltaic garden, Amherst, Massachusetts',
+    label: `Example agrivoltaic garden, ${SITE_LABEL}`,
     generatedAtUtc: new Date().toISOString(),
     generator: 'scripts/bake-example-garden.mjs',
     siteLabel: SITE_LABEL,
