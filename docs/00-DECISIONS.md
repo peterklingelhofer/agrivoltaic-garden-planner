@@ -1366,12 +1366,16 @@ gate refuses the crop, its calendar gives no dates and carries the gate's own se
   types the Rutgers sheet grew, which flower from late September and set no fruit outdoors
   there. One critical length can't stand for both, so roselle stays ungated. Calyces are ready
   "two weeks after flowering" (UF/IFAS HS1517), the one roselle figure its sources agree on.
-- Jicama. Zinsou and Venthou-Dumaine 1988, read in full, put tuber bulking in Guadeloupe under
-  "day length inferior to 12 hours", and Paull, Chen and Fukuda 1988's abstract gives 11 to 12
-  hours at planting. The only span to a harvest is Zinsou's: seed sown into short days ran a
-  cycle "not longer than 5 months", an upper bound that would date a south Florida harvest in
-  late February, where UF/IFAS HS615 has roots five to nine months after a spring sowing. Its
-  row's season length refuses it where the warm season is short.
+- Jicama. Zinsou and Venthou-Dumaine 1988 put tuber bulking in Guadeloupe under "day length
+  inferior to 12 hours", and Paull, Chen and Fukuda 1988 found in Hawaii that "Tuberous root
+  development was initiated by decreasing day length at time of planting", with the critical
+  length at 11 to 12 hours. Both spans to a harvest are for seed sown into short days: Zinsou's
+  cycle "not longer than 5 months", and Paull's plantings, every one of them "harvested 5 months
+  after planting", with September to October the planting dates that filled that span. A plant
+  sown in spring and grown large before the days shorten bulks faster, and no source says by how
+  much, so a gate built on five months would date a south Florida harvest in late February, where
+  UF/IFAS HS615 has roots five to nine months after a spring sowing, and refuse jicama at every
+  site with a fall frost. Its row's season length refuses it where the warm season is short.
 - Oca. NRC 1989 says the common Andean types need days "shorter than 12 hours to initiate tuber
   formation", and the New Zealand lines it calls "apparently unrestricted by daylength" are
   measured at about 12 hours by the seller that grows them, who knows no day-neutral oca. No
