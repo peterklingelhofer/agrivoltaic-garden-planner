@@ -1618,20 +1618,24 @@ export const CROP_ROWS: readonly CropRow[] = [
     'C',
     // as sweet-potato
     0,
-    // Hermann and Heller 1997 (an IPGRI monograph, outside the usual source classes), on a field
-    // trial with the flowers removed: "three cultivars of P. erosus (reproductively pruned
-    // harvested after 154-168 days): 162-215 kg N/ha", the 161-day midpoint, from sowing
-    161,
-    // the same trial: "the plant population of both species in the trials was 110 000 plants/ha",
-    // a field population covering both species, sqrt(10,000 / 110,000) m = 0.30 m
-    30,
+    // UF/IFAS HS615: "When planted from seeds, about 5-9 months of warm weather are required
+    // before large roots are produced", the 7-month midpoint, 210 days. Hermann and Heller
+    // 1997's "154-168 days" are a field trial's pruned plants, and the book doesn't say what the
+    // count starts from
+    210,
+    // UC's 1983 leaflet (Johnson): "Rows should be two to three feet apart with plants eight to
+    // 10 inches apart in the row", the 9 in by 2.5 ft midpoints, 0.17 m² a plant, 42 cm on a
+    // square grid
+    42,
     // UF/IFAS HS615: "The vining tops, which reach 10-20 feet in length", the 15 ft midpoint,
     // the trellis to plan for
     4.57,
     // as yam-greater: no source read gives jicama's spread as a number
     0.5,
     {
-      // the 162-215 kg N/ha the trial sentence above reports for P. erosus itself
+      // Hermann and Heller 1997 (an IPGRI monograph, outside the usual source classes), on a
+      // field trial: "three cultivars of P. erosus (reproductively pruned harvested after 154-168
+      // days): 162-215 kg N/ha"
       nfix: true,
     },
   ],

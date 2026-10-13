@@ -22418,10 +22418,9 @@
       "accessLevel": "public-domain",
       "evidenceTier": "C",
       "backsClaims": [
-        "jicama spacing, verbatim: 'the plant population of both species in the trials was 110 000 plants/ha and the plants were reproductively pruned' (Chapter 'Ahipa (Pachyrhizus ahipa (Wedd.) Parodi)' (M. Sørensen, W. J. Grüneberg and B. Ørting), section 4.1 Biological nitrogen fixation, page 27)",
-        "jicama daysToMaturity, verbatim: 'Castellanos et al. (1997) conducted the first field test quantifying the actual amount of nitrogen fixed by two accessions of P. ahipa (reproductively pruned and [...] harvested after 154 days): 58-80 kg N/ha (or 60-76 g N/t biomass per day), and three cultivars of P. erosus (reproductively pruned harvested after 154-168 days): 162-215 kg N/ha' (Chapter 'Ahipa (Pachyrhizus ahipa (Wedd.) Parodi)' (M. Sørensen, W. J. Grüneberg and B. Ørting), section 4.1 Biological nitrogen fixation, pages 26 and 27, the omission being the page break)"
+        "jicama nfix, verbatim: 'three cultivars of P. erosus (reproductively pruned harvested after 154-168 days): 162-215 kg N/ha (or 84-107 g N/t biomass per day)' (Chapter 'Ahipa (Pachyrhizus ahipa (Wedd.) Parodi)' (M. Sørensen, W. J. Grüneberg and B. Ørting), section 4.1 Biological nitrogen fixation, page 27, on Castellanos et al. 1997's field trial in Mexico)"
       ],
-      "caveat": "A scholarly monograph (IPK and IPGRI), outside the usual extension, USDA and FAO classes. The catalog row comments say which figure each sentence gives."
+      "caveat": "A scholarly monograph (IPK and IPGRI), outside the usual extension, USDA and FAO classes. Its 154-168 days to harvest are for reproductively pruned trial plants and the book doesn't say what the count starts from, so the catalog's season length for jicama comes from UF/IFAS HS615. The catalog row comments say which figure each sentence gives."
     },
     "URL": "https://hdl.handle.net/10568/104208"
   },
@@ -22647,9 +22646,52 @@
       "evidenceTier": "C",
       "backsClaims": [
         "jicama height, verbatim: 'The vining tops, which reach 10-20 feet in length, have compound leaves with pointed edges, and bear white flowers and green lima bean-shaped pods.' (Page 1, the second paragraph)",
-        "jicama coldLimit, verbatim: 'Jicama does best in a warm climate with moderate rainfall and is sensitive to frost.' (Page 2, section 'Culture')"
+        "jicama coldLimit, verbatim: 'Jicama does best in a warm climate with moderate rainfall and is sensitive to frost.' (Page 2, section 'Culture')",
+        "jicama daysToMaturity, verbatim: 'When planted from seeds, about 5-9 months of warm weather are required before large roots are produced.' (Page 2, section 'Culture'), the 7-month midpoint, 210 days"
       ],
       "caveat": "Published outside a peer-reviewed journal."
+    }
+  },
+  {
+    "type": "webpage",
+    "title": "Jicama",
+    "author": [
+      {
+        "family": "Johnson",
+        "given": "Hunter",
+        "suffix": "Jr."
+      }
+    ],
+    "publisher": "University of California Cooperative Extension, Small Farms Network",
+    "issued": {
+      "date-parts": [
+        [
+          1983,
+          9
+        ]
+      ]
+    },
+    "URL": "https://ucanr.edu/program/uc-anr-small-farms-network/jicama",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          12
+        ]
+      ]
+    },
+    "id": "ucanr-johnson-1983-jicama",
+    "note": "Retrieved 2026-10-12 from the Internet Archive's copy of the page's print view (web.archive.org/web/20251009150829/https://ucanr.edu/node/130932/printable/print), since the live page answers automated reads with a bot challenge, and read in full for the sentence quoted. The page is dated 9/83.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "open-access",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "jicama spacing, verbatim: 'Rows should be two to three feet apart with plants eight to 10 inches apart in the row.' (section 'Cultural Requirements'), the 9 in by 2.5 ft midpoints, 0.17 m² a plant, 42 cm on a square grid"
+      ],
+      "caveat": "An archived copy of a 1983 extension leaflet that isn't peer reviewed. Comments on this app's catalog row say which figure the sentence gives."
     }
   },
   {

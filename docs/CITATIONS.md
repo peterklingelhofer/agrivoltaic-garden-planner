@@ -1,6 +1,6 @@
 # Citation corpus
 
-527 sources (176 crossref-verified, 1 datacite-verified, 16 unverified, 334 url-verified). Machine-readable companion: [`CITATIONS.csl.json`](./CITATIONS.csl.json) (CSL-JSON).
+528 sources (176 crossref-verified, 1 datacite-verified, 16 unverified, 335 url-verified). Machine-readable companion: [`CITATIONS.csl.json`](./CITATIONS.csl.json) (CSL-JSON).
 A record enters this corpus verified against the Crossref REST API, against the DataCite REST API,
 or by a fetch of the authoritative publisher, standards-body or government URL, with an Internet
 Archive snapshot standing in where a live page withholds its text.
@@ -48,12 +48,12 @@ Physics, geodata and software sources carry `null`: the scheme does not apply to
 | crossref-verified | 176 |
 | datacite-verified | 1 |
 | unverified | 16 |
-| url-verified | 334 |
-| **total** | **527** |
+| url-verified | 335 |
+| **total** | **528** |
 
 | Access level | n |
 |---|---|
-| open-access | 79 |
+| open-access | 80 |
 | paywalled | 115 |
 | public-domain | 333 |
 
@@ -61,7 +61,7 @@ Physics, geodata and software sources carry `null`: the scheme does not apply to
 |---|---|
 | A | 40 |
 | B | 75 |
-| C | 318 |
+| C | 319 |
 | null (not applicable) | 94 |
 
 ---
@@ -1002,7 +1002,7 @@ Yavari, Rouhangiz; Zaliwciw, Demetrius; Cibin, Raj; McPhillips, Lauren. (2022). 
 
 ## Horticulture & crop physiology
 
-368 sources.
+369 sources.
 
 #### `adhikary2025-clubroot-review`
 
@@ -1742,9 +1742,8 @@ Hermann, M.; Heller, J. (1997). *Andean roots and tubers: Ahipa, arracacha, maca
 - URL: <https://hdl.handle.net/10568/104208>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - jicama spacing, verbatim: 'the plant population of both species in the trials was 110 000 plants/ha and the plants were reproductively pruned' (Chapter 'Ahipa (Pachyrhizus ahipa (Wedd.) Parodi)' (M. Sørensen, W. J. Grüneberg and B. Ørting), section 4.1 Biological nitrogen fixation, page 27)
-  - jicama daysToMaturity, verbatim: 'Castellanos et al. (1997) conducted the first field test quantifying the actual amount of nitrogen fixed by two accessions of P. ahipa (reproductively pruned and [...] harvested after 154 days): 58-80 kg N/ha (or 60-76 g N/t biomass per day), and three cultivars of P. erosus (reproductively pruned harvested after 154-168 days): 162-215 kg N/ha' (Chapter 'Ahipa (Pachyrhizus ahipa (Wedd.) Parodi)' (M. Sørensen, W. J. Grüneberg and B. Ørting), section 4.1 Biological nitrogen fixation, pages 26 and 27, the omission being the page break)
-- **Caveat:** A scholarly monograph (IPK and IPGRI), outside the usual extension, USDA and FAO classes. The catalog row comments say which figure each sentence gives.
+  - jicama nfix, verbatim: 'three cultivars of P. erosus (reproductively pruned harvested after 154-168 days): 162-215 kg N/ha (or 84-107 g N/t biomass per day)' (Chapter 'Ahipa (Pachyrhizus ahipa (Wedd.) Parodi)' (M. Sørensen, W. J. Grüneberg and B. Ørting), section 4.1 Biological nitrogen fixation, page 27, on Castellanos et al. 1997's field trial in Mexico)
+- **Caveat:** A scholarly monograph (IPK and IPGRI), outside the usual extension, USDA and FAO classes. Its 154-168 days to harvest are for reproductively pruned trial plants and the book doesn't say what the count starts from, so the catalog's season length for jicama comes from UF/IFAS HS615. The catalog row comments say which figure each sentence gives.
 
 #### `hoanghua2024-white-rot`
 
@@ -3680,6 +3679,16 @@ Silva, Yolanda. (n.d.). *Yacon: What is it?* UC Cooperative Extension Alameda Co
   - yacon height, verbatim: 'the plant typically grows 4 to 8 feet tall, depending on variety.' (Page 1 (one-page fact sheet))
 - **Caveat:** Published outside a peer-reviewed journal.
 
+#### `ucanr-johnson-1983-jicama`
+
+Johnson, Hunter. (1983). *Jicama*. University of California Cooperative Extension, Small Farms Network
+
+- URL: <https://ucanr.edu/program/uc-anr-small-farms-network/jicama>
+- Verification: URL-verified | Access: open-access, evidence tier **C**
+- Backs:
+  - jicama spacing, verbatim: 'Rows should be two to three feet apart with plants eight to 10 inches apart in the row.' (section 'Cultural Requirements'), the 9 in by 2.5 ft midpoints, 0.17 m² a plant, 42 cm on a square grid
+- **Caveat:** An archived copy of a 1983 extension leaflet that isn't peer reviewed. Comments on this app's catalog row say which figure the sentence gives.
+
 #### `ucanr-santaclara-citrus`
 
 UCCE Master Gardener Program of Santa Clara County. (n.d.). *Growing Fabulous Citrus*. University of California Cooperative Extension, Santa Clara County
@@ -3758,6 +3767,7 @@ Stephens, James M. (1994). *Jicama: Pachyrhizus erosus (L.) Urban (HS615)*. Univ
 - Backs:
   - jicama height, verbatim: 'The vining tops, which reach 10-20 feet in length, have compound leaves with pointed edges, and bear white flowers and green lima bean-shaped pods.' (Page 1, the second paragraph)
   - jicama coldLimit, verbatim: 'Jicama does best in a warm climate with moderate rainfall and is sensitive to frost.' (Page 2, section 'Culture')
+  - jicama daysToMaturity, verbatim: 'When planted from seeds, about 5-9 months of warm weather are required before large roots are produced.' (Page 2, section 'Culture'), the 7-month midpoint, 210 days
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-1994-roselle-hs659`

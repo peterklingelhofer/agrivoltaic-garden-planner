@@ -393,6 +393,7 @@ export const CITATION_IDS = [
   'ucanr-2008-artichoke',
   'ucanr-2012-citrus-sacramento',
   'ucanr-alameda-yacon-what-is-it',
+  'ucanr-johnson-1983-jicama',
   'ucanr-santaclara-citrus',
   'ucce-2010-lemon-cost-study-sjv-south',
   'uconn-plantdatabase-hippophae-rhamnoides',

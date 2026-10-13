@@ -1273,8 +1273,8 @@
       "dliTargetHigh": 28,
       "tier": "C",
       "shade": 0,
-      "daysToMaturity": 161,
-      "spacingCm": 30,
+      "daysToMaturity": 210,
+      "spacingCm": 42,
       "heightM": 4.57,
       "widthM": 0.5,
       "overrides": {
