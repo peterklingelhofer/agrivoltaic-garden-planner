@@ -290,7 +290,7 @@ export const Sidebar = (): ReactElement => {
         return [
           guarded('Light simulation', 'panel-simulation-failed', <SimPanel />),
           guarded('Light in each bed', 'panel-bed-light-failed', <BedLightPanel />),
-          guarded('Light overlay', 'panel-overlay-failed', <OverlayPanel />),
+          guarded('Ground overlay', 'panel-overlay-failed', <OverlayPanel />),
           guarded('Sun and time', 'panel-time-failed', <TimePanel />),
         ]
       case 'plants':

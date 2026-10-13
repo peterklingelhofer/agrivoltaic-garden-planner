@@ -79,10 +79,10 @@ export const OverlayPanel = (): ReactElement => {
   const channelLabel = CHANNELS.find(([value]) => value === overlay.channel)?.[1] ?? overlay.channel
 
   return (
-    <Panel id="overlay" title="Light overlay">
+    <Panel id="overlay" title="Ground overlay">
       <Toggle
         testId="control-overlay-visible"
-        label="Color the ground by how much light it gets"
+        label="Color the ground"
         checked={overlay.visible}
         onChange={(visible) => setOverlay({ visible })}
       />
