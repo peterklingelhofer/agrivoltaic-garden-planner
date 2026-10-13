@@ -7,9 +7,10 @@ import {
   rotateRingAbout,
   translateRing,
 } from '../state/geom'
+import type { LengthUnit } from '../state/slices'
 import { useAppStore } from '../state/store'
-import type { House, Tree } from '../types/garden'
-import type { Ring2D } from '../types/geo'
+import type { House, Obstruction, Tree } from '../types/garden'
+import type { Ring2D, Vec2M } from '../types/geo'
 import type { ObstructionId } from '../types/ids'
 import { meters, type Fraction } from '../types/units'
 import { Action, NumberField, Toggle } from './controls'
@@ -79,6 +80,119 @@ const addAndShow = (add: () => ObstructionId | null): void => {
   if (added !== null) requestCardScroll(added)
 }
 
+/** A footprint's measures, read live off its ring, and the write every footprint field makes */
+interface Footprint {
+  readonly ring: Ring2D
+  readonly widthM: number
+  readonly depthM: number
+  readonly center: Vec2M
+  readonly turn: number
+  readonly write: (nextRing: Ring2D) => void
+}
+
+const footprintOf = (
+  obstruction: Obstruction,
+  upsertObstruction: (next: Obstruction) => void,
+): Footprint => {
+  const ring = obstruction.footprint.exterior
+  const [a, b, c] = ring
+  return {
+    ring,
+    widthM: a && b ? Math.hypot(b.xM - a.xM, b.yM - a.yM) : 0,
+    depthM: b && c ? Math.hypot(c.xM - b.xM, c.yM - b.yM) : 0,
+    center: centroidOf(ring),
+    turn: turnDeg(ring),
+    write: (nextRing) => upsertObstruction({ ...obstruction, footprint: polygonOf(nextRing) }),
+  }
+}
+
+interface FootprintFieldProps {
+  readonly kind: Obstruction['kind']
+  readonly id: ObstructionId
+  readonly footprint: Footprint
+  readonly unit: LengthUnit
+}
+
+/** Width and depth on one row: a house's own, or a tree's crown */
+const SizeFields = ({
+  kind,
+  id,
+  footprint,
+  unit,
+  labels,
+}: FootprintFieldProps & { readonly labels: readonly [string, string] }): ReactElement => {
+  const { ring, widthM, depthM, write } = footprint
+  return (
+    <div className="row">
+      <NumberField
+        testId={`control-${kind}-width-${id}`}
+        label={labels[0]}
+        unit={unit}
+        min={showLimit(1, unit)}
+        step={lengthStep(unit, 0.5)}
+        value={showLength(widthM, unit, round2)}
+        onChange={(value) =>
+          write(resizedRectangle(ring, Math.max(1, toMeters(value, unit)), depthM))
+        }
+      />
+      <NumberField
+        testId={`control-${kind}-depth-${id}`}
+        label={labels[1]}
+        unit={unit}
+        min={showLimit(1, unit)}
+        step={lengthStep(unit, 0.5)}
+        value={showLength(depthM, unit, round2)}
+        onChange={(value) =>
+          write(resizedRectangle(ring, widthM, Math.max(1, toMeters(value, unit))))
+        }
+      />
+    </div>
+  )
+}
+
+/** The footprint turned about its own middle, in whole degrees */
+const TurnField = ({ kind, id, footprint }: Omit<FootprintFieldProps, 'unit'>): ReactElement => (
+  <NumberField
+    testId={`control-${kind}-turn-${id}`}
+    label="Turn"
+    unit="°"
+    min={-180}
+    max={180}
+    step={5}
+    value={footprint.turn}
+    onChange={(value) =>
+      footprint.write(
+        rotateRingAbout(footprint.ring, centroidOf(footprint.ring), value - footprint.turn),
+      )
+    }
+  />
+)
+
+/** Where the footprint's middle stands, east and north of the plot's origin */
+const CenterFields = ({ kind, id, footprint, unit }: FootprintFieldProps): ReactElement => {
+  const { ring, center, write } = footprint
+  return (
+    <div className="row">
+      <NumberField
+        testId={`control-${kind}-east-${id}`}
+        label="Center east"
+        unit={unit}
+        step={lengthStep(unit, 0.5)}
+        value={showLength(center.xM, unit, round2)}
+        onChange={(value) => write(translateRing(ring, toMeters(value, unit) - center.xM, 0))}
+      />
+      <NumberField
+        testId={`control-${kind}-north-${id}`}
+        label="Center north"
+        unit={unit}
+        step={lengthStep(unit, 0.5)}
+        value={showLength(center.yM, unit, round2)}
+        onChange={(value) => write(translateRing(ring, 0, toMeters(value, unit) - center.yM))}
+      />
+    </div>
+  )
+}
+
 /**
  * One house, sized and placed by typing, beside drawing in Move mode. Every field reads the
  * footprint live and writes it back through `upsertObstruction`, so a drag in Move mode and a
@@ -95,15 +209,7 @@ const HouseCard = ({
   const removeObstruction = useAppStore((s) => s.removeObstruction)
   const unit = useLengthUnit()
   const card = useScrollWhenAsked(house.id, selected)
-  const ring = house.footprint.exterior
-  const [a, b, c] = ring
-  const widthM = a && b ? Math.hypot(b.xM - a.xM, b.yM - a.yM) : 0
-  const depthM = b && c ? Math.hypot(c.xM - b.xM, c.yM - b.yM) : 0
-  const center = centroidOf(ring)
-  const turn = turnDeg(ring)
-
-  const writeRing = (nextRing: Ring2D): void =>
-    upsertObstruction({ ...house, footprint: polygonOf(nextRing) })
+  const footprint = footprintOf(house, upsertObstruction)
 
   return (
     <li
@@ -113,30 +219,13 @@ const HouseCard = ({
       data-selected={selected}
     >
       <strong>{house.label}</strong>
-      <div className="row">
-        <NumberField
-          testId={`control-house-width-${house.id}`}
-          label="Width"
-          unit={unit}
-          min={showLimit(1, unit)}
-          step={lengthStep(unit, 0.5)}
-          value={showLength(widthM, unit, round2)}
-          onChange={(value) =>
-            writeRing(resizedRectangle(ring, Math.max(1, toMeters(value, unit)), depthM))
-          }
-        />
-        <NumberField
-          testId={`control-house-depth-${house.id}`}
-          label="Depth"
-          unit={unit}
-          min={showLimit(1, unit)}
-          step={lengthStep(unit, 0.5)}
-          value={showLength(depthM, unit, round2)}
-          onChange={(value) =>
-            writeRing(resizedRectangle(ring, widthM, Math.max(1, toMeters(value, unit))))
-          }
-        />
-      </div>
+      <SizeFields
+        kind="house"
+        id={house.id}
+        footprint={footprint}
+        unit={unit}
+        labels={['Width', 'Depth']}
+      />
       <div className="row">
         <NumberField
           testId={`control-house-height-${house.id}`}
@@ -149,35 +238,9 @@ const HouseCard = ({
             upsertObstruction({ ...house, heightM: meters(Math.max(1, toMeters(value, unit))) })
           }
         />
-        <NumberField
-          testId={`control-house-turn-${house.id}`}
-          label="Turn"
-          unit="°"
-          min={-180}
-          max={180}
-          step={5}
-          value={turn}
-          onChange={(value) => writeRing(rotateRingAbout(ring, centroidOf(ring), value - turn))}
-        />
+        <TurnField kind="house" id={house.id} footprint={footprint} />
       </div>
-      <div className="row">
-        <NumberField
-          testId={`control-house-east-${house.id}`}
-          label="Center east"
-          unit={unit}
-          step={lengthStep(unit, 0.5)}
-          value={showLength(center.xM, unit, round2)}
-          onChange={(value) => writeRing(translateRing(ring, toMeters(value, unit) - center.xM, 0))}
-        />
-        <NumberField
-          testId={`control-house-north-${house.id}`}
-          label="Center north"
-          unit={unit}
-          step={lengthStep(unit, 0.5)}
-          value={showLength(center.yM, unit, round2)}
-          onChange={(value) => writeRing(translateRing(ring, 0, toMeters(value, unit) - center.yM))}
-        />
-      </div>
+      <CenterFields kind="house" id={house.id} footprint={footprint} unit={unit} />
       <Action
         testId={`action-house-remove-${house.id}`}
         keyShortcuts="Delete Backspace"
@@ -205,15 +268,7 @@ const TreeCard = ({
   const removeObstruction = useAppStore((s) => s.removeObstruction)
   const unit = useLengthUnit()
   const card = useScrollWhenAsked(tree.id, selected)
-  const ring = tree.footprint.exterior
-  const [a, b, c] = ring
-  const widthM = a && b ? Math.hypot(b.xM - a.xM, b.yM - a.yM) : 0
-  const depthM = b && c ? Math.hypot(c.xM - b.xM, c.yM - b.yM) : 0
-  const center = centroidOf(ring)
-  const turn = turnDeg(ring)
-
-  const writeRing = (nextRing: Ring2D): void =>
-    upsertObstruction({ ...tree, footprint: polygonOf(nextRing) })
+  const footprint = footprintOf(tree, upsertObstruction)
 
   return (
     <li
@@ -223,30 +278,13 @@ const TreeCard = ({
       data-selected={selected}
     >
       <strong>{tree.label}</strong>
-      <div className="row">
-        <NumberField
-          testId={`control-tree-width-${tree.id}`}
-          label="Crown width"
-          unit={unit}
-          min={showLimit(1, unit)}
-          step={lengthStep(unit, 0.5)}
-          value={showLength(widthM, unit, round2)}
-          onChange={(value) =>
-            writeRing(resizedRectangle(ring, Math.max(1, toMeters(value, unit)), depthM))
-          }
-        />
-        <NumberField
-          testId={`control-tree-depth-${tree.id}`}
-          label="Crown depth"
-          unit={unit}
-          min={showLimit(1, unit)}
-          step={lengthStep(unit, 0.5)}
-          value={showLength(depthM, unit, round2)}
-          onChange={(value) =>
-            writeRing(resizedRectangle(ring, widthM, Math.max(1, toMeters(value, unit))))
-          }
-        />
-      </div>
+      <SizeFields
+        kind="tree"
+        id={tree.id}
+        footprint={footprint}
+        unit={unit}
+        labels={['Crown width', 'Crown depth']}
+      />
       <div className="row">
         <NumberField
           testId={`control-tree-base-${tree.id}`}
@@ -275,35 +313,9 @@ const TreeCard = ({
         />
       </div>
       <div className="row">
-        <NumberField
-          testId={`control-tree-turn-${tree.id}`}
-          label="Turn"
-          unit="°"
-          min={-180}
-          max={180}
-          step={5}
-          value={turn}
-          onChange={(value) => writeRing(rotateRingAbout(ring, centroidOf(ring), value - turn))}
-        />
+        <TurnField kind="tree" id={tree.id} footprint={footprint} />
       </div>
-      <div className="row">
-        <NumberField
-          testId={`control-tree-east-${tree.id}`}
-          label="Center east"
-          unit={unit}
-          step={lengthStep(unit, 0.5)}
-          value={showLength(center.xM, unit, round2)}
-          onChange={(value) => writeRing(translateRing(ring, toMeters(value, unit) - center.xM, 0))}
-        />
-        <NumberField
-          testId={`control-tree-north-${tree.id}`}
-          label="Center north"
-          unit={unit}
-          step={lengthStep(unit, 0.5)}
-          value={showLength(center.yM, unit, round2)}
-          onChange={(value) => writeRing(translateRing(ring, 0, toMeters(value, unit) - center.yM))}
-        />
-      </div>
+      <CenterFields kind="tree" id={tree.id} footprint={footprint} unit={unit} />
       <Toggle
         testId={`control-tree-evergreen-${tree.id}`}
         label="Keeps its leaves all year"
