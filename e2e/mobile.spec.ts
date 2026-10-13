@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test'
-import { openApp, openFold, step, waitForCanvas } from './fixtures/app.ts'
+import { AGENT_IN_BUILD, openApp, openFold, step, waitForCanvas } from './fixtures/app.ts'
 import { QUESTION_STEPS, readNumber, searchLayouts } from './fixtures/qa.ts'
 
 /**
@@ -165,9 +165,10 @@ for (const phone of PHONES) {
       await page.getByTestId('action-tab-edit').click()
       await expect(root).toHaveAttribute('data-surface', 'edit')
       expect(await currentTab(page)).toBe('action-tab-edit')
-      // exactly one tab is ever marked, and there are exactly the two
+      // exactly one tab is ever marked, and there are exactly the two, plus the agent's tab in
+      // a build that carries the agent
       await expect(page.locator('[data-testid^="action-tab-"][data-current="true"]')).toHaveCount(1)
-      await expect(page.locator('[data-testid^="action-tab-"]')).toHaveCount(2)
+      await expect(page.locator('[data-testid^="action-tab-"]')).toHaveCount(AGENT_IN_BUILD ? 3 : 2)
     })
 
     /**
