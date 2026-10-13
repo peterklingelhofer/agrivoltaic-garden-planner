@@ -2,7 +2,7 @@
  * Drives a real headless browser against the deployed site with nothing stubbed: a real place
  * lookup, a real geocoder search, a real bake, a real layout search, a real ranking.
  *
- * CI stubs every weather, elevation, soil and geocoding request (see e2e/fixtures/app.ts), and
+ * CI stubs every weather, soil and geocoding request (see e2e/fixtures/app.ts), and
  * `bun run verify-deploy` only reads the deployed HTML and JS over HTTP. Neither reaches a live
  * upstream, so a build can be green everywhere while a fresh place lookup fails against a real
  * one. This is the check that reaches one.

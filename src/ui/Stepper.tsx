@@ -244,8 +244,8 @@ export const Stepper = <T extends string>({
    * the step it is in.
    *
    * `scrollIntoView` on the header, so it's the scrolling
-   * ancestor's problem which element that is: the sidebar is the scroller on a laptop and the
-   * whole stage is the scroller on a phone, and neither is named here.
+   * ancestor's problem which element that is: the sidebar is the scroller at every width, and it
+   * isn't named here.
    *
    * In a frame callback because the press isn't the layout: opening a step closes the one before
    * it, and on this stepper that is worth thousands of pixels. And in a frame callback that keeps

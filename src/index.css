@@ -135,8 +135,8 @@ body {
 }
 
 /*
- * The page itself never scrolls: the plan column does, and on a phone so does the garden's
- * own box. Opening a step scrolls its header to the top of the column with `scrollIntoView`,
+ * The page itself never scrolls: the plan column does, at every width. Opening a step scrolls
+ * its header to the top of the column with `scrollIntoView`,
  * which also scrolls every scrollable ancestor, and a page that was a few pixels taller than
  * the viewport let it take the top bar off the screen by 45px on a laptop and the whole toolbar
  * away on the sources step
@@ -259,7 +259,8 @@ body {
 }
 
 .stage {
-  /* the scroller below 900px, for the same reason `.sidebar` is positioned */
+  /* positioned for the same reason `.sidebar` is: the containing block for what's positioned
+     inside it */
   position: relative;
   display: grid;
   grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
