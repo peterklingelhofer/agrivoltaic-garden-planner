@@ -1355,12 +1355,29 @@ gets a harvest date before the frost, and every such date names its day-length s
 gate refuses the crop, its calendar gives no dates and carries the gate's own sentence.
 
 **What stays ungated.**
-- Roselle. Its sources give a critical length, 12 hours in some and 13 in FAO's, and two weeks from
-  flower to calyx, but none gives the weeks from short days to the first flower. Its cultivars
-  differ too.
-- Jicama. Only an abstract gives a critical length.
-- Oca. No source gives the days from short days to a harvest, and NRC 1989 says the New Zealand
-  lines "are apparently unrestricted by daylength".
+- Roselle. One experiment stands behind every later figure: McClelland 1924, at the Porto Rico
+  station, grew seedlings under an 11-hour day and a 13⅓-hour day. The short-day plants "showed
+  buds at 4 weeks after planting", carried large red fruits at 10 weeks and seed at 14, and the
+  long-day plants showed no sign of a flower in five and a half months. Crane 1949 reads that as
+  a 13-hour threshold, and the extension sheets say 12. The ten weeks count from seed sown into
+  short days, so for a plant already grown they overstate the wait, and the retail cultivar
+  overturns them: Thai Red, transplanted in June in southern New Jersey, budded in early
+  September under days longer than 13 hours (Rutgers, SARE ONE11-151), a month ahead of the
+  types the Rutgers sheet grew, which flower from late September and set no fruit outdoors
+  there. One critical length can't stand for both, so roselle stays ungated. Calyces are ready
+  "two weeks after flowering" (UF/IFAS HS1517), the one roselle figure its sources agree on.
+- Jicama. Zinsou and Venthou-Dumaine 1988, read in full, put tuber bulking in Guadeloupe under
+  "day length inferior to 12 hours", and Paull, Chen and Fukuda 1988's abstract gives 11 to 12
+  hours at planting. The only span to a harvest is Zinsou's: seed sown into short days ran a
+  cycle "not longer than 5 months", an upper bound that would date a south Florida harvest in
+  late February, where UF/IFAS HS615 has roots five to nine months after a spring sowing. Its
+  row's season length refuses it where the warm season is short.
+- Oca. NRC 1989 says the common Andean types need days "shorter than 12 hours to initiate tuber
+  formation", and the New Zealand lines it calls "apparently unrestricted by daylength" are
+  measured at about 12 hours by the seller that grows them, who knows no day-neutral oca. No
+  source of the catalog's classes gives the days from short days to a harvest, and oca's tubers
+  are dug after the frost has killed the tops, which the gate's rule, a harvest before the first
+  freeze, can't say. Its row's season length refuses it where the season is short.
 - Pigeon pea and lablab. NRCS names a day-neutral pigeon pea, 'Amarillo', and CTAHR says of lablab
   that "Both short-day and long-day varieties are known".
 - Soybean, sorghum, upland rice and sesame. Seed sold at a latitude is bred or matched for it,
