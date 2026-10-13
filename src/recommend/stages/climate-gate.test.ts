@@ -241,7 +241,7 @@ describe('a short-day crop needs its days to a harvest before the first fall fre
     const outcome = photoperiodGate(need(catalog, 'winged-bean'), siteFixture(), 50)
     expect(outcome.passed).toBe(false)
     expect(outcome.limiting?.stage).toBe('climate-gate')
-    expect(outcome.limiting?.cause).toEqual({ kind: 'photoperiod' })
+    expect(outcome.limiting?.cause).toEqual({ kind: 'photoperiod', reason: 'frost' })
     expect(outcome.limiting?.explanation).toContain('Sep 8')
     expect(outcome.limiting?.membership).toBeCloseTo(44 / 70.5, 6)
   })
@@ -270,7 +270,7 @@ describe('a short-day crop needs its days to a harvest before the first fall fre
     })
     const outcome = photoperiodGate(need(catalog, 'winged-bean'), site, 50)
     expect(outcome.passed).toBe(false)
-    expect(outcome.limiting?.cause).toEqual({ kind: 'photoperiod' })
+    expect(outcome.limiting?.cause).toEqual({ kind: 'photoperiod', reason: 'frost' })
     expect(outcome.limiting?.explanation).toContain('Mar 6')
   })
 
@@ -352,7 +352,7 @@ describe('a short-day crop needs its days to a harvest before the first fall fre
     for (const site of [frostFree, siteFixture({ location })]) {
       const outcome = photoperiodGate(withTrigger(bean, { toHarvestDays: 300 }), site, 50)
       expect(outcome.passed).toBe(false)
-      expect(outcome.limiting?.cause).toEqual({ kind: 'photoperiod' })
+      expect(outcome.limiting?.cause).toEqual({ kind: 'photoperiod', reason: 'latitude' })
       expect(outcome.limiting?.membership).toBe(0)
       expect(outcome.limiting?.explanation).toBe(
         'Days here never stay shorter than 12.75 hours long enough for this crop to flower',
@@ -384,7 +384,10 @@ describe('a short-day crop needs its days to a harvest before the first fall fre
       coldWinterGate(bean, home),
     ])
       expect(outcome.passed).toBe(true)
-    expect(climateGate(bean, home, 50).limiting?.cause).toEqual({ kind: 'photoperiod' })
+    expect(climateGate(bean, home, 50).limiting?.cause).toEqual({
+      kind: 'photoperiod',
+      reason: 'frost',
+    })
   })
 
   it('leaves a site whose season is too short to the season gate, which comes first', async () => {

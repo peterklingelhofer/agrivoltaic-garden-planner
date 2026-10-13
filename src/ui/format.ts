@@ -308,7 +308,9 @@ export const explainLimitingFactor = (
         : cause.kind === 'chill'
           ? "winters here aren't cold enough for it to break dormancy"
           : cause.kind === 'photoperiod'
-            ? 'days here shorten too late in the year for it to finish before frost'
+            ? cause.reason === 'frost'
+              ? 'days here shorten too late in the year for it to finish before frost'
+              : 'days here never stay short enough for long enough for it to finish'
             : cause.kind === 'cold-winter'
               ? "winters here aren't cold enough for it: it grows only where winters are cold"
               : cause.kind === 'season-gdd'

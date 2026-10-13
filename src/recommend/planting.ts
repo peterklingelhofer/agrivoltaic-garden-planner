@@ -23,8 +23,10 @@ const FEASIBILITY_WORDS: Readonly<Record<CalendarFeasibility['kind'], string>> =
   'no-thermal-data': 'this site has no frost or soil temperature data to date it from',
 }
 
-export const feasibilityWords = (kind: CalendarFeasibility['kind']): string =>
-  FEASIBILITY_WORDS[kind]
+export const feasibilityWords = (feasibility: CalendarFeasibility): string =>
+  feasibility.kind === 'season-too-short' && feasibility.reason === 'day-length'
+    ? 'the days here shorten too late for it'
+    : FEASIBILITY_WORDS[feasibility.kind]
 
 /**
  * Turning a chosen crop into a Planting.
@@ -235,7 +237,7 @@ export const derivePlanting = (draft: PlantingDraft): Derivation<Planting> => {
   const calendarSow = calendarSowDay(calendar)
   if (calendarSow === null) {
     return refuse(
-      `the calendar gives ${name} no planting window in ${bed.label}: ${feasibilityWords(calendar.feasibility.kind)}`,
+      `the calendar gives ${name} no planting window in ${bed.label}: ${feasibilityWords(calendar.feasibility)}`,
     )
   }
   // an edit re-derives a planting that is already in the bed, so its own area isn't an obstacle

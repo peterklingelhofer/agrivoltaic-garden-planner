@@ -981,7 +981,11 @@ describe('a short-day crop', () => {
     expect(calendar.plantings).toEqual([])
     // the pod comes on day 322 (Nov 18, 71 days after the days shorten on Sep 8) and the first
     // fall freeze at the 20 percent level is day 280, so the harvest lands 42 days late
-    expect(calendar.feasibility).toEqual({ kind: 'season-too-short', shortfallDays: 42 })
+    expect(calendar.feasibility).toEqual({
+      kind: 'season-too-short',
+      shortfallDays: 42,
+      reason: 'day-length',
+    })
     expect(calendar.notes.at(-1)).toBe(
       photoperiodGate(bean, siteFixture(), 20).limiting?.explanation,
     )
@@ -991,7 +995,11 @@ describe('a short-day crop', () => {
       (percentile) => calendarFor(bean, percentile).feasibility,
     )
     expect(shortfalls).toEqual(
-      [47, 42, 37, 32, 27].map((shortfallDays) => ({ kind: 'season-too-short', shortfallDays })),
+      [47, 42, 37, 32, 27].map((shortfallDays) => ({
+        kind: 'season-too-short',
+        shortfallDays,
+        reason: 'day-length',
+      })),
     )
   })
 
@@ -1023,7 +1031,11 @@ describe('a short-day crop', () => {
       cropCalendar({ crop: bean, site: southern, light, percentile }),
     )
     expect(calendars.map((calendar) => calendar.feasibility)).toEqual(
-      [33, 28, 23, 18, 13].map((shortfallDays) => ({ kind: 'season-too-short', shortfallDays })),
+      [33, 28, 23, 18, 13].map((shortfallDays) => ({
+        kind: 'season-too-short',
+        shortfallDays,
+        reason: 'day-length',
+      })),
     )
     expect(calendars[1]?.notes.at(-1)).toContain('Mar 3')
   })
@@ -1124,7 +1136,9 @@ describe('determinism', () => {
   })
 
   it("discards the pipeline score of a crop whose calendar can't deliver", () => {
-    expect(calendarConfidence({ kind: 'season-too-short', shortfallDays: 10 as Days })).toBe(0)
+    expect(
+      calendarConfidence({ kind: 'season-too-short', shortfallDays: 10 as Days, reason: 'frost' }),
+    ).toBe(0)
     expect(calendarConfidence({ kind: 'light-limited', month: 5 })).toBe(0)
     expect(calendarConfidence({ kind: 'fits', slackDays: 60 as Days })).toBe(1)
     expect(calendarConfidence({ kind: 'fits', slackDays: 0 as Days })).toBeLessThan(1)

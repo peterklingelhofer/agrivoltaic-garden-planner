@@ -485,7 +485,7 @@ export const cropCalendar = (input: CalendarInput): CropCalendar => {
         crop,
         anchors,
         percentile,
-        { kind: 'season-too-short', shortfallDays: shortfall as Days },
+        { kind: 'season-too-short', shortfallDays: shortfall as Days, reason: 'frost' },
         notes,
       )
     }
@@ -723,7 +723,7 @@ const annualCalendar = (input: AnnualInput): CropCalendar => {
             kind: 'light-limited',
             month: ceiling.basis.kind === 'light-window' ? lit.lastMonth : lit.firstMonth,
           }
-        : { kind: 'season-too-short', shortfallDays: -openDays as Days },
+        : { kind: 'season-too-short', shortfallDays: -openDays as Days, reason: 'frost' },
       notes,
     )
   }
@@ -745,7 +745,11 @@ const annualCalendar = (input: AnnualInput): CropCalendar => {
         crop,
         anchors,
         percentile,
-        { kind: 'season-too-short', shortfallDays: Math.max(late, 1) as Days },
+        {
+          kind: 'season-too-short',
+          shortfallDays: Math.max(late, 1) as Days,
+          reason: 'day-length',
+        },
         notes,
       )
     }
@@ -1017,7 +1021,11 @@ const frostFreeCalendar = (input: CalendarInput, anchors: SeasonAnchors): CropCa
       crop,
       anchors,
       percentile,
-      { kind: 'season-too-short', shortfallDays: Math.max(shortfallDays, 1) as Days },
+      {
+        kind: 'season-too-short',
+        shortfallDays: Math.max(shortfallDays, 1) as Days,
+        reason: 'warmth',
+      },
       withWet(wetSeasonNote(precip)),
     )
   const unlit = (): CropCalendar =>

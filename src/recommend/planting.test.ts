@@ -210,7 +210,7 @@ describe('deriving a planting', () => {
     })
     expect(derived.ok).toBe(false)
     if (derived.ok) return
-    expect(derived.reason).toContain(feasibilityWords(barren.feasibility.kind))
+    expect(derived.reason).toContain(feasibilityWords(barren.feasibility))
   })
 
   it('refuses a plan slot whose harvest ends before the calendar says the crop is ready', () => {
@@ -351,7 +351,8 @@ describe('a short-day crop sown on another day', () => {
     const derived = derive(calendar as CropCalendar, 152)
     expect(derived.ok).toBe(false)
     if (derived.ok) return
-    expect(derived.reason).toContain(feasibilityWords('season-too-short'))
+    expect(derived.reason).toContain('the days here shorten too late for it')
+    expect(derived.reason).toContain(feasibilityWords((calendar as CropCalendar).feasibility))
   })
 })
 

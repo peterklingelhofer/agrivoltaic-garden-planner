@@ -64,10 +64,21 @@ export interface HarvestWindow {
 }
 
 // a calendar that doesn't fit must say so. It never emits an optimistic date
+/**
+ * What cuts a season too short: the frost-free span, a frost-free site's warm days, or the days a
+ * short-day crop waits for, which come too late for a harvest before the first fall freeze
+ * (Decision Record 29)
+ */
+export type SeasonShortfall = 'frost' | 'warmth' | 'day-length'
+
 export type CalendarFeasibility =
   | { readonly kind: 'fits'; readonly slackDays: Days }
   | { readonly kind: 'needs-indoor-start'; readonly weeksBefore: number }
-  | { readonly kind: 'season-too-short'; readonly shortfallDays: Days }
+  | {
+      readonly kind: 'season-too-short'
+      readonly shortfallDays: Days
+      readonly reason: SeasonShortfall
+    }
   | { readonly kind: 'light-limited'; readonly month: number }
   | { readonly kind: 'no-thermal-data' }
 

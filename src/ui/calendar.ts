@@ -176,7 +176,10 @@ export const feasibilitySummary = (feasibility: CalendarFeasibility): Feasibilit
       kind: 'season-too-short',
       tone: 'error',
       badge: "Can't finish here",
-      detail: `The season is ${feasibility.shortfallDays} days too short for this crop, so it can't be planted at this site`,
+      detail:
+        feasibility.reason === 'day-length'
+          ? `The days here shorten too late for this crop: its harvest would come ${feasibility.shortfallDays} days after the first fall frost, so it can't be planted at this site`
+          : `The season is ${feasibility.shortfallDays} days too short for this crop, so it can't be planted at this site`,
       plantable: false,
     }
   if (feasibility.kind === 'light-limited')

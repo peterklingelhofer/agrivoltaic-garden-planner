@@ -159,7 +159,7 @@ export const photoperiodGate = (
     const shortDay = shortDaysFrom({ ...trigger, toHarvestDays: 1 }, latitude, midsummer)
     return fail({
       stage: 'climate-gate',
-      cause: { kind: 'photoperiod' },
+      cause: { kind: 'photoperiod', reason: 'latitude' },
       membership: 0 as Fraction,
       explanation:
         shortDay === null
@@ -176,7 +176,7 @@ export const photoperiodGate = (
   const verb = flowers ? 'flower and give a first harvest' : need
   return fail({
     stage: 'climate-gate',
-    cause: { kind: 'photoperiod' },
+    cause: { kind: 'photoperiod', reason: 'frost' },
     membership: clamp((freezeOffset - offset) / trigger.toHarvestDays, 0, 1) as Fraction,
     explanation: `Days here get shorter than ${hours} hours only on ${dayLabel(shortFrom)}, and this crop needs about ${String(Math.round(trigger.toHarvestDays))} days after that to ${verb}, past the first fall frost around ${dayLabel(freezeDay)}`,
   })

@@ -154,6 +154,26 @@ describe('limiting factor prose', () => {
     expect(text).toBe('not enough light in May')
   })
 
+  it('says which of the two day-length refusals a short-day crop met', () => {
+    const says = (reason: 'frost' | 'latitude'): string =>
+      explainLimitingFactor(
+        {
+          stage: 'climate-gate',
+          cause: { kind: 'photoperiod', reason },
+          membership: 0 as Fraction,
+          explanation: '',
+        },
+        'novice',
+        [],
+      )
+    expect(says('frost')).toBe(
+      'days here shorten too late in the year for it to finish before frost',
+    )
+    expect(says('latitude')).toBe(
+      'days here never stay short enough for long enough for it to finish',
+    )
+  })
+
   /**
    * Every picker and list gives the gardener's name for a crop, and so does this sentence, which
    * gets the catalog passed in so it never prints a raw id such as `bean-bush`

@@ -187,10 +187,24 @@ describe('basis and feasibility', () => {
   })
 
   it("refuses to call a crop plantable when it can't finish", () => {
-    const short = feasibilitySummary({ kind: 'season-too-short', shortfallDays: days(18) })
+    const short = feasibilitySummary({
+      kind: 'season-too-short',
+      shortfallDays: days(18),
+      reason: 'frost',
+    })
     expect(short.plantable).toBe(false)
     expect(short.tone).toBe('error')
-    expect(short.detail).toContain('18')
+    expect(short.detail).toContain('18 days too short')
+    // a short-day crop's season is cut by the days it waits for, and the detail says so
+    const late = feasibilitySummary({
+      kind: 'season-too-short',
+      shortfallDays: days(42),
+      reason: 'day-length',
+    })
+    expect(late.badge).toBe(short.badge)
+    expect(late.plantable).toBe(false)
+    expect(late.detail).toContain('shorten too late')
+    expect(late.detail).toContain('42 days after the first fall frost')
     expect(feasibilitySummary({ kind: 'no-thermal-data' }).plantable).toBe(false)
     expect(feasibilitySummary({ kind: 'fits', slackDays: days(3) }).plantable).toBe(true)
   })
@@ -199,7 +213,7 @@ describe('basis and feasibility', () => {
     const kinds: readonly CalendarFeasibility[] = [
       { kind: 'fits', slackDays: days(5) },
       { kind: 'needs-indoor-start', weeksBefore: 6 },
-      { kind: 'season-too-short', shortfallDays: days(12) },
+      { kind: 'season-too-short', shortfallDays: days(12), reason: 'frost' },
       { kind: 'light-limited', month: 5 },
       { kind: 'no-thermal-data' },
     ]
@@ -284,7 +298,7 @@ describe('CalendarTimeline', () => {
 
   it('marks a season-too-short crop as not plantable and mutes its bars', async () => {
     const entry = crop('citrullus-lanatus', {
-      feasibility: { kind: 'season-too-short', shortfallDays: days(23) },
+      feasibility: { kind: 'season-too-short', shortfallDays: days(23), reason: 'frost' },
     })
     const harness = await mount(<CalendarTimeline calendars={bed([entry])} />)
     const row = harness.get('item-calendar-crop-citrullus-lanatus')
@@ -304,7 +318,9 @@ describe('CalendarTimeline', () => {
     const entries = [
       crop('a-fits'),
       crop('b-indoor', { feasibility: { kind: 'needs-indoor-start', weeksBefore: 6 } }),
-      crop('c-short', { feasibility: { kind: 'season-too-short', shortfallDays: days(9) } }),
+      crop('c-short', {
+        feasibility: { kind: 'season-too-short', shortfallDays: days(9), reason: 'frost' },
+      }),
       crop('d-light', { feasibility: { kind: 'light-limited', month: 5 } }),
       crop('e-thermal', { feasibility: { kind: 'no-thermal-data' } }),
     ]

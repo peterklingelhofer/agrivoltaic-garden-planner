@@ -14,11 +14,18 @@ export type PipelineStage =
   | 'interactions'
   | 'rank'
 
+/**
+ * Why the day length refuses a short-day crop: its run of short days starts too late for a
+ * harvest before the first fall freeze, or at this latitude days never get, or never stay, short
+ * enough for its days to a harvest (Decision Record 29)
+ */
+export type PhotoperiodRefusal = 'frost' | 'latitude'
+
 export type LimitingFactorKind =
   | { readonly kind: 'fao-ecocrop'; readonly parameter: EcocropParameter }
   | { readonly kind: 'hardiness' }
   | { readonly kind: 'chill' }
-  | { readonly kind: 'photoperiod' }
+  | { readonly kind: 'photoperiod'; readonly reason: PhotoperiodRefusal }
   | { readonly kind: 'cold-winter' }
   | { readonly kind: 'season-gdd' }
   | { readonly kind: 'dli-minimum'; readonly month: MonthIndex }

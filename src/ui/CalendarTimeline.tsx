@@ -390,9 +390,9 @@ export const CalendarTimeline = ({
       <InfoTip label="the verdict on each crop" testId="info-calendar-verdicts">
         Fits the season: the crop ripens before the first fall frost, and the slack is the days to
         spare. Indoor start required: it fits only if started under cover first. Can't finish here:
-        the season is too short for it. Light limited: the bed's light falls below what the crop
-        needs in some month, so its dates are optimistic. The small ticks on a bar are succession
-        sowings, repeats a few weeks apart for a steady harvest.
+        the season is too short for it, or its days shorten too late. Light limited: the bed's light
+        falls below what the crop needs in some month, so its dates are optimistic. The small ticks
+        on a bar are succession sowings, repeats a few weeks apart for a steady harvest.
       </InfoTip>
       {said.size > 0 ? (
         <details className="wizard-advanced" data-testid="details-calendar-method">

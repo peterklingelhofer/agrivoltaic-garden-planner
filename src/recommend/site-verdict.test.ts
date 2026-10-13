@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'bun:test'
 import { loadCropCatalog } from '../data/crops'
-import type { Celsius, MillimetersPerYear } from '../types/units'
+import type { Crop } from '../types/crop'
+import type { CropId } from '../types/ids'
+import type { Celsius, DegreesLatitude, DegreesLongitude, MillimetersPerYear } from '../types/units'
 import { climateRest, climateSentence, siteVerdict, waterSentence } from './site-verdict'
 import { frostFreeSiteFixture, hotDesertSiteFixture, siteFixture } from './testkit'
 
@@ -27,6 +29,27 @@ describe('how a place grows, before any bed exists', () => {
     expect(total).toBe(catalog.length)
   })
 
+  it('counts a crop the latitude refuses apart from one the frost refuses', async () => {
+    const catalog = await catalogPromise
+    const bean = catalog.find((crop) => crop.id === ('winged-bean' as CropId)) as Crop
+    const trigger = bean.photoperiod
+    if (trigger === null) throw new Error('winged bean carries no day-length trigger')
+    // at 5 N every day is shorter than 12.75 hours and none is shorter than 10: a crop that
+    // needs 10 is refused for the latitude, at a site with no frost to blame
+    const tropics = frostFreeSiteFixture({
+      location: { latitudeDeg: 5 as DegreesLatitude, longitudeDeg: -75 as DegreesLongitude },
+    })
+    const needsTen: Crop = { ...bean, photoperiod: { ...trigger, criticalHours: 10 } }
+    const verdict = siteVerdict(tropics, [needsTen], 50)
+    expect(verdict.refused['photoperiod-latitude']).toBe(1)
+    expect(verdict.refused.photoperiod).toBe(0)
+    expect(climateRest(verdict)).toBe('The rest need shorter days (1).')
+    // and at the fixture site the bean itself is refused for the frost, as before
+    const home = siteVerdict(siteFixture(), [bean], 50)
+    expect(home.refused.photoperiod).toBe(1)
+    expect(climateRest(home)).toBe('The rest need a later first frost (1).')
+  })
+
   it('reads the same whatever the site pH is, since soil is scored at the bed', async () => {
     const catalog = await catalogPromise
     const home = siteFixture()
@@ -47,6 +70,7 @@ describe('how a place grows, before any bed exists', () => {
       hardiness: 0,
       chill: 0,
       photoperiod: 0,
+      'photoperiod-latitude': 0,
       'cold-winter': 0,
       'season-gdd': 0,
       'fao-ecocrop': 0,
@@ -65,6 +89,7 @@ describe('how a place grows, before any bed exists', () => {
         hardiness: 1,
         chill: 2,
         photoperiod: 0,
+        'photoperiod-latitude': 0,
         'cold-winter': 1,
         'season-gdd': 4,
         'fao-ecocrop': 0,

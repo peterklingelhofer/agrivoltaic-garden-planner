@@ -17,6 +17,7 @@ export type ClimateRefusal =
   | 'hardiness'
   | 'chill'
   | 'photoperiod'
+  | 'photoperiod-latitude'
   | 'cold-winter'
   | 'season-gdd'
   | 'fao-ecocrop'
@@ -31,6 +32,7 @@ const REFUSALS: readonly ClimateRefusal[] = [
   'hardiness',
   'chill',
   'photoperiod',
+  'photoperiod-latitude',
   'cold-winter',
   'season-gdd',
   'fao-ecocrop',
@@ -48,6 +50,7 @@ export const siteVerdict = (
     hardiness: 0,
     chill: 0,
     photoperiod: 0,
+    'photoperiod-latitude': 0,
     'cold-winter': 0,
     'season-gdd': 0,
     'fao-ecocrop': 0,
@@ -59,7 +62,12 @@ export const siteVerdict = (
       fits += 1
       continue
     }
-    const kind = outcome.limiting?.cause.kind
+    // the day length refuses for two reasons that need different things, so they count apart
+    const cause = outcome.limiting?.cause
+    const kind =
+      cause?.kind === 'photoperiod' && cause.reason === 'latitude'
+        ? 'photoperiod-latitude'
+        : cause?.kind
     if (kind !== undefined && isRefusal(kind)) refused[kind] += 1
   }
   return { total: catalog.length, fits, refused }
@@ -70,6 +78,7 @@ const NEED: Readonly<Record<ClimateRefusal, string>> = {
   hardiness: 'milder winters',
   chill: 'colder winters',
   photoperiod: 'a later first frost',
+  'photoperiod-latitude': 'shorter days',
   'cold-winter': 'colder winters',
   'season-gdd': 'a longer season',
   'fao-ecocrop': 'a different temperature or rainfall',
