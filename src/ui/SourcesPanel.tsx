@@ -1,12 +1,12 @@
 import { useEffect, useState, type ReactElement } from 'react'
 import { settleLanding } from './landing'
 import { provenanceLedger, type ProvenanceGap } from '../data/gaps'
-import { prefersReducedMotion } from '../state/motion'
 import { useAppStore } from '../state/store'
 import type { CitationId } from '../types/citation-ids.generated'
 import type { CitationRecord } from '../types/evidence'
 import { SCOPE_HEADLINE, SCOPE_STATEMENT } from './onboarding'
 import { Panel } from './Panel'
+import { bringIntoView } from './scroll-into-view'
 import {
   citationLabel,
   citationShort,
@@ -67,9 +67,6 @@ export const SourceLink = ({
 
 /** Long enough to find the row with the eye, short enough that it never reads as a stored state */
 const HIGHLIGHT_MS = 2500
-
-/** Beyond this many screens away, the jump is instant: see the scroll below */
-const FAR_JUMP_SCREENS = 3
 
 const Reference = ({
   record,
@@ -156,17 +153,7 @@ export const SourcesPanel = (): ReactElement => {
           }
     const frame = schedule.set(() => {
       settleLanding()
-      if (typeof row.scrollIntoView === 'function') {
-        // smooth only over a short hop: two hundred sources are some 30,000 px on a phone, and a
-        // smooth scroll across them takes over a second, shows nothing but a blur of other rows,
-        // and eats most of the highlight's time before the row is even on screen
-        const farOff =
-          Math.abs(row.getBoundingClientRect().top) > FAR_JUMP_SCREENS * window.innerHeight
-        row.scrollIntoView({
-          behavior: prefersReducedMotion() || farOff ? 'auto' : 'smooth',
-          block: 'center',
-        })
-      }
+      bringIntoView(row)
     })
     // the control that asked for this lived on another tab and the tab change unmounted it, so
     // focus is sitting on nothing. Taking it here restores it, and a reader

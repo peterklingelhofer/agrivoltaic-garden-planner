@@ -40,6 +40,18 @@ describe('bringIntoView', () => {
     expect(asked).toEqual([{ block: 'start', behavior: 'smooth' }])
   })
 
+  it('jumps to a node more than three screens away, where a smooth scroll is a blur', () => {
+    vi.stubGlobal('matchMedia', () => ({ matches: false }))
+    vi.stubGlobal('innerHeight', 800)
+    const asked: ScrollIntoViewOptions[] = []
+    const node = {
+      getBoundingClientRect: () => ({ height: 40, top: -9000 }),
+      scrollIntoView: (options: ScrollIntoViewOptions) => asked.push(options),
+    } as unknown as HTMLElement
+    bringIntoView(node)
+    expect(asked).toEqual([{ block: 'center', behavior: 'auto' }])
+  })
+
   it('does nothing without a node, or where the node cannot scroll', () => {
     expect(() => bringIntoView(null)).not.toThrow()
     expect(() => bringIntoView({} as unknown as HTMLElement)).not.toThrow()
