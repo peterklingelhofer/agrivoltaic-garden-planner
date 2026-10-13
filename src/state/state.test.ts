@@ -139,7 +139,7 @@ describe('store', () => {
     expect(state.raster.status).toBe('idle')
   })
 
-  it('reports simulation unavailable rather than throwing when the bake fails', async () => {
+  it('reports simulation unavailable when the bake fails', async () => {
     await useAppStore.getState().runFinal()
     const raster = useAppStore.getState().raster
     expect(raster.status).toBe('error')

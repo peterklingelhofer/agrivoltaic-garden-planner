@@ -44,7 +44,7 @@ describe('what the ground remembers', () => {
     expect(historyByYear([], bed, 1).size).toBe(0)
   })
 
-  it('counts the seasons a family has been taken off a bed, not the plantings', () => {
+  it('counts the seasons a family has been taken off a bed, however many plantings each held', () => {
     const familyOf = (id: CropId): string | null => (id === tomato ? 'Solanaceae' : 'Apiaceae')
     expect(seasonsOnBed(records, bed, familyOf, 'Solanaceae')).toBe(2)
     expect(seasonsOnBed(records, bed, familyOf, 'Apiaceae')).toBe(1)

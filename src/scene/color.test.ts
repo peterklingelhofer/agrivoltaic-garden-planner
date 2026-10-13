@@ -97,13 +97,13 @@ describe('the field the GPU reads', () => {
     texture.dispose()
   })
 
-  it("interpolates the quantity rather than the color, which is why it's filtered", () => {
+  it("interpolates the quantity, which is why it's filtered", () => {
     const texture = fieldTexture(new Float32Array([0, 5, 10]), GRID, 0, 10)
     expect(texture.magFilter).toBe(LinearFilter)
     texture.dispose()
   })
 
-  it('draws a cell with no value at the bottom of the ramp rather than the middle', () => {
+  it('draws a cell with no value at the bottom of the ramp', () => {
     const texture = fieldTexture(new Float32Array([Number.NaN, 5, 10]), GRID, 0, 10)
     const data = texture.image.data as Uint16Array
     expect(DataUtils.fromHalfFloat(data[0] ?? 0)).toBe(0)

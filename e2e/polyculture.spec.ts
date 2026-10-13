@@ -117,9 +117,7 @@ test.describe('polyculture suggestions', () => {
     await expect(first.first()).toContainText('blueberry')
   })
 
-  test('an excluded crop leaves every combination rather than sinking in the ranking', async ({
-    page,
-  }) => {
+  test('an excluded crop leaves every combination', async ({ page }) => {
     await anchoredOnBlueberry(page)
     const before = await suggestedCombinations(page)
     const victim = before

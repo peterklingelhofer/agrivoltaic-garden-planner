@@ -14,7 +14,7 @@ const { geocode, timezoneFor } = await import('./geocode')
 const at = (latitudeDeg: number, longitudeDeg: number): LatLon =>
   ({ latitudeDeg, longitudeDeg }) as LatLon
 
-describe('timezoneFor reads the nearest zone.tab city rather than rounding the longitude', () => {
+describe('timezoneFor reads the nearest zone.tab city', () => {
   it('finds Nairobi, which longitude/15 used to round to UTC+2 (Nairobi is UTC+3)', () => {
     expect(timezoneFor(at(-1.29, 36.82))).toBe('Africa/Nairobi')
   })

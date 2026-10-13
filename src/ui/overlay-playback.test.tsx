@@ -41,7 +41,7 @@ describe('playing the light overlay through the year', () => {
     await harness.unmount()
   })
 
-  it('wraps December round to January rather than running off the end', async () => {
+  it('wraps December round to January, so the year never runs off the end', async () => {
     vi.useFakeTimers()
     useAppStore.getState().setOverlay({ slice: 12 })
     const harness = await mount(<OverlayPanel />)

@@ -61,7 +61,7 @@ afterEach(() => {
   vi.useRealTimers()
 })
 
-describe('address search results are a picker, not a list of links', () => {
+describe('address search results are a picker, one control with options', () => {
   it('carries listbox semantics, the region under the name and a roving tabindex', async () => {
     const harness = await mount(<SitePanel />)
     await search(harness)
@@ -140,7 +140,7 @@ describe('choosing a result resolves the site', () => {
     await harness.unmount()
   })
 
-  it('resolves the result the keyboard moved to, not the first one', async () => {
+  it('resolves the result the keyboard moved to, wherever the first one sits', async () => {
     const harness = await mount(<SitePanel />)
     await search(harness)
     await harness.press('item-site-result-Springfield, Massachusetts', 'ArrowDown')

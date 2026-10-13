@@ -81,7 +81,7 @@ describe('every intent answers', () => {
     'show-the-form',
   ]
 
-  it.each([...ALL])('%s produces at least one utterance rather than silence', async (intent) => {
+  it.each([...ALL])('%s produces at least one utterance', async (intent) => {
     const answer = await act(said(intent), context)
     expect(answer.utterances.length, intent as string).toBeGreaterThan(0)
   })
@@ -106,7 +106,7 @@ describe('recording an answer', () => {
     expect(getAppState().onboarding.step).toBe(before)
   })
 
-  it('refuses an answer whose slot never got filled rather than writing a default', async () => {
+  it('refuses an answer whose slot never got filled, with no default written', async () => {
     const before = getAppState().answers.exposure
     const answer = await act(said('set-exposure'), context)
     expect(kinds(answer.utterances)).toEqual(['blocked'])
@@ -121,7 +121,7 @@ describe('recording an answer', () => {
     ])
   })
 
-  it('puts the two wildlife answers on the wildlife slice, not into the wizard answers', async () => {
+  it('puts the two wildlife answers on the wildlife slice, away from the wizard answers', async () => {
     await act(said('set-natives', { yesNo: true }), context)
     await act(said('set-pollinators', { yesNo: false }), context)
     expect(getAppState().wildlife).toEqual({ favorNative: true, favorPollinators: false })
@@ -221,8 +221,8 @@ describe('what became of what they asked for', () => {
   })
 })
 
-describe('refusing rather than pretending', () => {
-  it("says what is missing rather than only that it can't", async () => {
+describe('refusing, with no pretense', () => {
+  it("says what is missing, beyond that it can't", async () => {
     /*
       The app always has a plot: `makePlot()` opens with three beds and a panel row. So the
       thing that is missing on a fresh store is a RANKING, and the sun is what produces one. It
@@ -236,7 +236,7 @@ describe('refusing rather than pretending', () => {
     expect(answer.offer).toContain('propose-designs')
   })
 
-  it('describes the garden the app opens on rather than refusing to', async () => {
+  it('describes the garden the app opens on', async () => {
     const answer = await act(said('describe-garden'), context)
     const first = answer.utterances[0]
     expect(first?.kind).toBe('garden')
@@ -314,7 +314,7 @@ describe('driving the engine', () => {
    * The staleness trap. immer hands back a NEW state object per mutation, so anything read from
    * the object captured before an action ran is the garden as it was
    */
-  it('reads the garden back after it changed rather than before', async () => {
+  it('reads the garden back after it changed', async () => {
     await getAppState().applyDesign(designScenarioFixture('balanced'))
     const answer = await act(said('describe-garden'), context)
     const first = answer.utterances[0]
@@ -352,7 +352,7 @@ describe('the questions the app could already answer', () => {
     expect(kinds(answer.utterances)).toEqual(['define'])
   })
 
-  it('opens the sources shelf rather than summarizing it', async () => {
+  it('opens the sources shelf, with no summary of it', async () => {
     await act(said('ask-sources'), context)
     expect(getAppState().sidebarStep).toBe('sources')
   })
@@ -372,7 +372,7 @@ describe('the questions the app could already answer', () => {
     expect(runEnergy).toHaveBeenCalled()
   })
 
-  it('refuses a water balance rather than inventing one when nothing has been baked', async () => {
+  it('refuses a water balance when nothing has been baked, and invents none', async () => {
     const answer = await act(said('ask-water'), context)
     expect(kinds(answer.utterances)).toEqual(['blocked'])
   })
@@ -413,7 +413,7 @@ describe('changing a garden that already exists', () => {
     expect(kinds(answer.utterances)).toEqual(['not-planted'])
   })
 
-  it('adds a bed and admits the defaults placed it, not the light', async () => {
+  it('adds a bed and admits the defaults placed it, with the light unread', async () => {
     const before = getAppState().plot?.beds.length ?? 0
     const answer = await act(said('add-bed'), context)
     expect(getAppState().plot?.beds.length).toBe(before + 1)
@@ -453,7 +453,7 @@ describe('changing a garden that already exists', () => {
    * The plot boundary is the one source of the plot's size, so "make it 8 by 5" resizes the plot
    * on screen whether or not a layout has been applied, and the search reads its size off that
    */
-  it('reshapes the plot, generated or not, rather than only recording the number', async () => {
+  it('reshapes the plot, generated or drawn, beyond recording the number', async () => {
     const answer = await act(said('set-space', { widthM: 8, depthM: 5 }), context)
     expect(kinds(answer.utterances)).toEqual(['resized', 'noted'])
     const plot = getAppState().plot
@@ -507,7 +507,7 @@ describe('moving the panels', () => {
   })
 
   /** Saying it and typing it move the garden by the same amount, through the same action */
-  it('leaves the light stale and says so rather than quietly reusing it', async () => {
+  it('leaves the light stale and says so', async () => {
     await getAppState().applyDesign(designScenarioFixture('balanced'))
     const geometry = getAppState().lightGeometry
     await act(said('adjust-panels', { panels: 'wider-spacing' }), context)

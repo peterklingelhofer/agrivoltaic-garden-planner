@@ -141,7 +141,7 @@ describe('the advanced controls reach the engine', () => {
  * onto every suggestion the engine makes, so any seeded suggestion exercises this
  */
 describe("a traditional rule is credited where it's applied", () => {
-  it('names the peoples and the missing endorsement on the card, not the slug', async () => {
+  it('names the peoples and the missing endorsement on the card, with the slug kept out', async () => {
     const harness = await open()
     await anchorOnBlueberry(harness)
     const credit = harness.get('readout-polyculture-tek-0')
@@ -210,7 +210,7 @@ describe('the suggestion results read as advice first', () => {
     await harness.unmount()
   })
 
-  it('labels an unscorable term as shown-not-scored rather than hiding it', async () => {
+  it('labels an unscorable term as shown-not-scored, and keeps it on screen', async () => {
     const harness = await open()
     await anchorOnBlueberry(harness)
     const unscored = [...harness.container.querySelectorAll<HTMLElement>('[data-scores="false"]')]
@@ -253,7 +253,7 @@ describe('refusals are the feature', () => {
     expect(groups.map((group) => group.cause)).toEqual(['site', 'soil-ph'])
   })
 
-  it('reads each cause off the term that refused, not off its wording', () => {
+  it('reads each cause off the term that refused, whatever its wording says', () => {
     expect(refusalCause(refusal({ termKind: 'soil-ph' }))).toBe('soil-ph')
     expect(refusalCause(refusal({ termKind: 'light-overtopping' }))).toBe('light')
     expect(refusalCause(refusal({ termKind: 'shared-pest-or-pathogen' }))).toBe('shared-pest')
@@ -272,7 +272,7 @@ describe('refusals are the feature', () => {
    * it as "this bed can't grow it" describes the wrong problem and hides the only part
    * the grower can act on
    */
-  it('calls a light-gate refusal light, not a site one', () => {
+  it("calls a light-gate refusal light, and keeps the site's name off it", () => {
     const limiting = (kind: string) =>
       ({ stage: 'light-gate', cause: { kind }, membership: 0, explanation: 'x' }) as never
     expect(refusalCause(refusal({ limiting: limiting('max-design-rsr') }))).toBe('light')
@@ -375,7 +375,7 @@ describe('the plain case for a combination', () => {
   })
 })
 
-describe('the headline is prose, not a table', () => {
+describe('the headline is prose, a sentence a reader can scan', () => {
   // a small fixture over the real catalog, because the assertion is about the joining,
   // whatever common name the catalog happens to carry for these ids today
   const catalogFixture = ['blueberry', 'teaberry', 'apple'].map(
@@ -414,7 +414,7 @@ describe('the headline is prose, not a table', () => {
     ).toBe('blueberry and teaberry, 3 and 12 plants, fits your 12.0 m² bed')
   })
 
-  it("states the shortfall rather than trimming a combination that doesn't fit", () => {
+  it("states the shortfall, and leaves a combination that doesn't fit as it is", () => {
     expect(
       suggestionHeadline(catalogFixture, {
         cropIds: ['apple'],

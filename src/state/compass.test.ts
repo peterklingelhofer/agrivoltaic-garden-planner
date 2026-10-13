@@ -18,7 +18,7 @@ describe('headingDeg', () => {
     expect(headingDeg(-1, 0)).toBeCloseTo(270, 9)
   })
 
-  it('guards a zero-length input rather than reporting south', () => {
+  it('guards a zero-length input, which would otherwise read as south', () => {
     expect(headingDeg(0, 0)).toBe(0)
   })
 })

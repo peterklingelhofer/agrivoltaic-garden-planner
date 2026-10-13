@@ -135,7 +135,7 @@ test.describe('the agent on a phone', () => {
    * design it and I will run the sun over it first", promises a next step, and a next step that
    * doesn't work is worse than a refusal
    */
-  test('starts the work a question needs rather than naming a chore', async ({ page }) => {
+  test('starts the work a question needs', async ({ page }) => {
     await openApp(page)
     await openChat(page)
     await say(page, 'what can i grow')
@@ -260,9 +260,7 @@ test.describe('on a desktop', () => {
    * recognition mishears, and the whole value of a text box over a chip is that you can see what
    * it heard. One line of a 380px column showed 27% of a 137-character sentence
    */
-  test('grows the box to fit a long sentence instead of scrolling it sideways', async ({
-    page,
-  }) => {
+  test('grows the box to fit a long sentence', async ({ page }) => {
     await openApp(page)
     await waitForCanvas(page)
     await page.getByTestId('action-toolbar-ask').click()
@@ -299,9 +297,7 @@ test.describe('on a desktop', () => {
    * so the opening sat at the top with 529px of nothing between it and the box it was asking to
    * be answered in
    */
-  test('keeps a short conversation against the box rather than at the top of the column', async ({
-    page,
-  }) => {
+  test('keeps a short conversation against the box', async ({ page }) => {
     await openApp(page)
     await waitForCanvas(page)
     await page.getByTestId('action-toolbar-ask').click()
@@ -482,9 +478,7 @@ test.describe('a whole conversation', () => {
    * applied the agent has to start the run itself. Telling the asker the sun hadn't been run would
    * be a permanent dead end worded as a next step
    */
-  test('answers a question about a finished garden instead of sending it round again', async ({
-    page,
-  }) => {
+  test('answers a question about a finished garden', async ({ page }) => {
     test.setTimeout(240_000)
     await openApp(page)
     await openChat(page)
@@ -636,7 +630,7 @@ test.describe('answering why', () => {
    * And when there's nothing, it says so, without inventing one or pretending not
    * to have understood. This is the single place a language model would most want to help
    */
-  test('admits to having no recorded answer instead of making one up', async ({ page }) => {
+  test('admits to having no recorded answer', async ({ page }) => {
     test.setTimeout(300_000)
     await designed(page)
     await say(page, 'why is the sky blue')
@@ -809,9 +803,7 @@ test.describe('the sentence embedder', () => {
    * that decides between them. What is checked here is that the size is on screen either way and
    * that the press works, because an offer nobody can act on is worse than no offer
    */
-  test('offers the download rather than taking it, on a connection that says to ask', async ({
-    page,
-  }) => {
+  test('offers the download on a connection that says to ask', async ({ page }) => {
     test.setTimeout(180_000)
     // the browser says data is being saved, which is the whole population this offer exists for
     await page.addInitScript(() => {

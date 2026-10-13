@@ -52,7 +52,7 @@ describe('the tab bar', () => {
     expect(getAppState().answers.ambition).toBe('fruiting-and-berries')
   })
 
-  it('comes back to the step it left rather than to the first one', async () => {
+  it('comes back to the step it left, wherever the first one is', async () => {
     const harness = await mount(<MobileTabs />)
     getAppState().setSidebarStep('wants')
     await harness.click('action-tab-garden')

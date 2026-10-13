@@ -144,7 +144,7 @@ describe('dehesa distance gradient', () => {
     }
   })
 
-  it('clamps outside its valid range instead of extrapolating', () => {
+  it('clamps outside its valid range', () => {
     const template = dehesaGradient()
     expect(transmissionAtDistance(template, 0 as Meters)).toBeCloseTo(
       template.samples.value[0]?.transmittedRadiationFraction ?? 0,

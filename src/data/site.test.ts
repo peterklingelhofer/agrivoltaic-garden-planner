@@ -22,7 +22,7 @@ const frostFree = (site: Site): number =>
 describe('the site as it was in one measured year', () => {
   const base = siteFixture()
 
-  it('reads the frost dates off the year rather than off the thirty-year normals', () => {
+  it('reads the frost dates off the year itself', () => {
     const cold = siteForYear(base, measuredYearFixture({ year: 2019, meanC: 7, seasonalC: 14 }))
     const mild = siteForYear(base, measuredYearFixture({ year: 2020, meanC: 11, seasonalC: 12 }))
     expect(spring(cold)).toBeGreaterThan(spring(mild))

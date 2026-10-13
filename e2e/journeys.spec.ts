@@ -49,7 +49,7 @@ test('2: a manual lat/lon resolves the site readouts', async ({ page }) => {
   expect(app.errors).toEqual([])
 })
 
-test('2b: a Canadian site carries the NRCan zone beside the temperature rating, never blended', async ({
+test('2b: a Canadian site carries the NRCan zone beside the temperature rating, each its own', async ({
   page,
 }) => {
   const app = await openApp(page)

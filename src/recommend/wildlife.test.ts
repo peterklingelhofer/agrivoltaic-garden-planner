@@ -49,7 +49,7 @@ describe('what the wildlife answers do to a crop', () => {
    * nobody has checked below one that was checked and found introduced, which is the ranking
    * quietly making a claim Kew hasn't made
    */
-  it('drops an unanswerable native term instead of scoring it against the crop', async () => {
+  it('drops an unanswerable native term, so it never scores against the crop', async () => {
     const unknown = await unmatchedCrop()
     const offGrid = { favorNative: true, favorPollinators: false, botanicalArea: null }
     // no region, so there's no native term at all and nothing else was asked
@@ -64,7 +64,7 @@ describe('what the wildlife answers do to a crop', () => {
     ).toBeNull()
   })
 
-  it('scores an unnameable crop on the pollinator half alone rather than halving it', async () => {
+  it('scores an unnameable crop on the pollinator half alone, at its full weight', async () => {
     const unknown = await unmatchedCrop()
     const both = { favorNative: true, favorPollinators: true, botanicalArea: CALIFORNIA }
     // the native term is dropped, so this is the forage score on its own

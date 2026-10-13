@@ -9,7 +9,7 @@ describe('a day of the year and the date it names are the same fact', () => {
     }
   })
 
-  it('clamps into the month rather than rolling over into the next one', () => {
+  it('clamps into the month, so the day never rolls over into the next one', () => {
     // Date.UTC(2001, 1, 31) is March 3. A gardener who picked 31 and then picked February
     // meant the end of February
     expect(dayOfYearFrom(2, 31)).toBe(dayOfYearFrom(2, 28))

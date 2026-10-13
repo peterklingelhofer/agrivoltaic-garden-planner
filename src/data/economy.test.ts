@@ -191,7 +191,7 @@ describe('paybackYearsBand', () => {
     expect(payback?.value.interval.upper).toBeCloseTo((4000 * 2.33) / 500, 6)
   })
 
-  it('is null when the year earned nothing, rather than an infinity', () => {
+  it('is null when the year earned nothing', () => {
     const cost = buildCostUsdBand(FOUR_KW)
     expect(paybackYearsBand(cost, 0)).toBeNull()
     expect(paybackYearsBand(cost, -1)).toBeNull()

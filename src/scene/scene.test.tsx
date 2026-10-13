@@ -447,7 +447,7 @@ describe('closing a drawn shape by double-clicking it', () => {
     stopPropagation: () => {},
   })
 
-  it('raises a bed with the corners that were clicked, not one more', async () => {
+  it('raises a bed with exactly the corners that were clicked', async () => {
     resetAppStore()
     useAppStore.getState().setMode('draw-bed')
     const renderer = await ReactThreeTestRenderer.create(<Ground />)

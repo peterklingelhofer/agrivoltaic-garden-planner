@@ -165,7 +165,7 @@ describe('what the guided setup planted', () => {
  * no stale name is left to read as a choice that failed
  */
 describe('the plan card follows the beds', () => {
-  it('lists what is in each bed now, and counts it, off the plot rather than the snapshot', async () => {
+  it('lists what is in each bed now, and counts it, off the plot', async () => {
     await generate()
     const harness = await mount(<GardenPlanPanel />)
     const generated = getAppState().generated

@@ -19,7 +19,7 @@ describe('the model chain in an answer', () => {
   const report = energyReportFixture()
   const lines = wordsFor({ kind: 'energy', report }, [])
 
-  it("is provenance rather than caveat, so it's not drawn as a warning", () => {
+  it("is provenance, so it's drawn as a note and never as a warning", () => {
     const tones = new Set(lines.map((line) => line.tone))
     expect(tones.has('provenance')).toBe(true)
     expect(tones.has('caveat')).toBe(false)

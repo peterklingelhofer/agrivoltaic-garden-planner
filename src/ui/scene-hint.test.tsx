@@ -169,7 +169,7 @@ describe('what to do with the bed that was just tapped', () => {
     await harness.unmount()
   })
 
-  it('names the selected bed rather than saying something is selected', async () => {
+  it('names the selected bed, where a plain "something is selected" would do less', async () => {
     const id = await raiseBed()
     const harness = await mount(<SceneHint />)
     const prompt = harness.get('status-scene-selected')

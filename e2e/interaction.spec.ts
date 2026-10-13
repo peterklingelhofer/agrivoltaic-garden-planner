@@ -223,9 +223,7 @@ test('soil, irrigation and bed geometry edits reach the model and can be undone 
  * reach, the step shows its own lock, names the one thing owed and offers the press, and the picker
  * never mounts
  */
-test('placing a plant waits for its prerequisites instead of offering an unranked catalog', async ({
-  page,
-}) => {
+test('placing a plant waits for its prerequisites', async ({ page }) => {
   await openApp(page, { siteUnreachable: true })
   await bedTools(page)
   await expect(page.getByTestId('readout-bed-plantings')).toHaveText('0')
@@ -335,11 +333,11 @@ test('a plant can be placed from the ranked picker, edited, seen in the scene an
   await row.locator('[data-testid^="control-bed-planting-sow-month-"]').selectOption('5')
   await row.locator('[data-testid^="control-bed-planting-sow-day-"]').selectOption('30')
   await expect(readout).toContainText('day 150')
+  // the count survives the sow-day edit: only the dates are derived again
+  await expect(readout).toContainText('3 plants')
   // and the harvest moved with the sowing, keeping the lag the calendar gave it
   const startAfter = Number(await row.getAttribute('data-harvest-start-day'))
   expect(wrap(startAfter - 150)).toBe(wrap(startBefore - sowBefore))
-  // the count survives the sow-day edit: only the dates are derived again
-  await expect(readout).toContainText('3 plants')
 
   await remove()
   await expect(rows).toHaveCount(0)

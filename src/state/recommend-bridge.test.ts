@@ -24,7 +24,7 @@ describe('recommend bridge', () => {
     expect(run?.calendars?.[0]?.entries.length).toBe(1)
   })
 
-  it('reports no calendar rather than a partial one', () => {
+  it('reports no calendar where only a partial one could be had', () => {
     const run = normalizeRun({ beds: [{ bedId: 'bed-1', ranked: [] }] })
     expect(run?.sets.length).toBe(1)
     expect(run?.calendars).toBeNull()

@@ -84,7 +84,7 @@ describe('plant counts the way a grower says them', () => {
 })
 
 describe('band formatting', () => {
-  it('renders an interval, never a single number', () => {
+  it('renders an interval, two numbers every time', () => {
     const text = formatBandPercent(band)
     expect(text).toBe('67-156%')
     expect(text).toContain('-')
@@ -111,7 +111,7 @@ describe('band formatting', () => {
    * own it would fall to the final else, which labels everything it doesn't recognize 'soil and
    * water', so a build-cost band would read as dominated by soil moisture
    */
-  it('names the mount structure a build cost spans rather than calling it soil and water', () => {
+  it('names the mount structure a build cost spans, since it is neither soil nor water', () => {
     expect(attributionLabel('mount-structure')).toBe('mount structure (Horowitz et al. 2020)')
     expect(attributionLabel('soil-water')).toBe('soil and water')
   })
@@ -178,7 +178,7 @@ describe('limiting factor prose', () => {
    * Every picker and list gives the gardener's name for a crop, and so does this sentence, which
    * gets the catalog passed in so it never prints a raw id such as `bean-bush`
    */
-  it('names the other crop by its common name, not its catalog id', () => {
+  it('names the other crop by its common name, with the catalog id kept out', () => {
     const catalog = [
       { id: 'bean-bush', taxonomy: { commonNames: ['Bush beans'] } },
     ] as unknown as Parameters<typeof explainLimitingFactor>[2]
@@ -370,7 +370,7 @@ describe('naming a crop or a bed the way a gardener would', () => {
 
   const bedOne: Bed = { id: bedId('bed-1'), label: 'Bed 1' } as unknown as Bed
 
-  it('reads the common name off the catalog, not the id', () => {
+  it('reads the common name off the catalog, with the id kept out', () => {
     expect(cropName([bushBean], cropId('bean-bush'))).toBe('bush bean')
     expect(bedName([bedOne], bedId('bed-1'))).toBe('Bed 1')
   })
@@ -381,7 +381,7 @@ describe('naming a crop or a bed the way a gardener would', () => {
     expect(bedName([], bedId('bed-1'))).toBe('bed-1')
   })
 
-  it('falls back to the id rather than crash on a crop with no common name on record', () => {
+  it('falls back to the id on a crop with no common name on record, and keeps running', () => {
     const nameless = {
       id: cropId('mystery-crop'),
       taxonomy: { commonNames: [] },

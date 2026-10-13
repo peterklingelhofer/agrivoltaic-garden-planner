@@ -156,7 +156,7 @@ describe('the ground cover reaching the chain', () => {
    * face only sees the ground through the (1 - cos tilt) / 2 term of the transposition, and at
    * 25 degrees that is under 5% of the hemisphere
    */
-  it('lands almost entirely on the backs of the panels rather than the fronts', () => {
+  it('lands almost entirely on the backs of the panels', () => {
     const dark = yearAt(GROUND_COVER_ALBEDO['bare-soil'])
     const bright = yearAt(GROUND_COVER_ALBEDO['light-gravel'])
     expect(bright.bifacialGainFraction - dark.bifacialGainFraction).toBeGreaterThan(0.15)
@@ -210,7 +210,7 @@ describe('the winter the chain reads', () => {
     expect(wintered / bare - 1).toBeGreaterThan(0.01)
   })
 
-  it('changes nothing where nothing is known about the winter, rather than inventing one', () => {
+  it('changes nothing where nothing is known about the winter', () => {
     expect(DEFAULT_PV_CHAIN_OPTIONS.snowCover).toBeNull()
     const asked = runAnnualChain(array, tmy, position, {
       ...DEFAULT_PV_CHAIN_OPTIONS,

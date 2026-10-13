@@ -36,7 +36,7 @@ describe('the pixel forms', () => {
     }
   })
 
-  it('all draw something, rather than an empty grid', () => {
+  it('all draw something, so no sprite is an empty grid', () => {
     for (const [name, grid] of Object.entries(SPRITE_FORMS)) {
       const filled = grid.join('').replace(/\./g, '').length
       expect(filled, `${name} is blank`).toBeGreaterThan(12)
@@ -75,7 +75,7 @@ describe('every crop is drawn', () => {
     expect(palettes.size).toBeGreaterThanOrEqual(30)
   })
 
-  it('uses every palette it defines, so a color nobody wears is deleted rather than kept', () => {
+  it('uses every palette it defines, so a color nobody wears is deleted', () => {
     const worn = new Set(Object.values(CROP_SPRITE).map(([, palette]) => palette))
     for (const name of Object.keys(SPRITE_PALETTES)) {
       expect(worn.has(name as never), `${name} is defined and unused`).toBe(true)

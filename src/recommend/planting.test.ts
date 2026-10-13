@@ -84,7 +84,7 @@ describe('planting density', () => {
     expect(large.value.plantsPerM2).toBeCloseTo(small.value.plantsPerM2, 12)
   })
 
-  it('refuses rather than inventing a count when the catalog spacing is unusable', () => {
+  it('refuses a count when the catalog spacing is unusable, and invents none', () => {
     const crop = {
       ...cropOf('lettuce-leaf'),
       spacing: { inRowCm: 0, betweenRowsCm: 0, equidistantCm: 0 },
@@ -160,7 +160,7 @@ describe('deriving a planting', () => {
     expect(derived.value.harvestStartDay).toBe((calendar?.harvest.start ?? 0) + 10)
   })
 
-  it('reads a companion species role out of the catalog rather than defaulting it', () => {
+  it('reads a companion species role out of the catalog, with no default', () => {
     expect(cropOf('marigold-french').role).toBe('insectary')
     expect(cropOf('clover-crimson').role).toBe('cover')
     expect(cropOf('nasturtium').role).toBe('trap')
@@ -232,7 +232,7 @@ describe('deriving a planting', () => {
     expect(derived.reason).toContain("isn't ready to pick")
   })
 
-  it('refuses a bed too small for one plant instead of rounding up to one', () => {
+  it('refuses a bed too small for one plant, with no rounding up to one', () => {
     const crop = cropOf('lettuce-leaf')
     const bed = { ...(beds[0] as Bed), areaM2: 0.001 as SquareMeters }
     const derived = derivePlanting({
@@ -481,7 +481,7 @@ describe('a bed that is already planted', () => {
     expect(planted.freeM2).toBeCloseTo(bed.areaM2 - planted.plantedM2, 6)
   })
 
-  it('sizes the next planting against what is left, not against the whole bed', () => {
+  it('sizes the next planting against what is left of the bed', () => {
     const crop = cropOf('lettuce-leaf')
     const bed = beds[0] as Bed
     const whole = plantingDensity(crop, bed.areaM2)
@@ -529,7 +529,7 @@ describe('a bed that is already planted', () => {
    * leave 0.04 m2 of a 12 m2 bed, which is exactly one spinach at 0.0225. The property worth
    * asserting is that the remainder is all the second crop gets
    */
-  it('gives a second crop only the remainder, not the bed over again', () => {
+  it('gives a second crop only the remainder of the bed', () => {
     const crop = cropOf('lettuce-leaf')
     const spinach = cropOf('spinach')
     const bed = beds[0] as Bed
@@ -618,7 +618,7 @@ describe("garlic, sown the autumn before it's harvested", () => {
     ],
   })
 
-  it('derives a planting a gardener can actually press, not just a barren calendar entry', () => {
+  it('derives a planting a gardener can actually press, from a calendar entry with a window', () => {
     const garlic = cropOf('garlic')
     const bed = beds[0] as Bed
     const calendar = cropCalendar({

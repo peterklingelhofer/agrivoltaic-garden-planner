@@ -11,7 +11,7 @@ const report = energyReportFixture()
 beforeEach(() => resetAppStore())
 
 describe('energy panel', () => {
-  it('shows an unavailable state rather than a substituted figure before the chain runs', async () => {
+  it('shows an unavailable state before the chain runs, with no substituted figure', async () => {
     const harness = await mount(<EnergyPanel />)
     expect(harness.get('status-energy').dataset.state).toBe('idle')
     expect(harness.find('readout-energy-annual-ac')).toBeNull()
@@ -39,7 +39,7 @@ describe('energy panel', () => {
     await harness.unmount()
   })
 
-  it('renders the electricity term as a band with named contributions, never a point', async () => {
+  it('renders the electricity term as a band with named contributions', async () => {
     useAppStore.setState({ energy: ready(report) })
     const harness = await mount(<EnergyPanel />)
     expect(harness.get('readout-energy-ler-electricity').textContent).toBe('0.82-1.12')

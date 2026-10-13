@@ -15,7 +15,7 @@ describe('normalize', () => {
 })
 
 describe('bigrams', () => {
-  it('carries a one-character string whole rather than yielding nothing', () => {
+  it('carries a one-character string whole', () => {
     expect(bigrams('a')).toEqual(['a'])
     expect(bigrams('')).toEqual([])
   })
@@ -42,7 +42,7 @@ describe('similarity', () => {
     expect(similarity('beans', 'runner bean')).toBeGreaterThan(0.4)
   })
 
-  it('counts a repeated bigram once per occurrence rather than once per string', () => {
+  it('counts a repeated bigram once per occurrence', () => {
     // 'aa' appears twice on the left and once on the right, so exactly one can be shared
     expect(similarity('aaa', 'aa')).toBeCloseTo((2 * 1) / (2 + 1), 6)
   })
@@ -54,7 +54,7 @@ describe('bestMatch', () => {
     { value: 'b', phrases: ['mostly electricity'] },
   ]
 
-  it('scores a candidate as its best phrase, not its average', () => {
+  it('scores a candidate as its best phrase', () => {
     const hit = bestMatch('food first', candidates, 0.3)
     expect(hit?.value).toBe('a')
     expect(hit?.matched).toBe('food first')
@@ -67,7 +67,7 @@ describe('bestMatch', () => {
     expect(bestMatch('i want to help the bees', bees, 0.3)?.matched).toBe('i want to help the bees')
   })
 
-  it('returns null below the floor rather than the least bad answer', () => {
+  it('returns null below the floor, whatever the least bad answer was', () => {
     expect(bestMatch('the weather in june', candidates, 0.6)).toBeNull()
   })
 })
@@ -80,7 +80,7 @@ describe('containedPhrases', () => {
     { value: 'tomato', phrases: ['tomato'] },
   ]
 
-  it('finds every phrase in a sentence, not just the first', () => {
+  it('finds every phrase in a sentence', () => {
     const found = containedPhrases('i want tomato and broad bean', candidates)
     expect(found.map((hit) => hit.value).sort()).toEqual(['broad-bean', 'tomato'])
   })

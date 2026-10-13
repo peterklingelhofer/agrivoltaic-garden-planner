@@ -220,7 +220,7 @@ describe('what is persisted', () => {
     expect(loaded.design?.sidebarStep).toBe('place')
   })
 
-  it('recomputes bed area and array metrics rather than trusting the stored ones', () => {
+  it('recomputes bed area and array metrics, whatever the stored ones say', () => {
     const design = realisticDesign()
     const plot = design.plot as GardenPlot
     const storage = memoryStorage()
@@ -426,7 +426,7 @@ describe('schema version', () => {
     if (!result.ok) expect(result.reason).toContain('no schema version')
   })
 
-  it('discards a mismatched payload whole rather than half-loading it', () => {
+  it('discards a mismatched payload whole', () => {
     const loaded = loadedFrom(envelope(SCHEMA_VERSION + 1))
     expect(loaded.design).toBeNull()
     expect(loaded.status.outcome).toBe('discarded')
@@ -480,7 +480,7 @@ describe('corrupt and partial payloads', () => {
     expect(loaded.design?.imageryEnabled).toBe(true)
   })
 
-  it('drops a plot whose geometry would divide by zero rather than rendering it', () => {
+  it('drops a plot whose geometry would divide by zero', () => {
     const design = realisticDesign()
     const raw = JSON.parse(encodeDesign(design, AT)) as {
       design: { plot: { arrays: { geometry: { pitchM: number } }[] } }
@@ -493,7 +493,7 @@ describe('corrupt and partial payloads', () => {
   })
 
   /** Four corners or it isn't the box the bake would shade with, so the whole plot is unreadable */
-  it('drops a plot whose house has three corners rather than rendering it', () => {
+  it('drops a plot whose house has three corners', () => {
     const design = realisticDesign()
     const plot = design.plot as GardenPlot
     const house = makeHouse(1, plot.boundary, 'south')
@@ -508,7 +508,7 @@ describe('corrupt and partial payloads', () => {
   })
 
   /** A crown whose top sits below its own base isn't a box the bake could shade with */
-  it('drops a plot whose tree top is below its crown base rather than rendering it', () => {
+  it('drops a plot whose tree top is below its crown base', () => {
     const design = realisticDesign()
     const plot = design.plot as GardenPlot
     const tree = makeTree(1, plot.boundary, 'south')
@@ -661,7 +661,7 @@ describe('corrupt and partial payloads', () => {
 })
 
 describe('quota and availability', () => {
-  it('names a quota failure rather than failing silently', () => {
+  it('names a quota failure', () => {
     const error = new DOMException('exceeded the quota', 'QuotaExceededError')
     const written = writeDesign(throwingStorage(error), realisticDesign(), AT)
     expect(written.outcome).toBe('quota-exceeded')
@@ -754,7 +754,7 @@ describe('change detection and debouncing', () => {
     expect(sameDesign(design, { ...design, plantYear: 2 })).toBe(false)
   })
 
-  it('runs once after the edits stop, not once per edit', () => {
+  it('runs once after the edits stop', () => {
     vi.useFakeTimers()
     const run = vi.fn()
     const write = debounce(run, 600)
@@ -806,7 +806,7 @@ describe('a design saved before ground cover existed', () => {
     return loadDesign(storage)
   }
 
-  it('is kept, not discarded, and its beds come back', () => {
+  it('is kept, and its beds come back', () => {
     const loaded = loadLegacy(0.2)
     expect(loaded.design?.plot).not.toBeNull()
     expect(loaded.design?.plot?.beds.length).toBe(4)

@@ -40,7 +40,7 @@ describe('the AgX inverse', () => {
    * The 8-bit quantization the screenshot goes through is the real error term, so this is the
    * size of it: a code either way at the shaded end is well under a percent of the ratio
    */
-  it('is quantization-limited, not model-limited, on an 8-bit screenshot', () => {
+  it('is quantization-limited on an 8-bit screenshot', () => {
     const shaded: readonly [number, number, number] = [0.62, 0.78, 1.1]
     const display = agxForward(shaded, EXPOSURE)
     const bytes = display.map((c) =>

@@ -6,7 +6,7 @@ const answered = (...steps: readonly OnboardingStep[]): ReadonlySet<OnboardingSt
   new Set(steps)
 
 describe('what to ask next', () => {
-  it('opens on the first question rather than waiting to be spoken to', () => {
+  it('opens on the first question, unprompted', () => {
     expect(nextQuestion(answered())).toBe('location')
   })
 
@@ -16,7 +16,7 @@ describe('what to ask next', () => {
    * toward native planting, having never established where the garden is or how big it is.
    * "Amherst, Massachusetts" typed into a question about natives is then told it didn't follow
    */
-  it('asks for what is still missing, not for whatever follows in the table', () => {
+  it('asks for what is still missing, whatever follows in the table', () => {
     expect(nextQuestion(answered('growing'))).toBe('location')
     expect(nextQuestion(answered('growing', 'location'))).toBe('space')
   })

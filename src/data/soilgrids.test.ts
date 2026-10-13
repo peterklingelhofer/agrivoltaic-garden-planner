@@ -30,7 +30,7 @@ describe('soilAt', () => {
     await expect(soilAt(LOCATION)).resolves.toStrictEqual(DEFAULT_SOIL)
   })
 
-  it('falls back on an implausible pH rather than trusting it', async () => {
+  it('falls back on an implausible pH', async () => {
     fetchJson.mockResolvedValue(body(0))
     await expect(soilAt(LOCATION)).resolves.toStrictEqual(DEFAULT_SOIL)
   })

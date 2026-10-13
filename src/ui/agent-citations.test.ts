@@ -36,7 +36,7 @@ describe('what the agent cites', () => {
     expect(shown.size).toBeGreaterThan(3)
   })
 
-  it('keeps each work on the line it belongs to, not pooled at the end', () => {
+  it('keeps each work on the line it belongs to, with none pooled at the end', () => {
     const lines = wordsFor({ kind: 'energy', report }, [])
     const faiman = lines.find((line) => line.text.startsWith('Cell temperature, Faiman'))
     expect(faiman?.citations).toContain('faiman2008-module-temperature')
@@ -72,7 +72,7 @@ describe('what the agent cites', () => {
     expect(lines.map((line) => line.text).join(' ')).toContain('no citation of their own')
   })
 
-  it('cites nothing on a reply that is a fact about the garden rather than a claim', () => {
+  it('cites nothing on a reply that is a fact about the garden and makes no claim', () => {
     for (const utterance of [
       { kind: 'noted', step: 'growing' },
       { kind: 'planted', cropIds: [] },

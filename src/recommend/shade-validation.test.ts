@@ -223,7 +223,7 @@ describe('the Laub et al. 2022 anchor data, read against the primary paper', () 
   })
 })
 
-describe('Marrou et al. 2013 (lettuce, Montpellier FR, irrigated, not water-limited)', () => {
+describe('Marrou et al. 2013 (lettuce, Montpellier FR, irrigated, water never limiting)', () => {
   // marrou2013-lettuce-rue, Eur J Agron 44:54-66. Two panel densities transmitting 50% and 70% of
   // incoming radiation (RSR 50% and 30%). Water and nitrogen were held non-limiting by design
   // (marrou2013-microclimate states this explicitly), so this is the one trial in this file that
@@ -249,7 +249,7 @@ describe('Marrou et al. 2013 (lettuce, Montpellier FR, irrigated, not water-limi
     },
   )
 
-  it('is comfortably inside the trial finding rather than sitting right at the edge of it', async () => {
+  it('is comfortably inside the trial finding, well away from its edge', async () => {
     // The inequality above passes with room to spare: the leafy-vegetables curve predicts a
     // markedly SMALLER loss than the paper's own floor at both tested shade levels, which is a
     // real point of agreement. Both are shade-tolerant results in the sense Laub's own three-way
@@ -379,7 +379,7 @@ describe('Weselek et al. 2021 (potato and wheat, Heggelbach DE, ~30% RSR, drough
     expect(band.interval.upper, message).toBeGreaterThan(1)
   })
 
-  it('potato, 2017 (normal year, not water-limited): the app predicts a bigger loss than the field trial measured', async () => {
+  it('potato, 2017 (normal year, water never limiting): the app predicts a bigger loss than the field trial measured', async () => {
     const catalog = await catalogPromise
     const potato = need(catalog, 'potato')
     const curve = laubCurve(potato.laubGroup)
@@ -413,7 +413,7 @@ describe('Weselek et al. 2021 (potato and wheat, Heggelbach DE, ~30% RSR, drough
     expect(band.interval.upper, message).toBeLessThan(1.027)
   })
 
-  it('wheat, 2017 (normal year, not water-limited): the app again predicts a bigger loss than the field trial measured', async () => {
+  it('wheat, 2017 (normal year, water never limiting): the app again predicts a bigger loss than the field trial measured', async () => {
     const catalog = await catalogPromise
     const wheat = need(catalog, 'wheat-spring')
     const curve = laubCurve(wheat.laubGroup)

@@ -41,7 +41,7 @@ describe('stage 1: hard climate gate', () => {
     expect(hardinessGate(need(catalog, 'tomato'), cold).passed).toBe(true)
   })
 
-  it('gates a Canadian site on its measured winter minimum, never on its NRCan zone', async () => {
+  it('gates a Canadian site on its measured winter minimum alone, with its NRCan zone left out', async () => {
     const catalog = await catalogPromise
     // Toronto: NRCan 7a beside a reanalysis-derived -24 C, which is USDA 5b. Reading the
     // index zone as if it were a USDA one would let a fig through
@@ -129,7 +129,7 @@ describe('stage 2: light gate', () => {
     expect(outcome.limiting?.cause.kind).toBe('max-design-rsr')
   })
 
-  it('computes season-cumulative RSR against the crop window, not the annual mean', async () => {
+  it('computes season-cumulative RSR against the crop window, with the annual mean left out', async () => {
     const catalog = await catalogPromise
     const outcome = lightGate(
       need(catalog, 'lettuce-leaf'),

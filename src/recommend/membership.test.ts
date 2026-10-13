@@ -65,7 +65,7 @@ describe('cycle length membership', () => {
 })
 
 describe('koppen membership', () => {
-  it('degrades rather than zeroing on a mismatch', () => {
+  it('degrades on a mismatch, and never zeroes', () => {
     expect(koppenMembership('Cfa', ['Cfa', 'Dfa'])).toBe(1)
     expect(koppenMembership('Csb', ['Cfa', 'Dfa'])).toBeCloseTo(0.85)
     expect(koppenMembership('BWh', ['Cfa', 'Dfa'])).toBeCloseTo(0.7)

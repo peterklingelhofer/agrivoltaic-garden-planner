@@ -132,7 +132,7 @@ describe('what a trial has to compare itself against', () => {
     })
   })
 
-  it('says a garden left no bed out rather than pretending it has a comparison', () => {
+  it('says a garden left no bed out, and pretends to no comparison', () => {
     const comparison = trialComparison(
       [report(1, [outcome('a', 'harvested', 0.5, [RULE]), outcome('b', 'harvested', 0.7, [RULE])])],
       RULE,

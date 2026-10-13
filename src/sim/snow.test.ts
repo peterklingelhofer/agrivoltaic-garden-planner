@@ -14,7 +14,7 @@ describe('how covered the winter ground is', () => {
     expect(groundSnowCover(COLD_WET, WET, 196)).toBe(0)
   })
 
-  it('crosses the seasons rather than stepping between months', () => {
+  it('crosses the seasons smoothly', () => {
     const march = groundSnowCover(COLD_WET, WET, 70)
     const april = groundSnowCover(COLD_WET, WET, 105)
     expect(march).toBeGreaterThan(april)
@@ -29,7 +29,7 @@ describe('how covered the winter ground is', () => {
     expect(groundSnowCover(COLD_WET, dry, 15)).toBe(0)
   })
 
-  it('draws summer, not a snowfield, when the site has no normals to read', () => {
+  it('draws summer when the site has no normals to read', () => {
     expect(groundSnowCover([], [], 15)).toBe(0)
     expect(groundSnowCover([1, 2], [3, 4], 15)).toBe(0)
   })

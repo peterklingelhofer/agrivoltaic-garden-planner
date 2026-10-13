@@ -26,13 +26,13 @@ describe('growth across the season', () => {
     expect(seasonalScale(planting(), undefined, 201)).toBe(0)
   })
 
-  it('starts at a transplant rather than at nothing, and reaches full size at first harvest', () => {
+  it("starts at a transplant's size, and reaches full size at first harvest", () => {
     expect(seasonalScale(planting(), undefined, 100)).toBeCloseTo(SEEDLING_SCALE, 10)
     expect(seasonalScale(planting(), undefined, 160)).toBeCloseTo(1, 10)
     expect(seasonalScale(planting(), undefined, 200)).toBeCloseTo(1, 10)
   })
 
-  it('grows monotonically, on a curve rather than a ramp', () => {
+  it('grows monotonically, on a curve', () => {
     let previous = 0
     for (let day = 100; day <= 160; day += 1) {
       const value = seasonalScale(planting(), undefined, day)

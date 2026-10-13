@@ -180,7 +180,7 @@ describe('what the cold open is allowed to say', () => {
     expect(reading?.body).not.toContain('20.5')
   })
 
-  it("says nothing at all rather than a placeholder when there's no light field yet", () => {
+  it("says nothing at all when there's no light field yet, with no placeholder", () => {
     const plot = plotFixture([planted('bed-1', []), planted('bed-2', [])])
     expect(coldOpenReading(plot, [], catalog)).toBeNull()
     expect(coldOpenReading(plot, [atDli('bed-1', 12)], catalog)).toBeNull()
@@ -194,7 +194,7 @@ describe('what the cold open is allowed to say', () => {
     ).toBeNull()
   })
 
-  it('names crop TYPES read out of the catalog, never a crop and never a cultivar', () => {
+  it('names crop TYPES read out of the catalog, and no single crop or cultivar', () => {
     const plot = plotFixture([
       planted('bed-dim', ['ramps', 'wild-ginger']),
       planted('bed-bright', ['bean-pole', 'brussels-sprouts']),
@@ -207,7 +207,7 @@ describe('what the cold open is allowed to say', () => {
     expect(clause).not.toContain('bean')
   })
 
-  it('drops the crop clause rather than say the opposite of its own numbers', () => {
+  it('drops the crop clause where it would say the opposite of its own numbers', () => {
     const backward = plotFixture([
       planted('bed-dim', ['bean-pole']),
       planted('bed-bright', ['ramps']),

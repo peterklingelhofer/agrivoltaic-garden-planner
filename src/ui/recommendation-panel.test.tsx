@@ -235,7 +235,7 @@ describe('a ranked row and the wildlife question', () => {
   // says for a place the region map doesn't cover: the sentence says the garden is outside the
   // map, so it doesn't read as if the lookup itself never ran. Said whichever way the switch is
   // set, since it's as true before the press as after
-  it('says the place is outside the map rather than letting the switch read as if it had worked', async () => {
+  it("says the place is outside the map, so the switch can't read as if it had worked", async () => {
     await seedRankedStore()
     const harness = await mount(<PlantsPanel />)
     const said = harness.get('status-plants-natives-region').textContent ?? ''
@@ -245,7 +245,7 @@ describe('a ranked row and the wildlife question', () => {
     await harness.unmount()
   })
 
-  it('renders forage and dependence as two separate lines, never folded into one sentence', async () => {
+  it('renders forage and dependence as two separate lines, each its own sentence', async () => {
     await seedRankedStore()
     const harness = await mount(<PlantsPanel />)
     await harness.click('control-recommendation-all')

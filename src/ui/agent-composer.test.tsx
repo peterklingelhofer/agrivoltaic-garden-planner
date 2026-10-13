@@ -160,7 +160,7 @@ describe('the transcript follows the conversation', () => {
     await harness.unmount()
   })
 
-  it('scrolls the newest turn into view rather than the foot of the box', async () => {
+  it('scrolls the newest turn into view, and leaves the foot of the box where it was', async () => {
     const harness = await mount(<AgentPanel />)
     await act(async () => {
       openChat()

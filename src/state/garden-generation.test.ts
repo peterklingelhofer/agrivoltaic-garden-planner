@@ -29,7 +29,7 @@ beforeEach(() => {
   useAppStore.setState({ site: ready(siteFixture()), autoRun: false })
 })
 
-describe('applying a scenario hands over a planted garden, not an empty one', () => {
+describe('applying a scenario hands over a planted garden', () => {
   it('places the beds the light chose and puts something in them', async () => {
     await generate()
     const state = getAppState()
@@ -64,7 +64,7 @@ describe('applying a scenario hands over a planted garden, not an empty one', ()
     expect(checked).toBeGreaterThan(0)
   })
 
-  it('carries the light each bed was placed in, rather than one plot average', async () => {
+  it('carries the light each bed was placed in', async () => {
     await generate()
     const light = getAppState().bedLight
     expect(light.length).toBe(2)
@@ -192,7 +192,7 @@ describe('applying a scenario hands over a planted garden, not an empty one', ()
    * re-opening the wizard would land the grower on a garden they never drew. The undo target must
    * stay pinned to what they had before guided setup touched anything
    */
-  it('keeps the pre-generation plot as the undo target across a second apply, not the first generated layout', async () => {
+  it('keeps the pre-generation plot as the undo target across a second apply', async () => {
     const before = getAppState().plot
     await generate('balanced')
     const firstGenerated = getAppState().plot
@@ -300,7 +300,7 @@ describe('the ranking a generation rests on', () => {
     expect(getAppState().sets).toEqual(ready(newer))
   })
 
-  it("returns null rather than a ranking when there's no site to rank against", async () => {
+  it("returns null when there's no site to rank against", async () => {
     useAppStore.setState({ site: failed('no site was resolved') })
     expect(await getAppState().recommend()).toBeNull()
   })

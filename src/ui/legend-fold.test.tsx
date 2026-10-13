@@ -36,7 +36,7 @@ describe('the color key folds', () => {
     await harness.unmount()
   })
 
-  it('says what the press will do rather than what is on screen', async () => {
+  it('says what the press will do, in place of what is on screen', async () => {
     const harness = await mount(legend)
     // the visible word is short because it shares a line with the caption on a 320px screen, so
     // the accessible name is the half carrying the sentence

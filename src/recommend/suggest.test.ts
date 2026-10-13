@@ -354,7 +354,7 @@ describe('preferences move the result', () => {
     expect(rankOf(boosted, target)).toBeLessThan(rankOf(base, target))
   })
 
-  it('removes an excluded crop entirely rather than merely down-weighting it', () => {
+  it('removes an excluded crop entirely, with no weight left on it', () => {
     const base = suggest(preferences([prefer('blueberry', 'require')]))
     const victim = base.suggestions
       .flatMap((entry) => entry.cropIds.map((id) => id as string))
@@ -502,7 +502,7 @@ const atPhoenix = (rsr: number): PhoenixRun => {
 }
 
 describe('an inference never passes for a measurement', () => {
-  it('reads the measured envelope off the catalog rather than off a constant', () => {
+  it('reads the measured envelope off the catalog, with no constant in it', () => {
     const envelope = measuredLightEnvelope(catalog)
     // lettuce at 5.8 mol/m2/d (Pennisi et al. 2020, the lowest level a cited trial grew it at),
     // and potato's 0.5 design ceiling: the only measured ends
@@ -619,7 +619,7 @@ describe('determinism', () => {
     )
   })
 
-  it('sorts refusals and suggestions rather than leaving map order to chance', () => {
+  it('sorts refusals and suggestions, so map order never decides their place', () => {
     const set = suggest(preferences([prefer('blueberry', 'require')]))
     const ids = set.refused.map((entry) => entry.cropId as string)
     expect(ids).toEqual([...ids].sort())

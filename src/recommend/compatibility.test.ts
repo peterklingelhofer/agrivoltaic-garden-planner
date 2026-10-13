@@ -237,7 +237,7 @@ describe('shared pests and rotation', () => {
   })
 })
 
-describe('evidence grading is enforced by the engine, not by convention', () => {
+describe('evidence grading is enforced by the engine itself', () => {
   it('never lets a grade C, D or E term contribute to a score', () => {
     const pairs = [
       evaluatePair(crop('blueberry'), crop('sweetfern'), contextWith()),

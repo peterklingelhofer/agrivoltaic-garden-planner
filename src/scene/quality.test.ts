@@ -6,7 +6,7 @@ const WORKSTATION: DeviceProfile = { cores: 16, deviceMemoryGb: 8, maxTextureSiz
 const PHONE: DeviceProfile = { cores: 4, deviceMemoryGb: 4, maxTextureSize: 4096 }
 
 describe('detectTier', () => {
-  it('reads capabilities, not GPU names, so the software rasterizer is measured as it is', () => {
+  it('reads capabilities, so the software rasterizer is measured as it is', () => {
     expect(detectTier(WORKSTATION)).toBe('high')
     expect(detectTier({ ...WORKSTATION, cores: 6 })).toBe('low')
     expect(detectTier({ ...WORKSTATION, maxTextureSize: 4096 })).toBe('low')
@@ -39,7 +39,7 @@ describe('qualityFor', () => {
    * tier still gets a blurrier estimate of the same quantity. Off is a choice
    * the grower makes in the panel, and it's the only way to be without it
    */
-  it('degrades the sky occlusion rather than dropping it', () => {
+  it('degrades the sky occlusion and keeps it', () => {
     const low = qualityFor('low')
     expect(low.occlusionSamples).toBeGreaterThan(0)
     expect(low.occlusionDenoiseSamples).toBeGreaterThan(0)
@@ -83,7 +83,7 @@ describe('cascadeShadowRadius', () => {
     expect(cascadeShadowRadius(120, HIGH.shadowMapSize, penumbraWidthM(2.5, 60))).toBe(1)
   })
 
-  it('never spreads nine taps so wide that they band instead of blurring', () => {
+  it('keeps nine taps close enough that they blur', () => {
     expect(cascadeShadowRadius(4, HIGH.shadowMapSize, penumbraWidthM(4, 5))).toBe(4)
   })
 })

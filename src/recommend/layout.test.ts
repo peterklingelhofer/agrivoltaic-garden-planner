@@ -159,7 +159,7 @@ const crossOf = (footprint: Polygon2D): number => {
 const meanCross = (footprints: readonly Polygon2D[]): number =>
   footprints.reduce((sum, footprint) => sum + crossOf(footprint), 0) / footprints.length
 
-describe('beds are placed by the light, not by the geometry', () => {
+describe('beds are placed by the light alone', () => {
   it('never lets one bed straddle the edge between a shaded band and a bright gap', () => {
     for (const bed of banded().beds) {
       const [lo, hi] = extentAlongY(bed.footprint)
@@ -170,7 +170,7 @@ describe('beds are placed by the light, not by the geometry', () => {
     }
   })
 
-  it('produces a mix that genuinely differs in light rather than four of the same bed', () => {
+  it('produces a mix that genuinely differs in light, four different beds', () => {
     const layout = banded()
     const zones = new Set(layout.beds.map((bed) => bed.zone))
     expect(zones).toContain('bright-gap')
@@ -247,7 +247,7 @@ describe('the same answers always place the same beds', () => {
     expect(banded().explanation).toBe(banded().explanation)
   })
 
-  it('finds the two populations exactly rather than approximately', () => {
+  it('finds the two populations exactly', () => {
     const clusters = twoLightClusters([1, 1, 1, 9, 9, 9])
     expect(clusters?.thresholdMolM2Day).toBe(5)
     expect(clusters?.darkMeanMolM2Day).toBe(1)
@@ -296,7 +296,7 @@ describe('a plot with no bands gets no invented ones', () => {
 })
 
 describe('a space with no room for a bed is refused, with the reason', () => {
-  it('refuses rather than placing a bed nobody can work in', () => {
+  it('refuses to place a bed nobody can work in', () => {
     const placed = placeBeds(bandedRequest({ plotWidthM: 1.2, plotDepthM: 1.4 }))
     expect(placed.ok).toBe(false)
     if (placed.ok) return

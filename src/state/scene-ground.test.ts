@@ -58,7 +58,7 @@ beforeEach(() => {
 })
 
 describe('snow reaching the ground the camera sees', () => {
-  it('is nothing at all until a site is resolved, rather than a guess', () => {
+  it('is nothing at all until a site is resolved', () => {
     useAppStore.getState().setTime(JANUARY)
     expect(sceneSnowCover(useAppStore.getState())).toBe(0)
   })

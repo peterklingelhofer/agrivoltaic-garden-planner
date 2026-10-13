@@ -147,9 +147,7 @@ test('prefers-reduced-motion frames the example and never starts the orbit', asy
  * starting plot is a garden like any other, so its light comes by itself once the place it names
  * has been looked up
  */
-test('an unreadable example asset opens the starting plot rather than failing', async ({
-  page,
-}) => {
+test('an unreadable example asset opens the starting plot', async ({ page }) => {
   test.setTimeout(180_000)
   const app = await openApp(page)
   await waitForCanvas(page)

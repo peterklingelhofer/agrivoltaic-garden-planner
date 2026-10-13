@@ -43,7 +43,7 @@ describe('the example framing', () => {
     expect(south?.position[2]).toBeLessThan(0)
   })
 
-  it('stands off the pitch axis, so the rows recede rather than stack', () => {
+  it('stands off the pitch axis, so the rows recede', () => {
     const framing = framingFor(plotFacing(90))
     expect(Math.abs(framing?.position[0] ?? 0)).toBeGreaterThan(5)
   })
@@ -77,7 +77,7 @@ describe('the guided framing', () => {
     expect(framingForSubject({ ...plot, boundary: polygonOf([]) }, 'plot')).toBeNull()
   })
 
-  it('reuses the shade-band shot for the panels rather than inventing a second one', () => {
+  it('reuses the shade-band shot for the panels', () => {
     expect(framingForSubject(plot, 'panels')).toEqual(framingFor(plot))
   })
 
@@ -88,7 +88,7 @@ describe('the guided framing', () => {
     expect(radiusOf(framing)).toBeGreaterThan(16)
   })
 
-  it('comes in close on the beds, and centers on them rather than on the plot', () => {
+  it('comes in close on the beds, and centers on them', () => {
     // three 8 m by 1.4 m beds, spaced north from y = -3 to y = 3
     const beds = framingForSubject(plot, 'beds')
     expect(radiusOf(beds)).toBeLessThan(radiusOf(framingForSubject(plot, 'plot')))

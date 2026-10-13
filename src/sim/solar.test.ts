@@ -203,7 +203,7 @@ describe('NREL SPA', () => {
     ).toBeLessThan(0.02)
   })
 
-  it('rejects unimplemented algorithms rather than returning wrong physics', () => {
+  it('rejects unimplemented algorithms', () => {
     expect(() => solarPositionSeries(new Float64Array(1), observer(0, 0, 0), 'psa')).toThrow()
     expect(() => solarPositionSeries(new Float64Array(1), observer(0, 0, 0), 'grena3')).toThrow()
   })

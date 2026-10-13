@@ -166,7 +166,7 @@ describe('the season origin', () => {
       seasonGdd: { base4C: 6609 as never, base10C: 4170 as never, percentile: 20 },
     })
 
-  it('sits at the coldest point of the year rather than a fixed lead into it', () => {
+  it('sits at the coldest point of the year, with no fixed lead into it', () => {
     // December is Phoenix's coldest month, and its midpoint is day 350
     expect(seasonOrigin(PHOENIX_MEAN_TEMP_C)).toBe(350)
     expect(seasonAnchors(phoenix(), 20).origin).toBe(350)
@@ -178,7 +178,7 @@ describe('the season origin', () => {
     expect(new Set(origins).size).toBe(1)
   })
 
-  it('leaves a long hot season open instead of reading it back to front', async () => {
+  it('leaves a long hot season open, read front to back', async () => {
     const site = phoenix()
     const light = bedLightFixture('bed-a', 0, 60)
     for (const id of ['cucumber', 'bean-runner', 'eggplant']) {
@@ -291,7 +291,7 @@ describe('dtmReference', () => {
 })
 
 describe('feasibility', () => {
-  it('reports season-too-short with a shortfall rather than an optimistic date', async () => {
+  it('reports season-too-short with a shortfall, and gives no optimistic date', async () => {
     const crop = need(await catalogPromise, 'watermelon')
     const short = siteFixture({
       frost: [
@@ -640,7 +640,7 @@ describe('a site with no frost in the record', () => {
     })
   })
 
-  it('gives a perennial a dated window rather than "no thermal data"', async () => {
+  it('gives a perennial a dated window in place of "no thermal data"', async () => {
     const moringa = need(await catalogPromise, 'moringa')
     const calendar = at(moringa)
     expect(calendar.feasibility.kind).toBe('fits')

@@ -73,7 +73,7 @@ describe('timeline geometry', () => {
     expect(segments[1]?.widthPercent).toBeCloseTo((39 / 365) * 100, 6)
   })
 
-  it('clamps out of range days rather than drawing off the track', () => {
+  it('clamps out of range days onto the track', () => {
     expect(timelineSegments(0, 400)[0]?.leftPercent).toBe(0)
     expect(dayLabel(1)).toBe('Jan 1')
     expect(dayLabel(365)).toBe('Dec 31')
@@ -420,7 +420,7 @@ describe('CalendarTimeline', () => {
     await empty.unmount()
   })
 
-  it('resolves a planting citekey to its readable label instead of printing it raw', async () => {
+  it('resolves a planting citekey to its readable label', async () => {
     const entry = crop('daucus-carota', {
       plantings: [planting({ citations: ['fao-ecocrop'] })],
     })

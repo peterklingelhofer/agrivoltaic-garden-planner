@@ -113,7 +113,7 @@ describe('useGuidedTour', () => {
    * and a turn with no bob would each satisfy "the camera moved", and the elevation in particular
    * would go unnoticed if it stopped, since the azimuth would still be carrying the shot
    */
-  it('turns and rises, not just turns', async () => {
+  it('turns and rises', async () => {
     const plot = plotWith(arrayFixture())
     useAppStore.setState({ plot, example: 'showing' })
 

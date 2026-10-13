@@ -71,7 +71,7 @@ describe('canopy cards', () => {
   })
 
   /** Shading off the card's own plane is what makes card foliage read as flat paper */
-  it('shades off a normal that leaves the canopy, not off the card', () => {
+  it('shades off a normal that leaves the canopy', () => {
     const geometry = canopyCards('sphere', 9)
     const position = geometry.getAttribute('position')
     const normal = geometry.getAttribute('normal')
@@ -98,7 +98,7 @@ describe('the leaf cut-out', () => {
     expect(coverage).toBeLessThan(0.75)
   })
 
-  it('is opaque or clear, never in between, because the alpha test admits nothing in between', () => {
+  it('is opaque or clear, because the alpha test admits nothing in between', () => {
     const data = leafTexture(64).image.data as Uint8Array
     for (let i = 3; i < data.length; i += 4) expect([0, 255]).toContain(data[i])
     expect(LEAF_ALPHA_TEST).toBeGreaterThan(0)

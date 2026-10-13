@@ -63,7 +63,7 @@ describe('meters and feet, neither forced on anyone', () => {
     }
   })
 
-  it('prints both units together rather than making anyone convert', () => {
+  it('prints both units together, so nobody has to convert', () => {
     expect(formatBothUnits(6)).toBe('6.0 m (19.7 ft)')
     expect(formatAreaBothUnits(48)).toBe('48.0 m² (517 sq ft)')
   })
@@ -150,7 +150,7 @@ describe('every question is answerable without knowing any agrivoltaics', () => 
     for (const [where, text] of prompts) expect(text, where).not.toMatch(JARGON)
   })
 
-  it('asks for a growing ambition rather than a shade tolerance', () => {
+  it("asks for a growing ambition, in a gardener's words", () => {
     expect(STEP_COPY.growing.title).toMatch(/grow/i)
     expect(AMBITION_OPTIONS.map((option) => option.value)).toEqual([
       'leafy-and-herbs',
@@ -159,7 +159,7 @@ describe('every question is answerable without knowing any agrivoltaics', () => 
     ])
   })
 
-  it("asks whether the space can be watered rather than whether it's water-limited", () => {
+  it("asks whether the space can be watered, in a gardener's words", () => {
     expect(ANSWER_QUESTIONS.irrigationAvailable).toMatch(/water it through a dry spell/i)
     const source = MODULES['/src/ui/AnswerPanels.tsx'] ?? ''
     // asked from the table, without a second copy of the sentence in the panel
@@ -201,7 +201,7 @@ describe('a layout beaten on both figures says so', () => {
     expect(beatenBy(energy, all)).toEqual([])
   })
 
-  it('needs a clear margin on one figure, not a rounding difference', () => {
+  it('needs a clear margin on one figure, so a rounding difference never decides it', () => {
     const near = withFigures('vertical-east-west', 0.08, 97_500)
     expect(beatenBy(balanced, [balanced, near])).toEqual([])
     expect(

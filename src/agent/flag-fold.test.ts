@@ -22,7 +22,7 @@ for (const relativePath of RELATIVE_PATHS) {
   sources[`../${relativePath}`] = readFileSync(join(ROOT, relativePath), 'utf8')
 }
 
-describe('the flag folds rather than hides', () => {
+describe('the flag folds, and stays in the document', () => {
   it('finds both of the files the agent is gated in', () => {
     expect(Object.keys(sources).sort()).toEqual(['../App.tsx', '../ui/MobileTabs.tsx'])
   })

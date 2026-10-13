@@ -96,7 +96,7 @@ describe('beamIrradiance', () => {
     expect(green(-3)).toBe(0)
   })
 
-  it('is an irradiance over the disc the shader paints, not the almanac sun', () => {
+  it('is an irradiance over the disc the shader paints', () => {
     // 0.533 deg limb to limb would be 6.8e-5 sr, but three's disc is a 0.533 deg half-angle
     expect(SUN_DISC_STERADIAN).toBeCloseTo(2.7221e-4, 8)
   })
@@ -114,7 +114,7 @@ describe('keyLight', () => {
     }
   })
 
-  it('keeps a usable color below the cutoff rather than a black light', () => {
+  it('keeps a usable color below the cutoff', () => {
     expect(keyLight(-10)).toEqual({ color: [1, 1, 1], intensity: 0 })
   })
 })
@@ -143,7 +143,7 @@ describe('TONE_MAPPING_EXPOSURE', () => {
 })
 
 describe('RENDERER_SETTINGS', () => {
-  it('is what the canvas is given, stated rather than inherited', () => {
+  it('is what the canvas is given, stated outright', () => {
     expect(RENDERER_SETTINGS.toneMapping).toBe(AgXToneMapping)
     expect(RENDERER_SETTINGS.outputColorSpace).toBe(SRGBColorSpace)
     expect(RENDERER_SETTINGS.toneMappingExposure).toBe(TONE_MAPPING_EXPOSURE)
@@ -194,7 +194,7 @@ describe('the horizon color the fog takes', () => {
     expect(warmth(low)).toBeGreaterThan(warmth(high))
   })
 
-  it('answers a color below the horizon rather than a division by zero', () => {
+  it('answers a color below the horizon', () => {
     const [r, g, b] = horizonColor(-10)
     for (const channel of [r, g, b]) expect(Number.isFinite(channel)).toBe(true)
   })

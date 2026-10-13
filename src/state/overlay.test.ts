@@ -118,7 +118,7 @@ describe('overlay accumulation', () => {
     ).toBeLessThan(1e-5)
   })
 
-  it('weights by each month’s length in days, not a plain twelve-way mean', () => {
+  it('weights by each month’s length in days', () => {
     const built = raster()
     // February alone against a January+February accumulation: if the accumulation were a plain
     // mean of the two slices it would land exactly halfway, which is NOT the weighted answer

@@ -93,7 +93,7 @@ describe('storage panel', () => {
     await harness.unmount()
   })
 
-  it('paints a refused write as an error the grower can read, never a silent failure', async () => {
+  it('paints a refused write as an error the grower can read, so a failure is never silent', async () => {
     const original = Storage.prototype.setItem
     Storage.prototype.setItem = () => {
       throw new DOMException('over quota', 'QuotaExceededError')

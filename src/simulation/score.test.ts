@@ -100,7 +100,7 @@ describe('where the garden stands', () => {
     expect(standing.verdict).not.toMatch(/\d\.\d\d/)
   })
 
-  it('bands the ratio from the published bands the seasons carried, never from the draws', () => {
+  it('bands the ratio from the published bands the seasons carried, with the draws left out', () => {
     const outcomes = [
       outcome('harvested', { realized: 0.6 as Fraction, band: bandOf(0.5, 0.9) }),
       // never grew, so it carries no band and counts as zero at both bounds

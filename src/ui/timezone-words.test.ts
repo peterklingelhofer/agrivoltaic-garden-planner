@@ -19,7 +19,7 @@ describe('the timezone readout', () => {
     )
   })
 
-  it('says a nearest-zone name came off the nearest city on record, not the weather service', () => {
+  it('says a nearest-zone name came off the nearest city on record, with the weather service left out of it', () => {
     expect(timezoneWords('Africa/Nairobi', 'nearest-zone')).toBe(
       'Africa/Nairobi, the nearest time zone on record to this point',
     )

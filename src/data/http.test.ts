@@ -73,7 +73,7 @@ const callDirect = (): Promise<unknown> =>
   fetchJson('nasa-power', '/api/temporal/hourly/point', new URLSearchParams({ q: '1' }), OPTIONS)
 
 describe('an upstream that never answers', () => {
-  it('is refused once the deadline passes rather than waited on forever', async () => {
+  it('is refused once the deadline passes', async () => {
     globalThis.fetch = silent()
     await expect(callDirect()).rejects.toBeInstanceOf(UpstreamTimeout)
   })
@@ -142,7 +142,7 @@ describe('an upstream that answers with an error status', () => {
    * more of the very requests the limit is counting. Measured: a handful of reloads in a minute
    * earns a 429, and each reload was making three requests into it
    */
-  it('gives up at once on a rate limit rather than spending two more requests on it', async () => {
+  it('gives up at once on a rate limit', async () => {
     const stub = vi.fn().mockResolvedValue({ ok: false, status: 429 })
     globalThis.fetch = stub as unknown as typeof fetch
     await expect(call()).rejects.toThrow(/as many requests as it allows/)

@@ -50,7 +50,7 @@ describe('usStateOf', () => {
     expect(usStateOf('MSO')).toBe('MO')
   })
 
-  it('is null off the map rather than guessing at a neighbor', () => {
+  it('is null off the map', () => {
     expect(usStateOf('NOR')).toBeNull()
     expect(usStateOf('PUE')).toBeNull()
     expect(usStateOf(null)).toBeNull()
@@ -80,7 +80,7 @@ describe('implausiblePrice', () => {
     expect(implausiblePrice(MAX_PLAUSIBLE_CENTS_PER_KWH)).toBeNull()
   })
 
-  it('names a wrong unit rather than passing it on', () => {
+  it('names a wrong unit', () => {
     // dollars read as cents, and cents read as dollars: the two failures this gate is for
     expect(implausiblePrice(0.3048)).toContain('cents per kWh')
     expect(implausiblePrice(3048)).toContain('no US state pays')
@@ -121,7 +121,7 @@ describe('fetchRetailPrice', () => {
     expect([...params.keys()].some((name) => /api[-_]?key/i.test(name))).toBe(false)
   })
 
-  it('is null on an implausible price rather than pricing a garden off a wrong unit', async () => {
+  it('is null on an implausible price', async () => {
     fetchJson.mockResolvedValue(body([{ period: '2025', price: '0.3048' }]))
     await expect(fetchRetailPrice('MA', { signal: null })).resolves.toBeNull()
   })

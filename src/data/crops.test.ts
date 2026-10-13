@@ -133,7 +133,7 @@ describe('DLI class limits', () => {
     expect(dliClassLimits('strawberry').minMolM2Day).toBe(25)
   })
 
-  it('reports null where no threshold is established rather than inventing one', () => {
+  it('reports null where no threshold is established', () => {
     expect(dliClassLimits('root-tuber').minMolM2Day).toBeNull()
     expect(dliClassLimits('alliums').minMolM2Day).toBeNull()
   })

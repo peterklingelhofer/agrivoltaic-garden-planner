@@ -104,7 +104,7 @@ describe('the place the app is already showing gets looked up', () => {
    * A failure stays failed. Retrying on every render would put a site lookup on a timer against
    * an upstream that has already said no, and the visitor's own remedy is the Resolve control
    */
-  it('leaves a failed lookup alone rather than retrying it', async () => {
+  it('leaves a failed lookup alone', async () => {
     resolveSite.mockRejectedValueOnce(new Error('upstream said no'))
     await state().ensureSite()
     expect(state().site.status).toBe('error')
@@ -554,7 +554,7 @@ describe('which way the starting array faces', () => {
  * ground under their own town's weather. The later lookup is the place on screen
  */
 describe('a lookup that lands after a later one', () => {
-  it('is dropped rather than written over the later one', async () => {
+  it('is dropped, and the later one stands', async () => {
     const sydney = {
       latitudeDeg: degreesLatitude(-33.87),
       longitudeDeg: degreesLongitude(151.21),

@@ -124,7 +124,7 @@ describe('the DLI threshold a crop was gated on names its own evidence', () => {
     expect(dliEvidence(cropBy(catalog, 'apple'), 'disorder-ceiling')).toBeNull()
   })
 
-  it('renders every DLI class in the catalog rather than only the ones tests name', async () => {
+  it('renders every DLI class in the catalog, the ones no test names included', async () => {
     const catalog = await loadCropCatalog()
     const kinds = new Set(
       catalog.map((crop) => dliEvidence(crop, 'minimum')?.provenance ?? 'missing'),

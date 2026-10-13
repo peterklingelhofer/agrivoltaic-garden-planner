@@ -499,9 +499,7 @@ for (const persona of PERSONAS) {
  * The fifth persona, and the one the claim has to survive. A window box isn't a garden, and the
  * honest answer is to say so plainly
  */
-test('the window-box grower is told their space is too small rather than handed an empty plot', async ({
-  page,
-}) => {
+test('the window-box grower is told their space is too small', async ({ page }) => {
   test.setTimeout(DESIGN_TIMEOUT_MS + 120_000)
   const app = await openIn(page, 'light')
   const user = hands(page)

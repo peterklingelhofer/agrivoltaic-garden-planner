@@ -342,9 +342,7 @@ test('turning the array away from the equator costs annual output', async ({ pag
  * same, because the panels on it each know what they're missing and one of them, the saved design,
  * isn't about the garden at all and must never be locked away behind the site
  */
-test('the energy chain refuses to run without a site rather than inventing one', async ({
-  page,
-}) => {
+test('the energy chain refuses to run without a site', async ({ page }) => {
   await openApp(page, { siteUnreachable: true })
   await panels(page)
   await page.getByTestId('control-energy-run').click()
@@ -354,9 +352,7 @@ test('the energy chain refuses to run without a site rather than inventing one',
   await expect(page.getByTestId('readout-energy-annual-ac')).toHaveCount(0)
 })
 
-test('the energy chain refuses to run without an array rather than reporting zero', async ({
-  page,
-}) => {
+test('the energy chain refuses to run without an array', async ({ page }) => {
   test.setTimeout(SITE_TIMEOUT_MS + 120_000)
   await openApp(page)
   await resolveSite(page)

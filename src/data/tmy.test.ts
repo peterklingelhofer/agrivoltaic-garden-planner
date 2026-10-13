@@ -112,7 +112,7 @@ describe('the weather record keeps the years the typical one was assembled from'
     expect(record.typical.precipMm).toBeDefined()
   })
 
-  it("leaves the rain column absent, not zero, where the source didn't answer it", () => {
+  it("leaves the rain column absent where the source didn't answer it", () => {
     const dry = normalizeWeather(
       { source: 'open-meteo', body: openMeteoBody([2023, 2024], null) },
       AMHERST,

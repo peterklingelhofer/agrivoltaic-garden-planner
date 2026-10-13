@@ -189,7 +189,7 @@ describe('the objective is four weights nobody has to normalize by hand', () => 
     expect(water.energy).toBeGreaterThan(0)
   })
 
-  it('splits evenly rather than dividing by zero when nothing is wanted', () => {
+  it('splits evenly when nothing is wanted', () => {
     expect(normalizeObjective({ food: 0, energy: 0, water: 0, simplicity: 0 }).food).toBe(0.25)
   })
 
@@ -258,7 +258,7 @@ describe('applying a scenario goes through the actions the editor already has', 
     expect(getAppState().plot?.arrays.length).toBe(0)
   })
 
-  it('replaces the array rather than adding a second one', async () => {
+  it('replaces the array, so there is one', async () => {
     await getAppState().applyDesign(scenarioFor('food-first'))
     await getAppState().applyDesign(scenarioFor('energy-first'))
     const plot = getAppState().plot
@@ -389,7 +389,7 @@ describe('the answers outlive the step that asked them', () => {
     expect(getAppState().answers.ambition).toBe('fruiting-and-berries')
   })
 
-  it('drops a finished run once an answer moves, rather than showing a stale one', async () => {
+  it('drops a finished run once an answer moves', async () => {
     await getAppState().suggestDesigns()
     expect(getAppState().onboarding.designs.status).toBe('ready')
     getAppState().answerOnboarding({ ambition: 'leafy-and-herbs' })
@@ -543,7 +543,7 @@ describe("the search runs where it can't freeze the wizard", () => {
     expect(getAppState().onboarding.progress).toBeNull()
   })
 
-  it('stops the worker when the search is abandoned, rather than letting it finish unread', async () => {
+  it('stops the worker when the search is abandoned', async () => {
     const pending = getAppState().suggestDesigns()
     getAppState().cancelDesignSuggestions()
     await pending
@@ -583,7 +583,7 @@ describe('an engine answer is taken only in a shape the view can render', () => 
     ).toBeNull()
   })
 
-  it('carries a preview set through as a preview, never as a final one', () => {
+  it('carries a preview set through as a preview', () => {
     const normalized = normalizeSet(setFor())
     expect(normalized?.scenarios.length).toBe(4)
   })

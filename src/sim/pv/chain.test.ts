@@ -217,7 +217,7 @@ describe('annual chain', () => {
     expect(thin.annualAcKwh).toBe(energy.annualAcKwh)
   })
 
-  it('responds to tilt, pitch and tracking rather than sitting at a constant', () => {
+  it('responds to tilt, pitch and tracking', () => {
     const flat = runAnnualChain(
       {
         ...array,
@@ -286,7 +286,7 @@ describe('land equivalent ratio, electricity term', () => {
     DEFAULT_PV_CHAIN_OPTIONS,
   )
 
-  it('states its denominator rather than leaving the ratio undefined', () => {
+  it('states its denominator', () => {
     expect(result.reference.definition).toBe(REFERENCE_DEFINITION)
     expect(result.reference.definition).toContain('Dupraz')
     expect(result.reference.groundCoverRatio).toBe(REFERENCE_GROUND_COVER_RATIO)

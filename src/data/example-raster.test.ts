@@ -118,7 +118,7 @@ describe('the example raster codec', () => {
     expect(encodeExampleRaster(flat).length).toBeLessThan(1_000)
   })
 
-  describe('refuses rather than guesses', () => {
+  describe('refuses', () => {
     const encoded = (): Uint8Array => encodeExampleRaster(raster())
 
     it('a buffer that is too short to hold a header', () => {

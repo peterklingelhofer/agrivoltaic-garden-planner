@@ -98,7 +98,7 @@ afterEach(() => {
 })
 
 describe('the physics core seam', () => {
-  it('refuses rather than degrading when nothing is installed', () => {
+  it('refuses when nothing is installed', () => {
     installPhysicsCore(null)
     expect(physicsImplementation()).toBe('typescript')
     // the message names both recoverable causes, because neither is obvious from a stack trace

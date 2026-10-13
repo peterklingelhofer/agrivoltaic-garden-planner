@@ -58,7 +58,7 @@ afterEach(() => {
 })
 
 describe('a run that started reports back when it lands', () => {
-  it('answers once a pending run settles into an error, instead of waiting on it forever', async () => {
+  it('answers once a pending run settles into an error, with no waiting on it forever', async () => {
     const runEnergy = vi.fn()
     useAppStore.setState({ runEnergy })
 

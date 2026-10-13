@@ -46,7 +46,7 @@ describe('isNegated', () => {
 })
 
 describe('routing a sentence', () => {
-  it('says nothing rather than guessing at an empty or meaningless one', () => {
+  it('says nothing on an empty or meaningless one, with no guess', () => {
     expect(routeLexically('', at())).toBeNull()
     expect(routeLexically('   ', at())).toBeNull()
     expect(routeLexically('asdfgh qwerty', at())).toBeNull()
@@ -72,7 +72,7 @@ describe('routing a sentence', () => {
     expect(routed?.slots.crops).toContain('tomato')
   })
 
-  it('refuses an intent whose slot came back empty rather than acting on nothing', () => {
+  it("refuses an intent whose slot came back empty, since there's nothing to act on", () => {
     // "in" scores against "i live in" and against nothing else. Without the slot check this
     // resolves to set-place and asks the geocoder about an empty string
     const routed = routeLexically('in', at())
@@ -383,7 +383,7 @@ describe("a question isn't an instruction", () => {
     expect(routeLexically('can i have some strawberries', at(null))?.intent).toBe('like-crop')
   })
 
-  it('takes pleasantries as pleasantries rather than as a place name', () => {
+  it('takes pleasantries as pleasantries, with no place name read into them', () => {
     for (const said of ['hiya', 'thanks', 'ta', 'hello', 'cheers']) {
       expect(routeLexically(said, at('location'))?.intent, said).toBe('greeting')
     }
@@ -422,7 +422,7 @@ describe('a request that might be destructive', () => {
    * on a chip and let the visitor read the words and decide. One press is a clearer confirmation
    * than any dialog
    */
-  it('comes back as something to press rather than nothing at all', () => {
+  it('comes back as something to press', () => {
     expect(nearMisses('delete my garden', at('location'))).toContain('start-over')
   })
 })

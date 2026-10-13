@@ -81,7 +81,7 @@ describe('every citekey the runtime hands to a renderer resolves', () => {
     for (const id of ids) expect(CORPUS.has(id), `${where} cites ${id}`).toBe(true)
   }
 
-  it('covers the modules that hold citekeys in code rather than in loadable data', () => {
+  it('covers the modules that hold citekeys in code', () => {
     // the compliance regime table and the frost citation list are module-private, so
     // they're only reachable through the scan. This proves the scan saw those files
     const files = new Set(referencedInSource().map((reference) => reference.file))

@@ -118,7 +118,7 @@ describe('the editor speaks the same language as the questions that led into it'
     await harness.unmount()
   })
 
-  it('names the drawing buttons after what they draw, not after the geometry', async () => {
+  it('names the drawing buttons after what they draw, with no geometry in the name', async () => {
     const harness = await mount(<GroundPanel />)
     const labels = labelsOf(harness)
     for (const jargon of ['Close polygon', 'Undo vertex', 'Draw plot boundary']) {

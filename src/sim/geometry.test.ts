@@ -181,7 +181,7 @@ describe('panelSnapshot', () => {
       }
     })
 
-    it('lays the modules of a row end to end rather than on top of one another', () => {
+    it('lays the modules of a row end to end', () => {
       // 10 m of row over 2 modules is 5 m each, so a module spans 5 m along the row and
       // consecutive ones sit 5 m apart: touching end to end
       for (let i = 0; i < panels.length; i += 1) expect(spread(xs(i))).toBeCloseTo(5, 12)

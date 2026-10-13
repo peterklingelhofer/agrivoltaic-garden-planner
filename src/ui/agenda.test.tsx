@@ -111,7 +111,7 @@ describe('agenda labels', () => {
 })
 
 describe('agenda panel', () => {
-  it('asks for a planted bed rather than showing an empty year', async () => {
+  it('asks for a planted bed, with no empty year shown', async () => {
     const harness = await mount(<AgendaPanel />)
     expect(harness.find('panel-agenda')).not.toBeNull()
     expect(harness.get('status-agenda-empty').textContent).toMatch(/Put plants in a bed/)
@@ -192,7 +192,7 @@ describe('agenda panel', () => {
     await harness.unmount()
   })
 
-  it('says what the dates of a perennial rest on rather than that it has none', async () => {
+  it('says what the dates of a perennial rest on', async () => {
     await seed(['apple'])
     const harness = await mount(<AgendaPanel />)
     const notice = harness.container.querySelector(

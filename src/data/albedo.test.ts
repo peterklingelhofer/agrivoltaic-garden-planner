@@ -8,7 +8,7 @@ import { GROUND_COVER_OPTIONS } from './albedo'
  * set of figures: these are what stops the second file from quietly growing its own copy
  */
 describe('the cited table and the numbers the simulation reads', () => {
-  it('are the same numbers, because the citations quote the values rather than restate them', () => {
+  it('are the same numbers, because the citations quote the values', () => {
     for (const option of GROUND_COVER_OPTIONS) {
       expect(option.albedo.value, option.id).toBe(GROUND_COVER_ALBEDO[option.id])
     }

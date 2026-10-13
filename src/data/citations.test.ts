@@ -58,7 +58,7 @@ describe('citation registry', () => {
     expect(dangling).toEqual([])
   })
 
-  it('throws rather than silently dropping an unknown citekey', async () => {
+  it('throws on an unknown citekey', async () => {
     const registry = await loadCitations()
     expect(() => citationsFor(registry, ['not-a-real-key' as never])).toThrow(/unknown citekey/)
   })

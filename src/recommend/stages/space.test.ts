@@ -33,7 +33,7 @@ const bedOfDepth = (effectiveDepthM: number): Bed => {
  * grow in 30 cm of soil. A shallow bed limits a crop and says what it costs. Only a bed under
  * the floor refuses it (Decision Record 16)
  */
-describe('root depth limits rather than excludes', () => {
+describe('root depth is a limit, and no crop is excluded on it', () => {
   it('passes a crop whose roots would go deeper than the bed, with the reason and the cost', async () => {
     const tomato = need(await catalogPromise, 'tomato')
     expect(tomato.roots.maxEffectiveDepthM).toBeGreaterThan(0.3)

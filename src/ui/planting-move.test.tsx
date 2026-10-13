@@ -127,7 +127,7 @@ describe('moving a planting to another bed', () => {
     expect(plantingsIn(A)).toBe(1)
   })
 
-  it('refuses a planting that is no longer there rather than inventing one', async () => {
+  it('refuses a planting that is no longer there, and invents none', async () => {
     await setup([calendarFixture(A), calendarFixture(B)])
     const outcome = useAppStore.getState().movePlanting(plantingId('gone'), A, B)
     expect(outcome.ok).toBe(false)

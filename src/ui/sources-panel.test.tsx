@@ -38,7 +38,7 @@ describe('the scope of the whole tool is stated once, plainly', () => {
     await harness.unmount()
   })
 
-  it('sits before the bibliography rather than inside it', async () => {
+  it('sits before the bibliography, outside it', async () => {
     await loadCitations()
     const harness = await mount(<SourcesPanel />)
     const container = harness.container

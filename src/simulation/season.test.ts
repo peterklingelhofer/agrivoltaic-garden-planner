@@ -148,7 +148,7 @@ describe('one season of the garden, as a value', () => {
    * September, and a frost check at sowing would read it as a seedling in frozen ground every
    * season. A class the calendar raises under cover meets the frost on the day it goes out
    */
-  it('reads an indoor start as set out after the raising period rather than lost at sowing', () => {
+  it('reads an indoor start as set out after the raising period, and alive at sowing', () => {
     const { outcome } = only(
       plotFixture([bedFixture('a', { plantings: [planting('a', 'tomato', 100)] })]),
     )
@@ -193,7 +193,7 @@ describe('one season of the garden, as a value', () => {
     expect(outcome.kind).toBe('unlit')
   })
 
-  it('refuses the family the ground remembers, in years, and by family rather than by name', () => {
+  it('refuses the family the ground remembers, in years, by family', () => {
     const constraint = rotation.find((entry) => entry.groupRef === 'Solanaceae')
     const interval = constraint?.minIntervalYears ?? 0
     expect(interval).toBeGreaterThan(1)

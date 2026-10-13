@@ -114,7 +114,7 @@ test('the Close results button dismisses without choosing', async ({ page }) => 
  * "Look up these coordinates". Selecting IS resolving: the list closes, the selection is confirmed,
  * and the site readouts fill from the chosen hit, replacing whatever was in the latitude field
  */
-test('clicking a result resolves the site, not just the coordinates', async ({ page }) => {
+test('clicking a result resolves the whole site', async ({ page }) => {
   test.setTimeout(SITE_TIMEOUT_MS + 120_000)
   const app = await openApp(page, stub)
   const list = await searchAddress(page, 'Amherst')
@@ -156,9 +156,7 @@ test('Enter on a keyboard-selected result resolves the same way a click does', a
   await expect(page.getByTestId('readout-site-label')).toContainText(chosen.label)
 })
 
-test('a geocoder that answers nothing usable says so instead of placing a pin at 0, 0', async ({
-  page,
-}) => {
+test('a geocoder that answers nothing usable says so', async ({ page }) => {
   const app = await openApp(page)
   const startingLatitude = await page.getByTestId('control-site-latitude').inputValue()
   /*

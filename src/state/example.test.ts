@@ -232,7 +232,7 @@ describe('loading the shipped example', () => {
  * apart, aren't lumped together
  */
 describe('which example a visitor opens on', () => {
-  it('reads the band off real tzdb coordinates rather than the zone name', () => {
+  it('reads the band off real tzdb coordinates, with the zone name unread', () => {
     expect(bandForTimezone('Europe/Oslo')).toBe('high')
     expect(bandForTimezone('America/New_York')).toBe('temperate')
     expect(bandForTimezone('America/Phoenix')).toBe('low')

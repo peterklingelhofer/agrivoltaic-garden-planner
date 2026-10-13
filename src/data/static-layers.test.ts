@@ -207,7 +207,7 @@ describe('the bundled botanical region grid', () => {
     await expect(botanicalAreaAt(at(33.6, 73.05))).resolves.toBe('PAK')
   })
 
-  it('answers null out at sea rather than guessing at the nearest land', async () => {
+  it('answers null out at sea', async () => {
     // the middle of the North Atlantic, which belongs to no botanical country
     await expect(botanicalAreaAt(at(35, -40))).resolves.toBeNull()
   })
@@ -349,7 +349,7 @@ describe('a Canadian site', () => {
 })
 
 describe('a sampled band the reanalysis disagrees with', () => {
-  it('reports both rather than letting one silently replace the other', async () => {
+  it('reports both', async () => {
     // -40 C derives zone 3a where the 2023 map reads 6a: six half-zones apart
     fetchJson.mockResolvedValue(dailyBody(-40))
     const ratings = await hardinessAt(SITES.amherst)
@@ -439,7 +439,7 @@ describe('an absent, truncated or corrupt asset', () => {
    * other malformed input gets null, and for the botanical layer a wrong answer is a claim about
    * where a plant grows wild
    */
-  it('refuses a run length crafted to go negative rather than decoding it', () => {
+  it('refuses a run length crafted to go negative', () => {
     const table = [3, 0x42, 0x42, 0x42]
     const payload = [0x00, 0x80, 0x80, 0x80, 0x80, 0x08]
     const buffer = new ArrayBuffer(GRID_HEADER + table.length + payload.length)
@@ -461,7 +461,7 @@ describe('an absent, truncated or corrupt asset', () => {
     expect(decodeClassGrid(buffer)).toBeNull()
   })
 
-  it('samples nothing outside the grid rather than wrapping to the far edge', () => {
+  it('samples nothing outside the grid', () => {
     const grid = decodeClassGrid(PHZM)
     expect(grid).not.toBeNull()
     if (grid === null) return

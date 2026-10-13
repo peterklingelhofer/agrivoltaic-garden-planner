@@ -131,7 +131,7 @@ describe.skipIf(!HAVE_MODEL)('the embedding understander', () => {
    * panels over crops" scored `ask-energy` 0.652 against `define` 0.649, and "scratch that" put
    * three intents inside five hundredths of each other
    */
-  it('offers the candidates rather than picking one when nothing separates them', async () => {
+  it('offers the candidates when nothing separates them, and picks none', async () => {
     for (const said of ['what is the thinking behind panels over crops', 'scratch that']) {
       const got = await understander.route(said, { step: null, catalog })
       expect(got?.alternatives.length, said).toBeGreaterThan(1)
@@ -207,7 +207,7 @@ describe.skipIf(!HAVE_MODEL)('the embedding understander', () => {
 })
 
 describe('without the weights', () => {
-  it('falls back to the lexical router rather than failing', async () => {
+  it('falls back to the lexical router', async () => {
     const catalog = await loadCropCatalog()
     const understander = createEmbeddingUnderstander({ loader: () => Promise.resolve(null) })
     expect(await understander.ready()).toBe(false)

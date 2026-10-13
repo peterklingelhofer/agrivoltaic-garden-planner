@@ -60,7 +60,7 @@ beforeEach(() => {
  * and rejects a response below `MIN_COVERAGE`
  */
 describe('a daily-normals response with no values', () => {
-  it('refuses the read rather than fabricating a climate', async () => {
+  it('refuses the read, and fabricates no climate', async () => {
     fetchJson.mockResolvedValue(dailyBody(null))
     await expect(climateNormalsAt(LOCATION)).rejects.toThrow(/coverage/)
   })
@@ -102,7 +102,7 @@ const place = (lat: unknown, lon: unknown): unknown => ({
 
 /** `Number(place.lat ?? 0)` would put a malformed geocode at 0, 0 in the Gulf of Guinea */
 describe('a geocode result with no usable coordinates', () => {
-  it('is rejected rather than placed at 0, 0', async () => {
+  it('is rejected', async () => {
     fetchJson.mockResolvedValue([place(undefined, undefined)])
     await expect(geocode('somewhere', null)).rejects.toThrow(
       /Nominatim returned 1 result with no usable coordinates/,
@@ -148,7 +148,7 @@ describe('a geocode result with no usable coordinates', () => {
     expect(plain.get('viewbox')).toBeNull()
   })
 
-  it('refuses a reverse geocode rather than answering 0, 0', async () => {
+  it('refuses a reverse geocode that would answer 0, 0', async () => {
     fetchJson.mockResolvedValue(place(undefined, undefined))
     await expect(reverseGeocode(LOCATION, null)).rejects.toThrow(/no usable coordinates/)
   })
@@ -269,7 +269,7 @@ describe('the daily normals fall back to NASA POWER', () => {
     )
   })
 
-  it('asks again after a refusal rather than replaying the cached rejection', async () => {
+  it('asks again after a refusal', async () => {
     fetchJson.mockImplementation(() => openMeteoRefuses())
     await expect(climateNormalsAt(LOCATION)).rejects.toThrow()
     fetchJson.mockResolvedValue(dailyBody(12))

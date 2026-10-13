@@ -291,7 +291,7 @@ describe('treeQuads shadow, min rule', () => {
     expect(at(visibility, cellAt(grid, 3, 3))).toBeCloseTo(0.3, 5)
   })
 
-  it('counts a ray through two faces of one crown once, not twice', () => {
+  it('counts a ray through two faces of one crown once', () => {
     const tree: Tree = {
       id: obstructionId('tree-3'),
       kind: 'tree',

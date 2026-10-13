@@ -40,7 +40,7 @@ describe('preferences are the request', () => {
     }
   })
 
-  it('replaces a kind rather than stacking two entries on one crop', () => {
+  it('replaces a kind, so one crop holds one entry', () => {
     const store = useAppStore.getState()
     store.setPreference(BLUEBERRY, 'prefer')
     store.setPreference(BLUEBERRY, 'avoid')
@@ -59,7 +59,7 @@ describe('preferences are the request', () => {
     expect(useAppStore.getState().preferences.entries).toEqual([])
   })
 
-  it('removes an excluded crop from every suggestion instead of down-weighting it', () => {
+  it('removes an excluded crop from every suggestion', () => {
     useAppStore.getState().setPreference(BLUEBERRY, 'require')
     useAppStore.getState().suggest()
     const victim = cropsSuggested().find((cropId) => cropId !== 'blueberry')
@@ -81,7 +81,7 @@ describe('preferences are the request', () => {
   })
 })
 
-describe('the advanced controls are wired to the engine, not to a display', () => {
+describe('the advanced controls are wired to the engine', () => {
   it('carries a compatibility weight of zero through to the term contribution', () => {
     useAppStore.getState().setPreference(BLUEBERRY, 'require')
     useAppStore.getState().suggest()
@@ -168,7 +168,7 @@ describe('refusing to run beats running on invented inputs', () => {
     if (state.status === 'error') expect(state.message.length).toBeGreaterThan(0)
   })
 
-  it('refuses without an electricity term rather than assuming one, where there are panels', () => {
+  it('refuses without an electricity term where there are panels, and assumes none', () => {
     const plot = useAppStore.getState().plot
     if (plot === null) throw new Error('no plot')
     useAppStore.setState({ energy: { status: 'idle' }, plot: { ...plot, arrays: [makeArray(1)] } })
@@ -183,7 +183,7 @@ describe('refusing to run beats running on invented inputs', () => {
    * no-array control scores on the same, and a garden with no panels is still a garden that can
    * be planted
    */
-  it('scores a plot with no panels on a zero electricity term rather than refusing', () => {
+  it('scores a plot with no panels on a zero electricity term', () => {
     useAppStore.setState({ energy: { status: 'idle' } })
     expect(useAppStore.getState().plot?.arrays).toEqual([])
     useAppStore.getState().suggest()

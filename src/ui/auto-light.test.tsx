@@ -72,7 +72,7 @@ describe('re-running the light after the garden moves', () => {
   })
 
   /** A nudge, then another before the first has fired, is one bake */
-  it('waits for the last change rather than baking each one', async () => {
+  it('waits for the last change, with one bake for the whole burst', async () => {
     bakeHappened()
     await probe()
     act(() => state().upsertBed(makeBed(1, { label: 'first nudge' })))

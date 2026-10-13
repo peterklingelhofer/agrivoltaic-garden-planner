@@ -12,7 +12,7 @@ describe('annual energy state', () => {
     expect(state().energy.status).toBe('idle')
   })
 
-  it('says what is missing rather than falling back to a figure', () => {
+  it('says what is missing, with no fallback figure', () => {
     state().runEnergy()
     const energy = state().energy
     expect(energy.status).toBe('error')

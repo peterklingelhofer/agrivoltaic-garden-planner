@@ -130,7 +130,7 @@ describe('geometry is derived from the answers', () => {
     expect(tiltOf(south)).toBeCloseTo(tiltOf(balancedAt(33.9)), 6)
   })
 
-  it('builds the pitch from the coverage target and the collector width, not from a default', () => {
+  it('builds the pitch from the coverage target and the collector width, with no default in it', () => {
     for (const latitude of [12, 30, 42.37, 55]) {
       const candidate = balancedAt(latitude)
       expect(candidate.geometry.collectorWidthM / candidate.geometry.pitchM).toBeCloseTo(
@@ -229,7 +229,7 @@ describe('the height limit is a hard limit', () => {
     expect(tighter.rationale).toContain('Massachusetts fast-track rules')
   })
 
-  it('keeps the vertical rows vertical rather than tilting them to fit', () => {
+  it('keeps the vertical rows vertical, however they would fit tilted', () => {
     const site = siteAt(42.37)
     const candidate = pick(
       'vertical-east-west',
@@ -338,7 +338,7 @@ describe('a full five-scenario run', () => {
     expect(elapsedMs).toBeLessThan(60_000)
   })
 
-  it('says how far the search went rather than truncating it silently', () => {
+  it('says how far the search went, so a truncation is never silent', () => {
     expect(result.notConsidered.join(' ')).toContain('Exactly 5 geometries were evaluated')
     expect(result.notConsidered.join(' ')).toContain('almost nothing was swept around them')
     // the one sweep that does run has to be named, so the sentence above it can't gloss over it
@@ -992,7 +992,7 @@ describe('the archetype names have to match the figures beside them', () => {
     }
   }, 600_000)
 
-  it('says the tilt was measured rather than taken from a rule of thumb', async () => {
+  it('says the tilt was measured, with the rule of thumb left out', async () => {
     const set = await suggestDesigns(answersFor(), deps)
     const energyFirst = set.scenarios.find(
       (entry) => entry.candidate.archetype === 'energy-first',

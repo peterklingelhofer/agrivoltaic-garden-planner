@@ -41,7 +41,7 @@ const eachStep = async (page: Page, visit: (id: Step) => Promise<void>): Promise
   }
 }
 
-test('every yield readout is a band, never a point estimate', async ({ page }) => {
+test('every yield readout is a band', async ({ page }) => {
   test.setTimeout(BAKE_TIMEOUT_MS + 240_000)
   await rankedBed(page)
   await expandAll(page)
@@ -197,9 +197,7 @@ test('grade C renders only as visibly labeled experimental', async ({ page }) =>
  * same panels that are asserted present while Sources is open are asserted OUT of the document from
  * every other step
  */
-test('a closed step is a separate document, not a hidden section of the one that is open', async ({
-  page,
-}) => {
+test('a closed step is a separate document', async ({ page }) => {
   test.setTimeout(BAKE_TIMEOUT_MS + 240_000)
   await rankedBed(page)
 

@@ -33,7 +33,7 @@ const drawnByHand = polygonOf([
   vec2(0, 12),
 ])
 
-describe('the size of the plot, typed rather than redrawn', () => {
+describe('the size of the plot, typed, with the drawing left alone', () => {
   it('resizes a rectangular plot from either unit, around its own middle', async () => {
     const harness = await mount(<GroundPanel />)
     // meters first, and only the pair for the unit that is switched on is in the document

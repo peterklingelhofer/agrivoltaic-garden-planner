@@ -78,13 +78,13 @@ describe('the flight interpolation', () => {
   })
 
   /** A 12 m to 60 m flight: linearly that is 36 m at the halfway mark, geometrically 26.8 m */
-  it('closes the distance geometrically rather than linearly', () => {
+  it('closes the distance geometrically', () => {
     expect(poseAt(from, to, 0.5).radiusM).toBeCloseTo(Math.sqrt(12 * 60), 10)
     expect(poseAt(from, to, 0.5).radiusM).toBeCloseTo(26.83, 2)
     expect(poseAt(from, to, 0.5).radiusM).not.toBeCloseTo(36, 1)
   })
 
-  it('takes the short way round rather than a lap of the garden', () => {
+  it('takes the short way round', () => {
     expect(shortArc(170 * DEG, -170 * DEG)).toBeCloseTo(20 * DEG, 10)
     expect(shortArc(-170 * DEG, 170 * DEG)).toBeCloseTo(-20 * DEG, 10)
     const halfway = poseAt(
@@ -96,7 +96,7 @@ describe('the flight interpolation', () => {
     expect(halfway.theta).toBeCloseTo(180 * DEG, 10)
   })
 
-  it('interpolates a degenerate radius linearly rather than to NaN', () => {
+  it('interpolates a degenerate radius linearly, to a number', () => {
     const collapsed = poseAt(poseFixture({ radiusM: 0 }), poseFixture({ radiusM: 10 }), 0.5)
     expect(collapsed.radiusM).toBeCloseTo(5, 10)
   })
@@ -111,7 +111,7 @@ describe('easeInOutCubic', () => {
     expect(easeInOutCubic(0.9)).toBeGreaterThan(0.9)
   })
 
-  it('holds still outside the flight rather than overshooting it', () => {
+  it('holds still outside the flight', () => {
     expect(easeInOutCubic(-1)).toBe(0)
     expect(easeInOutCubic(4)).toBe(1)
   })

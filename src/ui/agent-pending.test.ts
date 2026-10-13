@@ -40,7 +40,7 @@ describe('the agent knows what it just asked', () => {
    * ranking while the next one runs, so a transition read off its status never fires for a
    * re-rank. The `ranking` flag is what says one finished
    */
-  it('answers a waiting question on the ranking flag, not on the sets status', () => {
+  it('answers a waiting question on the ranking flag alone, whatever the sets status says', () => {
     const code = (source ?? '')
       .split('\n')
       .filter((line) => !line.trim().startsWith('*') && !line.trim().startsWith('/*'))

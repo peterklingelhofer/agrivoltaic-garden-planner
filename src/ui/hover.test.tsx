@@ -131,7 +131,7 @@ describe('naming what the pointer is over', () => {
     expect(named?.detail).toBe('12 plants in Bed 1')
   })
 
-  it('says what the last season did to a plant, off the report rather than a recomputation', () => {
+  it('says what the last season did to a plant, off the report alone, with nothing recomputed', () => {
     const { bed } = withPlot()
     const plot = useAppStore.getState().plot
     const lettuce = {
@@ -174,7 +174,7 @@ describe('naming what the pointer is over', () => {
     )
   })
 
-  it('names an array by the geometry the panel prints, not by a second calculation', () => {
+  it('names an array by the geometry the panel prints, with no second calculation', () => {
     const { array } = withPlot()
     const plot = useAppStore.getState().plot
     const named = describeHover(plot, [], { kind: 'array', arrayId: array.id }, 'm')

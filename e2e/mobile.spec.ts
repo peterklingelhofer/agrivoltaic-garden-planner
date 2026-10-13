@@ -127,7 +127,7 @@ for (const phone of PHONES) {
      * The toolbar took 124px at 360 wide and 153px at 320, a fifth to a quarter of the screen for
      * a title and four buttons, because its contents needed 694px on one line
      */
-    test('spends one row on the toolbar, not three', async ({ page }) => {
+    test('spends one row on the toolbar', async ({ page }) => {
       await openApp(page)
       await waitForCanvas(page)
       const height = await page
@@ -230,9 +230,7 @@ for (const phone of PHONES) {
      * The two assertions are a pair. The first proves the press had somewhere to travel from, so
      * that the second isn't passing on a column that never moved
      */
-    test('lands on the step it was asked for, not where the last one was left', async ({
-      page,
-    }) => {
+    test('lands on the step it was asked for', async ({ page }) => {
       test.setTimeout(180_000)
       // the example is what makes the steps worth opening: without a garden they are locked and
       // hold a sentence each, and nothing here is long enough to scroll

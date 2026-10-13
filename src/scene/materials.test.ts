@@ -87,7 +87,7 @@ describe('the module laminate', () => {
    * A module measures a few percent. Without mipmaps the texture samples as dark as the cells it
    * mostly is while averaging far brighter. With mipmaps the average is what shows
    */
-  it('averages to the reflectance of a real module, not of its inter-cell gaps', () => {
+  it('averages to the reflectance of a real module', () => {
     expect(luminance(laminateSurface(128).meanAlbedo)).toBeLessThan(0.08)
     expect(luminance(laminateSurface(128).meanAlbedo)).toBeGreaterThan(0.03)
   })
@@ -99,7 +99,7 @@ describe('the module laminate', () => {
 })
 
 describe('metals', () => {
-  it('are metal in the map the material reads, not in a constant beside it', () => {
+  it('are metal in the map the material reads', () => {
     for (const surface of [aluminumSurface(SIZE), galvanizedSurface(SIZE)]) {
       const orm = surface.ormMap.image.data as Uint8Array
       expect(orm[2]).toBeGreaterThan(200)
@@ -124,7 +124,7 @@ describe('bed soil', () => {
     expect(bedSoilAlbedo(richer, 0.2)).toBeCloseTo(bedSoilAlbedo(rich, 0.2), 12)
   })
 
-  it('reads the surface an irrigation method wets, not the water it delivers', () => {
+  it('reads the surface an irrigation method wets', () => {
     const bed = makeBed(1)
     const wetted = (method: Irrigation['method']): number => bedWetness(irrigation({ method }))
     expect(wetted('sprinkler')).toBe(1)
@@ -168,7 +168,7 @@ describe('timber', () => {
 })
 
 describe('selection', () => {
-  it('multiplies the material rather than replacing it, and is neutral when unselected', () => {
+  it('multiplies the material, and is neutral when unselected', () => {
     expect(tintedBy(0.7, false)).toEqual([0.7, 0.7, 0.7])
     const [r, g, b] = tintedBy(0.7, true)
     expect(r).toBeGreaterThan(0.7)

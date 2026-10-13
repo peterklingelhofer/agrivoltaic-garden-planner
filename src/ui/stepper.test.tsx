@@ -53,7 +53,7 @@ describe('the sidebar stepper', () => {
     await harness.unmount()
   })
 
-  it('keeps a closed step out of the document entirely, not merely hidden', async () => {
+  it('keeps a closed step out of the document entirely', async () => {
     const harness = await mount(<Sidebar />)
     expect(harness.find('panel-site')).not.toBeNull()
     expect(harness.find('panel-sources')).toBeNull()

@@ -147,7 +147,7 @@ describe('graded pathways through the recommender', () => {
     expect(shadeBenefitBonus(heatLover, desert, SHADED)).toBe(0)
   })
 
-  it('grades the drought penalty instead of switching it', async () => {
+  it('grades the drought penalty on a curve', async () => {
     const rainfed = bedFixture('bed-a', {
       irrigation: {
         method: 'none',
@@ -205,7 +205,7 @@ describe('per-bed water balance', () => {
     expect(balance.rain.interceptedFraction).toBeGreaterThan(0.9)
   })
 
-  it('reports the saving as a band whose width is the measured spread, not a point', () => {
+  it('reports the saving as a band whose width is the measured spread', () => {
     const balance = run()[0]
     if (balance === undefined) throw new Error('no balance')
     const saving = balance.evapotranspirationSaving

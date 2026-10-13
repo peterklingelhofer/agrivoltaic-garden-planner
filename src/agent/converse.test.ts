@@ -70,7 +70,7 @@ describe("a reading it won't choose between", () => {
       }),
   }
 
-  it('offers the readings instead of acting on one', async () => {
+  it('offers the readings, and acts on none', async () => {
     const { reply } = await converse('bin it', { step: null, catalog }, torn, {
       state: getAppState,
     })

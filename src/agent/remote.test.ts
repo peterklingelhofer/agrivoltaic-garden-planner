@@ -135,7 +135,7 @@ describe('the readiness probe', () => {
     expect(await understander.ready()).toBe(false)
   })
 
-  it('gives up on a request nothing ever answers, rather than holding the status line all session', async () => {
+  it('gives up on a request nothing ever answers, and frees the status line', async () => {
     const understander = createRemoteUnderstander({
       fetch: () => new Promise<Response>(() => undefined),
       timeoutMs: 5,
@@ -291,7 +291,7 @@ describe('what the model is told about the garden', () => {
     names are the one part of this summary that grows without limit, and the edge refuses a
     summary over its cap outright
   */
-  it('drops crop names rather than sending a summary the edge refuses', () => {
+  it('drops crop names, so the summary is one the edge accepts', () => {
     const state = getAppState()
     const plot = state.plot
     const bed = plot?.beds[0]

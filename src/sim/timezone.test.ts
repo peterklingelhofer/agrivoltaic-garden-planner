@@ -19,7 +19,7 @@ describe('the offset a zone keeps at an instant', () => {
     expect(utcOffsetMinutesAt('Asia/Kolkata', Date.UTC(2024, 6, 15))).toBe(330)
   })
 
-  it('reads the day the clocks change per instant rather than off the cached day', () => {
+  it('reads the day the clocks change per instant', () => {
     // March 10, 2024, 07:00 UTC is 02:00 EST becoming 03:00 EDT
     expect(utcOffsetMinutesAt('America/New_York', Date.UTC(2024, 2, 10, 6))).toBe(-300)
     expect(utcOffsetMinutesAt('America/New_York', Date.UTC(2024, 2, 10, 8))).toBe(-240)

@@ -66,7 +66,7 @@ describe('a failed lookup', () => {
     await harness.unmount()
   })
 
-  it('says so when nothing more is scheduled, rather than counting down to nothing', async () => {
+  it('says so when nothing more is scheduled, so the countdown never runs to nothing', async () => {
     useAppStore.setState({ siteRetryAt: null })
     const harness = await mount(notice)
     expect(harness.get('status-site-retry-when').textContent).toBe("It won't try again by itself")
@@ -274,7 +274,7 @@ describe('the upstream sentence, capitalized only at the head of a paragraph', (
 describe('the same failure on the shipped example', () => {
   const shipped = (path: string): Buffer => readFileSync(`public${path}`)
 
-  it('reads as a quiet note, not a red box, and keeps the retry', async () => {
+  it('reads as a quiet note, and keeps the retry', async () => {
     vi.useRealTimers()
     vi.stubGlobal('fetch', (input: string) => {
       if (input === exampleDesignPath('temperate')) {
