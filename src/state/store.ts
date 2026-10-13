@@ -2869,6 +2869,8 @@ export const resetAppStore = (): void => {
   noPanelsToken += 1
   // and a place lookup in flight, which would mark its site ready over the store that replaced it
   siteToken += 1
+  // the retries one store's lookup had spent would otherwise shorten the next store's schedule
+  siteRetries = 0
   scheduleWrite.cancel()
   attempt(() => client?.terminate())
   client = null
