@@ -13,6 +13,7 @@ import {
   calendarSowDay,
   derivePlanting,
   feasibilityWords,
+  harvestDaysFrom,
   plantingDensity,
   plantingIdFor,
 } from './planting'
@@ -351,6 +352,53 @@ describe('a short-day crop sown on another day', () => {
     expect(derived.ok).toBe(false)
     if (derived.ok) return
     expect(derived.reason).toContain(feasibilityWords('season-too-short'))
+  })
+})
+
+describe('harvestDaysFrom', () => {
+  const bed = beds[0] as Bed
+  const windowFor = (crop: Crop): CropCalendar => {
+    const calendar = calendarFor(calendarsFor(), bed.id, crop.id)
+    expect(
+      calendar?.plantings[0],
+      `${crop.id as string} has no window at the fixture`,
+    ).toBeDefined()
+    return calendar as CropCalendar
+  }
+
+  it("moves an annual's harvest by the days its sowing moved", () => {
+    const crop = cropOf('lettuce-leaf')
+    const calendar = windowFor(crop)
+    const calendarSow = calendarSowDay(calendar) as DayOfYear
+    const base = harvestDaysFrom(crop, calendar, calendarSow, calendarSow)
+    expect(base.harvestStartDay).toBe(calendar.harvest.start)
+    expect(base.harvestEndDay).toBe(calendar.harvest.end)
+    const later = harvestDaysFrom(crop, calendar, calendarSow, (calendarSow + 10) as DayOfYear)
+    expect(forwardDays(base.harvestStartDay, later.harvestStartDay)).toBe(10)
+    expect(forwardDays(base.harvestEndDay, later.harvestEndDay)).toBe(10)
+  })
+
+  it("keeps a perennial's picking season, which comes round on its own clock", () => {
+    const perennial = catalog.find(
+      (crop) => crop.thermal === null && calendarFor(calendarsFor(), bed.id, crop.id)?.plantings[0],
+    )
+    expect(perennial, 'no perennial with a window at the fixture').toBeDefined()
+    const crop = perennial as Crop
+    const calendar = windowFor(crop)
+    const calendarSow = calendarSowDay(calendar) as DayOfYear
+    // a day before the season starts: the season is the calendar's, whatever the sowing
+    const before = (calendar.harvest.start - 1) as DayOfYear
+    const dates = harvestDaysFrom(crop, calendar, calendarSow, before)
+    expect(dates.harvestStartDay).toBe(calendar.harvest.start)
+    expect(dates.harvestEndDay).toBe(calendar.harvest.end)
+  })
+
+  it("keeps a plan slot's own harvest end", () => {
+    const crop = cropOf('lettuce-leaf')
+    const calendar = windowFor(crop)
+    const calendarSow = calendarSowDay(calendar) as DayOfYear
+    const dates = harvestDaysFrom(crop, calendar, calendarSow, calendarSow, 300 as DayOfYear)
+    expect(dates.harvestEndDay).toBe(300)
   })
 })
 

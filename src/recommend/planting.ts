@@ -173,6 +173,57 @@ export interface PlantingDraft {
   readonly catalog?: readonly Crop[]
 }
 
+export interface HarvestDays {
+  readonly harvestStartDay: DayOfYear
+  readonly harvestEndDay: DayOfYear
+}
+
+/**
+ * A planting's harvest window, counted from its sowing by the calendar's own rule, so a sowing
+ * moved after the planting went in is dated the way a new one is. An annual keeps the calendar's
+ * lag from its recommended sowing, `calendarSow`. A short-day crop is dated from the sowing by the
+ * day-length rule, so a later sowing that still comes before the run of short days keeps the
+ * calendar's harvest. A perennial's picking season is the calendar's own, coming round every year
+ * on the frost or catalog clock: it doesn't move with the sowing the way an annual's harvest lag
+ * does. A plan slot's own harvest end is kept where it's given
+ */
+export const harvestDaysFrom = (
+  crop: Crop,
+  calendar: CropCalendar,
+  calendarSow: DayOfYear,
+  sowDay: DayOfYear,
+  harvestEndDay?: DayOfYear,
+): HarvestDays => {
+  const perennial = crop.thermal === null
+  const sowInsideHarvest =
+    forwardDays(calendar.harvest.start, sowDay) <=
+    forwardDays(calendar.harvest.start, calendar.harvest.end)
+  const basis = calendar.harvest.basis
+  const shortDays =
+    basis.kind === 'day-length'
+      ? shortDayHarvestLag(crop, basis.latitudeDeg, sowDay, basis.maturityDays)
+      : null
+  const harvestStartDay = perennial
+    ? sowInsideHarvest
+      ? sowDay
+      : calendar.harvest.start
+    : wrapDayOfYear(
+        sowDay + (shortDays?.lagDays ?? forwardDays(calendarSow, calendar.harvest.start)),
+      )
+  return {
+    harvestStartDay,
+    harvestEndDay:
+      harvestEndDay ??
+      (perennial
+        ? calendar.harvest.end
+        : wrapDayOfYear(
+            shortDays === null
+              ? sowDay + forwardDays(calendarSow, calendar.harvest.end)
+              : harvestStartDay + forwardDays(calendar.harvest.start, calendar.harvest.end),
+          )),
+  }
+}
+
 export const derivePlanting = (draft: PlantingDraft): Derivation<Planting> => {
   const { bed, crop, calendar } = draft
   const name = cropLabel(crop)
@@ -204,35 +255,14 @@ export const derivePlanting = (draft: PlantingDraft): Derivation<Planting> => {
   }
 
   const sowDay = draft.sowDay ?? calendarSow
-  // a perennial's picking season is the calendar's own, coming round every year on the frost or
-  // catalog clock: it doesn't move with this sowing the way an annual's harvest lag does
   const perennial = crop.thermal === null
-  const sowInsideHarvest =
-    forwardDays(calendar.harvest.start, sowDay) <=
-    forwardDays(calendar.harvest.start, calendar.harvest.end)
-  // a short-day crop is dated from this sowing by the calendar's own rule, so a later sowing that
-  // still comes before the run of short days keeps the calendar's harvest
-  const basis = calendar.harvest.basis
-  const shortDays =
-    basis.kind === 'day-length'
-      ? shortDayHarvestLag(crop, basis.latitudeDeg, sowDay, basis.maturityDays)
-      : null
-  const harvestStartDay = perennial
-    ? sowInsideHarvest
-      ? sowDay
-      : calendar.harvest.start
-    : wrapDayOfYear(
-        sowDay + (shortDays?.lagDays ?? forwardDays(calendarSow, calendar.harvest.start)),
-      )
-  const harvestEndDay =
-    draft.harvestEndDay ??
-    (perennial
-      ? calendar.harvest.end
-      : wrapDayOfYear(
-          shortDays === null
-            ? sowDay + forwardDays(calendarSow, calendar.harvest.end)
-            : harvestStartDay + forwardDays(calendar.harvest.start, calendar.harvest.end),
-        ))
+  const { harvestStartDay, harvestEndDay } = harvestDaysFrom(
+    crop,
+    calendar,
+    calendarSow,
+    sowDay,
+    draft.harvestEndDay,
+  )
   // an annual sown too late to reach its own harvest end is refused. A perennial's picking season
   // recurs on its own and is never refused for the day it went into the bed
   if (!perennial && forwardDays(sowDay, harvestStartDay) > forwardDays(sowDay, harvestEndDay)) {

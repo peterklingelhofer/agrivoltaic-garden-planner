@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from 'bun:test'
 import { loadCropCatalog } from '../data/crops'
-import { bedCalendar } from '../recommend/calendar'
+import { bedCalendar, forwardDays } from '../recommend/calendar'
 import { calendarFor, derivePlanting, plantingIdFor } from '../recommend/planting'
 import { bedLightFixture, siteFixture } from '../recommend/testkit'
 import type { Crop } from '../types/crop'
@@ -94,6 +94,45 @@ describe('planting actions', () => {
     expect(stored?.id).toBe(planting.id)
     expect(stored?.bedId).toBe(bed.id)
     expect(stored?.cropId).toBe(planting.cropId)
+  })
+
+  /**
+   * A sowing moved in the bed takes its harvest with it, by the rule that dated the planting when
+   * it went in. Lettuce is an annual with no day-length trigger, so its lag from sowing to harvest
+   * is the calendar's own, and the window moves by the days the sowing moved
+   */
+  it('re-dates the harvest from a moved sowing, by the lag the calendar gave it', () => {
+    const bed = firstBed()
+    const planting = seed(catalog, bed)
+    useAppStore.setState({ catalog: ready(catalog), calendars: ready(calendarsFor(catalog)) })
+    useAppStore.getState().addPlanting(planting)
+    useAppStore.getState().updatePlanting(bed.id, planting.id, { sowDay: 99 as DayOfYear })
+    const stored = plantingsOf(bed)[0] as Planting
+    expect(stored.harvestStartDay).not.toBe(planting.harvestStartDay)
+    expect(forwardDays(99 as DayOfYear, stored.harvestStartDay)).toBe(
+      forwardDays(planting.sowDay, planting.harvestStartDay),
+    )
+    expect(forwardDays(99 as DayOfYear, stored.harvestEndDay)).toBe(
+      forwardDays(planting.sowDay, planting.harvestEndDay),
+    )
+  })
+
+  it('keeps a harvest the patch brings, and the stored one where no calendar can date the sowing', () => {
+    const bed = firstBed()
+    const planting = seed(catalog, bed)
+    useAppStore.getState().addPlanting(planting)
+    // no calendars in the store: a harvest date the calendar can't give would be invented
+    useAppStore.getState().updatePlanting(bed.id, planting.id, { sowDay: 99 as DayOfYear })
+    expect(plantingsOf(bed)[0]?.sowDay).toBe(99)
+    expect(plantingsOf(bed)[0]?.harvestStartDay).toBe(planting.harvestStartDay)
+    useAppStore.setState({ catalog: ready(catalog), calendars: ready(calendarsFor(catalog)) })
+    useAppStore.getState().updatePlanting(bed.id, planting.id, {
+      sowDay: 130 as DayOfYear,
+      harvestStartDay: 200 as DayOfYear,
+      harvestEndDay: 230 as DayOfYear,
+    })
+    expect(plantingsOf(bed)[0]?.harvestStartDay).toBe(200)
+    expect(plantingsOf(bed)[0]?.harvestEndDay).toBe(230)
   })
 
   it('removes exactly the planting it is given', () => {

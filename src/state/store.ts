@@ -17,6 +17,7 @@ import {
   calendarFor,
   calendarSowDay,
   derivePlanting,
+  harvestDaysFrom,
   plantingIdFor,
   type PlanRefusal,
 } from '../recommend/planting'
@@ -42,7 +43,7 @@ import { extraterrestrialNormal, observerFor, spaPosition } from '../sim/solar'
 import { utcOffsetMinutesAt } from '../sim/timezone'
 import { createSimClient, type SimClient } from '../sim/worker/client'
 import type { CompanionRule, PartitionedCompanionRules } from '../types/companion'
-import type { Bed, GardenPlot } from '../types/garden'
+import type { Bed, GardenPlot, Planting } from '../types/garden'
 import { albedoUnderSnow, DEFAULT_GROUND_COVER, groundAlbedoOf } from '../types/ground'
 import type { ArrayId, BedId, CropId, ObstructionId, PlantingId } from '../types/ids'
 import type { Banded } from '../types/band'
@@ -108,6 +109,7 @@ import {
   loading,
   ready,
   type AppState,
+  type PlantingPatch,
   type AsyncState,
   type GardenGeneration,
   type GeneratedBed,
@@ -463,6 +465,26 @@ const runBake = async (
  * told the reader to wait a minute. A manual press at any point is a fresh lookup and cancels
  * whatever was scheduled, through `siteRetryAt`
  */
+/** The patch with the harvest re-dated from a moved sowing, where the bed's calendar can date it */
+const withHarvestMoved = (
+  state: AppState,
+  bed: Bed,
+  planting: Planting,
+  patch: PlantingPatch,
+): PlantingPatch => {
+  if (patch.sowDay === undefined || patch.sowDay === planting.sowDay) return patch
+  if (patch.harvestStartDay !== undefined || patch.harvestEndDay !== undefined) return patch
+  const crop =
+    state.catalog.status === 'ready'
+      ? state.catalog.value.find((entry) => entry.id === planting.cropId)
+      : undefined
+  const calendars = state.calendars.status === 'ready' ? state.calendars.value : []
+  const calendar = calendarFor(calendars, bed.id, planting.cropId)
+  const calendarSow = calendar === undefined ? null : calendarSowDay(calendar)
+  if (crop === undefined || calendar === undefined || calendarSow === null) return patch
+  return { ...patch, ...harvestDaysFrom(crop, calendar, calendarSow, patch.sowDay) }
+}
+
 const SITE_RETRY_MS: readonly number[] = [60_000, 120_000, 240_000]
 
 /** A search asked for while no lookup has run or landed. The site step says what stopped it */
@@ -1392,15 +1414,29 @@ export const useAppStore = create<AppState>()(
         return derived
       },
 
-      updatePlanting: (bedId, plantingId, patch) =>
+      /**
+       * A patch that moves a planting's sowing moves its harvest with it, by the rule that dated
+       * the planting when it went in (`harvestDaysFrom`). A patch carrying its own harvest days
+       * keeps them, and a sowing the bed's calendar can't date keeps the window it has: a harvest
+       * date the calendar can't give would be invented
+       */
+      updatePlanting: (bedId, plantingId, patch) => {
+        const state = get()
+        const bed = state.plot?.beds.find((entry) => entry.id === bedId)
+        const planting = bed?.plantings.find((entry) => entry.id === plantingId)
+        const dated =
+          bed === undefined || planting === undefined
+            ? patch
+            : withHarvestMoved(state, bed, planting, patch)
         set((s) => {
-          patchBed(s, bedId, (bed) => ({
-            ...bed,
-            plantings: bed.plantings.map((p) =>
-              p.id === plantingId ? { ...p, ...patch, id: p.id, bedId: p.bedId } : p,
+          patchBed(s, bedId, (entry) => ({
+            ...entry,
+            plantings: entry.plantings.map((p) =>
+              p.id === plantingId ? { ...p, ...dated, id: p.id, bedId: p.bedId } : p,
             ),
           }))
-        }),
+        })
+      },
 
       upsertArray: (array) =>
         set((s) => {

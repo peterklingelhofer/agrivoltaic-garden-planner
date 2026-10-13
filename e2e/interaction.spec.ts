@@ -318,9 +318,15 @@ test('a plant can be placed from the ranked picker, edited, seen in the scene an
   await expect(readout).toContainText('3 plants')
   await expect.poll(() => canvasPixels(page), { timeout: 30_000 }).not.toBe(oneCrop)
 
-  // the sow day is the last edit, because moving it past the harvest days the planting already
-  // carries leaves the plant a seedling for the whole of its own window, which is honest and
-  // is also too small to read in the buffer
+  // the sow day is the last edit: the harvest moves with it, so the scrubber, set to the old
+  // window above, would show a plant a long way from harvest, which is honest and also too
+  // small to read in the buffer
+  const sowBefore = Number(
+    (await row.locator('[data-testid^="readout-bed-sow-date-"]').textContent())?.match(
+      /day (\d+)/,
+    )?.[1],
+  )
+  const startBefore = Number(await row.getAttribute('data-harvest-start-day'))
   /*
    * A month and a day. A number from 1 to 365 is a calendar nobody owns, so
    * the field is two selects and the edit is made the way it is offered. May 30 IS day 150 on the
@@ -329,7 +335,10 @@ test('a plant can be placed from the ranked picker, edited, seen in the scene an
   await row.locator('[data-testid^="control-bed-planting-sow-month-"]').selectOption('5')
   await row.locator('[data-testid^="control-bed-planting-sow-day-"]').selectOption('30')
   await expect(readout).toContainText('day 150')
-  // the count survives the sow-day edit: an update patches, it doesn't rebuild
+  // and the harvest moved with the sowing, keeping the lag the calendar gave it
+  const startAfter = Number(await row.getAttribute('data-harvest-start-day'))
+  expect(wrap(startAfter - 150)).toBe(wrap(startBefore - sowBefore))
+  // the count survives the sow-day edit: only the dates are derived again
   await expect(readout).toContainText('3 plants')
 
   await remove()
