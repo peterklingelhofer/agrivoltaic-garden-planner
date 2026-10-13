@@ -1,6 +1,6 @@
 /// <reference types="node" />
 import { readFileSync } from 'node:fs'
-import { act } from 'react'
+import { act, type ReactElement } from 'react'
 import { afterEach, beforeEach, describe, expect, it } from 'bun:test'
 import { vi } from '../../test/vi'
 import type { SitePart } from '../data/site'
@@ -22,6 +22,15 @@ import { capitalizeSentence, siteNoticeText, soilSampledNote, waitLabel } from '
  */
 
 const UPSTREAM = 'the weather service is busy and is asking for a pause'
+
+/** The panel's text as the eye gets it, without the live regions' copies of the sentences */
+const shown = (el: Element): string => {
+  const copy = el.cloneNode(true) as Element
+  for (const hidden of copy.querySelectorAll('.visually-hidden')) {
+    hidden.remove()
+  }
+  return copy.textContent ?? ''
+}
 
 const resolveSite = vi.fn(async () => undefined)
 let originalResolve: typeof resolveSite
@@ -87,6 +96,8 @@ describe('a failed lookup', () => {
 
 describe('the other states', () => {
   it("says what it's waiting on without naming the place, and offers no retry for a lookup in flight", async () => {
+    // a lookup starts with every part out, in the same write that sets the state loading
+    useAppStore.setState({ sitePending: ['weather', 'soil', 'frost'] })
     const harness = await mount(
       <SiteNotice state={loading()} testId="status-site" idleLabel="nothing yet" />,
     )
@@ -118,9 +129,14 @@ describe('the loading sentence', () => {
     [['weather'], 'The soil and frost dates are ready. Still looking up the weather…'],
   ]
 
-  it('names all three while nothing has landed, and when there is no list to read', () => {
+  it('names all three while nothing has landed', () => {
     expect(say(['weather', 'soil', 'frost'])).toBe(EVERYTHING)
-    expect(say([])).toBe(EVERYTHING)
+  })
+
+  // the per-part report empties the list a moment before the lookup's answer lands, so this is
+  // the last sentence the region holds, and the one a screen reader hears the lookup end on
+  it('says every part is ready once the list is empty', () => {
+    expect(say([])).toBe('The weather, soil and frost dates are ready.')
   })
 
   for (const [pending, sentence] of PARTIAL) {
@@ -142,14 +158,15 @@ describe('the loading sentence', () => {
     const harness = await mount(
       <SiteNotice state={loading()} testId="status-site" idleLabel="nothing yet" />,
     )
-    const sentence = harness.get('status-site').querySelector('[role="status"]')
-    expect(sentence?.textContent).toBe(EVERYTHING)
+    const sentence = harness.get('status-site-live')
+    expect(sentence.getAttribute('role')).toBe('status')
+    expect(sentence.textContent).toBe(EVERYTHING)
     await act(async () => {
       useAppStore.setState({ sitePending: ['soil', 'frost'] })
     })
     // one element throughout, so a screen reader hears a change in a region it already holds
-    expect(harness.get('status-site').querySelector('[role="status"]')).toBe(sentence)
-    expect(sentence?.textContent).toBe(
+    expect(harness.get('status-site-live')).toBe(sentence)
+    expect(sentence.textContent).toBe(
       'The weather is ready. Still looking up the soil and frost dates…',
     )
     await harness.unmount()
@@ -160,8 +177,7 @@ describe('the loading sentence', () => {
     const harness = await mount(
       <SiteNotice state={loading()} testId="status-site" idleLabel="nothing yet" />,
     )
-    const sentence = harness.get('status-site').querySelector('[role="status"]')
-    if (sentence === null) throw new Error('no status region')
+    const sentence = harness.get('status-site-live')
     // the callback gathers what it's handed, since the awaits below let it run before any
     // `takeRecords` call could see a mutation
     const seen: MutationRecord[] = []
@@ -193,10 +209,10 @@ describe('the loading sentence', () => {
   it('keeps the countdown and the press outside the region that is read out', async () => {
     useAppStore.setState({ siteRetryAt: Date.now() + 60_000 })
     const harness = await mount(notice)
-    const region = harness.get('status-site').querySelector('[role="status"]')
-    expect(region?.textContent).toBe(capitalizeSentence(UPSTREAM))
-    expect(region?.contains(harness.get('status-site-retry-when'))).toBe(false)
-    expect(region?.contains(harness.get('status-site-retry'))).toBe(false)
+    const region = harness.get('status-site-live')
+    expect(region.textContent).toBe(capitalizeSentence(UPSTREAM))
+    expect(region.contains(harness.get('status-site-retry-when'))).toBe(false)
+    expect(region.contains(harness.get('status-site-retry'))).toBe(false)
     await harness.unmount()
   })
 
@@ -205,10 +221,48 @@ describe('the loading sentence', () => {
     useAppStore.setState({ site: loading(), weather: loading(), sitePending: ['soil'] })
     const harness = await mount(<SitePanel />)
     const said = 'The weather and frost dates are ready. Still looking up the soil…'
-    const text = harness.get('panel-site').textContent ?? ''
+    const text = shown(harness.get('panel-site'))
     expect(text).toContain(said)
     expect(text.indexOf(said)).toBe(text.lastIndexOf(said))
     expect(harness.find('status-weather')).toBeNull()
+    await harness.unmount()
+  })
+})
+
+/**
+ * A live region that arrives with its sentence already in it is one some screen readers skip, and
+ * on a second search the box does exactly that. So the region is mounted in every state, empty
+ * while the place is ready, and the next lookup's first sentence is a change inside it
+ */
+describe('the region a reader already holds', () => {
+  const Live = (): ReactElement => {
+    const site = useAppStore((s) => s.site)
+    return <SiteNotice state={site} testId="status-site" idleLabel="nothing yet" />
+  }
+
+  it('stays mounted and empty while the place is ready, then carries the next first sentence', async () => {
+    useAppStore.setState({ site: ready(siteFixture()), sitePending: [] })
+    const harness = await mount(<Live />)
+    const region = harness.get('status-site-live')
+    expect(region.getAttribute('role')).toBe('status')
+    expect(region.textContent).toBe('')
+    expect(harness.find('status-site')).toBeNull()
+    await act(async () => {
+      useAppStore.setState({ site: loading(), sitePending: ['weather', 'soil', 'frost'] })
+    })
+    expect(harness.get('status-site-live')).toBe(region)
+    expect(region.textContent).toBe('Looking up the weather, soil and frost dates for this place…')
+    expect(harness.get('status-site').textContent).toContain('Looking up the weather')
+    await harness.unmount()
+  })
+
+  it('shows the sentence once to the eye, with the box copy hidden from the reader', async () => {
+    const harness = await mount(
+      <SiteNotice state={loading()} testId="status-site" idleLabel="nothing yet" />,
+    )
+    const copy = harness.get('status-site').querySelector('p')
+    expect(copy?.getAttribute('aria-hidden')).toBe('true')
+    expect(copy?.textContent).toBe(harness.get('status-site-live').textContent)
     await harness.unmount()
   })
 })
@@ -226,7 +280,7 @@ describe('the site panel states a failure once', () => {
     })
     const harness = await mount(<SitePanel />)
     const said = capitalizeSentence(UPSTREAM)
-    const text = harness.get('panel-site').textContent ?? ''
+    const text = shown(harness.get('panel-site'))
     expect(text).toContain(said)
     expect(text.indexOf(said)).toBe(text.lastIndexOf(said))
     expect(harness.find('status-weather')).toBeNull()

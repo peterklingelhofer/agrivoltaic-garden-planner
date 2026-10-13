@@ -10,21 +10,28 @@ const PART_WORDS: Readonly<Record<SitePart, string>> = {
   frost: 'frost dates',
 }
 
-const named = (parts: readonly SitePart[]): string =>
-  parts.map((part) => PART_WORDS[part]).join(' and ')
+/** Two parts joined by "and", three as a list, so all three read as the first sentence names them */
+const named = (parts: readonly SitePart[]): string => {
+  const words = parts.map((part) => PART_WORDS[part])
+  if (words.length <= 2) return words.join(' and ')
+  return `${words.slice(0, -1).join(', ')} and ${String(words.at(-1))}`
+}
 
 /**
  * The loading sentence. The requests run side by side and the slowest sets the pace, so once a part
  * has landed it says which are in and which are still out, and a reader can see the late one. Until
- * a part lands, and for an empty list, it names all three. Parts go in the order `SITE_PARTS` has
- * them, whatever order `pending` arrives in
+ * a part lands it names all three. An empty list means every part has reported and the lookup is
+ * putting its answer together, which lasts a render or two before the notice leaves, so that
+ * sentence says all three are in: it's the one a screen reader hears the lookup end on. Parts go in
+ * the order `SITE_PARTS` has them, whatever order `pending` arrives in
  */
 const lookingUpText = (pending: readonly SitePart[]): string => {
   const waiting = SITE_PARTS.filter((part) => pending.includes(part))
   const landed = SITE_PARTS.filter((part) => !pending.includes(part))
-  if (waiting.length === 0 || landed.length === 0) return LOOKING_UP_EVERYTHING
+  if (landed.length === 0) return LOOKING_UP_EVERYTHING
   // "is" for one singular part, "are" for the plural frost dates or for two parts
   const verb = landed.length === 1 && landed[0] !== 'frost' ? 'is' : 'are'
+  if (waiting.length === 0) return `The ${named(landed)} ${verb} ready.`
   return `The ${named(landed)} ${verb} ready. Still looking up the ${named(waiting)}…`
 }
 

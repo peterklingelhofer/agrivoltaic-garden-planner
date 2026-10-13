@@ -19,15 +19,16 @@ export interface SiteNoticeProps<T> {
  * promise the message makes is one a reader can watch: the seconds tick down, the button is there
  * for anyone who won't wait, and when nothing more is scheduled it says so.
  *
- * The sentence is a polite live region, so each part of the lookup landing is read out as the text
- * changes, and the same text is never read twice because React leaves it alone. The countdown and
- * the press sit outside it, since a clock ticking over every second would be read out every second
+ * The sentence is read out from a polite live region that outlives the notice: it's mounted in
+ * every state and empty once the place is ready, so the first sentence of the next lookup is a
+ * change inside a region the screen reader already holds. A region that arrives with its sentence
+ * already in it is one some readers skip, and on a second search the box is exactly that. The box
+ * carries its own copy of the sentence for the eye, hidden from the reader so the words are read
+ * once, and the same text is never read twice because React leaves it alone. The countdown and
+ * the press sit outside the region, since a clock ticking over every second would be read out
+ * every second
  */
-export const SiteNotice = <T,>({
-  state,
-  testId,
-  idleLabel,
-}: SiteNoticeProps<T>): ReactElement | null => {
+export const SiteNotice = <T,>({ state, testId, idleLabel }: SiteNoticeProps<T>): ReactElement => {
   const location = useAppStore((s) => s.location)
   const locationLabel = useAppStore((s) => s.locationLabel)
   const retryAt = useAppStore((s) => s.siteRetryAt)
@@ -61,36 +62,46 @@ export const SiteNotice = <T,>({
   }, [failed, retryAt])
 
   const text = siteNoticeText(state, idleLabel, pending)
-  if (text === null) return null
   const seconds = retryAt === null ? null : Math.max(0, Math.ceil((retryAt - now) / 1000))
+  // the upstream sentence arrives lowercase. Muted it sits after a colon and stays that
+  // way, plain it opens the paragraph on its own and reads wrong without a capital
+  const said =
+    text === null
+      ? ''
+      : muted
+        ? `The weather for this place hasn't loaded yet: ${text}`
+        : capitalizeSentence(text)
 
   return (
-    <div
-      className={`notice notice-${muted ? 'idle' : state.status} site-notice`}
-      data-testid={testId}
-      data-state={state.status}
-    >
-      {/* the upstream sentence arrives lowercase. Muted it sits after a colon and stays that
-          way, plain it opens the paragraph on its own and reads wrong without a capital */}
-      <p role="status">
-        {muted ? `The weather for this place hasn't loaded yet: ${text}` : capitalizeSentence(text)}
+    <>
+      <p className="visually-hidden" role="status" data-testid={`${testId}-live`}>
+        {said}
       </p>
-      {failed ? (
-        <>
-          <p data-testid={`${testId}-retry-when`}>
-            {seconds === null
-              ? "It won't try again by itself"
-              : `Trying again in ${waitLabel(seconds)}`}
-          </p>
-          <Action
-            testId={`${testId}-retry`}
-            tone="primary"
-            onClick={() => void resolveSite(location, locationLabel)}
-          >
-            Try again now
-          </Action>
-        </>
-      ) : null}
-    </div>
+      {text === null ? null : (
+        <div
+          className={`notice notice-${muted ? 'idle' : state.status} site-notice`}
+          data-testid={testId}
+          data-state={state.status}
+        >
+          <p aria-hidden="true">{said}</p>
+          {failed ? (
+            <>
+              <p data-testid={`${testId}-retry-when`}>
+                {seconds === null
+                  ? "It won't try again by itself"
+                  : `Trying again in ${waitLabel(seconds)}`}
+              </p>
+              <Action
+                testId={`${testId}-retry`}
+                tone="primary"
+                onClick={() => void resolveSite(location, locationLabel)}
+              >
+                Try again now
+              </Action>
+            </>
+          ) : null}
+        </div>
+      )}
+    </>
   )
 }
