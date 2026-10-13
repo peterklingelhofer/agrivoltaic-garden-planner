@@ -311,9 +311,16 @@ export const simulateSeason = (input: SeasonInput): SeasonResult => {
         continue
       }
       // the maturity clock runs from the day the catalog's figure counts from: sowing, indoors
-      // or out, for a sow-referenced figure, and the setting-out day for a transplant-referenced one
-      const needed = siteMaturityDays(crop, year.site, anchors.frostFreeDays)
+      // or out, for a sow-referenced figure, and the setting-out day for a transplant-referenced
+      // one. A short-day crop's harvest can come later than its maturity days, so its planting's
+      // own date counts where it's the later of the two, and the sentence names the days it needs
+      // whichever check reads the planting first
       const clockFrom = crop.thermal?.dtmReference === 'transplant' ? setOutDay : planting.sowDay
+      const maturity = siteMaturityDays(crop, year.site, anchors.frostFreeDays)
+      const needed =
+        crop.photoperiod === null
+          ? maturity
+          : Math.max(maturity, forwardDays(clockFrom, planting.harvestStartDay))
       const daysToFrost = forwardDays(clockFrom, anchors.firstFallFreeze)
       if (!hardy && needed > daysToFrost) {
         outcomes.push(
