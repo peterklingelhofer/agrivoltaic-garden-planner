@@ -595,27 +595,86 @@ const WORD_NUMBER: Readonly<Record<string, number>> = {
  * and converted: the app is metric throughout and a grower who thinks in feet
  * isn't going to convert on our behalf
  */
-export const lengths = (text: string): readonly number[] => {
-  /*
-    A lighter clean than `normalize`, which strips the decimal point as punctuation and so
-    silently turned "2.5 meters" into the separate numbers 2 and 5, handing a plot of 2 by 5 to
-    somebody who asked for a square of two and a half. A point or a comma BETWEEN two digits is
-    a decimal separator and is kept as a point. Every other one is punctuation and goes
-  */
-  const cleaned = text
+const cleanedMeasure = (text: string): string =>
+  text
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase()
+    // the squared sign is part of its unit, kept as the digit the sweep below lets through
+    .replace(/²/g, '2')
     .replace(/(\d)[.,](\d)/g, '$1.$2')
     .replace(/[^a-z0-9. ]+/g, ' ')
     .replace(/\.(?!\d)/g, ' ')
     .replace(/\s+/g, ' ')
     .trim()
+
+const SQUARE_METERS_PER_SQUARE_FOOT = 0.3048 * 0.3048
+const SQUARE_METERS_PER_ACRE = 4046.8564224
+
+/**
+ * "200 sq ft", "200 square feet", "50 m2" (a ² arrives as that 2), "2 acres". A unit BEFORE
+ * "square" is a shape and stays a length: "20 foot square" is a square twenty feet across
+ */
+const AREA =
+  /(\d+(?:\.\d+)?)\s*(?:(?:sq|square)\s*(ft|foot|feet|m|metre|metres|meter|meters)|(ft|foot|feet|m|metre|metres|meter|meters)\s*(?:2|squared)|(sqft|sqm|acres?))(?![a-z])/g
+
+/** The acre fractions people say, since "half an acre" has no digit in it */
+const ACRE_WORDS: readonly (readonly [string, number])[] = [
+  ['half an acre', 0.5],
+  ['half acre', 0.5],
+  ['quarter of an acre', 0.25],
+  ['quarter acre', 0.25],
+  ['an acre', 1],
+  ['one acre', 1],
+]
+
+interface AreaHit {
+  readonly at: number
+  readonly end: number
+  readonly squareMeters: number
+}
+
+const areaHits = (cleaned: string): readonly AreaHit[] => {
+  const found: AreaHit[] = []
+  for (const hit of cleaned.matchAll(AREA)) {
+    const raw = Number(hit[1])
+    if (!Number.isFinite(raw)) continue
+    const unit = hit[2] ?? hit[3] ?? hit[4] ?? 'm'
+    const squareMeters = unit.startsWith('acre')
+      ? raw * SQUARE_METERS_PER_ACRE
+      : unit === 'sqft' || unit === 'ft' || unit === 'foot' || unit === 'feet'
+        ? raw * SQUARE_METERS_PER_SQUARE_FOOT
+        : raw
+    found.push({ at: hit.index, end: hit.index + hit[0].length, squareMeters })
+  }
+  const padded = ` ${cleaned} `
+  for (const [words, acres] of ACRE_WORDS) {
+    const at = padded.indexOf(` ${words} `)
+    if (at >= 0)
+      found.push({ at, end: at + words.length, squareMeters: acres * SQUARE_METERS_PER_ACRE })
+  }
+  return found.sort((a, b) => a.at - b.at)
+}
+
+/**
+ * Every area in a sentence, in square meters, in the order they were said.
+ *
+ * An area is what a grower who has never paced out two sides says, and read as a length it once
+ * made "40 sq ft" a plot forty feet across
+ */
+export const areasM2 = (text: string): readonly number[] =>
+  areaHits(cleanedMeasure(text)).map((hit) => hit.squareMeters)
+
+export const lengths = (text: string): readonly number[] => {
+  const cleaned = cleanedMeasure(text)
+  // a number that belongs to an area is not a length as well
+  const areas = areaHits(cleaned)
   const found: { readonly at: number; readonly meters: number }[] = []
   const digits = /(\d+(?:\.\d+)?)\s*(m|metre|metres|meter|meters|ft|foot|feet|cm)?/g
   for (const hit of cleaned.matchAll(digits)) {
     const raw = Number(hit[1])
     if (!Number.isFinite(raw)) continue
+    if (areas.some((area) => hit.index >= area.at && hit.index < area.end)) continue
     const unit = hit[2] ?? 'm'
     const meters =
       unit === 'cm'

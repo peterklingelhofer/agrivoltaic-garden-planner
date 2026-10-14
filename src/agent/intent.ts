@@ -403,6 +403,8 @@ export const INTENTS: readonly Intent[] = [
       'actually make it 8 by 5',
       'change the size to 10 by 10',
       'maybe 20 foot square',
+      'about 200 square feet',
+      '40 sq ft',
     ],
   },
   {

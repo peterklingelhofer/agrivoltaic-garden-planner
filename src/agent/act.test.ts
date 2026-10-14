@@ -474,6 +474,22 @@ describe('changing a garden that already exists', () => {
       6,
     )
   })
+
+  it('draws a square from an area said on its own, and says which area it came from', async () => {
+    const answer = await act(said('set-space', { areaM2: 36 }), context)
+    const resized = answer.utterances.find((utterance) => utterance.kind === 'resized')
+    expect(resized).toMatchObject({ widthM: 6, depthM: 6, fromAreaM2: 36 })
+    expect(polygonAreaM2(getAppState().plot?.boundary ?? { exterior: [], holes: [] })).toBeCloseTo(
+      36,
+      6,
+    )
+  })
+
+  it('lets two sides win over an area said with them', async () => {
+    const answer = await act(said('set-space', { widthM: 8, depthM: 5, areaM2: 36 }), context)
+    const resized = answer.utterances.find((utterance) => utterance.kind === 'resized')
+    expect(resized).toMatchObject({ widthM: 8, depthM: 5, fromAreaM2: null })
+  })
 })
 
 describe('moving the panels', () => {

@@ -27,6 +27,7 @@ const HOLDOUT: readonly {
   { said: 'the back garden of a terrace in Leeds', step: 'location', want: 'set-place' },
   { said: 'roughly twelve meters across and seven deep', step: 'space', want: 'set-space' },
   { said: 'quite a long thin strip, 15 by 3', step: 'space', want: 'set-space' },
+  { said: 'sorry, 200 sq ft', step: 'space', want: 'set-space' },
   { said: 'the house blocks the morning sun', step: 'surroundings', want: 'set-exposure' },
   { said: 'completely exposed, it is a field', step: 'surroundings', want: 'set-exposure' },
   { said: 'things I can put in a stew', step: 'growing', want: 'set-ambition' },

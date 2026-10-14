@@ -5,7 +5,7 @@ import type { IntentId } from './intent'
 import { ANSWERING_SCORE, CONFIDENCE_FLOOR, isNegated, nearMisses, routeLexically } from './lexical'
 import type { OnboardingStep } from '../state/slices'
 import type { RouteContext } from './understand'
-import { lengths } from './vocabulary'
+import { areasM2, lengths } from './vocabulary'
 
 let catalog: readonly Crop[] = []
 beforeAll(async () => {
@@ -644,5 +644,36 @@ describe('measured accuracy on replies to a question', () => {
       `  knowing the question: ${(knowing * 100).toFixed(0)}%, blind: ${(blind * 100).toFixed(0)}%`,
     )
     expect(knowing).toBeGreaterThan(blind + 0.15)
+  })
+})
+
+describe('areas', () => {
+  it('reads square feet, square meters and acres, in square meters', () => {
+    expect(areasM2('sorry, 200 sq ft')[0]).toBeCloseTo(18.58, 2)
+    expect(areasM2('about 200 square feet')[0]).toBeCloseTo(18.58, 2)
+    expect(areasM2('50 m²')).toEqual([50])
+    expect(areasM2('50 sqm')).toEqual([50])
+    expect(areasM2('2 acres')[0]).toBeCloseTo(8093.7, 1)
+    expect(areasM2('half an acre')[0]).toBeCloseTo(2023.4, 1)
+  })
+
+  it('leaves a side alone, so "20 foot square" is a length and nothing else', () => {
+    expect(areasM2('maybe 20 foot square')).toEqual([])
+    expect(lengths('maybe 20 foot square')[0]).toBeCloseTo(6.096, 3)
+    expect(areasM2('my plot is 6 by 4 meters')).toEqual([])
+  })
+
+  it("keeps an area's number out of the lengths", () => {
+    expect(lengths('sorry, 200 sq ft')).toEqual([])
+    expect(lengths('50 m²')).toEqual([])
+  })
+})
+
+describe('a plot given as an area', () => {
+  it('is the space answer, with the area and no side', () => {
+    const reading = routeLexically('sorry, 200 sq ft', at('space'))
+    expect(reading?.intent).toBe('set-space')
+    expect(reading?.slots.areaM2).toBeCloseTo(18.58, 2)
+    expect(reading?.slots.widthM).toBeNull()
   })
 })

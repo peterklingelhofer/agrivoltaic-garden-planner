@@ -19,6 +19,8 @@ export interface Slots {
   readonly widthM: number | null
   readonly depthM: number | null
   readonly lengthM: number | null
+  /** An area said on its own, in square meters: the sides are the app's to choose */
+  readonly areaM2: number | null
   readonly exposure: SiteExposure | null
   readonly ambition: GrowingAmbition | null
   readonly objective: ObjectivePresetId | null
@@ -38,6 +40,7 @@ export const EMPTY_SLOTS: Slots = {
   widthM: null,
   depthM: null,
   lengthM: null,
+  areaM2: null,
   exposure: null,
   ambition: null,
   objective: null,

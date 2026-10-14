@@ -821,13 +821,30 @@ export const act = async (
     case 'set-place':
       return setPlace(state, slots, context.signal ?? null)
     case 'set-space': {
-      if (slots.widthM === null) return blocked('plot')
-      const widthM = slots.widthM
+      // an area on its own names a square, the one rectangle it can: the sides can come later
+      const area =
+        slots.widthM === null && slots.areaM2 !== null && slots.areaM2 > 0 ? slots.areaM2 : null
+      const widthM = slots.widthM ?? (area === null ? null : Math.sqrt(area))
+      if (widthM === null) return blocked('plot')
       // the boundary is the one source of the plot's size, so "make it 8 by 5" is a resize of
       // the plot on screen, and the search reads its size off that
-      const depthM = slots.depthM ?? plotSizeOf(state.plot).depthM
+      const depthM = area === null ? (slots.depthM ?? plotSizeOf(state.plot).depthM) : widthM
       state.setBoundary(polygonOf(rectangleRing(vec2(0, 0), widthM, depthM)))
-      return reply([{ kind: 'resized', widthM, depthM }, noted('space')], { did: ['plot size'] })
+      return reply(
+        [
+          {
+            kind: 'resized',
+            widthM,
+            depthM,
+            fromAreaM2: area,
+            unit: state.lengthUnit,
+            // the light follows an edit by itself unless auto-run is off (`useAutoLight`)
+            recomputing: state.autoRun,
+          },
+          noted('space'),
+        ],
+        { did: ['plot size'] },
+      )
     }
     case 'set-exposure': {
       if (slots.exposure === null) return blocked('plot')

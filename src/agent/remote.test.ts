@@ -76,6 +76,7 @@ const ANSWER = {
     widthM: 6,
     depthM: 4,
     lengthM: null,
+    areaM2: null,
     exposure: null,
     ambition: null,
     objective: null,
@@ -182,6 +183,20 @@ describe('a sentence sent to the edge', () => {
     })
     expect(reading?.slots.widthM).toBe(6)
     expect(reading?.slots.depthM).toBe(4)
+  })
+
+  it('carries an area the model read in place of the sides', async () => {
+    const helper = answering(() =>
+      json(200, {
+        ...ANSWER,
+        slots: { ...ANSWER.slots, widthM: null, depthM: null, areaM2: 18.6 },
+      }),
+    )
+    const understander = createRemoteUnderstander({ fetch: helper.fetch })
+    const reading = await understander.route('sorry, 200 sq ft', context)
+    expect(reading?.intent).toBe('set-space')
+    expect(reading?.slots.areaM2).toBe(18.6)
+    expect(reading?.slots.widthM).toBeNull()
   })
 
   it('keeps only the crops this catalog holds, so an invented name goes nowhere', async () => {

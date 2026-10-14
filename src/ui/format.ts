@@ -21,7 +21,12 @@ import type { CropRecommendation, LimitingFactor, RecommendationVerdict } from '
 import type { LengthUnit } from '../state/slices'
 import type { Fraction, MolPerM2Day, MonthIndex } from '../types/units'
 import type { WeatherSourceId } from '../types/weather'
-import { metersToFeet, showsFigures, type Experience } from './onboarding'
+import {
+  type Experience,
+  metersToFeet,
+  showsFigures,
+  SQUARE_FEET_PER_SQUARE_METER,
+} from './onboarding'
 
 export const POINT_ESTIMATE_REFUSED =
   'src/ui/format.ts refuses a point estimate: Decision Record 7 requires a band'
@@ -166,6 +171,10 @@ export const formatMeters = (value: number): string => `${num(value)} m`
  */
 export const formatLength = (valueM: number, unit: LengthUnit): string =>
   unit === 'm' ? formatMeters(valueM) : `${num(metersToFeet(valueM))} ft`
+
+/** An area in the design's unit, the way the bed summary prints one: "18.6 m²" or "200 sq ft" */
+export const formatArea = (valueM2: number, unit: LengthUnit): string =>
+  unit === 'm' ? `${num(valueM2)} m²` : `${num(valueM2 * SQUARE_FEET_PER_SQUARE_METER)} sq ft`
 
 /**
  * A temperature in both units, the way every size in this app already prints both meters and

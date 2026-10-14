@@ -6,6 +6,7 @@ import {
   AMBITION,
   cropVocabulary,
   EXPOSURE,
+  areasM2,
   lengths,
   MOUNTING,
   NEGATIVE,
@@ -211,6 +212,8 @@ export const PER_WORD_CROP = 0.85
  */
 interface Reading {
   readonly meters: readonly number[]
+  /** The first area said, in square meters, for a plot given by its size alone */
+  readonly areaM2: number | null
   readonly crops: readonly CropId[]
   /**
    * Whether the crops were NAMED or merely resembled.
@@ -238,6 +241,7 @@ const readingOf = (text: string, context: RouteContext): Reading => {
   const found = cropsIn(text, context.catalog)
   return {
     meters: lengths(text),
+    areaM2: areasM2(text)[0] ?? null,
     crops: found.ids,
     cropsAreCertain: found.certain,
     scope: scopeSubjectIn(text),
@@ -257,12 +261,12 @@ const readingOf = (text: string, context: RouteContext): Reading => {
 export const SPOKEN_ANSWER = 0.6
 
 const fillSlots = (intent: Intent, text: string, reading: Reading, spoken: number): Slots => {
-  const { meters, crops } = reading
+  const { meters, crops, areaM2 } = reading
   switch (intent.slot) {
     case 'place':
       return { ...EMPTY_SLOTS, place: placeIn(text) }
     case 'dimensions':
-      return { ...EMPTY_SLOTS, widthM: meters[0] ?? null, depthM: meters[1] ?? null }
+      return { ...EMPTY_SLOTS, widthM: meters[0] ?? null, depthM: meters[1] ?? null, areaM2 }
     case 'length':
       return { ...EMPTY_SLOTS, lengthM: meters[0] ?? null, yesNo: yesNoOf(text) }
     case 'exposure':

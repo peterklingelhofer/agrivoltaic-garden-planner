@@ -8,7 +8,7 @@ import type { ScopeTopic } from '../agent/vocabulary'
 import type { ComplianceCheck, ComplianceOutcome } from '../types/compliance'
 import { ARCHETYPE_LABEL } from '../recommend/design'
 import { cropName } from '../data/crops'
-import { explainLimitingFactor } from './format'
+import { explainLimitingFactor, formatArea, formatLength } from './format'
 import type { Crop } from '../types/crop'
 import { actionLabel } from './agenda'
 import { dayLabel } from './calendar'
@@ -733,17 +733,23 @@ export const wordsFor = (utterance: Utterance, catalog: readonly Crop[]): readon
       ]
     case 'started-over':
       return [{ text: 'Cleared. You can start from the beginning.', tone: 'say' }]
-    case 'resized':
-      return [
-        {
-          text: `The plot is ${String(utterance.widthM)} by ${String(utterance.depthM)} meters now.`,
-          tone: 'say',
-        },
-        {
-          text: "The light was computed for the old shape, so those numbers are stale until it's run again.",
-          tone: 'caveat',
-        },
-      ]
+    case 'resized': {
+      const width = formatLength(utterance.widthM, utterance.unit)
+      const depth = formatLength(utterance.depthM, utterance.unit)
+      const shape =
+        utterance.fromAreaM2 === null
+          ? `The plot is ${width} by ${depth} now.`
+          : `${formatArea(utterance.fromAreaM2, utterance.unit)} is about ${width} by ${depth}, a square until you give me the two sides.`
+      // `useAutoLight` runs the full check about a second after the last edit, so the figures on
+      // screen are stale only while auto-run is switched off
+      const light: Line = utterance.recomputing
+        ? { text: 'The light is being computed again for the new shape.', tone: 'say' }
+        : {
+            text: "The light was computed for the old shape, so those numbers are stale until it's run again.",
+            tone: 'caveat',
+          }
+      return [{ text: shape, tone: 'say' }, light]
+    }
     case 'methods': {
       const rasterLine: Line =
         utterance.raster === null

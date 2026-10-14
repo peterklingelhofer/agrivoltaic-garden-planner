@@ -1,7 +1,15 @@
 import { describe, expect, it } from 'bun:test'
 import type { ExecutionContextLike, ProxyEnv } from './env'
 import { readFileSync } from 'node:fs'
-import { CROP_LIMIT, DEFAULT_HELPER_MODEL, HELPER_INTENTS, HELPER_PATH, TEXT_LIMIT } from './helper'
+import {
+  CROP_LIMIT,
+  DEFAULT_HELPER_MODEL,
+  HELPER_INTENTS,
+  HELPER_PATH,
+  HELPER_SCHEMA,
+  SYSTEM,
+  TEXT_LIMIT,
+} from './helper'
 import handler from './index'
 import { PROXY_PREFIX } from './routes'
 
@@ -247,5 +255,15 @@ describe('the crop list limit', () => {
     }
     expect(catalog.crops.length).toBeGreaterThan(0)
     expect(CROP_LIMIT).toBeGreaterThanOrEqual(catalog.crops.length)
+  })
+})
+
+/** An area said on its own was a length to the model until the slot existed to put it in */
+describe('the area slot', () => {
+  it('is in the schema the model fills and in the rules it reads', () => {
+    const slots = HELPER_SCHEMA.properties.slots
+    expect(Object.keys(slots.properties)).toContain('areaM2')
+    expect(slots.required).toContain('areaM2')
+    expect(SYSTEM).toContain('areaM2')
   })
 })

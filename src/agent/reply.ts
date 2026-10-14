@@ -4,7 +4,7 @@ import type { ComplianceCheck } from '../types/compliance'
 import type { PvEnergyReport } from '../types/energy'
 import type { LimitingFactor } from '../types/recommend'
 import type { BedWaterBalance } from '../types/water'
-import type { OnboardingStep } from '../state/slices'
+import type { LengthUnit, OnboardingStep } from '../state/slices'
 import type { CitationId } from '../types/citation-ids.generated'
 import type { CropId } from '../types/ids'
 import type { CandidateArchetype } from '../types/onboarding'
@@ -210,7 +210,17 @@ export type Utterance =
    */
   | { readonly kind: 'out-of-scope'; readonly topic: ScopeTopic }
   /** The plot was reshaped as well as recorded, which only happens once one has been drawn */
-  | { readonly kind: 'resized'; readonly widthM: number; readonly depthM: number }
+  | {
+      readonly kind: 'resized'
+      readonly widthM: number
+      readonly depthM: number
+      /** The area the sides were drawn from, when an area was all that was said */
+      readonly fromAreaM2: number | null
+      /** The unit the design is kept in, so the sentence prints what the grower said */
+      readonly unit: LengthUnit
+      /** Whether the light follows by itself, or waits for the press because auto-run is off */
+      readonly recomputing: boolean
+    }
   /** What this whole application is for, as a fixed definition */
   | { readonly kind: 'define' }
   /**

@@ -126,6 +126,7 @@ const SLOT_NAMES: readonly string[] = [
   'widthM',
   'depthM',
   'lengthM',
+  'areaM2',
   'exposure',
   'ambition',
   'objective',
@@ -159,6 +160,7 @@ export const HELPER_SCHEMA = {
         widthM: NULLABLE_NUMBER,
         depthM: NULLABLE_NUMBER,
         lengthM: NULLABLE_NUMBER,
+        areaM2: NULLABLE_NUMBER,
         exposure: nullableEnum(EXPOSURE),
         ambition: nullableEnum(AMBITION),
         objective: nullableEnum(OBJECTIVE),
@@ -202,6 +204,8 @@ export const SYSTEM = [
   'Slot rules:',
   '- Every length is in meters. Convert feet before you answer.',
   '- "6 by 4" is widthM 6 and depthM 4. A single side goes in widthM.',
+  '- An area on its own ("200 sq ft", "50 m²", "a quarter acre") goes in areaM2, in square',
+  '  meters, with widthM and depthM null. "20 foot square" is a side of 20 feet, in widthM.',
   '- lengthM is only ever a height limit for the panels.',
   '- yesNo answers the two wildlife questions and the water question.',
   '- crops may only hold ids from the list the request gives you. Leave it empty otherwise.',
@@ -233,6 +237,7 @@ export interface HelperSlots {
   readonly widthM: number | null
   readonly depthM: number | null
   readonly lengthM: number | null
+  readonly areaM2: number | null
   readonly exposure: string | null
   readonly ambition: string | null
   readonly objective: string | null
@@ -311,6 +316,7 @@ const readSlots = (value: unknown, allowed: readonly string[]): HelperSlots => {
     widthM: asNumber(raw.widthM),
     depthM: asNumber(raw.depthM),
     lengthM: asNumber(raw.lengthM),
+    areaM2: asNumber(raw.areaM2),
     exposure: asMember(raw.exposure, EXPOSURE),
     ambition: asMember(raw.ambition, AMBITION),
     objective: asMember(raw.objective, OBJECTIVE),

@@ -108,6 +108,7 @@ const readSlots = (value: unknown, catalog: readonly Crop[]): Slots => {
     widthM: asNumber(raw.widthM),
     depthM: asNumber(raw.depthM),
     lengthM: asNumber(raw.lengthM),
+    areaM2: asNumber(raw.areaM2),
     exposure: asChoice(raw.exposure, EXPOSURE),
     ambition: asChoice(raw.ambition, AMBITION),
     objective: asChoice(raw.objective, OBJECTIVE),
