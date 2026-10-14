@@ -31,7 +31,13 @@ export const HELPER_MAX_TOKENS = 240
 export const TEXT_LIMIT = 400
 export const STEP_LIMIT = 40
 export const SUMMARY_LIMIT = 600
-export const CROP_LIMIT = 250
+/**
+ * The panel sends every catalog id with each reading, so the model can name a crop by id, and
+ * a list longer than this is refused. The catalog is 264 rows and `helper.test.ts` holds this
+ * above its count: at 250 the route answered 400 to every reading once batches 2 and 3 landed,
+ * and the panel fell back to the phrase table without a word
+ */
+export const CROP_LIMIT = 400
 export const CROP_ID_LIMIT = 60
 
 /**

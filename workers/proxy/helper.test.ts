@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'bun:test'
 import type { ExecutionContextLike, ProxyEnv } from './env'
-import { DEFAULT_HELPER_MODEL, HELPER_INTENTS, HELPER_PATH, TEXT_LIMIT } from './helper'
+import { readFileSync } from 'node:fs'
+import { CROP_LIMIT, DEFAULT_HELPER_MODEL, HELPER_INTENTS, HELPER_PATH, TEXT_LIMIT } from './helper'
 import handler from './index'
 import { PROXY_PREFIX } from './routes'
 
@@ -231,5 +232,20 @@ describe('the intent list the model is given', () => {
   it('says what every one of them means, so a label is never guessed from its id alone', () => {
     expect(HELPER_INTENTS.every((intent) => intent.means.length > 10)).toBe(true)
     expect(new Set(HELPER_INTENTS.map((intent) => intent.id)).size).toBe(HELPER_INTENTS.length)
+  })
+})
+
+/**
+ * The panel sends the whole catalog's ids with every reading. A cap under the catalog's size turns
+ * every reading into a 400 and the panel drops to the phrase table in silence, which is what the
+ * crop batches of October 2026 did to a cap of 250
+ */
+describe('the crop list limit', () => {
+  it('covers every row of the catalog the panel sends', () => {
+    const catalog = JSON.parse(readFileSync('data/crop-catalog.json', 'utf8')) as {
+      readonly crops: readonly unknown[]
+    }
+    expect(catalog.crops.length).toBeGreaterThan(0)
+    expect(CROP_LIMIT).toBeGreaterThanOrEqual(catalog.crops.length)
   })
 })
