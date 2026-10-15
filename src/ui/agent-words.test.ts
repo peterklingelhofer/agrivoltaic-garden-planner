@@ -45,6 +45,8 @@ describe('the words for a resized plot', () => {
       [],
     )
     // the app's own meter formatter, two decimals under ten, so one rule prints every length
-    expect(lines[0]?.text).toBe(`The plot is ${formatLength(6, 'm')} by ${formatLength(4, 'm')} now.`)
+    expect(lines[0]?.text).toBe(
+      `The plot is ${formatLength(6, 'm')} by ${formatLength(4, 'm')} now.`,
+    )
   })
 })
