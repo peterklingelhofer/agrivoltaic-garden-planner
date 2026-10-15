@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it } from 'bun:test'
 import { siteFixture } from '../recommend/testkit'
+import { extentOf } from '../state/geom'
 import { ready } from '../state/slices'
 import { getAppState, resetAppStore, useAppStore } from '../state/store'
 import { designScenarioFixture } from '../state/testkit'
@@ -22,7 +23,9 @@ const understander = createLexicalUnderstander()
 let catalog: readonly Crop[] = []
 
 const say = async (text: string, step: OnboardingStep | null = getAppState().onboarding.step) =>
-  converse(text, { step, catalog }, understander, { state: getAppState })
+  converse(text, { step, catalog, lengthUnit: getAppState().lengthUnit }, understander, {
+    state: getAppState,
+  })
 
 beforeEach(async () => {
   localStorage.clear()
@@ -168,5 +171,28 @@ describe('what it refuses to split', () => {
     await getAppState().applyDesign(designScenarioFixture('balanced'))
     const { understood } = await say('what have i got then thanks')
     expect(understood.map((entry) => entry.intent)).not.toContain('undo')
+  })
+})
+
+describe('the unit the grower speaks in', () => {
+  it('becomes the design unit, so a bare number after it is read in it', async () => {
+    await say('my plot is 30 by 40 feet', 'space')
+    expect(getAppState().lengthUnit).toBe('ft')
+    await say('actually make it 25 by 35', 'space')
+    const plot = getAppState().plot
+    expect(plot).not.toBeNull()
+    if (plot === null) return
+    const extent = extentOf([plot.boundary.exterior])
+    expect(extent.maxXM - extent.minXM).toBeCloseTo(25 * 0.3048, 3)
+  })
+})
+
+describe('two clauses answering one question', () => {
+  it('acknowledge it once', async () => {
+    const { reply } = await say(
+      'there is a wall on one side and there are trees around it',
+      'surroundings',
+    )
+    expect(reply.utterances.filter((entry) => entry.kind === 'noted')).toHaveLength(1)
   })
 })

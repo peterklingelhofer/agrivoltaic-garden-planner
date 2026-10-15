@@ -15,7 +15,7 @@ import { connectionHint, looksUnmetered, MODEL_DOWNLOAD_MB } from '../agent/conn
 import { createLexicalUnderstander } from '../agent/lexical'
 import type { AgentReply } from '../agent/reply'
 import type { Understander } from '../agent/understand'
-import { nextQuestion } from '../agent/conversation'
+import { nextQuestion, QUESTION_STEPS } from '../agent/conversation'
 import { EMPTY_SLOTS, type Understanding } from '../agent/understand'
 import type { OnboardingStep } from '../state/slices'
 import { MODEL_CHOICE_KEY } from '../state/persist'
@@ -208,8 +208,23 @@ const Sources = ({ ids }: { readonly ids?: readonly CitationId[] }): ReactElemen
     </span>
   )
 
-const linesOf = (answer: AgentReply, catalog: readonly Crop[]): readonly Line[] =>
-  answer.utterances.flatMap((utterance) => wordsFor(utterance, catalog))
+/**
+ * One reply's lines, with one acknowledgment however many questions it answered.
+ *
+ * "I have a 20 by 30 foot backyard in Pitman, pretty shady" answers three questions, and each is
+ * recorded as its own `noted` so the conversation knows what was said. Three "Got it." lines in
+ * one reply read as a stammer, so the words are said once and the record stays whole
+ */
+const linesOf = (answer: AgentReply, catalog: readonly Crop[]): readonly Line[] => {
+  let acknowledged = false
+  return answer.utterances.flatMap((utterance) => {
+    if (utterance.kind === 'noted') {
+      if (acknowledged) return []
+      acknowledged = true
+    }
+    return wordsFor(utterance, catalog)
+  })
+}
 
 /** An intent dispatched by name, which is what a chip does */
 const dispatched = (intent: IntentId, matched: string): Understanding => ({
@@ -234,6 +249,7 @@ const startedARun = (answer: AgentReply): boolean =>
       utterance.kind === 'blocked' &&
       (utterance.need === 'light-running' ||
         utterance.need === 'ranking-running' ||
+        utterance.need === 'comparison-running' ||
         utterance.need === 'energy'),
   )
 
@@ -383,7 +399,7 @@ export const AgentPanel = (): ReactElement => {
    * progress bar and no idea how long a year of light simulation takes pressing send until
    * something changed. The agent started the work. Finishing the sentence is its job
    */
-  const [waiting, setWaiting] = useState<IntentId | null>(null)
+  const [waiting, setWaiting] = useState<Understanding | null>(null)
   const log = useRef<HTMLDivElement | null>(null)
   const scroll = useScrollable(log, turns.length)
   const box = useRef<HTMLTextAreaElement | null>(null)
@@ -470,7 +486,7 @@ export const AgentPanel = (): ReactElement => {
       try {
         // the sentence waits briefly for the better router to answer, and is never raced against it
         await readyOrTimeout()
-        const context = { step, catalog: known }
+        const context = { step, catalog: known, lengthUnit: getAppState().lengthUnit }
         /*
           One press, however many things were asked for. `converse` splits the sentence, routes
           each half and carries them out in order. A chip short-circuits the routing entirely,
@@ -489,7 +505,12 @@ export const AgentPanel = (): ReactElement => {
           visitor with no way of knowing how long a year of light simulation takes would be left
           pressing send again
         */
-        const asking = intent ?? spoken?.understood[spoken.understood.length - 1]?.intent ?? null
+        // the whole reading, slots and all: "how much do I lose to the shade" asked again with
+        // no subject would be a different question
+        const asking =
+          intent !== undefined
+            ? dispatched(intent, trimmed)
+            : (spoken?.understood[spoken.understood.length - 1] ?? null)
         if (asking !== null && startedARun(answer)) setWaiting(asking)
         /*
           Whatever this reply recorded, plus the question to ask next. Asking for what is still
@@ -501,6 +522,13 @@ export const AgentPanel = (): ReactElement => {
         if (recorded.length > 0) setAnswered(nowAnswered)
         const ask = recorded.length === 0 ? null : nextQuestion(nowAnswered)
         if (ask !== null) setOnboardingStep(ask)
+        /*
+          And with nothing left to ask, the results step, which is what the search waits on.
+          Left standing on the last question, "ok use it" was read as one more yes to the
+          question about pollinators and "what would you suggest" as a request for a crop list,
+          because every reader is told which question is on screen and that one was answered
+        */ else if (recorded.length > 0 && QUESTION_STEPS.includes(getAppState().onboarding.step))
+          setOnboardingStep('results')
         /*
           The same question twice running is asked short. Answering the height question while the
           one about native planting is on screen is normal and allowed, and it leaves that
@@ -568,7 +596,7 @@ export const AgentPanel = (): ReactElement => {
       if (!alive || running) return
       running = true
       try {
-        const answer = await act(dispatched(waiting, ''), { state: getAppState })
+        const answer = await act(waiting, { state: getAppState })
         if (!alive || startedARun(answer)) return
         alive = false
         setWaiting(null)
@@ -591,7 +619,11 @@ export const AgentPanel = (): ReactElement => {
       const energySettled =
         previous.energy.status !== state.energy.status &&
         (state.energy.status === 'ready' || state.energy.status === 'error')
-      if (bakeFinished || rankingLanded || energySettled) void attempt()
+      // and the no-panels comparison, the fourth run the agent starts for a question
+      const comparisonSettled =
+        previous.noPanels.status !== state.noPanels.status &&
+        (state.noPanels.status === 'ready' || state.noPanels.status === 'error')
+      if (bakeFinished || rankingLanded || energySettled || comparisonSettled) void attempt()
     })
     /*
       And once now, because a run can finish before this effect exists.

@@ -267,3 +267,18 @@ describe('the area slot', () => {
     expect(SYSTEM).toContain('areaM2')
   })
 })
+
+describe('what the model is told about the choices', () => {
+  /**
+   * Measured without these: a fence and a maple read as an open site, "food matters more" as
+   * balanced, "raise the panels" as lower, "spread the rows out" as flatter, and the plot size
+   * copied out of the summary into a question about electricity
+   */
+  it('glosses every closed value and keeps the summary out of the slots', () => {
+    expect(SYSTEM).toContain('overhead-canopy (panels above the beds')
+    expect(SYSTEM).toContain('wider-spacing')
+    expect(SYSTEM).toContain('partly-sheltered (a fence')
+    expect(SYSTEM).toContain('Never copy the place, the plot size or the')
+    expect(SYSTEM).toContain('Once the summary says layouts were offered')
+  })
+})

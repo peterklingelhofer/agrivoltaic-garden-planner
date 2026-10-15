@@ -2,6 +2,7 @@ import type { Crop } from '../types/crop'
 import type { CropId } from '../types/ids'
 import type { GrowingAmbition, MountingPreference, SiteExposure } from '../types/onboarding'
 import type { ObjectivePresetId } from '../state/onboarding'
+import type { LengthUnit } from '../state/slices'
 import { normalize, tokens } from './text'
 
 export interface Candidate<T> {
@@ -665,7 +666,24 @@ const areaHits = (cleaned: string): readonly AreaHit[] => {
 export const areasM2 = (text: string): readonly number[] =>
   areaHits(cleanedMeasure(text)).map((hit) => hit.squareMeters)
 
-export const lengths = (text: string): readonly number[] => {
+/**
+ * The unit a sentence measures in, where it names one, so the design can be kept in the unit
+ * the grower speaks. "30 by 40 feet" said once means the next "25 by 35" is feet as well
+ */
+export const unitSaid = (text: string): LengthUnit | null => {
+  const cleaned = ` ${cleanedMeasure(text)} `
+  if (/ (ft|foot|feet|sqft) /.test(cleaned) || /\d(ft|feet)\b/.test(cleaned)) return 'ft'
+  if (/ (m|metre|metres|meter|meters|cm|sqm) /.test(cleaned) || /\d(m|cm)\b/.test(cleaned))
+    return 'm'
+  return null
+}
+
+/**
+ * Every length in a sentence, in meters, in the order said. A number with no unit is read in
+ * `unit`, the one the design is kept in, because "25 by 35" from somebody who said feet a
+ * sentence ago is feet
+ */
+export const lengths = (text: string, unit: LengthUnit = 'm'): readonly number[] => {
   const cleaned = cleanedMeasure(text)
   // a number that belongs to an area is not a length as well
   const areas = areaHits(cleaned)
@@ -675,18 +693,26 @@ export const lengths = (text: string): readonly number[] => {
     const raw = Number(hit[1])
     if (!Number.isFinite(raw)) continue
     if (areas.some((area) => hit.index >= area.at && hit.index < area.end)) continue
-    const unit = hit[2] ?? 'm'
+    const said = hit[2] ?? (unit === 'ft' ? 'ft' : 'm')
     const meters =
-      unit === 'cm'
+      said === 'cm'
         ? raw / 100
-        : unit === 'ft' || unit === 'foot' || unit === 'feet'
+        : said === 'ft' || said === 'foot' || said === 'feet'
           ? raw * 0.3048
           : raw
     found.push({ at: hit.index, meters })
   }
   for (const [word, value] of Object.entries(WORD_NUMBER)) {
     const at = cleaned.indexOf(` ${word} `)
-    if (at >= 0) found.push({ at, meters: value })
+    if (at < 0) continue
+    // "two meters" names its unit; a bare "two" is in the design's
+    const after = cleaned.slice(at + word.length + 2).split(' ')[0] ?? ''
+    const said = /^(m|metre|metres|meter|meters)$/.test(after)
+      ? 'm'
+      : /^(ft|foot|feet)$/.test(after)
+        ? 'ft'
+        : unit
+    found.push({ at, meters: said === 'ft' ? value * 0.3048 : value })
   }
   return found.sort((a, b) => a.at - b.at).map((entry) => entry.meters)
 }
@@ -749,6 +775,16 @@ export const singularize = (text: string): string => tokens(text).map(singular).
 const heads = new WeakMap<readonly Crop[], ReadonlyMap<string, readonly CropId[]>>()
 
 /**
+ * Heads that are a word for any plant, or a botanical suffix, and so name no crop at all.
+ *
+ * "Plant" is the last word of cup plant, tea plant and oyster plant, so "when should I plant the
+ * tomatoes" read as naming salsify and tea beside the tomato. "Group" is the suffix of cultivar
+ * groups (Acephala Group) in the synonyms. A head only earns its place by being what a grower
+ * calls the crop, and nobody calls anything "a plant"
+ */
+const GENERIC_HEADS: ReadonlySet<string> = new Set(['plant', 'group'])
+
+/**
  * Every crop indexed by the LAST word of each of its names.
  *
  * This closes the router's largest usability hole, and it's a hole made by the catalog being
@@ -772,7 +808,7 @@ export const cropsByHead = (catalog: readonly Crop[]): ReadonlyMap<string, reado
       const head = words[words.length - 1]
       // a one-word name is already reachable by exact match, and indexing it here would only
       // let a longer name's head silently outvote it
-      if (head === undefined || words.length < 2) continue
+      if (head === undefined || words.length < 2 || GENERIC_HEADS.has(head)) continue
       const list = made.get(head) ?? []
       if (!list.includes(crop.id)) list.push(crop.id)
       made.set(head, list)

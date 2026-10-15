@@ -237,10 +237,21 @@ interface Reading {
   readonly cropWords: ReadonlySet<string>
 }
 
+/**
+ * The crops a sentence names, by name alone: an exact catalog name, a head noun a group shares,
+ * or a near-spelling. Nothing merely resembled. A reader that can be wrong about a name, such as
+ * a model that dropped the lettuce from "peppers, and some lettuce", gets a second one that
+ * reads names and nothing else
+ */
+export const namedCrops = (text: string, catalog: RouteContext['catalog']): readonly CropId[] => {
+  const found = cropsIn(text, catalog)
+  return found.certain ? found.ids : []
+}
+
 const readingOf = (text: string, context: RouteContext): Reading => {
   const found = cropsIn(text, context.catalog)
   return {
-    meters: lengths(text),
+    meters: lengths(text, context.lengthUnit ?? 'm'),
     areaM2: areasM2(text)[0] ?? null,
     crops: found.ids,
     cropsAreCertain: found.certain,

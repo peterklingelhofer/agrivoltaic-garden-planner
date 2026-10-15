@@ -51,16 +51,20 @@ export const CROP_ID_LIMIT = 60
  */
 export const HELPER_INTENTS: readonly { readonly id: string; readonly means: string }[] = [
   { id: 'greeting', means: 'hello, thanks or goodbye, with nothing about the garden in it' },
-  { id: 'help', means: "they're stuck and want to know what they can say here" },
+  {
+    id: 'help',
+    means: "they ask what this agent can do or what they can say here ('help', 'what can you do')",
+  },
   { id: 'describe-garden', means: 'read back what is in the plot at the moment' },
   {
     id: 'explain',
-    means: 'why a number or a planting is what it is; subject carries what was asked about',
+    means:
+      'why a number, a date, a planting or a layout is what it is, or whether a crop gets enough light; subject carries the sentence',
   },
   {
     id: 'list-crops',
     means:
-      'what to plant, what would grow, or what suits the beds or the ground under the panels, as a ranked list',
+      'what to plant, what would grow, or what suits the beds or the ground under the panels, as a ranked list; never "what goes well with X" or "next to X", which is ask-companions',
   },
   {
     id: 'out-of-scope',
@@ -69,10 +73,22 @@ export const HELPER_INTENTS: readonly { readonly id: string; readonly means: str
   { id: 'define', means: 'what agrivoltaics is, and what this app is for' },
   { id: 'ask-energy', means: 'how much electricity the panels will make' },
   { id: 'ask-calendar', means: 'sowing and harvest dates, for the crops named in crops' },
-  { id: 'ask-agenda', means: 'what to do next, as a month by month list of tasks' },
-  { id: 'ask-compliance', means: 'whether the design meets the state rules the app checks' },
+  {
+    id: 'ask-agenda',
+    means:
+      'what to do in the garden next, now, first or this month ("what do I do first", "what needs doing"), as a dated list of tasks',
+  },
+  {
+    id: 'ask-compliance',
+    means:
+      'whether the design meets the state rules the app checks ("is this legal", "is it allowed", "does it meet the rules")',
+  },
   { id: 'ask-water', means: 'how much watering the garden will need' },
-  { id: 'ask-companions', means: 'which crops grow well beside the ones named in crops' },
+  {
+    id: 'ask-companions',
+    means:
+      'which crops grow well with, beside or next to the one named in crops ("what goes well with tomatoes", "what should I plant next to the strawberries")',
+  },
   { id: 'ask-sources', means: 'the papers and datasets the numbers come from' },
   { id: 'set-place', means: 'where the garden is; place carries the town or the address' },
   { id: 'set-space', means: 'how big the plot is; widthM and depthM carry the two sides' },
@@ -82,18 +98,42 @@ export const HELPER_INTENTS: readonly { readonly id: string; readonly means: str
   { id: 'set-pollinators', means: 'whether they want planting for pollinators; yesNo' },
   { id: 'set-objective', means: 'how to weigh food against electricity; objective' },
   { id: 'set-mounting', means: 'how the panels should sit over or beside the beds; mounting' },
-  { id: 'set-height', means: 'a height limit for the panels, in meters; lengthM' },
+  {
+    id: 'set-height',
+    means:
+      'a height LIMIT the layout may not exceed ("nothing taller than", "keep it under 2 m", "no height limit"); lengthM. Moving panels already on the plot is adjust-panels',
+  },
   { id: 'set-water', means: 'whether the plot can be watered; yesNo' },
   { id: 'like-crop', means: 'they want these crops; crops' },
   { id: 'dislike-crop', means: "they don't want these crops; crops" },
-  { id: 'propose-designs', means: 'run the design search and offer some layouts' },
-  { id: 'apply-design', means: 'commit one of the layouts already offered' },
+  {
+    id: 'propose-designs',
+    means:
+      'run the design search and offer some layouts ("design it for me", "what would you suggest", a bare "go" or "ok" before any layout exists)',
+  },
+  {
+    id: 'apply-design',
+    means:
+      'commit one of the layouts the summary says were offered ("use that one", "go with the one you recommend", "the balanced one", "ok use it"); subject carries the sentence',
+  },
   { id: 'plan-planting', means: 'fill every bed with crops' },
   { id: 'remove-planting', means: 'take the named crops out of the beds; crops' },
-  { id: 'adjust-panels', means: 'move the panels; panels says which way' },
+  {
+    id: 'adjust-panels',
+    means:
+      'move the panels already on the plot ("raise them", "tilt them more", "spread the rows out", "make them 10 feet high"); panels says which way, lengthM an exact height if one is said',
+  },
   { id: 'add-bed', means: 'add another bed to the plot' },
-  { id: 'start-over', means: 'forget the whole design and begin again' },
-  { id: 'undo', means: 'put back what the last change altered' },
+  {
+    id: 'start-over',
+    means:
+      'forget the whole design and begin again, only when they say so in as many words ("start over", "start again", "clear everything")',
+  },
+  {
+    id: 'undo',
+    means:
+      'put back what the last change altered ("undo", "scratch that", "put it back", "i did not mean that", "cancel that")',
+  },
   { id: 'show-the-form', means: 'stop the conversation and use the guided questions instead' },
 ]
 
@@ -201,15 +241,37 @@ export const SYSTEM = [
   'Pick one intent from this list:',
   ...HELPER_INTENTS.map((intent) => `- ${intent.id}: ${intent.means}`),
   '',
+  'What the choice slots mean:',
+  '- exposure: open (nothing shades the plot), partly-sheltered (a fence, a wall, a hedge, a',
+  '  building or a few trees shade part of it), overshadowed (big trees or buildings shade most',
+  '  of it).',
+  '- ambition: leafy-and-herbs (salad, greens, herbs), mixed-vegetables (a mix of ordinary',
+  '  vegetables), fruiting-and-berries (tomatoes, peppers, squash, strawberries, fruit).',
+  '- objective: mostly-food (the harvest matters more than the power), balanced (both alike),',
+  '  mostly-electricity (the power matters more than the harvest).',
+  '- mounting: overhead-canopy (panels above the beds, walk under them), ground-rows (rows',
+  '  standing on the ground between or beside the beds), vertical-bifacial (upright panels, like',
+  '  a fence), any (no preference).',
+  '- panels: taller (raise them, more headroom, higher off the ground), lower (bring them down,',
+  '  closer to the ground), steeper (tilt them more), flatter (tilt them less), wider-spacing',
+  '  (spread the rows out, further apart), tighter-spacing (bring the rows closer together).',
+  '- scope: cost (money, payback), permitting (a permit, planning permission), wildlife (deer,',
+  '  pests, animals), grid (export, batteries, inverters), structure (the frame, foundations,',
+  '  installation), soil (a description of the soil).',
+  '',
   'Slot rules:',
-  '- Every length is in meters. Convert feet before you answer.',
+  '- A slot holds only what this sentence says. Never copy the place, the plot size or the',
+  '  plantings out of the garden summary into a slot: the summary is context for reading it.',
+  '- Every length is in meters. Convert feet before you answer. A length with no unit is in the',
+  '  unit the garden summary names.',
   '- "6 by 4" is widthM 6 and depthM 4. A single side goes in widthM.',
   '- An area on its own ("200 sq ft", "50 m²", "a quarter acre") goes in areaM2, in square',
   '  meters, with widthM and depthM null. "20 foot square" is a side of 20 feet, in widthM.',
   '- lengthM is only ever a height limit for the panels.',
   '- yesNo answers the two wildlife questions and the water question.',
   '- crops may only hold ids from the list the request gives you. Leave it empty otherwise.',
-  '- subject is the words they asked about, verbatim, for explain and define.',
+  '- subject is the whole sentence, verbatim, for explain, define, list-crops, apply-design',
+  '  and out-of-scope.',
   "- scope names the thing the app doesn't model: cost, permitting, wildlife, grid, structure,",
   '  soil.',
   '- panels says which way to move them, for adjust-panels.',
@@ -219,8 +281,10 @@ export const SYSTEM = [
   '',
   'The step is the question on screen. It makes an answer to that question more likely and it',
   'never rules anything out: somebody standing on the height question is still allowed to say',
-  'they hate parsnips. A bare word of assent on the results step ("go", "ok", "do it", "run',
-  'it") is propose-designs: the search is what that step is waiting on.',
+  'they hate parsnips. On the results step, before any layout exists, a bare word of assent',
+  '("go", "ok", "do it", "run it") is propose-designs: the search is what that step is waiting on.',
+  'Once the summary says layouts were offered, "use it", "go with that", "the one you',
+  'recommend" and a layout named by its label are apply-design, never a second search.',
   '',
   "Confidence is 0.9 or above when the reading is clear, and below 0.5 when you're guessing.",
 ].join('\n')

@@ -3,7 +3,7 @@ import type { CropId } from '../types/ids'
 import type { GrowingAmbition, MountingPreference, SiteExposure } from '../types/onboarding'
 import type { ObjectivePresetId } from '../state/onboarding'
 import type { PanelChange, ScopeTopic } from './vocabulary'
-import type { OnboardingStep } from '../state/slices'
+import type { LengthUnit, OnboardingStep } from '../state/slices'
 import type { IntentId } from './intent'
 
 /**
@@ -91,6 +91,8 @@ export interface RouteContext {
    */
   readonly step: OnboardingStep | null
   readonly catalog: readonly Crop[]
+  /** The unit the design is kept in, which is what a bare "25 by 35" is read in. Meters when unset */
+  readonly lengthUnit?: LengthUnit
 }
 
 /**

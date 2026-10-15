@@ -1,16 +1,17 @@
 import { buildAgenda } from '../recommend/agenda'
 import { ruleJoinsPair } from '../recommend/compatibility'
 import { geocode } from '../data/geocode'
+import type { PlanRefusal } from '../recommend/planting'
 import { dayOfYearAt } from '../state/sun'
 import { waterBalanceView } from '../state/water'
-import type { Agenda } from '../types/agenda'
-import { polygonAreaM2, polygonOf, rectangleRing, vec2 } from '../state/geom'
+import type { Agenda, AgendaItem } from '../types/agenda'
+import { extentOf, polygonAreaM2, polygonOf, rectangleRing, vec2 } from '../state/geom'
 import { makeBed, nextBedIndex, soilForSite } from '../state/defaults'
 import { OBJECTIVE_PRESETS, plotSizeOf } from '../state/onboarding'
 import type { AppState, OnboardingStep } from '../state/slices'
 import type { CitationId } from '../types/citation-ids.generated'
 import type { BedId, CropId } from '../types/ids'
-import type { CandidateArchetype } from '../types/onboarding'
+import type { CandidateArchetype, ScenarioSet } from '../types/onboarding'
 import { degrees, meters } from '../types/units'
 
 /**
@@ -21,13 +22,16 @@ import { degrees, meters } from '../types/units'
  */
 export const PANEL_STEP_M = 0.5
 export const TILT_STEP_DEG = 5
+import { QUESTION_STEPS } from './conversation'
 import type { IntentId } from './intent'
 import {
-  reply,
   type AgentReply,
   type ArrayAssumptions,
+  type BedLightVerdict,
   type BlockedNeed,
   type Capability,
+  mergeReplies,
+  reply,
   type Utterance,
 } from './reply'
 import type { Slots, Understanding } from './understand'
@@ -251,8 +255,9 @@ const explainWithoutACrop = (state: AppState, subject: string): AgentReply | nul
     said.includes('which studies') ||
     said.includes('is the yield')
   if (asksMethod) {
+    // the step is set so the editor opens on it, and the conversation stays on screen with the
+    // answer in it
     state.setSidebarStep('light')
-    state.setSurface('edit')
     return reply([
       {
         kind: 'methods',
@@ -292,6 +297,40 @@ const plantedCrops = (state: AppState): readonly CropId[] => {
   return [...new Set(plot.beds.flatMap((bed) => bed.plantings.map((entry) => entry.cropId)))]
 }
 
+/** The crops the grower asked for, which is what a planting report answers about first */
+const wantedCrops = (state: AppState): ReadonlySet<CropId> =>
+  new Set(
+    state.preferences.entries
+      .filter((entry) => entry.kind === 'prefer' || entry.kind === 'require')
+      .map((entry) => entry.cropId),
+  )
+
+/**
+ * The planner's refusals as the grower reads them: verbatim for a crop they asked for, and one
+ * line counting the rest.
+ *
+ * "Fill the beds" came back with twenty lines of trees that "stay for years, so it joins a bed
+ * only when you ask for it", about crops nobody had named, and a wall of notes is read as
+ * carefully as none. The reasons stay in the plants step, one per crop, where they were already
+ */
+const refusalLines = (
+  refusals: readonly PlanRefusal[],
+  wanted: ReadonlySet<CropId>,
+): readonly Utterance[] => {
+  const theirs = refusals.filter((refusal) => wanted.has(refusal.cropId))
+  const others = [
+    ...new Set(
+      refusals.filter((refusal) => !wanted.has(refusal.cropId)).map((refusal) => refusal.cropId),
+    ),
+  ]
+  return [
+    ...(theirs.length > 0 ? [{ kind: 'refusals' as const, refusals: theirs }] : []),
+    ...(others.length > 0
+      ? [{ kind: 'left-out' as const, count: others.length, sample: others.slice(0, 3) }]
+      : []),
+  ]
+}
+
 const summarize = (state: AppState): AgentReply => {
   const plot = state.plot
   if (plot === null) return blocked('plot')
@@ -304,12 +343,43 @@ const summarize = (state: AppState): AgentReply => {
           bedCount: plot.beds.length,
           arrayCount: plot.arrays.length,
           plantingCount: plot.beds.reduce((total, bed) => total + bed.plantings.length, 0),
+          plantedCropIds: plantedCrops(state),
           plotAreaM2: polygonAreaM2(plot.boundary),
+          unit: state.lengthUnit,
         },
       },
     ],
     { offer: ['list-crops', 'propose-designs'] },
   )
+}
+
+/**
+ * The ranking's verdict on one crop in each bed, with the light it measured there.
+ *
+ * `bedIds` of null means every bed. A bed the ranking hasn't reached, such as one added a moment
+ * ago, has no verdict and is left out, and a caller falls back to every bed before answering
+ */
+const cropLight = (
+  state: AppState,
+  cropId: CropId,
+  bedIds: readonly BedId[] | null,
+): Utterance | null => {
+  const plot = state.plot
+  if (state.sets.status !== 'ready' || plot === null) return null
+  const beds: BedLightVerdict[] = state.sets.value.flatMap((set) => {
+    if (bedIds !== null && !bedIds.includes(set.bedId)) return []
+    const entry = set.ranked.find((candidate) => candidate.cropId === cropId)
+    const label = plot.beds.find((bed) => bed.id === set.bedId)?.label
+    if (entry === undefined || label === undefined) return []
+    return [
+      {
+        label,
+        dliMolM2Day: entry.light.meanDliMolM2Day as number,
+        limiting: entry.outcome.verdict === 'recommended' ? null : entry.outcome.limiting,
+      },
+    ]
+  })
+  return beds.length === 0 ? null : { kind: 'crop-light', cropId, beds }
 }
 
 /**
@@ -342,6 +412,32 @@ const verdictsFor = (state: AppState, cropIds: readonly CropId[]): readonly Utte
     ]
   })
 
+/** Whether it's about the layouts on offer: which one, the best one, the one that makes the most */
+const asksAboutLayouts = (subject: string | null): boolean => {
+  const said = (subject ?? '').toLowerCase()
+  return (
+    /\b(which|best|most|layout|layouts|design|designs|option|options|one)\b/.test(said) &&
+    /\b(power|electricity|energy|kwh|food|yield|harvest|light|layout|layouts|design|designs|option|options|recommend|one)\b/.test(
+      said,
+    )
+  )
+}
+
+/** The layouts offered, with each one's own figures, as one utterance */
+const designsUtterance = (set: ScenarioSet): Utterance => ({
+  kind: 'designs',
+  archetypes: set.scenarios.map((entry) => entry.candidate.archetype),
+  recommended: set.recommendedArchetype,
+  notConsidered: set.notConsidered,
+  // each layout's own figures, so "which one makes the most" has its answer on screen
+  figures: set.scenarios.map((entry) => ({
+    archetype: entry.candidate.archetype,
+    annualAcKwh: entry.production.annualAcKwh as number,
+    bedsWithLight: entry.lightAdequateBeds,
+    bedCount: entry.layout.beds.length,
+  })),
+})
+
 /** Whether the question is about light, however it was put */
 const asksAboutLight = (subject: string | null): boolean =>
   /\b(sun|sunny|sunlight|light|shade|shady|dark|darker)\b/.test((subject ?? '').toLowerCase())
@@ -373,7 +469,8 @@ const asksPanelCost = (subject: string | null): boolean => {
  * real thing and traces to nothing, and this is the single place a language model would most want
  * to help and the single place it must not
  */
-const explain = (state: AppState, slots: Slots): AgentReply => {
+const explain = (context: ActContext, slots: Slots): AgentReply => {
+  const state = context.state()
   const wanted = new Set(slots.crops)
   const subject = slots.subject ?? ''
   /*
@@ -385,8 +482,51 @@ const explain = (state: AppState, slots: Slots): AgentReply => {
     light question directly. A rotation rule is a true thing about that tomato and no answer at
     all to the question put
   */
+  /**
+   * What the panels cost the harvest comes first. "How much do I lose to the shade" names the
+   * shade and asks about the loss, and read as a light question it was answered with a crop
+   * list. The seasons step computes the loss by running the same year again with every row
+   * pulled off the plot
+   */
+  if (asksPanelCost(subject)) {
+    const compared = state.noPanels
+    const latest = state.simulation.reports[state.simulation.reports.length - 1]
+    if (compared.status === 'ready' && latest !== undefined && latest.harvestIndex !== null) {
+      return reply([
+        {
+          kind: 'panel-cost',
+          withPanels: latest.harvestIndex,
+          withoutPanels: compared.value.harvestIndex,
+          yearLabel: yearLabelOf(state),
+        },
+      ])
+    }
+    /*
+      Started here, the way `ask-energy` starts the annual run. Sending somebody to a button in
+      the editor hid the conversation that told them where the button was. It needs a season to
+      run again without the rows, and says so where none has run yet
+    */
+    const plot = state.plot
+    if (plot !== null && plot.arrays.length === 0) return blocked('panels', ['propose-designs'])
+    if (latest !== undefined && compared.status !== 'loading') void state.compareWithoutPanels()
+    if (context.state().noPanels.status === 'loading') {
+      return blocked('comparison-running', ['ask-energy'])
+    }
+    state.setSidebarStep('seasons')
+    return reply([{ kind: 'panel-cost-run' }], { offer: ['ask-energy'] })
+  }
   if (asksAboutLight(subject) && state.bedLight.length > 0) {
     const bedIds = asksAboutShade(subject) ? darkestBedIds(state) : null
+    /*
+      A crop named in the question is answered for itself, bed by bed, from the ranking's own
+      verdicts: whether the light is what limits it there. The kindest verdict across every bed
+      answered "will the tomatoes get enough sun" with a sentence about soil depth
+    */
+    const lights = [...wanted].flatMap((cropId) => {
+      const answer = cropLight(state, cropId, bedIds) ?? cropLight(state, cropId, null)
+      return answer === null ? [] : [answer]
+    })
+    if (lights.length > 0) return reply(lights, { offer: ['list-crops', 'ask-calendar'] })
     const ranked = rankedCropsForBeds(state, bedIds, 8)
     const plot = state.plot
     const bedLabels =
@@ -415,28 +555,12 @@ const explain = (state: AppState, slots: Slots): AgentReply => {
       )
     }
   }
-  /**
-   * And what the panels cost the harvest, which the seasons step computes by running the same year
-   * again with every row pulled off the plot
-   */
-  if (asksPanelCost(subject)) {
-    const compared = state.noPanels
-    const latest = state.simulation.reports[state.simulation.reports.length - 1]
-    if (compared.status === 'ready' && latest !== undefined && latest.harvestIndex !== null) {
-      return reply([
-        {
-          kind: 'panel-cost',
-          withPanels: latest.harvestIndex,
-          withoutPanels: compared.value.harvestIndex,
-          yearLabel: yearLabelOf(state),
-        },
-      ])
-    }
-    state.setSidebarStep('seasons')
-    state.setSurface('edit')
-    return reply([{ kind: 'panel-cost-run' }], { offer: ['ask-energy'] })
-  }
   if (wanted.size === 0) {
+    // "which one gives the most power" is about the layouts, whose figures the search holds
+    const designs = state.onboarding.designs
+    if (designs.status === 'ready' && asksAboutLayouts(subject)) {
+      return reply([designsUtterance(designs.value)], { offer: ['apply-design', 'explain'] })
+    }
     const answered = explainWithoutACrop(state, subject)
     if (answered !== null) return answered
   }
@@ -501,6 +625,12 @@ const setPreferences = (state: AppState, crops: readonly CropId[], liked: boolea
         liked: liked ? usable : [],
         disliked: liked ? [] : usable,
       },
+      /*
+        Naming what they want, while being asked what they want to grow, answers the question.
+        Without this the same question came round after every later answer, five times over, to
+        somebody who had said "tomatoes, zucchini and strawberries" on the first
+      */
+      ...(liked && state.onboarding.step === 'growing' ? [noted('growing')] : []),
     ],
     { did: usable.map((id) => `${liked ? 'like' : 'avoid'}: ${id}`), offer: ['list-crops'] },
   )
@@ -515,18 +645,7 @@ const propose = async (context: ActContext): Promise<AgentReply> => {
   const after = context.state().onboarding.designs
   if (after.status === 'error') return reply([{ kind: 'failed', message: after.message }])
   if (after.status !== 'ready') return blocked('designs')
-  const set = after.value
-  return reply(
-    [
-      {
-        kind: 'designs',
-        archetypes: set.scenarios.map((entry) => entry.candidate.archetype),
-        recommended: set.recommendedArchetype,
-        notConsidered: set.notConsidered,
-      },
-    ],
-    { offer: ['apply-design', 'explain'] },
-  )
+  return reply([designsUtterance(after.value)], { offer: ['apply-design', 'explain'] })
 }
 
 /**
@@ -560,9 +679,9 @@ const applyChosen = async (context: ActContext, slots: Slots): Promise<AgentRepl
   return reply(
     [
       { kind: 'applied', archetype },
-      ...(generated !== null && generated.plantRefusals.length > 0
-        ? [{ kind: 'refusals' as const, refusals: generated.plantRefusals }]
-        : []),
+      ...(generated === null
+        ? []
+        : refusalLines(generated.plantRefusals, wantedCrops(context.state()))),
     ],
     { did: [`applied: ${archetype}`], offer: ['describe-garden', 'plan-planting', 'undo'] },
   )
@@ -591,9 +710,7 @@ const planPlanting = async (context: ActContext): Promise<AgentReply> => {
     roots". So the answer was there all along and only the asking was left to a grower who had
     no reason to think there was anything to ask about
   */
-  const wanted = after.preferences.entries
-    .filter((entry) => entry.kind === 'prefer' || entry.kind === 'require')
-    .map((entry) => entry.cropId)
+  const wanted = [...wantedCrops(after)]
   const missing = wanted.filter((cropId) => !planted.includes(cropId))
   /*
     Only the verdicts that explain an absence. A crop the ranking is HAPPY with and that still didn't
@@ -617,9 +734,7 @@ const planPlanting = async (context: ActContext): Promise<AgentReply> => {
       // planner's notes about crops nobody named are the footnote
       ...explained,
       ...(unexplained.length > 0 ? [{ kind: 'not-planted' as const, cropIds: unexplained }] : []),
-      ...(after.planRefusals.length > 0
-        ? [{ kind: 'refusals' as const, refusals: after.planRefusals }]
-        : []),
+      ...refusalLines(after.planRefusals, new Set(wanted)),
     ],
     { did: ['planted the beds'], offer: ['describe-garden', 'undo'] },
   )
@@ -655,13 +770,34 @@ const agendaOf = (state: AppState): Agenda | null => {
  * "what do I do first" is the agenda, and "when should I plant the beans" is the agenda about
  * beans. Splitting them would mean two ways of reading one set of dates
  */
-const agendaReply = (state: AppState, crops: readonly CropId[], limit: number): AgentReply => {
+const agendaReply = (
+  state: AppState,
+  crops: readonly CropId[],
+  limit: number,
+  subject: string | null,
+): AgentReply => {
   const agenda = agendaOf(state)
   if (agenda === null) return blocked('beds', ['propose-designs'])
   const wanted = new Set(crops)
-  const items = agenda.groups
+  const theirs = agenda.groups
     .flatMap((group) => group.items)
     .filter((item) => wanted.size === 0 || wanted.has(item.cropId))
+  /*
+    "When do I harvest" is answered with the harvests and "when do I sow" with the sowings, where
+    the sentence says which. The whole list stands where it says neither, or where the filter
+    would leave nothing, because an empty answer to a dated question reads as no dates at all
+  */
+  const said = (subject ?? '').toLowerCase()
+  const harvests = /\bharvest/.test(said)
+  const sowings = !harvests && /\b(sow|plant|transplant|start)/.test(said)
+  const isHarvest = (item: AgendaItem): boolean =>
+    item.action === 'first-harvest' || item.action === 'harvest-ends'
+  const narrowed = harvests
+    ? theirs.filter(isHarvest)
+    : sowings
+      ? theirs.filter((item) => !isHarvest(item))
+      : theirs
+  const items = narrowed.length > 0 ? narrowed : theirs
   if (items.length === 0) {
     /*
       A crop with no dates isn't the same as an empty garden. `blocked` reads as "the app cannot
@@ -747,16 +883,21 @@ const companionsFor = (state: AppState, cropId: CropId): Companions => {
   }
 }
 
+/** The center of the plot on screen, or the origin where there's no plot yet */
+const centerOf = (state: AppState): ReturnType<typeof vec2> => {
+  const plot = state.plot
+  if (plot === null) return vec2(0, 0)
+  const extent = extentOf([plot.boundary.exterior])
+  return vec2((extent.minXM + extent.maxXM) / 2, (extent.minYM + extent.maxYM) / 2)
+}
+
 /**
- * Carry out one understood sentence.
+ * Carry out one understood sentence, as the one thing it meant.
  *
  * Returns a reply for every input including the ones it refuses, because a conversational surface
  * that sometimes says nothing is indistinguishable from one that has crashed
  */
-export const act = async (
-  understanding: Understanding,
-  context: ActContext,
-): Promise<AgentReply> => {
+const carryOut = async (understanding: Understanding, context: ActContext): Promise<AgentReply> => {
   const state = context.state()
   const { slots } = understanding
   switch (understanding.intent) {
@@ -768,7 +909,7 @@ export const act = async (
     case 'describe-garden':
       return summarize(state)
     case 'explain':
-      return explain(state, slots)
+      return explain(context, slots)
     case 'list-crops': {
       /*
         "What will still grow in the SHADE under the panels" is a different question from "what
@@ -779,6 +920,10 @@ export const act = async (
       const shaded = asksAboutShade(slots.subject)
       const bedIds = shaded ? darkestBedIds(state) : null
       const ranked = rankedCropsForBeds(state, bedIds, 8)
+      // a ranking on its way is waited for, as the panel does for every run the agent starts.
+      // Answering with what is planted meanwhile answers a different question
+      if (ranked.length === 0 && (state.ranking || state.sets.status === 'loading'))
+        return needsLight(state)
       if (ranked.length > 0) {
         const plot = state.plot
         const bedLabels =
@@ -829,7 +974,9 @@ export const act = async (
       // the boundary is the one source of the plot's size, so "make it 8 by 5" is a resize of
       // the plot on screen, and the search reads its size off that
       const depthM = area === null ? (slots.depthM ?? plotSizeOf(state.plot).depthM) : widthM
-      state.setBoundary(polygonOf(rectangleRing(vec2(0, 0), widthM, depthM)))
+      // around the center of the plot that is there, the way the ground step resizes, so what
+      // is already drawn keeps its place in it
+      state.setBoundary(polygonOf(rectangleRing(centerOf(state), widthM, depthM)))
       return reply(
         [
           {
@@ -924,16 +1071,20 @@ export const act = async (
       return reply([{ kind: 'undone' }], { did: ['undone'], offer: ['describe-garden'] })
     case 'define':
       return reply([{ kind: 'define' }], { offer: ['propose-designs', 'list-crops'] })
-    case 'greeting':
+    case 'greeting': {
       /*
         Answered with the question that was already on the table, because a greeting isn't a turn
         in the conversation and dropping the thread after one would leave the visitor looking at a
         cheerful sentence and no next step
       */
+      // and only a question: the results and planting steps are things to ask for, and "Layouts
+      // to compare" after "thanks" reads as a non sequitur
+      const asking = QUESTION_STEPS.includes(state.onboarding.step)
       return reply([
-        { kind: 'greeting', sort: slots.subject === 'thanks' ? 'thanks' : 'hello' },
-        { kind: 'ask', step: state.onboarding.step },
+        { kind: 'greeting', sort: slots.subject === 'thanks' ? 'thanks' : 'hello', asking },
+        ...(asking ? [{ kind: 'ask' as const, step: state.onboarding.step }] : []),
       ])
+    }
     case 'out-of-scope': {
       if (slots.scope === null) {
         return reply([
@@ -971,7 +1122,8 @@ export const act = async (
         )
       }
       const plot = state.plot
-      if (plot === null || plot.arrays.length === 0) return blocked('designs', ['propose-designs'])
+      if (plot === null) return blocked('designs', ['propose-designs'])
+      if (plot.arrays.length === 0) return blocked('panels', ['propose-designs'])
       /*
         `runEnergy` runs the PV chain in place, without scheduling it on a worker, so the result is
         already sitting in the store the instant it returns. It's read back at once, and a run that
@@ -991,9 +1143,9 @@ export const act = async (
       return blocked('energy', ['ask-energy'])
     }
     case 'ask-calendar':
-      return agendaReply(state, slots.crops, 6)
+      return agendaReply(state, slots.crops, 6, slots.subject)
     case 'ask-agenda':
-      return agendaReply(state, [], 6)
+      return agendaReply(state, [], 6, null)
     case 'ask-compliance': {
       if (state.compliance.length === 0) return needsLight(state)
       return reply([{ kind: 'compliance', checks: state.compliance }], { offer: ['ask-sources'] })
@@ -1060,7 +1212,8 @@ export const act = async (
     case 'adjust-panels': {
       const plot = state.plot
       const array = plot?.arrays[0]
-      if (plot === null || array === undefined) return blocked('designs', ['propose-designs'])
+      if (plot === null) return blocked('designs', ['propose-designs'])
+      if (array === undefined) return blocked('panels', ['propose-designs'])
       if (slots.panels === null) return blocked('plot')
       /*
         One step per asking, and the step sizes are the ones the editor's own controls step by.
@@ -1111,6 +1264,8 @@ export const act = async (
             clearanceM: after.geometry.clearanceHeightM as number,
             pitchM: after.geometry.pitchM as number,
             tiltDeg: after.tracker.mode === 'fixed' ? (after.tracker.tiltDeg as number) : null,
+            // the light follows a move by itself unless auto-run is off (`useAutoLight`)
+            recomputing: context.state().autoRun,
           },
         ],
         { did: [`panels: ${slots.panels}`], offer: ['ask-energy', 'ask-compliance'] },
@@ -1125,4 +1280,89 @@ export const act = async (
       state.setSurface('edit')
       return reply([{ kind: 'sources' }])
   }
+}
+
+/** The sentences that answer questions, which are the ones allowed to answer more than one */
+const ANSWERING: readonly IntentId[] = [
+  'set-place',
+  'set-space',
+  'set-exposure',
+  'set-ambition',
+  'set-objective',
+  'set-mounting',
+  'set-height',
+  'set-water',
+  'set-natives',
+  'set-pollinators',
+  'like-crop',
+  'dislike-crop',
+]
+
+/** The questions a sentence can answer on the side, by the slot that answers each */
+const SIDE: readonly (readonly [IntentId, (slots: Slots) => boolean])[] = [
+  ['set-place', (slots) => slots.place !== null],
+  ['set-space', (slots) => slots.widthM !== null || slots.areaM2 !== null],
+  ['set-exposure', (slots) => slots.exposure !== null],
+  ['set-ambition', (slots) => slots.ambition !== null],
+  ['set-objective', (slots) => slots.objective !== null],
+  ['set-mounting', (slots) => slots.mounting !== null],
+  ['set-height', (slots) => slots.lengthM !== null],
+]
+
+/** Whether the size said is the size the plot already has, to the centimeter */
+const sameSize = (state: AppState, slots: Slots): boolean => {
+  if (slots.widthM === null || state.plot === null) return false
+  const size = plotSizeOf(state.plot)
+  const depth = slots.depthM ?? (size.depthM as number)
+  return (
+    Math.abs(slots.widthM - (size.widthM as number)) < 0.05 &&
+    Math.abs(depth - (size.depthM as number)) < 0.05
+  )
+}
+
+/**
+ * What else the sentence answered.
+ *
+ * "I have a 20 by 30 foot backyard in Pitman, pretty shady from the neighbor's oak" is read as
+ * the place, with the size and the surroundings filled in beside it, and acting on the place
+ * alone then asks how big it is. Each side answer goes through the same action a sentence of its
+ * own would, after the main one.
+ *
+ * Only for a sentence that was answering a question, and never for a place or a size the garden
+ * already has: a reader that copies the plot size out of the garden summary into a question
+ * about electricity must not resize the plot, and the same place again must not be looked up
+ * again. The crops are left to the main reading, which already recorded them
+ */
+const sideAnswers = (understanding: Understanding, state: AppState): readonly Understanding[] => {
+  if (!ANSWERING.includes(understanding.intent)) return []
+  const { slots } = understanding
+  return SIDE.flatMap(([intent, filled]) => {
+    if (intent === understanding.intent || !filled(slots)) return []
+    if (
+      intent === 'set-place' &&
+      slots.place !== null &&
+      state.locationLabel.toLowerCase().includes(slots.place.trim().toLowerCase())
+    )
+      return []
+    if (intent === 'set-space' && sameSize(state, slots)) return []
+    return [{ ...understanding, intent, slots: { ...slots, crops: [] } }]
+  })
+}
+
+/**
+ * Carry out one understood sentence, and whatever else it answered.
+ *
+ * The main reading first, then each side answer through the same actions, as one reply with each
+ * question acknowledged once and the main reading's chips
+ */
+export const act = async (
+  understanding: Understanding,
+  context: ActContext,
+): Promise<AgentReply> => {
+  const main = await carryOut(understanding, context)
+  const sides = sideAnswers(understanding, context.state())
+  if (sides.length === 0) return main
+  const replies = [main]
+  for (const side of sides) replies.push(await carryOut(side, context))
+  return mergeReplies(replies, main.offer)
 }

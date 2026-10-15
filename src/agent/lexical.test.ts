@@ -5,7 +5,7 @@ import type { IntentId } from './intent'
 import { ANSWERING_SCORE, CONFIDENCE_FLOOR, isNegated, nearMisses, routeLexically } from './lexical'
 import type { OnboardingStep } from '../state/slices'
 import type { RouteContext } from './understand'
-import { areasM2, lengths } from './vocabulary'
+import { areasM2, lengths, unitSaid } from './vocabulary'
 
 let catalog: readonly Crop[] = []
 beforeAll(async () => {
@@ -28,6 +28,22 @@ describe('lengths', () => {
 
   it('finds nothing in a sentence with no number in it', () => {
     expect(lengths('quite big really')).toEqual([])
+  })
+
+  it('reads a bare number in the unit the design is kept in', () => {
+    expect(lengths('25 by 35', 'ft')[0]).toBeCloseTo(7.62, 3)
+    expect(lengths('25 by 35')).toEqual([25, 35])
+    expect(lengths('nothing taller than two meters', 'ft')).toEqual([2])
+  })
+})
+
+describe('the unit a sentence speaks in', () => {
+  it('is feet or meters where one is named, and nothing where none is', () => {
+    expect(unitSaid('the plot is 30 by 40 feet')).toBe('ft')
+    expect(unitSaid('about 200 sq ft')).toBe('ft')
+    expect(unitSaid('6 by 4 metres')).toBe('m')
+    expect(unitSaid('keep it under 2m')).toBe('m')
+    expect(unitSaid('actually make it 25 by 35')).toBeNull()
   })
 })
 

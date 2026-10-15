@@ -1,8 +1,9 @@
 import { act, type ActContext } from './act'
 import { clausesOf } from './clauses'
 import { nearMisses, routeLexically } from './lexical'
-import { reply, type AgentReply } from './reply'
+import { type AgentReply, mergeReplies, reply } from './reply'
 import type { RouteContext, Understander, Understanding } from './understand'
+import { unitSaid } from './vocabulary'
 
 /**
  * One typed sentence, from words to a reply, including the sentences that ask for two things.
@@ -36,6 +37,15 @@ export const converse = async (
   understander: Understander,
   actContext: ActContext,
 ): Promise<Conversation> => {
+  /*
+    The unit the sentence measures in becomes the design's. Somebody who types "30 by 40 feet"
+    is answered in feet from then on, and their next "25 by 35" is read as feet, through the
+    same switch the ground step offers. Read off the sentence before any routing, so the
+    readers below and the words that answer all work in the unit just spoken
+  */
+  const unit = unitSaid(text)
+  if (unit !== null && actContext.state().lengthUnit !== unit)
+    actContext.state().setLengthUnit(unit)
   const clauses = clausesOf(text, {
     // a half stands alone when the router makes something of it, which is the only honest test
     /*
@@ -85,11 +95,7 @@ export const converse = async (
     to offer next follows from where the sentence ended
   */
   return {
-    reply: {
-      utterances: replies.flatMap((entry) => entry.utterances),
-      did: replies.flatMap((entry) => entry.did),
-      offer: replies[replies.length - 1]?.offer ?? [],
-    },
+    reply: mergeReplies(replies, replies[replies.length - 1]?.offer ?? []),
     understood,
   }
 }

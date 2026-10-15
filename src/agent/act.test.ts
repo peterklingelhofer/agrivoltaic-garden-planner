@@ -1,7 +1,8 @@
 import { beforeEach, describe, expect, it } from 'bun:test'
 import { vi } from '../../test/vi'
 import { siteFixture } from '../recommend/testkit'
-import { polygonAreaM2 } from '../state/geom'
+import { extentOf, polygonAreaM2, polygonOf, rectangleRing, vec2 } from '../state/geom'
+import { plotSizeOf } from '../state/onboarding'
 import { ready, type AppState } from '../state/slices'
 import { getAppState, resetAppStore, useAppStore } from '../state/store'
 import { designScenarioFixture, scenarioSetFixture, seedRankedStore } from '../state/testkit'
@@ -539,5 +540,170 @@ describe("the things people say that aren't about the garden", () => {
   it('answers a greeting with the question that was already on the table', async () => {
     const answer = await act(said('greeting'), context)
     expect(kinds(answer.utterances)).toEqual(['greeting', 'ask'])
+  })
+})
+
+describe('what else a sentence answered', () => {
+  /**
+   * "I have a 20 by 30 foot backyard in Pitman, pretty shady" read as the place alone was
+   * followed by "How big is it?": the size and the surroundings were in the reading and dropped
+   */
+  it('records a size and surroundings said beside another answer, each acknowledged once', async () => {
+    const answer = await act(
+      said('set-water', {
+        yesNo: true,
+        widthM: 6.096,
+        depthM: 9.144,
+        exposure: 'partly-sheltered',
+      }),
+      context,
+    )
+    expect(kinds(answer.utterances)).toEqual(['noted', 'resized', 'noted', 'noted'])
+    expect(plotSizeOf(getAppState().plot).widthM).toBeCloseTo(6.096, 3)
+    expect(getAppState().answers.exposure).toBe('partly-sheltered')
+  })
+
+  it('leaves a size the plot already has alone, since that is the summary read back', async () => {
+    const size = plotSizeOf(getAppState().plot)
+    const answer = await act(
+      said('set-natives', {
+        yesNo: true,
+        widthM: size.widthM as number,
+        depthM: size.depthM as number,
+      }),
+      context,
+    )
+    expect(kinds(answer.utterances)).toEqual(['noted'])
+  })
+
+  it('answers nothing on the side of a question', async () => {
+    const answer = await act(said('ask-energy', { widthM: 3, depthM: 3 }), context)
+    expect(kinds(answer.utterances)).not.toContain('resized')
+  })
+})
+
+describe('a resize keeps the plot where it is', () => {
+  it('draws the new rectangle around the old center, as the ground step does', async () => {
+    getAppState().setBoundary(polygonOf(rectangleRing(vec2(10, 10), 8, 8)))
+    await act(said('set-space', { widthM: 4, depthM: 4 }), context)
+    const plot = getAppState().plot
+    expect(plot).not.toBeNull()
+    if (plot === null) return
+    const extent = extentOf([plot.boundary.exterior])
+    expect((extent.minXM + extent.maxXM) / 2).toBeCloseTo(10, 6)
+    expect((extent.minYM + extent.maxYM) / 2).toBeCloseTo(10, 6)
+  })
+})
+
+describe('what the planting report says about crops nobody named', () => {
+  it('keeps the verbatim reasons for the crops asked for and counts the rest', async () => {
+    await seedRankedStore()
+    await act(said('like-crop', { crops: ['tomato' as CropId] }), context)
+    const answer = await act(said('plan-planting'), context)
+    for (const utterance of answer.utterances) {
+      if (utterance.kind === 'refusals') {
+        expect(utterance.refusals.every((refusal) => refusal.cropId === ('tomato' as CropId))).toBe(
+          true,
+        )
+      }
+    }
+    const others = getAppState().planRefusals.filter(
+      (refusal) => refusal.cropId !== ('tomato' as CropId),
+    )
+    const leftOut = answer.utterances.find((entry) => entry.kind === 'left-out')
+    expect(leftOut !== undefined).toBe(others.length > 0)
+  })
+})
+
+describe('a question about the light for a named crop', () => {
+  it('answers bed by bed from the ranking', async () => {
+    await seedRankedStore()
+    const answer = await act(
+      said('explain', {
+        crops: ['tomato' as CropId],
+        subject: 'will the tomatoes get enough sun under the panels',
+      }),
+      context,
+    )
+    expect(kinds(answer.utterances)).toEqual(['crop-light'])
+    const light = answer.utterances[0]
+    if (light?.kind === 'crop-light') expect(light.beds.length).toBeGreaterThan(0)
+  })
+
+  it('answers what the panels cost before what the light is', async () => {
+    await seedRankedStore()
+    await getAppState().applyDesign(designScenarioFixture('balanced'))
+    const answer = await act(
+      said('explain', { subject: 'how much do I lose to the shade?' }),
+      context,
+    )
+    // no season has run, so there's nothing yet to run again without the rows
+    expect(kinds(answer.utterances)).toEqual(['panel-cost-run'])
+  })
+
+  it('says a layout with no panels has nothing to lose to them', async () => {
+    await seedRankedStore()
+    const answer = await act(
+      said('explain', { subject: 'how much do I lose to the shade?' }),
+      context,
+    )
+    const first = answer.utterances[0]
+    expect(first?.kind === 'blocked' && first.need).toBe('panels')
+  })
+})
+
+describe('the calendar, narrowed to what was asked', () => {
+  it('lists the harvests for a harvest question', async () => {
+    await seedRankedStore()
+    await act(said('plan-planting'), context)
+    const answer = await act(said('ask-calendar', { subject: 'when do I harvest?' }), context)
+    const agenda = answer.utterances.find((entry) => entry.kind === 'agenda')
+    expect(agenda?.kind).toBe('agenda')
+    if (agenda?.kind !== 'agenda') return
+    expect(
+      agenda.items.every(
+        (item) => item.action === 'first-harvest' || item.action === 'harvest-ends',
+      ),
+    ).toBe(true)
+  })
+})
+
+describe('the question put back after a greeting', () => {
+  it('is left out on the results step, which is a thing to ask for', async () => {
+    getAppState().setOnboardingStep('results')
+    const answer = await act(said('greeting'), context)
+    expect(kinds(answer.utterances)).toEqual(['greeting'])
+  })
+})
+
+describe('naming a crop while asked what to grow', () => {
+  it('answers the question', async () => {
+    await getAppState().loadCatalog()
+    getAppState().setOnboardingStep('growing')
+    const answer = await act(said('like-crop', { crops: ['tomato' as CropId] }), context)
+    expect(kinds(answer.utterances)).toEqual(['preference', 'noted'])
+  })
+})
+
+describe('what a move of the panels says about the light', () => {
+  it('says it follows by itself while auto-run is on', async () => {
+    await getAppState().applyDesign(designScenarioFixture('balanced'))
+    useAppStore.setState({ autoRun: true })
+    const answer = await act(said('adjust-panels', { panels: 'taller' }), context)
+    const moved = answer.utterances[0]
+    expect(moved?.kind === 'panels-adjusted' && moved.recomputing).toBe(true)
+  })
+})
+
+describe('describing the garden', () => {
+  it('names what is planted, in the design unit', async () => {
+    await seedRankedStore()
+    await act(said('plan-planting'), context)
+    const answer = await act(said('describe-garden'), context)
+    const garden = answer.utterances[0]
+    expect(garden?.kind).toBe('garden')
+    if (garden?.kind !== 'garden') return
+    expect(garden.summary.plantedCropIds.length > 0).toBe(garden.summary.plantingCount > 0)
+    expect(garden.summary.unit).toBe(getAppState().lengthUnit)
   })
 })

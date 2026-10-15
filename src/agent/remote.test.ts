@@ -5,9 +5,9 @@ import {
   SUMMARY_LIMIT as EDGE_SUMMARY_LIMIT,
 } from '../../workers/proxy/helper'
 import { loadCropCatalog } from '../data/crops'
-import type { AppState } from '../state/slices'
-import { getAppState, resetAppStore } from '../state/store'
-import { seedRankedStore } from '../state/testkit'
+import { type AppState, ready } from '../state/slices'
+import { getAppState, resetAppStore, useAppStore } from '../state/store'
+import { scenarioSetFixture, seedRankedStore } from '../state/testkit'
 import type { Crop } from '../types/crop'
 import type { Planting } from '../types/garden'
 import { type BedId, type CropId, plantingId } from '../types/ids'
@@ -195,7 +195,8 @@ describe('a sentence sent to the edge', () => {
     const understander = createRemoteUnderstander({ fetch: helper.fetch })
     const reading = await understander.route('sorry, 200 sq ft', context)
     expect(reading?.intent).toBe('set-space')
-    expect(reading?.slots.areaM2).toBe(18.6)
+    // the sentence's own figure, to the square centimeter, where the model's is a rounding of it
+    expect(reading?.slots.areaM2).toBeCloseTo(18.58, 1)
     expect(reading?.slots.widthM).toBeNull()
   })
 
@@ -293,6 +294,24 @@ describe('what the model is told about the garden', () => {
     await seedRankedStore()
   })
 
+  /*
+    Whether layouts exist is the difference between "go" meaning run the search and "use the
+    balanced one" meaning apply it, and the unit is what a bare "25 by 35" is read in
+  */
+  it('says which layouts were offered and which unit the design is kept in', () => {
+    const state = getAppState()
+    useAppStore.setState({
+      lengthUnit: 'ft',
+      onboarding: { ...state.onboarding, designs: ready(scenarioSetFixture('balanced')) },
+    })
+    const summary = summarizeForHelper(getAppState())
+    expect(summary).toContain('Layouts offered: ')
+    expect(summary).toContain('Balanced (recommended)')
+    expect(summary).toContain('Lengths are in feet.')
+    expect(summary.length).toBeLessThanOrEqual(SUMMARY_LIMIT)
+    useAppStore.setState({ lengthUnit: 'm', onboarding: state.onboarding })
+  })
+
   it('names the place and stays inside what the edge accepts', () => {
     const summary = summarizeForHelper(getAppState())
     expect(summary).toContain(getAppState().locationLabel)
@@ -328,5 +347,59 @@ describe('what the model is told about the garden', () => {
     expect(summary.length).toBeLessThanOrEqual(SUMMARY_LIMIT)
     expect(summary).toContain('planted with')
     expect(summary).toContain('Panel arrays:')
+  })
+})
+
+/**
+ * What the browser makes of a reading that came back, on top of narrowing it to the catalog:
+ * the places the model was measured to be wrong in a way the sentence itself can correct
+ */
+describe('what the browser makes of the answer', () => {
+  const at = (): RouteContext => ({ step: null, catalog })
+  const read = async (text: string, answer: Record<string, unknown>) => {
+    const edge = answering(() => json(200, { ...ANSWER, ...answer }))
+    return createRemoteUnderstander({ fetch: edge.fetch }).route(text, at())
+  }
+
+  it('hands over the whole sentence as the subject, whatever the model abbreviated it to', async () => {
+    const reading = await read('how much do I lose to the shade?', {
+      intent: 'explain',
+      slots: { ...ANSWER.slots, subject: 'shade' },
+    })
+    expect(reading?.slots.subject).toBe('how much do I lose to the shade?')
+  })
+
+  it('says which pleasantry a greeting was, so thanks is not answered with hello', async () => {
+    const reading = await read('thanks!', { intent: 'greeting', slots: ANSWER.slots })
+    expect(reading?.slots.subject).toBe('thanks')
+  })
+
+  it('keeps every crop the sentence names when the model dropped one', async () => {
+    const reading = await read('peppers, and some lettuce for salads', {
+      intent: 'like-crop',
+      slots: { ...ANSWER.slots, crops: ['pepper-sweet'] },
+    })
+    expect(reading?.slots.crops).toContain('pepper-sweet')
+    expect(reading?.slots.crops).toContain('lettuce-leaf')
+  })
+
+  it('offers a guess as chips, acting on nothing', async () => {
+    const reading = await read('is it legal?', {
+      intent: 'out-of-scope',
+      confidence: 0.4,
+      slots: { ...ANSWER.slots, scope: 'permitting' },
+    })
+    expect(reading?.alternatives[0]).toBe('out-of-scope')
+  })
+
+  it('will not start over on the model word alone', async () => {
+    const reading = await read('scratch that', { intent: 'start-over', slots: ANSWER.slots })
+    expect(reading?.alternatives).toEqual(['undo', 'start-over'])
+  })
+
+  it('starts over when the sentence says so in as many words', async () => {
+    const reading = await read('start over', { intent: 'start-over', slots: ANSWER.slots })
+    expect(reading?.intent).toBe('start-over')
+    expect(reading?.alternatives).toEqual([])
   })
 })

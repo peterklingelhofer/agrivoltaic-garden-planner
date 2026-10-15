@@ -12,6 +12,24 @@ import type { Fraction } from '../types/units'
 import type { IntentId } from './intent'
 import type { PanelChange, ScopeTopic } from './vocabulary'
 
+/** One offered layout's own figures, read off the scenario the search produced */
+export interface LayoutFigures {
+  readonly archetype: CandidateArchetype
+  readonly annualAcKwh: number
+  /** Of the beds this layout places, how many get enough light for at least one crop */
+  readonly bedsWithLight: number
+  readonly bedCount: number
+}
+
+/** What the ranking made of one crop in one bed, for a question about its light */
+export interface BedLightVerdict {
+  readonly label: string
+  /** The mean daily light over the crop's own season in this bed, mol per square meter per day */
+  readonly dliMolM2Day: number
+  /** null when the ranking is happy with it there */
+  readonly limiting: LimitingFactor | null
+}
+
 /**
  * What the agent says, as structure.
  *
@@ -91,6 +109,8 @@ export type Utterance =
        * thing a summarizer would throw away, so it travels as the engine's string
        */
       readonly notConsidered: readonly string[]
+      /** Each layout's own electricity and bed count, so "which one makes the most" is answered */
+      readonly figures?: readonly LayoutFigures[]
     }
   | { readonly kind: 'applied'; readonly archetype: CandidateArchetype }
   /**
@@ -103,6 +123,26 @@ export type Utterance =
   | { readonly kind: 'planted'; readonly cropIds: readonly CropId[] }
   /** Engine-authored, passed through word for word: these are the reasons crops were left out */
   | { readonly kind: 'refusals'; readonly refusals: readonly PlanRefusal[] }
+  /**
+   * The crops the planner skipped that nobody asked for, as a count and a few names.
+   *
+   * Twenty lines of trees that "stay for years" after "fill the beds" is a wall, and a wall is
+   * read as carefully as nothing. The reasons stay in the plants step, verbatim, one per crop
+   */
+  | { readonly kind: 'left-out'; readonly count: number; readonly sample: readonly CropId[] }
+  /**
+   * Whether a named crop gets the light it needs, bed by bed, from the ranking's own verdicts.
+   *
+   * "Will the tomatoes get enough sun under the panels" was answered with the kindest verdict
+   * across every bed, which was about soil depth: a true thing about tomatoes and no answer to
+   * the question put. This carries the verdict for THIS crop in EACH bed, and says in each
+   * whether the light is what limits it
+   */
+  | {
+      readonly kind: 'crop-light'
+      readonly cropId: CropId
+      readonly beds: readonly BedLightVerdict[]
+    }
   /**
    * What the ranking made of a crop, which is the other half of "why not that one".
    *
@@ -185,7 +225,12 @@ export type Utterance =
    * `sort` because they're not the same thing said twice: answering "thanks" with "Hello."
    * reads as an agent that heard a noise
    */
-  | { readonly kind: 'greeting'; readonly sort: 'hello' | 'thanks' }
+  | {
+      readonly kind: 'greeting'
+      readonly sort: 'hello' | 'thanks'
+      /** Whether a question follows, so the lead-in doesn't trail off into nothing */
+      readonly asking: boolean
+    }
   /**
    * Asked about a crop that is not in any bed.
    *
@@ -201,6 +246,8 @@ export type Utterance =
       readonly pitchM: number
       /** null when the array tracks the sun, which has no fixed tilt to report */
       readonly tiltDeg: number | null
+      /** Whether the light follows the move by itself, or waits because auto-run is off */
+      readonly recomputing: boolean
     }
   /**
    * Asked about something this application doesn't model, and saying so by name.
@@ -311,7 +358,14 @@ export type BlockedNeed =
    * had already finished, every time a question needed only the ranking that follows it
    */
   | 'ranking-running'
+  /** The same year again with every row off the plot, which the agent has just started */
+  | 'comparison-running'
   | 'designs'
+  /**
+   * The layout on the ground has no panels, which is one of the five the search offers. "I
+   * haven't computed any layouts yet" to somebody who has just applied one is false
+   */
+  | 'panels'
   | 'catalog'
 
 export interface GardenSummary {
@@ -319,7 +373,10 @@ export interface GardenSummary {
   readonly bedCount: number
   readonly arrayCount: number
   readonly plantingCount: number
+  /** What is in the beds, by name: "9 plantings" answers nobody who asked what was planted */
+  readonly plantedCropIds: readonly CropId[]
   readonly plotAreaM2: number
+  readonly unit: LengthUnit
 }
 
 /**
@@ -344,3 +401,29 @@ export const reply = (
   did: extra.did ?? [],
   offer: extra.offer ?? [],
 })
+
+/**
+ * Several replies to one sentence, as one.
+ *
+ * A question is acknowledged once however many clauses answered it: "a fence on the south side
+ * and a maple to the west" is two clauses on the surroundings question and came back "Got it.
+ * Got it." Everything else is kept in order, and the chips are the caller's to choose
+ */
+export const mergeReplies = (
+  replies: readonly AgentReply[],
+  offer: readonly IntentId[],
+): AgentReply => {
+  const noted = new Set<OnboardingStep>()
+  return {
+    utterances: replies
+      .flatMap((entry) => entry.utterances)
+      .filter((utterance) => {
+        if (utterance.kind !== 'noted') return true
+        if (noted.has(utterance.step)) return false
+        noted.add(utterance.step)
+        return true
+      }),
+    did: replies.flatMap((entry) => entry.did),
+    offer,
+  }
+}

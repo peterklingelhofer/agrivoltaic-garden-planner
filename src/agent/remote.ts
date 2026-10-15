@@ -1,19 +1,30 @@
 import { cropName } from '../data/crops'
+import { ARCHETYPE_LABEL } from '../recommend/design'
 import { extentOf, extentSize } from '../state/geom'
 import type { AppState } from '../state/slices'
 import type { Crop } from '../types/crop'
 import type { CropId } from '../types/ids'
-import { INTENTS, type IntentId } from './intent'
-import { routeLexically } from './lexical'
-import { EMPTY_SLOTS, type Slots, type Understander, type Understanding } from './understand'
+import { INTENTS, type IntentId, isIrreversible } from './intent'
+import { namedCrops, nearMisses, routeLexically } from './lexical'
+import {
+  EMPTY_SLOTS,
+  type RouteContext,
+  type Slots,
+  type Understander,
+  type Understanding,
+} from './understand'
 import {
   AMBITION,
+  areasM2,
   type Candidate,
+  cropsByHead,
   EXPOSURE,
+  lengths,
   MOUNTING,
   OBJECTIVE,
   PANEL_CHANGE,
   SCOPE,
+  socialSort,
 } from './vocabulary'
 
 /**
@@ -99,46 +110,111 @@ const asChoice = <T extends string>(value: unknown, among: readonly Candidate<T>
  * survives it, because the intent is the load-bearing half and a half-filled reading is the normal
  * case `Slots` was written for
  */
-const readSlots = (value: unknown, catalog: readonly Crop[]): Slots => {
+/**
+ * The figure the sentence gives, where the model's is a rounding of it.
+ *
+ * The model answers "20x30 ft" as 6.1 by 9.1 and the plot comes back as 20.0 by 29.9 feet. The
+ * parser reads the same sentence to the millimeter, so where the two agree to within a few
+ * percent the parser's figure is the one kept, and where they don't the model's stands: it may
+ * have converted something the parser can't read
+ */
+const precise = (said: number | null, parsed: number | undefined): number | null => {
+  if (said === null) return null
+  if (parsed === undefined || parsed <= 0) return said
+  return Math.abs(parsed - said) / parsed < 0.03 ? parsed : said
+}
+
+/**
+ * The crops the sentence names, joined to the model's.
+ *
+ * A head the model already answered is the model's call: "peppers" came back as sweet and hot
+ * pepper, and the name reader's group for the same word adds black pepper, which nobody meant.
+ * A head the model said nothing about is added whole, which is how the lettuce dropped from
+ * "peppers, and some lettuce" gets back in
+ */
+const cropsNamed = (
+  text: string,
+  catalog: readonly Crop[],
+  given: readonly CropId[],
+): readonly CropId[] => {
+  const groups = cropsByHead(catalog)
+  const headsOf = (id: CropId): readonly string[] =>
+    [...groups].flatMap(([head, ids]) => (ids.includes(id) ? [head] : []))
+  const answered = new Set(given.flatMap(headsOf))
+  const extra = namedCrops(text, catalog).filter(
+    (id) => !given.includes(id) && !headsOf(id).some((head) => answered.has(head)),
+  )
+  return [...given, ...extra]
+}
+
+const readSlots = (
+  value: unknown,
+  text: string,
+  catalog: readonly Crop[],
+  unit: 'm' | 'ft',
+): Slots => {
   const raw = (typeof value === 'object' && value !== null ? value : {}) as Record<string, unknown>
   const named: readonly unknown[] = Array.isArray(raw.crops) ? raw.crops : []
+  const given = named.filter((entry): entry is CropId =>
+    catalog.some((crop) => (crop.id as string) === entry),
+  )
+  const measured = lengths(text, unit)
   return {
     ...EMPTY_SLOTS,
     place: asString(raw.place),
-    widthM: asNumber(raw.widthM),
-    depthM: asNumber(raw.depthM),
-    lengthM: asNumber(raw.lengthM),
-    areaM2: asNumber(raw.areaM2),
+    widthM: precise(asNumber(raw.widthM), measured[0]),
+    depthM: precise(asNumber(raw.depthM), measured[1]),
+    lengthM: precise(asNumber(raw.lengthM), measured[0]),
+    areaM2: precise(asNumber(raw.areaM2), areasM2(text)[0]),
     exposure: asChoice(raw.exposure, EXPOSURE),
     ambition: asChoice(raw.ambition, AMBITION),
     objective: asChoice(raw.objective, OBJECTIVE),
     mounting: asChoice(raw.mounting, MOUNTING),
     yesNo: typeof raw.yesNo === 'boolean' ? raw.yesNo : null,
-    // narrowed to the ids this catalog actually holds, so a plausible invented name goes nowhere
-    crops: named.filter((entry): entry is CropId =>
-      catalog.some((crop) => (crop.id as string) === entry),
-    ),
+    /*
+      Narrowed to the ids this catalog actually holds, so a plausible invented name goes nowhere,
+      and joined by every crop the sentence names outright. The model dropped the lettuce from
+      "peppers, and some lettuce" and two of "tomatos, zuchini and strawberrys", and a name typed
+      into the catalog's own vocabulary is the one thing the phrase table reads without error
+    */
+    crops: cropsNamed(text, catalog, given),
     subject: asString(raw.subject),
     scope: asChoice(raw.scope, SCOPE),
     panels: asChoice(raw.panels, PANEL_CHANGE),
   }
 }
 
+/**
+ * Below this the model said it was guessing, and a guess is offered, never acted on.
+ *
+ * The system prompt asks for 0.9 and above when the reading is clear and below 0.5 when it isn't,
+ * and the model keeps to that: measured over three conversations every clear sentence came back
+ * at 0.9 and the two that came back lower were both wrong ("is it legal?" declined as a question
+ * about permits at 0.4). A guess becomes chips, the same way the embedding offers a tie
+ */
+export const GUESS = 0.5
+
 /** The answer as an `Understanding`, or null where it's not one the app can carry out */
-const readAnswer = (
-  body: unknown,
-  text: string,
-  catalog: readonly Crop[],
-): Understanding | null => {
+const readAnswer = (body: unknown, text: string, context: RouteContext): Understanding | null => {
   const raw = (typeof body === 'object' && body !== null ? body : {}) as Record<string, unknown>
   const intent = INTENT_IDS.find((id) => id === raw.intent)
   const confidence = asNumber(raw.confidence)
   if (intent === undefined || confidence === null) return null
   const held = Math.min(1, Math.max(0, confidence))
-  return {
+  /*
+    The subject is the sentence itself, whatever the model put there. It's asked for verbatim and
+    answers "shade" for "how much do I lose to the shade?", and everything that reads a subject
+    looks for the words of the question in it: the lexical reader has always handed over the
+    whole sentence. A greeting's subject is which pleasantry it was, as the phrase table reads it
+  */
+  const slots = {
+    ...readSlots(raw.slots, text, context.catalog, context.lengthUnit ?? 'm'),
+    subject: intent === 'greeting' ? socialSort(text) : text.trim(),
+  }
+  const reading = {
     intent,
     confidence: held,
-    slots: readSlots(raw.slots, catalog),
+    slots,
     matched: text,
     /*
       The same number as `confidence`, because there's no bias underneath it to strip. `spoken`
@@ -147,15 +223,27 @@ const readAnswer = (
       context that makes an answer to that question likelier and rules nothing out
     */
     spoken: held,
-    /*
-      Never a tie. The other two routers offer candidates when two readings are within a few
-      hundredths of each other, because a cosine gap that thin is a coin flip with store
-      mutations behind it. A model that has been asked for one label and a confidence has already
-      done that choosing, and inventing an ambiguity from a middling confidence would offer chips
-      for sentences it read perfectly well
-    */
-    alternatives: [],
   }
+  if (held < GUESS) {
+    const near = nearMisses(text, context).filter((id) => id !== intent)
+    return { ...reading, alternatives: [intent, ...near].slice(0, 3) }
+  }
+  /*
+    The one irreversible intent needs a second reader to agree. The model read "scratch that" as
+    start-over at 0.9 and the design was gone. The phrase table holds that intent to a
+    near-verbatim match (`IRREVERSIBLE_FLOOR`), so where it doesn't agree the choice goes back to
+    the person as two chips, undo and start over, which is one press and unambiguous
+  */
+  if (isIrreversible(intent) && routeLexically(text, context)?.intent !== intent) {
+    return { ...reading, alternatives: ['undo', intent] }
+  }
+  /*
+    Otherwise never a tie. The other two routers offer candidates when two readings are within a
+    few hundredths of each other, because a cosine gap that thin is a coin flip with store
+    mutations behind it. A model that has been asked for one label and a confidence has already
+    done that choosing
+  */
+  return { ...reading, alternatives: [] }
 }
 
 /**
@@ -242,7 +330,7 @@ export const createRemoteUnderstander = (options: RemoteOptions = {}): Understan
         }
         if (!response.ok) return routeLexically(text, context)
         const body: unknown = await response.json()
-        return readAnswer(body, text, context.catalog) ?? routeLexically(text, context)
+        return readAnswer(body, text, context) ?? routeLexically(text, context)
       } catch (error) {
         if (error instanceof HelperAllowanceError) throw error
         /*
@@ -286,6 +374,22 @@ export const summarizeForHelper = (state: AppState): string => {
     ...new Set(plot?.beds.flatMap((bed) => bed.plantings.map((entry) => entry.cropId)) ?? []),
   ].map((id) => cropName(catalog, id))
 
+  /*
+    Whether layouts have been offered, and which, because that is the difference between "go"
+    meaning run the search and "use the balanced one" meaning apply it. Without this line the
+    model read "go with the one you recommend" as a second search, and nothing was applied
+  */
+  const designs = state.onboarding.designs
+  const offered =
+    designs.status === 'ready'
+      ? `Layouts offered: ${designs.value.scenarios
+          .map((entry) =>
+            entry.candidate.archetype === designs.value.recommendedArchetype
+              ? `${ARCHETYPE_LABEL[entry.candidate.archetype]} (recommended)`
+              : ARCHETYPE_LABEL[entry.candidate.archetype],
+          )
+          .join(', ')}.`
+      : 'No layouts offered yet.'
   const summarize = (names: readonly string[]): string =>
     [
       `Place: ${state.locationLabel}.`,
@@ -293,10 +397,13 @@ export const summarizeForHelper = (state: AppState): string => {
         ? 'The site lookup has run.'
         : "The site lookup hasn't run yet.",
       size === null ? "There's no plot yet." : `The plot is ${size}.`,
+      // the unit the design is kept in, which is what a length with no unit is read in
+      state.lengthUnit === 'ft' ? 'Lengths are in feet.' : 'Lengths are in meters.',
       plot === null
         ? ''
         : `Beds: ${String(plot.beds.length)}${names.length === 0 ? ', nothing planted' : `, planted with ${names.join(', ')}`}.`,
       plot === null ? '' : `Panel arrays: ${String(plot.arrays.length)}.`,
+      offered,
       `The ${state.sidebarStep} step is open.`,
     ]
       .filter((part) => part !== '')

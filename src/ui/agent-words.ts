@@ -8,7 +8,7 @@ import type { ScopeTopic } from '../agent/vocabulary'
 import type { ComplianceCheck, ComplianceOutcome } from '../types/compliance'
 import { ARCHETYPE_LABEL } from '../recommend/design'
 import { cropName } from '../data/crops'
-import { explainLimitingFactor, formatArea, formatLength } from './format'
+import { explainLimitingFactor, formatArea, formatDli, formatLength } from './format'
 import type { Crop } from '../types/crop'
 import { actionLabel } from './agenda'
 import { dayLabel } from './calendar'
@@ -150,7 +150,11 @@ export const BLOCKED_TEXT: Readonly<Record<BlockedNeed, string>> = {
   */
   'ranking-running':
     'The light is computed. I have started ranking crops against it. I will answer as soon as it lands.',
+  'comparison-running':
+    "I've started running the same year again with every panel row off the plot. I will answer as soon as it lands.",
   designs: "I haven't computed any layouts yet. Ask me to design it and I will.",
+  panels:
+    'This layout has no panels, so there is nothing to move and nothing to generate. Pick a layout with panels, or ask me to design it again.',
   catalog: "I don't know that one. It may not be in the catalog this build ships.",
   /**
    * "Ask me again in a moment" would ask somebody who can't see a progress bar to guess how long a
@@ -318,14 +322,15 @@ export const wordsFor = (utterance: Utterance, catalog: readonly Crop[]): readon
       const s = utterance.summary
       return [
         {
-          text: `${s.locationLabel}: ${String(s.bedCount)} bed${s.bedCount === 1 ? '' : 's'} and ${String(s.arrayCount)} panel row${s.arrayCount === 1 ? '' : 's'} over about ${s.plotAreaM2.toFixed(0)} square meters.`,
+          text: `${s.locationLabel}: ${String(s.bedCount)} bed${s.bedCount === 1 ? '' : 's'} and ${String(s.arrayCount)} panel row${s.arrayCount === 1 ? '' : 's'} over about ${formatArea(s.plotAreaM2, s.unit)}.`,
           tone: 'say',
         },
         {
+          // by name: "9 plantings" answers nobody who asked what was planted
           text:
             s.plantingCount === 0
               ? 'Nothing is planted in them yet.'
-              : `${String(s.plantingCount)} plantings in the beds.`,
+              : `${String(s.plantingCount)} plantings in the beds: ${named(catalog, s.plantedCropIds)}.`,
           tone: 'note',
         },
       ]
@@ -380,6 +385,11 @@ export const wordsFor = (utterance: Utterance, catalog: readonly Crop[]): readon
           text: `I computed ${String(utterance.archetypes.length)} layouts. The one I would go with is ${ARCHETYPE_LABEL[utterance.recommended]}.`,
           tone: 'say',
         },
+        // each layout's own figures, so "which one makes the most" is on screen with the choice
+        ...(utterance.figures ?? []).map((figure) => ({
+          text: `${ARCHETYPE_LABEL[figure.archetype]}${figure.archetype === utterance.recommended ? ', my pick' : ''}: ${figure.annualAcKwh === 0 ? 'no electricity' : `${approxKwh(figure.annualAcKwh)} a year`}, ${String(figure.bedsWithLight)} of ${String(figure.bedCount)} beds with enough light to grow something.`,
+          tone: 'note' as const,
+        })),
         // the search's own account of its limits, verbatim, because it's the sentence that keeps
         // up to five geometries from reading as every geometry
         ...utterance.notConsidered.map((text) => ({ text, tone: 'caveat' as const })),
@@ -423,6 +433,44 @@ export const wordsFor = (utterance: Utterance, catalog: readonly Crop[]): readon
           tone: 'note' as const,
         })),
       ]
+    }
+    case 'left-out':
+      return [
+        {
+          text:
+            utterance.count === 1
+              ? `It also left out ${named(catalog, utterance.sample)}. The plants step says why.`
+              : `It also left out ${String(utterance.count)} others, such as ${named(catalog, utterance.sample)}. The plants step lists each one with its reason.`,
+          tone: 'note',
+        },
+      ]
+    case 'crop-light': {
+      const crop = cropName(catalog, utterance.cropId)
+      return utterance.beds.map((bed) => {
+        const limiting = bed.limiting
+        const light = formatDli(bed.dliMolM2Day as Parameters<typeof formatDli>[0])
+        if (limiting === null) {
+          return {
+            text: `In ${bed.label} ${crop} has the light it needs: ${light} over its season.`,
+            tone: 'say' as const,
+          }
+        }
+        const why = explainLimitingFactor(limiting, 'novice', catalog)
+        const kind = limiting.cause.kind
+        return {
+          // a shade ceiling is about the share taken off the sky, so "falls short" would read
+          // against a figure that is plenty: the ceiling is said as the ceiling
+          text:
+            kind === 'max-design-rsr'
+              ? `In ${bed.label} the shade is more than ${crop} takes: ${why}, with ${light} over its season.`
+              : kind === 'dli-disorder-ceiling' || kind === 'dli-survival-ceiling'
+                ? `In ${bed.label} there is more light than ${crop} takes: ${why}, ${light} over its season.`
+                : kind === 'dli-minimum'
+                  ? `In ${bed.label} the light falls short for ${crop}: ${why}, ${light} over its season.`
+                  : `In ${bed.label} the light is not what limits ${crop}: ${why}.`,
+          tone: 'say' as const,
+        }
+      })
     }
     case 'verdict':
       return [
@@ -536,7 +584,8 @@ export const wordsFor = (utterance: Utterance, catalog: readonly Crop[]): readon
     case 'panel-cost-run':
       return [
         {
-          text: "I can work that out by running the same year again with every panel row taken off the plot. I've opened the seasons step, press Compare with no panels there and I'll have both figures.",
+          // no season has run, so there's nothing yet to run again without the rows
+          text: 'I can work that out by running the same year again with every panel row taken off the plot, once a season has been run. The seasons step in the editor runs one.',
           tone: 'say',
         },
       ]
@@ -703,18 +752,27 @@ export const wordsFor = (utterance: Utterance, catalog: readonly Crop[]): readon
           text: `Done. ${utterance.clearanceM.toFixed(1)} m of headroom, rows ${utterance.pitchM.toFixed(1)} m apart${utterance.tiltDeg === null ? '' : `, tilted ${utterance.tiltDeg.toFixed(0)} degrees`}.`,
           tone: 'say',
         },
-        {
-          text: "The light was computed for where they were, so those figures are stale until it's run again.",
-          tone: 'caveat',
-        },
+        // `useAutoLight` runs the full check about a second after the last edit, so the figures on
+        // screen are stale only while auto-run is switched off
+        utterance.recomputing
+          ? { text: 'The light is being computed again for where they are now.', tone: 'say' }
+          : {
+              text: "The light was computed for where they were, so those figures are stale until it's run again.",
+              tone: 'caveat',
+            },
       ]
     case 'greeting':
       return [
         {
-          text:
-            utterance.sort === 'thanks'
+          // the lead-in only where a question follows it: "Where this had got to:" over nothing
+          // reads as a sentence that broke off
+          text: utterance.asking
+            ? utterance.sort === 'thanks'
               ? 'Any time. Where this had got to:'
-              : "Hello. Whenever you're ready:",
+              : "Hello. Whenever you're ready:"
+            : utterance.sort === 'thanks'
+              ? 'Any time.'
+              : 'Hello.',
           tone: 'say',
         },
       ]
@@ -727,7 +785,7 @@ export const wordsFor = (utterance: Utterance, catalog: readonly Crop[]): readon
       */
       return [
         {
-          text: `${named(catalog, utterance.cropIds)} isn't in any of your beds.`,
+          text: `${named(catalog, utterance.cropIds)} ${utterance.cropIds.length === 1 ? "isn't" : "aren't"} in any of your beds.`,
           tone: 'say',
         },
       ]

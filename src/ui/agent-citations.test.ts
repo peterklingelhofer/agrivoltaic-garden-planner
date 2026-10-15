@@ -77,7 +77,7 @@ describe('what the agent cites', () => {
       { kind: 'noted', step: 'growing' },
       { kind: 'planted', cropIds: [] },
       { kind: 'undone' },
-      { kind: 'greeting', sort: 'hello' },
+      { kind: 'greeting', sort: 'hello', asking: true },
     ] as const) {
       expect(cited(wordsFor(utterance, [])), utterance.kind).toEqual([])
     }
