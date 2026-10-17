@@ -1,0 +1,38 @@
+name: Sources
+
+# Weekly, and never on a push: `main` deploys on push, and a publisher's outage must not block a
+# deploy. The run fails, and GitHub emails the failure, only on what is new since the snapshot in
+# `docs/CITATIONS.registry.json`: a DOI or URL that stopped answering 200, a title or year that
+# stopped agreeing with its registry, or a ledger entry that changed. A problem the snapshot
+# already had is listed and does not fail the run. The job reads the repository and changes
+# nothing in it: the snapshot is refreshed by hand with `bun run sources:check --write`. See
+# scripts/check-sources.mjs
+on:
+  schedule:
+    - cron: '17 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  BUN_VERSION: '1.4.2'
+
+jobs:
+  check:
+    name: registries and links
+    runs-on: ubuntu-latest
+    # about 520 requests at two a second is five minutes. The cap is for a day when many hosts hang
+    # for their full 60 s timeout and retry
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v5
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+      - run: bun install --frozen-lockfile
+      - name: Check every DOI and URL in the ledger
+        # an unset repository variable is an empty string, which the script reads as no address
+        run: bun scripts/check-sources.mjs --summary "$GITHUB_STEP_SUMMARY"
+        env:
+          CROSSREF_MAILTO: ${{ vars.CROSSREF_MAILTO }}
