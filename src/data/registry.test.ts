@@ -6,6 +6,7 @@ import {
   normalizeTitle,
   recordFromCrossref,
   recordFromDatacite,
+  squeezeTitle,
   type CrossrefMessage,
   type DataciteAttributes,
   type LedgerEntry,
@@ -48,6 +49,70 @@ const DATACITE_DATASET: DataciteAttributes = {
   publicationYear: 2021,
 }
 
+// the ledger's title and Crossref's copy for four entries the first live run flagged, where it
+// is Crossref's copy that is damaged
+const CROSSREF_DAMAGE = [
+  {
+    damage: 'a line break inside a word',
+    ledger: "Historical ecology of forest garden management in Laxyuubm Ts'msyen and beyond",
+    registry:
+      'Historical ecology of forest garden management in L\n    a\n    xyuubm Ts\u2019msyen and beyond',
+  },
+  {
+    damage: 'spaces lost around italics',
+    ledger:
+      'Reverse phenology and dry-season water uptake by Faidherbia albida (Del.) A. Chev. in an agroforestry parkland of Sudanese west Africa',
+    registry:
+      'Reverse phenology and dry\u2010season water uptake byFaidherbia albida(Del.) A. Chev. in an agroforestry parkland of Sudanese west Africa',
+  },
+  {
+    damage: 'a footnote digit glued on',
+    ledger:
+      "A model for estimating the completion of rest for 'Redhaven' and 'Elberta' peach trees",
+    registry:
+      'A Model for Estimating the Completion of Rest for \u2018Redhaven\u2019 and \u2018Elberta\u2019 Peach Trees1',
+  },
+  {
+    damage: 'a footnote digit glued on, with nothing else changed',
+    ledger:
+      'A Generalized Relationship between Photosynthetically Active Radiation and Solar Radiation',
+    registry:
+      'A Generalized Relationship between Photosynthetically Active Radiation and Solar Radiation1',
+  },
+]
+
+// title pairs from the same run that really differ
+const REAL_DIFFERENCES = [
+  {
+    difference: 'the last words differ',
+    ledger:
+      'The milpa system as a model of agroecological intensification: integrating productivity, ecological function and cultural heritage',
+    registry:
+      'The milpa system as a model of agroecological intensification: integrating productivity, ecological functioning, and resilience',
+  },
+  {
+    difference: 'the last words differ again',
+    ledger:
+      'A reevaluation of the solar constant based on a 42-year total solar irradiance time series and a reconciliation of spectral irradiance references',
+    registry:
+      'A reevaluation of the solar constant based on a 42-year total solar irradiance time series and a reconciliation of spaceborne observations',
+  },
+  {
+    difference: 'one word against two',
+    ledger:
+      'Evaluation of Bait Crops for the Integrated Management of White Rot (Sclerotium cepivorum) in Onion',
+    registry:
+      'Evaluation of Bait Crops for the Integrated Management of White Rot (Sclerotium cepivorum) in Allium Crops',
+  },
+  {
+    difference: 'a clause only the registry has, in the middle',
+    ledger:
+      "Root foraging elicits niche complementarity-dependent yield advantage in the ancient 'three sisters' polyculture",
+    registry:
+      'Root foraging elicits niche complementarity-dependent yield advantage in the ancient \u2018three sisters\u2019 (maize/bean/squash) polyculture',
+  },
+]
+
 const EMPTY_RECORD: RegistryRecord = {
   title: '',
   year: null,
@@ -82,6 +147,21 @@ describe('normalizeTitle', () => {
 
   it('returns an empty string when no letter or digit is left', () => {
     expect(normalizeTitle(' -- ? ')).toBe('')
+  })
+})
+
+describe('squeezeTitle', () => {
+  it('leaves lowercase letters and digits and nothing else', () => {
+    expect(squeezeTitle('  The Café\u2019s CO₂ & H₂O:  A "Study"?  ')).toBe('thecafésco2h2oastudy')
+    expect(squeezeTitle('\ufb01eld trial')).toBe('fieldtrial')
+  })
+
+  it('reads letters split by line breaks as the whole word', () => {
+    expect(squeezeTitle('L\n    a\n    xyuubm')).toBe(squeezeTitle('Laxyuubm'))
+  })
+
+  it('returns an empty string when no letter or digit is left', () => {
+    expect(squeezeTitle(' -- ? ')).toBe('')
   })
 })
 
@@ -257,10 +337,25 @@ describe('agreement', () => {
       expect(agreement(subtitled, bare).title).toBe(true)
     })
 
-    it('disagrees on a mistyped word, including one cut short', () => {
+    it('agrees across the damage Crossref does to its own copy of a title', () => {
+      for (const { damage, ledger, registry } of CROSSREF_DAMAGE) {
+        const [a, b] = [shade({ title: ledger }), shade({ title: registry })]
+        expect(agreement(a, b).title, damage).toBe(true)
+        expect(agreement(b, a).title, damage).toBe(true)
+      }
+    })
+
+    it('disagrees on the real differences the first live run found', () => {
+      for (const { difference, ledger, registry } of REAL_DIFFERENCES) {
+        const [a, b] = [shade({ title: ledger }), shade({ title: registry })]
+        expect(agreement(a, b).title, difference).toBe(false)
+        expect(agreement(b, a).title, difference).toBe(false)
+      }
+    })
+
+    it('disagrees on a mistyped word', () => {
       const registry = shade({ title: 'Shade tolerance of kale: a field trial' })
       expect(agreement(shade({ title: 'Shade tolerence of kale' }), registry).title).toBe(false)
-      expect(agreement(shade({ title: 'Shade tolerance of kal' }), registry).title).toBe(false)
     })
 
     it('never agrees with a blank title', () => {
@@ -284,10 +379,19 @@ describe('agreement', () => {
       expect(agreement(shade(inYears(2020)), shade(inYears(2019, 2021))).year).toBe(false)
     })
 
-    it('agrees on no year only with a registry that offers none', () => {
+    it('agrees with any ledger year, or none, when the registry offers no year', () => {
+      expect(agreement(shade(inYears(2008)), shade(inYears())).year).toBe(true)
       expect(agreement(shade(inYears()), shade(inYears())).year).toBe(true)
+    })
+
+    it('agrees on a Crossref record that carries no date, as some book chapters do', () => {
+      const chapter = recordFromCrossref({ title: ['A chapter'], 'container-title': ['A book'] })
+      expect(chapter.years).toEqual([])
+      expect(agreement(shade({ title: 'A chapter', ...inYears(2008) }), chapter).year).toBe(true)
+    })
+
+    it('disagrees when the registry offers a year and the ledger has none', () => {
       expect(agreement(shade(inYears()), shade(inYears(2020))).year).toBe(false)
-      expect(agreement(shade(inYears(2020)), shade(inYears())).year).toBe(false)
     })
   })
 
@@ -304,6 +408,16 @@ describe('agreement', () => {
       const short = shade({ containerTitle: 'Soil research' })
       expect(agreement(short, long).containerTitle).toBe(true)
       expect(agreement(long, short).containerTitle).toBe(true)
+    })
+
+    it('never agrees on names with no letter or digit', () => {
+      const blank = shade({ containerTitle: '?' })
+      expect(agreement(blank, blank).containerTitle).toBe(false)
+    })
+
+    it('compares whole words, so a name cut off mid-word disagrees', () => {
+      const cut = shade({ containerTitle: 'Soil Res' })
+      expect(agreement(cut, shade({ containerTitle: 'Soil Research' })).containerTitle).toBe(false)
     })
 
     it('disagrees on a different journal, or on a registry with none', () => {

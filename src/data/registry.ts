@@ -21,8 +21,9 @@
  *
  * `years` lists every year the source offers, ascending and without repeats, and `year` is the
  * first of them. Crossref dates one article three ways (issued, printed, online) and a ledger
- * entry may carry any of the three, so the snapshot keeps all of them. On the ledger side
- * `years` only restates `year`
+ * entry may carry any of the three, so the snapshot keeps all of them. The list is empty when
+ * the source gives no year, as Crossref does for some book chapters. On the ledger side `years`
+ * only restates `year`
  */
 export interface RegistryRecord {
   readonly title: string
@@ -135,17 +136,30 @@ export interface DataciteAttributes {
   }
 }
 
-/**
- * A title with everything that varies between sources taken out: compatibility forms (the "fi"
- * ligature, "CO₂" against "CO2"), case, punctuation and runs of spaces. Two spellings of one title
- * come out alike, and a mistyped word does not
- */
-export const normalizeTitle = (text: string): string =>
+const foldTitle = (text: string, between: string): string =>
   text
     .normalize('NFKC')
     .toLowerCase()
-    .replace(/[^\p{L}\p{N}]+/gu, ' ')
+    .replace(/[^\p{L}\p{N}]+/gu, between)
     .trim()
+
+/**
+ * A title with everything that varies between sources taken out: compatibility forms (the "fi"
+ * ligature, "CO₂" against "CO2"), case, punctuation and runs of spaces. Two spellings of one title
+ * come out alike, and a mistyped word does not. The words stay apart, which is what a journal
+ * name or a surname needs
+ */
+export const normalizeTitle = (text: string): string => foldTitle(text, ' ')
+
+/**
+ * `normalizeTitle` with the spaces gone as well, so that only lowercase letters and digits
+ * remain. Crossref damages titles in ways that move spaces or add a character: a line break
+ * inside a word ("L a xyuubm" for "Laxyuubm"), spaces lost around italics
+ * ("byFaidherbia albida(Del.)"), a footnote digit glued on ("Peach Trees1"). With no spaces left
+ * to disagree about, the first two compare equal, and `agreement` takes the digit by testing
+ * containment
+ */
+export const squeezeTitle = (text: string): string => foldTitle(text, '')
 
 const MARKUP = /<[^>]*>/g
 const ENTITY = /&(?:#(\d+)|#x([\da-f]+)|(amp|lt|gt|quot|apos|nbsp));/gi
@@ -278,28 +292,36 @@ export const ledgerFields = (entry: LedgerEntry): RegistryRecord => {
 const overlap = (a: string, b: string): boolean =>
   a !== '' && b !== '' && (` ${a} `.includes(` ${b} `) || ` ${b} `.includes(` ${a} `))
 
+/** True when the shorter of two squeezed strings sits anywhere inside the longer */
+const squeezedOverlap = (a: string, b: string): boolean =>
+  a !== '' && b !== '' && (a.includes(b) || b.includes(a))
+
 /**
  * Whether the ledger's record agrees with a registry's, field by field.
  *
- * - `title` agrees when one normalized title contains the other. That absorbs a subtitle that only
- *   one side has, and it compares whole words, so a ledger title cut off mid-word ("lettuc")
- *   does not slip through as a substring of the registry's. A blank title never agrees
- * - `year` agrees when the ledger's year is one of the registry's `years`, since a ledger often
- *   carries the volume year of an article that appeared online earlier. A ledger with no year
- *   agrees only with a registry that offers none
+ * - `title` agrees when one squeezed title (`squeezeTitle`) contains the other. That absorbs a
+ *   subtitle that only one side has and the damage Crossref does to a title: letters split by
+ *   a line break, spaces lost around italics, a footnote digit glued to the end. A title that
+ *   stops short of the other, mid-word or not, agrees for the same reason. A different word, or
+ *   a clause that one side lacks in the middle, still disagrees. A blank title never agrees
+ * - `year` agrees when the registry offers no year at all, since an absent date is nothing to
+ *   disagree with. Otherwise it agrees when the ledger's year is one of the registry's `years`,
+ *   since a ledger often carries the volume year of an article that appeared online earlier,
+ *   and a ledger with no year disagrees
  * - `containerTitle` agrees when the ledger has none, or when the normalized titles contain one
- *   another
+ *   another on word boundaries
  * - `volume` and `page` agree when the ledger has none, or when the trimmed strings are equal. A
  *   page compares only the part before a hyphen or dash, so a range and a first page can agree
  * - `authors` agrees when the ledger has none, or only `literal` names (which `ledgerFields`
  *   leaves out), or its first family name is among the registry's family names. Names compare
- *   under the same folding as titles, which absorbs case and an apostrophe's shape
+ *   under `normalizeTitle`, which absorbs case and an apostrophe's shape
  */
 export const agreement = (ledger: RegistryRecord, registry: RegistryRecord): Agreement => {
   const lead = ledger.authors[0]
   return {
-    title: overlap(normalizeTitle(ledger.title), normalizeTitle(registry.title)),
-    year: ledger.year === null ? registry.years.length === 0 : registry.years.includes(ledger.year),
+    title: squeezedOverlap(squeezeTitle(ledger.title), squeezeTitle(registry.title)),
+    year:
+      registry.years.length === 0 || (ledger.year !== null && registry.years.includes(ledger.year)),
     containerTitle:
       ledger.containerTitle === null ||
       (registry.containerTitle !== null &&

@@ -660,7 +660,7 @@ Gueymard, Christian A.; Ruiz-Arias, Jose A. (2016). *Extensive worldwide validat
 
 #### `gueymard2018-solar-constant`
 
-Gueymard, Christian A. (2018). *A reevaluation of the solar constant based on a 42-year total solar irradiance time series and a reconciliation of spectral irradiance references*. Solar Energy 168: 2-9
+Gueymard, Christian A. (2018). *A reevaluation of the solar constant based on a 42-year total solar irradiance time series and a reconciliation of spaceborne observations*. Solar Energy 168: 2-9
 
 - DOI: [10.1016/j.solener.2018.04.001](https://doi.org/10.1016/j.solener.2018.04.001)
 - Verification: Crossref-verified | Access: paywalled
@@ -1815,7 +1815,7 @@ Hermann, M.; Heller, J. (1997). *Andean roots and tubers: Ahipa, arracacha, maca
 
 #### `hoanghua2024-white-rot`
 
-Hoang Hua, Giang; Wilson, Christopher R.; Dung, Jeremiah K. S. (2024). *Evaluation of Bait Crops for the Integrated Management of White Rot (Sclerotium cepivorum) in Onion*. Plant Disease 108: 118-124
+Hoang Hua, Giang; Wilson, Christopher R.; Dung, Jeremiah K. S. (2024). *Evaluation of Bait Crops for the Integrated Management of White Rot (Sclerotium cepivorum) in Allium Crops*. Plant Disease 108: 118-124
 
 - DOI: [10.1094/PDIS-04-23-0688-RE](https://doi.org/10.1094/PDIS-04-23-0688-RE)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **B**
@@ -3153,7 +3153,7 @@ Penhallegon, Ross. (2006). *Lingonberry production guide for the Pacific Northwe
 
 Olsen, Jeff L.; Peachey, Ed. (2013). *Growing Hazelnuts in the Pacific Northwest: Orchard Floor Management*. Oregon State University Extension Service
 
-- URL: <https://extension.oregonstate.edu/catalog/pub/em-9079-growing-hazelnuts-pacific-northwest-orchard-floor-management>
+- URL: <https://extension.oregonstate.edu/catalog/em-9079-growing-hazelnuts-pacific-northwest-orchard-floor-management>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - harvest timing for hazelnut, verbatim: 'Blank nuts fall before good nuts. After blanks have fallen and just before good nuts begin to drop (usually at the end of August), it might be desirable to do a final flailing and floating to fill small depressions in the ground. ... In most years, it is October before all of the nuts have fallen naturally' (EM 9079, 'Nut Fall' and 'Hazelnut Harvest' sections, p. 3)
@@ -3888,7 +3888,7 @@ Silva, Yolanda. (n.d.). *Yacon: What is it?* UC Cooperative Extension Alameda Co
 
 Johnson, Hunter. (1983). *Jicama*. University of California Cooperative Extension, Small Farms Network
 
-- URL: <https://ucanr.edu/program/uc-anr-small-farms-network/jicama>
+- URL: <https://ucanr.edu/program/uc-small-farms-network/jicama>
 - Archived: <https://web.archive.org/web/20260214141431/https://ucanr.edu/program/uc-anr-small-farms-network/jicama>
 - Verification: URL-verified | Access: open-access, evidence tier **C**
 - Backs:
@@ -5346,7 +5346,7 @@ Zhang, Qianwen; Bi, Guihong; Li, Tongyin; Wang, Qiushuang; Xing, Zhiheng; LeComp
 
 #### `zhang2014-three-sisters-roots`
 
-Zhang, Chaochun; Postma, Johannes A.; York, Larry M.; Lynch, Jonathan P. (2014). *Root foraging elicits niche complementarity-dependent yield advantage in the ancient 'three sisters' polyculture*. Annals of Botany 114: 1719-1733
+Zhang, Chaochun; Postma, Johannes A.; York, Larry M.; Lynch, Jonathan P. (2014). *Root foraging elicits niche complementarity-dependent yield advantage in the ancient 'three sisters' (maize/bean/squash) polyculture*. Annals of Botany 114: 1719-1733
 
 - DOI: [10.1093/aob/mcu191](https://doi.org/10.1093/aob/mcu191)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **B**
@@ -5739,7 +5739,7 @@ Carroll, Stephanie Russo; Herczog, Edit; Hudson, Maui; Russell, Keith; Stall, Sh
 
 #### `chiorese2026-milpa`
 
-Chiorese, Gabriele; Manalil, Sudheesh; Muniraj, Iniya. (2026). *The milpa system as a model of agroecological intensification: integrating productivity, ecological function and cultural heritage*. Frontiers in Sustainable Food Systems 10: 1843955
+Chiorese, Gabriele; Manalil, Sudheesh; Muniraj, Iniya. (2026). *The milpa system as a model of agroecological intensification: integrating productivity, ecological functioning, and resilience*. Frontiers in Sustainable Food Systems 10: 1843955
 
 - DOI: [10.3389/fsufs.2026.1843955](https://doi.org/10.3389/fsufs.2026.1843955)
 - Verification: Crossref-verified | Access: open-access, evidence tier **C**
