@@ -1,6 +1,13 @@
 import { growingWindowFor } from '../../data/crops'
 import { unsourcedClaim } from '../../types/cited'
-import { at, clamp, MONTH_LENGTH_DAYS, MONTH_START_DAY, monthsInWindow } from '../../data/util'
+import {
+  at,
+  clamp,
+  MONTH_LENGTH_DAYS,
+  MONTH_NAMES,
+  MONTH_START_DAY,
+  monthsInWindow,
+} from '../../data/util'
 import { shadeBenefitStatusOf } from '../../data/water'
 import type { Crop } from '../../types/crop'
 import type { BedLight, GrowingWindow, SeasonLight } from '../../types/light'
@@ -214,7 +221,7 @@ export const lightGate = (
             0,
             1,
           ) as Fraction,
-          explanation: `Only ${monthValue(light.monthlyMeanDliMolM2Day, month).toFixed(1)} mol/m²/d reaches this bed in month ${String(month)}, and this crop needs at least ${minimum.toFixed(1)}`,
+          explanation: `Only ${monthValue(light.monthlyMeanDliMolM2Day, month).toFixed(1)} mol/m²/d reaches this bed in ${MONTH_NAMES[month - 1] ?? `month ${String(month)}`}, and this crop needs at least ${minimum.toFixed(1)}`,
         },
       }
     }

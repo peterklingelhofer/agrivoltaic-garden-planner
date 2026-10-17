@@ -10,6 +10,7 @@ import type { House } from '../types/garden'
 import { obstructionId } from '../types/ids'
 import { meters } from '../types/units'
 import type { Fraction } from '../types/units'
+import { wordsFor } from './agent-words'
 import { CompliancePanel } from './CompliancePanel'
 import { mount } from './testkit'
 
@@ -112,6 +113,9 @@ describe('what a rule card shows', () => {
     const note = harness.get('readout-compliance-elsewhere').textContent ?? ''
     expect(note).toMatch(/^This garden isn't in Massachusetts/)
     expect(note).not.toContain(getAppState().locationLabel)
+    // and the agent says it in the same words, so the two cannot drift apart
+    const spoken = wordsFor({ kind: 'compliance', checks: CHECKS, usState: 'NJ' }, [])
+    expect(spoken.map((line) => line.text)).toContain(note)
     await harness.unmount()
   })
 })

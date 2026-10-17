@@ -1,11 +1,23 @@
 import { beforeEach, describe, expect, it } from 'bun:test'
 import { vi } from '../../test/vi'
-import { siteFixture } from '../recommend/testkit'
+import {
+  bedFixture,
+  bedLightFixture,
+  plotFixture,
+  siteFixture,
+  tmyFixture,
+} from '../recommend/testkit'
 import { extentOf, polygonAreaM2, polygonOf, rectangleRing, vec2 } from '../state/geom'
 import { plotSizeOf } from '../state/onboarding'
-import { ready, type AppState } from '../state/slices'
+import { idle, ready, type AppState } from '../state/slices'
 import { getAppState, resetAppStore, useAppStore } from '../state/store'
-import { designScenarioFixture, scenarioSetFixture, seedRankedStore } from '../state/testkit'
+import {
+  designScenarioFixture,
+  energyReportFixture,
+  scenarioSetFixture,
+  seedRankedStore,
+} from '../state/testkit'
+import type { ComplianceCheck } from '../types/compliance'
 import type { CropId } from '../types/ids'
 import { act, type ActContext } from './act'
 import { EMPTY_SLOTS, type Slots, type Understanding } from './understand'
@@ -705,5 +717,109 @@ describe('describing the garden', () => {
     if (garden?.kind !== 'garden') return
     expect(garden.summary.plantedCropIds.length > 0).toBe(garden.summary.plantingCount > 0)
     expect(garden.summary.unit).toBe(getAppState().lengthUnit)
+  })
+})
+
+/**
+ * What an answer is worded from rides on the utterance: the unit the design is kept in and the
+ * number of rows, the bed's own name and whether there are panels at all, the state the garden is
+ * in. The words print what they are handed, so what they are handed is held here
+ */
+describe('the array figures an answer carries', () => {
+  it('has the design unit and the row count on a move of the panels', async () => {
+    await getAppState().applyDesign(designScenarioFixture('balanced'))
+    useAppStore.setState({ lengthUnit: 'ft' })
+    const moved = (await act(said('adjust-panels', { panels: 'taller' }), context)).utterances[0]
+    expect(moved?.kind).toBe('panels-adjusted')
+    if (moved?.kind !== 'panels-adjusted') return
+    expect(moved.unit).toBe('ft')
+    expect(moved.rowCount).toBe(getAppState().plot?.arrays[0]?.geometry.rowCount)
+  })
+
+  it('has them on an electricity answer, from the same reading of the array', async () => {
+    await getAppState().applyDesign(designScenarioFixture('balanced'))
+    useAppStore.setState({ lengthUnit: 'ft', energy: ready(energyReportFixture()) })
+    const energy = (await act(said('ask-energy'), context)).utterances[0]
+    expect(energy?.kind).toBe('energy')
+    if (energy?.kind !== 'energy') return
+    expect(energy.assumptions?.unit).toBe('ft')
+    expect(energy.assumptions?.rowCount).toBe(getAppState().plot?.arrays[0]?.geometry.rowCount)
+  })
+})
+
+describe('the water answer', () => {
+  it('names each bed by its label, and says a plot with no rows has no panels', async () => {
+    useAppStore.setState({
+      weather: ready(tmyFixture()),
+      plot: plotFixture([
+        bedFixture('bed-a', { label: 'Herb bed' }),
+        bedFixture('bed-b', { label: 'Kale bed' }),
+      ]),
+      bedLight: [bedLightFixture('bed-a', 0.3), bedLightFixture('bed-b', 0.1)],
+    })
+    const water = (await act(said('ask-water'), context)).utterances[0]
+    expect(water?.kind).toBe('water')
+    if (water?.kind !== 'water') return
+    expect(water.balances.map((entry) => entry.label)).toEqual(['Herb bed', 'Kale bed'])
+    expect(water.hasPanels).toBe(false)
+  })
+
+  it('says there are panels once the plot has rows', async () => {
+    await getAppState().applyDesign(designScenarioFixture('balanced'))
+    const beds = getAppState().plot?.beds ?? []
+    expect(beds.length).toBeGreaterThan(0)
+    useAppStore.setState({
+      weather: ready(tmyFixture()),
+      bedLight: beds.map((bed) => bedLightFixture(bed.id, 0.2)),
+    })
+    const water = (await act(said('ask-water'), context)).utterances[0]
+    expect(water?.kind).toBe('water')
+    if (water?.kind !== 'water') return
+    expect(water.balances.map((entry) => entry.label)).toEqual(beds.map((bed) => bed.label))
+    expect(water.hasPanels).toBe(true)
+  })
+})
+
+describe('the compliance answer', () => {
+  const smart: ComplianceCheck = {
+    regime: {
+      id: 'us-ma-smart',
+      label: 'Massachusetts SMART',
+      verifiability: 'estimate-only',
+      determinationBarrier: 'the program decides',
+      citations: [] as unknown as ComplianceCheck['regime']['citations'],
+    },
+    results: [],
+    overall: 'meets-expedited-parameters',
+    isDetermination: false,
+  }
+
+  const stateOf = async (): Promise<string | null | undefined> => {
+    const answer = (await act(said('ask-compliance'), context)).utterances[0]
+    return answer?.kind === 'compliance' ? answer.usState : undefined
+  }
+
+  it.each([
+    ['NWJ', 'NJ'],
+    ['MAS', 'MA'],
+    ['ENG', null],
+  ] as const)('carries the state the site is in: %s is %s', async (area, expected) => {
+    useAppStore.setState({ compliance: [smart], site: ready(siteFixture({ botanicalArea: area })) })
+    expect(await stateOf()).toBe(expected)
+  })
+
+  it('leaves the state out before the site is looked up', async () => {
+    useAppStore.setState({ compliance: [smart], site: idle() })
+    expect(await stateOf()).toBeNull()
+  })
+})
+
+describe('a question with no garden in it', () => {
+  it('is answered as the catch-all topic, and not as one with nothing recorded', async () => {
+    const answer = await act(
+      said('out-of-scope', { scope: 'other', subject: 'why is the sky blue' }),
+      context,
+    )
+    expect(answer.utterances).toEqual([{ kind: 'out-of-scope', topic: 'other' }])
   })
 })

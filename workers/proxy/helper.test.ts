@@ -268,6 +268,43 @@ describe('the area slot', () => {
   })
 })
 
+/**
+ * "Why is the sky blue" was read as out-of-scope with the scope "wildlife", the nearest of six
+ * topics that all had to be something the app doesn't model. A seventh stands for the rest
+ */
+describe('the scope slot', () => {
+  it('has a catch-all for a question with no garden in it, in the schema and in the glosses', () => {
+    const scope = HELPER_SCHEMA.properties.slots.properties.scope as {
+      readonly enum: readonly (string | null)[]
+    }
+    expect(scope.enum).toContain('other')
+    expect(SYSTEM).toContain('other (anything else, a question with no garden in it)')
+  })
+
+  it('returns the catch-all as the model said it', async () => {
+    const answer = {
+      ...ANSWER,
+      intent: 'out-of-scope',
+      slots: { ...ANSWER.slots, scope: 'other' },
+    }
+    const response = await post(fakeAi(answer).env, { ...ASKED, text: 'why is the sky blue' })
+    expect(await response.json()).toMatchObject({
+      intent: 'out-of-scope',
+      slots: { scope: 'other' },
+    })
+  })
+
+  it('still drops a scope the app has no such thing as', async () => {
+    const answer = {
+      ...ANSWER,
+      intent: 'out-of-scope',
+      slots: { ...ANSWER.slots, scope: 'weather' },
+    }
+    const response = await post(fakeAi(answer).env, ASKED)
+    expect(await response.json()).toMatchObject({ slots: { scope: null } })
+  })
+})
+
 describe('what the model is told about the choices', () => {
   /**
    * Measured without these: a fence and a maple read as an open site, "food matters more" as

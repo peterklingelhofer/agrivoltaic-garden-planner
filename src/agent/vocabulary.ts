@@ -184,7 +184,20 @@ export const MOUNTING: readonly Candidate<MountingPreference>[] = [
  * the water balance. Answering a question about deer with an irrigation figure is worse than
  * answering nothing, because it looks like an answer
  */
-export type ScopeTopic = 'cost' | 'permitting' | 'wildlife' | 'grid' | 'structure' | 'soil'
+export type ScopeTopic =
+  | 'cost'
+  | 'permitting'
+  | 'wildlife'
+  | 'grid'
+  | 'structure'
+  | 'soil'
+  /**
+   * A question with no garden in it, such as why the sky is blue.
+   *
+   * Only the remote reader says it. No phrase or noun names "anything else", so the lexical
+   * tables carry nothing for it
+   */
+  | 'other'
 
 export const SCOPE: readonly Candidate<ScopeTopic>[] = [
   {
@@ -431,6 +444,8 @@ export const SCOPE_SUBJECTS: Readonly<Record<ScopeTopic, readonly string[]>> = {
     'bolts',
   ],
   soil: ['clay', 'sandy', 'loam', 'chalky', 'peat', 'ph', 'topsoil', 'subsoil', 'earth', 'compost'],
+  // no noun names a question with no garden in it, so only the remote reader ever says it
+  other: [],
 }
 
 /** The topic a sentence is about, when it names one of them, or null */

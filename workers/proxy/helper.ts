@@ -68,7 +68,7 @@ export const HELPER_INTENTS: readonly { readonly id: string; readonly means: str
   },
   {
     id: 'out-of-scope',
-    means: "asks about something the app doesn't model; scope says which of the six",
+    means: "asks about something the app doesn't model; scope says which",
   },
   { id: 'define', means: 'what agrivoltaics is, and what this app is for' },
   { id: 'ask-energy', means: 'how much electricity the panels will make' },
@@ -143,7 +143,15 @@ const EXPOSURE: readonly string[] = ['open', 'partly-sheltered', 'overshadowed']
 const AMBITION: readonly string[] = ['leafy-and-herbs', 'mixed-vegetables', 'fruiting-and-berries']
 const OBJECTIVE: readonly string[] = ['mostly-food', 'balanced', 'mostly-electricity']
 const MOUNTING: readonly string[] = ['overhead-canopy', 'ground-rows', 'vertical-bifacial', 'any']
-const SCOPE: readonly string[] = ['cost', 'permitting', 'wildlife', 'grid', 'structure', 'soil']
+const SCOPE: readonly string[] = [
+  'cost',
+  'permitting',
+  'wildlife',
+  'grid',
+  'structure',
+  'soil',
+  'other',
+]
 const PANELS: readonly string[] = [
   'taller',
   'lower',
@@ -257,7 +265,8 @@ export const SYSTEM = [
   '  (spread the rows out, further apart), tighter-spacing (bring the rows closer together).',
   '- scope: cost (money, payback), permitting (a permit, planning permission), wildlife (deer,',
   '  pests, animals), grid (export, batteries, inverters), structure (the frame, foundations,',
-  '  installation), soil (a description of the soil).',
+  '  installation), soil (a description of the soil),',
+  '  other (anything else, a question with no garden in it).',
   '',
   'Slot rules:',
   '- A slot holds only what this sentence says. Never copy the place, the plot size or the',
@@ -273,7 +282,7 @@ export const SYSTEM = [
   '- subject is the whole sentence, verbatim, for explain, define, list-crops, apply-design',
   '  and out-of-scope.',
   "- scope names the thing the app doesn't model: cost, permitting, wildlife, grid, structure,",
-  '  soil.',
+  '  soil, other.',
   '- panels says which way to move them, for adjust-panels.',
   '- A slot with nothing in the sentence to fill it is null.',
   '- Asking what to plant, what would grow or what to put somewhere is list-crops, wherever on',

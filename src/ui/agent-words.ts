@@ -1,6 +1,6 @@
 import type { IntentId } from '../agent/intent'
 import { approxKwh, approxPercent } from '../simulation/coach'
-import type { BlockedNeed, Capability, Utterance } from '../agent/reply'
+import type { ArrayAssumptions, BlockedNeed, Capability, Utterance } from '../agent/reply'
 import type { CitationId } from '../types/citation-ids.generated'
 import type { Tone } from '../agent/transcript'
 import type { OnboardingStep } from '../state/slices'
@@ -122,6 +122,8 @@ export const OUT_OF_SCOPE: Readonly<Record<ScopeTopic, string>> = {
   structure:
     "How the panels are mounted, founded and installed isn't something this covers. It computes where the shade falls. What holds the frame up is outside it.",
   soil: "I can't take a description of your soil in words. The bed panel in the editor has the real fields for it, and what you put there does reach the recommendations.",
+  other:
+    "I have nothing on that. This computes the light, the crops and the electricity for a garden plan, and that's all it knows.",
 }
 
 /**
@@ -225,6 +227,15 @@ const complianceHeadline = (checks: readonly ComplianceCheck[]): string => {
     : `I looked at ${programs}: ${list(parts)}.`
 }
 
+/**
+ * Said under the Massachusetts rule when the garden is in another state.
+ *
+ * The compliance panel's own sentence, word for word. Without it, a grower in New Jersey reads
+ * a verdict on a rule that isn't theirs and nothing says so
+ */
+const NOT_YOUR_STATE =
+  "This garden isn't in Massachusetts, so this rule doesn't apply here. It's shown because it's the only dual-use rule the app can check a layout against."
+
 const list = (names: readonly string[]): string =>
   names.length <= 1
     ? (names[0] ?? '')
@@ -232,6 +243,15 @@ const list = (names: readonly string[]): string =>
 
 const named = (catalog: readonly Crop[], ids: readonly string[]): string =>
   list(ids.map((id) => cropName(catalog, id as Parameters<typeof cropName>[1])))
+
+/**
+ * The array's headroom, row spacing and tilt, in the unit the design is kept in.
+ *
+ * One row has no spacing to give, so the pitch is said only where a second row has something
+ * to be apart from
+ */
+const arrayClause = (array: ArrayAssumptions): string =>
+  `${formatLength(array.clearanceM, array.unit)} of headroom${array.rowCount > 1 ? `, rows ${formatLength(array.pitchM, array.unit)} apart` : ''}${array.tiltDeg === null ? '' : `, tilted ${array.tiltDeg.toFixed(0)} degrees`}`
 
 /**
  * The same question a second time running, without the paragraph that explains it.
@@ -446,7 +466,7 @@ export const wordsFor = (utterance: Utterance, catalog: readonly Crop[]): readon
       ]
     case 'crop-light': {
       const crop = cropName(catalog, utterance.cropId)
-      return utterance.beds.map((bed) => {
+      const lines = utterance.beds.map((bed) => {
         const limiting = bed.limiting
         const light = formatDli(bed.dliMolM2Day as Parameters<typeof formatDli>[0])
         if (limiting === null) {
@@ -462,15 +482,24 @@ export const wordsFor = (utterance: Utterance, catalog: readonly Crop[]): readon
           // against a figure that is plenty: the ceiling is said as the ceiling
           text:
             kind === 'max-design-rsr'
-              ? `In ${bed.label} the shade is more than ${crop} takes: ${why}, with ${light} over its season.`
-              : kind === 'dli-disorder-ceiling' || kind === 'dli-survival-ceiling'
-                ? `In ${bed.label} there is more light than ${crop} takes: ${why}, ${light} over its season.`
-                : kind === 'dli-minimum'
-                  ? `In ${bed.label} the light falls short for ${crop}: ${why}, ${light} over its season.`
-                  : `In ${bed.label} the light is not what limits ${crop}: ${why}.`,
+              ? `In ${bed.label} the shade is more than ${crop} takes, with ${light} over its season.`
+              : kind === 'dli-survival-ceiling'
+                ? `In ${bed.label} there is more light than ${crop} can survive, ${light} over its season.`
+                : kind === 'dli-disorder-ceiling'
+                  ? `In ${bed.label} there is more light than ${crop} takes: ${why}, ${light} over its season.`
+                  : kind === 'dli-minimum'
+                    ? `In ${bed.label} the light falls short for ${crop}: ${why}, ${light} over its season.`
+                    : `In ${bed.label} the light is not what limits ${crop}: ${why}.`,
           tone: 'say' as const,
         }
       })
+      // six beds with the same verdict would say the same sentence six times over, so one line
+      // says it for every bed when nothing but the bed's name differs
+      const afterLabel = lines.map((line, at) =>
+        line.text.replace(`In ${utterance.beds[at]?.label ?? ''} `, ''),
+      )
+      const alike = lines.length > 1 && new Set(afterLabel).size === 1
+      return alike ? [{ text: `In every bed ${afterLabel[0] ?? ''}`, tone: 'say' as const }] : lines
     }
     case 'verdict':
       return [
@@ -517,7 +546,7 @@ export const wordsFor = (utterance: Utterance, catalog: readonly Crop[]): readon
         ...(assumptions
           ? [
               {
-                text: `That runs on ${assumptions.clearanceM.toFixed(1)} m of headroom, rows ${assumptions.pitchM.toFixed(1)} m apart${assumptions.tiltDeg === null ? '' : `, tilted ${assumptions.tiltDeg.toFixed(0)} degrees`}.`,
+                text: `That runs on ${arrayClause(assumptions)}.`,
                 tone: 'note' as const,
               },
             ]
@@ -599,7 +628,7 @@ export const wordsFor = (utterance: Utterance, catalog: readonly Crop[]): readon
         ...(assumptions
           ? [
               {
-                text: `That runs on ${assumptions.clearanceM.toFixed(1)} m of headroom, rows ${assumptions.pitchM.toFixed(1)} m apart${assumptions.tiltDeg === null ? '' : `, tilted ${assumptions.tiltDeg.toFixed(0)} degrees`}.`,
+                text: `That runs on ${arrayClause(assumptions)}.`,
                 tone: 'note' as const,
               },
             ]
@@ -651,6 +680,11 @@ export const wordsFor = (utterance: Utterance, catalog: readonly Crop[]): readon
             // the regulation itself, and whatever reading of it this app is working from
             citations: check.regime.citations,
           },
+          ...(check.regime.id === 'us-ma-smart' &&
+          utterance.usState !== null &&
+          utterance.usState !== 'MA'
+            ? [{ text: NOT_YOUR_STATE, tone: 'caveat' as const }]
+            : []),
           ...check.results.map((result) => ({
             text: `${result.criterion.label}: ${criterionSummary(result)}`,
             tone: 'note' as const,
@@ -666,9 +700,12 @@ export const wordsFor = (utterance: Utterance, catalog: readonly Crop[]): readon
         { text: NOT_A_DETERMINATION, tone: 'caveat' },
       ]
     case 'water': {
+      // with no panels on the plot, the shaded figure is for whatever shade the bed already has
+      const shaded = utterance.hasPanels ? 'under the panels' : 'with the shade it has'
+      // the part after the bed's name, so beds that match can share a line whatever they are called
       const perBed = utterance.balances.map(
-        (balance) =>
-          `In the open ${formatBandRange(balance.irrigationOpenSkyMm, 'mm')}, under the panels ${formatBandRange(balance.irrigationUnderPanelsMm, 'mm')}.`,
+        ({ balance }) =>
+          `in the open ${formatBandRange(balance.irrigationOpenSkyMm, 'mm')}, ${shaded} ${formatBandRange(balance.irrigationUnderPanelsMm, 'mm')}.`,
       )
       /*
         Said once when every bed says the same thing: three identical beds would otherwise repeat
@@ -677,17 +714,21 @@ export const wordsFor = (utterance: Utterance, catalog: readonly Crop[]): readon
         deduplicating a list where two of three match would leave a count that is a lie
       */
       const identical = new Set(perBed).size === 1 && perBed.length > 1
+      const first = perBed[0] ?? ''
       return [
         { text: 'What the beds would need over a year:', tone: 'say' },
         ...(identical
           ? [
               {
-                text: `All ${String(perBed.length)} beds alike. ${perBed[0] ?? ''}`,
+                text: `All ${String(perBed.length)} beds alike. ${first.charAt(0).toUpperCase()}${first.slice(1)}`,
                 tone: 'note' as const,
               },
             ]
-          : perBed.map((text) => ({ text, tone: 'note' as const }))),
-        ...[...new Set(utterance.balances.flatMap((balance) => balance.notes))].map((text) => ({
+          : utterance.balances.map(({ label }, at) => ({
+              text: `${label}: ${perBed[at] ?? ''}`,
+              tone: 'note' as const,
+            }))),
+        ...[...new Set(utterance.balances.flatMap(({ balance }) => balance.notes))].map((text) => ({
           text,
           tone: 'caveat' as const,
         })),
@@ -739,17 +780,22 @@ export const wordsFor = (utterance: Utterance, catalog: readonly Crop[]): readon
     case 'out-of-scope':
       return [
         { text: OUT_OF_SCOPE[utterance.topic], tone: 'say' },
-        {
-          // the same sentence the results panel already carries, so the agent and the panel are
-          // honest about the same limits in the same words
-          text: "Cost, planning permission, grid connection and mounting structure weren't considered at all.",
-          tone: 'caveat',
-        },
+        // the caveat lists the app's limits, and a question with no garden in it names none of them
+        ...(utterance.topic === 'other'
+          ? []
+          : [
+              {
+                // the same sentence the results panel already carries, so the agent and the panel are
+                // honest about the same limits in the same words
+                text: "Cost, planning permission, grid connection and mounting structure weren't considered at all.",
+                tone: 'caveat' as const,
+              },
+            ]),
       ]
     case 'panels-adjusted':
       return [
         {
-          text: `Done. ${utterance.clearanceM.toFixed(1)} m of headroom, rows ${utterance.pitchM.toFixed(1)} m apart${utterance.tiltDeg === null ? '' : `, tilted ${utterance.tiltDeg.toFixed(0)} degrees`}.`,
+          text: `Done. ${arrayClause(utterance)}.`,
           tone: 'say',
         },
         // `useAutoLight` runs the full check about a second after the last edit, so the figures on

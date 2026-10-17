@@ -1,6 +1,7 @@
 import { buildAgenda } from '../recommend/agenda'
 import { ruleJoinsPair } from '../recommend/compatibility'
 import { geocode } from '../data/geocode'
+import { usStateOf } from '../data/retail-price'
 import type { PlanRefusal } from '../recommend/planting'
 import { dayOfYearAt } from '../state/sun'
 import { waterBalanceView } from '../state/water'
@@ -180,13 +181,15 @@ const coverCropIdsOf = (state: AppState, cropIds: readonly CropId[]): readonly C
   })
 }
 
-/** The array's own headroom, spacing and tilt, read the way `panels-adjusted` already reads them */
+/** The array's own headroom, spacing and tilt, in the design's unit, which `panels-adjusted` reads through too */
 const arrayAssumptions = (state: AppState): ArrayAssumptions | null => {
   const array = state.plot?.arrays[0]
   if (array === undefined) return null
   return {
     clearanceM: array.geometry.clearanceHeightM as number,
     pitchM: array.geometry.pitchM as number,
+    rowCount: array.geometry.rowCount,
+    unit: state.lengthUnit,
     tiltDeg: array.tracker.mode === 'fixed' ? (array.tracker.tiltDeg as number) : null,
   }
 }
@@ -1148,12 +1151,31 @@ const carryOut = async (understanding: Understanding, context: ActContext): Prom
       return agendaReply(state, [], 6, null)
     case 'ask-compliance': {
       if (state.compliance.length === 0) return needsLight(state)
-      return reply([{ kind: 'compliance', checks: state.compliance }], { offer: ['ask-sources'] })
+      return reply(
+        [
+          {
+            kind: 'compliance',
+            checks: state.compliance,
+            // where the garden is, read the way the compliance panel reads it
+            usState:
+              state.site.status === 'ready' ? usStateOf(state.site.value.botanicalArea) : null,
+          },
+        ],
+        { offer: ['ask-sources'] },
+      )
     }
     case 'ask-water': {
       const view = waterBalanceView(state)
-      if (view.balances.length === 0) return needsLight(state)
-      return reply([{ kind: 'water', balances: view.balances }], { offer: ['describe-garden'] })
+      const plot = state.plot
+      if (view.balances.length === 0 || plot === null) return needsLight(state)
+      // each balance with its bed's name, so a line can say whose it is
+      const balances = view.balances.flatMap((balance) => {
+        const label = plot.beds.find((bed) => bed.id === balance.bedId)?.label
+        return label === undefined ? [] : [{ label, balance }]
+      })
+      return reply([{ kind: 'water', balances, hasPanels: plot.arrays.length > 0 }], {
+        offer: ['describe-garden'],
+      })
     }
     case 'ask-companions': {
       const cropId = slots.crops[0]
@@ -1254,16 +1276,14 @@ const carryOut = async (understanding: Understanding, context: ActContext): Prom
                 }
               : array.tracker
       state.upsertArray({ ...array, geometry: { ...geometry, ...next }, tracker })
-      const after = context.state().plot?.arrays[0]
-      if (after === undefined) return blocked('designs')
+      const after = arrayAssumptions(context.state())
+      if (after === null) return blocked('designs')
       return reply(
         [
           {
             kind: 'panels-adjusted',
             change: slots.panels,
-            clearanceM: after.geometry.clearanceHeightM as number,
-            pitchM: after.geometry.pitchM as number,
-            tiltDeg: after.tracker.mode === 'fixed' ? (after.tracker.tiltDeg as number) : null,
+            ...after,
             // the light follows a move by itself unless auto-run is off (`useAutoLight`)
             recomputing: context.state().autoRun,
           },

@@ -80,7 +80,7 @@ describe('compliance language', () => {
       overall,
       isDetermination: false,
     }))
-    const lines = wordsFor({ kind: 'compliance', checks }, [])
+    const lines = wordsFor({ kind: 'compliance', checks, usState: null }, [])
     const first = lines[0]?.text ?? ''
     expect(first).not.toMatch(FORBIDDEN)
     // it says how many were looked at, and doesn't stop at a number

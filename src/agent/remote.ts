@@ -179,7 +179,8 @@ const readSlots = (
     */
     crops: cropsNamed(text, catalog, given),
     subject: asString(raw.subject),
-    scope: asChoice(raw.scope, SCOPE),
+    // `other` has no phrase to match, so it isn't in `SCOPE`, and the model is the only reader that says it
+    scope: raw.scope === 'other' ? 'other' : asChoice(raw.scope, SCOPE),
     panels: asChoice(raw.panels, PANEL_CHANGE),
   }
 }

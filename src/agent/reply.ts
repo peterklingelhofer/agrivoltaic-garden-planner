@@ -30,6 +30,12 @@ export interface BedLightVerdict {
   readonly limiting: LimitingFactor | null
 }
 
+/** One bed's water balance, the engine's own value, with the bed's name so a line can say whose it is */
+export interface NamedBalance {
+  readonly label: string
+  readonly balance: BedWaterBalance
+}
+
 /**
  * What the agent says, as structure.
  *
@@ -199,8 +205,18 @@ export type Utterance =
       /** What was asked: the whole list, or the dates for one crop */
       readonly about: 'everything' | 'crop'
     }
-  | { readonly kind: 'compliance'; readonly checks: readonly ComplianceCheck[] }
-  | { readonly kind: 'water'; readonly balances: readonly BedWaterBalance[] }
+  | {
+      readonly kind: 'compliance'
+      readonly checks: readonly ComplianceCheck[]
+      /** The US state the garden is in, null outside the US or before the site is looked up */
+      readonly usState: string | null
+    }
+  | {
+      readonly kind: 'water'
+      readonly balances: readonly NamedBalance[]
+      /** Whether the plot has any panels, which decides what the shaded figure is said to be under */
+      readonly hasPanels: boolean
+    }
   | {
       readonly kind: 'companions'
       readonly cropId: CropId
@@ -244,6 +260,10 @@ export type Utterance =
       readonly change: PanelChange
       readonly clearanceM: number
       readonly pitchM: number
+      /** One row has no spacing to report, so the words give a pitch only for two or more */
+      readonly rowCount: number
+      /** The unit the design is kept in, so the sentence prints what the grower said */
+      readonly unit: LengthUnit
       /** null when the array tracks the sun, which has no fixed tilt to report */
       readonly tiltDeg: number | null
       /** Whether the light follows the move by itself, or waits because auto-run is off */
@@ -253,7 +273,8 @@ export type Utterance =
    * Asked about something this application doesn't model, and saying so by name.
    *
    * The design search already lists these in its own caveats. Declining specifically is the point:
-   * "I don't model cost" is a fact a grower can act on, and "I didn't follow that" is a lie
+   * "I don't model cost" is a fact a grower can act on, and "I didn't follow that" is a lie.
+   * The topic `other` is a question with no garden in it, which names no limit of this app
    */
   | { readonly kind: 'out-of-scope'; readonly topic: ScopeTopic }
   /** The plot was reshaped as well as recorded, which only happens once one has been drawn */
@@ -319,6 +340,10 @@ export type Utterance =
 export interface ArrayAssumptions {
   readonly clearanceM: number
   readonly pitchM: number
+  /** One row has no spacing to report, so the words give a pitch only for two or more */
+  readonly rowCount: number
+  /** The unit the design is kept in, so the sentence prints what the grower said */
+  readonly unit: LengthUnit
   /** Null where the array tracks the sun, which has no fixed tilt to report */
   readonly tiltDeg: number | null
 }

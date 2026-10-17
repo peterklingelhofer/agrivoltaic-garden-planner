@@ -383,6 +383,22 @@ describe('what the browser makes of the answer', () => {
     expect(reading?.slots.crops).toContain('lettuce-leaf')
   })
 
+  it('keeps the catch-all scope, which no entry in the phrase table names', async () => {
+    const reading = await read('why is the sky blue', {
+      intent: 'out-of-scope',
+      slots: { ...ANSWER.slots, scope: 'other' },
+    })
+    expect(reading?.slots.scope).toBe('other')
+  })
+
+  it('drops a scope the app has no such thing as', async () => {
+    const reading = await read('what about the weather', {
+      intent: 'out-of-scope',
+      slots: { ...ANSWER.slots, scope: 'weather' },
+    })
+    expect(reading?.slots.scope).toBeNull()
+  })
+
   it('offers a guess as chips, acting on nothing', async () => {
     const reading = await read('is it legal?', {
       intent: 'out-of-scope',
