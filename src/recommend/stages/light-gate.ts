@@ -77,7 +77,8 @@ const seasonMonthsFor = (
  * Season light for one crop in one bed, evaluated against only the months of the crop's own
  * growing window that the site's own season actually reaches (`seasonMonthsFor`). Cumulative RSR
  * is the day-weighted photon deficit across those months, which is the quantity the Laub curves
- * are defined on
+ * are defined on. `bakedRsr` is the same deficit read off the bake's own mean, before the
+ * surroundings answer, and it's the share the design ceiling reads
  */
 export const seasonLightFor = (
   crop: Crop,
@@ -91,6 +92,7 @@ export const seasonLightFor = (
 
   let weightedDli = 0
   let underArrayMol = 0
+  let bakedMol = 0
   let openSkyMol = 0
   let days = 0
   let minMonthly = Number.POSITIVE_INFINITY
@@ -104,6 +106,7 @@ export const seasonLightFor = (
     const floor = monthValue(light.monthlyMinDliMolM2Day, month)
     weightedDli += mean * monthDays
     underArrayMol += mean * monthDays
+    bakedMol += monthValue(light.monthlyBakedMeanDliMolM2Day, month) * monthDays
     openSkyMol += open * monthDays
     days += monthDays
     minMonthly = Math.min(minMonthly, floor)
@@ -118,6 +121,7 @@ export const seasonLightFor = (
     minMonthlyDliMolM2Day: (Number.isFinite(minMonthly) ? minMonthly : 0) as MolPerM2Day,
     maxMonthlyDliMolM2Day: (Number.isFinite(maxMonthly) ? maxMonthly : 0) as MolPerM2Day,
     cumulativeRsr: clamp(openSkyMol <= 0 ? 0 : 1 - underArrayMol / openSkyMol, 0, 1) as Fraction,
+    bakedRsr: clamp(openSkyMol <= 0 ? 0 : 1 - bakedMol / openSkyMol, 0, 1) as Fraction,
     daysAboveDisorderCeiling: daysAboveCeiling,
   }
 }
@@ -141,8 +145,13 @@ export const dliFit = (
   return clamp(rising * (1 - Math.min(overshoot, 0.5)), 0, 1) as Fraction
 }
 
+/**
+ * The design ceiling reads the bake's own share, the panels and anything drawn, before the
+ * surroundings answer. Its source limits the shading caused by PV systems, and a fence isn't a
+ * panel
+ */
 export const rsrWithinDesignCeiling = (seasonLight: SeasonLight, maxDesignRsr: Fraction): boolean =>
-  seasonLight.cumulativeRsr <= maxDesignRsr
+  seasonLight.bakedRsr <= maxDesignRsr
 
 /**
  * The shade-benefit bonus scales with the graded water-limitation index, with heat days, AND
@@ -221,11 +230,11 @@ export const lightGate = (
         stage: 'light-gate',
         cause: { kind: 'max-design-rsr' },
         membership: clamp(
-          crop.light.maxDesignRsr.value / Math.max(seasonLight.cumulativeRsr, 0.001),
+          crop.light.maxDesignRsr.value / Math.max(seasonLight.bakedRsr, 0.001),
           0,
           1,
         ) as Fraction,
-        explanation: `Shade takes ${(seasonLight.cumulativeRsr * 100).toFixed(0)} percent of this bed's light over the season, above the ${(crop.light.maxDesignRsr.value * 100).toFixed(0)} percent limit set for this kind of crop`,
+        explanation: `Panels and anything drawn take ${(seasonLight.bakedRsr * 100).toFixed(0)} percent of this bed's light over the season, above the ${(crop.light.maxDesignRsr.value * 100).toFixed(0)} percent limit set for this kind of crop`,
       },
     }
   }

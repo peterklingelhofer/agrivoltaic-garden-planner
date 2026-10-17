@@ -442,16 +442,19 @@ describe('a native already asked for leans like a named pick', () => {
   })
 })
 
-const phoenixLight = (rsr: number): BedLight => ({
-  ...bedLightFixture('bed-a', rsr),
-  monthlyMeanDliMolM2Day: monthly(
-    PHOENIX_OPEN_SKY_DLI.map((value) => (value * (1 - rsr)) as MolPerM2Day),
-  ),
-  monthlyMinDliMolM2Day: monthly(
-    PHOENIX_OPEN_SKY_DLI.map((value) => (value * (1 - rsr) * 0.9) as MolPerM2Day),
-  ),
-  monthlyOpenSkyDliMolM2Day: monthly(PHOENIX_OPEN_SKY_DLI.map((value) => value as MolPerM2Day)),
-})
+const phoenixLight = (rsr: number): BedLight => {
+  const mean = monthly(PHOENIX_OPEN_SKY_DLI.map((value) => (value * (1 - rsr)) as MolPerM2Day))
+  return {
+    ...bedLightFixture('bed-a', rsr),
+    monthlyMeanDliMolM2Day: mean,
+    // the shade here is all the bake's, and the design ceiling reads this field
+    monthlyBakedMeanDliMolM2Day: mean,
+    monthlyMinDliMolM2Day: monthly(
+      PHOENIX_OPEN_SKY_DLI.map((value) => (value * (1 - rsr) * 0.9) as MolPerM2Day),
+    ),
+    monthlyOpenSkyDliMolM2Day: monthly(PHOENIX_OPEN_SKY_DLI.map((value) => value as MolPerM2Day)),
+  }
+}
 
 interface PhoenixRun {
   readonly bed: Bed

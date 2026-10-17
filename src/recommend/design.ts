@@ -1205,12 +1205,13 @@ const evaluate = (
     // the water balance's own reading of these placed beds, the figure the water objective
     // ranks on, computed by `scenarioWaterOf`
     water: scenarioWaterOf(deps, plot, resolvedLayout, ground),
-    // the shade the planting can take, against the shade the bake says it gets, since the footprint
-    // the rows were sized from isn't a measurement
+    // the shade the planting can take, against the shade the bake says the panels and anything
+    // drawn give it, since the footprint the rows were sized from isn't a measurement. The
+    // surroundings' share comes off the budget (`shadeBudgetFor`) and stays out of the measure
     flags: flagsFrom(check, {
       maxRatio: shadeBudgetFor(answers),
-      measuredRatio: season.cumulativeRsr,
-      withinBudget: season.cumulativeRsr <= shadeBudgetFor(answers) + 1e-9,
+      measuredRatio: season.bakedRsr,
+      withinBudget: season.bakedRsr <= shadeBudgetFor(answers) + 1e-9,
     }),
     lightExcluded: lightGateExcluded(ranked),
     tierCShare: basket.length === 0 ? 1 : tierC / basket.length,

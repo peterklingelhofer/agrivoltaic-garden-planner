@@ -198,6 +198,21 @@ describe('per-bed aggregation', () => {
     expect(season.cumulativeRsr).toBeCloseTo(light.monthlyRsr[5], 5)
     expect(season.meanDliMolM2Day).toBeGreaterThan(0)
     expect(season.minMonthlyDliMolM2Day).toBeLessThanOrEqual(season.maxMonthlyDliMolM2Day)
+
+    // nothing has dimmed this bed, so the bake's own mean is the mean and the two shares agree
+    expect(light.monthlyBakedMeanDliMolM2Day).toEqual(light.monthlyMeanDliMolM2Day)
+    expect(season.bakedRsr).toBeCloseTo(season.cumulativeRsr, 9)
+
+    // halving the mean, as the surroundings answer does, moves the total and leaves the baked share
+    const dimmed = {
+      ...light,
+      monthlyMeanDliMolM2Day: byMonth(
+        (month) => ((light.monthlyMeanDliMolM2Day[month] ?? 0) * 0.5) as MolPerM2Day,
+      ),
+    }
+    const dimmedSeason = seasonLight(dimmed, { startMonth: 4, endMonth: 9 }, 17 as MolPerM2Day)
+    expect(dimmedSeason.bakedRsr).toBeCloseTo(season.bakedRsr, 9)
+    expect(dimmedSeason.cumulativeRsr).toBeGreaterThan(season.cumulativeRsr)
   })
 
   /**

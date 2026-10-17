@@ -61,6 +61,18 @@ describe('what already surrounds a space', () => {
     expect(shaded.skyViewFactor).toBe(light.skyViewFactor)
   })
 
+  it('scales the mean by 0.7 for a space shaded part of the day and leaves the baked mean as the bake read it', () => {
+    const light = bedLightFixture('bed-1', 0.2)
+    const shaded = shadedBySurroundings(light, 'partly-sheltered')
+    for (let month = 0; month < 12; month += 1) {
+      expect(shaded.monthlyMeanDliMolM2Day[month]).toBeCloseTo(
+        (light.monthlyMeanDliMolM2Day[month] ?? 0) * 0.7,
+        6,
+      )
+    }
+    expect(shaded.monthlyBakedMeanDliMolM2Day).toEqual(light.monthlyMeanDliMolM2Day)
+  })
+
   it('takes more off a space in shade most of the day than one shaded part of it', () => {
     const light = bedLightFixture('bed-1', 0)
     const part = shadedBySurroundings(light, 'partly-sheltered')

@@ -88,12 +88,13 @@ export const bedLight = (raster: DliRaster, bedId: BedId, footprint: Polygon2D):
     gather(monthValue(raster.monthlyOpenSkyMolM2Day, month), indices),
   )
   const annualUnder = gather(raster.annualUnderArrayMolM2Day, indices)
+  const monthlyMean = byMonth((month) => meanOf(monthValue(monthlyUnder, month)) as MolPerM2Day)
   return {
     bedId,
     cellCount: indices.length,
-    monthlyMeanDliMolM2Day: byMonth(
-      (month) => meanOf(monthValue(monthlyUnder, month)) as MolPerM2Day,
-    ),
+    monthlyMeanDliMolM2Day: monthlyMean,
+    // the same figures until `shadedBySurroundings` dims the first and leaves this one as baked
+    monthlyBakedMeanDliMolM2Day: monthlyMean,
     monthlyMinDliMolM2Day: byMonth(
       (month) => minOf(monthValue(monthlyUnder, month)) as MolPerM2Day,
     ),
@@ -134,6 +135,7 @@ export const seasonLight = (
 ): SeasonLight => {
   const months = monthsInWindow(window)
   let weightedUnder = 0
+  let weightedBaked = 0
   let weightedOpen = 0
   let days = 0
   let daysAboveDisorderCeiling = 0
@@ -143,6 +145,7 @@ export const seasonLight = (
     const monthDays = DAYS_PER_MONTH[month] ?? 30
     const under = monthValue(light.monthlyMeanDliMolM2Day, month) as number
     weightedUnder += under * monthDays
+    weightedBaked += (monthValue(light.monthlyBakedMeanDliMolM2Day, month) as number) * monthDays
     weightedOpen += (monthValue(light.monthlyOpenSkyDliMolM2Day, month) as number) * monthDays
     days += monthDays
     smallest = Math.min(smallest, under)
@@ -150,6 +153,7 @@ export const seasonLight = (
     if (disorderCeiling !== null && under > disorderCeiling) daysAboveDisorderCeiling += monthDays
   }
   const meanUnder = days > 0 ? weightedUnder / days : 0
+  const meanBaked = days > 0 ? weightedBaked / days : 0
   const meanOpen = days > 0 ? weightedOpen / days : 0
   return {
     bedId: light.bedId,
@@ -159,6 +163,7 @@ export const seasonLight = (
     maxMonthlyDliMolM2Day: (largest === -Infinity ? 0 : largest) as MolPerM2Day,
     // RSR is season-cumulative, one ratio for the whole season (Decision Record section 6)
     cumulativeRsr: relativeShadeRatio(meanUnder as MolPerM2Day, meanOpen as MolPerM2Day),
+    bakedRsr: relativeShadeRatio(meanBaked as MolPerM2Day, meanOpen as MolPerM2Day),
     daysAboveDisorderCeiling,
   }
 }

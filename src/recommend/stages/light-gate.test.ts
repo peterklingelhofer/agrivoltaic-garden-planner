@@ -5,6 +5,7 @@ import type { CropId } from '../../types/ids'
 import type { ExceedancePercentile, FrostExceedanceCurve, Site } from '../../types/site'
 import { molPerM2Day } from '../../types/units'
 import type { Celsius, Days, DayOfYear } from '../../types/units'
+import { shadedBySurroundings } from '../surroundings'
 import { bedLightFixture, FROST_EVERY_YEAR, frostFreeSiteFixture, siteFixture } from '../testkit'
 import { lightGate } from './light-gate'
 
@@ -119,5 +120,63 @@ describe('lightGate refuses wild ginger past its own survival ceiling', () => {
     const dim = bedLightFixture('bed-dim', 0.3, 36, Array(12).fill(30))
     const admitted = lightGate(crop, dim, siteFixture(), PERCENTILE)
     expect(admitted.passed).toBe(true)
+  })
+})
+
+describe('lightGate holds the design ceiling to the bake alone', () => {
+  // light well above every minimum in every month, so the shade ceiling is the only question
+  const BRIGHT = Array(12).fill(40)
+
+  it('admits a bed the bake leaves unshaded where the surroundings take three tenths of the light', async () => {
+    const catalog = await catalogPromise
+    const tomato = need(catalog, 'tomato')
+    expect(tomato.light.maxDesignRsr.value).toBe(0.2)
+
+    const open = bedLightFixture('bed-open', 0, 36, BRIGHT)
+    const outcome = lightGate(
+      tomato,
+      shadedBySurroundings(open, 'partly-sheltered'),
+      siteFixture(),
+      PERCENTILE,
+    )
+    expect(outcome.passed).toBe(true)
+    // the total still carries the surroundings, which is what the yield curve is read on
+    expect(outcome.light.cumulativeRsr).toBeCloseTo(0.3, 6)
+    expect(outcome.light.bakedRsr).toBeCloseTo(0, 9)
+  })
+
+  it('refuses a bed the bake shades past the ceiling under every answer to what surrounds it', async () => {
+    const catalog = await catalogPromise
+    const tomato = need(catalog, 'tomato')
+    const panelShaded = bedLightFixture('bed-panels', 0.25, 36, BRIGHT)
+    for (const exposure of ['open', 'partly-sheltered'] as const) {
+      const outcome = lightGate(
+        tomato,
+        shadedBySurroundings(panelShaded, exposure),
+        siteFixture(),
+        PERCENTILE,
+      )
+      expect(outcome.passed, exposure).toBe(false)
+      expect(outcome.limiting?.cause, exposure).toEqual({ kind: 'max-design-rsr' })
+      expect(outcome.light.bakedRsr, exposure).toBeCloseTo(0.25, 6)
+    }
+  })
+
+  it('names the percentage the bake takes, with the surroundings left out of it', async () => {
+    const catalog = await catalogPromise
+    const tomato = need(catalog, 'tomato')
+    const panelShaded = bedLightFixture('bed-panels', 0.25, 36, BRIGHT)
+    const outcome = lightGate(
+      tomato,
+      shadedBySurroundings(panelShaded, 'partly-sheltered'),
+      siteFixture(),
+      PERCENTILE,
+    )
+    // the total is 1 - 0.75 x 0.7, about 48 percent, and the sentence says 25
+    expect(outcome.light.cumulativeRsr).toBeCloseTo(0.475, 6)
+    expect(outcome.limiting?.explanation).toBe(
+      "Panels and anything drawn take 25 percent of this bed's light over the season, above the 20 percent limit set for this kind of crop",
+    )
+    expect(outcome.limiting?.membership).toBeCloseTo(0.8, 6)
   })
 })

@@ -1096,11 +1096,15 @@ a real garden.
 light and the layout search (`src/recommend/surroundings.ts`): a space shaded part of the day loses
 three tenths of the open-sky light before any panel does, one in shade most of the day six tenths.
 Both are this app's own reading of a three-answer question, declared unsourced on the sources step.
-Every bed's under-array figures are dimmed by that share, the open-sky reference is left alone so
-the relative shade ratio compounds by itself, the layout search judges its candidates on the same
-dimmed light, and the ranking re-runs when the answer changes. The light step says what was taken
-off, and that the ground map shows the panels' shade alone. The search's shade budget is scaled by
-one minus the same share.
+Every bed's under-array figures are dimmed by that share and the open-sky reference is left alone,
+so the dimmed light carries the shade of the panels and the surroundings together. The daily light
+minimums read its figures, the yield curve reads its shade, the layout search judges its candidates
+on it, and the ranking re-runs when the answer changes. The design ceiling for shade-sensitive
+crops and the layout search's shade budget read the bake's own share, the panels and anything
+drawn, before the surroundings answer. The ceiling's source limits the shading caused by PV systems
+(Record 6), and a fence isn't a panel. The light step says what was taken off, and that the ground
+map shows the panels' shade alone. The search's shade budget is scaled by one minus the
+surroundings share.
 
 **A plant recorded wild only where winters are cold needs a cold winter.** Ramps, western wild
 ginger and eastern teaberry carry `coldWinterOnly` on their recorded ranges (Chamberlain et al.

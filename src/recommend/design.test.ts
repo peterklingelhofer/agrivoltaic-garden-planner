@@ -937,6 +937,21 @@ describe('the archetype names have to match the figures beside them', () => {
   }, 600_000)
 
   /**
+   * The surroundings answer dims the light the crops are judged on and takes its share off the
+   * budget, so the check reads the shade the bake itself puts down. The control puts down none
+   */
+  it('keeps the no-array control inside the budget where the surroundings take a share of the light', async () => {
+    const answers = answersFor({ mounting: 'ground-rows', exposure: 'partly-sheltered' })
+    const set = await suggestDesigns(answers, deps)
+    const control = set.scenarios.find(
+      (entry) => entry.candidate.archetype === 'no-array-control',
+    ) as DesignScenario
+    expect(control.flags.shade.maxRatio).toBeCloseTo(shadeBudgetFor(answers), 9)
+    expect(control.flags.shade.measuredRatio).toBeCloseTo(0, 3)
+    expect(control.flags.shade.withinBudget).toBe(true)
+  }, 600_000)
+
+  /**
    * The sizing footprint and the measured ratio aren't the same quantity, and this pins that they
    * differ.
    *

@@ -72,10 +72,14 @@ export const bedLightFixture = (
   open: readonly number[] = openSkyDli(peakDli),
 ): BedLight => {
   const under = open.map((value) => value * (1 - rsr))
+  const mean = monthly(under.map((value) => value as MolPerM2Day))
   return {
     bedId: bedId as BedId,
     cellCount: 400,
-    monthlyMeanDliMolM2Day: monthly(under.map((value) => value as MolPerM2Day)),
+    monthlyMeanDliMolM2Day: mean,
+    // the fixture's `rsr` is all bake. A test that wants the surroundings' share on top of it runs
+    // the bed through `shadedBySurroundings`
+    monthlyBakedMeanDliMolM2Day: mean,
     monthlyMinDliMolM2Day: monthly(under.map((value) => (value * 0.9) as MolPerM2Day)),
     monthlyOpenSkyDliMolM2Day: monthly(open.map((value) => value as MolPerM2Day)),
     monthlyRsr: twelve(rsr as Fraction),

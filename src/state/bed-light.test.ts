@@ -18,11 +18,14 @@ const quality: RasterQuality = {
   seasonalParHalfWidthFraction: 0 as Fraction,
 }
 
+const underPanels = twelve([30, 30, 30, 15, 15, 15, 15, 15, 15, 30, 30, 30])
+
 /** Open sky 30 all year. Under the panels 15 from April to September and 30 outside it */
 const shaded: BedLight = {
   bedId: bedId('bed-1'),
   cellCount: 40,
-  monthlyMeanDliMolM2Day: twelve([30, 30, 30, 15, 15, 15, 15, 15, 15, 30, 30, 30]),
+  monthlyMeanDliMolM2Day: underPanels,
+  monthlyBakedMeanDliMolM2Day: underPanels,
   monthlyMinDliMolM2Day: twelve([30, 30, 30, 9, 9, 9, 9, 9, 9, 30, 30, 30]),
   monthlyOpenSkyDliMolM2Day: twelve([30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30]),
   monthlyRsr: twelve([

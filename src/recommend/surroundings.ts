@@ -36,14 +36,6 @@ const scaled = (values: ByMonth<MolPerM2Day>, keep: number): ByMonth<MolPerM2Day
   values.map((value) => (value * keep) as MolPerM2Day) as unknown as ByMonth<MolPerM2Day>
 
 /**
- * A bed's light with the surroundings' share taken off it.
- *
- * The under-array figures are dimmed and the open-sky reference is left alone, so the relative
- * shade ratio compounds by itself: a bed the panels shade by a fifth in a space that already
- * loses a third reads as shaded by 1 - 0.8 x 0.7, which is the shade the plant stands in. The
- * open answer returns the same object, so a bake in open sky isn't copied for nothing
- */
-/**
  * Which answer the three-answer share actually reads: the grower's own, unless a house is
  * drawn. A drawn house is the answer to what is already around the space, so the share stands
  * only while nothing is drawn (Decision Record 26)
@@ -53,6 +45,16 @@ export const exposureInForce = (
   exposure: SiteExposure,
 ): SiteExposure => (obstructions.length > 0 ? 'open' : exposure)
 
+/**
+ * A bed's light with the surroundings' share taken off it.
+ *
+ * The under-array figures are dimmed and the open-sky reference is left alone, so the dimmed
+ * figures carry the compounded shade: a bed the panels shade by a fifth in a space that already
+ * loses three tenths reads as shaded by 1 - 0.8 x 0.7, which is the shade the plant stands in.
+ * `monthlyBakedMeanDliMolM2Day` stays as the bake left it, the panels and anything drawn, so the
+ * design ceiling reads that share on its own. The open answer returns the same object, so a bake
+ * in open sky isn't copied for nothing
+ */
 export const shadedBySurroundings = (light: BedLight, exposure: SiteExposure): BedLight => {
   const share = SURROUNDINGS_SHADE[exposure]
   if (share === 0) return light

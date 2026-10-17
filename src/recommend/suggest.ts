@@ -368,14 +368,14 @@ export const inferredLightAdmissionsOf = (
   if (
     ceiling.provenance === 'inferred' &&
     ceiling.value > envelope.deepestRsr &&
-    seasonLight.cumulativeRsr > envelope.deepestRsr
+    seasonLight.bakedRsr > envelope.deepestRsr
   ) {
     admissions.push({
       cropId: crop.id,
       threshold: 'max-design-rsr',
       inferredValue: ceiling.value,
       measuredEnvelopeValue: envelope.deepestRsr,
-      explanation: `This bed is ${(seasonLight.cumulativeRsr * 100).toFixed(0)} percent shaded across ${crop.id as string}'s season. It's allowed here only by a ${(ceiling.value * 100).toFixed(0)} percent shade limit inferred from its crop class. No measured figure in this catalog supports more than ${(envelope.deepestRsr * 100).toFixed(0)} percent shade`,
+      explanation: `The panels and anything drawn shade this bed ${(seasonLight.bakedRsr * 100).toFixed(0)} percent across ${crop.id as string}'s season. It's allowed here only by a ${(ceiling.value * 100).toFixed(0)} percent shade limit inferred from its crop class. No measured figure in this catalog supports more than ${(envelope.deepestRsr * 100).toFixed(0)} percent shade`,
     })
   }
   const floor = crop.light.dliMinMolM2Day

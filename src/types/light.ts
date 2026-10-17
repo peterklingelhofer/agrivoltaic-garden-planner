@@ -63,6 +63,11 @@ export interface BedLight {
   readonly bedId: BedId
   readonly cellCount: number
   readonly monthlyMeanDliMolM2Day: ByMonth<MolPerM2Day>
+  /**
+   * The bake's own under-array mean, the panels and anything drawn. `shadedBySurroundings` leaves
+   * it alone, so the design ceiling can read the array's share on its own
+   */
+  readonly monthlyBakedMeanDliMolM2Day: ByMonth<MolPerM2Day>
   readonly monthlyMinDliMolM2Day: ByMonth<MolPerM2Day>
   readonly monthlyOpenSkyDliMolM2Day: ByMonth<MolPerM2Day>
   readonly monthlyRsr: ByMonth<Fraction>
@@ -94,5 +99,10 @@ export interface SeasonLight {
   readonly minMonthlyDliMolM2Day: MolPerM2Day
   readonly maxMonthlyDliMolM2Day: MolPerM2Day
   readonly cumulativeRsr: Fraction
+  /**
+   * The season's shade from the bake alone, the panels and anything drawn, before the
+   * surroundings answer
+   */
+  readonly bakedRsr: Fraction
   readonly daysAboveDisorderCeiling: number
 }
