@@ -1,23 +1,31 @@
 import { createHash } from 'node:crypto'
+import type { CitationQuote } from '../types/evidence'
 
 /**
  * The verbatim quotes in the citation ledger, and the receipts that show each one was found in
  * its source.
  *
- * A `backsClaims` string in `docs/CITATIONS.csl.json` can carry a quote from its source: the word
- * verbatim, then the source's own words in single or double quotation marks.
- * `scripts/check-quotes.mjs` looks every quote up in the text of its source, which it reads from a
- * cache: a local folder of fetched sources that is never committed, since most of them are
+ * An entry in `docs/CITATIONS.csl.json` lists the quotes it backs in `custom.quotes`: the source's
+ * own words, where in the source they sit and the index of the claim in `backsClaims` that they
+ * back. `scripts/check-quotes.mjs` looks every quote up in the text of its source, which it reads
+ * from a cache: a local folder of fetched sources that is never committed, since most of them are
  * copyrighted. A quote the script finds gets a receipt in `docs/CITATIONS.receipts.json`, which
  * `bun scripts/check-quotes.mjs --write-receipts` writes: the quote's key and a description of the
  * text it was found in. `staleReceipts` holds the receipts against the ledger with no network and
  * no cache, so the words of a quote can't change after it was checked without CI failing until the
  * script finds the new wording.
  *
+ * An entry with no `quotes` field is read the old way: a `backsClaims` string carries a quote after
+ * the word verbatim, the source's own words in single or double quotation marks. `quotesInClaim`
+ * reads those, and `claimsStillQuoting` lists the entries that still have one, so none comes back.
+ *
  * This module is the one definition of which quotes an entry carries, of how a page becomes the
  * text a quote is looked up in and of when two texts count as the same. The script and the tests
  * both import it, so a change to a rule reaches both
  */
+
+// the word that marks a quote in a claim, in any case
+const VERBATIM = 'verbatim'
 
 /** The layout version of `docs/CITATIONS.receipts.json` */
 export const RECEIPTS_FORMAT = 1
@@ -59,7 +67,10 @@ export interface ReceiptsFile {
 
 /** The part of a ledger entry that holds quotes */
 export interface ClaimedEntry {
-  readonly custom?: { readonly backsClaims?: readonly string[] }
+  readonly custom?: {
+    readonly backsClaims?: readonly string[]
+    readonly quotes?: readonly CitationQuote[]
+  }
 }
 
 /** A CSL-JSON ledger entry as far as this module reads it */
@@ -248,7 +259,7 @@ const QUOTED_SPAN = /(?<![\p{L}\p{N}])'((?:[^']|'(?=\p{L}))*)'(?![\p{L}\p{N}])|"
  * label is not a quote
  */
 export const quotesInClaim = (claim: string): readonly ClaimQuote[] => {
-  const verbatimAt = claim.toLowerCase().indexOf('verbatim')
+  const verbatimAt = claim.toLowerCase().indexOf(VERBATIM)
   if (verbatimAt === -1) return []
   const rest = claim.slice(verbatimAt)
   const quotes: ClaimQuote[] = []
@@ -266,12 +277,29 @@ export const quotesInClaim = (claim: string): readonly ClaimQuote[] => {
   return quotes
 }
 
-/** The quotes an entry carries, in order, with the labels left out */
+/**
+ * The quotes an entry carries, in order. An entry with a `quotes` field gives the text of each. An
+ * entry without one gives what `quotesInClaim` reads from its claims, with the labels left out
+ */
 export const verbatimQuotesOf = (entry: ClaimedEntry): readonly string[] =>
-  (entry.custom?.backsClaims ?? []).flatMap((claim) =>
-    quotesInClaim(claim)
-      .filter((quote) => !quote.label)
-      .map((quote) => quote.text),
+  entry.custom?.quotes !== undefined
+    ? entry.custom.quotes.map((quote) => quote.text)
+    : (entry.custom?.backsClaims ?? []).flatMap((claim) =>
+        quotesInClaim(claim)
+          .filter((quote) => !quote.label)
+          .map((quote) => quote.text),
+      )
+
+/**
+ * The entries with a claim that still says verbatim. Once a quote moves to `custom.quotes` its
+ * claim keeps only the ledger's own words, so a claim that says verbatim is a quote left behind in
+ * prose, where `verbatimQuotesOf` reads it only from an entry that has no `quotes` field
+ */
+export const claimsStillQuoting = <Entry extends ClaimedEntry>(
+  ledger: readonly Entry[],
+): readonly Entry[] =>
+  ledger.filter((entry) =>
+    (entry.custom?.backsClaims ?? []).some((claim) => claim.toLowerCase().includes(VERBATIM)),
   )
 
 /**

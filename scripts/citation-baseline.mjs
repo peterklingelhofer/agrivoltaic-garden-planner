@@ -1,12 +1,13 @@
 #!/usr/bin/env bun
 /**
- * Holds three counts in the citation ledger to a baseline that can only go down.
+ * Holds five counts in the citation ledger to a baseline that can only go down.
  *
  * The counts come from `baselineCounts` in `src/data/citation-baseline.ts`: the entries still
- * marked unverified, the verbatim quotes that have no receipt, and the quotes that elide words
- * with a bare ellipsis where `[...]` is the written form. `docs/CITATIONS.baseline.json` holds the
- * figure each one may not exceed and `src/data/citation-baseline.test.ts` fails CI when one does,
- * so a regression is caught offline and an improvement is a one-line change to the baseline.
+ * marked unverified, the verbatim quotes that have no receipt, the quotes that elide words with a
+ * bare ellipsis where `[...]` is the written form, the quotes with no locator and the entries with
+ * a claim that still says verbatim. `docs/CITATIONS.baseline.json` holds the figure each one may
+ * not exceed and `src/data/citation-baseline.test.ts` fails CI when one does, so a regression is
+ * caught offline and an improvement is a one-line change to the baseline.
  *
  *   bun scripts/citation-baseline.mjs           print each count as `current / baseline`, say
  *                                               which could come down, and exit 1 when any is over

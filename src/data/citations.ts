@@ -2,6 +2,7 @@ import { CITATION_IDS, type CitationId } from '../types/citation-ids.generated'
 import {
   PEER_REVIEWED_TYPES,
   RESOLVER_VERIFIED,
+  type CitationQuote,
   type CitationRecord,
   type CitationType,
   type CitationVerification,
@@ -28,6 +29,7 @@ interface CslEntry {
     readonly accessLevel: string
     readonly evidenceTier: string | null
     readonly backsClaims?: readonly string[]
+    readonly quotes?: readonly CitationQuote[]
     readonly caveat?: string
     readonly archived?: string
   }
@@ -56,6 +58,7 @@ const project = (entry: CslEntry): CitationRecord => {
     accessLevel: entry.custom.accessLevel as CitationRecord['accessLevel'],
     evidenceTier: entry.custom.evidenceTier as CitationRecord['evidenceTier'],
     backsClaims: entry.custom.backsClaims ?? [],
+    quotes: entry.custom.quotes ?? [],
     caveat: entry.custom.caveat ?? null,
     peerReviewed: PEER_REVIEWED_TYPES.includes(type) && RESOLVER_VERIFIED.includes(verification),
   }

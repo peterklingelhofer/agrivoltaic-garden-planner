@@ -3,17 +3,6 @@
   "receipts": {
     "akepic-non-native-plant-species-list": [
       {
-        "quote": "0aaa891e43dbfd2161c4dc51a3e67389ea0b86638448909eedd0bc3c80f3f2be",
-        "preview": "Non-Native Plant Species List",
-        "found": {
-          "kind": "html",
-          "bytes": 334975,
-          "textSha256": "ec17e29dd51502a97f46a004ffe1aa63e449323fe63d54b5a96a5740f3ad324b",
-          "via": "e-html",
-          "date": "2026-10-17"
-        }
-      },
-      {
         "quote": "579986d02f3efe122d59f053865d52cd774ec2865314b49a929e4cf38ad13bdc",
         "preview": "Taraxacum officinale F.H. Wigg. TAOF common dandelion 58 Ast",
         "found": {
@@ -193,17 +182,6 @@
     ],
     "ca-olive-committee-2003-olive-pmsp": [
       {
-        "quote": "a2a64cf7e579afdbcbe616959986fbd282f80907ab15be3fead0adcb43eb3f0e",
-        "preview": "Differences in Production of Table Versus Oil Cultivars in C",
-        "found": {
-          "kind": "pdf",
-          "bytes": 535941,
-          "textSha256": "08d55265da1ec1f73860244df686f739fa59cd90d7c9ac951cb62b8154853bcf",
-          "via": "a-direct",
-          "date": "2026-10-17"
-        }
-      },
-      {
         "quote": "5c3ed384ffcbb9ee02818397e8a59b1602e3d04cebbc116f5e6485763cf267a0",
         "preview": "Table olive harvest usually begins in mid-September and can ",
         "found": {
@@ -211,6 +189,19 @@
           "bytes": 535941,
           "textSha256": "08d55265da1ec1f73860244df686f739fa59cd90d7c9ac951cb62b8154853bcf",
           "via": "a-direct",
+          "date": "2026-10-17"
+        }
+      }
+    ],
+    "calipc-inventory": [
+      {
+        "quote": "a8c8c00c3b8514855224840e8f20c28628f0a190cb87b157e22e02c46b6c34c0",
+        "preview": "Glebionis coronaria garland Chrysanthemum, crown daisy Limit",
+        "found": {
+          "kind": "html",
+          "bytes": 457916,
+          "textSha256": "2412a33b0ebdd620206ced5e5e9c396a67c9c80729b53f4292a12259d0df48f9",
+          "via": "e-html",
           "date": "2026-10-17"
         }
       }
@@ -243,19 +234,8 @@
     ],
     "colorado-cda-noxious-weed-species": [
       {
-        "quote": "57bad27f35b977e1919da801b30515b4955fe43306acf39567d8ee1d4d05c4af",
-        "preview": "List B Species ... Wild caraway Carum carvi",
-        "found": {
-          "kind": "html",
-          "bytes": 119915,
-          "textSha256": "9a36524da308feaa2bd817fa4df2683e69db12aeb3da3b154f331b68db51a13e",
-          "via": "e-html",
-          "date": "2026-10-17"
-        }
-      },
-      {
-        "quote": "d224b9374b089e992f80f5c9eb3079d5097164d69d6bd7f5afe2f35d87367035",
-        "preview": "Noxious Weed Species in Colorado",
+        "quote": "1e38767d93c297b0fbe12c63a3dcac7fed0a33333831b15fd34f887d272a4ab3",
+        "preview": "List B Species [...] Wild caraway Carum carvi",
         "found": {
           "kind": "html",
           "bytes": 119915,
@@ -543,23 +523,12 @@
           "via": "a-direct",
           "date": "2026-10-17"
         }
-      },
-      {
-        "quote": "273f697006c8354d17f3ebc003efdb6eb4ba93df6fd7a9768cc1485b37a5e573",
-        "preview": "Overview of Commercial Production Practices",
-        "found": {
-          "kind": "pdf",
-          "bytes": 191113,
-          "textSha256": "23caa48e847f6d3b07a88a39bb1b735b88a98291c7d68733d2897ac7f9f58869",
-          "via": "a-direct",
-          "date": "2026-10-17"
-        }
       }
     ],
     "ctahr-2009-cacao-economics-kona": [
       {
-        "quote": "da34bd18bee979242a06e57b505833adb30b155f689790d887d4ca628f2528f2",
-        "preview": "The example farm's tree spacing is 6 ft by 7 ft... some mana",
+        "quote": "af9a3d5032a1bbcccbe3a86c77f724ebdf59ca9b116acccc1788824347454d9a",
+        "preview": "The example farm's tree spacing is 6 ft by 7 ft [...] some m",
         "found": {
           "kind": "pdf",
           "bytes": 444533,
@@ -584,8 +553,8 @@
     ],
     "ctahr-circular-485-macadamia": [
       {
-        "quote": "9899d9066f211b2562f97bfc8751c9c03e5dbe6eb1153b49dce7eccfb42b8e0e",
-        "preview": "... 30 to 35 feet between rows and 16 to 20 feet between tre",
+        "quote": "438c9d363ea495602737e9e91b3c893201148dcce729c1494cf15fdbbba28da3",
+        "preview": "The main harvest period for macadamia nuts in Hawaii extends",
         "found": {
           "kind": "pdf",
           "bytes": 1511823,
@@ -595,8 +564,8 @@
         }
       },
       {
-        "quote": "438c9d363ea495602737e9e91b3c893201148dcce729c1494cf15fdbbba28da3",
-        "preview": "The main harvest period for macadamia nuts in Hawaii extends",
+        "quote": "aea07f3909d3d85a2354a1ba7949b835f7ee434b27b6aa16d7532dac1df79ca2",
+        "preview": "[...] 30 to 35 feet between rows and 16 to 20 feet between t",
         "found": {
           "kind": "pdf",
           "bytes": 1511823,
@@ -667,7 +636,7 @@
     ],
     "duke-1983-cacao-energy-crops": [
       {
-        "quote": "4cbe66f0455f7e015805534795fd944cde1d719c1315965830b6ae0da16e1bf5",
+        "quote": "0369e919884385f1699a62574885eb6ed766dee716dc814e73d135131ecbf2a1",
         "preview": "Although fruits mature throughout the year, usually only two",
         "found": {
           "kind": "html",
@@ -689,8 +658,8 @@
         }
       },
       {
-        "quote": "bedc4125d302f0c673964fc198a9502459b1a21a49c9c2fddfe1c74686f03e8b",
-        "preview": "Plants are shade-tolerant... Fields should remain shaded for",
+        "quote": "2a0f01f669ed084787c337e2376fb0bd8a01cadd46e94c0c3de1b2ccaeadeff3",
+        "preview": "Plants are shade-tolerant [...] Fields should remain shaded ",
         "found": {
           "kind": "html",
           "bytes": 28800,
@@ -881,7 +850,7 @@
         }
       },
       {
-        "quote": "53bdd06a2c6c010e48bcdd3e3c59472f41564c3a8d739457c3f044e623fa5680",
+        "quote": "046fe87dc956bba2c04c2fa8602e01240fd479aff3777007f07cc06b79a11bb0",
         "preview": "Seeds are sown into warm plantbeds 60-65 days prior to trans",
         "found": {
           "kind": "html",
@@ -894,17 +863,6 @@
     ],
     "fernandez-2006-yacon-central-europe": [
       {
-        "quote": "ddd24b8640c83afac3332a396eed7ce6590c351cddc506af8641b7fb0bec5f99",
-        "preview": "Influence of precipitation and temperature",
-        "found": {
-          "kind": "pdf",
-          "bytes": 129143,
-          "textSha256": "d7fe34081bbd3bda95de3db555f39cb86c1a1586c7870930e879944267e70b9b",
-          "via": "a-direct",
-          "date": "2026-10-17"
-        }
-      },
-      {
         "quote": "ff8f5e9a3bc55efb6586479868b4428df1262152f5a1f14d9023f42cbe5d2bf2",
         "preview": "The first frosts (–1°C) in autumn can cause yacon frost burn",
         "found": {
@@ -912,6 +870,19 @@
           "bytes": 129143,
           "textSha256": "d7fe34081bbd3bda95de3db555f39cb86c1a1586c7870930e879944267e70b9b",
           "via": "a-direct",
+          "date": "2026-10-17"
+        }
+      }
+    ],
+    "fisc-2025-invasive-plant-species": [
+      {
+        "quote": "757296f62b0f9df4f22e38473384e79ed36f10ab95e9443af5410eb9765e5f67",
+        "preview": "Xanthosoma sagittifolium arrowleaf elephant's ear N, C, S II",
+        "found": {
+          "kind": "html",
+          "bytes": 249224,
+          "textSha256": "e95e8c90a1c36b219e7cc84c752109d877930f61aff2378e722acd2bdf6ad960",
+          "via": "e-html",
           "date": "2026-10-17"
         }
       }
@@ -970,17 +941,6 @@
     ],
     "hear-pier-dysphania-ambrosioides": [
       {
-        "quote": "7069ca81047d19aa4d419bd90de0461f95bec2319eef225fc144d00d1ccdc36b",
-        "preview": "Dysphania ambrosioides: info from PIER",
-        "found": {
-          "kind": "html",
-          "bytes": 40892,
-          "textSha256": "045bb87ae9b0a3be771d93939538fdd1345fe1a0e4acc26c746cd62e15441409",
-          "via": "e-html",
-          "date": "2026-10-17"
-        }
-      },
-      {
         "quote": "c2bd8446032f8ef64fc262b5eb233a135e8c2c820bc5c562dcee7845cdd62938",
         "preview": "O‘ahu Island introduced invasive Wagner, Warren L./Herbst, D",
         "found": {
@@ -993,17 +953,6 @@
       }
     ],
     "hear-pier-eryngium-foetidum": [
-      {
-        "quote": "fe1de84576267db237748da09695a22b88b9474154fb960d93fed2f1266c7608",
-        "preview": "Eryngium foetidum: info from PIER",
-        "found": {
-          "kind": "html",
-          "bytes": 17834,
-          "textSha256": "884e7ccd00f95583244455105dad8dfd2d4459cc865a5262621364d9c7984095",
-          "via": "e-html",
-          "date": "2026-10-17"
-        }
-      },
       {
         "quote": "4b4119a0655141933296a19c96fd761bd90a87227f7b58e915754b71bba374a1",
         "preview": "O‘ahu Island introduced invasive cultivated Wagner, Warren L",
@@ -1059,17 +1008,6 @@
       {
         "quote": "4f154096af4580a640fb4920105f01d5aee48391eddef055ecd9c9f66c902a1a",
         "preview": "Eventually after several decades the trees can reach a heigh",
-        "found": {
-          "kind": "html",
-          "bytes": 43754,
-          "textSha256": "12c860588ff489ca82140ebccc6228d442f45d6ac6bf33c6718fe82c5531e863",
-          "via": "e-html",
-          "date": "2026-10-17"
-        }
-      },
-      {
-        "quote": "707a0d90e23b757b182324a045a3a6fa2d4e2f7b7f94bd20799b98797b77ddd3",
-        "preview": "What is Chinese Chestnut?",
         "found": {
           "kind": "html",
           "bytes": 43754,
@@ -1431,8 +1369,8 @@
     ],
     "maine-dacf-2024-invasive-plants-do-not-sell-list": [
       {
-        "quote": "6fc125697844b472401df13120bb6d994d21bc153aac4ae5b3d443bfaa79d3fd",
-        "preview": "Do Not Sell Plant List",
+        "quote": "77526723acd5eba7ee2fe6bea87d731b1ea304dc91d5c7ac4e859d6655cffd8a",
+        "preview": "The invasive plants listed below are illegal to import, expo",
         "found": {
           "kind": "html",
           "bytes": 54163,
@@ -1575,17 +1513,6 @@
         }
       },
       {
-        "quote": "4b5e468f27dfae32d1f049b7700e9020ec3bca5dbac7360aa7f5d126351f0373",
-        "preview": "USDA Plant Hardiness Zone",
-        "found": {
-          "kind": "html",
-          "bytes": 79751,
-          "textSha256": "71e60a1bfe8ba2d42fd10342cb6162f59916ce3cf9ef7b33bb06c9dbfb93f4bc",
-          "via": "e-html",
-          "date": "2026-10-17"
-        }
-      },
-      {
         "quote": "71bba10325a2cebe13195cf98d390af99b9907ae1afcf4be40c8b1953c4a2e2e",
         "preview": "While it thrives in zones 9-12, you can grow this tropical p",
         "found": {
@@ -1634,17 +1561,6 @@
       {
         "quote": "32463ba5eea1687b98f032846ff37f49b5cc8861d6d4af08ede08ddd3077639e",
         "preview": "The USDA Hardiness Zones are 8-11. In areas where the plant ",
-        "found": {
-          "kind": "html",
-          "bytes": 54286,
-          "textSha256": "eec204ad8a23ce5c781b27f3a48cfb21bf1c0da6a80fb7889d84fe3d6ff09b69",
-          "via": "e-html",
-          "date": "2026-10-17"
-        }
-      },
-      {
-        "quote": "4b5e468f27dfae32d1f049b7700e9020ec3bca5dbac7360aa7f5d126351f0373",
-        "preview": "USDA Plant Hardiness Zone",
         "found": {
           "kind": "html",
           "bytes": 54286,
@@ -1738,17 +1654,6 @@
       }
     ],
     "ncstate-plant-toolbox-glycine-max": [
-      {
-        "quote": "a3deb341688e1d747861390ccdf292e75a7ab71732109b2caf81bafb38276e07",
-        "preview": "Full sun (6 or more hours of direct sunlight a day)",
-        "found": {
-          "kind": "html",
-          "bytes": 55530,
-          "textSha256": "638aa685a6f93728d2e6c29354927b10ab048ad9297adefa983ca5543a48c06e",
-          "via": "e-html",
-          "date": "2026-10-17"
-        }
-      },
       {
         "quote": "aec13187f219d6875f6187f86d40229e6f45d6d1e37f6c54667ded03642f37f2",
         "preview": "Soybean grows readily in most garden soils in full sun.",
@@ -1844,7 +1749,7 @@
         }
       },
       {
-        "quote": "49abd25e94df8fdd5aeeb96dfcacb5fa9bbc9531619d113e4710c0a4b7c5bdff",
+        "quote": "e31a1263b8f33638d74f3fc32bed129f4742ea47210657671cea6aa199c7002e",
         "preview": "It prefers full sun locations with moist, well drained soil ",
         "found": {
           "kind": "html",
@@ -1879,7 +1784,7 @@
     ],
     "ncstate-toolbox-salsify": [
       {
-        "quote": "d105a771d7e94b078d7b3bd929f3991af0b354c59a1e35269caad5d1176678f5",
+        "quote": "9abf820bd9bc7f46d9536af9d13ea5f9f5a3d75eb5b944ed3a39b11802522a07",
         "preview": "Purple Goat's Beard performs best in full sun and sandy, loa",
         "found": {
           "kind": "html",
@@ -1916,17 +1821,6 @@
       {
         "quote": "1b40908b210194bbc0c92687257d83c4af810af20cec1b8f66729fc48d161b5f",
         "preview": "Luffa should be transplanted outdoors after all danger of fr",
-        "found": {
-          "kind": "html",
-          "bytes": 52242,
-          "textSha256": "5e4dede69f41d6af940c0178f79d0e79b99b8bfde556b4ce2bb85746491aec1f",
-          "via": "e-html",
-          "date": "2026-10-17"
-        }
-      },
-      {
-        "quote": "d05889aee790fb2e70182a381b5efbc1688d72322d3b306bc810d777885b94d3",
-        "preview": "Site Selection and Fertilization",
         "found": {
           "kind": "html",
           "bytes": 52242,
@@ -1997,7 +1891,7 @@
         }
       },
       {
-        "quote": "024e630f4b52affceda9ea942171c5af2270462a07621314e97ec5b387e28202",
+        "quote": "bdcd6197d64eb4196a189992cb5d0a4ca8d73b205218414ae1998c5fef180b9d",
         "preview": "is the Chinese variety that has small leaves and is more tol",
         "found": {
           "kind": "html",
@@ -2108,7 +2002,7 @@
     ],
     "ncsu-extension-toolbox-caraway": [
       {
-        "quote": "344a6cae9cd0c3c70e41f4ceca46d6edf473bce76f8dd8f87439192d62ff880b",
+        "quote": "c29cf2ccb034f035eccec6370427105588b179975bfc017c930b3aae2f65e972",
         "preview": "Carawy will grow 1 to 2 feet tall and spread 1 foot wide and",
         "found": {
           "kind": "html",
@@ -2121,17 +2015,6 @@
       {
         "quote": "cb2531c1623149f9a7e0a5bb739478e0c76cb90a783a0fc3baa6486874fdcd19",
         "preview": "Carawy will grow 1 to 2 feet tall and spread 1 foot wide and",
-        "found": {
-          "kind": "html",
-          "bytes": 57548,
-          "textSha256": "4c145f129ceb73f442e85d5f25c6cf070fecf693589a57188bf28240bf556dc2",
-          "via": "e-html",
-          "date": "2026-10-17"
-        }
-      },
-      {
-        "quote": "4b5e468f27dfae32d1f049b7700e9020ec3bca5dbac7360aa7f5d126351f0373",
-        "preview": "USDA Plant Hardiness Zone",
         "found": {
           "kind": "html",
           "bytes": 57548,
@@ -2154,17 +2037,6 @@
     ],
     "ncsu-extension-toolbox-catnip": [
       {
-        "quote": "a3deb341688e1d747861390ccdf292e75a7ab71732109b2caf81bafb38276e07",
-        "preview": "Full sun (6 or more hours of direct sunlight a day)",
-        "found": {
-          "kind": "html",
-          "bytes": 61369,
-          "textSha256": "9f7a68cad4307f7db7d786286a4bbd899375d11fae41ad4df86536378da10e47",
-          "via": "e-html",
-          "date": "2026-10-17"
-        }
-      },
-      {
         "quote": "a81d05c93e895874b43ceb5bd9f110a4a5d7b0f7bf39057eebee6c9fa158bb4a",
         "preview": "‘Cataria’ catmint requires good drainage and full sun to par",
         "found": {
@@ -2177,17 +2049,6 @@
       }
     ],
     "ncsu-extension-toolbox-cumin": [
-      {
-        "quote": "c7109be143c230af3e37c4af3a99426aeffae430b73fe895b11a19df3a0b3bda",
-        "preview": "Available Space To Plant",
-        "found": {
-          "kind": "html",
-          "bytes": 49428,
-          "textSha256": "48227f7e05356e81d30b54a9ae526d8fcfa97d1f4c2a7ffafc421c1bbcb6ab51",
-          "via": "e-html",
-          "date": "2026-10-17"
-        }
-      },
       {
         "quote": "3651a4671412cbd48d5801f0ac9323b59587650abf07b0c023722daac8c9f837",
         "preview": "Available Space To Plant: Less than 12 inches",
@@ -2246,17 +2107,6 @@
         }
       },
       {
-        "quote": "a3deb341688e1d747861390ccdf292e75a7ab71732109b2caf81bafb38276e07",
-        "preview": "Full sun (6 or more hours of direct sunlight a day)",
-        "found": {
-          "kind": "html",
-          "bytes": 120297,
-          "textSha256": "2e0ea714bedfbf257743cac3b2d1411ae8d4d7a3f5b80177fd081f7ade01e5a3",
-          "via": "e-html",
-          "date": "2026-10-17"
-        }
-      },
-      {
         "quote": "5b83cfd54d86166d0dc4a749a8ff4b9a86c2e9ccde6ffcf669649b13e8b47775",
         "preview": "Height: 0 ft. 2 in. - 0 ft. 6 in.",
         "found": {
@@ -2269,17 +2119,6 @@
       }
     ],
     "ncsu-extension-toolbox-echinacea": [
-      {
-        "quote": "a3deb341688e1d747861390ccdf292e75a7ab71732109b2caf81bafb38276e07",
-        "preview": "Full sun (6 or more hours of direct sunlight a day)",
-        "found": {
-          "kind": "html",
-          "bytes": 198549,
-          "textSha256": "da0f594d67a0c503b4e62602a702b92978368a49ea126f821edaa20b6d599de3",
-          "via": "e-html",
-          "date": "2026-10-17"
-        }
-      },
       {
         "quote": "30bee7cc2cf490c57f1e845f6f3c6e22cd869de9bef48d5ff2f305d9ee3835a8",
         "preview": "Height: 3 ft. 0 in. - 4 ft. 0 in.",
@@ -2294,17 +2133,6 @@
       {
         "quote": "6e82fc5a0c86aef83a827672435475334d004fb580a58c24aace1cbb60466507",
         "preview": "It is drought tolerant once established and can grow in full",
-        "found": {
-          "kind": "html",
-          "bytes": 198549,
-          "textSha256": "da0f594d67a0c503b4e62602a702b92978368a49ea126f821edaa20b6d599de3",
-          "via": "e-html",
-          "date": "2026-10-17"
-        }
-      },
-      {
-        "quote": "4b5e468f27dfae32d1f049b7700e9020ec3bca5dbac7360aa7f5d126351f0373",
-        "preview": "USDA Plant Hardiness Zone",
         "found": {
           "kind": "html",
           "bytes": 198549,
@@ -2337,17 +2165,6 @@
       }
     ],
     "ncsu-extension-toolbox-epazote": [
-      {
-        "quote": "a3deb341688e1d747861390ccdf292e75a7ab71732109b2caf81bafb38276e07",
-        "preview": "Full sun (6 or more hours of direct sunlight a day)",
-        "found": {
-          "kind": "html",
-          "bytes": 65107,
-          "textSha256": "38cae48a7b71cdd8318aa20733bc7c1ce2eb96c6c161bdce754e6e7b4bec4a09",
-          "via": "e-html",
-          "date": "2026-10-17"
-        }
-      },
       {
         "quote": "d45c9c653760a57b3cf84fe17243abbf48add7e67b1933a5220b6b66671b1059",
         "preview": "This plant does best in full sun and moderately fertile mois",
@@ -2469,7 +2286,7 @@
     ],
     "ndsu-2026-flax-production": [
       {
-        "quote": "1e29abcdb16b417b2abeecedae76a568b2eb846765a7bddb549b52fd62ca5f06",
+        "quote": "291c681a04edda37ca93e0c93ba40bbaba49e8d94aed56dbac71213f78e90b7b",
         "preview": "A stand of 70 plants per square foot is desired. However, if",
         "found": {
           "kind": "html",
@@ -2541,17 +2358,6 @@
       {
         "quote": "1d8f4e3bc0a9d25eda00cd4d99aeb2a7b4868426e81fcda22505fa7f4424887f",
         "preview": "CORN: Usually damaged by temperatures in 28 degree range or ",
-        "found": {
-          "kind": "html",
-          "bytes": 139892,
-          "textSha256": "f6c88049282ad826eb440a24404c809189acb2b5e56c1485510a7ee754d9cb7a",
-          "via": "e-html",
-          "date": "2026-10-17"
-        }
-      },
-      {
-        "quote": "297a0f94404061f60cb52a0ed213c4d328a55ca0b6c9a64b84e3982565f0bb95",
-        "preview": "Fall Frost Damage to Field Crops",
         "found": {
           "kind": "html",
           "bytes": 139892,
@@ -2664,34 +2470,12 @@
           "via": "e-html",
           "date": "2026-10-17"
         }
-      },
-      {
-        "quote": "cb20468ee76f1c50b5a7791ad969f7b39872897f505e6383c7d4836d21cbc6b0",
-        "preview": "Precocity and tree life span",
-        "found": {
-          "kind": "html",
-          "bytes": 56332,
-          "textSha256": "6801ee7dcb26dc355fef61e6d29a2323e70566375a4a17e6e3ad49216f30a82c",
-          "via": "e-html",
-          "date": "2026-10-17"
-        }
       }
     ],
     "nrcs-2006-plant-guide-sunn-hemp": [
       {
         "quote": "d4b01d846347c631cc8a4d6e35cc33d4c1baf005298ba5ad12af54e4dcc37941",
         "preview": "Branched, erect, herbaceous shrubby annual growing 3 to 9 fe",
-        "found": {
-          "kind": "pdf",
-          "bytes": 80594,
-          "textSha256": "046bca8df2037b23dbed6f1d07db14084bfbb4a7d384956c0681b314b55db4ae",
-          "via": "a-direct",
-          "date": "2026-10-17"
-        }
-      },
-      {
-        "quote": "9832b52b4ea1e09205195ce39e17965bb53bee252a5e85191a1802eef8c7b453",
-        "preview": "Cover Crop & Green Manure",
         "found": {
           "kind": "pdf",
           "bytes": 80594,
@@ -2797,17 +2581,6 @@
     ],
     "olanrewaju-2021-bambara-growth-yield": [
       {
-        "quote": "30acebc836625d7e0957642f21825d44db8f615ff8908296e129b85dee7f3f87",
-        "preview": "Field Trials and Phenotyping",
-        "found": {
-          "kind": "xml",
-          "bytes": 208220,
-          "textSha256": "e9485bd85aac326add419941ec25c467ca18d3fe219ea218c33dcb06268db7bc",
-          "via": "c-europepmc",
-          "date": "2026-10-17"
-        }
-      },
-      {
         "quote": "cec9de8229da1155a8b9af30db25182c720619dcf47a977d085e4363bc1be161",
         "preview": "It has both prostrate and erect forms and grows to a height ",
         "found": {
@@ -2845,8 +2618,8 @@
     ],
     "omafra-2012-gobo": [
       {
-        "quote": "46d6dad4e1423f151ae9311ab9a776bc6a4016ba853abfbc72616b78d43cd4b7",
-        "preview": "Days to harvest 90-120 days ... Roots become woody beyond th",
+        "quote": "baf78bec35aab0897391cac290f5807271895a5e762720f53af082d11d34909f",
+        "preview": "Days to harvest 90-120 days [...] Roots become woody beyond ",
         "found": {
           "kind": "html",
           "bytes": 19447,
@@ -3055,17 +2828,6 @@
     ],
     "osu-2016-forage-information-system-alfalfa": [
       {
-        "quote": "4c6a0c6f1194354ef0f0299c55288fe06e50543b1bd6f667025ee035fe54684b",
-        "preview": "Climate and Soil Suitability Zones",
-        "found": {
-          "kind": "html",
-          "bytes": 87689,
-          "textSha256": "cdf4609527ff31bcbe756ea4adf95b8c008a795ed79dda0cd8c977aa889725fd",
-          "via": "e-html",
-          "date": "2026-10-17"
-        }
-      },
-      {
         "quote": "817c2573e38f0b251d5463b373b6c20deb3558311375cc3bfbcce7c0d53e065a",
         "preview": "For pure stands, a seeding rate of 12-15 lb/a (26.5-33 kg/ha",
         "found": {
@@ -3101,7 +2863,7 @@
         }
       },
       {
-        "quote": "579d36a51e4f131061767909f3bca319c90228d48c86d8449e9dacf139d27070",
+        "quote": "396311702da09673ece425c0039c8133a423da1e358c5fe143ca18f32903ee49",
         "preview": "Ideal environmental conditions for kiwifruit are full sun ex",
         "found": {
           "kind": "html",
@@ -3295,8 +3057,8 @@
         }
       },
       {
-        "quote": "5d2ad8d47956deb2fe7d994473f962b8aa12100a1e3f5293eb3479390ebeb20c",
-        "preview": "It grows relatively well at low light levels. ... Tangho is ",
+        "quote": "db5cd14fb0f8024b7eebc5e72d40a3500ee49687bc004b18f71205b63ee8c1b9",
+        "preview": "It grows relatively well at low light levels. [...] Tangho i",
         "found": {
           "kind": "html",
           "bytes": 26860,
@@ -3419,17 +3181,6 @@
     ],
     "purdue-2007-soybean-plant-populations-ay217w": [
       {
-        "quote": "863f5ccdce5f1f330be9bb96d89c69756a0c56b514746f30a964e01fa416fac0",
-        "preview": "Recommended Seeding Rates and Plant Populations at Different",
-        "found": {
-          "kind": "pdf",
-          "bytes": 369848,
-          "textSha256": "2be1ec62b3cbac07112afd013d0a8eeafb49aaad4ae29cdc83638f71d7ff8216",
-          "via": "a-direct",
-          "date": "2026-10-17"
-        }
-      },
-      {
         "quote": "e1729c57f091fd57885107f5d897592f7bd3ef5fb18bc72dcfc8a487cf1c38c0",
         "preview": "To maximize yields in most environments growers should have ",
         "found": {
@@ -3468,17 +3219,6 @@
       }
     ],
     "purdue-newcrop-simon-1984-dandelion": [
-      {
-        "quote": "5f4f4759b15652f1a358a11ec4e5c9dbdf52b2fcd0731b1078367d8c302c6c3a",
-        "preview": "Aromatic and Medicinal Plants",
-        "found": {
-          "kind": "html",
-          "bytes": 8447,
-          "textSha256": "f6a5bb5b1efccb77f8d96e132b3a5bc67ca9bda129100879a3f7f4553a0478a0",
-          "via": "e-html",
-          "date": "2026-10-17"
-        }
-      },
       {
         "quote": "7543def1a770c849267e6c1376bc85d30afe992d0f14ccb5cba03b232a7e44f8",
         "preview": "Roots are generally harvested in spring or fall of the secon",
@@ -3541,17 +3281,6 @@
     ],
     "ragone-2006-breadfruit-species-profile": [
       {
-        "quote": "f7b87ccd6fc078602e56f290b86e3b90e4a14cc56ab8cf64323c14b8f44ef610",
-        "preview": "Size in an urban environment",
-        "found": {
-          "kind": "pdf",
-          "bytes": 1081791,
-          "textSha256": "7cf141364e1f979c95e12b3336c9c594793875557d2497002c4141a6d4b6de45",
-          "via": "e-html",
-          "date": "2026-10-17"
-        }
-      },
-      {
         "quote": "6d81494baf569c47532798c9660a9fb438082dd5bef584e163b5469109e9270d",
         "preview": "The tree does best in full sun and forms the overstory canop",
         "found": {
@@ -3575,17 +3304,6 @@
       }
     ],
     "rodrigues-2022-eryngium-foetidum-review": [
-      {
-        "quote": "c9f101cab2d1e75e020679aad3d7d3cd0777f4c68326ccb87166e33b366cf12f",
-        "preview": "Botanical Aspects, Propagation, and Cultural Treatments",
-        "found": {
-          "kind": "html",
-          "bytes": 267859,
-          "textSha256": "55edb897af65683df0ad194c2484801c5366b5bfcb2247cc8cd088bd853f3089",
-          "via": "e-html",
-          "date": "2026-10-17"
-        }
-      },
       {
         "quote": "7f6e113b5557660734b0e9e3260191bb95651a101bfce57ec62e33d824a0cda1",
         "preview": "classified as a rustic tropical vegetable of herbaceous habi",
@@ -3660,17 +3378,6 @@
       }
     ],
     "sare-2021-sea-kale": [
-      {
-        "quote": "e2a571baf772a96339a70ddeaa0479482fa5b70eb6b8961e1a71a7967ad679d5",
-        "preview": "Description of farm operation",
-        "found": {
-          "kind": "html",
-          "bytes": 131138,
-          "textSha256": "8831e31be78725dc8026a87ebc28e4a1dc3b52b7432d2fe77572a233a6c9c25c",
-          "via": "e-html",
-          "date": "2026-10-17"
-        }
-      },
       {
         "quote": "4b99196c69b8a25abaf0956a6d6398b2daec094f67bc07d486b50aae7f51d1b3",
         "preview": "Seakale provides a harvest of shoot (in May) and broccoli fl",
@@ -3796,8 +3503,19 @@
     ],
     "tnau-2013-ragi-cultivation": [
       {
-        "quote": "4dd2108e93f36745ba1b7de84e5e4cab7df7b588ed047ac903794d3c9178e6c9",
-        "preview": "Particulars of Ragi Strains",
+        "quote": "c28c669aa1b5b300051a8a74525ce44ad3cf6cf51c058f27b7e262c548dc79ff",
+        "preview": "Duration (days) 100-105 95 - 100 105-110",
+        "found": {
+          "kind": "html",
+          "bytes": 61813,
+          "textSha256": "7079f003cdb08bd8e532cfe62c40ae1cadbef83a3221b5a0c7f1216de49b57b9",
+          "via": "e-html",
+          "date": "2026-10-17"
+        }
+      },
+      {
+        "quote": "6a10564ea7dfd32c68028e3c45be63162ac9c6f472d809c127baf06e01f10361",
+        "preview": "Height (cm) 75-80 85 - 90 115-120",
         "found": {
           "kind": "html",
           "bytes": 61813,
@@ -3846,17 +3564,6 @@
       {
         "quote": "1667cad9b928cd0f25fb47c94f9a16fee115dde929f4ddde61a6d0ce9b12c84b",
         "preview": "Adopt a spacing of 45 cm between rows and 15 cm between plan",
-        "found": {
-          "kind": "html",
-          "bytes": 12564,
-          "textSha256": "bfb30e318ae15c1990a174ac03808b4f824db4213c3661d53dcb91040600371a",
-          "via": "e-html",
-          "date": "2026-10-17"
-        }
-      },
-      {
-        "quote": "4102e8980cbbf9332e30fa25e540494c495ece1fcfa7e4cd642de16a229a9205",
-        "preview": "Preparation of the field",
         "found": {
           "kind": "html",
           "bytes": 12564,
@@ -4114,8 +3821,8 @@
     ],
     "uconn-plantdatabase-hippophae-rhamnoides": [
       {
-        "quote": "4a44dc15364204a80fe80e9039455cc1608281820fe2b24f1e5233ade6af1dd5",
-        "preview": "10",
+        "quote": "5c24b0d6776cb561a9429cea8086c82223e621f6c3bb32029290dc85af3edb14",
+        "preview": "10' to 25' tall with an equal or greater width",
         "found": {
           "kind": "html",
           "bytes": 10955,
@@ -4411,8 +4118,8 @@
     ],
     "ufifas-2015-citrus-culture-home-landscape": [
       {
-        "quote": "757b6e315e403e888cff49c3a2410c7cf518a3a1d1dec8c26f6e4928be4672b6",
-        "preview": "7. Marsh (White flesh) ... Midseason (Nov–May)",
+        "quote": "1eea3c36c4670d33252f23408ee9481fb607d8af18bb7e0f1b5c6b6470ad00b5",
+        "preview": "7. Marsh (White flesh) [...] Midseason (Nov–May)",
         "found": {
           "kind": "html",
           "bytes": 108377,
@@ -4641,30 +4348,8 @@
     ],
     "ufifas-2018-lychee-fact-sheet": [
       {
-        "quote": "3b2ea28a76024b095b9d210bf786c0fc5cd3d7de168f8ea106e1b14869187399",
-        "preview": "Height: 30 to 50 feet",
-        "found": {
-          "kind": "html",
-          "bytes": 126101,
-          "textSha256": "beb258c8f1691983081c34280b2e5df93322868af2422e8d50dc56b29ca8f369",
-          "via": "e-html",
-          "date": "2026-10-17"
-        }
-      },
-      {
         "quote": "62bbd1e0692515df985a7be1aff4b7f92e8a1260ab8f302488cd4eb2b9f7202b",
         "preview": "Lychee trees can eventually reach 30 to 50-feet in height wi",
-        "found": {
-          "kind": "html",
-          "bytes": 126101,
-          "textSha256": "beb258c8f1691983081c34280b2e5df93322868af2422e8d50dc56b29ca8f369",
-          "via": "e-html",
-          "date": "2026-10-17"
-        }
-      },
-      {
-        "quote": "ed3b323116503c5c63d04480afceaad03c9fdf9dd148d0ba21563e0e0e02f9fc",
-        "preview": "Spread: 30 to 50 feet",
         "found": {
           "kind": "html",
           "bytes": 126101,
@@ -4814,7 +4499,51 @@
     ],
     "ufifas-2022-edible-ornamental-landscaping": [
       {
+        "quote": "86c8d6d5edb35a7551ae5dd4757af7266df4a8d5265a34a99e57e5fa62398b4b",
+        "preview": "Consider planting lemongrass individually to showcase its ca",
+        "found": {
+          "kind": "html",
+          "bytes": 236637,
+          "textSha256": "790463196a4dc1176cfcc31092c86209ec1f40a31b53aed00967cd5862cf8f57",
+          "via": "e-html",
+          "date": "2026-10-17"
+        }
+      },
+      {
+        "quote": "9dfb84c3d2700bfe941fe90ae9662120ecbea3860be0da2a42a34a61af4cd4c4",
+        "preview": "It is best to plant lemongrass in spring or summer, allowing",
+        "found": {
+          "kind": "html",
+          "bytes": 236637,
+          "textSha256": "790463196a4dc1176cfcc31092c86209ec1f40a31b53aed00967cd5862cf8f57",
+          "via": "e-html",
+          "date": "2026-10-17"
+        }
+      },
+      {
+        "quote": "20f65285102ef6002ebacd7e0fc7cd441de4f49b6d46cb20108507695267b9e9",
+        "preview": "Lemongrass Cymbopogon citratus No Leaves and stalks Year-rou",
+        "found": {
+          "kind": "html",
+          "bytes": 236637,
+          "textSha256": "790463196a4dc1176cfcc31092c86209ec1f40a31b53aed00967cd5862cf8f57",
+          "via": "e-html",
+          "date": "2026-10-17"
+        }
+      },
+      {
         "quote": "78d9d1bffec030325c0ac9a7701c20ecd928609f80b61740be24c8e1e021b14e",
+        "preview": "Lemongrass can serve as a living privacy fence, growing to a",
+        "found": {
+          "kind": "html",
+          "bytes": 236637,
+          "textSha256": "790463196a4dc1176cfcc31092c86209ec1f40a31b53aed00967cd5862cf8f57",
+          "via": "e-html",
+          "date": "2026-10-17"
+        }
+      },
+      {
+        "quote": "f020546bbbe407ccf1e621b3b347ae5d2c95b39f603257d1caf0259f19dc8338",
         "preview": "Lemongrass can serve as a living privacy fence, growing to a",
         "found": {
           "kind": "html",
@@ -5168,17 +4897,6 @@
         }
       },
       {
-        "quote": "fe29a9d679378cf98228d8843564d97671763d0733fa63efc0a890b3d9bd0290",
-        "preview": "Cool and Freezing Temperatures",
-        "found": {
-          "kind": "html",
-          "bytes": 124417,
-          "textSha256": "23b8bc5be4cac23ca282c3a74be93127de2ba00fffed003af8c3917e28b75d20",
-          "via": "e-html",
-          "date": "2026-10-17"
-        }
-      },
-      {
         "quote": "731fd8368b223d9f02ec866faca316e89d1aa5cce9a8c2f67c7140201f529a30",
         "preview": "In general, pineapple plants should be planted in full sun f",
         "found": {
@@ -5264,17 +4982,6 @@
       {
         "quote": "2f0d72dd310c62c90f9526bfadfc92c1fbc5fa9caed273f91185183641e7e526",
         "preview": "Distance between rows (in) 48 52 52 Distance between plants ",
-        "found": {
-          "kind": "html",
-          "bytes": 965830,
-          "textSha256": "e660384e553350500d250b3995ce9496e99050113d078e7ba5c453b97951e5da",
-          "via": "e-html",
-          "date": "2026-10-17"
-        }
-      },
-      {
-        "quote": "5f1667c9fb2fd9478da447176511bbdb7886189f21f250dd253bd51694bd61b0",
-        "preview": "Planting information for cassava, taro, and malanga",
         "found": {
           "kind": "html",
           "bytes": 965830,
@@ -5408,17 +5115,6 @@
     ],
     "ufifas-invasive-assessment-jackfruit": [
       {
-        "quote": "77a1edf45a395de7ba3683aef26b1a44f733869ef8aa5dcf87d15e6237e77a1c",
-        "preview": "Not a problem species (un-documented)",
-        "found": {
-          "kind": "html",
-          "bytes": 9365,
-          "textSha256": "811adcc3ce4becedf9b93b3ed0f71e99b76ba56a8fa4566e1f94ea0b3d21452e",
-          "via": "e-html",
-          "date": "2026-10-17"
-        }
-      },
-      {
         "quote": "b2abf1ba94ccc1f6795d6b43bc11ecf134d0bd6a1812c718dff9a2cb01a69436",
         "preview": "Not considered a problem species at this time. May be recomm",
         "found": {
@@ -5491,7 +5187,7 @@
         }
       },
       {
-        "quote": "fb06e090f0601f63484943725ab0ff49e0ab2c7bb667d7165d6303b0b69d2e4e",
+        "quote": "06eeb22adccd86690bf7a77b9a803d479f4f42b89dab5adb122263cbcb950329",
         "preview": "The first harvest is in year three, but these fruit will ten",
         "found": {
           "kind": "html",
@@ -5515,19 +5211,8 @@
     ],
     "uga-2024-corn-production-guide": [
       {
-        "quote": "032f3862602dd55f4a209fc9fdb749453af504221d1ed66f193a37a78384300e",
+        "quote": "c322572f78f0fbb7a08beaffa4715417ac34adc121b46d31eafd8d9a029ddd07",
         "preview": "Current plant population recommendations for irrigated corn ",
-        "found": {
-          "kind": "pdf",
-          "bytes": 2291918,
-          "textSha256": "4b519790d77c90f47c064104f3a096bf0c4cb704a61537d6b69a071673ad6060",
-          "via": "a-direct",
-          "date": "2026-10-17"
-        }
-      },
-      {
-        "quote": "4245bdd8a66f6583dcbd1d843fed995269d9721e6e70fef49ca6dcb4eac42c5b",
-        "preview": "Estimated Water Use of Corn in Georgia",
         "found": {
           "kind": "pdf",
           "bytes": 2291918,
@@ -5576,7 +5261,7 @@
         }
       },
       {
-        "quote": "cf2d8a8afe54a8adcca3ecd7185abff05ac7e71f15d82ba98d37599f98db9dd6",
+        "quote": "428110c06ff34a374789948b5a66a8acd29a0302ccda8f9ef66373660afa4e51",
         "preview": "— “Carter” is an Alabama cultivar that produces a large nut ",
         "found": {
           "kind": "html",
@@ -5678,17 +5363,6 @@
       {
         "quote": "c12bce34913fd60a0b330540ca0803e6f259c965e9a47b9111f45d7b45820b75",
         "preview": "Direct-seeded alfalfa should be harvested about 60 days foll",
-        "found": {
-          "kind": "html",
-          "bytes": 120856,
-          "textSha256": "46a2dd5e62e19a86ab69dfaeb4f13781e54de86fc06109548b365578cb72891c",
-          "via": "e-html",
-          "date": "2026-10-17"
-        }
-      },
-      {
-        "quote": "8a3fea0734356a116039a71ecfeb87b5f807cb23c717d64fc1f58178b745da9a",
-        "preview": "Weed control and companion crops with new seedings",
         "found": {
           "kind": "html",
           "bytes": 120856,
@@ -5854,17 +5528,6 @@
         }
       },
       {
-        "quote": "858f4d96f58b0714de5c678b1063af8b5615e5541d7bb0bbf223d09df7a3458e",
-        "preview": "Planting tips for growing molokhia in Minnesota",
-        "found": {
-          "kind": "html",
-          "bytes": 146080,
-          "textSha256": "3acf149ed3010749b9af3242ae13471d75ab5de8fca2ca1f708db18b87d56521",
-          "via": "e-html",
-          "date": "2026-10-17"
-        }
-      },
-      {
         "quote": "b5e2170517f250046de850063bf3f8ceadf34bfa39e0eb9bb55102be3b919ce5",
         "preview": "Row spacing: 30-36 inches. Within-row plant spacing: 2-3 inc",
         "found": {
@@ -5937,19 +5600,8 @@
     ],
     "uprm-2001-recao-culantro-publicacion-162": [
       {
-        "quote": "ede306c74889a5543ed6d5a1e2646c43eeda400f0bbbdbae78486ec26e8bf3ff",
+        "quote": "450ec97692c8ae26d2ce2b02632d206c074e9a5e60b112d29b3e695c922305d3",
         "preview": "Al cabo de dos meses, la planta ha crecido de nuevo, dando p",
-        "found": {
-          "kind": "pdf",
-          "bytes": 4090633,
-          "textSha256": "e54249f0447f0074aeef2f231401960aba043011962e7e4b19d0852b597b0643",
-          "via": "a-direct",
-          "date": "2026-10-17"
-        }
-      },
-      {
-        "quote": "5a929bc5b1cc8debaa8f689ccd9d3093cc5855026dc867c533e65614403f9dec",
-        "preview": "Ciclo de cultivo vegetativo del recao",
         "found": {
           "kind": "pdf",
           "bytes": 4090633,
@@ -6158,19 +5810,6 @@
           "bytes": 103043,
           "textSha256": "b9ff2fd6a122cd1737a5e8e83022ef0a841f209f2fd94fd471a67e9e9bd30f8a",
           "via": "e-html",
-          "date": "2026-10-17"
-        }
-      }
-    ],
-    "usfs-2008-invasiveness-ranking-non-native-plants-alaska": [
-      {
-        "quote": "d921d94f14df8750a104fb3614556754e10b1949c0bb66885d5a5d1beefcb21a",
-        "preview": "Medicago sativa ssp. sativa",
-        "found": {
-          "kind": "pdf",
-          "bytes": 6205854,
-          "textSha256": "9a14667e7683b06f7acf5038448f3a9a1417f96c4dfb13a37c095e8fee44d22f",
-          "via": "a-direct",
           "date": "2026-10-17"
         }
       }
@@ -6387,17 +6026,6 @@
     ],
     "usu-extension-2020-almonds-home-garden": [
       {
-        "quote": "6305d44234a5a2265d2ce315b9ebd4f8b6e954a419cf84bfc2f3f6387564ef89",
-        "preview": "Almond Cultivar and Rootstock Selection",
-        "found": {
-          "kind": "html",
-          "bytes": 65300,
-          "textSha256": "d2f85a5cf01f0c039e5014c3eef857dd38872ef53a28a191a61bb743ce158b59",
-          "via": "e-html",
-          "date": "2026-10-17"
-        }
-      },
-      {
         "quote": "dd2f35826dba5299e463f3c8b54cbf266b3a9437d30143d5725a3a174593cc40",
         "preview": "Almond trees grow quite large, and at maturity will occupy a",
         "found": {
@@ -6411,17 +6039,6 @@
       {
         "quote": "38990532cf4b907659525b6036b142ba69abc8ce8521692483605391765b91d5",
         "preview": "Almond trees, like all fruit trees, must mature before they ",
-        "found": {
-          "kind": "html",
-          "bytes": 65300,
-          "textSha256": "d2f85a5cf01f0c039e5014c3eef857dd38872ef53a28a191a61bb743ce158b59",
-          "via": "e-html",
-          "date": "2026-10-17"
-        }
-      },
-      {
-        "quote": "f931e36e781d5b1889fd4415d5e563ba4a1a84d2770828e5bf9742f3329cd085",
-        "preview": "How to Grow Almonds in Your Garden",
         "found": {
           "kind": "html",
           "bytes": 65300,
@@ -6462,22 +6079,11 @@
           "via": "e-html",
           "date": "2026-10-17"
         }
-      },
-      {
-        "quote": "c1dccf4c941f07d12a3d0f6d2d6b09774c6d33cb5328a751ba18831d64d18bcf",
-        "preview": "Why Almond Trees Fail to Bear",
-        "found": {
-          "kind": "html",
-          "bytes": 65300,
-          "textSha256": "d2f85a5cf01f0c039e5014c3eef857dd38872ef53a28a191a61bb743ce158b59",
-          "via": "e-html",
-          "date": "2026-10-17"
-        }
       }
     ],
     "usu-extension-2020-watercress": [
       {
-        "quote": "7bf6074e356340318c69050f1cb9e00471bad0b6125ba66bde3fa072da611500",
+        "quote": "7414af1bda07818ea2549124fdd6e3cdc843b5bf735945a23d63e05615cf2546",
         "preview": "Harvest dime sized dark green leaves at any time during the ",
         "found": {
           "kind": "html",
@@ -6586,17 +6192,6 @@
           "via": "e-html",
           "date": "2026-10-17"
         }
-      },
-      {
-        "quote": "2eb0e68aa4ba806e591835b4cfee45d7a63bedf976f429c67b16d4b754e815ae",
-        "preview": "Plants die back to the ground in the winter",
-        "found": {
-          "kind": "html",
-          "bytes": 141641,
-          "textSha256": "ba3c1efa768a2200870f8ea88b26e76a280005fbaa1567addf343aa28e892cac",
-          "via": "e-html",
-          "date": "2026-10-17"
-        }
       }
     ],
     "uwmadison-extension-dandelion": [
@@ -6671,21 +6266,23 @@
         }
       }
     ],
+    "vce-2015-tree-fruit-home-garden": [
+      {
+        "quote": "d27f693b02259f369b5ce63f7752ae05c0bc63ed547b220b9f71b1d0ec989e15",
+        "preview": "Quince 15 1 5-6 30-40",
+        "found": {
+          "kind": "html",
+          "bytes": 146288,
+          "textSha256": "23aaf483d854ecc0dab1f20fa61809fd75fd557e4317912f3a5c6b6cb43675a5",
+          "via": "e-html",
+          "date": "2026-10-17"
+        }
+      }
+    ],
     "vce-2024-herb-culture-and-use": [
       {
         "quote": "df1bb63e89db662d2e8d5c56a2ba7391066a843790b123342dd29d89dc5f3d19",
         "preview": "Chamomile, German chamomile Matricaria recutita 8-24” 6-12” ",
-        "found": {
-          "kind": "pdf",
-          "bytes": 3653218,
-          "textSha256": "bfba0c2bd730c02c61c26b8cba945ee7cccb7d579e14eb05cbbef5c267fb08ff",
-          "via": "a-direct",
-          "date": "2026-10-17"
-        }
-      },
-      {
-        "quote": "e5bd5c770b9599a6e897de25f13f0c963d2e1f97cad90ea3af834072b398b292",
-        "preview": "Herb Culture and Use",
         "found": {
           "kind": "pdf",
           "bytes": 3653218,
@@ -6721,7 +6318,7 @@
     ],
     "widmer-strawberry-dli": [
       {
-        "quote": "111689c0d99087516d84842e250be9e520aba5a58a9bb326d32e7dd1ecbd42ff",
+        "quote": "0123f904d1f0ac301286b68d169108fd27ae1ab8019fc2d824d5f18537a94898",
         "preview": "Based on our findings, we recommend a minimum DLI of 25 mol ",
         "found": {
           "kind": "pdf",
@@ -6779,17 +6376,6 @@
       }
     ],
     "wisniewski-harasym-2024-chinese-artichoke": [
-      {
-        "quote": "03ca4f6b38525465f26b17ed09e0642696a353b6cab3c9fa1d7c38d2cc813e13",
-        "preview": "Chinese artichokes grow up to 45 cm in height",
-        "found": {
-          "kind": "html",
-          "bytes": 227747,
-          "textSha256": "205771b50bb12cc0f57697d4b38a9bfa7218e90077dc6a9f778833a1cdf08d12",
-          "via": "e-html",
-          "date": "2026-10-17"
-        }
-      },
       {
         "quote": "932ef92147186a65a9affceedb2003a4243fe4b1be9019d04dcdbb0a11d42c29",
         "preview": "They prefer well-drained soil in a sunny location and thrive",
@@ -6852,7 +6438,7 @@
         }
       },
       {
-        "quote": "e3b5ad8e5ace29bc6fbd3ef7f4c4d40c3aaa5fca5127bd701c32e35b98a40de6",
+        "quote": "226df853d58c3bd75d78b5e17f9722b9185fc61a0c55e232f8f1a598466bc858",
         "preview": "Results from segmented regression lines revealed that at sha",
         "found": {
           "kind": "pdf",

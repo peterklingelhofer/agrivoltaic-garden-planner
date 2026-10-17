@@ -59,6 +59,19 @@ const entryOf = (
   },
 })
 
+/** An entry whose quotes sit in the quotes field, one claim apiece, each with its locator */
+const movedEntryOf = (
+  id: string,
+  quotes: readonly { readonly text: string; readonly locator: string }[],
+): BaselineEntry => ({
+  id,
+  custom: {
+    verification: 'url-verified',
+    backsClaims: quotes.map(() => "a claim in the ledger's own words"),
+    quotes: quotes.map((quote, claim) => ({ ...quote, claim })),
+  },
+})
+
 const counts = (ledger: readonly BaselineEntry[], receipts = NO_RECEIPTS): BaselineCounts =>
   baselineCounts(ledger, receipts)
 
@@ -69,6 +82,8 @@ describe('baselineCounts', () => {
       unverifiedEntries: 0,
       quotesWithoutReceipt: 0,
       quotesWithBareEllipsis: 0,
+      quotesWithoutLocator: 0,
+      claimsStillQuoting: 0,
     })
   })
 
@@ -131,6 +146,17 @@ describe('baselineCounts', () => {
       const receipts = receiptsOf({ 'nobody2000-none': [receiptFor(FIRST)] })
       expect(counts([entryOf('a2020-one', [FIRST])], receipts).quotesWithoutReceipt).toBe(1)
     })
+
+    it('reads the quotes field, where a receipt covers a quote that moved there', () => {
+      const ledger = [
+        movedEntryOf('a2020-one', [
+          { text: FIRST, locator: 'p. 7' },
+          { text: SECOND, locator: '' },
+        ]),
+      ]
+      const receipts = receiptsOf({ 'a2020-one': [receiptFor(FIRST)] })
+      expect(counts(ledger, receipts).quotesWithoutReceipt).toBe(1)
+    })
   })
 
   describe('quotesWithBareEllipsis', () => {
@@ -180,9 +206,71 @@ describe('baselineCounts', () => {
       ]
       expect(counts(ledger).quotesWithBareEllipsis).toBe(0)
     })
+
+    it('reads the quotes field', () => {
+      const ledger = [
+        movedEntryOf('a2020-one', [
+          { text: 'the first words ... the last words', locator: 'p. 7' },
+          { text: 'the first words [...] the last words', locator: 'p. 7' },
+        ]),
+      ]
+      expect(counts(ledger).quotesWithBareEllipsis).toBe(1)
+    })
   })
 
-  it('reads the three counts together', () => {
+  describe('quotesWithoutLocator', () => {
+    it('counts a quote in the quotes field whose locator is empty', () => {
+      const ledger = [
+        movedEntryOf('a2020-one', [
+          { text: FIRST, locator: '' },
+          { text: SECOND, locator: 'p. 7' },
+        ]),
+      ]
+      expect(counts(ledger).quotesWithoutLocator).toBe(1)
+    })
+
+    it('counts a quote read from prose, which names no locator', () => {
+      expect(counts([entryOf('a2020-one', [FIRST, SECOND])]).quotesWithoutLocator).toBe(2)
+    })
+
+    it('counts a quote written twice once, and not at all when a copy has a locator', () => {
+      const bare = movedEntryOf('a2020-one', [
+        { text: FIRST, locator: '' },
+        { text: 'The  FIRST quoted words', locator: '' },
+      ])
+      expect(counts([bare]).quotesWithoutLocator).toBe(1)
+      const placed = movedEntryOf('a2020-one', [
+        { text: FIRST, locator: '' },
+        { text: FIRST, locator: 'p. 7' },
+      ])
+      expect(counts([placed]).quotesWithoutLocator).toBe(0)
+    })
+
+    it('counts the same quote on two entries twice', () => {
+      const ledger = [
+        movedEntryOf('a2020-one', [{ text: FIRST, locator: '' }]),
+        movedEntryOf('b2021-two', [{ text: FIRST, locator: '' }]),
+      ]
+      expect(counts(ledger).quotesWithoutLocator).toBe(2)
+    })
+  })
+
+  describe('claimsStillQuoting', () => {
+    it('counts the entries with a claim that says verbatim', () => {
+      const ledger = [
+        entryOf('a2020-one', [FIRST]),
+        movedEntryOf('b2021-two', [{ text: SECOND, locator: 'p. 7' }]),
+        entryOf('c2022-three', []),
+      ]
+      expect(counts(ledger).claimsStillQuoting).toBe(1)
+    })
+
+    it('counts an entry once however many of its claims say it', () => {
+      expect(counts([entryOf('a2020-one', [FIRST, SECOND])]).claimsStillQuoting).toBe(1)
+    })
+  })
+
+  it('reads the five counts together', () => {
     const ledger = [
       entryOf('a2020-one', [FIRST, 'the first ... the last'], 'unverified'),
       entryOf('b2021-two', [SECOND, 'the first [...] the last']),
@@ -192,6 +280,8 @@ describe('baselineCounts', () => {
       unverifiedEntries: 1,
       quotesWithoutReceipt: 3,
       quotesWithBareEllipsis: 1,
+      quotesWithoutLocator: 4,
+      claimsStillQuoting: 2,
     })
   })
 })
@@ -201,6 +291,8 @@ describe('overBaseline', () => {
     unverifiedEntries: 16,
     quotesWithoutReceipt: 103,
     quotesWithBareEllipsis: 29,
+    quotesWithoutLocator: 101,
+    claimsStillQuoting: 0,
   }
 
   it('finds nothing when every count is at its baseline', () => {
@@ -218,10 +310,17 @@ describe('overBaseline', () => {
   })
 
   it('names every count that went up, in the order the counts are reported', () => {
-    const current = { unverifiedEntries: 17, quotesWithoutReceipt: 90, quotesWithBareEllipsis: 30 }
+    const current = {
+      unverifiedEntries: 17,
+      quotesWithoutReceipt: 90,
+      quotesWithBareEllipsis: 30,
+      quotesWithoutLocator: 101,
+      claimsStillQuoting: 1,
+    }
     expect(overBaseline(current, BASELINE).map((over) => over.metric)).toEqual([
       'unverifiedEntries',
       'quotesWithBareEllipsis',
+      'claimsStillQuoting',
     ])
   })
 

@@ -39,6 +39,16 @@ export type CitationType =
   | 'standard'
   | 'webpage'
 
+/** One verbatim quote a source backs, with where in the source it sits and the claim it backs */
+export interface CitationQuote {
+  /** The source's own words */
+  readonly text: string
+  /** The page, section, table or figure the words are in, or empty when the ledger names none */
+  readonly locator: string
+  /** The position in `backsClaims` of the claim this quote backs */
+  readonly claim: number
+}
+
 /** Projection of one `docs/CITATIONS.csl.json` entry, authored there and nowhere in TS */
 export interface CitationRecord {
   readonly id: CitationId
@@ -56,6 +66,7 @@ export interface CitationRecord {
   readonly accessLevel: CitationAccessLevel
   readonly evidenceTier: DataTier | null
   readonly backsClaims: readonly string[]
+  readonly quotes: readonly CitationQuote[]
   readonly caveat: string | null
   /** Journal, conference or book literature carrying a resolver-verified identifier */
   readonly peerReviewed: boolean

@@ -73,7 +73,12 @@ const render = (e) => {
   )
   if (c.backsClaims?.length) {
     lines.push('- Backs:')
-    for (const claim of c.backsClaims) lines.push(`  - ${claim}`)
+    c.backsClaims.forEach((claim, index) => {
+      lines.push(`  - ${claim}`)
+      for (const quote of (c.quotes ?? []).filter((one) => one.claim === index)) {
+        lines.push(`    - "${quote.text}"${quote.locator === '' ? '' : ` (${quote.locator})`}`)
+      }
+    })
   }
   if (c.caveat) lines.push(`- **Caveat:** ${c.caveat}`)
   lines.push('')

@@ -7,7 +7,9 @@ import type { CitationId } from '../types/citation-ids.generated'
  * claim text
  */
 export interface Provenance {
-  /** The citation whose `backsClaims` carries this number, from `docs/CITATIONS.csl.json` */
+  /**
+   * The citation whose `backsClaims` or `quotes` carry this number, from `docs/CITATIONS.csl.json`
+   */
   readonly citation: CitationId
   /** Where in that source, spelled the way the citation's own claim spells it */
   readonly locator: string

@@ -4,6 +4,7 @@ import {
   type QuoteReceipt,
   RECEIPTS_FORMAT,
   type ReceiptsFile,
+  claimsStillQuoting,
   foldForMatch,
   ledgerQuoteKeys,
   normalizeForMatch,
@@ -256,6 +257,75 @@ describe('verbatimQuotesOf', () => {
   it('returns nothing for an entry with no claims', () => {
     expect(verbatimQuotesOf({})).toEqual([])
     expect(verbatimQuotesOf({ custom: {} })).toEqual([])
+  })
+
+  it('reads the text of each quote when the entry has a quotes field', () => {
+    expect(
+      verbatimQuotesOf({
+        custom: {
+          backsClaims: ['the first claim', 'the second claim'],
+          quotes: [
+            { text: 'the first quoted words', locator: 'p. 7', claim: 0 },
+            { text: 'the second quoted words', locator: '', claim: 1 },
+          ],
+        },
+      }),
+    ).toEqual(['the first quoted words', 'the second quoted words'])
+  })
+
+  it('reads the quotes field and not the prose, even when the field is empty', () => {
+    const claims = ["a claim, verbatim: 'words left in the prose'"]
+    expect(verbatimQuotesOf({ custom: { backsClaims: claims, quotes: [] } })).toEqual([])
+    expect(
+      verbatimQuotesOf({
+        custom: {
+          backsClaims: claims,
+          quotes: [{ text: 'words in the field', locator: '', claim: 0 }],
+        },
+      }),
+    ).toEqual(['words in the field'])
+  })
+
+  it('reads the prose when the entry has no quotes field', () => {
+    expect(
+      verbatimQuotesOf({ custom: { backsClaims: ["a claim, verbatim: 'words in the prose'"] } }),
+    ).toEqual(['words in the prose'])
+  })
+})
+
+describe('claimsStillQuoting', () => {
+  const MOVED: LedgerEntryLike = {
+    id: 'alpha2020-one',
+    custom: {
+      backsClaims: ["a claim in the ledger's own words"],
+      quotes: [{ text: 'the first quoted words', locator: 'p. 7', claim: 0 }],
+    },
+  }
+  const LEFT: LedgerEntryLike = {
+    id: 'beta2021-two',
+    custom: { backsClaims: ['a paraphrase', "a claim, verbatim: 'the first quoted words'"] },
+  }
+
+  it('lists the entries with a claim that says verbatim', () => {
+    expect(claimsStillQuoting([MOVED, LEFT]).map((entry) => entry.id)).toEqual(['beta2021-two'])
+  })
+
+  it('reads the word in any case', () => {
+    const shouting: LedgerEntryLike = {
+      id: 'gamma2022-three',
+      custom: { backsClaims: ["Verbatim: 'the first quoted words'"] },
+    }
+    expect(claimsStillQuoting([shouting])).toEqual([shouting])
+  })
+
+  it('lists nothing for a ledger whose quotes all moved', () => {
+    expect(claimsStillQuoting([MOVED])).toEqual([])
+  })
+
+  it('lists nothing for entries with no claims', () => {
+    expect(
+      claimsStillQuoting([{ id: 'delta2023-four' }, { id: 'echo2024-five', custom: {} }]),
+    ).toEqual([])
   })
 })
 

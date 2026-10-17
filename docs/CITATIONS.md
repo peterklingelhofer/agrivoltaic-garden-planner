@@ -52,10 +52,18 @@ description of the text it was found in, since the texts themselves are copyrigh
 one machine. `src/data/citation-receipts.test.ts` holds `CITATIONS.receipts.json` against this
 ledger offline, so a quote whose words change after it was checked fails CI until
 `bun scripts/check-quotes.mjs --write-receipts` finds the new wording. `CITATIONS.baseline.json`
-holds three counts that can only go down: the entries still marked unverified, the quotes without
-a receipt and the quotes written with a bare ellipsis. `src/data/citation-baseline.test.ts` fails
-when any of them goes up, and `bun run citations:baseline --write` lowers the baseline when one
-comes down.
+holds five counts that can only go down: the entries still marked unverified, the quotes without a
+receipt, the quotes written with a bare ellipsis, the quotes without a locator and the entries
+with a claim that still says verbatim. `src/data/citation-baseline.test.ts` fails when any of them
+goes up, and `bun run citations:baseline --write` lowers the baseline when one comes down.
+
+### Quotes
+
+An entry's `quotes` hold the source's own words, and `backsClaims` holds each claim they back in
+the ledger's words. A quote writes an elision as `[...]`. Each quote carries a locator, the page,
+section, table or figure it comes from, and the baseline counts the quotes that still lack one.
+The ledger's house spelling of a unit, such as `mol/m2/d`, stands for the source's own, since the
+lookup folds the spellings together.
 
 ### Counts
 
@@ -129,9 +137,12 @@ Ben Naim, Yariv; Ladell, Chanani; Cohen, Yigal. (2025). *Agri-Photovoltaic techn
 - DOI: [10.1038/s41598-025-27602-9](https://doi.org/10.1038/s41598-025-27602-9)
 - Verification: Crossref-verified | Access: open-access, evidence tier **B**
 - Backs:
-  - a row-resolved tomato yield response under single-axis trackers, verbatim: 'Plants in row 4 yielded the highest fruit weight (~ 3.5 kg per plant), which declined significantly and progressively in adjacent rows. The yields in rows 3 and 5 were similar to row 4 while rows 2 and 6 showed a significant reduction in yield (~ 2.6 kg/plant) compared with row 4.'
-  - the shading those rows received, verbatim: 'The relative gradual reduction in irradiation levels in rows 1-7, compared to row 4, were 92.7%, 19.3%, 11.9%, 0.0%, 8.6%, 16.5%, and 91.2%, respectively', so a significant tomato yield loss appears at 16.5 and 19.3 percent season shading and none at 8.6 and 11.9
-  - the whole-system reading the authors draw, verbatim: 'A coverage of up to 26% of the land area with PV modules did not significantly affect plant growth or fruit quality', with total fruit yield loss of 19.4% across all seven rows and an improved land equivalent ratio
+  - a row-resolved tomato yield response under single-axis trackers
+    - "Plants in row 4 yielded the highest fruit weight (~ 3.5 kg per plant), which declined significantly and progressively in adjacent rows. The yields in rows 3 and 5 were similar to row 4 while rows 2 and 6 showed a significant reduction in yield (~ 2.6 kg/plant) compared with row 4."
+  - the shading those rows received, so a significant tomato yield loss appears at 16.5 and 19.3 percent season shading and none at 8.6 and 11.9
+    - "The relative gradual reduction in irradiation levels in rows 1-7, compared to row 4, were 92.7%, 19.3%, 11.9%, 0.0%, 8.6%, 16.5%, and 91.2%, respectively"
+  - the whole-system reading the authors draw, with total fruit yield loss of 19.4% across all seven rows and an improved land equivalent ratio
+    - "A coverage of up to 26% of the land area with PV modules did not significantly affect plant growth or fruit quality"
 - **Caveat:** Bar Ilan University, Israel (32.07 N), hot Mediterranean, processing tomato in 110 L containers on white plastic mulch under computer-controlled drip fertigation, two seasons. Irrigated and container-grown, so water isn't the limiting factor. The east and west asymmetry between rows at similar shading (row 2 against row 6, row 3 against row 5) is larger than the shading difference between them, so the trial carries a confounder the paper doesn't resolve. The row-level result is the one a per-bed tool should quote, and the land-coverage sentence is about module coverage of the plot.
 
 #### `both2025-nj-lessons`
@@ -141,8 +152,10 @@ Both, A. J.; Bamka, Bill; Besancon, Thierry; Birnie, Dunbar P.; Burgher, Clint; 
 - DOI: [10.52825/agripv.v3i.1357](https://doi.org/10.52825/agripv.v3i.1357)
 - Verification: Crossref-verified | Access: open-access
 - Backs:
-  - the design premise this app is built on, verbatim: 'While some yield reduction is to be expected, resulting from less sunlight reaching the plant canopy and ground occupied by support structures, the generated electricity provides a low-risk supplemental income to farmers'
-  - why an agrivoltaic array is built at a lower ground coverage ratio and a greater height than a solar farm, verbatim: 'agrivoltaic systems use a lower ground coverage ratio compared to normal solar farms and the PV panels are often mounted higher above the ground in order to facilitate the movement of agricultural equipment and to reduce the contrast between shaded and non-shaded areas'
+  - the design premise this app is built on
+    - "While some yield reduction is to be expected, resulting from less sunlight reaching the plant canopy and ground occupied by support structures, the generated electricity provides a low-risk supplemental income to farmers"
+  - why an agrivoltaic array is built at a lower ground coverage ratio and a greater height than a solar farm
+    - "agrivoltaic systems use a lower ground coverage ratio compared to normal solar farms and the PV panels are often mounted higher above the ground in order to facilitate the movement of agricultural equipment and to reduce the contrast between shaded and non-shaded areas"
   - the three Rutgers and NJAES installations the Bridgeton trials run on
 - **Caveat:** A practice paper about designing, permitting and building three research installations. It reports no crop yield of its own and carries no evidence tier.
 
@@ -153,7 +166,8 @@ Dal Pra, Aldo; Dainelli, Riccardo; Santoni, Margherita; Lanini, Giuseppe Mario; 
 - DOI: [10.3390/horticulturae11030319](https://doi.org/10.3390/horticulturae11030319)
 - Verification: Crossref-verified | Access: open-access, evidence tier **B**
 - Backs:
-  - processing tomato under trackers at a 41% ground coverage ratio, verbatim from the abstract: 'In 2023, the results showed that A2 achieved a total yield of only 24.5% lower than FL, with a marketable yield reduction of just 6.5%, indicating its potential to maintain productivity under shaded conditions'
+  - processing tomato under trackers at a 41% ground coverage ratio
+    - "In 2023, the results showed that A2 achieved a total yield of only 24.5% lower than FL, with a marketable yield reduction of just 6.5%, indicating its potential to maintain productivity under shaded conditions" (the abstract)
 - **Caveat:** This entry rests on the publisher abstract and the Crossref record. The trial ran two seasons in northwest Italy under organic management. Its shading treatments are defined by ground coverage ratio and panel position, with no measured season-cumulative shade fraction.
 
 #### `doedt2024-japan-legal`
@@ -282,8 +296,10 @@ Kujawa, Anna; Kornas, Julian; Hanrieder, Natalie; Gonzalez Rodriguez, Sergio; Hr
 - DOI: [10.3390/agriengineering7060178](https://doi.org/10.3390/agriengineering7060178)
 - Verification: Crossref-verified | Access: open-access, evidence tier **B**
 - Backs:
-  - tomato yield falls with shading in a Mediterranean greenhouse, verbatim from the abstract: 'The 30% and 50% shading zones resulted in 15% and 26% crop yield reductions, respectively'
-  - the trade the authors draw from it, verbatim: 'A preliminary, theoretical analysis of potential revenues of the photovoltaic yield showed that reductions in crop yield can be overcompensated by the energy generated by the PV system'
+  - tomato yield falls with shading in a Mediterranean greenhouse
+    - "The 30% and 50% shading zones resulted in 15% and 26% crop yield reductions, respectively" (the abstract)
+  - the trade the authors draw from it
+    - "A preliminary, theoretical analysis of potential revenues of the photovoltaic yield showed that reductions in crop yield can be overcompensated by the energy generated by the PV system"
 - **Caveat:** This entry rests on the publisher abstract and the Crossref record. Opaque plastic sheets in a checkerboard on the roof of a raspa-y-amagado greenhouse in Almeria stand in for the modules. The shading is a roof cover ratio in a greenhouse, and no field array was tested.
 
 #### `laub2021-shade-dataset`
@@ -322,8 +338,10 @@ Marrou, Hélène; Wery, Jacques; Dufour, Lydie; Dupraz, Christian. (2013). *Prod
 - DOI: [10.1016/j.eja.2012.08.003](https://doi.org/10.1016/j.eja.2012.08.003)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **B**
 - Backs:
-  - lettuce maintains yield under partial panel shade through improved radiation interception efficiency, verbatim: 'Lettuce yield was maintained through an improved Radiation Interception Efficiency (RIE) in the shade, while Radiation Conversion Efficiency (RCE) did not change significantly'
-  - no phenological delay in thermal time to harvest, verbatim: 'Thermal time was calculated from air temperature measurement above control plots (CPs): indeed no significant difference in cumulated thermal time was measured between FD, HD and the control plots, whatever reference temperature is used (crop or air temperature) (not shown)'
+  - lettuce maintains yield under partial panel shade through improved radiation interception efficiency
+    - "Lettuce yield was maintained through an improved Radiation Interception Efficiency (RIE) in the shade, while Radiation Conversion Efficiency (RCE) did not change significantly"
+  - no phenological delay in thermal time to harvest
+    - "Thermal time was calculated from air temperature measurement above control plots (CPs): indeed no significant difference in cumulated thermal time was measured between FD, HD and the control plots, whatever reference temperature is used (crop or air temperature) (not shown)"
   - measured yields against the unshaded control: 58% in 2010 and 79% in 2011 under full density (RSR 50%), 81% in 2010 and 99% in 2011 under half density (RSR 30%)
   - one of the four studies inside Laub et al. 2022's leafy-vegetables curve, listed in Table S1 as 'Marrou et al., 2013b' with this paper's DOI, so a comparison against it is an in-sample check
 - **Caveat:** This paper reports a null on cumulated thermal time and states no phenology delay. The '3-7 day phenology delay in shaded lettuce' belongs to elamri2018-water-budget. Laub's Table S1 labels this paper 2013b where this corpus labels it 2013a, so a reader checking the supplement meets a naming collision.
@@ -355,8 +373,10 @@ Mata, Rebeca; Ward, Daniel L.; Wyenandt, Christian A. (2026). *First Year Observ
 - DOI: [10.52825/agripv.v4i.2829](https://doi.org/10.52825/agripv.v4i.2829)
 - Verification: Crossref-verified | Access: open-access, evidence tier **B**
 - Backs:
-  - Solanaceae yield falls nearest the array in a temperate field trial, verbatim: 'Total yield of all crops studied was lower at the rows closer to the solar panels, especially on eggplants'
-  - fruit quality doesn't follow yield, verbatim: 'while quality of the fruit, expressed as the marketable percentage of the harvested fruit, was higher closer to the modules row for eggplant, but was unaffected for tomatoes and peppers'
+  - Solanaceae yield falls nearest the array in a temperate field trial
+    - "Total yield of all crops studied was lower at the rows closer to the solar panels, especially on eggplants"
+  - fruit quality doesn't follow yield
+    - "while quality of the fruit, expressed as the marketable percentage of the harvested fruit, was higher closer to the modules row for eggplant, but was unaffected for tomatoes and peppers"
 - **Caveat:** One season, 2024, the first of the trial. Eggplant 'Palermo', bell pepper 'Turnpike' and fresh-market tomato 'Red Deuce' under single-axis trackers at 2.4 m with 10 m row spacing, on raised plastic mulch beds with drip irrigation. The paper reports yield by distance from the array and states no light measurement, so no season-cumulative shade fraction can be paired with its yields, which is the number this app would need from it.
 
 #### `meng2025-desert-pv-plants`
@@ -479,8 +499,10 @@ Weselek, Axel; Bauerle, Andrea; Hartung, Jens; Zikeli, Sabine; Lewandowski, Iris
 - Backs:
   - the sign of the shade effect flips between years, and the 2017 figures are the significant ones: fresh-matter tuber yield 23.6 t/ha under the array against 28.8 t/ha on the reference in 2017 (-18.2%, p = 0.005) and 25.5 against 23.0 t/ha in 2018 (+11%, p = 0.034), winter wheat grain yield 4.6 against 5.7 t/ha in 2017 (-18.7%, p = 0.03) and 4.7 against 4.6 t/ha in 2018 (+2.7%, not significant, p = 0.78). The 7.2% and 8% figures quoted elsewhere are two-year averages
   - decision 4: weather input must be a TMY, never a single year
-  - temperate-site cooling under panels, verbatim: 'In both, 2017 (n = 132 days) and 2018 (n = 112 days) daily mean air temperature was significantly lower by about 1.1 °C on average. This effect was found across the whole year but was most prevalent during summertime. However, on 7 days in 2017 and 18 days in 2018, measured air temperature was higher under AV' (page 7), which agrees in direction with the Arizona and Oregon results
-  - reduced soil moisture at Heggelbach, contradicting the Arizona and Oregon increases, verbatim: 'Soil moisture was significantly decreased under AV on 26 days in 2017 and on 133 days in 2018. In 2017, significant differences only occurred during wintertime from the end of November onwards. Similar results were observed in 2018, where daily mean soil moisture was significantly lower under AV until the middle of April and from the end of October onwards', so the significant reductions fall in winter and the shoulder seasons and the authors attribute the difference from the irrigated sites to irrigation (page 6)
+  - temperate-site cooling under panels, which agrees in direction with the Arizona and Oregon results
+    - "In both, 2017 (n = 132 days) and 2018 (n = 112 days) daily mean air temperature was significantly lower by about 1.1 °C on average. This effect was found across the whole year but was most prevalent during summertime. However, on 7 days in 2017 and 18 days in 2018, measured air temperature was higher under AV" (page 7)
+  - reduced soil moisture at Heggelbach, contradicting the Arizona and Oregon increases, so the significant reductions fall in winter and the shoulder seasons and the authors attribute the difference from the irrigated sites to irrigation
+    - "Soil moisture was significantly decreased under AV on 26 days in 2017 and on 133 days in 2018. In 2017, significant differences only occurred during wintertime from the end of November onwards. Similar results were observed in 2018, where daily mean soil moisture was significantly lower under AV until the middle of April and from the end of October onwards" (page 6)
   - crop development was slightly delayed under the array and the visible differences had gone by final harvest (page 12)
 - **Caveat:** The sentence 'air temperature tended to be higher underneath the AV facility on days with high solar radiation or low wind speeds' is Weselek reporting Marrou et al. 2013b as a contrast to their own result, introduced by 'In contrast' and closed by 'the opposing results'. Reading it as Weselek's own finding inverts the sign of what they measured.
 
@@ -491,8 +513,10 @@ Widmer, Jocelyn; Ançay, André; Duchemin, Mathilde; Nardin, Gaël; Ackermann, M
 - DOI: [10.52825/agripv.v4i.2837](https://doi.org/10.52825/agripv.v4i.2837)
 - Verification: Crossref-verified | Access: open-access, evidence tier **B**
 - Backs:
-  - strawberry minimum DLI 25 mol/m2/d and raspberry minimum DLI 15 mol/m2/d, verbatim: 'Based on the point where the standardized regression line crosses zero, the minimal DLI recommendation for maintaining average yield was 15 mol m-2 d-1 for raspberry and 25 mol m-2 d-1 for strawberries.'
-  - the shading that recommendation corresponds to, verbatim: 'Based on our findings, we recommend a minimum DLI of 25 mol m-2 d-1 ... corresponded to an estimated total shading of 10-30%, depending on the type of cover', which is the only shading percentage in the paper and the basis for this app's 10% strawberry ceiling
+  - strawberry minimum DLI 25 mol/m2/d and raspberry minimum DLI 15 mol/m2/d
+    - "Based on the point where the standardized regression line crosses zero, the minimal DLI recommendation for maintaining average yield was 15 mol m-2 d-1 for raspberry and 25 mol m-2 d-1 for strawberries."
+  - the shading that recommendation corresponds to, which is the only shading percentage in the paper and the basis for this app's 10% strawberry ceiling
+    - "Based on our findings, we recommend a minimum DLI of 25 mol m-2 d-1 [...] corresponded to an estimated total shading of 10-30%, depending on the type of cover"
   - a positive linear relationship between DLI and both yield and sugar content in both species, stronger in strawberry
   - strawberry firmness declines at low DLI, and fruit weight and titratable acidity are unaffected in both species
   - the authority for splitting strawberry out of Laub's lumped berry group
@@ -518,9 +542,12 @@ Zhang, Yuxin; Hendriks, Chantal; Uchanski, Mark; Page, Ellie. (2025). *Climatic 
 - Verification: Crossref-verified | Access: open-access, evidence tier **B**
 - Backs:
   - the paper's own headline tipping point is SYSTEM SIZE, ~2 ha (breakpoint 19,839 m2), beyond which microclimate temperature effects reverse
-  - segmented regression on shading rate (n=155), verbatim: 'Results from segmented regression lines revealed that at shading rates below 20%, crop yield shows no statistically significant difference from the control group (p = 0.084) ... In the shading scale between 20% and 30% (which does not significantly change the microclimate), lower yield is observed (p < 0.01)'
-  - the design ceiling this app's Solanaceae and cucurbits classes now carry, verbatim: 'To reduce the impact on the growth of crops, the shading caused by PV systems should preferably not exceed 20%, but such a strategy might sacrifice energy generation per unit of land'
-  - where a shade benefit is observed at all, verbatim: 'Additionally, some variability is present in the climate conditions of the studies reporting yield increase, but in summary, the climates share some main features: hot summers, limited precipitation and (semi-) arid conditions (Fig. 9)'
+  - segmented regression on shading rate (n=155)
+    - "Results from segmented regression lines revealed that at shading rates below 20%, crop yield shows no statistically significant difference from the control group (p = 0.084) [...] In the shading scale between 20% and 30% (which does not significantly change the microclimate), lower yield is observed (p < 0.01)"
+  - the design ceiling this app's Solanaceae and cucurbits classes now carry
+    - "To reduce the impact on the growth of crops, the shading caused by PV systems should preferably not exceed 20%, but such a strategy might sacrifice energy generation per unit of land"
+  - where a shade benefit is observed at all
+    - "Additionally, some variability is present in the climate conditions of the studies reporting yield increase, but in summary, the climates share some main features: hot summers, limited precipitation and (semi-) arid conditions (Fig. 9)"
   - the authors' design conclusion that 30-40% shading may support plant growth while maintaining reasonable solar output, and that shading above 50% isn't ideal from a crop standpoint
   - crop groupings used: corn shade-sensitive (n=17), beans partial (n=40), lettuce shade-tolerant (n=42)
 - **Caveat:** The full text (21 pp, CC BY 4.0) is at https://link.springer.com/content/pdf/10.1007/s13593-025-01060-z.pdf. A '~50% shade tipping point' doesn't come from this paper. Its tipping point is ~2 ha of system size. The shade result is a separate segmented regression whose significant suppression band is 50-60%. The literal 50% figure belongs to Beck et al. 2012, which Zhang et al. cite. The paper has no per-group effect-size table with confidence intervals, so any such numbers cited to it are unsupportable. The segmented regression pools crops, and its three crop-resolved regressions are corn, beans and lettuce. No Solanaceae appears in any of them, so the 20% ceiling it supports is a design figure across crops with no tomato result behind it.
@@ -991,7 +1018,8 @@ Torres, Ariana P.; Lopez, Roberto G. (n.d.). *Measuring Daily Light Integral in 
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - worked DLI integration example: 500 umol/m2/s over a 12 h photoperiod = 21.6 mol/m2/d
-  - the 10-12 mol/m2/d minimum DLI figure, verbatim: 'we recommend that greenhouse growers provide a minimum of 10 to 12 mol/m2/d of light during the finish stage to produce many shade-intolerant floriculture crops'
+  - the 10-12 mol/m2/d minimum DLI figure
+    - "we recommend that greenhouse growers provide a minimum of 10 to 12 mol/m2/d of light during the finish stage to produce many shade-intolerant floriculture crops"
   - propagation DLI 4-11 mol/m2/d during callusing and root development accelerates petunia and New Guinea impatiens propagation
   - greenhouse DLI seldom exceeds 25 mol/m2/d because of glazing, superstructure and season
 - **Caveat:** Published outside a peer-reviewed journal. It's the origin of the '10-12 mol/m2/d minimum' commonly attributed to Faust & Logan 2018, which contains no such figure. The source scopes the 10-12 figure to shade-intolerant floriculture crops at the finish stage in a greenhouse. It sets no threshold for vegetables or for field growing. Using it as the Solanaceae minimum in Decision Record 6 is an extrapolation the source doesn't make.
@@ -1047,12 +1075,18 @@ Kiehn, Ferdinand A.; Reimer, Mel. (1992). *Alternative crops for the prairies (A
 - URL: <https://archive.org/details/alternativecrops00kieh>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - crosne spacing, verbatim: 'Plant in early May, in rows 45 cm apart for easy mechanical weed control, and allow 15-30 cm within rows.' (Entry 'Japanese artichoke' (the name used for Stachys affinis), 'Cultural information', Planting, page 24)
-  - crosne height, verbatim: 'The plant is 30-45 cm high, usually 34-40 cm.' (Entry 'Japanese artichoke', Introduction, page 24)
-  - crosne daysToMaturity, verbatim: 'Harvest Japanese artichokes 100-130 days after planting by mechanically lifting the tubers out of the ground.' (Entry 'Japanese artichoke', Harvesting, page 25)
-  - crosne coldLimit, verbatim: 'The tubers also overwinter extremely well in the field as long as they are planted in a well-drained area.' (Entry 'Japanese artichoke', Harvesting, page 25)
-  - tepary-bean spacing, verbatim: 'For effective weed control with row crop equipment, seed at a rate of 25-35 kg/ha in rows 60-90 cm apart.' (Entry 'Tepary bean', 'Cultural information', Planting, page 45)
-  - tepary-bean height, verbatim: 'The plant is 35-50 cm high, with vines that receive ample moisture and that measure up to 115 cm long.' (Entry 'Tepary bean', Introduction, page 45)
+  - crosne spacing
+    - "Plant in early May, in rows 45 cm apart for easy mechanical weed control, and allow 15-30 cm within rows." (Entry 'Japanese artichoke' (the name used for Stachys affinis), 'Cultural information', Planting, page 24)
+  - crosne height
+    - "The plant is 30-45 cm high, usually 34-40 cm." (Entry 'Japanese artichoke', Introduction, page 24)
+  - crosne daysToMaturity
+    - "Harvest Japanese artichokes 100-130 days after planting by mechanically lifting the tubers out of the ground." (Entry 'Japanese artichoke', Harvesting, page 25)
+  - crosne coldLimit
+    - "The tubers also overwinter extremely well in the field as long as they are planted in a well-drained area." (Entry 'Japanese artichoke', Harvesting, page 25)
+  - tepary-bean spacing
+    - "For effective weed control with row crop equipment, seed at a rate of 25-35 kg/ha in rows 60-90 cm apart." (Entry 'Tepary bean', 'Cultural information', Planting, page 45)
+  - tepary-bean height
+    - "The plant is 35-50 cm high, with vines that receive ample moisture and that measure up to 115 cm long." (Entry 'Tepary bean', Introduction, page 45)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `akepic-non-native-plant-species-list`
@@ -1063,7 +1097,8 @@ Alaska Center for Conservation Science, University of Alaska Anchorage. (n.d.). 
 - Archived: <https://web.archive.org/web/20260921110506/https://accs.uaa.alaska.edu/invasive-species/non-native-plant-species-list/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - dandelion invasiveStatus, verbatim: 'Taraxacum officinale F.H. Wigg. TAOF common dandelion 58 Asteraceae 1916 Alaska' (AKEPIC 'Non-Native Plant Species List' table (Alaska Center for Conservation Science), columns Scientific Name, Symbol, )
+  - dandelion invasiveStatus
+    - "Taraxacum officinale F.H. Wigg. TAOF common dandelion 58 Asteraceae 1916 Alaska" (AKEPIC 'Non-Native Plant Species List' table (Alaska Center for Conservation Science), columns Scientific Name, Symbol,)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `allen1998-fao56`
@@ -1085,7 +1120,8 @@ Andrews, Nick; Coop, Leonard; Stoven, Heather; Noordijk, Heidi; Heinrich, Aaron.
 - Archived: <https://web.archive.org/web/20260314052805/https://extension.oregonstate.edu/sites/extd8/files/catalog/auto/EM9305.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **B**
 - Backs:
-  - OSU Croptime coverage, verbatim: 'Croptime currently hosts 29 vegetable DD models and three summer annual weed models', which is the count behind ledger row A16
+  - OSU Croptime coverage, which is the count behind ledger row A16
+    - "Croptime currently hosts 29 vegetable DD models and three summer annual weed models"
   - published lower and upper development thresholds for six vegetables: broccoli 32/70 F, cucumber 50/90 F, snap bean 40/90 F, sweet corn 44 F fresh market or 50 F processing with an 86 F upper, sweet pepper 52/100 F, tomato 45/92 F
   - cultivar-level degree-days to named growth stages and to harvest, with per-cultivar model accuracy in days and the number of data sets behind each
   - the case for GDD-based maturity over fixed days-to-maturity: 'Arcadia' broccoli in Aurora, Oregon ranged 66-103 days to maturity, a 20-32 day spread within a season by planting date
@@ -1100,7 +1136,8 @@ Arkansas State Plant Board, Arkansas Department of Agriculture. (2025). *Code of
 - Archived: <https://web.archive.org/web/20261017221536/https://webftp.blr.arkansas.gov/Home/FTPDocument?path=CAR%2FParts%2F2CARpt50.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - sunn-hemp invasiveStatus, verbatim: '(23) Crotalaria (Crotalaria spp.);' (2 CAR 50-101, subsection (d) Noxious weeds listed, item (23), page 5 of the PDF)
+  - sunn-hemp invasiveStatus
+    - "(23) Crotalaria (Crotalaria spp.);" (2 CAR 50-101, subsection (d) Noxious weeds listed, item (23), page 5 of the PDF)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `bassal-2020-winged-bean-underused`
@@ -1110,9 +1147,12 @@ Bassal, Hussein; Merah, Othmane; Ali, Aqeel M.; Hijazi, Akram; El Omar, Fawaz. (
 - DOI: [10.3390/plants9121730](https://doi.org/10.3390/plants9121730)
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - winged-bean spacing, verbatim: 'The distance between seeds is around 50 cm.' (Section 2.5 Cultivation)
-  - winged-bean height, verbatim: 'Winged bean is a climbing twinning plant (climb up to 3–5 m).' (Section 2.3 Morphology)
-  - winged-bean daysToMaturity, verbatim: 'In the first 6 weeks, Psophocarpus tetragonolobus grows slowly, and after 10–12 weeks of planting, the fruit can be harvested.' (Section 2.5 Cultivation)
+  - winged-bean spacing
+    - "The distance between seeds is around 50 cm." (Section 2.5 Cultivation)
+  - winged-bean height
+    - "Winged bean is a climbing twinning plant (climb up to 3–5 m)." (Section 2.3 Morphology)
+  - winged-bean daysToMaturity
+    - "In the first 6 weeks, Psophocarpus tetragonolobus grows slowly, and after 10–12 weeks of planting, the fruit can be harvested." (Section 2.5 Cultivation)
 - **Caveat:** Read in full for the sentences quoted. The catalog row comments say which figure each sentence gives.
 
 #### `bleasdale1960-population-yield`
@@ -1142,9 +1182,13 @@ Brechner, Melissa; Both, A. J. (2013). *Hydroponic Lettuce Handbook*. Cornell Un
 - Archived: <https://web.archive.org/web/20261005233844/https://cpb-us-e1.wpmucdn.com/blogs.cornell.edu/dist/8/8824/files/2019/06/Cornell-CEA-Lettuce-Handbook-.pdf>
 - Verification: URL-verified | Access: open-access, evidence tier **B**
 - Backs:
-  - lettuce target DLI, verbatim: 'A supplemental light intensity within the range of 100-200 umol/m2/s (for a total of 17 mol/m2/d of both natural and supplemental lighting) at the plant level is recommended. It should be noted that 17 mol/m2/d is the light integral that worked best for the particular cultivar of boston bibb lettuce that we used'
-  - tipburn is light-limited and cultivar-dependent, verbatim: 'For some cultivars, 15 or mol/m2/d is the maximum amount of light that can be used before the physiological condition called tipburn occurs' and 'Without the air flow, we were not able to go over 12 mol/m2/d'
-  - seedlings, verbatim: 'the same total daily accumulated light (~22 mol/m2/d). Anecdotal evidence shows that some lettuce seedlings can tolerate 30 mol/m2/d'
+  - lettuce target DLI
+    - "A supplemental light intensity within the range of 100-200 umol/m2/s (for a total of 17 mol/m2/d of both natural and supplemental lighting) at the plant level is recommended. It should be noted that 17 mol/m2/d is the light integral that worked best for the particular cultivar of boston bibb lettuce that we used"
+  - tipburn is light-limited and cultivar-dependent
+    - "For some cultivars, 15 or mol/m2/d is the maximum amount of light that can be used before the physiological condition called tipburn occurs"
+    - "Without the air flow, we were not able to go over 12 mol/m2/d"
+  - seedlings
+    - "the same total daily accumulated light (~22 mol/m2/d). Anecdotal evidence shows that some lettuce seedlings can tolerate 30 mol/m2/d"
 - **Caveat:** A production handbook for one floating-raft greenhouse system, written from Cornell trials on a boston bibb cultivar (Ostinata, no longer available). It gives no minimum DLI and no sustained-days rule for tipburn: the tipburn ceiling it describes moves with cultivar, spacing and vertical airflow (12 to 17 mol/m2/d in its own examples), so it backs the 17 target and the existence of a light-driven tipburn limit, and nothing more precise.
 
 #### `ca-olive-committee-2003-olive-pmsp`
@@ -1154,7 +1198,8 @@ California Olive Committee and California Minor Crops Council. (2003). *A Pest M
 - URL: <https://ipmdata.ipmcenters.org/documents/pmsps/CAOLIVEPMSP.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - harvest timing for olive, verbatim: 'Table olive harvest usually begins in mid-September and can extend through November. Cultivars grown for oil, however, are harvested much later so that the maximum amount of oil can accumulate in the fruit' (HARVEST section, document p. 19 (PDF p. 21). Table cultivar region and 'September - November' harvest period also given in the 'Differences in Production of Table Versus Oil Cultivars in California' table, PDF p. 7)
+  - harvest timing for olive
+    - "Table olive harvest usually begins in mid-September and can extend through November. Cultivars grown for oil, however, are harvested much later so that the maximum amount of oil can accumulate in the fruit" (HARVEST section, document p. 19 (PDF p. 21). Table cultivar region and 'September - November' harvest period also given in the 'Differences in Production of Table Versus Oil Cultivars in California' table, PDF p. 7)
 - **Caveat:** Published outside a peer-reviewed journal. Its dates are calibrated to the table-cultivar production areas of California's San Joaquin and Sacramento Valleys, and this app places them at the same point in each garden's own frost-free season. For olive, the source is a pest management strategic plan for table olives in the Central Valley, from the California Olive Committee and the California Minor Crops Council.
 
 #### `calipc-inventory`
@@ -1165,7 +1210,8 @@ California Invasive Plant Council. (n.d.). *The Cal-IPC Inventory*. California I
 - Archived: <https://web.archive.org/web/20261002053929/https://www.cal-ipc.org/plants/inventory/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - shungiku invasiveStatus, verbatim: 'Glebionis coronaria | garland Chrysanthemum, crown daisy | Limited' (Cal-IPC Inventory web table (https://www.cal-ipc.org/plants/inventory/), columns 'Scientific name', 'Common names' and ')
+  - shungiku invasiveStatus
+    - "Glebionis coronaria garland Chrysanthemum, crown daisy Limited" (Cal-IPC Inventory web table (https://www.cal-ipc.org/plants/inventory/), columns 'Scientific name', 'Common names' and ')
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `chamberlain2014-forest-farming-ramps`
@@ -1187,7 +1233,8 @@ Chan, Edwin; Elevitch, Craig R. (2006). *Cocos nucifera (coconut), Species Profi
 - Archived: <https://web.archive.org/web/20260916093154/https://agroforestry.org/images/pdfs/Cocos-coconut.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - coconut width, verbatim: 'The canopy has a diameter of 8–9 m (26–30 ft).' (p. 3 of 27, section 'BOTANICAL DESCRIPTION', paragraph 'Size')
+  - coconut width
+    - "The canopy has a diameter of 8–9 m (26–30 ft)." (p. 3 of 27, section 'BOTANICAL DESCRIPTION', paragraph 'Size')
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `clemson-hgic-2024-inground-citrus`
@@ -1198,10 +1245,14 @@ Snipes, Zack; Melgar, Juan Carlos. (2024). *In-Ground Citrus Production (HGIC 13
 - Archived: <https://web.archive.org/web/20260613215859/https://hgic.clemson.edu/factsheet/in-ground-citrus-production/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - orange yearsToFirstHarvest, verbatim: 'Young, grafted oranges, grapefruits, and mandarins must grow for 5 years before they will flower and produce fruit.' ("Purchasing Citrus" section)
-  - mandarin yearsToFirstHarvest, verbatim: 'Young, grafted oranges, grapefruits, and mandarins must grow for 5 years before they will flower and produce fruit.' ("Purchasing Citrus" section)
-  - mandarin coldLimit, verbatim: 'Satsuma | Owari | 19.8-20.7 | Very little foliar damage in the 2022 Christmas Freeze' (unlabeled cold-hardiness table under "Recommended Varieties for South Carolina", columns "Type", "Variety", "Minimum Tem)
-  - mandarin light, verbatim: 'Site Selection: Citrus trees should be planted in a full-sun location to achieve maximum production.' ("Culture" / "Site Selection" section)
+  - orange yearsToFirstHarvest
+    - "Young, grafted oranges, grapefruits, and mandarins must grow for 5 years before they will flower and produce fruit." ("Purchasing Citrus" section)
+  - mandarin yearsToFirstHarvest
+    - "Young, grafted oranges, grapefruits, and mandarins must grow for 5 years before they will flower and produce fruit." ("Purchasing Citrus" section)
+  - mandarin coldLimit
+    - "Satsuma Owari 19.8-20.7 Very little foliar damage in the 2022 Christmas Freeze" (unlabeled cold-hardiness table under "Recommended Varieties for South Carolina", columns "Type", "Variety", "Minimum Tem)
+  - mandarin light
+    - "Site Selection: Citrus trees should be planted in a full-sun location to achieve maximum production." ("Culture" / "Site Selection" section)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `clemson-hgic-2025-pomegranate`
@@ -1212,8 +1263,10 @@ Tanner, Cory. (2025). *Pomegranate (Punica granatum): How to Grow, Care for, and
 - Archived: <https://web.archive.org/web/20260904181100/https://hgic.clemson.edu/factsheet/pomegranate-punica-granatum-how-to-grow-care-for-and-enjoy-in-south-carolina/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - pomegranate height, verbatim: 'This deciduous (rarely evergreen) shrub or small tree typically grows from 12 to 20 feet tall and nearly the same in spread.' ("Description: Identifying the Pomegranate Plant" section)
-  - pomegranate width, verbatim: 'This deciduous (rarely evergreen) shrub or small tree typically grows from 12 to 20 feet tall and nearly the same in spread.' ("Description: Identifying the Pomegranate Plant" section)
+  - pomegranate height
+    - "This deciduous (rarely evergreen) shrub or small tree typically grows from 12 to 20 feet tall and nearly the same in spread." ("Description: Identifying the Pomegranate Plant" section)
+  - pomegranate width
+    - "This deciduous (rarely evergreen) shrub or small tree typically grows from 12 to 20 feet tall and nearly the same in spread." ("Description: Identifying the Pomegranate Plant" section)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `cockshull1992-tomato-shading`
@@ -1244,7 +1297,8 @@ Colorado Department of Agriculture. (n.d.). *Noxious Weed Species in Colorado*. 
 - URL: <https://ag.colorado.gov/conservation/noxious-weeds/species-id>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - caraway invasiveStatus, verbatim: 'List B Species ... Wild caraway Carum carvi' (Colorado Department of Agriculture, 'Noxious Weed Species in Colorado' page, section 'List B Species' (the species page )
+  - caraway invasiveStatus
+    - "List B Species [...] Wild caraway Carum carvi" (Colorado Department of Agriculture, 'Noxious Weed Species in Colorado' page, section 'List B Species' (the species page ))
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `cornell-2006-garden-cress`
@@ -1255,8 +1309,10 @@ Cornell University, Home Gardening. (2006). *Garden cress (Vegetable Growing Gui
 - Archived: <https://web.archive.org/web/20260531014909/http://www.gardening.cornell.edu/homegardening/scene3673.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - cress coldLimit, verbatim: 'Tolerates: frost' (Site and Plant Characteristics tab, Special Considerations)
-  - cress light, verbatim: 'Prefers part shade during hot summer weather.' (Site and Plant Characteristics tab, Site Characteristics, Sunlight (listed as full sun and part shade))
+  - cress coldLimit
+    - "Tolerates: frost" (Site and Plant Characteristics tab, Special Considerations)
+  - cress light
+    - "Prefers part shade during hot summer weather." (Site and Plant Characteristics tab, Site Characteristics, Sunlight (listed as full sun and part shade))
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `cornell-fruit-resources-quince`
@@ -1267,8 +1323,10 @@ Cornell University, Department of Horticulture. (n.d.). *Quinces (Cydonia oblong
 - Archived: <https://web.archive.org/web/20250625023002/http://www.hort.cornell.edu/fruit/mfruit/quince.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - quince coldLimit, verbatim: 'The flowers are susceptible to winter injury at temperatures below about -15 F, but trees are hardy in Zones 5 to 9.' (Cornell Fruit Resources, Quinces page, first paragraph)
-  - quince light, verbatim: 'Quinces prefer a fertile site in full sun.' (Cornell Fruit Resources, Quinces page, Growing quinces paragraph)
+  - quince coldLimit
+    - "The flowers are susceptible to winter injury at temperatures below about -15 F, but trees are hardy in Zones 5 to 9." (Cornell Fruit Resources, Quinces page, first paragraph)
+  - quince light
+    - "Quinces prefer a fertile site in full sun." (Cornell Fruit Resources, Quinces page, Growing quinces paragraph)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `crane-ifas-lemon-hs1153`
@@ -1279,11 +1337,17 @@ Crane, Jonathan H. (n.d.). *Lemon Growing in the Florida Home Landscape*. Univer
 - Archived: <https://web.archive.org/web/20260614172052/https://ask.ifas.ufl.edu/publication/HS402>
 - Verification: URL-verified | Access: public-domain
 - Backs:
-  - verbatim: 'Trees may reach 10-20 ft (3.1-6.1 m) in height' and are best 'maintained at 7 to 10 ft (2.1-3.1 m) high and 10 to 15 ft (3.1-4.6 m) wide'
-  - verbatim: planted '15 to 25 feet or more (6.1 to 7.6 m) away from buildings and other trees'
-  - verbatim: 'Young trees usually begin fruit production in the third year'
-  - verbatim: trees are 'defoliated at 22-24F (-4.4 to -5.6C), severe wood damaged at 20F (-6.7C), flowers and young fruit are killed at 29F (-1.7C)'
-  - verbatim: lemon trees 'should be planted in full sun'
+  - lemon height and width, the size trees may reach and the size they are best maintained at
+    - "Trees may reach 10-20 ft (3.1-6.1 m) in height"
+    - "maintained at 7 to 10 ft (2.1-3.1 m) high and 10 to 15 ft (3.1-4.6 m) wide"
+  - lemon spacing from buildings and other trees
+    - "15 to 25 feet or more (6.1 to 7.6 m) away from buildings and other trees"
+  - lemon yearsToFirstHarvest
+    - "Young trees usually begin fruit production in the third year"
+  - lemon coldLimit
+    - "defoliated at 22-24F (-4.4 to -5.6C), severe wood damaged at 20F (-6.7C), flowers and young fruit are killed at 29F (-1.7C)"
+  - lemon light
+    - "should be planted in full sun"
 - **Caveat:** The quoted sentences come from the page itself, and the page shows no publication date.
 
 #### `crane-ifas-mango-hs2`
@@ -1294,11 +1358,17 @@ Crane, Jonathan H.; Wasielewski, Jeff; Balerdi, Carlos F.; Maguire, Ian. (n.d.).
 - Archived: <https://web.archive.org/web/20261004065636/https://ask.ifas.ufl.edu/publication/MG216>
 - Verification: URL-verified | Access: public-domain
 - Backs:
-  - verbatim: 'Left unpruned many mango varieties become medium to large (30 to 100 ft; 9.1 to 30.5 m) trees'
-  - verbatim: less vigorous varieties with pruning 'may be planted 12 to 15 feet (3.7 to 4.6 m) apart from other trees, buildings, and power lines'
-  - verbatim: 'Grafted trees will begin to bear 3 to 5 years after planting'
-  - verbatim: 'mature trees can withstand air temperatures as low as 25F (-3.9C)' with injury; 'young trees may be killed at 29F to 30F (-1.7C to -1.1C)'
-  - verbatim: 'mango trees should be planted in full sun for best growth and fruit production'
+  - mango height
+    - "Left unpruned many mango varieties become medium to large (30 to 100 ft; 9.1 to 30.5 m) trees"
+  - mango spacing, for less vigorous varieties with pruning
+    - "may be planted 12 to 15 feet (3.7 to 4.6 m) apart from other trees, buildings, and power lines"
+  - mango yearsToFirstHarvest
+    - "Grafted trees will begin to bear 3 to 5 years after planting"
+  - mango coldLimit, where mature trees withstand 25F with injury and young trees are killed at 29F to 30F
+    - "mature trees can withstand air temperatures as low as 25F (-3.9C)"
+    - "young trees may be killed at 29F to 30F (-1.7C to -1.1C)"
+  - mango light
+    - "mango trees should be planted in full sun for best growth and fruit production"
 - **Caveat:** The quoted sentences come from the page itself, and the page shows no publication date.
 
 #### `crane-ifas-papaya-hs11`
@@ -1309,10 +1379,14 @@ Crane, Jonathan H. (n.d.). *Papaya Growing in the Florida Home Landscape*. Unive
 - Archived: <https://web.archive.org/web/20260525145455/https://ask.ifas.ufl.edu/publication/MG054>
 - Verification: URL-verified | Access: public-domain
 - Backs:
-  - verbatim: 'Giant arborescent plant to 33 ft (10 m) tall'
-  - verbatim: 'Papaya plants should be planted in full sun and at least 7 to 10 ft (2.1-3.1 m) away from other plants, buildings, and power lines'
-  - verbatim: 'Well-cared-for plants may begin to produce flowers 4 months after planting and fruit 7 to 11 months after planting'
-  - verbatim: 'Papaya plants are not tolerant of freezing temperatures and are damaged or killed below 31F (-0.6C)'
+  - papaya height
+    - "Giant arborescent plant to 33 ft (10 m) tall"
+  - papaya light and spacing
+    - "Papaya plants should be planted in full sun and at least 7 to 10 ft (2.1-3.1 m) away from other plants, buildings, and power lines"
+  - papaya yearsToFirstHarvest
+    - "Well-cared-for plants may begin to produce flowers 4 months after planting and fruit 7 to 11 months after planting"
+  - papaya coldLimit
+    - "Papaya plants are not tolerant of freezing temperatures and are damaged or killed below 31F (-0.6C)"
 - **Caveat:** The quoted sentences come from the page itself, and the page shows no publication date.
 
 #### `cryan2024-three-sisters-labor`
@@ -1334,7 +1408,8 @@ Shigeura, Gordon T.; Bullock, Richard M. (1983). *Guava (Psidium guajava L.) in 
 - Archived: <https://web.archive.org/web/20251204105754/https://www.ctahr.hawaii.edu/oc/freepubs/pdf/RES-035.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - guava width, verbatim: 'A properly pruned and trained tree can be confined to a foliage canopy approaching 4 meters (11 to 12 feet) in radius.' (CTAHR RES-035, section 'Orchard Design', Clonal orchard, PDF page 17)
+  - guava width
+    - "A properly pruned and trained tree can be confined to a foliage canopy approaching 4 meters (11 to 12 feet) in radius." (CTAHR RES-035, section 'Orchard Design', Clonal orchard, PDF page 17)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ctahr-2002-lablab-green-manure`
@@ -1345,8 +1420,10 @@ Valenzuela, Hector; Smith, Jody. (2002). *Green Manure Crops: Lablab (SA-GM-7)*.
 - Archived: <https://web.archive.org/web/20260708105759/https://www.ctahr.hawaii.edu/oc/freepubs/pdf/GreenManureCrops/lablab.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - lablab light, verbatim: 'Lablab is also shade tolerant.' (Page 1, section 'Environmental requirements')
-  - lablab photoperiod, verbatim: 'Both short-day and long-day varieties are known.' (page 1), why the row carries no day-length gate
+  - lablab light
+    - "Lablab is also shade tolerant." (Page 1, section 'Environmental requirements')
+  - lablab photoperiod, why the row carries no day-length gate
+    - "Both short-day and long-day varieties are known." (page 1)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ctahr-2002-pineapple-cultivation-hawaii`
@@ -1357,7 +1434,8 @@ Bartholomew, Duane P.; Rohrbach, Kenneth G.; Evans, Dale O. (2002). *Pineapple C
 - Archived: <https://web.archive.org/web/20260902194450/https://www3.ctahr.hawaii.edu/oc/freepubs/pdf/F_N-7.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - pineapple harvestSeason, verbatim: 'Fruits are harvested year-round for fresh market and canning operations.' (CTAHR F&N-7, 'Overview of Commercial Production Practices', first page, PDF page 1)
+  - pineapple harvestSeason
+    - "Fruits are harvested year-round for fresh market and canning operations." (CTAHR F&N-7, 'Overview of Commercial Production Practices', first page, PDF page 1)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ctahr-2009-cacao-economics-kona`
@@ -1368,7 +1446,8 @@ Fleming, Kent; Smith, Virginia Easton; Bittenbender, H. C. (2009). *The Economic
 - Archived: <https://web.archive.org/web/20251129220117/https://www.ctahr.hawaii.edu/oc/freepubs/pdf/AB-17.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - cacao spacing, verbatim: 'The example farm's tree spacing is 6 ft by 7 ft... some managers prefer a 5x12-ft spacing arrangement because it allows machinery to travel more freely between the rows.' (p. 3, orchard-size description)
+  - cacao spacing
+    - "The example farm's tree spacing is 6 ft by 7 ft [...] some managers prefer a 5x12-ft spacing arrangement because it allows machinery to travel more freely between the rows." (p. 3, orchard-size description)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ctahr-2010-non-invasive-fruit-trees-hawaii`
@@ -1379,7 +1458,8 @@ Clifford, Patti; Kobayashi, Kent. (2010). *Non-Invasive Fruit Trees for Gardens 
 - Archived: <https://web.archive.org/web/20260423080601/https://www.ctahr.hawaii.edu/oc/freepubs/pdf/F_N-17.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - macadamia yearsToFirstHarvest, verbatim: 'Harvest trees begin bearing fruit at 3–6 years' (CTAHR and Hawaii Invasive Species Council F_N-17, Macadamia entry, PDF page 6)
+  - macadamia yearsToFirstHarvest
+    - "Harvest trees begin bearing fruit at 3–6 years" (CTAHR and Hawaii Invasive Species Council F_N-17, Macadamia entry, PDF page 6)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ctahr-circular-485-macadamia`
@@ -1390,8 +1470,10 @@ Hamilton, Richard A.; Ito, Philip J.; Chia, C. L. (n.d.). *Macadamia: Hawaii's D
 - Archived: <https://web.archive.org/web/20260901143437/https://www3.ctahr.hawaii.edu/oc/freepubs/pdf/C1-485.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - macadamia spacing, verbatim: '... 30 to 35 feet between rows and 16 to 20 feet between trees in the row are considered reasonable, depending on tree form and growth rate of the trees.' (CTAHR Circular 485, section 'Yields and Spacing', PDF page 8)
-  - macadamia harvestSeason, verbatim: 'The main harvest period for macadamia nuts in Hawaii extends from about August through January.' (CTAHR Circular 485, section 'Harvesting and Processing', PDF page 13)
+  - macadamia spacing
+    - "[...] 30 to 35 feet between rows and 16 to 20 feet between trees in the row are considered reasonable, depending on tree form and growth rate of the trees." (CTAHR Circular 485, section 'Yields and Spacing', PDF page 8)
+  - macadamia harvestSeason
+    - "The main harvest period for macadamia nuts in Hawaii extends from about August through January." (CTAHR Circular 485, section 'Harvesting and Processing', PDF page 13)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ctahr-coconut-as-an-ornamental`
@@ -1402,7 +1484,8 @@ Watson, Donald P. (n.d.). *Coconut as an Ornamental (Circular 478)*. Hawaii Coop
 - Archived: <https://web.archive.org/web/20260801224447/https://www.ctahr.hawaii.edu/oc/freepubs/pdf/C1-478.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - coconut height, verbatim: 'Tall coconut palms may attain a height of more than 80 feet and live as long as 90 years. They begin to bear 6 to 10 years after planting. Dwarf coconut palms rarely grow to be more than 25 feet and bear fruit a little sooner.' (p. 3 of 16, opening section)
+  - coconut height
+    - "Tall coconut palms may attain a height of more than 80 feet and live as long as 90 years. They begin to bear 6 to 10 years after planting. Dwarf coconut palms rarely grow to be more than 25 feet and bear fruit a little sooner." (p. 3 of 16, opening section)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ctahr-hgv18-upland-taro`
@@ -1413,9 +1496,13 @@ University of Hawaii Cooperative Extension Service. (1998). *Upland Taro*. Colle
 - Archived: <https://web.archive.org/web/20260901125154/https://www3.ctahr.hawaii.edu/oc/freepubs/pdf/HGV-18.pdf>
 - Verification: URL-verified | Access: public-domain
 - Backs:
-  - verbatim: 'use a guide string to plant 18-24 inches apart within rows 18-24 inches apart'
-  - verbatim: 'Upland taro is ready for harvest 8-10 months after planting'
-  - verbatim: 'best results are obtained on deep, well drained, friable loams with pH 5.5-6.5'; 'It is best adapted to a warm, moist environment. Evenly distributed rainfall is ideal'
+  - taro spacing
+    - "use a guide string to plant 18-24 inches apart within rows 18-24 inches apart"
+  - taro daysToMaturity
+    - "Upland taro is ready for harvest 8-10 months after planting"
+  - taro soil and rainfall
+    - "best results are obtained on deep, well drained, friable loams with pH 5.5-6.5"
+    - "It is best adapted to a warm, moist environment. Evenly distributed rainfall is ideal"
 - **Caveat:** Home-garden guidance for Hawaii, and it gives no temperature figures.
 
 #### `de-melo-abreu2004-olive-chilling`
@@ -1436,7 +1523,8 @@ Dou, Haijie; Niu, Genhua; Gu, Mengmeng; Masabni, Joseph G. (2018). *Responses of
 - Verification: Crossref-verified | Access: open-access, evidence tier **A**
 - Backs:
   - sweet basil grown for 21 days under five DLIs of 9.3, 11.5, 12.9, 16.5 and 17.8 mol/m2/d, where shoot fresh weight was 54 to 79 percent higher under the higher DLIs than under 9.3, and soluble sugars, chlorophyll, anthocyanins and phenolics rose with DLI
-  - the basil production DLI, verbatim: 'we suggest a DLI of 12.9 mol/m2/d for sweet basil commercial production in indoor vertical farming to minimize the energy cost while maintaining a high yield and nutritional quality'
+  - the basil production DLI
+    - "we suggest a DLI of 12.9 mol/m2/d for sweet basil commercial production in indoor vertical farming to minimize the energy cost while maintaining a high yield and nutritional quality"
 - **Caveat:** This entry rests on the abstract and the Crossref record. The suggested 12.9 mol/m2/d is a production recommendation that trades energy cost against yield and quality. Plants at 9.3 still grew, so it isn't a failure threshold. It's indoor sole-source LED culture.
 
 #### `duke-1983-cacao-energy-crops`
@@ -1447,12 +1535,17 @@ Duke, James A. (1983). *Handbook of Energy Crops: Theobroma cacao (unpublished)*
 - Archived: <https://web.archive.org/web/20260921224616/https://www.hort.purdue.edu/newcrop/duke_energy/Theobroma_cacao.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - cacao height, verbatim: 'Small tree usually 4–8 m tall, rarely up to 20 m' ('Description' section)
-  - cacao yearsToFirstHarvest, verbatim: 'Remove floral buds until trees are 5 years old.' ('Cultivation' section)
-  - cacao harvestSeason, verbatim: 'Although fruits mature throughout the year, usually only two harvests are made. In West Africa, the main harvest begins in September, extends to February, with a second smaller harvest in May–June... Harvest season lasts about 5 months.' ('Harvesting' section)
-  - cacao regionLastFreeze, verbatim: '(no quote: West Africa's cacao belt is equatorial/tropical and frost-free, so no NOAA station lookup was performed, per the task's frost-free allowance)' (n/a)
-  - cacao coldLimit, verbatim: 'Maximum temperature of 33.5°C and minimum 13°C, with diurnal temperature variation between 33.5 and 18°C are suggested (Reed, 1976).' ('Ecology' section)
-  - cacao light, verbatim: 'Plants are shade-tolerant... Fields should remain shaded for 3 years... Seedling cacao does best with only 25% full sunlight, saplings with closer to 50%.' ('Ecology', 'Cultivation' and 'Energy' sections)
+  - cacao height
+    - "Small tree usually 4–8 m tall, rarely up to 20 m" ('Description' section)
+  - cacao yearsToFirstHarvest
+    - "Remove floral buds until trees are 5 years old." ('Cultivation' section)
+  - cacao harvestSeason
+    - "Although fruits mature throughout the year, usually only two harvests are made. In West Africa, the main harvest begins in September, extends to February, with a second smaller harvest in May–June [...] Harvest season lasts about 5 months." ('Harvesting' section)
+  - cacao regionLastFreeze, no quote: West Africa's cacao belt is equatorial/tropical and frost-free, so no NOAA station lookup was performed, per the task's frost-free allowance
+  - cacao coldLimit
+    - "Maximum temperature of 33.5°C and minimum 13°C, with diurnal temperature variation between 33.5 and 18°C are suggested (Reed, 1976)." ('Ecology' section)
+  - cacao light
+    - "Plants are shade-tolerant [...] Fields should remain shaded for 3 years [...] Seedling cacao does best with only 25% full sunlight, saplings with closer to 50%." ('Ecology', 'Cultivation' and 'Energy' sections)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `duke-1983-handbook-of-energy-crops-corchorus-olitorius`
@@ -1463,7 +1556,8 @@ Duke, James A. (1983). *Corchorus olitorius L., in Handbook of Energy Crops (unp
 - Archived: <https://web.archive.org/web/20261008155054/https://www.hort.purdue.edu/newcrop/duke_energy/Corchorus_olitorius.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - jute-mallow height, verbatim: 'Annual, much-branched herb 90-120 cm tall; stems glabrous.' ('Description' section)
+  - jute-mallow height
+    - "Annual, much-branched herb 90-120 cm tall; stems glabrous." ('Description' section)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `duke-1983-handbook-of-energy-crops-saccharum-officinarum`
@@ -1474,7 +1568,8 @@ Duke, James A. (1983). *Saccharum officinarum L., in Handbook of Energy Crops (u
 - Archived: <https://web.archive.org/web/20261011133421/https://hort.purdue.edu/newcrop/duke_energy/Saccharum_officinarum.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - sugarcane coldLimit, verbatim: 'Sugarcane in commercial production has endured a maximum of 53°C (127°F) and a minimum of -13°C (9°F). The high is endured by standing cane and the low by overwintering stubble. Standing stalks of sugarcane freeze at -4 to -5.5°C (25 to 22°F) depending on cv and length of exposure.' ('Ecology' section)
+  - sugarcane coldLimit
+    - "Sugarcane in commercial production has endured a maximum of 53°C (127°F) and a minimum of -13°C (9°F). The high is endured by standing cane and the low by overwintering stubble. Standing stalks of sugarcane freeze at -4 to -5.5°C (25 to 22°F) depending on cv and length of exposure." ('Ecology' section)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `duke1983-energy-crops-purdue`
@@ -1485,8 +1580,15 @@ Duke, James A. (1983). *Handbook of Energy Crops*. Unpublished; hosted by Purdue
 - Archived: <https://web.archive.org/web/20261012095420/https://hort.purdue.edu/newcrop/duke_energy/dukeindex.html>
 - Verification: URL-verified | Access: open-access, evidence tier **C**
 - Backs:
-  - cassava, verbatim: 'Shrub or small tree, 1.3-5 m tall'; spacing 'usually 1.20 m to 1.50 m by 80 cm for good cvs on fertile soils; 1 m each way for weak cvs on poor soils'; 'Cassava is harvested in 10-14 months, depending on the cv, the cultural practices and the purpose of the crop'; cassava is 'reported to tolerate' shade
-  - rice, verbatim: 'Erect annual grass, to 1.2 m tall'; transplanted 'spaced 10-20 cm apart in 20-30 cm rows'; 'From planting to harvest varies: 4 months in Italy, 6 months in monsoon regions of Asia, and 135 days for some cvs in the US'
+  - cassava height, spacing, harvest time and shade tolerance
+    - "Shrub or small tree, 1.3-5 m tall"
+    - "usually 1.20 m to 1.50 m by 80 cm for good cvs on fertile soils; 1 m each way for weak cvs on poor soils"
+    - "Cassava is harvested in 10-14 months, depending on the cv, the cultural practices and the purpose of the crop"
+    - "reported to tolerate"
+  - rice height, transplant spacing and time from planting to harvest
+    - "Erect annual grass, to 1.2 m tall"
+    - "spaced 10-20 cm apart in 20-30 cm rows"
+    - "From planting to harvest varies: 4 months in Italy, 6 months in monsoon regions of Asia, and 135 days for some cvs in the US"
 - **Caveat:** An unpublished 1983 compilation, served by a land-grant site. Its climate ranges are means of reported cases and aren't used here. Only the descriptive height, spacing and harvest statements are cited.
 
 #### `ecfr-7cfr-360-200-noxious-weeds`
@@ -1496,8 +1598,10 @@ Animal and Plant Health Inspection Service, US Department of Agriculture. (2018)
 - URL: <https://www.ecfr.gov/current/title-7/subtitle-B/chapter-III/part-360/section-360.200>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - blackberry acceptedName, verbatim: 'Rubus fruticosus Linnaeus (complex) (wild blackberry)' (paragraph (c)), the listing the blackberry row's name stays clear of
-  - the catalog rule in the decision record, verbatim: 'a scientific name is intended to include all subordinate taxa within the taxon' (footnote 1). Checked 2026-10-11 against every catalog accepted name and synonym: once the blackberry row took the genus name, it names none of them
+  - blackberry acceptedName, the listing the blackberry row's name stays clear of
+    - "Rubus fruticosus Linnaeus (complex) (wild blackberry)" (paragraph (c))
+  - the catalog rule in the decision record. Checked 2026-10-11 against every catalog accepted name and synonym: once the blackberry row took the genus name, it names none of them
+    - "a scientific name is intended to include all subordinate taxa within the taxon" (footnote 1)
 - **Caveat:** A federal regulation, the list of federal noxious weeds.
 
 #### `elevitch-manner-2006-jackfruit-species-profile`
@@ -1508,7 +1612,8 @@ Elevitch, Craig R.; Manner, Harley I. (2006). *Artocarpus heterophyllus (jackfru
 - Archived: <https://web.archive.org/web/20260926101738/https://agroforestry.org/images/pdfs/A.heterophyllus-jackfruit.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - jackfruit width, verbatim: 'The canopy diameter at 5 years old ranges from 3.5–6.7 m (11–22 ft) and can reach 10 m or more in older trees.' (p. 3 of 17, section 'Size and form')
+  - jackfruit width
+    - "The canopy diameter at 5 years old ranges from 3.5–6.7 m (11–22 ft) and can reach 10 m or more in older trees." (p. 3 of 17, section 'Size and form')
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `erdei2024-desmodium-interception`
@@ -1544,10 +1649,14 @@ Hernández Bermejo, J. E.; León, J. (1994). *Neglected crops: 1492 from a diffe
 - Archived: <https://web.archive.org/web/20260502074154/https://openknowledge.fao.org/server/api/core/bitstreams/fbde779c-8968-4a7d-8df8-de28c2196aac/content>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - oca daysToMaturity, verbatim: 'The extensive growing period of seven to eight months exposes the crop for a longer time to attack from biotic and abiotic factors' (Chapter 'Andean tubers' (C. Arbizu and M. Tapia), section Oca, 'Prospects for improvement' (page 152 of the book, also o)
-  - malanga light, verbatim: 'The Xanthosoma species are plants of the tropical rain forest and, although in their natural habitat they grow under the forest canopy, under cultivation they are usually sown with full exposure to sunlight.' (Chapter 'Tannia, yautia' (D. C. Giacometti and J. León), 'Ecology and phytogeography' (page 254))
-  - tepary-bean daysToMaturity, verbatim: 'The cultivated form, like the wild forms, has a short cycle, flowering 27 to 40 clays after gen-nination and ripening at 60 to 80 days.' (Chapter 'Beans' (D. G. Debouck), section Phaseolus acutifolius, 'Botanical description', book page 52 (PDF page 70))
-  - tepary-bean light, verbatim: 'heliophyte and has characteristics that allow it to tolerate excessive sun.' (Chapter 'Beans' (D. G. Debouck), section Phaseolus acutifolius, 'Ecology and phytogeography', last sentence of the secti)
+  - oca daysToMaturity
+    - "The extensive growing period of seven to eight months exposes the crop for a longer time to attack from biotic and abiotic factors" (Chapter 'Andean tubers' (C. Arbizu and M. Tapia), section Oca, 'Prospects for improvement' (page 152 of the book, also o))
+  - malanga light
+    - "The Xanthosoma species are plants of the tropical rain forest and, although in their natural habitat they grow under the forest canopy, under cultivation they are usually sown with full exposure to sunlight." (Chapter 'Tannia, yautia' (D. C. Giacometti and J. León), 'Ecology and phytogeography' (page 254))
+  - tepary-bean daysToMaturity
+    - "The cultivated form, like the wild forms, has a short cycle, flowering 27 to 40 clays after gen-nination and ripening at 60 to 80 days." (Chapter 'Beans' (D. G. Debouck), section Phaseolus acutifolius, 'Botanical description', book page 52 (PDF page 70))
+  - tepary-bean light
+    - "heliophyte and has characteristics that allow it to tolerate excessive sun." (Chapter 'Beans' (D. G. Debouck), section Phaseolus acutifolius, 'Ecology and phytogeography', last sentence of the secti)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `fao-minor-oil-crops-cashew-nut`
@@ -1558,7 +1667,8 @@ Food and Agriculture Organization of the United Nations. (n.d.). *Minor oil crop
 - Archived: <https://web.archive.org/web/20261007121957/https://www.fao.org/4/X5043E/x5043E06.htm>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - cashew harvestSeason, verbatim: 'In India the main crop is ready for harvest between March and April. Some trees may produce an additional light crop between October and November (Woodroof).' (Section 'HARVESTING PERIODS' of the Cashew nut monograph)
+  - cashew harvestSeason
+    - "In India the main crop is ready for harvest between March and April. Some trees may produce an additional light crop between October and November (Woodroof)." (Section 'HARVESTING PERIODS' of the Cashew nut monograph)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `farazdaghi1968-competition-yield`
@@ -1579,8 +1689,10 @@ Ferguson, J.M.; Weeks, W.W.; Fike, W.T. (1990). *Production of catnip in North C
 - Archived: <https://web.archive.org/web/20261017220054/https://hort.purdue.edu/newcrop/proceedings1990/V1-527.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - catnip yearsToFirstHarvest, verbatim: 'Seeds are sown into warm plantbeds 60-65 days prior to transplanting, which in North Carolina is generally between March 1 and April 1 ... Catnip is usually ready to harvest in August a time when the weather is too humid in North Carolina for proper curing.' (Sections 'TRANSPLANT PRODUCTION' and 'CURING')
-  - catnip harvestSeason, verbatim: 'Catnip is usually ready to harvest in August a time when the weather is too humid in North Carolina for proper curing.' (Section 'CURING')
+  - catnip yearsToFirstHarvest
+    - "Seeds are sown into warm plantbeds 60-65 days prior to transplanting, which in North Carolina is generally between March 1 and April 1 [...] Catnip is usually ready to harvest in August a time when the weather is too humid in North Carolina for proper curing." (Sections 'TRANSPLANT PRODUCTION' and 'CURING')
+  - catnip harvestSeason
+    - "Catnip is usually ready to harvest in August a time when the weather is too humid in North Carolina for proper curing." (Section 'CURING')
 - **Caveat:** Read in full for the sentences quoted. The catalog row comments say which figure each sentence gives.
 
 #### `fernandez-2006-yacon-central-europe`
@@ -1591,7 +1703,8 @@ Fernández, E. C.; Viehmannová, I.; Lachman, J.; Milella, L. (2006). *Yacon [Sm
 - Archived: <https://web.archive.org/web/20261017215232/https://pse.agriculturejournals.cz/pdfs/pse/2006/12/05.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - yacon coldLimit, verbatim: 'The first frosts (–1°C) in autumn can cause yacon frost burns on the overground parts (1 meter above the ground). Basal parts of the stem resist –2°C, and underground organs –3°C. In lower temperatures the tuberous roots crack.' (Journal page 568 (PDF page 5), Results and Discussion, section 'Influence of precipitation and temperature')
+  - yacon coldLimit
+    - "The first frosts (–1°C) in autumn can cause yacon frost burns on the overground parts (1 meter above the ground). Basal parts of the stem resist –2°C, and underground organs –3°C. In lower temperatures the tuberous roots crack." (Journal page 568 (PDF page 5), Results and Discussion, section 'Influence of precipitation and temperature')
 - **Caveat:** Read in full for the sentences quoted. The catalog row comments say which figure each sentence gives.
 
 #### `fiedler2007-insectary`
@@ -1633,7 +1746,8 @@ Florida Invasive Species Council. (2025). *2025 Invasive Plant Species (the inva
 - Archived: <https://web.archive.org/web/20260226093230/https://www.floridainvasives.org/plant-list/2025-invasive-plant-species/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - malanga invasiveStatus, verbatim: 'Xanthosoma sagittifolium | arrowleaf elephant's ear | N, C, S | II' (2025 Invasive Plant Species table, columns Scientific Name, Common Name, Zone, Category)
+  - malanga invasiveStatus
+    - "Xanthosoma sagittifolium arrowleaf elephant's ear N, C, S II" (2025 Invasive Plant Species table, columns Scientific Name, Common Name, Zone, Category)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `fisc-2026-invasive-plant-list`
@@ -1644,7 +1758,8 @@ Florida Invasive Species Council (formerly Florida Exotic Pest Plant Council). (
 - Archived: <https://web.archive.org/web/20261017214110/https://www.floridainvasives.org/wp-content/uploads/2026/07/FISC-2026-Plant-List-Cat-I-II_April2026.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - guava invasiveStatus, verbatim: 'Psidium guajava guava C, S' (FISC List of Invasive Plant Species, table 'FISC Category I', row Psidium guajava (columns Scientific Name, Common Name,)
+  - guava invasiveStatus
+    - "Psidium guajava guava C, S" (FISC List of Invasive Plant Species, table 'FISC Category I', row Psidium guajava (columns Scientific Name, Common Name,))
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `gao2020-spinach-dli`
@@ -1723,7 +1838,8 @@ Hawaiian Ecosystems at Risk project, Pacific Island Ecosystems at Risk (PIER). (
 - Archived: <https://web.archive.org/web/20260711014415/http://www.hear.org/pier/wra/pacific/anacardium_occidentale_htmlwra.htm>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - cashew invasiveStatus, verbatim: 'RISK ASSESSMENT RESULTS: Low risk, score: 0' (Header of the Hawaii-Pacific Weed Risk Assessment page for Anacardium occidentale)
+  - cashew invasiveStatus
+    - "RISK ASSESSMENT RESULTS: Low risk, score: 0" (Header of the Hawaii-Pacific Weed Risk Assessment page for Anacardium occidentale)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `hear-hpwra-lagenaria-siceraria`
@@ -1734,7 +1850,8 @@ Hawaiian Ecosystems at Risk project (HEAR), Pacific Island Ecosystems at Risk (P
 - Archived: <https://web.archive.org/web/20230601224239/http://www.hear.org/pier/wra/pacific/lagenaria_siceraria_htmlwra.htm>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - bottle-gourd invasiveStatus, verbatim: 'RISK ASSESSMENT RESULTS: Low risk, score: 0' (HEAR (Hawaiian Ecosystems at Risk) Hawaii-Pacific Weed Risk Assessment page for Lagenaria siceraria)
+  - bottle-gourd invasiveStatus
+    - "RISK ASSESSMENT RESULTS: Low risk, score: 0" (HEAR (Hawaiian Ecosystems at Risk) Hawaii-Pacific Weed Risk Assessment page for Lagenaria siceraria)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `hear-hpwra-macadamia-integrifolia`
@@ -1745,7 +1862,8 @@ Hawaiian Ecosystems at Risk project (HEAR), Pacific Island Ecosystems at Risk (P
 - Archived: <https://web.archive.org/web/20261017214126/http://www.hear.org/pier/wra/pacific/macadamia_integrifolia_htmlwra.htm>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - macadamia invasiveStatus, verbatim: 'RISK ASSESSMENT RESULTS: Low risk, score: -1' (HEAR (Hawaiian Ecosystems at Risk) Hawaii-Pacific Weed Risk Assessment page for Macadamia integrifolia)
+  - macadamia invasiveStatus
+    - "RISK ASSESSMENT RESULTS: Low risk, score: -1" (HEAR (Hawaiian Ecosystems at Risk) Hawaii-Pacific Weed Risk Assessment page for Macadamia integrifolia)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `hear-pier-carthamus-tinctorius`
@@ -1756,7 +1874,8 @@ US Forest Service, Pacific Island Ecosystems at Risk (PIER). (2018). *Carthamus 
 - Archived: <https://web.archive.org/web/20250328062158/http://www.hear.org/pier/species/carthamus_tinctorius.htm>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - safflower invasiveStatus, verbatim: 'Risk assessment results: High risk; score: 8 ( Hawaii-Pacific Weed Risk Assessment for Carthamus tinctorius )' (PIER species page, 'Risk assessment results' line)
+  - safflower invasiveStatus
+    - "Risk assessment results: High risk; score: 8 ( Hawaii-Pacific Weed Risk Assessment for Carthamus tinctorius )" (PIER species page, 'Risk assessment results' line)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `hear-pier-dysphania-ambrosioides`
@@ -1767,7 +1886,8 @@ Pacific Island Ecosystems at Risk project (PIER). (n.d.). *Dysphania ambrosioide
 - Archived: <https://web.archive.org/web/20261017220035/http://www.hear.org/pier/species/dysphania_ambrosioides.htm>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - epazote invasiveStatus, verbatim: 'O‘ahu Island introduced invasive Wagner, Warren L./Herbst, Derral R./Sohmer, S. H. (1999) (p. 537)' (HEAR PIER species page 'Dysphania ambrosioides: info from PIER', table 'Presence', rows for the State of Hawaii (one per)
+  - epazote invasiveStatus
+    - "O‘ahu Island introduced invasive Wagner, Warren L./Herbst, Derral R./Sohmer, S. H. (1999) (p. 537)" (HEAR PIER species page 'Dysphania ambrosioides: info from PIER', table 'Presence', rows for the State of Hawaii (one per))
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `hear-pier-eryngium-foetidum`
@@ -1778,7 +1898,8 @@ Pacific Island Ecosystems at Risk project (PIER). (n.d.). *Eryngium foetidum: in
 - Archived: <https://web.archive.org/web/20251211052305/http://www.hear.org/pier/species/eryngium_foetidum.htm>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - culantro invasiveStatus, verbatim: 'O‘ahu Island introduced invasive cultivated Wagner, Warren L./Herbst, Derral R./Sohmer, S. H. (1999) (p. 199)' (HEAR PIER species page 'Eryngium foetidum: info from PIER', table 'Presence', row for the State of Hawaii, O‘ahu Island,)
+  - culantro invasiveStatus
+    - "O‘ahu Island introduced invasive cultivated Wagner, Warren L./Herbst, Derral R./Sohmer, S. H. (1999) (p. 199)" (HEAR PIER species page 'Eryngium foetidum: info from PIER', table 'Presence', row for the State of Hawaii, O‘ahu Island,)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `hear-pier-lablab-purpureus`
@@ -1789,7 +1910,8 @@ US Forest Service, Pacific Island Ecosystems at Risk (PIER). (2013). *Lablab pur
 - Archived: <https://web.archive.org/web/20261017221403/http://www.hear.org/pier/species/lablab_purpureus.htm>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - lablab invasiveStatus, verbatim: 'Risk assessment results: Evaluate, score: 5 ( Go to the risk assessment )' (PIER species page, 'Risk assessment results' line)
+  - lablab invasiveStatus
+    - "Risk assessment results: Evaluate, score: 5 ( Go to the risk assessment )" (PIER species page, 'Risk assessment results' line)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `hear-pier-setaria-italica`
@@ -1800,7 +1922,8 @@ US Forest Service, Pacific Island Ecosystems at Risk (PIER). (2011). *Setaria it
 - Archived: <https://web.archive.org/web/20260215021723/http://www.hear.org/pier/species/setaria_italica.htm>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - foxtail-millet invasiveStatus, verbatim: 'Risk assessment results: Evaluate, score: 3 (Go to the risk assessment ( Australia )). High risk, score 9 (Go to the risk assessment ( Pacific )).' (PIER species page, 'Risk assessment results' lines)
+  - foxtail-millet invasiveStatus
+    - "Risk assessment results: Evaluate, score: 3 (Go to the risk assessment ( Australia )). High risk, score 9 (Go to the risk assessment ( Pacific ))." (PIER species page, 'Risk assessment results' lines)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `hermann-heller-1997-andean-roots-tubers`
@@ -1810,7 +1933,8 @@ Hermann, M.; Heller, J. (1997). *Andean roots and tubers: Ahipa, arracacha, maca
 - URL: <https://hdl.handle.net/10568/104208>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - jicama nfix, verbatim: 'three cultivars of P. erosus (reproductively pruned harvested after 154-168 days): 162-215 kg N/ha (or 84-107 g N/t biomass per day)' (Chapter 'Ahipa (Pachyrhizus ahipa (Wedd.) Parodi)' (M. Sørensen, W. J. Grüneberg and B. Ørting), section 4.1 Biological nitrogen fixation, page 27, on Castellanos et al. 1997's field trial in Mexico)
+  - jicama nfix
+    - "three cultivars of P. erosus (reproductively pruned harvested after 154-168 days): 162-215 kg N/ha (or 84-107 g N/t biomass per day)" (Chapter 'Ahipa (Pachyrhizus ahipa (Wedd.) Parodi)' (M. Sørensen, W. J. Grüneberg and B. Ørting), section 4.1 Biological nitrogen fixation, page 27, on Castellanos et al. 1997's field trial in Mexico)
 - **Caveat:** A scholarly monograph (IPK and IPGRI), outside the usual extension, USDA and FAO classes. Its 154-168 days to harvest are for reproductively pruned trial plants and the book doesn't say what the count starts from, so the catalog's season length for jicama comes from UF/IFAS HS615. The catalog row comments say which figure each sentence gives.
 
 #### `hoanghua2024-white-rot`
@@ -1865,7 +1989,8 @@ Hummer, Kim E. (2006). *Blue Honeysuckle: A New Berry Crop for North America*. J
 - DOI: [10.71318/apom.2006.60.1.3](https://doi.org/10.71318/apom.2006.60.1.3)
 - Verification: Crossref-verified | Access: open-access, evidence tier **C**
 - Backs:
-  - haskap chill, verbatim: 'Notwithstanding this cold hardiness, the buds have a very short chilling, i.e., rest, requirement. In St. Petersburg, rest is satisfied by late October or early November (6).' (page 5), why the row carries no chill figure
+  - haskap chill, why the row carries no chill figure
+    - "Notwithstanding this cold hardiness, the buds have a very short chilling, i.e., rest, requirement. In St. Petersburg, rest is satisfied by late October or early November (6)." (page 5)
 - **Caveat:** A review of the crop by the USDA ARS curator at Corvallis, with no trial of its own. License CC BY-NC 4.0.
 
 #### `iastate-extension-2015-aronia`
@@ -1876,7 +2001,8 @@ Hannan, Joe. (2015). *Growing Aronia in Iowa*. Iowa State University Extension a
 - Archived: <https://web.archive.org/web/20260419193722/https://yardandgarden.extension.iastate.edu/article/2015/02-13/aronia.htm>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - harvest timing for aronia, verbatim: 'The fruit ripen from late August through mid-September' (Third paragraph of the article (fruiting-habit paragraph))
+  - harvest timing for aronia
+    - "The fruit ripen from late August through mid-September" (Third paragraph of the article (fruiting-habit paragraph))
 - **Caveat:** Published outside a peer-reviewed journal. Its dates are calibrated to Iowa, and this app places them at the same point in each garden's own frost-free season.
 
 #### `iastate-extension-2019-chinese-chestnut`
@@ -1887,8 +2013,10 @@ O'Malley, Patrick. (2019). *What is Chinese Chestnut?* Iowa State University Ext
 - Archived: <https://web.archive.org/web/20260420012400/https://yardandgarden.extension.iastate.edu/article/2019/11/what-chinese-chestnut>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - chestnut height, verbatim: 'Eventually after several decades the trees can reach a height of 40-60’ and a spread of 30’ and potentially produce 50 lbs. of nuts.' (Iowa State University Extension, "What is Chinese Chestnut?" article)
-  - chestnut width, verbatim: 'Eventually after several decades the trees can reach a height of 40-60’ and a spread of 30’ and potentially produce 50 lbs. of nuts.' (Iowa State University Extension, "What is Chinese Chestnut?" article)
+  - chestnut height
+    - "Eventually after several decades the trees can reach a height of 40-60’ and a spread of 30’ and potentially produce 50 lbs. of nuts." (Iowa State University Extension, "What is Chinese Chestnut?" article)
+  - chestnut width
+    - "Eventually after several decades the trees can reach a height of 40-60’ and a spread of 30’ and potentially produce 50 lbs. of nuts." (Iowa State University Extension, "What is Chinese Chestnut?" article)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `iastate-extension-2025-rhubarb`
@@ -1899,7 +2027,8 @@ Iowa State University Extension and Outreach. (2025). *Growing Rhubarb in Iowa*.
 - Archived: <https://web.archive.org/web/20260626185155/https://yardandgarden.extension.iastate.edu/how-to/growing-rhubarb-iowa>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - harvest timing for rhubarb, verbatim: 'Begin harvesting rhubarb when stalks reach 10 to 15 inches long (usually sometime in April or early May in Iowa). Rhubarb can be harvested for eight to ten weeks, ending in mid-June' ("Harvesting > When to Harvest" section)
+  - harvest timing for rhubarb
+    - "Begin harvesting rhubarb when stalks reach 10 to 15 inches long (usually sometime in April or early May in Iowa). Rhubarb can be harvested for eight to ten weeks, ending in mid-June" ("Harvesting > When to Harvest" section)
 - **Caveat:** Published outside a peer-reviewed journal. Its dates are calibrated to Iowa, represented by Des Moines, and this app places them at the same point in each garden's own frost-free season. Rhubarb's start date is the middle of the stated range, April to early May.
 
 #### `iastate-extension-red-mulberry`
@@ -1910,9 +2039,12 @@ Iowa State University Extension and Outreach, Natural Resources. (n.d.). *Red Mu
 - Archived: <https://web.archive.org/web/20260615140520/https://naturalresources.extension.iastate.edu/forestry/iowa_trees/trees/red_mulberry.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - mulberry-red height, verbatim: 'Height: 30-45 feet' (Iowa State University Extension, Natural Resources, Red Mulberry page, fact list at the top (last reviewed March 1, 2019)
-  - mulberry-red width, verbatim: 'Width: 25-35 feet' (Iowa State University Extension, Natural Resources, Red Mulberry page, fact list at the top)
-  - mulberry-red coldLimit, verbatim: 'Hardiness: Zones 5 through 10' (Iowa State University Extension, Natural Resources, Red Mulberry page, fact list at the top)
+  - mulberry-red height
+    - "Height: 30-45 feet" (Iowa State University Extension, Natural Resources, Red Mulberry page, fact list at the top (last reviewed March 1, 2019))
+  - mulberry-red width
+    - "Width: 25-35 feet" (Iowa State University Extension, Natural Resources, Red Mulberry page, fact list at the top)
+  - mulberry-red coldLimit
+    - "Hardiness: Zones 5 through 10" (Iowa State University Extension, Natural Resources, Red Mulberry page, fact list at the top)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `iimr-2017-finger-millet-pop`
@@ -1923,7 +2055,8 @@ ICAR-Indian Institute of Millets Research. (2017). *Recommended Package of Pract
 - Archived: <https://web.archive.org/web/20260116064853/https://millets.res.in/technologies/1-Recommended_Package_of_Practices-Finger_Millet.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - finger-millet spacing, verbatim: 'Maintenance of optimum plant population of 4-5 lakh plants ha-1 this is attained by line sowing using seed drill giving a spacing of 22.5-30 cm between rows and 7.5-10 cm between plants' ('Sowing/Planting' section)
+  - finger-millet spacing
+    - "Maintenance of optimum plant population of 4-5 lakh plants ha-1 this is attained by line sowing using seed drill giving a spacing of 22.5-30 cm between rows and 7.5-10 cm between plants" ('Sowing/Planting' section)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `iimr-foxtail-millet-package-of-practices`
@@ -1934,7 +2067,8 @@ ICAR-Indian Institute of Millets Research. (n.d.). *Recommended package of pract
 - Archived: <https://web.archive.org/web/20260116054858/https://millets.res.in/technologies/2-Recommended_Package_of_Practices-Foxtail_Millet.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - foxtail-millet spacing, verbatim: '25-30 cm between rows and 8-10 cm between plants within a row' (Page 1, heading 'Spacing')
+  - foxtail-millet spacing
+    - "25-30 cm between rows and 8-10 cm between plants within a row" (Page 1, heading 'Spacing')
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `illinois-extension-herbs-bay-laurel`
@@ -1945,7 +2079,8 @@ University of Illinois Extension. (n.d.). *Bay Laurel*. University of Illinois E
 - Archived: <https://web.archive.org/web/20260801075018/https://extension.illinois.edu/herbs/bay-laurel>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - harvest timing for bay-laurel, verbatim: 'Leaves can be harvested throughout the season as needed' ("Harvesting" section)
+  - harvest timing for bay-laurel
+    - "Leaves can be harvested throughout the season as needed" ("Harvesting" section)
 - **Caveat:** Published outside a peer-reviewed journal. Its dates are calibrated to Illinois, and this app places them at the same point in each garden's own frost-free season.
 
 #### `illinois-extension-herbs-caraway`
@@ -1956,8 +2091,10 @@ University of Illinois Extension. (n.d.). *Caraway | Herbs | Illinois Extension*
 - Archived: <https://web.archive.org/web/20260520042439/https://extension.illinois.edu/herbs/caraway>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - caraway height, verbatim: 'The second season the plant grows to 2 to 3 feet tall and produces a large, flat-topped flower head with white flowers.' (Opening paragraph)
-  - caraway yearsToFirstHarvest, verbatim: 'Caraway is a biennial plant that produces seeds the second season after planting.' (Opening paragraph)
+  - caraway height
+    - "The second season the plant grows to 2 to 3 feet tall and produces a large, flat-topped flower head with white flowers." (Opening paragraph)
+  - caraway yearsToFirstHarvest
+    - "Caraway is a biennial plant that produces seeds the second season after planting." (Opening paragraph)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `illinois-extension-herbs-chives`
@@ -1968,7 +2105,8 @@ University of Illinois Extension. (n.d.). *Chives*. University of Illinois Exten
 - Archived: <https://web.archive.org/web/20260316020433/https://extension.illinois.edu/herbs/chives>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - harvest timing for chives, verbatim: 'Harvest chives throughout the season to prevent the leaves from becoming tough and to encourage formation of new bulblets' ("Harvesting" section)
+  - harvest timing for chives
+    - "Harvest chives throughout the season to prevent the leaves from becoming tough and to encourage formation of new bulblets" ("Harvesting" section)
 - **Caveat:** Published outside a peer-reviewed journal. Its dates are calibrated to Illinois, and this app places them at the same point in each garden's own frost-free season.
 
 #### `illinois-extension-herbs-lemon-balm`
@@ -1979,7 +2117,8 @@ University of Illinois Extension. (n.d.). *Lemon Balm*. University of Illinois E
 - Archived: <https://web.archive.org/web/20260722033611/https://extension.illinois.edu/herbs/lemon-balm>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - harvest timing for lemon-balm, verbatim: 'Stems can be cut as needed anytime during the season preferably before flowering' ("Harvesting" section)
+  - harvest timing for lemon-balm
+    - "Stems can be cut as needed anytime during the season preferably before flowering" ("Harvesting" section)
 - **Caveat:** Published outside a peer-reviewed journal. Its dates are calibrated to Illinois, and this app places them at the same point in each garden's own frost-free season.
 
 #### `illinois-extension-herbs-lovage`
@@ -1990,7 +2129,8 @@ University of Illinois Extension. (n.d.). *Lovage*. University of Illinois Exten
 - Archived: <https://web.archive.org/web/20260608051235/https://extension.illinois.edu/herbs/lovage>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - harvest timing for lovage, verbatim: 'Leaves and stems can be used fresh anytime they are needed' ("Harvesting" section)
+  - harvest timing for lovage
+    - "Leaves and stems can be used fresh anytime they are needed" ("Harvesting" section)
 - **Caveat:** Published outside a peer-reviewed journal. Its dates are calibrated to Illinois, and this app places them at the same point in each garden's own frost-free season.
 
 #### `illinois-extension-herbs-rosemary`
@@ -2001,7 +2141,8 @@ University of Illinois Extension. (n.d.). *Rosemary*. University of Illinois Ext
 - Archived: <https://web.archive.org/web/20260808094249/https://extension.illinois.edu/herbs/rosemary>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - harvest timing for rosemary, verbatim: 'The tender tips and foliage can be cut as needed throughout the growing season' ("Harvesting" section)
+  - harvest timing for rosemary
+    - "The tender tips and foliage can be cut as needed throughout the growing season" ("Harvesting" section)
 - **Caveat:** Published outside a peer-reviewed journal. Its dates are calibrated to Illinois, and this app places them at the same point in each garden's own frost-free season.
 
 #### `illinois-extension-herbs-sage`
@@ -2012,7 +2153,8 @@ University of Illinois Extension. (n.d.). *Sage*. University of Illinois Extensi
 - Archived: <https://web.archive.org/web/20260615212638/https://extension.illinois.edu/herbs/sage>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - harvest timing for sage, verbatim: 'Leaves can be harvested through the season as needed' ("Harvest" section)
+  - harvest timing for sage
+    - "Leaves can be harvested through the season as needed" ("Harvest" section)
 - **Caveat:** Published outside a peer-reviewed journal. Its dates are calibrated to Illinois, and this app places them at the same point in each garden's own frost-free season.
 
 #### `illinois-extension-herbs-savory-winter`
@@ -2023,7 +2165,8 @@ University of Illinois Extension. (n.d.). *Savory: Winter*. University of Illino
 - Archived: <https://web.archive.org/web/20260312080832/https://extension.illinois.edu/herbs/savory-winter>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - harvest timing for winter-savory, verbatim: 'Young shoots and leaves can be harvested throughout the growing season' ("Harvest" section)
+  - harvest timing for winter-savory
+    - "Young shoots and leaves can be harvested throughout the growing season" ("Harvest" section)
 - **Caveat:** Published outside a peer-reviewed journal. Its dates are calibrated to Illinois, and this app places them at the same point in each garden's own frost-free season.
 
 #### `illinois-extension-herbs-tarragon-french`
@@ -2034,7 +2177,8 @@ University of Illinois Extension. (n.d.). *Tarragon: French*. University of Illi
 - Archived: <https://web.archive.org/web/20260421040030/https://extension.illinois.edu/herbs/tarragon-french>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - harvest timing for tarragon, verbatim: 'Young stem tips and leaves can be harvested as needed throughout the season' ("Harvesting" section)
+  - harvest timing for tarragon
+    - "Young stem tips and leaves can be harvested as needed throughout the season" ("Harvesting" section)
 - **Caveat:** Published outside a peer-reviewed journal. Its dates are calibrated to Illinois, and this app places them at the same point in each garden's own frost-free season.
 
 #### `illinois-extension-herbs-thyme`
@@ -2045,7 +2189,8 @@ University of Illinois Extension. (n.d.). *Thyme*. University of Illinois Extens
 - Archived: <https://web.archive.org/web/20260216045059/https://extension.illinois.edu/herbs/thyme>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - harvest timing for thyme, verbatim: 'Stems of thyme can be cut through the season but is best cut just before the plant starts to flower' ("Harvesting" section)
+  - harvest timing for thyme
+    - "Stems of thyme can be cut through the season but is best cut just before the plant starts to flower" ("Harvesting" section)
 - **Caveat:** Published outside a peer-reviewed journal. Its dates are calibrated to Illinois, and this app places them at the same point in each garden's own frost-free season.
 
 #### `illinois-extension-lemon-verbena`
@@ -2056,8 +2201,10 @@ University of Illinois Extension. (n.d.). *Lemon Verbena (Herb Gardening)*. Univ
 - Archived: <https://web.archive.org/web/20260516233307/https://extension.illinois.edu/herbs/lemon-verbena>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - lemon-verbena harvestSeason, verbatim: 'Harvest leaves as needed throughout the season.' (Harvesting section)
-  - lemon-verbena light, verbatim: 'Outdoors, place the plant in a full sun location.' (Growing: Tender Perennial paragraph)
+  - lemon-verbena harvestSeason
+    - "Harvest leaves as needed throughout the season." (Harvesting section)
+  - lemon-verbena light
+    - "Outdoors, place the plant in a full sun location." (Growing: Tender Perennial paragraph)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `jose-juglone`
@@ -2088,10 +2235,14 @@ Directorate of Extension, Kerala Agricultural University. (2016). *Package of Pr
 - Archived: <https://web.archive.org/web/20260119200851/https://kau.in/sites/default/files/documents/pop2016.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - black-pepper spacing, verbatim: 'The spacing recommended is 3 m x 3 m on plain lands and 2 m between plants in rows across the slope and 4 m between rows on sloppy lands.' (p. 138 (PDF p. 146 of 401), section 'Field planting' under BLACK PEPPER (Piper nigrum))
-  - black-pepper width, verbatim: 'The spacing recommended is 3 m x 3 m on plain lands and 2 m between plants in rows across the slope and 4 m between rows on sloppy lands.' (p. 138 (PDF p. 146 of 401), section 'Field planting' under BLACK PEPPER (Piper nigrum))
-  - black-pepper coldLimit, verbatim: 'The plant tolerates a minimum temperature of 10oC and maximum of 40oC, the optimum being 20 - 30oC.' (p. 136 (PDF p. 144 of 401), opening paragraphs of BLACK PEPPER (Piper nigrum))
-  - black-pepper light, verbatim: 'When pepper is grown in open places, shading and watering of the young seedlings may be done during summer months for the first 1 to 3 years according to necessity.' (p. 139 (PDF p. 147 of 401), section 'Management after planting')
+  - black-pepper spacing
+    - "The spacing recommended is 3 m x 3 m on plain lands and 2 m between plants in rows across the slope and 4 m between rows on sloppy lands." (p. 138 (PDF p. 146 of 401), section 'Field planting' under BLACK PEPPER (Piper nigrum))
+  - black-pepper width
+    - "The spacing recommended is 3 m x 3 m on plain lands and 2 m between plants in rows across the slope and 4 m between rows on sloppy lands." (p. 138 (PDF p. 146 of 401), section 'Field planting' under BLACK PEPPER (Piper nigrum))
+  - black-pepper coldLimit
+    - "The plant tolerates a minimum temperature of 10oC and maximum of 40oC, the optimum being 20 - 30oC." (p. 136 (PDF p. 144 of 401), opening paragraphs of BLACK PEPPER (Piper nigrum))
+  - black-pepper light
+    - "When pepper is grown in open places, shading and watering of the young seedlings may be done during summer months for the first 1 to 3 years according to necessity." (p. 139 (PDF p. 147 of 401), section 'Management after planting')
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `kelly2020-lettuce-dli`
@@ -2152,8 +2303,10 @@ K-State Research and Extension, Butler County. (n.d.). *Ground Cherry*. Kansas S
 - Archived: <https://web.archive.org/web/20261017215013/https://www.butler.k-state.edu/horticulture/gardener-resources/seed-libraries/groundcherry.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - ground-cherry daysToMaturity, verbatim: 'Usually, fruits will ripen ten to eleven weeks after transplanting outdoors.' (Harvest and Storage section)
-  - ground-cherry light, verbatim: 'Sunlight: Ground cherries prefer eight hours of direct light on a daily basis.' (Growing notes, Sunlight entry)
+  - ground-cherry daysToMaturity
+    - "Usually, fruits will ripen ten to eleven weeks after transplanting outdoors." (Harvest and Storage section)
+  - ground-cherry light
+    - "Sunlight: Ground cherries prefer eight hours of direct light on a daily basis." (Growing notes, Sunlight entry)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ksu-extension-2010-organic-pawpaw`
@@ -2164,7 +2317,8 @@ Pomper, Kirk W.; Crabtree, Sheri B.; Lowe, Jeremy D. (2010). *Organic Production
 - Archived: <https://web.archive.org/web/20261017211855/https://www.kysu.edu/wp-content/uploads/2017/09/OrganicPawpawPBI-004-New-2.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - harvest timing for pawpaw, verbatim: 'Depending on the variety, fruit ripen in late-August to early-October. Fruit ripen on the same tree over about a 2 week period, which reflects an extended spring flowering period' (PBI-004, p. 1)
+  - harvest timing for pawpaw
+    - "Depending on the variety, fruit ripen in late-August to early-October. Fruit ripen on the same tree over about a 2 week period, which reflects an extended spring flowering period" (PBI-004, p. 1)
 - **Caveat:** Published outside a peer-reviewed journal. Its dates are calibrated to Frankfort, Kentucky, home of the KSU Pawpaw Research Program, and this app places them at the same point in each garden's own frost-free season.
 
 #### `kubota-osu-strawberry-dli`
@@ -2175,8 +2329,10 @@ Kubota Lab, The Ohio State University. (n.d.). *Environment*. Controlled Environ
 - Archived: <https://web.archive.org/web/20261017210823/https://u.osu.edu/indoorberry/environment/>
 - Verification: URL-verified | Access: open-access, evidence tier **C**
 - Backs:
-  - greenhouse strawberry DLI guidance, verbatim: 'We recommend 12 mol/m2/day DLI to target as minimum level for good productivity and consider the optimum between 20-25 mol/m2/d'
-  - a strawberry light ceiling, verbatim: 'Under DLI exceeding 30 mol/m2/d, strawberry plants tend to be stressed (shading is required in that case)'
+  - greenhouse strawberry DLI guidance
+    - "We recommend 12 mol/m2/day DLI to target as minimum level for good productivity and consider the optimum between 20-25 mol/m2/d"
+  - a strawberry light ceiling
+    - "Under DLI exceeding 30 mol/m2/d, strawberry plants tend to be stressed (shading is required in that case)"
 - **Caveat:** Greenhouse production guidance from a university lab page, undated and without a primary citation for the numbers. Its 12 mol/m2/d minimum is a greenhouse-productivity floor and isn't the same quantity as the 25 mol/m2/d agrivoltaic average-yield convention in widmer-strawberry-dli, which is what the catalog gate uses. The two are recorded side by side in Decision Record 23. The 30 mol/m2/d stress point is the only strawberry light ceiling located and isn't yet wired into the catalog.
 
 #### `lai2022-legume-cereal-n`
@@ -2196,8 +2352,13 @@ Lerner, B. Rosie. (2020). *Indiana Vegetable Planting Calendar*. Purdue Universi
 - Archived: <https://web.archive.org/web/20251217183844/https://www.extension.purdue.edu/extmedia/ho/ho-186-w.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - frostOffsetDays by hardiness class, verbatim from Table 1: hardy (tolerates hard frost) 'plant 4-6 weeks before last spring frost'; semi-hardy (tolerates light frost) 'plant 2-4 weeks before last spring frost'; tender 'plant after average last spring frost (minimum air temp 50 F)'; very tender 'plant at least two weeks after average last spring frost (minimum air temp 60-65 F)'
-  - fall window rule, verbatim from Table 2: cool season plants for late-summer or fall planting 'plant at least 4-8 weeks before first fall frost'
+  - frostOffsetDays by hardiness class
+    - "plant 4-6 weeks before last spring frost" (Table 1, hardy (tolerates hard frost))
+    - "plant 2-4 weeks before last spring frost" (Table 1, semi-hardy (tolerates light frost))
+    - "plant after average last spring frost (minimum air temp 50 F)" (Table 1, tender)
+    - "plant at least two weeks after average last spring frost (minimum air temp 60-65 F)" (Table 1, very tender)
+  - fall window rule
+    - "plant at least 4-8 weeks before first fall frost" (Table 2, cool season plants for late-summer or fall planting)
   - minSoilTempC per crop from Table 3, 'Soil Temperatures for Vegetable Seed Germination', giving optimum, optimum range, minimum and maximum in degrees F
   - the crop-to-hardiness-class assignment for roughly 30 common vegetables
 - **Caveat:** Published outside a peer-reviewed journal. Its dates are calibrated to Indiana, and its own frost maps are drawn at the 10% exceedance level. The publication states that the 50% level falls about two weeks earlier in spring and two weeks later in fall. Its offsets only hold against a stated percentile, and an unqualified 'average frost date' leaves them ambiguous. Purdue asserts university copyright, and this bibliography classifies it as public domain by its convention for extension output.
@@ -2221,9 +2382,12 @@ LSU AgCenter. (2017). *Beans (Pub. 2309)*. Louisiana State University Agricultur
 - Archived: <https://web.archive.org/web/20251108194758/https://www.lsuagcenter.com/~/media/system/c/7/1/0/c710883aa4ed69a0304445fab01c9399/pub%202309%20beans%20gardening%20tipspdf.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - lima-bean spacing, verbatim: 'Bush beans are planted in rows 3 feet apart. Plant 1/2 inch deep. After plants are up (7-12 days), thin limas to 3-5 inches apart... For pole beans, plant hills of two or three seeds every 12 inches apart in the row. Space these rows 3-4 feet apart.' (p. 1-2, 'Cultural Practices' section)
-  - lima-bean height, verbatim: 'Many pole varieties will grow 10-12 feet, so be prepared.' (p. 1, 'Cultural Practices' section)
-  - lima-bean light, verbatim: 'Choose a fertile, well-drained area that receives full sunlight.' (p. 1, 'Cultural Practices' section)
+  - lima-bean spacing
+    - "Bush beans are planted in rows 3 feet apart. Plant 1/2 inch deep. After plants are up (7-12 days), thin limas to 3-5 inches apart [...] For pole beans, plant hills of two or three seeds every 12 inches apart in the row. Space these rows 3-4 feet apart." (p. 1-2, 'Cultural Practices' section)
+  - lima-bean height
+    - "Many pole varieties will grow 10-12 feet, so be prepared." (p. 1, 'Cultural Practices' section)
+  - lima-bean light
+    - "Choose a fertile, well-drained area that receives full sunlight." (p. 1, 'Cultural Practices' section)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `lsuagcenter-2017-mirlitons`
@@ -2234,7 +2398,8 @@ Timmerman, Anna. (2017). *Got Mirlitons? Or Chayote? How About Alligator Pears?*
 - Archived: <https://web.archive.org/web/20251108222040/https://www.lsuagcenter.com/~/media/system/0/7/6/8/076829d1e19d5482e65dc24f45dfa6ae/january%202017pdf.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - chayote daysToMaturity, verbatim: 'The vine will die back in a frost, but a thick mulch around the roots will keep the plant happy and it will regrow in the spring. It typically takes 150 frost free days before the vine will produce more mirlitons.' (Feature article text, January 2017 "GNO Gardening" newsletter)
+  - chayote daysToMaturity
+    - "The vine will die back in a frost, but a thick mulch around the roots will keep the plant happy and it will regrow in the spring. It typically takes 150 frost free days before the vine will produce more mirlitons." (Feature article text, January 2017 "GNO Gardening" newsletter)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `magness-1971-food-and-feed-crops-dandelion`
@@ -2245,7 +2410,8 @@ Magness, J.R.; Markle, G.M.; Compton, C.C. (1971). *Dandelion (Food and feed cro
 - Archived: <https://web.archive.org/web/20261017220233/https://hort.purdue.edu/newcrop/Crops/Dandelion.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - dandelion width, verbatim: 'Cultivated forms may have rosettes of leaves spreading to 18 to 24 inches on established plants.' (Entry 'Dandelion' in Magness, Markle and Compton 1971, 'Food and feed crops of the United States', as reproduced by Purd)
+  - dandelion width
+    - "Cultivated forms may have rosettes of leaves spreading to 18 to 24 inches on established plants." (Entry 'Dandelion' in Magness, Markle and Compton 1971, 'Food and feed crops of the United States', as reproduced by Purd)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `mahr-2025-anise-hyssop`
@@ -2256,7 +2422,8 @@ Mahr, Susan. (2025). *Anise hyssop, Agastache foeniculum*. University of Wiscons
 - Archived: <https://web.archive.org/web/20260514111527/https://hort.extension.wisc.edu/articles/anise-hyssop-agastache-foeniculum/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - harvest timing for anise-hyssop, verbatim: 'The best time to harvest foliage to dry is when the flowers are just past full bloom, as the oil content in the leaves is the highest at that time, but they can be used at any time' (main overview text (before the "Landscape Use" heading))
+  - harvest timing for anise-hyssop
+    - "The best time to harvest foliage to dry is when the flowers are just past full bloom, as the oil content in the leaves is the highest at that time, but they can be used at any time" (main overview text (before the "Landscape Use" heading))
 - **Caveat:** Published outside a peer-reviewed journal. Its dates are calibrated to Wisconsin, and this app places them at the same point in each garden's own frost-free season.
 
 #### `maine-dacf-2024-invasive-plants-do-not-sell-list`
@@ -2267,7 +2434,8 @@ Maine Department of Agriculture, Conservation and Forestry, Horticulture Program
 - Archived: <https://web.archive.org/web/20261011010722/https://www.maine.gov/dacf/php/horticulture/invasiveplants.shtml>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - sea-buckthorn invasiveStatus, verbatim: 'The invasive plants listed below are illegal to import, export, buy, sell or intentionally propagate for sale or distribution in Maine. The ban includes all cultivars, varieties and hybrids of these plants. ... Hippophae rhamnoides | Sea buckthorn | January 1, 2024' ("Do Not Sell Plant List" table, row for Hippophae rhamnoides (the 2024 handout PDF also names it, saved as maine-dacf-in)
+  - sea-buckthorn invasiveStatus
+    - "The invasive plants listed below are illegal to import, export, buy, sell or intentionally propagate for sale or distribution in Maine. The ban includes all cultivars, varieties and hybrids of these plants. [...] Hippophae rhamnoides Sea buckthorn January 1, 2024" ("Do Not Sell Plant List" table, row for Hippophae rhamnoides (the 2024 handout PDF also names it, saved as maine-dacf-in))
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `manitoba-agriculture-sea-buckthorn-production`
@@ -2278,9 +2446,12 @@ Manitoba Agriculture. (n.d.). *Sea Buckthorn Production in Manitoba*. Province o
 - Archived: <https://web.archive.org/web/20260604084535/https://www.gov.mb.ca/agriculture/crops/crop-management/fruit-crops/sea-buckthorn-production.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - sea-buckthorn spacing, verbatim: 'Plants should be spaced three feet (1 m) between plants and 13 feet (4 m) between rows.' ("Site Selection/Spacing/Rooting Depth" section)
-  - sea-buckthorn height, verbatim: 'The sea buckthorn is a medium deciduous shrub six to 13 feet (2 to 4 m) in height.' ("Description" section)
-  - sea-buckthorn coldLimit, verbatim: 'Sea buckthorn plants are very hardy and can withstand temperatures of -45 to 103 °F (-43 to 40 °C).' ("Description" section)
+  - sea-buckthorn spacing
+    - "Plants should be spaced three feet (1 m) between plants and 13 feet (4 m) between rows." ("Site Selection/Spacing/Rooting Depth" section)
+  - sea-buckthorn height
+    - "The sea buckthorn is a medium deciduous shrub six to 13 feet (2 to 4 m) in height." ("Description" section)
+  - sea-buckthorn coldLimit
+    - "Sea buckthorn plants are very hardy and can withstand temperatures of -45 to 103 °F (-43 to 40 °C)." ("Description" section)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `mansion-vaquie2019-aphids`
@@ -2336,7 +2507,8 @@ Palmer, Dara. (2018). *Growing Serviceberries*. Montana State University Extensi
 - Archived: <https://web.archive.org/web/20261017211507/https://extension-store.montana.edu/montguides/growing-serviceberries>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - harvest timing for serviceberry, verbatim: 'Serviceberry fruit ripens in late June through July' (Section ‘Harvest and Uses’)
+  - harvest timing for serviceberry
+    - "Serviceberry fruit ripens in late June through July" (Section ‘Harvest and Uses’)
 - **Caveat:** Published outside a peer-reviewed journal. Its dates are calibrated to Montana, and this app places them at the same point in each garden's own frost-free season.
 
 #### `mt-pleasant2010-iroquoian`
@@ -2357,7 +2529,8 @@ Henning, Jimmy C.; Nelson, C. J. (2017). *Alfalfa (G4550)*. University of Missou
 - Archived: <https://web.archive.org/web/20260412094455/https://extension.missouri.edu/publications/g4550>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - alfalfa harvestSeason, verbatim: 'For established stands, take the first (May 10 to 20) and second (June 15 to 25) cuttings when the plants are just beginning to bloom. For persistence of the stand, make two more harvests at about 35-day intervals before Sept. 15.' (Section 'Harvest management')
+  - alfalfa harvestSeason
+    - "For established stands, take the first (May 10 to 20) and second (June 15 to 25) cuttings when the plants are just beginning to bloom. For persistence of the stand, make two more harvests at about 35-day intervals before Sept. 15." (Section 'Harvest management')
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `mu-2018-growing-millets`
@@ -2368,7 +2541,8 @@ Myers, Rob. (2018). *Growing Millets for Grain, Forage or Cover Crop Use (G4164)
 - Archived: <https://web.archive.org/web/20260617222052/https://extension.missouri.edu/publications/g4164>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - foxtail-millet daysToMaturity, verbatim: 'Maturity varies with foxtail, proso, Japanese and browntop millet being the fastest maturing types (60-90 days depending on planting date and variety and weather)' (Table 3 (Millet seeding rates and primary U.S. markets), footnote)
+  - foxtail-millet daysToMaturity
+    - "Maturity varies with foxtail, proso, Japanese and browntop millet being the fastest maturing types (60-90 days depending on planting date and variety and weather)" (Table 3 (Millet seeding rates and primary U.S. markets), footnote)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `mu-agroforestry-2009-black-walnut-nut-production`
@@ -2379,9 +2553,12 @@ Reid, William; Coggeshall, Mark; Garrett, H. E. "Gene"; Van Sambeek, Jerry. (200
 - Archived: <https://web.archive.org/web/20261017213309/https://extension.missouri.edu/media/wysiwyg/Extensiondata/Pub/pdf/agguides/agroforestry/af1011.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - black-walnut spacing, verbatim: 'Minimum tree spacing should be 25 to 30 feet depending on soil type.' (AF1011, "Orchard Design" section, p. 4)
-  - black-walnut yearsToFirstHarvest, verbatim: 'Trees should start to bear nuts within four to six years after transplanting.' (AF1011, "Methods for Establishing Black Walnut Trees" > "Grafted trees" subsection, p. 5)
-  - black-walnut harvestSeason, verbatim: 'In areas with a 195-day frost-free growing season such as central Missouri, early-ripening cultivars mature Sept. 1-14 ... Mid-season cultivars ripen Sept. 15-28 and late-ripening cultivars become harvestable after Sept. 28.' (AF1011, "Ripening season" section, p. 4)
+  - black-walnut spacing
+    - "Minimum tree spacing should be 25 to 30 feet depending on soil type." (AF1011, "Orchard Design" section, p. 4)
+  - black-walnut yearsToFirstHarvest
+    - "Trees should start to bear nuts within four to six years after transplanting." (AF1011, "Methods for Establishing Black Walnut Trees" > "Grafted trees" subsection, p. 5)
+  - black-walnut harvestSeason
+    - "In areas with a 195-day frost-free growing season such as central Missouri, early-ripening cultivars mature Sept. 1-14 [...] Mid-season cultivars ripen Sept. 15-28 and late-ripening cultivars become harvestable after Sept. 28." (AF1011, "Ripening season" section, p. 4)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `mu-agroforestry-2022-chinese-chestnut`
@@ -2392,11 +2569,16 @@ Revord, Ron; Gold, Michael; Meier, Nicholas; Webber, J. Bryan; Hunt, Ken; Warmun
 - Archived: <https://web.archive.org/web/20260609052850/https://extension.missouri.edu/media/wysiwyg/Extensiondata/Pub/pdf/agguides/agroforestry/af1007.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - chestnut spacing, verbatim: 'Chinese chestnut trees naturally form wide spreading crowns that grow to a height of 35 to 40 feet. Spacing your trees at least 40 to 50 feet apart will allow ample room for tree growth and allow easy access to all sides of the tree at harvest time.' (AF1007, "Backyard trees" section, p. 9)
-  - chestnut yearsToFirstHarvest, verbatim: 'Grafted trees come into bearing two or three years following establishment, depending on tree growth rate.' (AF1007, "Planting grafted trees" section, p. 6)
-  - chestnut harvestSeason, verbatim: 'Chinese chestnut is a medium-sized tree with spreading habit and is covered with burs filled with nuts stretching from September into October in Missouri.' (AF1007, photo caption, p. 1)
-  - chestnut coldLimit, verbatim: 'Chinese chestnuts can tolerate -20 °F temperatures when fully dormant' (AF1007, p. 3)
-  - chestnut light, verbatim: 'Chestnuts require full sun for best nut production so they should not be planted adjacent to large shade trees.' (AF1007, pp. 9-10 (sentence spans the page break))
+  - chestnut spacing
+    - "Chinese chestnut trees naturally form wide spreading crowns that grow to a height of 35 to 40 feet. Spacing your trees at least 40 to 50 feet apart will allow ample room for tree growth and allow easy access to all sides of the tree at harvest time." (AF1007, "Backyard trees" section, p. 9)
+  - chestnut yearsToFirstHarvest
+    - "Grafted trees come into bearing two or three years following establishment, depending on tree growth rate." (AF1007, "Planting grafted trees" section, p. 6)
+  - chestnut harvestSeason
+    - "Chinese chestnut is a medium-sized tree with spreading habit and is covered with burs filled with nuts stretching from September into October in Missouri." (AF1007, photo caption, p. 1)
+  - chestnut coldLimit
+    - "Chinese chestnuts can tolerate -20 °F temperatures when fully dormant" (AF1007, p. 3)
+  - chestnut light
+    - "Chestnuts require full sun for best nut production so they should not be planted adjacent to large shade trees." (AF1007, pp. 9-10 (sentence spans the page break))
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `mu-agroforestry-2022-pecan`
@@ -2407,9 +2589,12 @@ Reid, William; Templemire, Aaron. (2022). *Growing Pecans in Missouri (AF1002)*.
 - Archived: <https://web.archive.org/web/20260421003223/https://extension.missouri.edu/media/wysiwyg/Extensiondata/Pub/pdf/agguides/agroforestry/af1002.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - pecan height, verbatim: 'The largest member of the hickory family, pecan trees often grow to a height of over 70 feet with a spread of greater than 80 feet.' (AF1002, p. 1 (introduction))
-  - pecan width, verbatim: 'The largest member of the hickory family, pecan trees often grow to a height of over 70 feet with a spread of greater than 80 feet.' (AF1002, p. 1 (introduction))
-  - pecan yearsToFirstHarvest, verbatim: 'Trees should start to bear nuts within five to seven years after transplanting.' (AF1002, "Grafted Trees" subsection, p. 7)
+  - pecan height
+    - "The largest member of the hickory family, pecan trees often grow to a height of over 70 feet with a spread of greater than 80 feet." (AF1002, p. 1 (introduction))
+  - pecan width
+    - "The largest member of the hickory family, pecan trees often grow to a height of over 70 feet with a spread of greater than 80 feet." (AF1002, p. 1 (introduction))
+  - pecan yearsToFirstHarvest
+    - "Trees should start to bear nuts within five to seven years after transplanting." (AF1002, "Grafted Trees" subsection, p. 7)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `nakamura1989-winged-bean-okinawa`
@@ -2420,8 +2605,10 @@ Nakamura, Hiroshi; Abe, Jiro. (1989). *Growth and Yields of Winged Bean Grown in
 - Archived: <https://web.archive.org/web/20251208131005/https://www.jircas.go.jp/en/publication/jarq/23/1/71>
 - Verification: URL-verified | Access: open-access, evidence tier **C**
 - Backs:
-  - winged-bean photoperiod toHarvestDays, verbatim: 'UPS-31 15 92 Dec. 9 57 94' (Table 1, the September 28 sowing, row UPS-31: 57 days in the column whose footnote reads 'Number of days from germination to the first flowering'), plants sown into days shorter than 12 hours
-  - winged-bean photoperiod toHarvestDays, verbatim: 'Pods were carefully harvested before the suture became fibrous 12 to 15 days after flowering' (page 74, green pod production). The catalog adds the 13.5-day midpoint to UPS-31's 57 days, 70.5 days to a first green pod
+  - winged-bean photoperiod toHarvestDays, plants sown into days shorter than 12 hours
+    - "UPS-31 15 92 Dec. 9 57 94" (Table 1, the September 28 sowing, row UPS-31: 57 days in the column whose footnote reads 'Number of days from germination to the first flowering')
+  - winged-bean photoperiod toHarvestDays. The catalog adds the 13.5-day midpoint to UPS-31's 57 days, 70.5 days to a first green pod
+    - "Pods were carefully harvested before the suture became fibrous 12 to 15 days after flowering" (page 74, green pod production)
 - **Caveat:** One site at 24 N in one year. Its photoperiods include civil twilight. The days to flowering count from germination, so for a plant already growing when days shorten they overstate the wait.
 
 #### `ncstate-ces-diospyros-virginiana`
@@ -2432,8 +2619,10 @@ NC State Extension. (n.d.). *Diospyros virginiana (American Persimmon, Common Pe
 - Archived: <https://web.archive.org/web/20261012154934/https://plants.ces.ncsu.edu/plants/diospyros-virginiana/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - american-persimmon height, verbatim: 'Height: 30 ft. 0 in. - 80 ft. 0 in.' ("Dimensions" field)
-  - american-persimmon width, verbatim: 'Width: 20 ft. 0 in. - 35 ft. 0 in.' ("Dimensions" field)
+  - american-persimmon height
+    - "Height: 30 ft. 0 in. - 80 ft. 0 in." ("Dimensions" field)
+  - american-persimmon width
+    - "Width: 20 ft. 0 in. - 35 ft. 0 in." ("Dimensions" field)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ncstate-ces-ginger`
@@ -2444,9 +2633,12 @@ NC State Extension. (n.d.). *Zingiber officinale | North Carolina Extension Gard
 - Archived: <https://web.archive.org/web/20260520220212/https://plants.ces.ncsu.edu/plants/zingiber-officinale/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - ginger height, verbatim: 'Height: 2 ft. 0 in. - 4 ft. 0 in.' (Dimensions field, plant database entry)
-  - ginger width, verbatim: 'Width: 2 ft. 0 in. - 3 ft. 0 in.' (Dimensions field, plant database entry)
-  - ginger coldLimit, verbatim: 'While it thrives in zones 9-12, you can grow this tropical plant in a container or as an annual in cooler climates.' (Description section; see also the 'USDA Plant Hardiness Zone' field (9a, 9b, 10a, 10b, 11a, 11b, 12a, 12b) and the '#fro)
+  - ginger height
+    - "Height: 2 ft. 0 in. - 4 ft. 0 in." (Dimensions field, plant database entry)
+  - ginger width
+    - "Width: 2 ft. 0 in. - 3 ft. 0 in." (Dimensions field, plant database entry)
+  - ginger coldLimit
+    - "While it thrives in zones 9-12, you can grow this tropical plant in a container or as an annual in cooler climates." (Description section; see also the 'USDA Plant Hardiness Zone' field (9a, 9b, 10a, 10b, 11a, 11b, 12a, 12b) and the '#fro)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ncstate-ces-turmeric`
@@ -2457,10 +2649,14 @@ NC State Extension. (n.d.). *Curcuma longa (Common Turmeric, Turmeric) | North C
 - Archived: <https://web.archive.org/web/20260516175633/https://plants.ces.ncsu.edu/plants/curcuma-longa/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - turmeric height, verbatim: 'Height: 3 ft. 0 in. - 4 ft. 0 in.' (Dimensions field, plant database entry)
-  - turmeric width, verbatim: 'Width: 3 ft. 0 in. - 4 ft. 0 in.' (Dimensions field, plant database entry)
-  - turmeric coldLimit, verbatim: 'The USDA Hardiness Zones are 8-11. In areas where the plant is not winter hardy, it may be grown as an annual.' (Description section; see also the 'USDA Plant Hardiness Zone' field (8a, 8b, 9a, 9b, 10a, 10b, 11a, 11b))
-  - turmeric light, verbatim: 'Common Turmeric grows best in hot, humid conditions with full sun in the morning and afternoon shade.' (Description section)
+  - turmeric height
+    - "Height: 3 ft. 0 in. - 4 ft. 0 in." (Dimensions field, plant database entry)
+  - turmeric width
+    - "Width: 3 ft. 0 in. - 4 ft. 0 in." (Dimensions field, plant database entry)
+  - turmeric coldLimit
+    - "The USDA Hardiness Zones are 8-11. In areas where the plant is not winter hardy, it may be grown as an annual." (Description section; see also the 'USDA Plant Hardiness Zone' field (8a, 8b, 9a, 9b, 10a, 10b, 11a, 11b))
+  - turmeric light
+    - "Common Turmeric grows best in hot, humid conditions with full sun in the morning and afternoon shade." (Description section)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ncstate-extension-plant-toolbox-aloysia-citriodora`
@@ -2471,9 +2667,12 @@ North Carolina State Extension. (n.d.). *Aloysia citriodora (Lemon Beebrush, Lem
 - Archived: <https://web.archive.org/web/20260516104124/https://plants.ces.ncsu.edu/plants/aloysia-citriodora/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - lemon-verbena height, verbatim: 'Lemon verbena will grow 6 to 8 feet tall and wide in the ground but 2 to 4 feet tall and wide in a pot.' (Description, second paragraph (the Dimensions list gives Height: 6 ft. 0 in. - 8 ft. 0 in.))
-  - lemon-verbena width, verbatim: 'Lemon verbena will grow 6 to 8 feet tall and wide in the ground but 2 to 4 feet tall and wide in a pot.' (Description, second paragraph (the Dimensions list gives Width: 6 ft. 0 in. - 8 ft. 0 in.))
-  - lemon-verbena coldLimit, verbatim: 'In zones 8 and higher, it can be grown outdoors.' (Description, second paragraph)
+  - lemon-verbena height
+    - "Lemon verbena will grow 6 to 8 feet tall and wide in the ground but 2 to 4 feet tall and wide in a pot." (Description, second paragraph (the Dimensions list gives Height: 6 ft. 0 in. - 8 ft. 0 in.))
+  - lemon-verbena width
+    - "Lemon verbena will grow 6 to 8 feet tall and wide in the ground but 2 to 4 feet tall and wide in a pot." (Description, second paragraph (the Dimensions list gives Width: 6 ft. 0 in. - 8 ft. 0 in.))
+  - lemon-verbena coldLimit
+    - "In zones 8 and higher, it can be grown outdoors." (Description, second paragraph)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ncstate-extension-plant-toolbox-stevia-rebaudiana`
@@ -2484,9 +2683,12 @@ North Carolina State Extension. (n.d.). *Stevia rebaudiana (Candy Leaf, Stevia, 
 - Archived: <https://web.archive.org/web/20260616095317/https://plants.ces.ncsu.edu/plants/stevia-rebaudiana/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - stevia height, verbatim: 'This plant grows up to 1 to 2 feet tall and equally as wide, and it is typically grown for its sweet tasting leaves that are ground to make a sugar substitute.' (Description, first paragraph (the Dimensions list gives Height: 1 ft. 0 in. - 2 ft. 0 in.))
-  - stevia width, verbatim: 'This plant grows up to 1 to 2 feet tall and equally as wide, and it is typically grown for its sweet tasting leaves that are ground to make a sugar substitute.' (Description, first paragraph (the Dimensions list gives Width: 1 ft. 0 in. - 2 ft. 0 in.))
-  - stevia light, verbatim: 'Sweet leaf prefers full sun and will tolerate partial shade and requires moist, well-drained, slightly acidic, organically rich, loamy, sandy soils.' (Description, second paragraph (the Light list gives Full sun and Partial Shade))
+  - stevia height
+    - "This plant grows up to 1 to 2 feet tall and equally as wide, and it is typically grown for its sweet tasting leaves that are ground to make a sugar substitute." (Description, first paragraph (the Dimensions list gives Height: 1 ft. 0 in. - 2 ft. 0 in.))
+  - stevia width
+    - "This plant grows up to 1 to 2 feet tall and equally as wide, and it is typically grown for its sweet tasting leaves that are ground to make a sugar substitute." (Description, first paragraph (the Dimensions list gives Width: 1 ft. 0 in. - 2 ft. 0 in.))
+  - stevia light
+    - "Sweet leaf prefers full sun and will tolerate partial shade and requires moist, well-drained, slightly acidic, organically rich, loamy, sandy soils." (Description, second paragraph (the Light list gives Full sun and Partial Shade))
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ncstate-plant-toolbox-crotalaria-juncea`
@@ -2497,8 +2699,10 @@ NC State Extension. (n.d.). *Crotalaria juncea (Sunn Hemp)*. North Carolina Stat
 - Archived: <https://web.archive.org/web/20260519100449/https://plants.ces.ncsu.edu/plants/crotalaria-juncea/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - sunn-hemp width, verbatim: 'Width: 0 ft. 6 in. - 1 ft. 0 in.' (Plant detail page, Attributes, Dimensions field)
-  - sunn-hemp light, verbatim: 'Sunn hemp needs full sun.' (Plant detail page, Description)
+  - sunn-hemp width
+    - "Width: 0 ft. 6 in. - 1 ft. 0 in." (Plant detail page, Attributes, Dimensions field)
+  - sunn-hemp light
+    - "Sunn hemp needs full sun." (Plant detail page, Description)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ncstate-plant-toolbox-glycine-max`
@@ -2509,8 +2713,10 @@ NC State Extension. (n.d.). *Glycine max (soybean), NC State Extension Gardener 
 - Archived: <https://web.archive.org/web/20260316235206/https://plants.ces.ncsu.edu/plants/glycine-max/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - soybean width, verbatim: 'Width: 0 ft. 9 in. - 2 ft. 0 in.' (Plant detail page, 'Dimensions' under Attributes)
-  - soybean light, verbatim: 'Soybean grows readily in most garden soils in full sun.' ('Description' text, and 'Cultural Conditions', 'Light': 'Full sun (6 or more hours of direct sunlight a day)')
+  - soybean width
+    - "Width: 0 ft. 9 in. - 2 ft. 0 in." (Plant detail page, 'Dimensions' under Attributes)
+  - soybean light
+    - "Soybean grows readily in most garden soils in full sun." ('Description' text, and 'Cultural Conditions', 'Light': 'Full sun (6 or more hours of direct sunlight a day)')
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ncstate-plant-toolbox-lablab-purpureus`
@@ -2521,8 +2727,10 @@ NC State Extension. (n.d.). *Lablab purpureus (Hyacinth Bean, Indian Bean, Labla
 - Archived: <https://web.archive.org/web/20260729022231/https://plants.ces.ncsu.edu/plants/lablab-purpureus/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - lablab height, verbatim: 'Height: 10 ft. 0 in. - 25 ft. 0 in.' (Plant detail page, Attributes, Dimensions field)
-  - lablab width, verbatim: 'Width: 3 ft. 0 in. - 6 ft. 0 in.' (Plant detail page, Attributes, Dimensions field)
+  - lablab height
+    - "Height: 10 ft. 0 in. - 25 ft. 0 in." (Plant detail page, Attributes, Dimensions field)
+  - lablab width
+    - "Width: 3 ft. 0 in. - 6 ft. 0 in." (Plant detail page, Attributes, Dimensions field)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ncstate-shew-stevia-production-north-carolina`
@@ -2533,8 +2741,10 @@ Shew, David. (n.d.). *Stevia Production in North Carolina*. North Carolina State
 - Archived: <https://web.archive.org/web/20261017215136/https://cefs.ncsu.edu/wp-content/uploads/Stevia-FAQ.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - stevia yearsToFirstHarvest, verbatim: 'In the year of establishment, the crop is harvested once in September (sometimes twice).' (Page 2, answer to question 4 (How is stevia harvested and prepared for market?))
-  - stevia harvestSeason, verbatim: 'After the first year, it is usually harvested twice per growing season, July and September, with a combine.' (Page 2, answer to question 4. Region: North Carolina, mostly the eastern counties listed in the answer to question 5)
+  - stevia yearsToFirstHarvest
+    - "In the year of establishment, the crop is harvested once in September (sometimes twice)." (Page 2, answer to question 4 (How is stevia harvested and prepared for market?))
+  - stevia harvestSeason
+    - "After the first year, it is usually harvested twice per growing season, July and September, with a combine." (Page 2, answer to question 4. Region: North Carolina, mostly the eastern counties listed in the answer to question 5)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ncstate-toolbox-bitter-melon`
@@ -2545,10 +2755,14 @@ NC State Extension Gardener Plant Toolbox. (n.d.). *Momordica charantia (Ampalay
 - Archived: <https://web.archive.org/web/20260316183547/https://plants.ces.ncsu.edu/plants/momordica-charantia/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - bitter-melon height, verbatim: 'The plant itself, is about 4 to 6 inches high, but the vine will grow rapidly to 12 to 20 feet long in a single growing season. [...] Dimensions: Height: 12 ft. 0 in. - 20 ft. 0 in.' ("Description" text and structured "Dimensions" field, plant profile page)
-  - bitter-melon width, verbatim: 'Dimensions: Height: 12 ft. 0 in. - 20 ft. 0 in. Width: 3 ft. 0 in. - 6 ft. 0 in.' (Structured "Dimensions" field, plant profile page)
-  - bitter-melon coldLimit, verbatim: 'Bitter Goard [sic] is a vigorous, tendril-bearing, frost tender, annual vine of the cucumber family and a native of tropical Africa and Asia. [...] The plants will die in fall at the time of first frost. [...] USDA Plant Hardiness Zone: 9a, 9b, 10a, 10b, 11a, 11b' ("Description" text and structured "Cultural Conditions" field, plant profile page)
-  - bitter-melon light, verbatim: 'Light: Full sun (6 or more hours of direct sunlight a day) Partial Shade (Direct sunlight only part of the day, 2-6 hours)' (Structured "Cultural Conditions" field, plant profile page)
+  - bitter-melon height
+    - "The plant itself, is about 4 to 6 inches high, but the vine will grow rapidly to 12 to 20 feet long in a single growing season. [...] Dimensions: Height: 12 ft. 0 in. - 20 ft. 0 in." ("Description" text and structured "Dimensions" field, plant profile page)
+  - bitter-melon width
+    - "Dimensions: Height: 12 ft. 0 in. - 20 ft. 0 in. Width: 3 ft. 0 in. - 6 ft. 0 in." (Structured "Dimensions" field, plant profile page)
+  - bitter-melon coldLimit
+    - "Bitter Goard [sic] is a vigorous, tendril-bearing, frost tender, annual vine of the cucumber family and a native of tropical Africa and Asia. [...] The plants will die in fall at the time of first frost. [...] USDA Plant Hardiness Zone: 9a, 9b, 10a, 10b, 11a, 11b" ("Description" text and structured "Cultural Conditions" field, plant profile page)
+  - bitter-melon light
+    - "Light: Full sun (6 or more hours of direct sunlight a day) Partial Shade (Direct sunlight only part of the day, 2-6 hours)" (Structured "Cultural Conditions" field, plant profile page)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ncstate-toolbox-burdock`
@@ -2559,10 +2773,14 @@ North Carolina State University Extension. (n.d.). *Arctium lappa (Great Burdock
 - Archived: <https://web.archive.org/web/20260811110814/https://plants.ces.ncsu.edu/plants/arctium-lappa/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - burdock height, verbatim: 'Height: 2 ft. 0 in. - 10 ft. 0 in.' ('Dimensions' block of the Plant Toolbox page)
-  - burdock width, verbatim: 'Width: 2 ft. 0 in. - 4 ft. 0 in.' ('Dimensions' block of the Plant Toolbox page)
-  - burdock coldLimit, verbatim: 'USDA Plant Hardiness Zone: 3a, 3b, 4a, 4b, 5a, 5b, 6a, 6b, 7a, 7b, 8a, 8b, 9a, 9b, 10a, 10b' ('Cultural Conditions' block of the Plant Toolbox page)
-  - burdock light, verbatim: 'It prefers full sun locations with moist, well drained soil rich in organic matter and nitrogen. ... Full sun (6 or more hours of direct sunlight a day) Partial Shade (Direct sunlight only part of the day, 2-6 hours)' (Description paragraph and 'Cultural Conditions: Light' on the Plant Toolbox page)
+  - burdock height
+    - "Height: 2 ft. 0 in. - 10 ft. 0 in." ('Dimensions' block of the Plant Toolbox page)
+  - burdock width
+    - "Width: 2 ft. 0 in. - 4 ft. 0 in." ('Dimensions' block of the Plant Toolbox page)
+  - burdock coldLimit
+    - "USDA Plant Hardiness Zone: 3a, 3b, 4a, 4b, 5a, 5b, 6a, 6b, 7a, 7b, 8a, 8b, 9a, 9b, 10a, 10b" ('Cultural Conditions' block of the Plant Toolbox page)
+  - burdock light
+    - "It prefers full sun locations with moist, well drained soil rich in organic matter and nitrogen. [...] Full sun (6 or more hours of direct sunlight a day) Partial Shade (Direct sunlight only part of the day, 2-6 hours)" (Description paragraph and 'Cultural Conditions: Light' on the Plant Toolbox page)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ncstate-toolbox-salsify`
@@ -2573,8 +2791,10 @@ North Carolina State University Extension. (n.d.). *Tragopogon porrifolius (Comm
 - Archived: <https://web.archive.org/web/20260510145754/https://plants.ces.ncsu.edu/plants/tragopogon-porrifolius/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - salsify height, verbatim: 'larger species, up to 4 feet tall' ('Quick ID Hints' list on the Plant Toolbox page)
-  - salsify light, verbatim: 'Purple Goat's Beard performs best in full sun and sandy, loamy, and clay soils. ... Full sun (6 or more hours of direct sunlight a day) Partial Shade (Direct sunlight only part of the day, 2-6 hours)' (Description paragraph and 'Cultural Conditions: Light' on the Plant Toolbox page)
+  - salsify height
+    - "larger species, up to 4 feet tall" ('Quick ID Hints' list on the Plant Toolbox page)
+  - salsify light
+    - "Purple Goat's Beard performs best in full sun and sandy, loamy, and clay soils. [...] Full sun (6 or more hours of direct sunlight a day) Partial Shade (Direct sunlight only part of the day, 2-6 hours)" (Description paragraph and 'Cultural Conditions: Light' on the Plant Toolbox page)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ncsu-2023-commercial-luffa-sponge-gourd`
@@ -2585,8 +2805,10 @@ Davis, Jeanine. (2023). *Commercial Luffa Sponge Gourd Production (Horticulture 
 - Archived: <https://web.archive.org/web/20260617064937/https://content.ces.ncsu.edu/commercial-luffa-sponge-gourd-production>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - luffa coldLimit, verbatim: 'Luffa should be transplanted outdoors after all danger of frost is past.' (NC State Extension, Commercial Luffa Sponge Gourd Production (Davis), section 'Selecting Seeds and Producing Transplants)
-  - luffa light, verbatim: 'Luffa gourds require a well-drained soil in a location where they will have full sun and good air circulation.' (NC State Extension, Commercial Luffa Sponge Gourd Production (Davis), section 'Site Selection and Fertilization')
+  - luffa coldLimit
+    - "Luffa should be transplanted outdoors after all danger of frost is past." (NC State Extension, Commercial Luffa Sponge Gourd Production (Davis), section 'Selecting Seeds and Producing Transplants)
+  - luffa light
+    - "Luffa gourds require a well-drained soil in a location where they will have full sun and good air circulation." (NC State Extension, Commercial Luffa Sponge Gourd Production (Davis), section 'Site Selection and Fertilization')
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ncsu-ces-basella-alba`
@@ -2597,7 +2819,8 @@ NC State Extension. (n.d.). *Malabar Spinach - Basella alba*. NC State Extension
 - Archived: <https://web.archive.org/web/20260412190005/https://plants.ces.ncsu.edu/plants/basella-alba/common-name/malabar-spinach/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - malabar-spinach width, verbatim: 'Width: 2 ft. 0 in. - 3 ft. 0 in.' (Dimensions field, Basella alba plant profile (common name: Malabar Spinach))
+  - malabar-spinach width
+    - "Width: 2 ft. 0 in. - 3 ft. 0 in." (Dimensions field, Basella alba plant profile (common name: Malabar Spinach))
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ncsu-ces-matricaria-chamomilla`
@@ -2608,8 +2831,10 @@ NC State Extension. (n.d.). *Chamomile - Matricaria chamomilla*. NC State Extens
 - Archived: <https://web.archive.org/web/20260509163340/https://plants.ces.ncsu.edu/plants/matricaria-chamomilla/common-name/chamomile/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - chamomile width, verbatim: 'Width: 0 ft. 6 in. - 2 ft. 0 in.' (Dimensions field, Matricaria chamomilla plant profile (common name: Chamomile))
-  - chamomile light, verbatim: 'Full sun (6 or more hours of direct sunlight a day)' (Cultural Conditions > Light field, same Matricaria chamomilla plant profile)
+  - chamomile width
+    - "Width: 0 ft. 6 in. - 2 ft. 0 in." (Dimensions field, Matricaria chamomilla plant profile (common name: Chamomile))
+  - chamomile light
+    - "Full sun (6 or more hours of direct sunlight a day)" (Cultural Conditions > Light field, same Matricaria chamomilla plant profile)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ncsu-extension-camellia-sinensis`
@@ -2620,9 +2845,12 @@ NC State Extension. (n.d.). *Camellia sinensis*. NC State Extension, Plant Toolb
 - Archived: <https://web.archive.org/web/20261011054710/https://plants.ces.ncsu.edu/plants/camellia-sinensis/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - tea height, verbatim: 'Height: 6 ft. 0 in. - 15 ft. 0 in.' ('Dimensions' field)
-  - tea width, verbatim: 'Width: 4 ft. 0 in. - 8 ft. 0 in.' ('Dimensions' field)
-  - tea coldLimit, verbatim: 'is the Chinese variety that has small leaves and is more tolerant of cold weather hardy into USDA Zone 6 ... is from the Assam region of northern India with larger leaves hardy to zone 7 and south.' (Description section)
+  - tea height
+    - "Height: 6 ft. 0 in. - 15 ft. 0 in." ('Dimensions' field)
+  - tea width
+    - "Width: 4 ft. 0 in. - 8 ft. 0 in." ('Dimensions' field)
+  - tea coldLimit
+    - "is the Chinese variety that has small leaves and is more tolerant of cold weather hardy into USDA Zone 6 [...] is from the Assam region of northern India with larger leaves hardy to zone 7 and south." (Description section)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ncsu-extension-linum-usitatissimum`
@@ -2633,7 +2861,8 @@ NC State Extension. (n.d.). *Linum usitatissimum*. NC State Extension, Plant Too
 - Archived: <https://web.archive.org/web/20260513074256/https://plants.ces.ncsu.edu/plants/linum-usitatissimum/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - flax light, verbatim: 'It does best in full sun and cannot grow in the shade.' ('Linum usitatissimum' plant toolbox page, description text)
+  - flax light
+    - "It does best in full sun and cannot grow in the shade." ('Linum usitatissimum' plant toolbox page, description text)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ncsu-extension-parker-2022-tree-fruits-nuts`
@@ -2644,7 +2873,8 @@ Parker, Michael. (2022). *Tree Fruits and Nuts (Chapter 15), North Carolina Exte
 - Archived: <https://web.archive.org/web/20260727114116/https://content.ces.ncsu.edu/extension-gardener-handbook/15-tree-fruit-and-nuts>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - pecan light, verbatim: 'Fruit and nut trees need at least 6 hours of sunlight during the growing season.' (NC State Extension Gardener Handbook, Chapter 15, "Site Selection" > "Sunlight")
+  - pecan light
+    - "Fruit and nut trees need at least 6 hours of sunlight during the growing season." (NC State Extension Gardener Handbook, Chapter 15, "Site Selection" > "Sunlight")
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ncsu-extension-planttoolbox-citrus-x-paradisi`
@@ -2655,8 +2885,10 @@ NC State Extension. (n.d.). *Citrus x paradisi (Grapefruit)*. NC State Universit
 - Archived: <https://web.archive.org/web/20260711180547/https://plants.ces.ncsu.edu/plants/citrus-x-paradisi/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - grapefruit height, verbatim: 'Height: 15 ft. 0 in. - 30 ft. 0 in.' ("Dimensions" field, Attributes list)
-  - grapefruit width, verbatim: 'Width: 15 ft. 0 in. - 30 ft. 0 in.' ("Dimensions" field, Attributes list)
+  - grapefruit height
+    - "Height: 15 ft. 0 in. - 30 ft. 0 in." ("Dimensions" field, Attributes list)
+  - grapefruit width
+    - "Width: 15 ft. 0 in. - 30 ft. 0 in." ("Dimensions" field, Attributes list)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ncsu-extension-planttoolbox-juglans-regia`
@@ -2667,9 +2899,12 @@ NC State Extension. (n.d.). *Juglans regia (Black Sea Walnut, Common Walnut, Eng
 - Archived: <https://web.archive.org/web/20261009004000/https://plants.ces.ncsu.edu/plants/juglans-regia/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - walnut height, verbatim: 'Height: 40 ft. 0 in. - 60 ft. 0 in.' (NC State Plant Toolbox, Juglans regia page, "Dimensions" section)
-  - walnut width, verbatim: 'Width: 40 ft. 0 in. - 60 ft. 0 in.' (NC State Plant Toolbox, Juglans regia page, "Dimensions" section)
-  - walnut coldLimit, verbatim: 'USDA Plant Hardiness Zone: 3a, 3b, 4a, 4b, 5a, 5b, 6a, 6b, 7a, 7b' (NC State Plant Toolbox, Juglans regia page, "Cultural Conditions" section)
+  - walnut height
+    - "Height: 40 ft. 0 in. - 60 ft. 0 in." (NC State Plant Toolbox, Juglans regia page, "Dimensions" section)
+  - walnut width
+    - "Width: 40 ft. 0 in. - 60 ft. 0 in." (NC State Plant Toolbox, Juglans regia page, "Dimensions" section)
+  - walnut coldLimit
+    - "USDA Plant Hardiness Zone: 3a, 3b, 4a, 4b, 5a, 5b, 6a, 6b, 7a, 7b" (NC State Plant Toolbox, Juglans regia page, "Cultural Conditions" section)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ncsu-extension-planttoolbox-ziziphus-jujuba`
@@ -2680,7 +2915,8 @@ NC State Extension. (n.d.). *Ziziphus jujuba (Chinese Date, Common Jujuba)*. NC 
 - Archived: <https://web.archive.org/web/20260510150609/https://plants.ces.ncsu.edu/plants/ziziphus-jujuba/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - jujube width, verbatim: 'Width: 10 ft. 0 in. - 30 ft. 0 in.' ("Dimensions" field, Attributes list)
+  - jujube width
+    - "Width: 10 ft. 0 in. - 30 ft. 0 in." ("Dimensions" field, Attributes list)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ncsu-extension-toolbox-caraway`
@@ -2691,9 +2927,12 @@ North Carolina Extension Gardener Plant Toolbox. (n.d.). *Carum carvi (Caraway, 
 - Archived: <https://web.archive.org/web/20260617012704/https://plants.ces.ncsu.edu/plants/carum-carvi/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - caraway width, verbatim: 'Carawy will grow 1 to 2 feet tall and spread 1 foot wide and prefers full sun to light shade in moist well-drained garden soil.' (Description, second paragraph. The source spells the name 'Carawy'. The Dimensions field on the same page reads 'Width: )
-  - caraway coldLimit, verbatim: 'USDA Plant Hardiness Zone: 4a, 4b, 5a, 5b, 6a, 6b, 7a, 7b, 8a, 8b, 9a, 9b' (Cultural Conditions, field 'USDA Plant Hardiness Zone')
-  - caraway light, verbatim: 'Carawy will grow 1 to 2 feet tall and spread 1 foot wide and prefers full sun to light shade in moist well-drained garden soil. ... Plants growing in full sun are richer in essential oils and, therefore more aromatic.' (Description, second paragraph)
+  - caraway width
+    - "Carawy will grow 1 to 2 feet tall and spread 1 foot wide and prefers full sun to light shade in moist well-drained garden soil." (Description, second paragraph. The source spells the name 'Carawy'. The Dimensions field on the same page reads 'Width:)
+  - caraway coldLimit
+    - "USDA Plant Hardiness Zone: 4a, 4b, 5a, 5b, 6a, 6b, 7a, 7b, 8a, 8b, 9a, 9b" (Cultural Conditions, field 'USDA Plant Hardiness Zone')
+  - caraway light
+    - "Carawy will grow 1 to 2 feet tall and spread 1 foot wide and prefers full sun to light shade in moist well-drained garden soil. [...] Plants growing in full sun are richer in essential oils and, therefore more aromatic." (Description, second paragraph)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ncsu-extension-toolbox-catnip`
@@ -2704,7 +2943,8 @@ North Carolina Extension Gardener Plant Toolbox. (n.d.). *Nepeta cataria (Catmin
 - Archived: <https://web.archive.org/web/20260511215201/https://plants.ces.ncsu.edu/plants/nepeta-cataria/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - catnip light, verbatim: '‘Cataria’ catmint requires good drainage and full sun to part shade but tolerates many soil types. The plant is resistant to drought, dry soil, and air pollution but is somewhat intolerant of heat and humidity, so give it some afternoon shade.' (Description, second paragraph (the Light field reads 'Full sun (6 or more hours of direct sunlight a day)' and 'Partial )
+  - catnip light
+    - "‘Cataria’ catmint requires good drainage and full sun to part shade but tolerates many soil types. The plant is resistant to drought, dry soil, and air pollution but is somewhat intolerant of heat and humidity, so give it some afternoon shade." (Description, second paragraph (the Light field reads 'Full sun (6 or more hours of direct sunlight a day)' and 'Partial ))
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ncsu-extension-toolbox-cumin`
@@ -2715,11 +2955,16 @@ North Carolina Extension Gardener Plant Toolbox. (n.d.). *Cuminum cyminum (Cumin
 - Archived: <https://web.archive.org/web/20260610032531/https://plants.ces.ncsu.edu/plants/cuminum-cyminum/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - cumin spacing, verbatim: 'When seedlings are 2 inches tall, thin them to 1 plant every 4 to 8 inches.' (Description, second paragraph (planting instructions))
-  - cumin width, verbatim: 'Available Space To Plant: Less than 12 inches' (Cultural Conditions, field 'Available Space To Plant')
-  - cumin daysToMaturity, verbatim: 'It is vulnerable to frost, and needs 120 days of frost-free weather from planting to harvesting.' (Description, second paragraph)
-  - cumin coldLimit, verbatim: 'It is vulnerable to frost, and needs 120 days of frost-free weather from planting to harvesting.' (Description, second paragraph (the page tags the plant '#frost tender'))
-  - cumin light, verbatim: 'Full sun (6 or more hours of direct sunlight a day)' (Cultural Conditions, field 'Light')
+  - cumin spacing
+    - "When seedlings are 2 inches tall, thin them to 1 plant every 4 to 8 inches." (Description, second paragraph (planting instructions))
+  - cumin width
+    - "Available Space To Plant: Less than 12 inches" (Cultural Conditions, field 'Available Space To Plant')
+  - cumin daysToMaturity
+    - "It is vulnerable to frost, and needs 120 days of frost-free weather from planting to harvesting." (Description, second paragraph)
+  - cumin coldLimit
+    - "It is vulnerable to frost, and needs 120 days of frost-free weather from planting to harvesting." (Description, second paragraph (the page tags the plant '#frost tender'))
+  - cumin light
+    - "Full sun (6 or more hours of direct sunlight a day)" (Cultural Conditions, field 'Light')
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ncsu-extension-toolbox-dandelion`
@@ -2730,8 +2975,10 @@ North Carolina Extension Gardener Plant Toolbox. (n.d.). *Taraxacum officinale (
 - Archived: <https://web.archive.org/web/20260825122450/https://plants.ces.ncsu.edu/plants/taraxacum-officinale/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - dandelion height, verbatim: 'Height: 0 ft. 2 in. - 0 ft. 6 in.' (Attributes, field 'Dimensions')
-  - dandelion light, verbatim: 'Dandelion grows in full sun and forms a deep taproot that can break up compact soils.' (Description, second paragraph (the Light field reads 'Full sun (6 or more hours of direct sunlight a day)'))
+  - dandelion height
+    - "Height: 0 ft. 2 in. - 0 ft. 6 in." (Attributes, field 'Dimensions')
+  - dandelion light
+    - "Dandelion grows in full sun and forms a deep taproot that can break up compact soils." (Description, second paragraph (the Light field reads 'Full sun (6 or more hours of direct sunlight a day)'))
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ncsu-extension-toolbox-echinacea`
@@ -2742,10 +2989,14 @@ North Carolina Extension Gardener Plant Toolbox. (n.d.). *Echinacea purpurea (Co
 - Archived: <https://web.archive.org/web/20260618095222/https://plants.ces.ncsu.edu/plants/echinacea-purpurea/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - echinacea height, verbatim: 'Height: 3 ft. 0 in. - 4 ft. 0 in.' (Attributes, field 'Dimensions')
-  - echinacea width, verbatim: 'Width: 1 ft. 0 in. - 2 ft. 0 in.' (Attributes, field 'Dimensions')
-  - echinacea coldLimit, verbatim: 'USDA Plant Hardiness Zone: 3a, 3b, 4a, 4b, 5a, 5b, 6a, 6b, 7a, 7b, 8a, 8b' (Cultural Conditions, field 'USDA Plant Hardiness Zone')
-  - echinacea light, verbatim: 'It is drought tolerant once established and can grow in full sun to partial shade.' (Description, second paragraph (the Light field lists 'Full sun (6 or more hours of direct sunlight a day)' and 'Partial )
+  - echinacea height
+    - "Height: 3 ft. 0 in. - 4 ft. 0 in." (Attributes, field 'Dimensions')
+  - echinacea width
+    - "Width: 1 ft. 0 in. - 2 ft. 0 in." (Attributes, field 'Dimensions')
+  - echinacea coldLimit
+    - "USDA Plant Hardiness Zone: 3a, 3b, 4a, 4b, 5a, 5b, 6a, 6b, 7a, 7b, 8a, 8b" (Cultural Conditions, field 'USDA Plant Hardiness Zone')
+  - echinacea light
+    - "It is drought tolerant once established and can grow in full sun to partial shade." (Description, second paragraph (the Light field lists 'Full sun (6 or more hours of direct sunlight a day)' and 'Partial ))
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ncsu-extension-toolbox-epazote`
@@ -2756,7 +3007,8 @@ North Carolina Extension Gardener Plant Toolbox. (n.d.). *Dysphania ambrosioides
 - Archived: <https://web.archive.org/web/20260618100735/https://plants.ces.ncsu.edu/plants/dysphania-ambrosioides/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - epazote light, verbatim: 'This plant does best in full sun and moderately fertile moist well-drained soil.' (Description, third paragraph (the Light field reads 'Full sun (6 or more hours of direct sunlight a day)'))
+  - epazote light
+    - "This plant does best in full sun and moderately fertile moist well-drained soil." (Description, third paragraph (the Light field reads 'Full sun (6 or more hours of direct sunlight a day)'))
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ncsu-plant-toolbox`
@@ -2781,9 +3033,12 @@ NC State Extension. (n.d.). *Lagenaria siceraria (bottle gourd, calabash)*. NC S
 - Archived: <https://web.archive.org/web/20260417123805/https://plants.ces.ncsu.edu/plants/lagenaria-siceraria/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - bottle-gourd spacing, verbatim: 'Plant several seeds in mounds 3 feet apart if growing on supports or 4 to 6 feet apart is the vine will trail on the ground.' (NC State Plant Toolbox, Lagenaria siceraria page, description (the sentence has the source's own typo 'is the vine'))
-  - bottle-gourd width, verbatim: 'Width: 10 ft. 0 in. - 16 ft. 0 in.' (NC State Plant Toolbox, Lagenaria siceraria page, 'Dimensions')
-  - bottle-gourd light, verbatim: 'Bottle gourd does best in sandy or loamy, well-drained, soil in full sun and will tolerate hot, humid summers.' (NC State Plant Toolbox, Lagenaria siceraria page, description)
+  - bottle-gourd spacing
+    - "Plant several seeds in mounds 3 feet apart if growing on supports or 4 to 6 feet apart is the vine will trail on the ground." (NC State Plant Toolbox, Lagenaria siceraria page, description (the sentence has the source's own typo 'is the vine'))
+  - bottle-gourd width
+    - "Width: 10 ft. 0 in. - 16 ft. 0 in." (NC State Plant Toolbox, Lagenaria siceraria page, 'Dimensions')
+  - bottle-gourd light
+    - "Bottle gourd does best in sandy or loamy, well-drained, soil in full sun and will tolerate hot, humid summers." (NC State Plant Toolbox, Lagenaria siceraria page, description)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ncsu-planttoolbox-luffa-aegyptiaca`
@@ -2794,7 +3049,8 @@ NC State Extension. (n.d.). *Luffa aegyptiaca (sponge gourd, luffa)*. NC State U
 - Archived: <https://web.archive.org/web/20260113082906/https://plants.ces.ncsu.edu/plants/luffa-aegyptiaca/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - luffa width, verbatim: 'Width: 1 ft. 0 in. - 3 ft. 0 in.' (NC State Plant Toolbox, Luffa aegyptiaca page, 'Dimensions')
+  - luffa width
+    - "Width: 1 ft. 0 in. - 3 ft. 0 in." (NC State Plant Toolbox, Luffa aegyptiaca page, 'Dimensions')
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ncsu-planttoolbox-macadamia-integrifolia`
@@ -2805,10 +3061,14 @@ NC State Extension. (n.d.). *Macadamia integrifolia (Australian Nut, Macadamia, 
 - Archived: <https://web.archive.org/web/20260606014338/https://plants.ces.ncsu.edu/plants/macadamia-integrifolia/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - macadamia height, verbatim: 'Height: 30 ft. 0 in. - 50 ft. 0 in.' (NC State Plant Toolbox, Macadamia integrifolia page, 'Dimensions')
-  - macadamia width, verbatim: 'Width: 20 ft. 0 in. - 40 ft. 0 in.' (NC State Plant Toolbox, Macadamia integrifolia page, 'Dimensions')
-  - macadamia coldLimit, verbatim: 'Macadamia Nut trees prefer humus-rich, moist, well drained soils in full sun and are intolerant of frost.' (NC State Plant Toolbox, Macadamia integrifolia page, description)
-  - macadamia light, verbatim: 'Light: Full sun (6 or more hours of direct sunlight a day)' (NC State Plant Toolbox, Macadamia integrifolia page, 'Cultural Conditions')
+  - macadamia height
+    - "Height: 30 ft. 0 in. - 50 ft. 0 in." (NC State Plant Toolbox, Macadamia integrifolia page, 'Dimensions')
+  - macadamia width
+    - "Width: 20 ft. 0 in. - 40 ft. 0 in." (NC State Plant Toolbox, Macadamia integrifolia page, 'Dimensions')
+  - macadamia coldLimit
+    - "Macadamia Nut trees prefer humus-rich, moist, well drained soils in full sun and are intolerant of frost." (NC State Plant Toolbox, Macadamia integrifolia page, description)
+  - macadamia light
+    - "Light: Full sun (6 or more hours of direct sunlight a day)" (NC State Plant Toolbox, Macadamia integrifolia page, 'Cultural Conditions')
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ndsu-2024-sea-buckthorn-f2195`
@@ -2819,7 +3079,8 @@ Zeleznik, Joseph. (2024). *Sea-Buckthorn (F2195)*. North Dakota State University
 - Archived: <https://web.archive.org/web/20261017221144/https://www.ndsu.edu/agriculture/extension/publications/sea-buckthorn>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - sea-buckthorn light, verbatim: 'Light: Full sun to partial shade.' ("Preferences" section)
+  - sea-buckthorn light
+    - "Light: Full sun to partial shade." ("Preferences" section)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ndsu-2026-flax-production`
@@ -2830,10 +3091,14 @@ NDSU Extension Service. (2026). *Flax Production for Oil and Seed in North Dakot
 - Archived: <https://web.archive.org/web/20261008135224/https://www.ndsu.edu/agriculture/extension/publications/flax-production-oil-and-seed-north-dakota>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - flax spacing, verbatim: 'A stand of 70 plants per square foot is desired. However, if uniform, stands of 30 to 40 plants per square foot may provide a satisfactory yield... Seeding rates of 25 to 45 pounds per acre are common.' ('Seeding Flax' section)
-  - flax height, verbatim: 'Flax grows to a height of 20 to 30 inches.' ('Growth and Development' section)
-  - flax daysToMaturity, verbatim: 'It requires a 50-day vegetative period, a 20- to 25-day flowering period and an extra 25 to 30 days to reach maturity. In years with adequate moisture and wet fall conditions, the maturation period may extend until a hard frost kills the crop, with new flowers continuing to emerge until then.' ('Growth and Development' section)
-  - flax coldLimit, verbatim: 'Seedling plants just emerging (breaking ground) are the most susceptible to injury, but can withstand temperatures down to 28 degrees Fahrenheit for a few hours. After the seedlings have a second leaf, they can withstand temperatures in the low 20 degrees range.' ('Seeding Flax' section)
+  - flax spacing
+    - "A stand of 70 plants per square foot is desired. However, if uniform, stands of 30 to 40 plants per square foot may provide a satisfactory yield [...] Seeding rates of 25 to 45 pounds per acre are common." ('Seeding Flax' section)
+  - flax height
+    - "Flax grows to a height of 20 to 30 inches." ('Growth and Development' section)
+  - flax daysToMaturity
+    - "It requires a 50-day vegetative period, a 20- to 25-day flowering period and an extra 25 to 30 days to reach maturity. In years with adequate moisture and wet fall conditions, the maturation period may extend until a hard frost kills the crop, with new flowers continuing to emerge until then." ('Growth and Development' section)
+  - flax coldLimit
+    - "Seedling plants just emerging (breaking ground) are the most susceptible to injury, but can withstand temperatures down to 28 degrees Fahrenheit for a few hours. After the seedlings have a second leaf, they can withstand temperatures in the low 20 degrees range." ('Seeding Flax' section)
 - **Caveat:** Published outside a peer-reviewed journal. The May 2020 revision, archived at https://web.archive.org/web/20200730124756/https://www.ag.ndsu.edu/publications/crops/flax-production-in-north-dakota/a1038-flax-production-nd.pdf, gave a height of 24 to 36 inches, a 25-day flowering period and about 35 days to mature. The September 2026 revision quoted here gives 20 to 30 inches, a 20- to 25-day flowering period and an extra 25 to 30 days.
 
 #### `ndsu-extension-2024-black-walnut`
@@ -2844,8 +3109,10 @@ Zeleznik, Joseph. (2024). *Black Walnut (F2209)*. North Dakota State University 
 - Archived: <https://web.archive.org/web/20261017213425/https://www.ndsu.edu/agriculture/extension/publications/black-walnut>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - black-walnut width, verbatim: 'The largest tree in North Dakota is 65 feet tall with a canopy spread of 50 feet.' (NDSU Extension F2209, "Description" section)
-  - black-walnut coldLimit, verbatim: 'Hardiness: Zone 4' (NDSU Extension F2209, "General" characteristics list)
+  - black-walnut width
+    - "The largest tree in North Dakota is 65 feet tall with a canopy spread of 50 feet." (NDSU Extension F2209, "Description" section)
+  - black-walnut coldLimit
+    - "Hardiness: Zone 4" (NDSU Extension F2209, "General" characteristics list)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ndsu-fall-frost-damage-field-crops`
@@ -2856,7 +3123,8 @@ NDSU Extension. (n.d.). *Fall Frost Damage to Field Crops*. North Dakota State U
 - Archived: <https://web.archive.org/web/20251109071529/https://www.ndsu.edu/agriculture/ag-hub/ag-topics/crop-production/crops/corn/fall-frost-damage-field-crops>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - corn-grain coldLimit, verbatim: 'CORN: Usually damaged by temperatures in 28 degree range or less.' ('Fall Frost Damage to Field Crops' page, CORN section)
+  - corn-grain coldLimit
+    - "CORN: Usually damaged by temperatures in 28 degree range or less." ('Fall Frost Damage to Field Crops' page, CORN section)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ndsu-ndawn-corn-gdd`
@@ -2867,8 +3135,10 @@ NDSU Extension. (n.d.). *Fall Frost Damage to Field Crops*. North Dakota State U
 - Archived: <https://web.archive.org/web/20260318061528/https://ndawn.ndsu.nodak.edu/help-corn-growing-degree-days.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - corn GDD base temperature, verbatim: 'Scientists have determined the lower base temperature for corn is 50 F (10 C)'
-  - corn GDD upper limit, verbatim: 'The upper limit for corn is 86 F (30 C)'
+  - corn GDD base temperature
+    - "Scientists have determined the lower base temperature for corn is 50 F (10 C)"
+  - corn GDD upper limit
+    - "The upper limit for corn is 86 F (30 C)"
   - the threshold-substitution modified GDD method: substitute 50 F for daily minima below it and 86 F for daily maxima above it
 - **Caveat:** The page is about corn generally and never mentions sweet corn, so applying it to sweet corn is an extrapolation. This app's sweet-corn 10/30 C pair is an inference from the field-corn convention, with no sweet-corn measurement behind it. OSU EM 9305, which did fit sweet corn specifically, uses 44 F (6.7 C) for fresh-market varieties and 50 F only for processing varieties. The two sources therefore disagree on sweet corn, a crop this app ships. A weather-network help page isn't peer-reviewed literature. The 10/30 C pair is a standard agronomic convention, which is a different kind of warrant from a measurement.
 
@@ -2879,9 +3149,12 @@ Nelson, Cara R.; Halpern, Charles B.; Antos, Joseph A. (2007). *Variation in res
 - DOI: [10.1890/06-1989.1](https://doi.org/10.1890/06-1989.1)
 - Verification: Crossref-verified | Access: open-access, evidence tier **B**
 - Backs:
-  - growing-season PPFD averaged 36.4 mol/m2/d in the clearcut and 8.6 mol/m2/d in the adjacent old-growth Douglas-fir forest, verbatim from p. 2882: 'Photosynthetic photon flux density (PPFD) over the growing season averaged 36.4 mol·m-2·d-1 in the harvest area, but only 8.6 mol·m-2·d-1 in the forest'
-  - Asarum caudatum ramet survival in the clearcut was about 30% of the forest's in year 1, verbatim: 'survival rates were ca. 30% of those in the forest (year 1; Fig. 2a-c)'
-  - the depression held into year 2 for Asarum alone, verbatim: 'For Asarum, ramet survival remained depressed in the harvest area (Fig. 2a)', while its surviving ramets' clonal growth (new ramet production) ran markedly higher in the clearcut by year 2
+  - growing-season PPFD averaged 36.4 mol/m2/d in the clearcut and 8.6 mol/m2/d in the adjacent old-growth Douglas-fir forest
+    - "Photosynthetic photon flux density (PPFD) over the growing season averaged 36.4 mol·m-2·d-1 in the harvest area, but only 8.6 mol·m-2·d-1 in the forest" (p. 2882)
+  - Asarum caudatum ramet survival in the clearcut was about 30% of the forest's in year 1
+    - "survival rates were ca. 30% of those in the forest (year 1; Fig. 2a-c)"
+  - the depression held into year 2 for Asarum alone, while its surviving ramets' clonal growth (new ramet production) ran markedly higher in the clearcut by year 2
+    - "For Asarum, ramet survival remained depressed in the harvest area (Fig. 2a)"
   - mid-summer air and soil temperatures ran higher in the clearcut, by 3.3 C on the daily mean and up to 5.6 C on the daily maximum
 - **Caveat:** A two-level comparison: nine patches per species in one 6-ha clearcut and the adjacent 7-ha stand of old-growth forest in Washington, so 36.4 is the one light level this app has a measured survival collapse at for this species and never a fitted breakpoint. Mid-summer heat and soil dryness ran higher in the clearcut alongside the light, so this figure folds light, heat and drought stress together. Three species were tracked and the pattern belongs to Asarum alone: Clintonia uniflora's survival was significantly greater in the clearcut by year 2, and Pyrola picta's was comparable between environments throughout.
 
@@ -2893,11 +3166,16 @@ Herrera, Esteban. (1997). *Growing Pistachios in New Mexico (Circular 532)*. New
 - Archived: <https://web.archive.org/web/20251209074808/https://pubs.nmsu.edu/_circulars/CR532/index.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - pistachio spacing, verbatim: 'Tree spacing in New Mexico varies mostly from 17 feet by 17 feet to 20 feet by 20 feet (few growers have planted to 24 feet by 24 feet).' (NMSU Circular 532, section Spacing and Planting Procedures)
-  - pistachio height, verbatim: 'Pistachio trees are long-lived, tap-rooted and can grow to 20-30 feet tall.' (NMSU Circular 532, section Soil and Water Requirements)
-  - pistachio yearsToFirstHarvest, verbatim: 'Pistachio trees begin bearing the fourth or fifth year after budding.' (NMSU Circular 532, section Harvest)
-  - pistachio harvestSeason, verbatim: 'Depending on the season, the last irrigation is usually done the first or second half of August, and harvest starts in late August to early September.' (NMSU Circular 532, section Soil and Water Requirements)
-  - pistachio coldLimit, verbatim: 'Also, temperatures below 10° F can kill the tree, especially young trees.' (NMSU Circular 532, section Climate)
+  - pistachio spacing
+    - "Tree spacing in New Mexico varies mostly from 17 feet by 17 feet to 20 feet by 20 feet (few growers have planted to 24 feet by 24 feet)." (NMSU Circular 532, section Spacing and Planting Procedures)
+  - pistachio height
+    - "Pistachio trees are long-lived, tap-rooted and can grow to 20-30 feet tall." (NMSU Circular 532, section Soil and Water Requirements)
+  - pistachio yearsToFirstHarvest
+    - "Pistachio trees begin bearing the fourth or fifth year after budding." (NMSU Circular 532, section Harvest)
+  - pistachio harvestSeason
+    - "Depending on the season, the last irrigation is usually done the first or second half of August, and harvest starts in late August to early September." (NMSU Circular 532, section Soil and Water Requirements)
+  - pistachio coldLimit
+    - "Also, temperatures below 10° F can kill the tree, especially young trees." (NMSU Circular 532, section Climate)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `nmsu-2023-jujube-chinese-date`
@@ -2908,8 +3186,10 @@ Yao, Shengrui. (2023). *Jujube: Chinese Date in New Mexico (Guide H-330)*. New M
 - Archived: <https://web.archive.org/web/20260826080628/https://pubs.nmsu.edu/_h/H330/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - jujube height, verbatim: 'Jujube is a deciduous fruit/ornamental tree, 15 to 30 ft in height, with very hard, strong wood.' ("DESCRIPTION" section, "Tree" subsection)
-  - jujube yearsToFirstHarvest, verbatim: 'Most cultivars will produce a few fruits in the second year.' ("CULTURE" section, "Precocity and tree life span" subsection)
+  - jujube height
+    - "Jujube is a deciduous fruit/ornamental tree, 15 to 30 ft in height, with very hard, strong wood." ("DESCRIPTION" section, "Tree" subsection)
+  - jujube yearsToFirstHarvest
+    - "Most cultivars will produce a few fruits in the second year." ("CULTURE" section, "Precocity and tree life span" subsection)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `nps-mid-atlantic-epmt-invasive-plant-list`
@@ -2920,7 +3200,8 @@ National Park Service, Mid-Atlantic Exotic Plant Management Team. (n.d.). *Natio
 - Archived: <https://web.archive.org/web/20260618110458/https://www.invasive.org/species/list/187>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - goji invasiveStatus, verbatim: 'matrimony vine (Lycium barbarum L.)' (invasive.org species list 187, titled "National Park Service, Mid-Atlantic Exotic Plant Management Team Invasive Plant L)
+  - goji invasiveStatus
+    - "matrimony vine (Lycium barbarum L.)" (invasive.org species list 187, titled "National Park Service, Mid-Atlantic Exotic Plant Management Team Invasive Plant L)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `nrc-1981-winged-bean`
@@ -2930,8 +3211,10 @@ National Research Council. (1981). *The Winged Bean: A High-Protein Crop for the
 - DOI: [10.17226/19754](https://doi.org/10.17226/19754)
 - Verification: Crossref-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - winged-bean flowering and temperature, verbatim: 'Continuous day temperatures higher than 32°C or lower than 18°C inhibit flowering even under otherwise suitable short-day conditions.' (page 12), a limit the day-length gate doesn't model
-  - winged-bean range in the United States, verbatim: 'For North Americans this means that good harvests can be gained in south Florida but almost nowhere else in the continental United States' (introduction)
+  - winged-bean flowering and temperature, a limit the day-length gate doesn't model
+    - "Continuous day temperatures higher than 32°C or lower than 18°C inhibit flowering even under otherwise suitable short-day conditions." (page 12)
+  - winged-bean range in the United States
+    - "For North Americans this means that good harvests can be gained in south Florida but almost nowhere else in the continental United States" (introduction)
 - **Caveat:** A National Academies panel report, outside the usual extension, USDA and FAO classes, and not peer reviewed in the journal sense.
 
 #### `nrc-1989-lost-crops-of-the-incas`
@@ -2942,8 +3225,10 @@ National Research Council. (1989). *Lost Crops of the Incas: Little-Known Plants
 - Archived: <https://web.archive.org/web/20251005020734/https://nap.nationalacademies.org/read/1398/chapter/10>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - oca height, verbatim: 'Oca is a compact, perennial, tuberous herb, usually 20-30 cm high, with cylindrical, succulent stems that vary in color from yellow and green to a purplish red.' (Oca chapter, 'Species Information', Description (page 91))
-  - oca photoperiod, verbatim: 'Although many types collected from Peru and Ecuador are daylength sensitive, the ones in New Zealand [...] are apparently unrestricted by daylength.' (Oca chapter, page 91), why the row carries no day-length gate
+  - oca height
+    - "Oca is a compact, perennial, tuberous herb, usually 20-30 cm high, with cylindrical, succulent stems that vary in color from yellow and green to a purplish red." (Oca chapter, 'Species Information', Description (page 91))
+  - oca photoperiod, why the row carries no day-length gate
+    - "Although many types collected from Peru and Ecuador are daylength sensitive, the ones in New Zealand [...] are apparently unrestricted by daylength." (Oca chapter, page 91)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `nrcs-2006-plant-guide-sunn-hemp`
@@ -2954,9 +3239,12 @@ Joy, Robert; Peterson, J. S. (2006). *Plant guide for sunn hemp (Crotalaria junc
 - Archived: <https://web.archive.org/web/20261017221423/https://plants.usda.gov/DocumentLibrary/plantguide/pdf/pg_crju.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - sunn-hemp spacing, verbatim: 'If broadcasted, seed at a rate of 40 to 60 pounds of live seed per acre. If drilled, the rate should be 30 to 50 pounds per acre in 6-inch rows.' (Page 1, section 'Establishment')
-  - sunn-hemp height, verbatim: 'Branched, erect, herbaceous shrubby annual growing 3 to 9 feet high with bright green simple, elliptical leaves.' (Page 1, section 'Description')
-  - sunn-hemp daysToMaturity, verbatim: 'When grown as a summer annual, sunn hemp can produce over 5,000 pounds of biomass and 100 pounds of nitrogen per acre. It can produce this amount within 60 to 90 days' (Page 1, section 'Uses', paragraph 'Cover Crop & Green Manure')
+  - sunn-hemp spacing
+    - "If broadcasted, seed at a rate of 40 to 60 pounds of live seed per acre. If drilled, the rate should be 30 to 50 pounds per acre in 6-inch rows." (Page 1, section 'Establishment')
+  - sunn-hemp height
+    - "Branched, erect, herbaceous shrubby annual growing 3 to 9 feet high with bright green simple, elliptical leaves." (Page 1, section 'Description')
+  - sunn-hemp daysToMaturity
+    - "When grown as a summer annual, sunn hemp can produce over 5,000 pounds of biomass and 100 pounds of nitrogen per acre. It can produce this amount within 60 to 90 days" (Page 1, section 'Uses', paragraph 'Cover Crop & Green Manure')
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `nrcs-2012-plant-guide-lablab`
@@ -2967,7 +3255,8 @@ Sheahan, Christopher M. (2012). *Plant guide for lablab (Lablab purpureus)*. USD
 - Archived: <https://web.archive.org/web/20261017221232/https://plants.usda.gov/DocumentLibrary/plantguide/pdf/pg_lapu6.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - lablab spacing, verbatim: 'The seed should be sown 1 to 4 in. deep at 11–18 lb/acre on rows 2.5 ft wide with roughly 1 to 1.5 ft between plants (Cook et al., 2005).' (Page 2, section 'Establishment')
+  - lablab spacing
+    - "The seed should be sown 1 to 4 in. deep at 11–18 lb/acre on rows 2.5 ft wide with roughly 1 to 1.5 ft between plants (Cook et al., 2005)." (Page 2, section 'Establishment')
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `nrcs-2014-plant-guide-foxtail-millet`
@@ -2978,7 +3267,8 @@ Sheahan, Christopher M. (2014). *Plant guide for foxtail millet (Setaria italica
 - Archived: <https://web.archive.org/web/20260312060103/https://plants.usda.gov/DocumentLibrary/plantguide/pdf/pg_seit.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - foxtail-millet height, verbatim: 'It is an introduced, annual, warm-season crop that grows 2–5 ft (60-152 cm) tall.' (Page 1, section 'Description', paragraph 'General')
+  - foxtail-millet height
+    - "It is an introduced, annual, warm-season crop that grows 2–5 ft (60-152 cm) tall." (Page 1, section 'Description', paragraph 'General')
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `oikeh-warda-upland-rice-handbook`
@@ -2989,9 +3279,15 @@ Oikeh, S. O.; Nwilene, F. E.; Agunbiade, T. A.; Oladimeji, O.; Ajayi, O.; Semon,
 - Archived: <https://web.archive.org/web/20260812114737/https://www.fao.org/fileadmin/user_upload/ivc/docs/uplandrice.pdf>
 - Verification: URL-verified | Access: open-access
 - Backs:
-  - spacing, verbatim: 'Dibbling at 30 x 30 cm or 20 x 20 cm: seed rate: 50-60 kg/ha' and 'Drilling at 25-30 cm row spacing and 5 cm within row; seed rate: 75-80 kg/ha'
-  - maturity classes, verbatim: 'Early maturing (< 90-100 days)', 'Medium maturing (100-120 days)', 'Late maturing (> 120 days)'
-  - site, verbatim: 'Select your site in an ecological zone with at least 14-20 mm of five-day rainfall during the growing cycle'
+  - spacing
+    - "Dibbling at 30 x 30 cm or 20 x 20 cm: seed rate: 50-60 kg/ha"
+    - "Drilling at 25-30 cm row spacing and 5 cm within row; seed rate: 75-80 kg/ha"
+  - maturity classes
+    - "Early maturing (< 90-100 days)"
+    - "Medium maturing (100-120 days)"
+    - "Late maturing (> 120 days)"
+  - site
+    - "Select your site in an ecological zone with at least 14-20 mm of five-day rainfall during the growing cycle"
 - **Caveat:** A West African smallholder handbook built around NERICA and FARO cultivars. The maturity classes and spacings are those of that program.
 
 #### `olanrewaju-2021-bambara-growth-yield`
@@ -3001,8 +3297,10 @@ Olanrewaju, Oluwaseyi Samuel; Oyatomi, Olaniyi; Babalola, Olubukola Oluranti; Ab
 - DOI: [10.3389/fpls.2021.796352](https://doi.org/10.3389/fpls.2021.796352)
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - bambara-groundnut spacing, verbatim: 'The length of each plot was 3 m with 0.3 m spacing between each plant and a row spacing of 0.7 m between each plot.' (Methods, section 'Field Trials and Phenotyping')
-  - bambara-groundnut height, verbatim: 'It has both prostrate and erect forms and grows to a height of 0.30–0.35 m.' (Introduction)
+  - bambara-groundnut spacing
+    - "The length of each plot was 3 m with 0.3 m spacing between each plant and a row spacing of 0.7 m between each plot." (Methods, section 'Field Trials and Phenotyping')
+  - bambara-groundnut height
+    - "It has both prostrate and erect forms and grows to a height of 0.30–0.35 m." (Introduction)
 - **Caveat:** Read in full for the sentences quoted. The catalog row comments say which figure each sentence gives.
 
 #### `olsen-usu-planting-dates`
@@ -3013,7 +3311,11 @@ Olsen, Shawn. (2018). *Suggested Vegetable Planting Dates for Utah*. Utah State 
 - Archived: <https://web.archive.org/web/20260711114646/https://extension.usu.edu/yardandgarden/research/suggested-vegetable-planting-dates-for-utah>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - frostOffsetDays as a four-group ladder, verbatim: 'Group A: Hardy (Plant as soon as the soil dries out in the spring.)'; 'Group B: Semi-Hardy (Plants a week or two after A group or about 2 weeks before average last spring frost.)'; 'Group C: Tender (Plant on the average date of the last spring frost)'; 'Group D: Very Tender (Plant when the soil is warm, about 2 weeks after C group.)'
+  - frostOffsetDays as a four-group ladder
+    - "Group A: Hardy (Plant as soon as the soil dries out in the spring.)"
+    - "Group B: Semi-Hardy (Plants a week or two after A group or about 2 weeks before average last spring frost.)"
+    - "Group C: Tender (Plant on the average date of the last spring frost)"
+    - "Group D: Very Tender (Plant when the soil is warm, about 2 weeks after C group.)"
   - a worked frost-anchored table mapping average last spring frost to a concrete Group A-D planting date for 37 named locations, demonstrating the offset method in practice
   - a separate fall-harvest planting window group (Group E) with per-crop date ranges
   - days to maturity per crop in the companion planting guide, e.g. 'Tomatoes 60-90'
@@ -3027,8 +3329,10 @@ Ontario Ministry of Agriculture, Food and Rural Affairs. (2012). *Specialty Crop
 - Archived: <https://web.archive.org/web/20261017215326/https://www.omafra.gov.on.ca/CropOp/en/spec_veg/root_tuber_veg/gobo.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - burdock spacing, verbatim: 'In-row spacing 15-30 cm Between row spacing 60-90 cm' (Gobo crop profile, rows 'In-row spacing' and 'Between row spacing')
-  - burdock daysToMaturity, verbatim: 'Days to harvest 90-120 days ... Roots become woody beyond this time.' (Gobo crop profile, row 'Days to harvest')
+  - burdock spacing
+    - "In-row spacing 15-30 cm Between row spacing 60-90 cm" (Gobo crop profile, rows 'In-row spacing' and 'Between row spacing')
+  - burdock daysToMaturity
+    - "Days to harvest 90-120 days [...] Roots become woody beyond this time." (Gobo crop profile, row 'Days to harvest')
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `omafra-2012-specialty-cropportunities-stevia`
@@ -3039,8 +3343,10 @@ Ontario Ministry of Agriculture, Food and Rural Affairs. (2012). *Specialty Crop
 - Archived: <https://web.archive.org/web/20261017215120/https://www.omafra.gov.on.ca/CropOp/en/indus_misc/pharm/stev.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - stevia daysToMaturity, verbatim: '54-104 days depending on day length sensitivity of cultivar.' (Days to harvest entry (the same page gives Propagation method: Transplants))
-  - stevia coldLimit, verbatim: 'Will not survive temperatures below -3°C.' (Temperature sensitivity entry)
+  - stevia daysToMaturity
+    - "54-104 days depending on day length sensitivity of cultivar." (Days to harvest entry (the same page gives Propagation method: Transplants))
+  - stevia coldLimit
+    - "Will not survive temperatures below -3°C." (Temperature sensitivity entry)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `omafra-2022-canola-guide`
@@ -3051,9 +3357,12 @@ Ontario Ministry of Agriculture, Food and Rural Affairs. (2022). *Agronomy Guide
 - Archived: <https://web.archive.org/web/20261017212700/https://www.ontario.ca/files/2022-10/omafra-agronomy-guide-for-field-crops-chapter-6-en-2022-10-13.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - canola spacing, verbatim: 'The optimum plant stand is 75–130 healthy plants/m2 (7–13 plants/ft2) while 54 plants/m2 (5 plants/ft2) is the minimum for maintaining yield potential. In a 19 cm (7.5 in.) row width this is equivalent to 14–25 plants/m (4.5–6 plants/ft) of row.' (p. 160, 'Seeding Rate' section)
-  - canola daysToMaturity, verbatim: 'The average crop flowers 45–50 days (582–666 GDD) after emergence and matures in 90–96 days.' (p. 163, 'Crop Development' section)
-  - canola coldLimit, verbatim: 'Canola seedlings can withstand a considerable frost of -5°C to -8°C if plants have become acclimatized following a few days of cold temperatures. However, canola seedlings growing under warm conditions will be tender, and can be killed by even a few degrees frost.' (p. 159, seedling frost-tolerance paragraph)
+  - canola spacing
+    - "The optimum plant stand is 75–130 healthy plants/m2 (7–13 plants/ft2) while 54 plants/m2 (5 plants/ft2) is the minimum for maintaining yield potential. In a 19 cm (7.5 in.) row width this is equivalent to 14–25 plants/m (4.5–6 plants/ft) of row." (p. 160, 'Seeding Rate' section)
+  - canola daysToMaturity
+    - "The average crop flowers 45–50 days (582–666 GDD) after emergence and matures in 90–96 days." (p. 163, 'Crop Development' section)
+  - canola coldLimit
+    - "Canola seedlings can withstand a considerable frost of -5°C to -8°C if plants have become acclimatized following a few days of cold temperatures. However, canola seedlings growing under warm conditions will be tender, and can be killed by even a few degrees frost." (p. 159, seedling frost-tolerance paragraph)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `oplinger1990-sesame-afcm`
@@ -3064,11 +3373,17 @@ Oplinger, E. S.; Putnam, D. H.; Kaminski, A. R.; Hanson, C. V.; Oelke, E. A.; Sc
 - Archived: <https://web.archive.org/web/20260902222112/https://hort.purdue.edu/newcrop/afcm/sesame.html>
 - Verification: URL-verified | Access: public-domain
 - Backs:
-  - verbatim: 'Sesame is an erect annual (or occasionally a perennial) that grows to a height of 20 to 60 in., depending on the variety and the growing conditions'
-  - verbatim: 'Populations of 250,000 to 300,000 plants/acre in 18 to 30 in. rows have given the highest yields'
-  - verbatim: 'Sesame is ready for harvesting 90 to 150 days after planting'
-  - verbatim: 'Daytime temperatures of 77F to 80F are optimal; below 68F, growth is reduced, and at 50F germination and growth is inhibited'; 'Commercial varieties of sesame require 90 to 120 frostfree days'
-  - verbatim: 'A minimum rainfall of 20 to 26 in. per season is necessary for reasonable yields'
+  - sesame height
+    - "Sesame is an erect annual (or occasionally a perennial) that grows to a height of 20 to 60 in., depending on the variety and the growing conditions"
+  - sesame spacing
+    - "Populations of 250,000 to 300,000 plants/acre in 18 to 30 in. rows have given the highest yields"
+  - sesame daysToMaturity
+    - "Sesame is ready for harvesting 90 to 150 days after planting"
+  - sesame temperature response and frost-free days
+    - "Daytime temperatures of 77F to 80F are optimal; below 68F, growth is reduced, and at 50F germination and growth is inhibited"
+    - "Commercial varieties of sesame require 90 to 120 frostfree days"
+  - sesame rainfall
+    - "A minimum rainfall of 20 to 26 in. per season is necessary for reasonable yields"
 - **Caveat:** Written for the upper Midwest. The agronomy is transferable, the calendar is local.
 
 #### `osu-2002-safflower`
@@ -3079,10 +3394,14 @@ Armah-Agyeman, Grace; Loiland, Jim; Karow, Russell S.; Hang, Anne N. (2002). *Sa
 - Archived: <https://web.archive.org/web/20251112131006/https://extension.oregonstate.edu/sites/extd8/files/documents/em8792.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - safflower height, verbatim: 'It stands 1 to 4 feet tall at maturity.' (Page 1, section 'Description')
-  - safflower daysToMaturity, verbatim: 'Seeding to maturity takes 120 to 150 days or longer.' (Page 3, section 'Conditions for growth', subsection 'Climate')
-  - safflower coldLimit, verbatim: 'Varieties adapted to the PNW tolerate temperatures as low as 20°F in the seedling stage, but plants cannot withstand freezing temperatures after flowering.' (Page 3, section 'Conditions for growth', subsection 'Climate')
-  - safflower light, verbatim: 'Safflower is a sun-loving crop, and high temperatures and bright sunny days in July through early September speed development.' (Page 3, section 'Conditions for growth', subsection 'Climate')
+  - safflower height
+    - "It stands 1 to 4 feet tall at maturity." (Page 1, section 'Description')
+  - safflower daysToMaturity
+    - "Seeding to maturity takes 120 to 150 days or longer." (Page 3, section 'Conditions for growth', subsection 'Climate')
+  - safflower coldLimit
+    - "Varieties adapted to the PNW tolerate temperatures as low as 20°F in the seedling stage, but plants cannot withstand freezing temperatures after flowering." (Page 3, section 'Conditions for growth', subsection 'Climate')
+  - safflower light
+    - "Safflower is a sun-loving crop, and high temperatures and bright sunny days in July through early September speed development." (Page 3, section 'Conditions for growth', subsection 'Climate')
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `osu-2013-six-exotic-vegetables`
@@ -3093,7 +3412,8 @@ Oregon State University. (2013). *Six exotic vegetables for Oregon gardeners to 
 - Archived: <https://web.archive.org/web/20261017215200/https://news.oregonstate.edu/news/six-exotic-vegetables-oregon-gardeners-try>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - oca coldLimit, verbatim: 'It can't survive frost but tubers will overwinter in the ground as long as they do not freeze.' (Oca paragraph of the news release dated June 14, 2013)
+  - oca coldLimit
+    - "It can't survive frost but tubers will overwinter in the ground as long as they do not freeze." (Oca paragraph of the news release dated June 14, 2013)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `osu-2016-forage-information-system-alfalfa`
@@ -3104,8 +3424,10 @@ Oregon State University Forage Information System. (2016). *Alfalfa (Medicago sa
 - Archived: <https://web.archive.org/web/20251206055050/https://forages.oregonstate.edu/group/1701/alfalfa>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - alfalfa spacing, verbatim: 'For pure stands, a seeding rate of 12-15 lb/a (26.5-33 kg/ha) planted in 6-inch rows is usually sufficient for a good stand of alfalfa.' (Section 'Establishment and Management', subsection 'Establishment')
-  - alfalfa coldLimit, verbatim: 'Tolerant of drought, heat, and cold. Specific heat and cold tolerances depend on FD and WSI group. [USDA Plant Hardiness zone 3 for most cold-tolerant types; Jan mean minimum of -40 °F (-40 °C)' (Section 'Climate and Soil Suitability Zones', 'Climate Tolerances', and Table 1 'Climate Tolerances' (USDA Hardiness Zon)
+  - alfalfa spacing
+    - "For pure stands, a seeding rate of 12-15 lb/a (26.5-33 kg/ha) planted in 6-inch rows is usually sufficient for a good stand of alfalfa." (Section 'Establishment and Management', subsection 'Establishment')
+  - alfalfa coldLimit
+    - "Tolerant of drought, heat, and cold. Specific heat and cold tolerances depend on FD and WSI group. [USDA Plant Hardiness zone 3 for most cold-tolerant types; Jan mean minimum of -40 °F (-40 °C)" (Section 'Climate and Soil Suitability Zones', 'Climate Tolerances', and Table 1 'Climate Tolerances' (USDA Hardiness Zon))
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `osu-2021-strik-kiwifruit-home-garden`
@@ -3116,12 +3438,18 @@ Strik, Bernadine; Dixon, Emily; Detweiler, Amy Jo; Sanchez, Nicole. (2021). *Gro
 - Archived: <https://web.archive.org/web/20260420133132/https://extension.oregonstate.edu/catalog/em-9322-growing-kiwifruit-your-home-garden>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - kiwifruit spacing, verbatim: 'One plant needs about 15 feet of space. Plant two vines 15 feet apart and leave about 6 feet on each end.' ("Planting" section, p. 7)
-  - kiwifruit height, verbatim: 'Attach a strong cross arm at 6 to 7 feet above ground level on each post.' ("Trellising" section, p. 11)
-  - kiwifruit width, verbatim: 'One plant needs about 15 feet of space. Plant two vines 15 feet apart and leave about 6 feet on each end.' ("Planting" section, p. 7)
-  - kiwifruit harvestSeason, verbatim: 'In adapted regions of western Oregon, pick ‘Hayward’ and other fuzzy kiwifruit cultivars as late as possible (late October/early November, or before the first hard frost).' ("Harvest" / "Fuzzy kiwifruit" section, p. 12)
-  - kiwifruit coldLimit, verbatim: 'The fuzzy kiwifruit (Actinidia deliciosa) is only adapted to warmer regions of Oregon. It needs a growing season of 225 to 240 frost-free days and is cold hardy to about 0 to 10 °F, depending on when the cold event occurs and preceding temperatures.' ("Common problems" / "Winter cold injury and frost damage" section, p. 16)
-  - kiwifruit light, verbatim: 'Ideal environmental conditions for kiwifruit are full sun exposure and fertile, well-drained, sandy loam or clay loam soil with moderate water-holding capacity... While plants can tolerate partial shade, yield and fruit quality may be lower.' ("Site selection" section, p. 4)
+  - kiwifruit spacing
+    - "One plant needs about 15 feet of space. Plant two vines 15 feet apart and leave about 6 feet on each end." ("Planting" section, p. 7)
+  - kiwifruit height
+    - "Attach a strong cross arm at 6 to 7 feet above ground level on each post." ("Trellising" section, p. 11)
+  - kiwifruit width
+    - "One plant needs about 15 feet of space. Plant two vines 15 feet apart and leave about 6 feet on each end." ("Planting" section, p. 7)
+  - kiwifruit harvestSeason
+    - "In adapted regions of western Oregon, pick ‘Hayward’ and other fuzzy kiwifruit cultivars as late as possible (late October/early November, or before the first hard frost)." ("Harvest" / "Fuzzy kiwifruit" section, p. 12)
+  - kiwifruit coldLimit
+    - "The fuzzy kiwifruit (Actinidia deliciosa) is only adapted to warmer regions of Oregon. It needs a growing season of 225 to 240 frost-free days and is cold hardy to about 0 to 10 °F, depending on when the cold event occurs and preceding temperatures." ("Common problems" / "Winter cold injury and frost damage" section, p. 16)
+  - kiwifruit light
+    - "Ideal environmental conditions for kiwifruit are full sun exposure and fertile, well-drained, sandy loam or clay loam soil with moderate water-holding capacity [...] While plants can tolerate partial shade, yield and fruit quality may be lower." ("Site selection" section, p. 4)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `osu-extension-2006-growing-walnuts-oregon`
@@ -3132,10 +3460,14 @@ Olsen, Jeff. (2006). *Growing Walnuts in Oregon (EM 8907)*. Oregon State Univers
 - Archived: <https://web.archive.org/web/20260709105444/https://extension.oregonstate.edu/catalog/em-8907-growing-walnuts-oregon>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - walnut spacing, verbatim: 'Walnut trees usually are planted about 30 feet apart.' (EM 8907, "Planting" section)
-  - walnut yearsToFirstHarvest, verbatim: 'Most walnut varieties may produce a few nuts when trees are 5 or 6 years old, but they are not considered mature or in commercial production until trees are 10 years old.' (EM 8907, introductory section (before "Varieties" heading))
-  - walnut harvestSeason, verbatim: 'Walnuts are mature as soon as the husk will cut free from the nut, but they usually are not harvested until rains have cracked the husk to the point of letting the nut drop to the ground. This usually happens in October.' (EM 8907, "Harvesting and drying nuts" section)
-  - walnut light, verbatim: 'Walnuts grow best in full sun.' (EM 8907, photo caption near the top of the bulletin)
+  - walnut spacing
+    - "Walnut trees usually are planted about 30 feet apart." (EM 8907, "Planting" section)
+  - walnut yearsToFirstHarvest
+    - "Most walnut varieties may produce a few nuts when trees are 5 or 6 years old, but they are not considered mature or in commercial production until trees are 10 years old." (EM 8907, introductory section (before "Varieties" heading))
+  - walnut harvestSeason
+    - "Walnuts are mature as soon as the husk will cut free from the nut, but they usually are not harvested until rains have cracked the husk to the point of letting the nut drop to the ground. This usually happens in October." (EM 8907, "Harvesting and drying nuts" section)
+  - walnut light
+    - "Walnuts grow best in full sun." (EM 8907, photo caption near the top of the bulletin)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `osu-extension-2006-lingonberry-pnw583`
@@ -3146,7 +3478,8 @@ Penhallegon, Ross. (2006). *Lingonberry production guide for the Pacific Northwe
 - Archived: <https://web.archive.org/web/20260923201300/https://extension.oregonstate.edu/catalog/pnw-583-lingonberry-production-guide-pacific-northwest>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - harvest timing for lingonberry, verbatim: 'There are two bloom periods: March to April and July to August. The fruit ripens in mid-August and mid-October, respectively' (Section ‘Bloom’, p. 4)
+  - harvest timing for lingonberry
+    - "There are two bloom periods: March to April and July to August. The fruit ripens in mid-August and mid-October, respectively" (Section ‘Bloom’, p. 4)
 - **Caveat:** Published outside a peer-reviewed journal. Its dates are calibrated to the Willamette Valley, Oregon, and this app places them at the same point in each garden's own frost-free season. Lingonberry's two crops a year, in mid-August and mid-October, are read as one season.
 
 #### `osu-extension-2013-hazelnuts-orchard-floor`
@@ -3156,7 +3489,8 @@ Olsen, Jeff L.; Peachey, Ed. (2013). *Growing Hazelnuts in the Pacific Northwest
 - URL: <https://extension.oregonstate.edu/catalog/em-9079-growing-hazelnuts-pacific-northwest-orchard-floor-management>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - harvest timing for hazelnut, verbatim: 'Blank nuts fall before good nuts. After blanks have fallen and just before good nuts begin to drop (usually at the end of August), it might be desirable to do a final flailing and floating to fill small depressions in the ground. ... In most years, it is October before all of the nuts have fallen naturally' (EM 9079, 'Nut Fall' and 'Hazelnut Harvest' sections, p. 3)
+  - harvest timing for hazelnut
+    - "Blank nuts fall before good nuts. After blanks have fallen and just before good nuts begin to drop (usually at the end of August), it might be desirable to do a final flailing and floating to fill small depressions in the ground. [...] In most years, it is October before all of the nuts have fallen naturally" (EM 9079, 'Nut Fall' and 'Hazelnut Harvest' sections, p. 3)
 - **Caveat:** Published outside a peer-reviewed journal. Its dates are calibrated to the Willamette Valley hazelnut industry in Oregon, and this app places them at the same point in each garden's own frost-free season. For hazelnut, nut drop stands in for harvest. The nuts start falling at the end of August and have mostly fallen by October.
 
 #### `osu-extension-2015-hops-em9115`
@@ -3167,7 +3501,8 @@ Getty, Brooke; Townsend, Shaun; Detweiler, Amy Jo. (2015). *Growing hops in the 
 - Archived: <https://web.archive.org/web/20261017211522/https://extension.oregonstate.edu/catalog/em-9115-growing-hops-home-garden>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - harvest timing for hops, verbatim: 'In both Western and Central Oregon, hops typically mature between August 15 and September 15, depending on the cultivar and growing season conditions' (Section ‘Harvesting and storage’)
+  - harvest timing for hops
+    - "In both Western and Central Oregon, hops typically mature between August 15 and September 15, depending on the cultivar and growing season conditions" (Section ‘Harvesting and storage’)
 - **Caveat:** Published outside a peer-reviewed journal. Its dates are calibrated to Western and Central Oregon, and this app places them at the same point in each garden's own frost-free season.
 
 #### `osu-extension-2020-blackberries-ec1303`
@@ -3178,7 +3513,8 @@ Strik, Bernadine; Dixon, Emily; Detweiler, Amy Jo; Sanchez, Nicole. (2020). *Gro
 - Archived: <https://web.archive.org/web/20260827040330/https://extension.oregonstate.edu/catalog/ec-1303-growing-blackberries-your-home-garden>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - harvest timing for blackberry, verbatim: 'All cultivars are summer-bearing (‘Triple Crown’, for example) and are the latest summer-bearing cultivars, fruiting from early August to September or October in the Willamette Valley' (Section ‘Blackberry types > Growth type’, paragraph on semierect cultivars)
+  - harvest timing for blackberry
+    - "All cultivars are summer-bearing (‘Triple Crown’, for example) and are the latest summer-bearing cultivars, fruiting from early August to September or October in the Willamette Valley" (Section ‘Blackberry types > Growth type’, paragraph on semierect cultivars)
 - **Caveat:** Published outside a peer-reviewed journal. Its dates are calibrated to the Willamette Valley, Oregon, and this app places them at the same point in each garden's own frost-free season. Blackberry dates are for the semierect type, the guide's latest-fruiting group.
 
 #### `osu-extension-2025-tree-fruits-nuts-home`
@@ -3206,7 +3542,8 @@ Oregon State University Extension Service. (n.d.). *20 Mediterranean Tastes You 
 - Archived: <https://web.archive.org/web/20261017214436/https://extension.oregonstate.edu/sites/extd8/files/documents/12846/mediterraneanedibles-morgan.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - quince harvestSeason, verbatim: 'Harvest in October or later – wait for yellow color and light citrusy odor to develop.' (OSU Extension handout 20 Mediterranean Tastes You Can Grow at Home, page 2, quince entry)
+  - quince harvestSeason
+    - "Harvest in October or later – wait for yellow color and light citrusy odor to develop." (OSU Extension handout 20 Mediterranean Tastes You Can Grow at Home, page 2, quince entry)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `osu-horticulture-landscape-plants-cydonia-oblonga`
@@ -3217,8 +3554,10 @@ Oregon State University, Department of Horticulture. (n.d.). *Cydonia oblonga (L
 - Archived: <https://web.archive.org/web/20260122143703/https://landscapeplants.oregonstate.edu/plants/cydonia-oblonga>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - quince height, verbatim: 'Deciduous tree/shrub, rounded, 15 x 15 ft (4.5 x 4.5 m).' (OSU Landscape Plants, Cydonia oblonga page, description paragraph)
-  - quince width, verbatim: 'Deciduous tree/shrub, rounded, 15 x 15 ft (4.5 x 4.5 m).' (OSU Landscape Plants, Cydonia oblonga page, description paragraph)
+  - quince height
+    - "Deciduous tree/shrub, rounded, 15 x 15 ft (4.5 x 4.5 m)." (OSU Landscape Plants, Cydonia oblonga page, description paragraph)
+  - quince width
+    - "Deciduous tree/shrub, rounded, 15 x 15 ft (4.5 x 4.5 m)." (OSU Landscape Plants, Cydonia oblonga page, description paragraph)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `peng2015-clubroot-rotation`
@@ -3240,8 +3579,10 @@ Pennisi, Giuseppina; Pistillo, Alessandro; Orsini, Francesco; Cellini, Antonio; 
 - Verification: Crossref-verified | Access: paywalled, evidence tier **A**
 - Backs:
   - lettuce and basil grown at PPFDs of 100, 150, 200, 250 and 300 umol/m2/s for 16 h, which the paper states as DLIs of 5.8, 8.6, 11.5, 14.4 and 17.3 mol/m2/d
-  - verbatim: 'A progressive increase of biomass production for both lettuce and basil up to a PPFD of 250 umol m-2 s-1 was observed, whereas no further yield increases were associated with higher PPFD (300 umol m-2 s-1)'
-  - verbatim: 'a PPFD of 250 umol m-2 s-1 seems suitable for optimizing yield and resource use efficiency in red and blue LED lighting for indoor cultivation of lettuce and basil under the prevailing conditions of the used indoor farming set-up'
+  - lettuce and basil biomass rises with PPFD up to 250 umol/m2/s and no further above it
+    - "A progressive increase of biomass production for both lettuce and basil up to a PPFD of 250 umol m-2 s-1 was observed, whereas no further yield increases were associated with higher PPFD (300 umol m-2 s-1)"
+  - the PPFD the authors find suitable for yield and resource use efficiency in red and blue LED lighting
+    - "a PPFD of 250 umol m-2 s-1 seems suitable for optimizing yield and resource use efficiency in red and blue LED lighting for indoor cultivation of lettuce and basil under the prevailing conditions of the used indoor farming set-up"
 - **Caveat:** The full text is paywalled, and this entry rests on the abstract and the Crossref record. The abstract doesn't name the cultivars. Both crops still yielded at the lowest level, 5.8 mol/m2/d, with the least biomass. The paper finds an optimum (14.4) and places no failure point. It's indoor sole-source LED culture.
 
 #### `plantpono-hpwra-burdock`
@@ -3252,7 +3593,8 @@ Plant Pono (Coordinating Group on Alien Pest Species). (n.d.). *Arctium lappa (g
 - Archived: <https://web.archive.org/web/20260606134338/https://plantpono.org/hpwra/arctium-lappa/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - burdock invasiveStatus, verbatim: 'In Hawai‘i, A. lappa is considered a high-risk species and is not recommended for cultivation.' (Plant Pono page, second paragraph, with the result box 'High Risk', Score 9, Date Screened May 14, 2019)
+  - burdock invasiveStatus
+    - "In Hawai‘i, A. lappa is considered a high-risk species and is not recommended for cultivation." (Plant Pono page, second paragraph, with the result box 'High Risk', Score 9, Date Screened May 14, 2019)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `plantpono-hpwra-salsify`
@@ -3263,7 +3605,8 @@ Plant Pono (Coordinating Group on Alien Pest Species). (n.d.). *Tragopogon porri
 - Archived: <https://web.archive.org/web/20260711025519/https://plantpono.org/hpwra/tragopogon-porrifolius/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - salsify invasiveStatus, verbatim: 'Tragopogon porrifolius is naturalized in Hawaiʻi and possesses traits that are cause for concern in tropical island ecosystems.' (Plant Pono page, 'Risks & Threats' paragraph, with the result box 'High Risk', Score 6.5, Date Screened February 24, 201)
+  - salsify invasiveStatus
+    - "Tragopogon porrifolius is naturalized in Hawaiʻi and possesses traits that are cause for concern in tropical island ecosystems." (Plant Pono page, 'Risks & Threats' paragraph, with the result box 'High Risk', Score 6.5, Date Screened February 24, 201)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `postma2012-polyculture-roots`
@@ -3284,11 +3627,16 @@ Dasuki, U.A.; van den Bergh, M.H. (n.d.). *Chrysanthemum coronarium L. (PROSEA)*
 - Archived: <https://web.archive.org/web/20261017220732/https://uses.plantnet-project.org/en/Chrysanthemum_coronarium_(PROSEA)>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - shungiku spacing, verbatim: 'Plant spacing depends on harvesting stage (seedlings or mature plants) and harvesting method (pulling or repeated cuts) but varies from 5-15 cm × 5-15 cm.' (Section 'Agronomy')
-  - shungiku height, verbatim: 'An erect, densely leafy, branched, annual herb, 20-60 cm tall in the vegetative stage, up to ca. 90 cm when flowering.' (Section 'Description')
-  - shungiku daysToMaturity, verbatim: 'Alternatively, plants are harvested when they are vegetatively mature (15-25 cm high at 6-8 weeks from sowing) and either pulled or harvested by repeated cuttings over a 3-month period.' (Section 'Agronomy')
-  - shungiku coldLimit, verbatim: 'Some cultivars even tolerate light frost.' (Section 'Ecology')
-  - shungiku light, verbatim: 'It grows relatively well at low light levels. ... Tangho is suitable for intercropping because it is shade-tolerant.' (Sections 'Ecology' and 'Agronomy')
+  - shungiku spacing
+    - "Plant spacing depends on harvesting stage (seedlings or mature plants) and harvesting method (pulling or repeated cuts) but varies from 5-15 cm × 5-15 cm." (Section 'Agronomy')
+  - shungiku height
+    - "An erect, densely leafy, branched, annual herb, 20-60 cm tall in the vegetative stage, up to ca. 90 cm when flowering." (Section 'Description')
+  - shungiku daysToMaturity
+    - "Alternatively, plants are harvested when they are vegetatively mature (15-25 cm high at 6-8 weeks from sowing) and either pulled or harvested by repeated cuttings over a 3-month period." (Section 'Agronomy')
+  - shungiku coldLimit
+    - "Some cultivars even tolerate light frost." (Section 'Ecology')
+  - shungiku light
+    - "It grows relatively well at low light levels. [...] Tangho is suitable for intercropping because it is shade-tolerant." (Sections 'Ecology' and 'Agronomy')
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `prota-2004-lagenaria-siceraria`
@@ -3298,8 +3646,10 @@ Morimoto, Y.; Mvere, B. (2004). *Lagenaria siceraria (Molina) Standl., record fr
 - URL: <https://plantuse.plantnet.org/en/Lagenaria_siceraria_(PROTA)>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - bottle-gourd daysToMaturity, verbatim: 'For use as a vegetable, fruit harvesting starts three months after sowing.' (PROTA (Morimoto and Mvere 2004), section 'Harvesting', read on the Pl@ntUse mirror of the PROTA text)
-  - bottle-gourd coldLimit, verbatim: 'It tolerates low temperatures, but if the temperature drops below 10°C flowering is reduced; it does not tolerate frost.' (PROTA (Morimoto and Mvere 2004), section 'Ecology', Pl@ntUse mirror)
+  - bottle-gourd daysToMaturity
+    - "For use as a vegetable, fruit harvesting starts three months after sowing." (PROTA (Morimoto and Mvere 2004), section 'Harvesting', read on the Pl@ntUse mirror of the PROTA text)
+  - bottle-gourd coldLimit
+    - "It tolerates low temperatures, but if the temperature drops below 10°C flowering is reduced; it does not tolerate frost." (PROTA (Morimoto and Mvere 2004), section 'Ecology', Pl@ntUse mirror)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `prota-2011-corchorus-olitorius`
@@ -3310,7 +3660,8 @@ Fondio, L.; Grubben, G. J. H. (2011). *Corchorus olitorius L., PROTA (Plant Reso
 - Archived: <https://web.archive.org/web/20260604100617/https://plantuse.plantnet.org/en/Corchorus_olitorius_%28PROTA%29>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - jute-mallow coldLimit, verbatim: 'The optimal temperature is 25–32°C. Growth stops below 15°C. Jew’s mallow is a short-day species.' (Section 'Ecology')
+  - jute-mallow coldLimit
+    - "The optimal temperature is 25–32°C. Growth stops below 15°C. Jew’s mallow is a short-day species." (Section 'Ecology')
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `psu-2026-agritourism-lavender`
@@ -3321,7 +3672,8 @@ Schmidt, Claudia; Cornelisse, Sarah; Kime, Lynn. (2026). *Agritourism Diversific
 - Archived: <https://web.archive.org/web/20260419090042/https://extension.psu.edu/agritourism-diversification-lavender-production>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - lavender harvestSeason, verbatim: 'Harvest is accomplished by hand and can occur throughout the summer months.' (“Harvest” section)
+  - lavender harvestSeason
+    - "Harvest is accomplished by hand and can occur throughout the summer months." (“Harvest” section)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `psu-extension-gibson-ground-cherries`
@@ -3332,7 +3684,8 @@ Gibson, Mary Jo R. (2026). *Growing Ground Cherries*. Penn State Extension
 - Archived: <https://web.archive.org/web/20261017214931/https://extension.psu.edu/growing-ground-cherries>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - ground-cherry height, verbatim: 'Although most are 1 to 3 feet tall, they sprawl.' (Body text, paragraph beginning As you plan your garden)
+  - ground-cherry height
+    - "Although most are 1 to 3 feet tall, they sprawl." (Body text, paragraph beginning As you plan your garden)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `purdue-1996-asian-vegetables`
@@ -3343,7 +3696,8 @@ Cantwell, Marita; Nie, Xunli; Zong, Ru Jing; Yamaguchi, Mas. (1996). *Asian Vege
 - Archived: <https://web.archive.org/web/20261017214908/https://hort.purdue.edu/newcrop/proceedings1996/V3-488.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - garlic-chives yearsToFirstHarvest, verbatim: 'Limited harvesting is done during the first year's growth so that reserves build up in the roots.' (Chinese chives section (Purdue NewCROP copy of Cantwell et al. 1996, pp. 488-495))
+  - garlic-chives yearsToFirstHarvest
+    - "Limited harvesting is done during the first year's growth so that reserves build up in the roots." (Chinese chives section (Purdue NewCROP copy of Cantwell et al. 1996, pp. 488-495))
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `purdue-1997-chamomile`
@@ -3354,7 +3708,8 @@ Purdue University Center for New Crops and Plant Products (NewCrop). (1997). *Ch
 - Archived: <https://web.archive.org/web/20261017212247/https://hort.purdue.edu/newcrop/med-aro/factsheets/CHAMOMILE.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - chamomile height, verbatim: 'This many-branched, erect-growing annual, formerly classified as Matricaria chamomilla L., reaches a height of about 0.3 meter and has yellow disc white ray flowers.' (Fact sheet body text, paragraph on German chamomile (Matricaria recutita))
+  - chamomile height
+    - "This many-branched, erect-growing annual, formerly classified as Matricaria chamomilla L., reaches a height of about 0.3 meter and has yellow disc white ray flowers." (Fact sheet body text, paragraph on German chamomile (Matricaria recutita))
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `purdue-2007-soybean-plant-populations-ay217w`
@@ -3365,7 +3720,8 @@ Robinson, Andrew P.; Conley, Shawn P. (2007). *Soybean Production Systems: Plant
 - Archived: <https://web.archive.org/web/20250615172131/https://www.extension.purdue.edu/extmedia/ay/ay-217-w.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - soybean spacing, verbatim: 'To maximize yields in most environments growers should have no less than 100,000 uniformly standing plants per acre in 7.5- and 15-inch rows and no less than 80,000 uniformly standing plants per acre in 30-inch rows.' (p. 3, paragraph above Table 1. Table 1 'Recommended Seeding Rates and Plant Populations at Different Row Widths', row 'R)
+  - soybean spacing
+    - "To maximize yields in most environments growers should have no less than 100,000 uniformly standing plants per acre in 7.5- and 15-inch rows and no less than 80,000 uniformly standing plants per acre in 30-inch rows." (p. 3, paragraph above Table 1. Table 1 'Recommended Seeding Rates and Plant Populations at Different Row Widths', row 'R)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `purdue-2025-woodmansee-divine-fruit`
@@ -3376,7 +3732,8 @@ Woodmansee, John E. (2025). *Divine Fruit?* Purdue Extension, Whitley County
 - Archived: <https://web.archive.org/web/20260611010156/https://extension.purdue.edu/news/county/whitley/2025/11/divine-fruit.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - american-persimmon harvestSeason, verbatim: 'Farlee said that persimmon fruit normally ripens in September and October, but some trees hold fruit well into winter.' (main text (quoting Purdue forestry extension specialist Lenny Farlee))
+  - american-persimmon harvestSeason
+    - "Farlee said that persimmon fruit normally ripens in September and October, but some trees hold fruit well into winter." (main text (quoting Purdue forestry extension specialist Lenny Farlee))
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `purdue-christmas-hawkins-winter-canola`
@@ -3387,7 +3744,8 @@ Christmas, Ellsworth P.; Hawkins, Stephen S. (n.d.). *Winter Canola -- An Altern
 - Archived: <https://web.archive.org/web/20241203075724/https://www.extension.purdue.edu/extmedia/AY/AY-272.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - canola height, verbatim: 'In the spring it bolts, reaching a height of 3 to 5 feet, and produces bright yellow flowers.' (Publication AY-272, main text)
+  - canola height
+    - "In the spring it bolts, reaching a height of 3 to 5 feet, and produces bright yellow flowers." (Publication AY-272, main text)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `purdue-newcrop-simon-1984-dandelion`
@@ -3398,7 +3756,8 @@ Simon, J.E.; Chadwick, A.F.; Craker, L.E. (1984). *DANDELION (Aromatic and Medic
 - Archived: <https://web.archive.org/web/20261017220554/https://hort.purdue.edu/newcrop/med-aro/factsheets/DANDELION.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - dandelion harvestSeason, verbatim: 'Roots are generally harvested in spring or fall of the second year, while leaves and flower heads are gathered from cultivated and wild plants throughout the growing season.' (Purdue NewCROP 'Aromatic and Medicinal Plants' factsheet DANDELION, which summarises Simon, Chadwick and Craker 1984, la)
+  - dandelion harvestSeason
+    - "Roots are generally harvested in spring or fall of the second year, while leaves and flower heads are gathered from cultivated and wild plants throughout the growing season." (Purdue NewCROP 'Aromatic and Medicinal Plants' factsheet DANDELION, which summarises Simon, Chadwick and Craker 1984, la)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `pvamu-cocoyam-fact-sheet`
@@ -3409,7 +3768,8 @@ Ampim, Peter A. Y.; Rivera-Ocasio, Dania. (n.d.). *Cocoyam (fact sheet)*. Prairi
 - Archived: <https://web.archive.org/web/20250912064010/https://www.pvamu.edu/cafnr/wp-content/uploads/sites/27/Fact-Sheet-Cocoyam.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - malanga height, verbatim: 'It can be 1.3 to 2.5 meters tall.' (Page 2, 'Plant description')
+  - malanga height
+    - "It can be 1.3 to 2.5 meters tall." (Page 2, 'Plant description')
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `pvamu-fact-sheet-epazote`
@@ -3420,9 +3780,12 @@ Ampim, Peter A. Y.; Rivera-Ocasio, Dania. (n.d.). *Epazote (specialty crops fact
 - Archived: <https://web.archive.org/web/20240909134659/https://www.pvamu.edu/cafnr/wp-content/uploads/sites/27/Fact-Sheet-Epazote.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - epazote spacing, verbatim: 'Plant 200 plants/m2 (19 plants/ft2). Space plants 5-8 cm. (2-3 in.) apart.' (Page 1, block 'PROPAGATION')
-  - epazote height, verbatim: 'Annual or short-lived erect perennial plant that grows up to 1 m (3 ft.) or taller and strongly odorous.' (Page 2, block 'PLANT DESCRIPTION')
-  - epazote daysToMaturity, verbatim: 'About 50 days after planting' (Page 1, block 'DAYS TO MATURITY')
+  - epazote spacing
+    - "Plant 200 plants/m2 (19 plants/ft2). Space plants 5-8 cm. (2-3 in.) apart." (Page 1, block 'PROPAGATION')
+  - epazote height
+    - "Annual or short-lived erect perennial plant that grows up to 1 m (3 ft.) or taller and strongly odorous." (Page 2, block 'PLANT DESCRIPTION')
+  - epazote daysToMaturity
+    - "About 50 days after planting" (Page 1, block 'DAYS TO MATURITY')
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ragone-2006-breadfruit-species-profile`
@@ -3433,8 +3796,10 @@ Ragone, Diane. (2006). *Artocarpus altilis (breadfruit), Species Profiles for Pa
 - Archived: <https://web.archive.org/web/20260627124345/https://gms.ctahr.hawaii.edu/gs/handler/getmedia.ashx?moid=3135&dt=3&g=12>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - breadfruit width, verbatim: 'Trees can reach heights of 18 m (60 ft) or more but are typically 12–15 m (40–50 ft). Some varieties are relatively short-statured, reaching average heights of 9 m (30 ft). The canopy is generally about two-thirds of the height.' (p. 12 of 17, section 'Size in an urban environment')
-  - breadfruit light, verbatim: 'The tree does best in full sun and forms the overstory canopy in traditional mixed agroforests.' (p. 7 of 17, entry 'Full sun' under Tolerances)
+  - breadfruit width
+    - "Trees can reach heights of 18 m (60 ft) or more but are typically 12–15 m (40–50 ft). Some varieties are relatively short-statured, reaching average heights of 9 m (30 ft). The canopy is generally about two-thirds of the height." (p. 12 of 17, section 'Size in an urban environment')
+  - breadfruit light
+    - "The tree does best in full sun and forms the overstory canopy in traditional mixed agroforests." (p. 7 of 17, entry 'Full sun' under Tolerances)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `rodrigues-2022-eryngium-foetidum-review`
@@ -3445,7 +3810,8 @@ Rodrigues, Thiara L. M.; Silva, Maria E. P.; Gurgel, Ely S. C.; Oliveira, Mozani
 - Archived: <https://web.archive.org/web/20261017220153/https://pmc.ncbi.nlm.nih.gov/articles/PMC8938054/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - culantro height, verbatim: 'classified as a rustic tropical vegetable of herbaceous habit, measuring 45 cm in height' (Section 3.1 'Botanical Aspects, Propagation, and Cultural Treatments')
+  - culantro height
+    - "classified as a rustic tropical vegetable of herbaceous habit, measuring 45 cm in height" (Section 3.1 'Botanical Aspects, Propagation, and Cultural Treatments')
 - **Caveat:** Read in full for the sentences quoted. The catalog row comments say which figure each sentence gives.
 
 #### `rollings2019-garden-flowers`
@@ -3466,7 +3832,8 @@ Rothenberger, Ray R. (n.d.). *Growing Herbs at Home*. University of Missouri Ext
 - Archived: <https://web.archive.org/web/20260510045450/https://extension.missouri.edu/publications/g6470>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - harvest timing for mint, verbatim: 'Leaves and stems may be picked anytime' (page 4, "Herb descriptions (continued)", Spearmint entry)
+  - harvest timing for mint
+    - "Leaves and stems may be picked anytime" (page 4, "Herb descriptions (continued)", Spearmint entry)
 - **Caveat:** Published outside a peer-reviewed journal. Its dates are calibrated to Missouri, and this app places them at the same point in each garden's own frost-free season.
 
 #### `runkle2011-vegetable-dli`
@@ -3477,8 +3844,10 @@ Runkle, Erik. (2011). *Lighting Greenhouse Vegetables*. GPN (Greenhouse Product 
 - Archived: <https://web.archive.org/web/20251112020947/https://www.canr.msu.edu/uploads/resources/pdfs/lightingvegetables.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - minimum DLI for vine crops (tomato, pepper, cucumber), verbatim: 'A recommended minimum DLI for lettuce production is 12 to 14 mol/m2/d, whereas at least 15 (and preferably more than 20) mol/m2/d is suggested for vine crops'
-  - the 1-percent rule, verbatim: 'As a general rule, a 1 percent increase in DLI increases production by 1 percent'
+  - minimum DLI for vine crops (tomato, pepper, cucumber)
+    - "A recommended minimum DLI for lettuce production is 12 to 14 mol/m2/d, whereas at least 15 (and preferably more than 20) mol/m2/d is suggested for vine crops"
+  - the 1-percent rule
+    - "As a general rule, a 1 percent increase in DLI increases production by 1 percent"
   - tomato develops chlorotic leaves under continuous light, so four to six hours of darkness is suggested each night
 - **Caveat:** This is the only Extension-authored source located that states a tomato or vine-crop DLI minimum, and the number it gives is 15, preferably >20. The 'at least 22 mol/m2/d' tomato DLI that circulates is verbatim ReduSystems vendor marketing. It has no source in this corpus or in the literature, so nothing citable backs it. The sentence carrying the 15 names no crop at all. It says only 'is suggested for vine crops'. The tomato, pepper and cucumber lumping is the opening sentence of the column, 'Greenhouse vegetable crops, such as tomato, pepper and cucumber, are considered vine crops', so the per-species reading is this app's. The column prints no 30 anywhere: the top of this app's 20 to 30 band comes from VCE SPES-720NP Table 3 and Purdue HO-238-B-W. It's a trade-magazine column that isn't peer reviewed, and it cites no primary source for the 15/20 figures. It's Tier C, so it can't back a hard filter.
 
@@ -3490,9 +3859,11 @@ Runkle, Erik. (2019). *DLI 'Requirements'*. GPN (Greenhouse Product News)
 - Archived: <https://web.archive.org/web/20261017211139/https://gpnmag.com/article/dli-requirements/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - Extension's own objection to the concept this app gates on, verbatim: 'Growers sometimes ask for the DLI "requirement" of a particular crop, or type of crops. In my opinion, there is no such thing as a DLI requirement because, with some notable exceptions, most plants can grow under a wide range of environmental conditions, including different DLIs. Growth of crops also depends on carbon dioxide (CO2) concentration and especially temperature, as well as crop culture. Therefore, providing a DLI requirement is both subjective and situational.'
+  - Extension's own objection to the concept this app gates on
+    - "Growers sometimes ask for the DLI "requirement" of a particular crop, or type of crops. In my opinion, there is no such thing as a DLI requirement because, with some notable exceptions, most plants can grow under a wide range of environmental conditions, including different DLIs. Growth of crops also depends on carbon dioxide (CO2) concentration and especially temperature, as well as crop culture. Therefore, providing a DLI requirement is both subjective and situational."
   - fruiting vegetables at a target of 15+ mol/m2/d in Table 1, whose caption reads 'Suggested daily light integral (DLI) targets for crops grown in controlled environments. Values are subjective and situational, and can vary depending on the shade tolerance of species, other environmental factors (notably, temperature and CO2), the market, and economics.'
-  - the direction behind the lettuce disorder ceiling, verbatim: 'there can be negative outcomes for some crops when the DLI is too high. Examples include leaf tip burn of some lettuces'
+  - the direction behind the lettuce disorder ceiling
+    - "there can be negative outcomes for some crops when the DLI is too high. Examples include leaf tip burn of some lettuces"
 - **Caveat:** The quote in this app's DLI disclosure is from this column. Table 1's cells are served as an image on the archived page. The caption is verbatim from the page, and the values (leafy greens and herbs 12+, cut flowers 15+, fruiting vegetables 15+, late plugs 10-15) are transcribed from the printed table. It's a trade-magazine column that isn't peer reviewed, and it cites no primary source.
 
 #### `rutgers-fs547-tomato-diseases`
@@ -3503,8 +3874,10 @@ Wyenandt, Andy; Nitzsche, Peter. (2025). *Diagnosing and Controlling Fungal Dise
 - Archived: <https://web.archive.org/web/20260712092924/https://njaes.rutgers.edu/fs547/>
 - Verification: URL-verified | Access: public-domain, evidence tier **B**
 - Backs:
-  - the Solanaceae rotation interval this app applies, verbatim: 'A minimum rotation of three years is considered essential to help reduce populations of soil-borne fungi'
-  - the crops that interval covers together, verbatim: 'Each year, plant tomatoes in a new location away from areas where tomatoes, eggplant, potatoes, or peppers have been grown in the past, since these vegetables all have similar disease problems'
+  - the Solanaceae rotation interval this app applies
+    - "A minimum rotation of three years is considered essential to help reduce populations of soil-borne fungi"
+  - the crops that interval covers together
+    - "Each year, plant tomatoes in a new location away from areas where tomatoes, eggplant, potatoes, or peppers have been grown in the past, since these vegetables all have similar disease problems"
 - **Caveat:** Extension guidance for home gardeners, citing no trial of its own for the three years. The A to E scheme grades study designs and has no rung for an extension consensus on a characterized mechanism, so the grade this rule ships with is a judgment call recorded in `src/data/companions.ts`.
 
 #### `rutgers-fs678-growing-tomatoes`
@@ -3515,7 +3888,8 @@ Reiners, Steve; Nitzsche, Peter. (2021). *Growing Tomatoes in the Home Garden*. 
 - Archived: <https://web.archive.org/web/20260711142636/https://njaes.rutgers.edu/fs678/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - the laxer rotation figure in the same extension service, verbatim: 'If possible, plant tomatoes in an area where tomatoes, peppers, eggplants, and potatoes have not grown for at least two years to help avoid soil-borne disease problems'
+  - the laxer rotation figure in the same extension service
+    - "If possible, plant tomatoes in an area where tomatoes, peppers, eggplants, and potatoes have not grown for at least two years to help avoid soil-borne disease problems"
 - **Caveat:** Four years older than FS547 and not disease-specific. Carried as the lower end of the range the two sheets give, and the app ships the longer interval.
 
 #### `sahli2012-chemlali-olive-chilling`
@@ -3535,7 +3909,8 @@ Unangst-Rufenacht, Graham. (2021). *Seakale: Commercial Opportunities for New Pe
 - Archived: <https://web.archive.org/web/20260511183820/https://projects.sare.org/project-reports/fne18-895/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - harvest timing for sea-kale, verbatim: 'Seakale provides a harvest of shoot (in May) and broccoli florets (in early June), which presents farmers with an opportunity to functionally integrate Seakale into their cropping when there are few other crops available for harvest' (Project summary/rationale narrative (opening section, before "Description of farm operation"))
+  - harvest timing for sea-kale
+    - "Seakale provides a harvest of shoot (in May) and broccoli florets (in early June), which presents farmers with an opportunity to functionally integrate Seakale into their cropping when there are few other crops available for harvest" (Project summary/rationale narrative (opening section, before "Description of farm operation"))
 - **Caveat:** Published outside a peer-reviewed journal. Its dates are calibrated to Vermont, represented by Burlington, and this app places them at the same point in each garden's own frost-free season. Sea kale dates come from a USDA SARE farmer grant report with University of Vermont Extension as technical adviser. It gives the harvest only as the month of May.
 
 #### `shelton2006-trap-cropping`
@@ -3565,7 +3940,8 @@ Servicio de Información Agroalimentaria y Pesquera (SIAP). (2019). *Epazote*. S
 - URL: <https://web.archive.org/web/20220121170740/https://www.gob.mx/cms/uploads/attachment/file/587577/Epazote_.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - epazote coldLimit, verbatim: 'El clima más apto es el templado y, también el templado cálido; no tolera las heladas.' (Section 'Condiciones edáficas y clima')
+  - epazote coldLimit
+    - "El clima más apto es el templado y, también el templado cálido; no tolera las heladas." (Section 'Condiciones edáficas y clima')
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `singh2025-ucanr-moringa`
@@ -3576,8 +3952,10 @@ Singh, Hardeep. (2025). *Moringa Oleifera (Miracle tree)*. UCCE Central Sierra A
 - Archived: <https://web.archive.org/web/20251205080837/https://ucanr.edu/site/ucce-central-sierra-agriculture/article/moringa-oleifera-miracle-tree>
 - Verification: URL-verified | Access: public-domain
 - Backs:
-  - spacing, verbatim: moringa 'could be grown for leaves and/or pods and spaced 3 to 6 feet apart accordingly'
-  - verbatim: 'In California, winter frosts could kill the moringa and therefore it is cut back to one foot and covered with plastic during the winters'
+  - moringa spacing
+    - "could be grown for leaves and/or pods and spaced 3 to 6 feet apart accordingly"
+  - moringa coldLimit
+    - "In California, winter frosts could kill the moringa and therefore it is cut back to one foot and covered with plastic during the winters"
 - **Caveat:** A Cooperative Extension article for the central Sierra foothills. The spacing is a home-orchard range.
 
 #### `snyder1993-sweetfern-feis`
@@ -3611,7 +3989,8 @@ Sperling, Calvin R.; King, Steven R. (1990). *Andean Tuber Crops: Worldwide Pote
 - Archived: <https://web.archive.org/web/20251005020747/https://hort.purdue.edu/newcrop/proceedings1990/V1-428.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - oca spacing, verbatim: 'Planting is done in rows or hills 80-100 cm apart with plants spaced 40-60 cm apart in the rows (Rea 1975).' (Section 'Cultural Practices' under 'Agricultural Requirements' (pages 428-435 of Advances in New Crops, Timber Press, 19)
+  - oca spacing
+    - "Planting is done in rows or hills 80-100 cm apart with plants spaced 40-60 cm apart in the rows (Rea 1975)." (Section 'Cultural Practices' under 'Agricultural Requirements' (pages 428-435 of Advances in New Crops, Timber Press, 19))
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `strik2007-worldwide-blackberry`
@@ -3621,8 +4000,10 @@ Strik, Bernadine C.; Clark, John R.; Finn, Chad E.; Bañados, M. Pilar. (2007). 
 - DOI: [10.21273/HORTTECH.17.2.205](https://doi.org/10.21273/HORTTECH.17.2.205)
 - Verification: Crossref-verified | Access: open-access, evidence tier **C**
 - Backs:
-  - blackberry acceptedName, verbatim: 'A survey of worldwide blackberry (Rubus spp.) production was conducted in 2005.' (Summary, page 205)
-  - blackberry acceptedName, verbatim: 'Natural hybrids of wild species provided several of the first named cultivars' (page 205)
+  - blackberry acceptedName
+    - "A survey of worldwide blackberry (Rubus spp.) production was conducted in 2005." (Summary, page 205)
+  - blackberry acceptedName
+    - "Natural hybrids of wild species provided several of the first named cultivars" (page 205)
 - **Caveat:** A survey of the world’s plantings, with no trial of its own.
 
 #### `tamu-2011-rodriguez-harvesting-oriental-persimmons`
@@ -3633,7 +4014,8 @@ Rodriguez, David. (2011). *Harvesting Oriental Persimmons*. Texas A&M AgriLife E
 - Archived: <https://web.archive.org/web/20260512093521/https://bexar-tx.tamu.edu/earth-kind-horticulture/best-plants-for-bexar-county-south-texas/harvesting-oriental-persimmons/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - persimmon harvestSeason, verbatim: 'Oriental persimmons generally start ripening around late October through the early part of December in San Antonio and surrounding areas.' (main text)
+  - persimmon harvestSeason
+    - "Oriental persimmons generally start ripening around late October through the early part of December in San Antonio and surrounding areas." (main text)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `tamu-2013-stein-persimmons`
@@ -3644,7 +4026,8 @@ Stein, Larry; Nesbitt, Monte; Kamas, Jim. (2013). *Persimmons (E-611, Texas Frui
 - Archived: <https://web.archive.org/web/20260910071551/https://aggie-horticulture.tamu.edu/fruit-nut/wp-content/uploads/sites/6/2015/04/persimmons_2015.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - persimmon spacing, verbatim: 'Plant the trees every 15 to 18 feet in rows that are 20 feet apart.' ("Site preparation and planning" section, p. 3)
+  - persimmon spacing
+    - "Plant the trees every 15 to 18 feet in rows that are 20 feet apart." ("Site preparation and planning" section, p. 3)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `tamu-2018-jujubes-home-gardeners`
@@ -3655,8 +4038,10 @@ Stein, Larry; Gu, Mengmeng; Li, Qiansheng. (2018). *Jujubes - Easiest Tree Fruit
 - Archived: <https://web.archive.org/web/20261017221010/https://mytexas.ag.tamu.edu/publications/jujubes-easiest-tree-fruit-for-home-gardeners/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - jujube spacing, verbatim: 'Space them 6 to 12 feet apart.' ("Planting" section)
-  - jujube light, verbatim: 'The plants grow best under full sun and in well-drained soils.' ("Selecting a site" section)
+  - jujube spacing
+    - "Space them 6 to 12 feet apart." ("Planting" section)
+  - jujube light
+    - "The plants grow best under full sun and in well-drained soils." ("Selecting a site" section)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `tamu-sauls-citrus`
@@ -3667,8 +4052,10 @@ Sauls, Julian W. (n.d.). *Citrus*. Texas A&M AgriLife Extension, Aggie Horticult
 - Archived: <https://web.archive.org/web/20260421045345/https://aggie-horticulture.tamu.edu/fruit-nut/fact-sheets/citrus/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - orange light, verbatim: 'Citrus requires full sunlight for optimum growth and production.' ("Site Selection" section)
-  - lime yearsToFirstHarvest, verbatim: 'Most budded citrus trees can produce a few fruit in the second year after planting, but usually do not produce until the third year.' ("Productivity and Maturity" section)
+  - orange light
+    - "Citrus requires full sunlight for optimum growth and production." ("Site Selection" section)
+  - lime yearsToFirstHarvest
+    - "Most budded citrus trees can produce a few fruit in the second year after planting, but usually do not produce until the third year." ("Productivity and Maturity" section)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `tang2020-p-use-efficiency`
@@ -3730,7 +4117,8 @@ Tamil Nadu Agricultural University. (2011). *HORT 282 :: Lecture 06 :: CUMIN*. T
 - Archived: <https://web.archive.org/web/20260813231432/http://eagri.org/eagri50/HORT282/lec06.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - cumin height, verbatim: 'It is an herbaceous annual plant, with a slender branched stem 20–30 cm tall.' (Section 'Botany')
+  - cumin height
+    - "It is an herbaceous annual plant, with a slender branched stem 20–30 cm tall." (Section 'Botany')
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `tnau-2013-ragi-cultivation`
@@ -3741,8 +4129,10 @@ Tamil Nadu Agricultural University. (2013). *Ragi*. Tamil Nadu Agricultural Univ
 - Archived: <https://web.archive.org/web/20261017212638/https://agritech.tnau.ac.in/agriculture/CropProduction/Millets/millets_ragi.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - finger-millet height, verbatim: 'Height (cm) | 75-80 | 85-90 | 115-120 [for varieties CO 9, CO 13 and CO (Ra) 14 respectively]' ('Particulars of Ragi Strains' table)
-  - finger-millet daysToMaturity, verbatim: 'Duration (days) | 100-105 | 95-100 | 105-110 [for varieties CO 9, CO 13 and CO (Ra) 14 respectively]' ('Particulars of Ragi Strains' table)
+  - finger-millet height
+    - "Height (cm) 75-80 85 - 90 115-120" ('Particulars of Ragi Strains' table, for varieties CO 9, CO 13 and CO (Ra) 14 respectively)
+  - finger-millet daysToMaturity
+    - "Duration (days) 100-105 95 - 100 105-110" ('Particulars of Ragi Strains' table, for varieties CO 9, CO 13 and CO (Ra) 14 respectively)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `tnau-black-pepper`
@@ -3753,9 +4143,12 @@ Tamil Nadu Agricultural University. (n.d.). *Horticulture :: Spice Crops :: Pepp
 - Archived: <https://web.archive.org/web/20261017215715/https://agritech.tnau.ac.in/horticulture/horti_spice%20crops_pepper.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - black-pepper height, verbatim: 'Prune excessive foliage of the standards and limit the height of the standards to about 6 m.' (Section 'Aftercultivation')
-  - black-pepper yearsToFirstHarvest, verbatim: 'Pepper vines start yielding usually from the 3rd or 4th year.' (Section 'Harvesting and curing')
-  - black-pepper harvestSeason, verbatim: 'Harvesting is done from the November to February in the plains and January to March in the hills.' (Section 'Harvesting and curing')
+  - black-pepper height
+    - "Prune excessive foliage of the standards and limit the height of the standards to about 6 m." (Section 'Aftercultivation')
+  - black-pepper yearsToFirstHarvest
+    - "Pepper vines start yielding usually from the 3rd or 4th year." (Section 'Harvesting and curing')
+  - black-pepper harvestSeason
+    - "Harvesting is done from the November to February in the plains and January to March in the hills." (Section 'Harvesting and curing')
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `tnau-safflower-package-of-practices`
@@ -3766,7 +4159,8 @@ Tamil Nadu Agricultural University. (n.d.). *Safflower (Carthamus tinctorius), C
 - Archived: <https://web.archive.org/web/20260609111519/https://www.agritech.tnau.ac.in/agriculture/oilseeds_safflower.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - safflower spacing, verbatim: 'Adopt a spacing of 45 cm between rows and 15 cm between plants.' (Section 'Preparation of the field', item 5 Spacing)
+  - safflower spacing
+    - "Adopt a spacing of 45 cm between rows and 15 cm between plants." (Section 'Preparation of the field', item 5 Spacing)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `tnau-stevia-medicinal-crops`
@@ -3777,7 +4171,8 @@ Tamil Nadu Agricultural University. (n.d.). *Horticulture :: Medicinal Crops :: 
 - Archived: <https://web.archive.org/web/20261017215058/https://agritech.tnau.ac.in/horticulture/horti_medicinal%20crops_stevia.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - stevia spacing, verbatim: 'Rooted cuttings are planted at a spacing of 45X45 cm, with a total plant density in the order of 30,000 plants per ha.' (Planting section)
+  - stevia spacing
+    - "Rooted cuttings are planted at a spacing of 45X45 cm, with a total plant density in the order of 30,000 plants per ha." (Planting section)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `tribhuvan2026-winged-bean-photoperiod`
@@ -3787,7 +4182,10 @@ Tribhuvan, Kishor U.; N, Mustafa; Gidhi, Anupama; Singh, Devendra K.; Kumar, Sau
 - DOI: [10.1186/s12864-026-12857-x](https://doi.org/10.1186/s12864-026-12857-x)
 - Verification: Crossref-verified | Access: open-access, evidence tier **B**
 - Backs:
-  - winged-bean photoperiod criticalHours, verbatim: 'SD conditions corresponded to natural daylengths from July to October (11.5–12.5 h)' and 'LD conditions corresponded to natural daylengths from March to June (13.0–14.2 h)' (Methods, photoperiod sensitivity), with 'In this study, 76 (94%) of the 81 winged bean accessions evaluated under both SD and LD photoperiods for three consecutive years failed to initiate flowering under LD conditions.' (Discussion). Flowering under natural days of 12.5 h or less and almost none at 13.0 h or more puts the critical length between them, and the catalog takes the midpoint, 12.75 h
+  - winged-bean photoperiod criticalHours. Flowering under natural days of 12.5 h or less and almost none at 13.0 h or more puts the critical length between them, and the catalog takes the midpoint, 12.75 h
+    - "SD conditions corresponded to natural daylengths from July to October (11.5–12.5 h)" (Methods, photoperiod sensitivity)
+    - "LD conditions corresponded to natural daylengths from March to June (13.0–14.2 h)" (Methods, photoperiod sensitivity)
+    - "In this study, 76 (94%) of the 81 winged bean accessions evaluated under both SD and LD photoperiods for three consecutive years failed to initiate flowering under LD conditions." (Discussion)
 - **Caveat:** Three years of field sowings at one site, 81 accessions. The study brackets the critical day length between its short-day and long-day seasons and gives no single figure, so the 12.75 h midpoint is this app’s derivation. License CC BY-NC-ND 4.0.
 
 #### `uaex-2008-hyacinth-bean`
@@ -3798,8 +4196,10 @@ Klingaman, Gerald. (2008). *Plant of the Week: Hyacinth Bean*. University of Ark
 - Archived: <https://web.archive.org/web/20261017221340/https://www.uaex.uada.edu/yard-garden/resource-library/plant-week/hyacinth-bean-10-03-08.aspx>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - lablab daysToMaturity, verbatim: 'It takes about 90 days from planting until the first pods are produced.' (Plant of the Week article, paragraph on flowers and pods)
-  - lablab coldLimit, verbatim: 'Its roots will survive over winter in zone 8 if plants are well mulched but mostly the vine is grown as an annual.' (Plant of the Week article, paragraph on hot weather)
+  - lablab daysToMaturity
+    - "It takes about 90 days from planting until the first pods are produced." (Plant of the Week article, paragraph on flowers and pods)
+  - lablab coldLimit
+    - "Its roots will survive over winter in zone 8 if plants are well mulched but mostly the vine is grown as an annual." (Plant of the Week article, paragraph on hot weather)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `uaex-2017-camellia-sinensis`
@@ -3810,7 +4210,8 @@ University of Arkansas Division of Agriculture Cooperative Extension Service. (2
 - Archived: <https://web.archive.org/web/20261017213021/https://www.uaex.uada.edu/yard-garden/resource-library/plant-week/Camellia-sinensis-Tea-10-27-2017.aspx>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - tea light, verbatim: 'Plants are understory shrubs in nature and grow in moderate to heavy shade, but tea plantations are almost always in open fields in full sun.' ('Camellia sinensis (Tea Plant)' page text)
+  - tea light
+    - "Plants are understory shrubs in nature and grow in moderate to heavy shade, but tea plantations are almost always in open fields in full sun." ('Camellia sinensis (Tea Plant)' page text)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `uaex-andersen-garden-cress`
@@ -3821,8 +4222,10 @@ Andersen, Craig R. (n.d.). *Garden Cress (Home Gardening Series, FSA6084)*. Univ
 - Archived: <https://web.archive.org/web/20261017215029/https://www.uaex.uada.edu/publications/pdf/FSA-6084.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - cress spacing, verbatim: 'Spacing – 1 to 2 inches' (Page 1, Culture box (the same page says Sow 10 to 15 seeds per foot of row and Garden cress is not usually thinned))
-  - cress daysToMaturity, verbatim: 'Broad Leaved 10-40' (Page 2, Cultivars table, column Days to Maturity, row Garden Cress Broad Leaved (the Curled Cressida row gives 10-30))
+  - cress spacing
+    - "Spacing – 1 to 2 inches" (Page 1, Culture box (the same page says Sow 10 to 15 seeds per foot of row and Garden cress is not usually thinned))
+  - cress daysToMaturity
+    - "Broad Leaved 10-40" (Page 2, Cultivars table, column Days to Maturity, row Garden Cress Broad Leaved (the Curled Cressida row gives 10-30))
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `uaex-salsify-fsa6094`
@@ -3833,7 +4236,8 @@ Andersen, Craig R. (n.d.). *Salsify (FSA6094, Home Gardening Series)*. Universit
 - Archived: <https://web.archive.org/web/20261017215302/https://www.uaex.uada.edu/publications/PDF/FSA-6094.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - salsify coldLimit, verbatim: 'Because of its ability to withstand a hard freeze in the winter, salsify may be harvested until early spring.' (Page 1, introduction)
+  - salsify coldLimit
+    - "Because of its ability to withstand a hard freeze in the winter, salsify may be harvested until early spring." (Page 1, introduction)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `uarizona-2024-deciduous-fruit-nuts-low-desert`
@@ -3844,7 +4248,8 @@ Bradley, Lucy; Maurer, Michael. (2024). *Deciduous Fruit & Nuts for the Low Dese
 - Archived: <https://web.archive.org/web/20251107224409/https://extension.arizona.edu/sites/default/files/2025-05/az1269_Deciduous-Fruit-and-Nuts-for-the-Low-Desert.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - quince chillHours, verbatim: 'Cold hardy, yet low chilling requirement of 300 hours.' (az1269, under both Orange Quince and Pineapple Quince, page 3, and the chart's Chilling Hours column, page 7)
+  - quince chillHours
+    - "Cold hardy, yet low chilling requirement of 300 hours." (az1269, under both Orange Quince and Pineapple Quince, page 3, and the chart's Chilling Hours column, page 7)
 - **Caveat:** Extension publication, reviewed by University faculty and not peer reviewed. It lists low-chill cultivars for the Arizona low desert, so the 300 hours are those cultivars’ figure, and it names no origin for it. It counts the hours between 32 and 45 F from November 1 to February 15.
 
 #### `ucanr-2008-artichoke`
@@ -3855,7 +4260,8 @@ Smith, Richard; Baameur, Aziz; Bari, Mohammad; Cahn, Michael; Giraud, Deborah; N
 - Archived: <https://web.archive.org/web/20260610083635/https://ucanr.edu/sites/default/files/2026-04/anrcatalog%20Artichoke%20Production%20in%20California%207221.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - harvest timing for globe-artichoke, verbatim: 'Perennial artichokes are harvested year-round, but the highest volume of production occurs between March and May' (p. 4, "Harvesting and Handling" section)
+  - harvest timing for globe-artichoke
+    - "Perennial artichokes are harvested year-round, but the highest volume of production occurs between March and May" (p. 4, "Harvesting and Handling" section)
 - **Caveat:** Published outside a peer-reviewed journal. Its dates are calibrated to the Salinas Valley in Monterey County on California's Central Coast, represented by Salinas. This app places them at the same point in each garden's own frost-free season. Globe artichoke is picked year-round on the Central Coast, and the figure is the stated March to May peak.
 
 #### `ucanr-2012-citrus-sacramento`
@@ -3866,11 +4272,16 @@ UC Master Gardeners, Sacramento County. (2012). *Growing Citrus in Sacramento (G
 - Archived: <https://web.archive.org/web/20261017213132/https://ucanr.edu/sites/default/files/2013-07/72239.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - orange spacing, verbatim: 'Space standard trees at least 12 feet apart, and dwarf trees 8 to 10 feet apart.' (PLANTING section, p. 1 of 4)
-  - orange coldLimit, verbatim: 'Oranges and mandarins 21°F' (table under "COLD HARDINESS" heading, p. 4 of 4)
-  - lime spacing, verbatim: 'Space standard trees at least 12 feet apart, and dwarf trees 8 to 10 feet apart.' (PLANTING section, p. 1 of 4)
-  - lime coldLimit, verbatim: 'Limes 29°F' (table under "COLD HARDINESS" heading, p. 4 of 4)
-  - mandarin spacing, verbatim: 'Space standard trees at least 12 feet apart, and dwarf trees 8 to 10 feet apart.' (PLANTING section, p. 1 of 4)
+  - orange spacing
+    - "Space standard trees at least 12 feet apart, and dwarf trees 8 to 10 feet apart." (PLANTING section, p. 1 of 4)
+  - orange coldLimit
+    - "Oranges and mandarins 21°F" (table under "COLD HARDINESS" heading, p. 4 of 4)
+  - lime spacing
+    - "Space standard trees at least 12 feet apart, and dwarf trees 8 to 10 feet apart." (PLANTING section, p. 1 of 4)
+  - lime coldLimit
+    - "Limes 29°F" (table under "COLD HARDINESS" heading, p. 4 of 4)
+  - mandarin spacing
+    - "Space standard trees at least 12 feet apart, and dwarf trees 8 to 10 feet apart." (PLANTING section, p. 1 of 4)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ucanr-alameda-yacon-what-is-it`
@@ -3881,7 +4292,8 @@ Silva, Yolanda. (n.d.). *Yacon: What is it?* UC Cooperative Extension Alameda Co
 - Archived: <https://web.archive.org/web/20250712195058/https://ucanr.edu/sites/default/files/2019-04/301726.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - yacon height, verbatim: 'the plant typically grows 4 to 8 feet tall, depending on variety.' (Page 1 (one-page fact sheet))
+  - yacon height
+    - "the plant typically grows 4 to 8 feet tall, depending on variety." (Page 1 (one-page fact sheet))
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ucanr-johnson-1983-jicama`
@@ -3892,7 +4304,8 @@ Johnson, Hunter. (1983). *Jicama*. University of California Cooperative Extensio
 - Archived: <https://web.archive.org/web/20260214141431/https://ucanr.edu/program/uc-anr-small-farms-network/jicama>
 - Verification: URL-verified | Access: open-access, evidence tier **C**
 - Backs:
-  - jicama spacing, verbatim: 'Rows should be two to three feet apart with plants eight to 10 inches apart in the row.' (section 'Cultural Requirements'), the 9 in by 2.5 ft midpoints, 0.17 m² a plant, 42 cm on a square grid
+  - jicama spacing, the 9 in by 2.5 ft midpoints, 0.17 m² a plant, 42 cm on a square grid
+    - "Rows should be two to three feet apart with plants eight to 10 inches apart in the row." (section 'Cultural Requirements')
 - **Caveat:** An archived copy of a 1983 extension leaflet that isn't peer reviewed. Comments on this app's catalog row say which figure the sentence gives.
 
 #### `ucanr-santaclara-citrus`
@@ -3903,11 +4316,16 @@ UCCE Master Gardener Program of Santa Clara County. (n.d.). *Growing Fabulous Ci
 - Archived: <https://web.archive.org/web/20251205073346/https://ucanr.edu/sites/default/files/2020-02/319461.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - orange height, verbatim: 'Navel - Standard tree 20 to 25 feet high, dwarf 8 feet.' ("Sweet oranges" section, p. 4 of 6)
-  - orange harvestSeason, verbatim: 'Washington Navel –harvest Dec – May.' ("Sweet oranges" section, p. 4 of 6)
-  - lime harvestSeason, verbatim: 'Tahitian or Persian limes – Bearss variety recommended for SCC. Hardier than Mexican/West Indian (Key) lime, not as hardy as lemon. Attractive small tree. Seedless, ripens to yellow; doesn’t hold well on tree once ripe. Harvest Aug-Mar.' ("Limes" section, p. 5 of 6)
-  - lime light, verbatim: 'Limes and most lemons do not need full sun or long periods of heat to ripen fruit.' ("Plant Selection" section, p. 1 of 6)
-  - mandarin harvestSeason, verbatim: 'Satsuma – a group of varieties including Owari. Early ripening and very cold hardy. Harvest Dec - Apr, depending on variety.' ("Mandarins and mandarin hybrids" section, p. 4 of 6)
+  - orange height
+    - "Navel - Standard tree 20 to 25 feet high, dwarf 8 feet." ("Sweet oranges" section, p. 4 of 6)
+  - orange harvestSeason
+    - "Washington Navel –harvest Dec – May." ("Sweet oranges" section, p. 4 of 6)
+  - lime harvestSeason
+    - "Tahitian or Persian limes – Bearss variety recommended for SCC. Hardier than Mexican/West Indian (Key) lime, not as hardy as lemon. Attractive small tree. Seedless, ripens to yellow; doesn’t hold well on tree once ripe. Harvest Aug-Mar." ("Limes" section, p. 5 of 6)
+  - lime light
+    - "Limes and most lemons do not need full sun or long periods of heat to ripen fruit." ("Plant Selection" section, p. 1 of 6)
+  - mandarin harvestSeason
+    - "Satsuma – a group of varieties including Owari. Early ripening and very cold hardy. Harvest Dec - Apr, depending on variety." ("Mandarins and mandarin hybrids" section, p. 4 of 6)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ucce-2010-lemon-cost-study-sjv-south`
@@ -3918,7 +4336,8 @@ O'Connell, Neil V.; Kallsen, Craig E.; Klonsky, Karen M.; De Moura, Richard L. (
 - Archived: <https://web.archive.org/web/20250730185518/https://coststudyfiles.ucdavis.edu/uploads/cs_public/57/c4/57c4611c-f2bb-4bde-9b77-a343ca9f0a62/lemonvs10.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - harvest timing for lemon, verbatim: 'Typically one-third of the orchard is picked in each of three harvests over the growing season. Lemons are picked and graded by size and normally harvested from mid October through March' (LM-VS-10, p. 8)
+  - harvest timing for lemon
+    - "Typically one-third of the orchard is picked in each of three harvests over the growing season. Lemons are picked and graded by size and normally harvested from mid October through March" (LM-VS-10, p. 8)
 - **Caveat:** Published outside a peer-reviewed journal. Its dates are calibrated to Tulare and Kern counties, the San Joaquin Valley South region of California, and this app places them at the same point in each garden's own frost-free season. Lemon dates come from a commercial cost study for the southern San Joaquin Valley.
 
 #### `uconn-plantdatabase-hippophae-rhamnoides`
@@ -3929,7 +4348,8 @@ Brand, Mark H. (n.d.). *Hippophae rhamnoides, Common Seabuckthorn*. University o
 - Archived: <https://web.archive.org/web/20261017221124/https://plantdatabase.uconn.edu/detail.php?pid=205>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - sea-buckthorn width, verbatim: '10' to 25' tall with an equal or greater width' ("Habit and Form" entry)
+  - sea-buckthorn width
+    - "10' to 25' tall with an equal or greater width" ("Habit and Form" entry)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `udc-2019-growing-roselle-fact-sheet-001`
@@ -3940,7 +4360,8 @@ Richardson, Matthew L.; Arlotta, Caitlin G. (2019). *Growing Roselle (Hibiscus s
 - Archived: <https://web.archive.org/web/20260114214912/http://docs-do-not-link.udc.edu/causes/Fact_Sheet%20-%20Growing_Roselle.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - roselle spacing, verbatim: 'Plant roselle outdoors in areas that get full sun once the danger of frost has passed. This is a very shrubby plant, so plants should be spaced at least 3-4 feet apart and watered regularly.' (p. 1, right column, section 'Cultivation')
+  - roselle spacing
+    - "Plant roselle outdoors in areas that get full sun once the danger of frost has passed. This is a very shrubby plant, so plants should be spaced at least 3-4 feet apart and watered regularly." (p. 1, right column, section 'Cultivation')
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-1994-adzuki-bean`
@@ -3950,10 +4371,14 @@ Stephens, James M. (1994). *Bean, Adzuki - Phaseolus angularis (Willd.) W.F. Wig
 - DOI: [10.32473/edis-mv016-1994](https://doi.org/10.32473/edis-mv016-1994)
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - adzuki-bean spacing, verbatim: 'Sow seeds 3/4-1 inch deep, thinning the plants to stand about 2-3 inches apart in the row.' (Page 1, section 'Culture' (the row spacing sentence, Space rows 12-18 inches apart, is on page 2))
-  - adzuki-bean height, verbatim: 'The plant is erect, 1-2 feet high, although some gardeners have reported them to be indeterminate, growing and producing until frost.' (Page 1, section 'Description')
-  - adzuki-bean daysToMaturity, verbatim: 'Adzuki beans need about 120 days from sowing to the time the seeds and pods are dry.' (Page 1, section 'Culture')
-  - adzuki-bean coldLimit, verbatim: 'They need cool nights for best production, but will not tolerate frosts and freezes.' (Page 1, section 'Culture')
+  - adzuki-bean spacing
+    - "Sow seeds 3/4-1 inch deep, thinning the plants to stand about 2-3 inches apart in the row." (Page 1, section 'Culture' (the row spacing sentence, Space rows 12-18 inches apart, is on page 2))
+  - adzuki-bean height
+    - "The plant is erect, 1-2 feet high, although some gardeners have reported them to be indeterminate, growing and producing until frost." (Page 1, section 'Description')
+  - adzuki-bean daysToMaturity
+    - "Adzuki beans need about 120 days from sowing to the time the seeds and pods are dry." (Page 1, section 'Culture')
+  - adzuki-bean coldLimit
+    - "They need cool nights for best production, but will not tolerate frosts and freezes." (Page 1, section 'Culture')
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-1994-bambara-groundnut`
@@ -3963,9 +4388,12 @@ Stephens, James M. (1994). *Bambara Groundnut - Voandzeia subterranea (L.) Thoua
 - DOI: [10.32473/edis-mv014-1994](https://doi.org/10.32473/edis-mv014-1994)
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - bambara-groundnut daysToMaturity, verbatim: 'When grown like the peanut, Bambara groundnuts take about 3-6 months to mature, depending on climatic conditions and the cultivar.' (Page 2, section 'Culture')
-  - bambara-groundnut coldLimit, verbatim: 'It needs bright sunshine, high temperatures, at least 4 months free of frost, and frequent rains to grow best.' (Page 1, section 'Culture')
-  - bambara-groundnut light, verbatim: 'It needs bright sunshine, high temperatures, at least 4 months free of frost, and frequent rains to grow best.' (Page 1, section 'Culture')
+  - bambara-groundnut daysToMaturity
+    - "When grown like the peanut, Bambara groundnuts take about 3-6 months to mature, depending on climatic conditions and the cultivar." (Page 2, section 'Culture')
+  - bambara-groundnut coldLimit
+    - "It needs bright sunshine, high temperatures, at least 4 months free of frost, and frequent rains to grow best." (Page 1, section 'Culture')
+  - bambara-groundnut light
+    - "It needs bright sunshine, high temperatures, at least 4 months free of frost, and frequent rains to grow best." (Page 1, section 'Culture')
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-1994-jicama`
@@ -3975,9 +4403,12 @@ Stephens, James M. (1994). *Jicama: Pachyrhizus erosus (L.) Urban (HS615)*. Univ
 - DOI: [10.32473/edis-mv082-1994](https://doi.org/10.32473/edis-mv082-1994)
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - jicama height, verbatim: 'The vining tops, which reach 10-20 feet in length, have compound leaves with pointed edges, and bear white flowers and green lima bean-shaped pods.' (Page 1, the second paragraph)
-  - jicama coldLimit, verbatim: 'Jicama does best in a warm climate with moderate rainfall and is sensitive to frost.' (Page 2, section 'Culture')
-  - jicama daysToMaturity, verbatim: 'When planted from seeds, about 5-9 months of warm weather are required before large roots are produced.' (Page 2, section 'Culture'), the 7-month midpoint, 210 days
+  - jicama height
+    - "The vining tops, which reach 10-20 feet in length, have compound leaves with pointed edges, and bear white flowers and green lima bean-shaped pods." (Page 1, the second paragraph)
+  - jicama coldLimit
+    - "Jicama does best in a warm climate with moderate rainfall and is sensitive to frost." (Page 2, section 'Culture')
+  - jicama daysToMaturity, the 7-month midpoint, 210 days
+    - "When planted from seeds, about 5-9 months of warm weather are required before large roots are produced." (Page 2, section 'Culture')
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-1994-roselle-hs659`
@@ -3988,8 +4419,10 @@ Stephens, James M. (1994). *Roselle, Hibiscus sabdariffa L. (HS659), archival co
 - Archived: <https://web.archive.org/web/20261017213851/https://journals.flvc.org/edis/article/download/139843/144801/280434>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - roselle height, verbatim: 'The okra-like plant is an annual, 5-7 feet in height, with lobed leaves sometimes used for greens.' (p. 1, section 'DESCRIPTION')
-  - roselle daysToMaturity, verbatim: 'It is usually started in April or in late August in Florida, requiring about 4 months to mature.' (p. 1, section 'CULTURE')
+  - roselle height
+    - "The okra-like plant is an annual, 5-7 feet in height, with lobed leaves sometimes used for greens." (p. 1, section 'DESCRIPTION')
+  - roselle daysToMaturity
+    - "It is usually started in April or in late August in Florida, requiring about 4 months to mature." (p. 1, section 'CULTURE')
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-1994-winged-bean`
@@ -3999,7 +4432,8 @@ Stephens, James M. (1994). *Bean, Winged - Psophocarpus tetragonolobus (L.) D.C.
 - DOI: [10.32473/edis-mv028-1994](https://doi.org/10.32473/edis-mv028-1994)
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - winged-bean coldLimit, verbatim: 'Since most varieties of winged beans need short days to initiate flowering, yet are frost sensitive, they must be grown during the winter in South Florida while the days are short.' (Page 1, section 'Culture')
+  - winged-bean coldLimit
+    - "Since most varieties of winged beans need short days to initiate flowering, yet are frost sensitive, they must be grown during the winter in South Florida while the days are short." (Page 1, section 'Culture')
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-2003-chayote`
@@ -4010,7 +4444,8 @@ Stephens, James M. (2003). *Chayote — Sechium edule (Jacq.) Sw.* University of
 - Archived: <https://web.archive.org/web/20261017212457/https://journals.flvc.org/edis/article/download/139590/144628/279059>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - chayote spacing, verbatim: 'Plant one fruit per hill in hills spaced 12 feet apart and in rows spaced 12 feet apart.' ("Culture" section)
+  - chayote spacing
+    - "Plant one fruit per hill in hills spaced 12 feet apart and in rows spaced 12 feet apart." ("Culture" section)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-2003-salsify`
@@ -4021,8 +4456,10 @@ Stephens, James M. (2003). *Salsify - Tragopogon porrifolius L. (HS662)*. Univer
 - Archived: <https://web.archive.org/web/20260211013551/https://journals.flvc.org/edis/article/view/139847>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - salsify spacing, verbatim: 'The seedlings should be thinned to 3-4 inches apart in rows 18-24 inches apart.' (Page 1, section 'Culture')
-  - salsify daysToMaturity, verbatim: 'Salsify requires a long growing season of 120 to 150 days from seeding to harvest.' (Page 1, section 'Culture')
+  - salsify spacing
+    - "The seedlings should be thinned to 3-4 inches apart in rows 18-24 inches apart." (Page 1, section 'Culture')
+  - salsify daysToMaturity
+    - "Salsify requires a long growing season of 120 to 150 days from seeding to harvest." (Page 1, section 'Culture')
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-2009-backyard-sugarcane-ss-agr-253`
@@ -4033,10 +4470,14 @@ Baucum, L.; Rice, R. W.; Muralles, L. (2009). *Backyard Sugarcane (SS-AGR-253), 
 - Archived: <https://web.archive.org/web/20131206213904/https://ufdcimages.uflib.ufl.edu/IR/00/00/34/15/00001/SC05200.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - sugarcane spacing, verbatim: 'Sugarcane can be planted as a single row (a typical configuration for windbreaks) or in multiple, parallel rows with a distance of from 4 -10 feet between the rows.' (p. 3, section 'Planting')
-  - sugarcane yearsToFirstHarvest, verbatim: 'Depending on variety and growing conditions, a stalk weighing 2 - 4 pounds with 11 - 12 percent sugar will be produced in about 12 - 14 months from an original planting or in 11 - 12 months from a ratoon re-growth.' (p. 1, Introduction)
-  - sugarcane harvestSeason, verbatim: 'Given a reasonable planting date the preceding year, sugarcane will be ready for harvest anytime after November 1, but keep an eye on the weather since you'll want to harvest before a killing freeze.' (p. 5, section 'Harvesting')
-  - sugarcane light, verbatim: 'A well-drained, sunny location is desirable; the more sun the better. Sugarcane planted in partially shaded areas (such as near buildings, walls, or tall trees) will have reduced growth potential.' (p. 2, section 'Site Selection')
+  - sugarcane spacing
+    - "Sugarcane can be planted as a single row (a typical configuration for windbreaks) or in multiple, parallel rows with a distance of from 4 -10 feet between the rows." (p. 3, section 'Planting')
+  - sugarcane yearsToFirstHarvest
+    - "Depending on variety and growing conditions, a stalk weighing 2 - 4 pounds with 11 - 12 percent sugar will be produced in about 12 - 14 months from an original planting or in 11 - 12 months from a ratoon re-growth." (p. 1, Introduction)
+  - sugarcane harvestSeason
+    - "Given a reasonable planting date the preceding year, sugarcane will be ready for harvest anytime after November 1, but keep an eye on the weather since you'll want to harvest before a killing freeze." (p. 5, section 'Harvesting')
+  - sugarcane light
+    - "A well-drained, sunny location is desirable; the more sun the better. Sugarcane planted in partially shaded areas (such as near buildings, walls, or tall trees) will have reduced growth potential." (p. 2, section 'Site Selection')
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-2009-the-passion-fruit-hs60`
@@ -4047,8 +4488,10 @@ Knight, R. J., Jr.; Sauls, Julian W. (2009). *The Passion Fruit (HS60)*. UF/IFAS
 - Archived: <https://web.archive.org/web/20260211092542/https://ufdcimages.uflib.ufl.edu/IR/00/00/33/95/00001/MG32800.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - passion-fruit spacing, verbatim: 'In Florida, passion vines are planted 3-4.5 m (10-15 ft.) apart in rows 4.5-6 m (1 5-20 ft.) apart.' (UF/IFAS HS60 (archival copy, reviewed 2009), section 'Planting and Trellising', PDF page 2)
-  - passion-fruit height, verbatim: 'Ideally they should be long enough to provide a trellis height of 1.5 m (5 ft.), with 45-75 cm (18-30 in.) in the ground.' (UF/IFAS HS60 (archival copy, reviewed 2009), section 'Planting and Trellising', PDF page 3)
+  - passion-fruit spacing
+    - "In Florida, passion vines are planted 3-4.5 m (10-15 ft.) apart in rows 4.5-6 m (1 5-20 ft.) apart." (UF/IFAS HS60 (archival copy, reviewed 2009), section 'Planting and Trellising', PDF page 2)
+  - passion-fruit height
+    - "Ideally they should be long enough to provide a trellis height of 1.5 m (5 ft.), with 45-75 cm (18-30 in.) in the ground." (UF/IFAS HS60 (archival copy, reviewed 2009), section 'Planting and Trellising', PDF page 3)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-2014-gilman-diospyros-kaki`
@@ -4059,9 +4502,12 @@ Gilman, Edward F.; Watson, Dennis G. (2014). *Diospyros kaki: Japanese Persimmon
 - Archived: <https://web.archive.org/web/20260315093053/https://journals.flvc.org/edis/article/view/141253>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - persimmon height, verbatim: 'Height: 20 to 30 feet' ("Description" section)
-  - persimmon width, verbatim: 'Spread: 15 to 25 feet' ("Description" section)
-  - persimmon light, verbatim: 'Light requirement: full sun' ("Culture" section)
+  - persimmon height
+    - "Height: 20 to 30 feet" ("Description" section)
+  - persimmon width
+    - "Spread: 15 to 25 feet" ("Description" section)
+  - persimmon light
+    - "Light requirement: full sun" ("Culture" section)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-2015-citrus-culture-home-landscape`
@@ -4072,9 +4518,12 @@ Rouse, Robert E.; Zekri, Mongi. (2015). *Citrus Culture in the Home Landscape (H
 - Archived: <https://web.archive.org/web/20260124024310/https://edis.ifas.ufl.edu/publication/HS132>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - grapefruit spacing, verbatim: 'For home plantings, the spacing recommended should be a minimum of 15 feet between trees.' ("Site Selection" section)
-  - grapefruit harvestSeason, verbatim: '7. Marsh (White flesh) ... Midseason (Nov–May)' (Table 1, GRAPEFRUIT group, row 'Marsh (White flesh)', column "Fruit Season")
-  - grapefruit light, verbatim: 'Citrus trees tolerate light shade but will be more productive if grown in full sunlight.' ("Site Selection" section)
+  - grapefruit spacing
+    - "For home plantings, the spacing recommended should be a minimum of 15 feet between trees." ("Site Selection" section)
+  - grapefruit harvestSeason
+    - "7. Marsh (White flesh) [...] Midseason (Nov–May)" (Table 1, GRAPEFRUIT group, row 'Marsh (White flesh)', column "Fruit Season")
+  - grapefruit light
+    - "Citrus trees tolerate light shade but will be more productive if grown in full sunlight." ("Site Selection" section)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-2016-guava-home-landscape`
@@ -4085,11 +4534,16 @@ Crane, Jonathan H.; Balerdi, Carlos F. (2016). *Guava Growing in the Florida Hom
 - Archived: <https://web.archive.org/web/20260116120147/https://edis.ifas.ufl.edu/publication/MG045>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - guava spacing, verbatim: 'Depending upon ultimate tree size, trees should be planted 15 to 25 ft (4.6–7.6 m) away from other trees and structures and power lines.' (UF/IFAS HS4 (MG045), section 'Spacing', PDF page 3)
-  - guava height, verbatim: 'Small, single or multi-trunked trees to 20 ft (6.1 m) in height with a broad, spreading or upright canopy.' (UF/IFAS HS4 (MG045), section 'Description', subsection 'Tree', PDF page 1)
-  - guava yearsToFirstHarvest, verbatim: 'Guava trees generally begin fruit production 3 to 4 years after planting and yields range from 50 to 80 lbs (23–36 kg) or more per tree per year.' (UF/IFAS HS4 (MG045), section 'Production (Crop Yields)', PDF page 3)
-  - guava coldLimit, verbatim: 'Young guava trees may be killed by temperatures of 27° to 28°F (-3° to -2°C). Mature trees may withstand short periods of 25° to 26°F (-4° to -3°C) without much damage.' (UF/IFAS HS4 (MG045), section 'Climate', Cold stress, PDF page 2)
-  - guava light, verbatim: 'In general, guava trees should be planted in full sun for best growth and fruit production.' (UF/IFAS HS4 (MG045), section 'Site Selection', PDF page 3)
+  - guava spacing
+    - "Depending upon ultimate tree size, trees should be planted 15 to 25 ft (4.6–7.6 m) away from other trees and structures and power lines." (UF/IFAS HS4 (MG045), section 'Spacing', PDF page 3)
+  - guava height
+    - "Small, single or multi-trunked trees to 20 ft (6.1 m) in height with a broad, spreading or upright canopy." (UF/IFAS HS4 (MG045), section 'Description', subsection 'Tree', PDF page 1)
+  - guava yearsToFirstHarvest
+    - "Guava trees generally begin fruit production 3 to 4 years after planting and yields range from 50 to 80 lbs (23–36 kg) or more per tree per year." (UF/IFAS HS4 (MG045), section 'Production (Crop Yields)', PDF page 3)
+  - guava coldLimit
+    - "Young guava trees may be killed by temperatures of 27° to 28°F (-3° to -2°C). Mature trees may withstand short periods of 25° to 26°F (-4° to -3°C) without much damage." (UF/IFAS HS4 (MG045), section 'Climate', Cold stress, PDF page 2)
+  - guava light
+    - "In general, guava trees should be planted in full sun for best growth and fruit production." (UF/IFAS HS4 (MG045), section 'Site Selection', PDF page 3)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-2016-jackfruit`
@@ -4100,12 +4554,18 @@ Crane, Jonathan H.; Balerdi, Carlos F.; Maguire, Ian. (2016). *Jackfruit Growing
 - Archived: <https://web.archive.org/web/20251202205941/https://edis.ifas.ufl.edu/publication/mg370>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - jackfruit spacing, verbatim: 'If little or no pruning is planned, then jackfruit in the home landscape should be planted 25 to 30 feet (7.6–9.1 m) away from other trees and structures. If annual or semi-annual pruning is practiced jackfruit trees may be planted 20 to 25 feet (6.1–7.6 m) away from other trees and structures.' (Spacing section)
-  - jackfruit height, verbatim: 'Erect, evergreen, fairly large tree, 30 to 40 feet (9–12 m) tall in Florida (Figure 2).' (Description section, 'Trees.' paragraph)
-  - jackfruit yearsToFirstHarvest, verbatim: 'Jackfruit from seed may be more precocious than many other fruit, and trees may begin production in the 3rd to 4th year.' (Propagation section)
-  - jackfruit harvestSeason, verbatim: 'The main fruiting season is in summer and fall. Some fruit may ripen at other times, but usually not in winter and early spring.' (Description section, 'Season of bearing', and Table 1, column 'Season and months')
-  - jackfruit coldLimit, verbatim: 'Jackfruit leaves may be damaged at 32°F (0°C), branches at 30°F (-1°C), and branches and trees may be killed at 28°F (-2°C).' (Cold Stress section)
-  - jackfruit light, verbatim: 'In general, jackfruit trees should be planted in full sun for best growth and fruit production.' (Site Selection section)
+  - jackfruit spacing
+    - "If little or no pruning is planned, then jackfruit in the home landscape should be planted 25 to 30 feet (7.6–9.1 m) away from other trees and structures. If annual or semi-annual pruning is practiced jackfruit trees may be planted 20 to 25 feet (6.1–7.6 m) away from other trees and structures." (Spacing section)
+  - jackfruit height
+    - "Erect, evergreen, fairly large tree, 30 to 40 feet (9–12 m) tall in Florida (Figure 2)." (Description section, 'Trees.' paragraph)
+  - jackfruit yearsToFirstHarvest
+    - "Jackfruit from seed may be more precocious than many other fruit, and trees may begin production in the 3rd to 4th year." (Propagation section)
+  - jackfruit harvestSeason
+    - "The main fruiting season is in summer and fall. Some fruit may ripen at other times, but usually not in winter and early spring." (Description section, 'Season of bearing', and Table 1, column 'Season and months')
+  - jackfruit coldLimit
+    - "Jackfruit leaves may be damaged at 32°F (0°C), branches at 30°F (-1°C), and branches and trees may be killed at 28°F (-2°C)." (Cold Stress section)
+  - jackfruit light
+    - "In general, jackfruit trees should be planted in full sun for best growth and fruit production." (Site Selection section)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-2016-lychee`
@@ -4116,11 +4576,16 @@ Balerdi, Carlos F.; Maguire, Ian; Crane, Jonathan H. (2016). *Lychee Growing in 
 - Archived: <https://web.archive.org/web/20251220015127/https://edis.ifas.ufl.edu/publication/MG051>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - lychee spacing, verbatim: 'Lychee trees in the home landscape should be planted 25 to 30 feet or more (7.6 to 9.1 m) away from buildings, other trees, and electrical wires.' (Spacing section)
-  - lychee yearsToFirstHarvest, verbatim: 'Air-layered or grafted trees begin to bear fruit in 3 to 5 years.' (Propagation section)
-  - lychee harvestSeason, verbatim: 'Mid-May to early July in Florida, depending upon variety.' (Section 'Season of Bearing')
-  - lychee coldLimit, verbatim: 'Young trees are damaged at temperatures of 28° to 32°F (-2° to 0°C), while temperatures down to 24° to 25°F (-3° to -4°C) cause extensive damage or death to large trees if exposed for several hours.' (Climate section)
-  - lychee light, verbatim: 'In general, lychee trees should be planted in full sun for best growth and fruit production.' (Site Selection section)
+  - lychee spacing
+    - "Lychee trees in the home landscape should be planted 25 to 30 feet or more (7.6 to 9.1 m) away from buildings, other trees, and electrical wires." (Spacing section)
+  - lychee yearsToFirstHarvest
+    - "Air-layered or grafted trees begin to bear fruit in 3 to 5 years." (Propagation section)
+  - lychee harvestSeason
+    - "Mid-May to early July in Florida, depending upon variety." (Section 'Season of Bearing')
+  - lychee coldLimit
+    - "Young trees are damaged at temperatures of 28° to 32°F (-2° to 0°C), while temperatures down to 24° to 25°F (-3° to -4°C) cause extensive damage or death to large trees if exposed for several hours." (Climate section)
+  - lychee light
+    - "In general, lychee trees should be planted in full sun for best growth and fruit production." (Site Selection section)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-2017-assessment-ziziphus-jujuba`
@@ -4131,7 +4596,8 @@ UF/IFAS Center for Aquatic and Invasive Plants. (2017). *Ziziphus jujuba - UF/IF
 - Archived: <https://web.archive.org/web/20261011022226/https://assessment.ifas.ufl.edu/assessments/ziziphus-jujuba/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - jujube invasiveStatus, verbatim: 'Not considered a problem species at this time. May be recommended by IFAS. Reassessed every 10 years.' (Assessment page, "For Status Assessments" (assessment dates 2007 and 2017, conclusion "Not a problem species (un-documen)
+  - jujube invasiveStatus
+    - "Not considered a problem species at this time. May be recommended by IFAS. Reassessed every 10 years." (Assessment page, "For Status Assessments" (assessment dates 2007 and 2017, conclusion "Not a problem species (un-documen))
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-2018-lychee-fact-sheet`
@@ -4142,9 +4608,12 @@ Gilman, Edward F.; Hilbert, Deborah; Watson, Dennis G.; Klein, Ryan; Koeser, And
 - Archived: <https://web.archive.org/web/20260123195931/https://edis.ifas.ufl.edu/publication/st364>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - lychee height, verbatim: 'Lychee trees can eventually reach 30 to 50-feet in height with a 30 to 50-foot spread but will reach about 30 feet tall 30-years after planting in a landscape creating a wonderful shade, framing, or specimen tree.' (Introduction, and Description section 'Height: 30 to 50 feet')
-  - lychee width, verbatim: 'Lychee trees can eventually reach 30 to 50-feet in height with a 30 to 50-foot spread but will reach about 30 feet tall 30-years after planting in a landscape creating a wonderful shade, framing, or specimen tree.' (Introduction, and Description section 'Spread: 30 to 50 feet')
-  - lychee invasiveStatus, verbatim: 'UF/IFAS Invasive Assessment Status: not considered a problem species at this time, may be recommended (North, Central, South)' (General Information list)
+  - lychee height
+    - "Lychee trees can eventually reach 30 to 50-feet in height with a 30 to 50-foot spread but will reach about 30 feet tall 30-years after planting in a landscape creating a wonderful shade, framing, or specimen tree." (Introduction, and Description section 'Height: 30 to 50 feet')
+  - lychee width
+    - "Lychee trees can eventually reach 30 to 50-feet in height with a 30 to 50-foot spread but will reach about 30 feet tall 30-years after planting in a landscape creating a wonderful shade, framing, or specimen tree." (Introduction, and Description section 'Spread: 30 to 50 feet')
+  - lychee invasiveStatus
+    - "UF/IFAS Invasive Assessment Status: not considered a problem species at this time, may be recommended (North, Central, South)" (General Information list)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-2019-tropical-fruit-alternatives-to-citrus`
@@ -4155,10 +4624,14 @@ Crane, Jonathan H.; Balerdi, Carlos F.; Orfanedes, Michael S. (2019). *Tropical 
 - Archived: <https://web.archive.org/web/20251220051123/https://edis.ifas.ufl.edu/publication/MG373>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - guava harvestSeason, verbatim: 'Season: August–October, February–March.' (UF/IFAS MG373 (HS812), 'Invasive Fruit Crops', Guava entry, PDF page 5)
-  - passion-fruit width, verbatim: 'Passion fruit/ ... vine 12–20+ ≤32 High June–Dec. Yes' (UF/IFAS MG373 (HS812), Table 1, row Passion fruit/maracuyá, column 'Rec. distance' (value 12–20+, in feet))
-  - passion-fruit yearsToFirstHarvest, verbatim: 'Vines begin to bear within 3–6 months of planting.' (UF/IFAS MG373 (HS812), 'Passion Fruit' entry, PDF page 4)
-  - passion-fruit harvestSeason, verbatim: 'Vines begin to bear within 3–6 months of planting. Season June–December.' (UF/IFAS MG373 (HS812), 'Passion Fruit' entry, PDF page 4)
+  - guava harvestSeason
+    - "Season: August–October, February–March." (UF/IFAS MG373 (HS812), 'Invasive Fruit Crops', Guava entry, PDF page 5)
+  - passion-fruit width
+    - "Passion fruit/ [...] vine 12–20+ ≤32 High June–Dec. Yes" (UF/IFAS MG373 (HS812), Table 1, row Passion fruit/maracuyá, column 'Rec. distance' (value 12–20+, in feet))
+  - passion-fruit yearsToFirstHarvest
+    - "Vines begin to bear within 3–6 months of planting." (UF/IFAS MG373 (HS812), 'Passion Fruit' entry, PDF page 4)
+  - passion-fruit harvestSeason
+    - "Vines begin to bear within 3–6 months of planting. Season June–December." (UF/IFAS MG373 (HS812), 'Passion Fruit' entry, PDF page 4)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-2020-coconut-palm-florida`
@@ -4169,11 +4642,16 @@ Broschat, Timothy K.; Crane, Jonathan H. (2020). *The Coconut Palm in Florida (H
 - Archived: <https://web.archive.org/web/20260921055128/https://www.growables.org/information/TropicalFruit/documents/CoconutPalm.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - coconut spacing, verbatim: 'Commercially, the trees are planted at spacings of 18–30 feet (5.5–9.1 m) apart.' (p. 3 of 6, section 'Planting and Spacing')
-  - coconut yearsToFirstHarvest, verbatim: 'The coconut palm starts fruiting 6–10 years after the seed germinates and reaches full production at 15–20 years of age.' (p. 2 of 6, section 'Production')
-  - coconut harvestSeason, verbatim: 'Harvesting of coconuts occurs throughout the year.' (p. 5 of 6, section 'Harvesting')
-  - coconut coldLimit, verbatim: 'Coconut palms will be injured and may be killed by temperatures below 32°F (0°C) and may show chilling injury symptoms of leaflet necrosis at temperatures as high as 40°F (5°C).' (p. 3 of 6, section 'Environmental Stresses', heading 'Cold Temperatures')
-  - coconut light, verbatim: 'Coconut palms require full sunlight and are tolerant to wind and to temporary flooding.' (p. 3 of 6, section 'Climate and Soils')
+  - coconut spacing
+    - "Commercially, the trees are planted at spacings of 18–30 feet (5.5–9.1 m) apart." (p. 3 of 6, section 'Planting and Spacing')
+  - coconut yearsToFirstHarvest
+    - "The coconut palm starts fruiting 6–10 years after the seed germinates and reaches full production at 15–20 years of age." (p. 2 of 6, section 'Production')
+  - coconut harvestSeason
+    - "Harvesting of coconuts occurs throughout the year." (p. 5 of 6, section 'Harvesting')
+  - coconut coldLimit
+    - "Coconut palms will be injured and may be killed by temperatures below 32°F (0°C) and may show chilling injury symptoms of leaflet necrosis at temperatures as high as 40°F (5°C)." (p. 3 of 6, section 'Environmental Stresses', heading 'Cold Temperatures')
+  - coconut light
+    - "Coconut palms require full sunlight and are tolerant to wind and to temporary flooding." (p. 3 of 6, section 'Climate and Soils')
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-2022-chayote`
@@ -4184,9 +4662,12 @@ Qiu, Yuheng; Liu, Guodong. (2022). *Chayote—A Potential Vegetable Crop for Flo
 - Archived: <https://web.archive.org/web/20260305141610/https://journals.flvc.org/edis/article/download/124902/136472>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - chayote height, verbatim: 'The stem can grow up to 50 feet (Lira Saade 2020); therefore, trellis support is recommended to help plant growth (Stephens 2018). [...] A trellis, usually 6 feet tall, which allows people to walk beneath for cultivation, should be placed near the plant for supporting the climbing vine (Stephens 201' ("Botanical Description" and "General Description" sections)
-  - chayote coldLimit, verbatim: 'Chayote can tolerate temperatures between 54°F to 104°F, but this frost-sensitive plant will develop unripe fruits and cannot survive at temperatures less than 54°F (Fern 2020).' ("Growing Conditions" section)
-  - chayote light, verbatim: 'Chayote can grow in full-sun and partially shaded conditions, and 12-hour day length is required for plant flowering (Fern 2020; Valenzuela 2020).' ("Growing Conditions" section)
+  - chayote height
+    - "The stem can grow up to 50 feet (Lira Saade 2020); therefore, trellis support is recommended to help plant growth (Stephens 2018). [...] A trellis, usually 6 feet tall, which allows people to walk beneath for cultivation, should be placed near the plant for supporting the climbing vine (Stephens 201" ("Botanical Description" and "General Description" sections)
+  - chayote coldLimit
+    - "Chayote can tolerate temperatures between 54°F to 104°F, but this frost-sensitive plant will develop unripe fruits and cannot survive at temperatures less than 54°F (Fern 2020)." ("Growing Conditions" section)
+  - chayote light
+    - "Chayote can grow in full-sun and partially shaded conditions, and 12-hour day length is required for plant flowering (Fern 2020; Valenzuela 2020)." ("Growing Conditions" section)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-2022-edible-ornamental-landscaping`
@@ -4197,11 +4678,20 @@ Marek, Amanda S.; Bailey, Mark T.; Hansen, Gail. (2022). *Edible Ornamental Land
 - Archived: <https://web.archive.org/web/20251226034238/https://edis.ifas.ufl.edu/publication/EP618>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - lemongrass spacing, verbatim: 'Lemongrass can serve as a living privacy fence, growing to approximately 6′ tall and 4′ wide, by planting them about 4′ apart, center-to-center, to allow proper airflow.' (“Landscaping with Lemongrass” section)
-  - lemongrass height, verbatim: 'Lemongrass can serve as a living privacy fence, growing to approximately 6′ tall and 4′ wide… [Table 1:] Lemongrass | Cymbopogon citratus | No | Leaves and stalks | Year-round | Partial–full sun | Average | 6′ × 4′ | 9–11 | Harvest when stalks are ~½″ thick, cutting at ground level.' (“Landscaping with Lemongrass” section and Table 1 (Height × width column))
-  - lemongrass width, verbatim: 'Lemongrass can serve as a living privacy fence, growing to approximately 6′ tall and 4′ wide… [Table 1 height×width:] 6′ × 4′' (“Landscaping with Lemongrass” section and Table 1 (Height × width column))
-  - lemongrass coldLimit, verbatim: 'It is best to plant lemongrass in spring or summer, allowing it to become fully established before dangerous winter freezes occur. [Table 1:] Hardiness zones: 9–11.' (Body text and Table 1 (“Hardiness zones” column))
-  - lemongrass light, verbatim: 'Consider planting lemongrass individually to showcase its cascading leaves, en masse, or as a large border plant in full-to-partial sun where you can enjoy the lemony scent. [Table 1 Light needs:] Partial–full sun.' (“Landscaping with Lemongrass” section and Table 1 (“Light needs” column))
+  - lemongrass spacing
+    - "Lemongrass can serve as a living privacy fence, growing to approximately 6′ tall and 4′ wide, by planting them about 4′ apart, center-to-center, to allow proper airflow." (“Landscaping with Lemongrass” section)
+  - lemongrass height
+    - "Lemongrass can serve as a living privacy fence, growing to approximately 6′ tall and 4′ wide" (“Landscaping with Lemongrass” section)
+    - "Lemongrass Cymbopogon citratus No Leaves and stalks Year-round Partial–full sun Average 6′ × 4′ 9–11 Harvest when stalks are ~½″ thick, cutting at ground level." (Table 1 (Height × width column))
+  - lemongrass width
+    - "Lemongrass can serve as a living privacy fence, growing to approximately 6′ tall and 4′ wide" (“Landscaping with Lemongrass” section)
+    - "Lemongrass Cymbopogon citratus No Leaves and stalks Year-round Partial–full sun Average 6′ × 4′ 9–11 Harvest when stalks are ~½″ thick, cutting at ground level." (Table 1 (Height × width column))
+  - lemongrass coldLimit
+    - "It is best to plant lemongrass in spring or summer, allowing it to become fully established before dangerous winter freezes occur." (Body text)
+    - "Lemongrass Cymbopogon citratus No Leaves and stalks Year-round Partial–full sun Average 6′ × 4′ 9–11 Harvest when stalks are ~½″ thick, cutting at ground level." (Table 1 (“Hardiness zones” column))
+  - lemongrass light
+    - "Consider planting lemongrass individually to showcase its cascading leaves, en masse, or as a large border plant in full-to-partial sun where you can enjoy the lemony scent." (“Landscaping with Lemongrass” section)
+    - "Lemongrass Cymbopogon citratus No Leaves and stalks Year-round Partial–full sun Average 6′ × 4′ 9–11 Harvest when stalks are ~½″ thick, cutting at ground level." (Table 1 (“Light needs” column))
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-2022-sunn-hemp-cover-crop-florida`
@@ -4211,7 +4701,8 @@ Wang, Qingren; Li, Yuncong; Klassen, Waldemar; Hanlon, Edward A. (2022). *Sunn H
 - DOI: [10.32473/edis-tr003-2015](https://doi.org/10.32473/edis-tr003-2015)
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - sunn-hemp coldLimit, verbatim: 'Growth may be slowed by cool weather, and the plant is susceptible to freezing injuries when the temperature is less than 28°F.' (Page 2, section 'Production and Harvest')
+  - sunn-hemp coldLimit
+    - "Growth may be slowed by cool weather, and the plant is susceptible to freezing injuries when the temperature is less than 28°F." (Page 2, section 'Production and Harvest')
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-2022-yacon`
@@ -4222,10 +4713,14 @@ Gutierrez Laredo, Sergio Marcelo; Chen, Jianjun; Liu, Guodong. (2022). *Yacon, a
 - Archived: <https://web.archive.org/web/20260713002731/https://ask.ifas.ufl.edu/publication/HS1435>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - yacon spacing, verbatim: 'rooted stem cuttings or plants propagated from corms can be planted in beds with 3- or 4-foot center-to-center spacing (Chqoue Delago et al. 2013) with 30–40 inches for plant spacing (Herman and Heller 1997).' (Section 'Yacon Cultivation')
-  - yacon daysToMaturity, verbatim: 'This crop takes approximately 180 days from planting to maturity in Florida.' (Section 'Brief Biology')
-  - yacon light, verbatim: 'the crop can reduce soil erosion and tolerate partial shade and, hence, is ideal for agroforestry systems (Hermann and Heller 1997).' (Section 'Summary')
-  - yacon invasiveStatus, verbatim: 'It is not listed as an invasive species.' (Introduction)
+  - yacon spacing
+    - "rooted stem cuttings or plants propagated from corms can be planted in beds with 3- or 4-foot center-to-center spacing (Chqoue Delago et al. 2013) with 30–40 inches for plant spacing (Herman and Heller 1997)." (Section 'Yacon Cultivation')
+  - yacon daysToMaturity
+    - "This crop takes approximately 180 days from planting to maturity in Florida." (Section 'Brief Biology')
+  - yacon light
+    - "the crop can reduce soil erosion and tolerate partial shade and, hence, is ideal for agroforestry systems (Hermann and Heller 1997)." (Section 'Summary')
+  - yacon invasiveStatus
+    - "It is not listed as an invasive species." (Introduction)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-2023-ginger-galangal-turmeric`
@@ -4236,7 +4731,8 @@ Fisher, Paul; Freyre, Rosanna; Gómez, Celina; Pearson, Brian; Sanchez-Jones, Ta
 - Archived: <https://web.archive.org/web/20260119183127/https://edis.ifas.ufl.edu/publication/EP638>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - turmeric daysToMaturity, verbatim: 'Ginger and turmeric rhizomes harvested approximately seven months after planting (i.e., winter harvest) are suitable for curing and selling in retail and as an ingredient for making preserves.' (Harvest Maturity section)
+  - turmeric daysToMaturity
+    - "Ginger and turmeric rhizomes harvested approximately seven months after planting (i.e., winter harvest) are suitable for curing and selling in retail and as an ingredient for making preserves." (Harvest Maturity section)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-2023-luffa-asian-vegetable-florida`
@@ -4247,9 +4743,12 @@ Liu, Guodong; Li, Yuncong; Migliaccio, Kati W. (2023). *Luffa: an Asian Vegetabl
 - Archived: <https://web.archive.org/web/20251126193620/https://edis.ifas.ufl.edu/publication/HS1285>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - luffa spacing, verbatim: 'For planting or transplanting, the distance between plants is usually 3 feet, and the distance between rows is 6 feet.' (UF/IFAS HS1285 (EDIS page), section 'Cultivation Method')
-  - luffa height, verbatim: 'Vertical trellises (Figure 11) of 6 feet in height are recommended because they substantially increase fruit yield (Davis 1994).' (UF/IFAS HS1285 (EDIS page), section 'Cultivation Method')
-  - luffa daysToMaturity, verbatim: 'The pollinated flowers develop cylindrical fruit (Figures 1 and 2), and only young, immature fruits, which require the hot growing season of about two to three months, can be harvested for consumption as a vegetable.' (UF/IFAS HS1285 (EDIS page), section 'Cultivation Method', paragraph on inflorescences)
+  - luffa spacing
+    - "For planting or transplanting, the distance between plants is usually 3 feet, and the distance between rows is 6 feet." (UF/IFAS HS1285 (EDIS page), section 'Cultivation Method')
+  - luffa height
+    - "Vertical trellises (Figure 11) of 6 feet in height are recommended because they substantially increase fruit yield (Davis 1994)." (UF/IFAS HS1285 (EDIS page), section 'Cultivation Method')
+  - luffa daysToMaturity
+    - "The pollinated flowers develop cylindrical fruit (Figures 1 and 2), and only young, immature fruits, which require the hot growing season of about two to three months, can be harvested for consumption as a vegetable." (UF/IFAS HS1285 (EDIS page), section 'Cultivation Method', paragraph on inflorescences)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-2023-passiflora-edulis-fps456`
@@ -4260,8 +4759,10 @@ Gilman, Edward F.; Klein, Ryan W.; Hansen, Gail. (2023). *Passiflora edulis Pass
 - Archived: <https://web.archive.org/web/20260209131333/https://edis.ifas.ufl.edu/publication/FP456>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - passion-fruit coldLimit, verbatim: 'USDA hardiness zones: 9B through 11' (UF/IFAS FPS456, 'General Information' list, PDF page 2)
-  - passion-fruit light, verbatim: 'This plant does require a position in the landscape that receives full sun for best flowering and fruit production.' (UF/IFAS FPS456, 'Use and Management', PDF page 3)
+  - passion-fruit coldLimit
+    - "USDA hardiness zones: 9B through 11" (UF/IFAS FPS456, 'General Information' list, PDF page 2)
+  - passion-fruit light
+    - "This plant does require a position in the landscape that receives full sun for best flowering and fruit production." (UF/IFAS FPS456, 'Use and Management', PDF page 3)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-2024-jujube-florida`
@@ -4272,8 +4773,10 @@ Folta, Kevin M.; Huff, Dustin; Sarkhosh, Ali. (2024). *Jujube as a Florida Fruit
 - Archived: <https://web.archive.org/web/20250906132503/https://edis.ifas.ufl.edu/publication/HS1477>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - jujube harvestSeason, verbatim: 'Fruits are borne on new growth (Figure 14) and expand through the summer months, typically ripening in August and September in Florida.' ("Fruit Quality" section)
-  - jujube coldLimit, verbatim: 'Established trees are cold tolerant to -20°F (-29°C), yet they grow well in hot, humid conditions.' ("Growing Conditions" section)
+  - jujube harvestSeason
+    - "Fruits are borne on new growth (Figure 14) and expand through the summer months, typically ripening in August and September in Florida." ("Fruit Quality" section)
+  - jujube coldLimit
+    - "Established trees are cold tolerant to -20°F (-29°C), yet they grow well in hot, humid conditions." ("Growing Conditions" section)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-2024-long-squash-bottle-gourd`
@@ -4284,7 +4787,8 @@ Liu, Guodong; Li, Yuncong; Dinkins, David; Wells, Bonnie; Wang, Qingren; Cui, Yu
 - Archived: <https://web.archive.org/web/20260120213700/https://edis.ifas.ufl.edu/publication/HS1272>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - bottle-gourd height, verbatim: 'The vine has tendrils for climbing and can be up to 30 feet in length; hence, trellis support systems are needed for high yields of good quality (Figure 1).' (UF/IFAS HS1272 (EDIS page), second paragraph)
+  - bottle-gourd height
+    - "The vine has tendrils for climbing and can be up to 30 feet in length; hence, trellis support systems are needed for high yields of good quality (Figure 1)." (UF/IFAS HS1272 (EDIS page), second paragraph)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-2024-malabar-spinach`
@@ -4295,10 +4799,14 @@ Qiu, Yuheng; Liu, Guodong. (2024). *Florida Cultivation Guide for Malabar Spinac
 - Archived: <https://web.archive.org/web/20260119172001/https://edis.ifas.ufl.edu/publication/HS1371>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - malabar-spinach height, verbatim: 'Because Malabar spinach is a fast-growing vine that can grow six feet or even longer (Parkell et al. 2016), it is typically grown on a trellis or fence to help climbing and to facilitate periodic pruning by cutting off the fleshy leaves and overlong vines to keep desired shape (Cornell 2006, Singh e' ("Growing Conditions" section)
-  - malabar-spinach daysToMaturity, verbatim: 'Malabar spinach grows rapidly and reaches maturity around 70 days from seed in optimal conditions.' ("Harvest and Storage" section)
-  - malabar-spinach coldLimit, verbatim: 'Malabar spinach is extremely vulnerable to frost and should not be planted until the soil temperature reaches 65°F–75°F to reduce risk of frost damage, usually 2 to 3 weeks after last frost date (Cornell 2006). This spinach type grows as a perennial in USDA Plant Hardiness Zone 10 (south Florida) an' ("Propagation" section)
-  - malabar-spinach light, verbatim: 'While full-sun cultivation does not harm plants, partial shade may be beneficial by facilitating development of larger and more succulent leaves (Cornell 2006, Fern 2014).' ("Growing Conditions" section)
+  - malabar-spinach height
+    - "Because Malabar spinach is a fast-growing vine that can grow six feet or even longer (Parkell et al. 2016), it is typically grown on a trellis or fence to help climbing and to facilitate periodic pruning by cutting off the fleshy leaves and overlong vines to keep desired shape (Cornell 2006, Singh e" ("Growing Conditions" section)
+  - malabar-spinach daysToMaturity
+    - "Malabar spinach grows rapidly and reaches maturity around 70 days from seed in optimal conditions." ("Harvest and Storage" section)
+  - malabar-spinach coldLimit
+    - "Malabar spinach is extremely vulnerable to frost and should not be planted until the soil temperature reaches 65°F–75°F to reduce risk of frost damage, usually 2 to 3 weeks after last frost date (Cornell 2006). This spinach type grows as a perennial in USDA Plant Hardiness Zone 10 (south Florida) an" ("Propagation" section)
+  - malabar-spinach light
+    - "While full-sun cultivation does not harm plants, partial shade may be beneficial by facilitating development of larger and more succulent leaves (Cornell 2006, Fern 2014)." ("Growing Conditions" section)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-2024-vanilla-south-florida`
@@ -4309,11 +4817,16 @@ Wu, Xingbo; Moon, Pamela; Chambers, Alan; Crane, Jonathan. (2024). *Vanilla Grow
 - Archived: <https://web.archive.org/web/20260121203231/https://edis.ifas.ufl.edu/publication/HS1348>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - vanilla spacing, verbatim: 'Spacing recommendations are to plant vines 1–3 m (3–10 ft) apart with 2.5–3 m (8–10 ft) between rows.' (Section 'Production Methods')
-  - vanilla height, verbatim: 'Supports vary in height but are usually no more than 2 m (6 ft) tall to facilitate pollination once vines mature.' (Section 'Production Methods')
-  - vanilla width, verbatim: 'Spacing recommendations are to plant vines 1–3 m (3–10 ft) apart with 2.5–3 m (8–10 ft) between rows.' (Section 'Production Methods')
-  - vanilla coldLimit, verbatim: 'Vanilla is sensitive to chilling and can be killed by freezing temperatures.' (Section 'Environmental Conditions')
-  - vanilla invasiveStatus, verbatim: 'The species V. planifolia is naturalized (Figure 1), and V. pompona is also common among gardens in southern Florida.' (Section 'History')
+  - vanilla spacing
+    - "Spacing recommendations are to plant vines 1–3 m (3–10 ft) apart with 2.5–3 m (8–10 ft) between rows." (Section 'Production Methods')
+  - vanilla height
+    - "Supports vary in height but are usually no more than 2 m (6 ft) tall to facilitate pollination once vines mature." (Section 'Production Methods')
+  - vanilla width
+    - "Spacing recommendations are to plant vines 1–3 m (3–10 ft) apart with 2.5–3 m (8–10 ft) between rows." (Section 'Production Methods')
+  - vanilla coldLimit
+    - "Vanilla is sensitive to chilling and can be killed by freezing temperatures." (Section 'Environmental Conditions')
+  - vanilla invasiveStatus
+    - "The species V. planifolia is naturalized (Figure 1), and V. pompona is also common among gardens in southern Florida." (Section 'History')
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-2025-cashew-apple`
@@ -4324,11 +4837,16 @@ Balerdi, Carlos F.; Maguire, Ian; McLaughlin, John; Crane, Jonathan H. (2025). *
 - Archived: <https://web.archive.org/web/20260202042559/https://edis.ifas.ufl.edu/publication/HS377>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - cashew spacing, verbatim: 'Cashew trees in the home landscape should be planted 15 to 20 feet or more (4.6 to 6.1 m) away from buildings, electrical wires, or other trees.' (Spacing section)
-  - cashew height, verbatim: 'Under ideal tropical conditions, the cashew is an attractive, erect, 20- to 35-ft. evergreen tree with smooth brown bark and a dense, symmetrical, spreading canopy.' (Description section, 'Tree')
-  - cashew yearsToFirstHarvest, verbatim: 'Seedling trees usually begin fruit production after 3 to 4 years.' (Production (Crop Yields) section)
-  - cashew coldLimit, verbatim: 'The tree will not tolerate even short exposures to frost (freezing temperatures).' (Climate section)
-  - cashew light, verbatim: 'In general, cashew trees should be planted in full sun for best growth and fruit production.' (Site Selection section)
+  - cashew spacing
+    - "Cashew trees in the home landscape should be planted 15 to 20 feet or more (4.6 to 6.1 m) away from buildings, electrical wires, or other trees." (Spacing section)
+  - cashew height
+    - "Under ideal tropical conditions, the cashew is an attractive, erect, 20- to 35-ft. evergreen tree with smooth brown bark and a dense, symmetrical, spreading canopy." (Description section, 'Tree')
+  - cashew yearsToFirstHarvest
+    - "Seedling trees usually begin fruit production after 3 to 4 years." (Production (Crop Yields) section)
+  - cashew coldLimit
+    - "The tree will not tolerate even short exposures to frost (freezing temperatures)." (Climate section)
+  - cashew light
+    - "In general, cashew trees should be planted in full sun for best growth and fruit production." (Site Selection section)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-2025-pineapple-fps039`
@@ -4339,7 +4857,8 @@ Graves, Keighly; Wilber, Wendy; Wichman, Tom; Lewis, Claire; Hansen, Gail; Klein
 - Archived: <https://web.archive.org/web/20260106033537/https://edis.ifas.ufl.edu/publication/FP039>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - pineapple invasiveStatus, verbatim: 'Invasive potential: not known to be invasive' (UF/IFAS FPS039, 'General Information' list, PDF page 3)
+  - pineapple invasiveStatus
+    - "Invasive potential: not known to be invasive" (UF/IFAS FPS039, 'General Information' list, PDF page 3)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-2025-pineapple-home-landscape`
@@ -4350,12 +4869,18 @@ Crane, Jonathan H. (2025). *Pineapple Growing in the Florida Home Landscape (HS7
 - Archived: <https://web.archive.org/web/20251212041347/https://edis.ifas.ufl.edu/publication/MG055>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - pineapple spacing, verbatim: 'The distance between individual pineapple plants ranges from 12 to 36 inches (21–91 cm).' (UF/IFAS HS7 (MG055), section 'Spacing and Pruning', PDF page 3)
-  - pineapple height, verbatim: 'Adult plants may be 3 to 6 feet (0.9–1.8 m) high and wide.' (UF/IFAS HS7 (MG055), section 'Description', subsection 'Plant', PDF page 2)
-  - pineapple width, verbatim: 'Adult plants may be 3 to 6 feet (0.9–1.8 m) high and wide.' (UF/IFAS HS7 (MG055), section 'Description', subsection 'Plant', PDF page 2)
-  - pineapple yearsToFirstHarvest, verbatim: 'The time from planting to harvest of the fruit ranges from 18 to 36 months in subtropical climates.' (UF/IFAS HS7 (MG055), section 'Production (Crop Yields)', PDF page 3)
-  - pineapple coldLimit, verbatim: 'Pineapple plants do not tolerate freezing temperatures below 28°F (-2.0°C), and temperatures below 60°F (15.5°C) and above 90°F (32°C) may slow plant growth.' (UF/IFAS HS7 (MG055), section 'Cool and Freezing Temperatures', PDF page 3)
-  - pineapple light, verbatim: 'In general, pineapple plants should be planted in full sun for best growth and fruit production.' (UF/IFAS HS7 (MG055), section 'Spacing and Pruning', PDF page 3)
+  - pineapple spacing
+    - "The distance between individual pineapple plants ranges from 12 to 36 inches (21–91 cm)." (UF/IFAS HS7 (MG055), section 'Spacing and Pruning', PDF page 3)
+  - pineapple height
+    - "Adult plants may be 3 to 6 feet (0.9–1.8 m) high and wide." (UF/IFAS HS7 (MG055), section 'Description', subsection 'Plant', PDF page 2)
+  - pineapple width
+    - "Adult plants may be 3 to 6 feet (0.9–1.8 m) high and wide." (UF/IFAS HS7 (MG055), section 'Description', subsection 'Plant', PDF page 2)
+  - pineapple yearsToFirstHarvest
+    - "The time from planting to harvest of the fruit ranges from 18 to 36 months in subtropical climates." (UF/IFAS HS7 (MG055), section 'Production (Crop Yields)', PDF page 3)
+  - pineapple coldLimit
+    - "Pineapple plants do not tolerate freezing temperatures below 28°F (-2.0°C), and temperatures below 60°F (15.5°C) and above 90°F (32°C) may slow plant growth." (UF/IFAS HS7 (MG055), section 'Cool and Freezing Temperatures', PDF page 3)
+  - pineapple light
+    - "In general, pineapple plants should be planted in full sun for best growth and fruit production." (UF/IFAS HS7 (MG055), section 'Spacing and Pruning', PDF page 3)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-2026-assessment-passiflora-edulis`
@@ -4366,7 +4891,8 @@ UF/IFAS Center for Aquatic and Invasive Plants. (2026). *Passiflora edulis, UF/I
 - Archived: <https://web.archive.org/web/20260906000221/https://assessment.ifas.ufl.edu/assessments/passiflora-edulis/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - passion-fruit invasiveStatus, verbatim: 'Predicted to be invasive and not recommended by IFAS.' (UF/IFAS Assessment of Non-Native Plants in Florida's Natural Areas, Passiflora edulis page, 'Conclusions by Zone' (Centr)
+  - passion-fruit invasiveStatus
+    - "Predicted to be invasive and not recommended by IFAS." (UF/IFAS Assessment of Non-Native Plants in Florida's Natural Areas, Passiflora edulis page, 'Conclusions by Zone' (Centr))
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-2026-bitter-melon`
@@ -4377,8 +4903,10 @@ Liu, Guodong; Wang, Qingren; Li, Yuncong; Dinkins, David; Wells, Bonnie; Cui, Yu
 - Archived: <https://web.archive.org/web/20261017212350/https://edis.ifas.ufl.edu/hs1271>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - bitter-melon spacing, verbatim: 'Distance between rows should be 5 to 6 feet and spacing between plants should be between 3 and 5 feet (Freeman et al. 2015).' ("Cultural Practices" section)
-  - bitter-melon daysToMaturity, verbatim: 'Fruit should be started harvesting approximately 50 days after seeding in north Florida. For central and south Florida, fruit can be harvested earlier after seeding.' ("Cultural Practices" section)
+  - bitter-melon spacing
+    - "Distance between rows should be 5 to 6 feet and spacing between plants should be between 3 and 5 feet (Freeman et al. 2015)." ("Cultural Practices" section)
+  - bitter-melon daysToMaturity
+    - "Fruit should be started harvesting approximately 50 days after seeding in north Florida. For central and south Florida, fruit can be harvested earlier after seeding." ("Cultural Practices" section)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-2026-root-crop-production`
@@ -4389,9 +4917,12 @@ Beuzelin, Julien M.; Dittmar, Peter J.; Desaeger, Johan; Zotarelli, Lincoln; Zha
 - Archived: <https://web.archive.org/web/20260308010405/https://journals.flvc.org/edis/article/view/134126>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - malanga spacing, verbatim: 'Distance between rows (in) 48 52 52 Distance between plants (ft) 2 1 1' (Table 5, 'Planting information for cassava, taro, and malanga', column Malanga (the last column), PDF page 2)
-  - malanga daysToMaturity, verbatim: 'it is typically planted in the spring because the crop requires 9–10 months to reach maturity and can be injured by frosts.' (Tropical Root Crops section, tannia paragraph, PDF page 3)
-  - malanga coldLimit, verbatim: 'it is typically planted in the spring because the crop requires 9–10 months to reach maturity and can be injured by frosts.' (Tropical Root Crops section, tannia paragraph, PDF page 3)
+  - malanga spacing
+    - "Distance between rows (in) 48 52 52 Distance between plants (ft) 2 1 1" (Table 5, 'Planting information for cassava, taro, and malanga', column Malanga (the last column), PDF page 2)
+  - malanga daysToMaturity
+    - "it is typically planted in the spring because the crop requires 9–10 months to reach maturity and can be injured by frosts." (Tropical Root Crops section, tannia paragraph, PDF page 3)
+  - malanga coldLimit
+    - "it is typically planted in the spring because the crop requires 9–10 months to reach maturity and can be injured by frosts." (Tropical Root Crops section, tannia paragraph, PDF page 3)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-gardening-solutions-roselle`
@@ -4402,8 +4933,10 @@ UF/IFAS Extension. (n.d.). *Roselle, Gardening Solutions*. University of Florida
 - Archived: <https://web.archive.org/web/20261008141806/https://gardeningsolutions.ifas.ufl.edu/plants/edibles/vegetables/roselle/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - roselle coldLimit, verbatim: 'It is only hardy in zones 9-10, and is damaged by frosts or freezes; plan your harvest before temperatures drop below 40° F.' (Section 'Planting and Care', paragraph on soil and hardiness)
-  - roselle light, verbatim: 'Be aware that this plant does not do well in the shade and needs plenty of sunlight to thrive.' (Section 'Planting and Care')
+  - roselle coldLimit
+    - "It is only hardy in zones 9-10, and is damaged by frosts or freezes; plan your harvest before temperatures drop below 40° F." (Section 'Planting and Care', paragraph on soil and hardiness)
+  - roselle light
+    - "Be aware that this plant does not do well in the shade and needs plenty of sunlight to thrive." (Section 'Planting and Care')
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-gardeningsolutions-culantro`
@@ -4414,7 +4947,8 @@ UF/IFAS Extension. (n.d.). *Culantro*. University of Florida, Institute of Food 
 - Archived: <https://web.archive.org/web/20260604114054/https://gardeningsolutions.ifas.ufl.edu/plants/edibles/vegetables/culantro/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - culantro light, verbatim: 'Contrary to most herbs and vegetables, culantro does best in a shady area. Shade also aides in keeping your plant from bolting, that is, producing its cream-colored flowers and going to seed.' (Section 'Planting and Care')
+  - culantro light
+    - "Contrary to most herbs and vegetables, culantro does best in a shady area. Shade also aides in keeping your plant from bolting, that is, producing its cream-colored flowers and going to seed." (Section 'Planting and Care')
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-gardeningsolutions-ginger`
@@ -4425,9 +4959,12 @@ University of Florida IFAS Extension, Gardening Solutions. (n.d.). *Ginger – G
 - Archived: <https://web.archive.org/web/20260509172730/https://gardeningsolutions.ifas.ufl.edu/plants/edibles/vegetables/ginger/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - ginger spacing, verbatim: 'Space pieces about 15 inches apart as the underground structure will expand over the course of the year.' (Planting and Care section)
-  - ginger daysToMaturity, verbatim: 'Ginger is considered a long-season crop and takes about eight to ten months to produce fully developed rhizomes.' (Planting and Care section)
-  - ginger light, verbatim: 'Edible ginger does best in partial shade. It produces well if it gets a couple hours of sunlight a day but will grow in full shade, too. More than a couple hours in the sun is too much; the plants will grow poorly and the leaves will turn brown at the tips.' (Planting and Care section)
+  - ginger spacing
+    - "Space pieces about 15 inches apart as the underground structure will expand over the course of the year." (Planting and Care section)
+  - ginger daysToMaturity
+    - "Ginger is considered a long-season crop and takes about eight to ten months to produce fully developed rhizomes." (Planting and Care section)
+  - ginger light
+    - "Edible ginger does best in partial shade. It produces well if it gets a couple hours of sunlight a day but will grow in full shade, too. More than a couple hours in the sun is too much; the plants will grow poorly and the leaves will turn brown at the tips." (Planting and Care section)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-gardeningsolutions-mulberry`
@@ -4438,7 +4975,8 @@ UF/IFAS Extension Gardening Solutions. (n.d.). *Mulberry (Gardening Solutions)*.
 - Archived: <https://web.archive.org/web/20260617022805/https://gardeningsolutions.ifas.ufl.edu/plants/edibles/fruits/mulberry/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - mulberry-black light, verbatim: 'These trees do best in full sun to light shade.' (UF/IFAS Gardening Solutions, Mulberry page, Planting and Care section)
+  - mulberry-black light
+    - "These trees do best in full sun to light shade." (UF/IFAS Gardening Solutions, Mulberry page, Planting and Care section)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-gardeningsolutions-turmeric`
@@ -4449,7 +4987,8 @@ University of Florida IFAS Extension, Gardening Solutions. (n.d.). *Turmeric –
 - Archived: <https://web.archive.org/web/20260606201455/https://gardeningsolutions.ifas.ufl.edu/plants/edibles/vegetables/turmeric/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - turmeric spacing, verbatim: 'Space them 15 inches in the row and 15 inches between the row.' (Planting Tips section)
+  - turmeric spacing
+    - "Space them 15 inches in the row and 15 inches between the row." (Planting Tips section)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-invasive-assessment-breadfruit`
@@ -4460,7 +4999,8 @@ UF/IFAS Invasive Plant Working Group, Center for Aquatic and Invasive Plants. (n
 - Archived: <https://web.archive.org/web/20261006070250/https://assessment.ifas.ufl.edu/assessments/artocarpus-altilis/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - breadfruit invasiveStatus, verbatim: 'Low Risk for invasion, therefore Not considered a problem species at this time. May be recommended by IFAS. Reassessed every 10 years.' (Conclusions by Zone, Central, North, South: 'Low Invasion Risk', predictive tool score -1, assessment dates 2014 and 202)
+  - breadfruit invasiveStatus
+    - "Low Risk for invasion, therefore Not considered a problem species at this time. May be recommended by IFAS. Reassessed every 10 years." (Conclusions by Zone, Central, North, South: 'Low Invasion Risk', predictive tool score -1, assessment dates 2014 and 202)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-invasive-assessment-jackfruit`
@@ -4471,7 +5011,8 @@ UF/IFAS Invasive Plant Working Group, Center for Aquatic and Invasive Plants. (n
 - Archived: <https://web.archive.org/web/20261006070250/https://assessment.ifas.ufl.edu/assessments/artocarpus-heterophyllus/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - jackfruit invasiveStatus, verbatim: 'Not considered a problem species at this time. May be recommended by IFAS. Reassessed every 10 years.' (Conclusions by Zone, Central, North, South: 'Not a problem species (un-documented)', assessment dates 2007 and 2018)
+  - jackfruit invasiveStatus
+    - "Not considered a problem species at this time. May be recommended by IFAS. Reassessed every 10 years." (Conclusions by Zone, Central, North, South: 'Not a problem species (un-documented)', assessment dates 2007 and 2018)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-pasco-2026-heat-tolerant-edibles-roselle`
@@ -4482,7 +5023,8 @@ Sirchia, Julia. (2026). *Heat-Tolerant Edibles for the Summer: Roselle*. UF/IFAS
 - Archived: <https://web.archive.org/web/20261017213914/https://blogs.ifas.ufl.edu/pascoco/2026/06/11/heat-tolerant-edibles-for-the-summer-home-garden/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - roselle width, verbatim: 'roselle can easily grow 4 to 7 feet tall and 3 to 5 feet wide.' (Introduction paragraph)
+  - roselle width
+    - "roselle can easily grow 4 to 7 feet tall and 3 to 5 feet wide." (Introduction paragraph)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `ufifas-santarosa-2025-sugarcane`
@@ -4493,8 +5035,10 @@ Busbee, Larry; Stevens, Sandy; Andrews, Frances; Criss, Josh. (2025). *Sugarcane
 - Archived: <https://web.archive.org/web/20251220030236/https://sfyl.ifas.ufl.edu/media/sfylifasufledu/santa-rosa/docs/pdfs/demo-garden-5/Sugarcane-final.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - sugarcane height, verbatim: 'Height: 3 to 12 feet Spread: 3 to 10 feet' (Plant data block under the introductory text, field 'Height')
-  - sugarcane width, verbatim: 'Height: 3 to 12 feet Spread: 3 to 10 feet' (Plant data block under the introductory text, field 'Spread')
+  - sugarcane height
+    - "Height: 3 to 12 feet Spread: 3 to 10 feet" (Plant data block under the introductory text, field 'Height')
+  - sugarcane width
+    - "Height: 3 to 12 feet Spread: 3 to 10 feet" (Plant data block under the introductory text, field 'Spread')
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `uga-2022-pomegranate-production`
@@ -4505,11 +5049,16 @@ MacLean, Dan; Martino, Karina G.; Scherm, Harald; Horton, Dan L. (2022). *Pomegr
 - Archived: <https://web.archive.org/web/20261017213255/https://fieldreport.caes.uga.edu/publications/C997/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - pomegranate spacing, verbatim: 'Traditional spacing for an orchard is 18′ x 18′ (134 trees/acre).' ("Orchard Establishment" section)
-  - pomegranate yearsToFirstHarvest, verbatim: 'The first harvest is in year three, but these fruit will tend to be small and late-maturing. The focus should be on tree growth as opposed to fruit production in these early years... Full commercial production begins occurring in years five or six.' ("Orchard Establishment" section)
-  - pomegranate harvestSeason, verbatim: 'Early cultivars will begin to ripen near the end of August, and will continue through to October or early November for the late-maturing cultivars.' ("Harvest Maturity" section)
-  - pomegranate coldLimit, verbatim: 'Most pomegranate cultivars are hardy down to 12 degrees F, with the hardier types surviving without damage down to 7 degrees F.' ("Climate" section)
-  - pomegranate light, verbatim: 'Pomegranates require at least six hours of direct sunlight a day in order to ensure good fruit color and productivity.' ("Soil and Site Selection" section)
+  - pomegranate spacing
+    - "Traditional spacing for an orchard is 18′ x 18′ (134 trees/acre)." ("Orchard Establishment" section)
+  - pomegranate yearsToFirstHarvest
+    - "The first harvest is in year three, but these fruit will tend to be small and late-maturing. The focus should be on tree growth as opposed to fruit production in these early years [...] Full commercial production begins occurring in years five or six." ("Orchard Establishment" section)
+  - pomegranate harvestSeason
+    - "Early cultivars will begin to ripen near the end of August, and will continue through to October or early November for the late-maturing cultivars." ("Harvest Maturity" section)
+  - pomegranate coldLimit
+    - "Most pomegranate cultivars are hardy down to 12 degrees F, with the hardier types surviving without damage down to 7 degrees F." ("Climate" section)
+  - pomegranate light
+    - "Pomegranates require at least six hours of direct sunlight a day in order to ensure good fruit color and productivity." ("Soil and Site Selection" section)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `uga-2024-corn-production-guide`
@@ -4520,8 +5069,10 @@ Tubbs, R. Scott. (2024). *2024 Corn Production Guide*. University of Georgia Coo
 - Archived: <https://web.archive.org/web/20261017212557/https://grains.caes.uga.edu/content/dam/caes-subsite/grains/docs/corn/2024-Corn-Production-Guide.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - corn-grain spacing, verbatim: 'Current plant population recommendations for irrigated corn in Georgia are between 28,000 to 36,000 plants per acre... In dryland cropping systems current plant population recommendations are between 18,000 and 20,000 plants per acre in sandy soils... Traditional row-spacings utilized in Georgia pro' (p. 6, 'Plant Population and Row Spacing' section; Table 4 (p. 8) converts these to within-row inches by row width)
-  - corn-grain daysToMaturity, verbatim: 'This table also provides growth stage, days after planting and estimated water use in inches per day for hybrids with a relative maturity of 115-119 days... Black layer (physiological maturity). 115-119 [days after planting]' (p. 20, Table 8 'Estimated Water Use of Corn in Georgia')
+  - corn-grain spacing
+    - "Current plant population recommendations for irrigated corn in Georgia are between 28,000 to 36,000 plants per acre [...] In dryland cropping systems current plant population recommendations are between 18,000 and 20,000 plants per acre in sandy soils [...] Traditional row-spacings utilized in Georgia pro" (p. 6, 'Plant Population and Row Spacing' section; Table 4 (p. 8) converts these to within-row inches by row width)
+  - corn-grain daysToMaturity
+    - "This table also provides growth stage, days after planting and estimated water use in inches per day for hybrids with a relative maturity of 115-119 days [...] Black layer (physiological maturity). 115-119 [days after planting]" (p. 20, Table 8 'Estimated Water Use of Corn in Georgia')
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `uga-2025-dorn-herbs-in-southern-gardens`
@@ -4532,7 +5083,8 @@ Dorn, Sheri. (2025). *Herbs in Southern Gardens (Bulletin 1170)*. University of 
 - Archived: <https://web.archive.org/web/20251108200934/https://fieldreport.caes.uga.edu/publications/B1170/herbs-in-southern-gardens/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - lemon-verbena spacing, verbatim: 'Lemon Verbena (p) Spring 3–4 ft Seed, cutting 3–5 ft Branching/woody Full sun, partial shade' (Table Herb Cultivation Recommendations, column Spacing, row Lemon Verbena (p))
+  - lemon-verbena spacing
+    - "Lemon Verbena (p) Spring 3–4 ft Seed, cutting 3–5 ft Branching/woody Full sun, partial shade" (Table Herb Cultivation Recommendations, column Spacing, row Lemon Verbena (p))
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `uga-2026-b992-minor-fruits-nuts-georgia`
@@ -4543,7 +5095,8 @@ Krewer, Gerard W.; Crocker, Thomas F.; Bertrand, Paul F.; Horton, Dan L. (2026).
 - Archived: <https://web.archive.org/web/20260712082442/https://fieldreport.caes.uga.edu/publications/B992/minor-fruits-and-nuts-in-georgia/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - mulberry-black harvestSeason, verbatim: 'The fruit are borne on current season’s growth and ripen in May in Georgia.' (UGA Cooperative Extension Bulletin 992, Minor Fruits and Nuts in Georgia, Mulberry section)
+  - mulberry-black harvestSeason
+    - "The fruit are borne on current season’s growth and ripen in May in Georgia." (UGA Cooperative Extension Bulletin 992, Minor Fruits and Nuts in Georgia, Mulberry section)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `uga-b577-planting-chart`
@@ -4567,8 +5120,10 @@ Wells, Lenny; Hudson, William G.; Brock, Jason H. (2024). *Pecan Trees for the H
 - Archived: <https://web.archive.org/web/20261017213545/https://extension.uga.edu/publications/detail.html?number=B1348&title=pecan-trees-for-the-home-or-backyard-orchard>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - pecan spacing, verbatim: 'Yard and home orchard trees should be spaced at least 60 to 80 feet apart so they will not crowd as they reach maturity and so thinning will not be required.' (UGA Bulletin 1348, "Location and Spacing" section)
-  - pecan harvestSeason, verbatim: '— “Carter” is an Alabama cultivar that produces a large nut and has an estimated harvest date of October 18. ... — “McMillian” is another low-input cultivar from Alabama that has been highly productive and consistent, with light scab damage on nuts. Its estimated harvest date is October 20.' (UGA Bulletin 1348, "Cultivars" section)
+  - pecan spacing
+    - "Yard and home orchard trees should be spaced at least 60 to 80 feet apart so they will not crowd as they reach maturity and so thinning will not be required." (UGA Bulletin 1348, "Location and Spacing" section)
+  - pecan harvestSeason
+    - "— “Carter” is an Alabama cultivar that produces a large nut and has an estimated harvest date of October 18. [...] — “McMillian” is another low-input cultivar from Alabama that has been highly productive and consistent, with light scab damage on nuts. Its estimated harvest date is October 20." (UGA Bulletin 1348, "Cultivars" section)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `uky-2017-kaiser-american-persimmon`
@@ -4579,9 +5134,12 @@ Kaiser, Cheryl; Ernst, Matt. (2017). *American Persimmon (CCD-CP-1)*. Center for
 - Archived: <https://web.archive.org/web/20251204222526/https://ccd.uky.edu/sites/default/files/2024-11/ccd-cp-001_american-persimmon.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - american-persimmon spacing, verbatim: 'A tree spacing of 20 feet between trees in the row and 27 feet between rows has worked well.' ("Site selection, planting, and maintenance" section, p. 2)
-  - american-persimmon yearsToFirstHarvest, verbatim: 'Persimmon trees propagated from seeds begin producing a crop in about four to nine years, while grafted trees can begin fruiting three years after planting.' ("Harvest and Storage" section, p. 2)
-  - american-persimmon light, verbatim: 'Persimmon is a very adaptable tree, surviving on everything from poor sites to river bottoms, and from partial shade to full sun. However, for best growth and fruit production, moist, well-drained loamy soils and sunny sites are best.' ("Site selection, planting, and maintenance" section, p. 2)
+  - american-persimmon spacing
+    - "A tree spacing of 20 feet between trees in the row and 27 feet between rows has worked well." ("Site selection, planting, and maintenance" section, p. 2)
+  - american-persimmon yearsToFirstHarvest
+    - "Persimmon trees propagated from seeds begin producing a crop in about four to nine years, while grafted trees can begin fruiting three years after planting." ("Harvest and Storage" section, p. 2)
+  - american-persimmon light
+    - "Persimmon is a very adaptable tree, surviving on everything from poor sites to river bottoms, and from partial shade to full sun. However, for best growth and fruit production, moist, well-drained loamy soils and sunny sites are best." ("Site selection, planting, and maintenance" section, p. 2)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `uky-2017-malabar-spinach`
@@ -4592,7 +5150,8 @@ Ernst, Matt. (2017). *Malabar Spinach*. Center for Crop Diversification, Univers
 - Archived: <https://web.archive.org/web/20261017212334/https://publications.mgcafe.uky.edu/sites/publications.ca.uky.edu/files/malabar.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - malabar-spinach spacing, verbatim: 'Malabar spinach may be direct seeded in rows spaced 1 foot apart, with seeds spaced 1 to 2 inches and thinned to 6 inches between plants.' ("Production considerations > Site selection and planting" section, p. 2)
+  - malabar-spinach spacing
+    - "Malabar spinach may be direct seeded in rows spaced 1 foot apart, with seeds spaced 1 to 2 inches and thinned to 6 inches between plants." ("Production considerations > Site selection and planting" section, p. 2)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `uky-2018-foxtail-millet`
@@ -4603,7 +5162,8 @@ Teutsch, Chris; Smith, Ray; Keene, Tom; Henning, Jimmy C. (2018). *Foxtail Mille
 - Archived: <https://web.archive.org/web/20261017221222/https://publications.mgcafe.uky.edu/sites/publications.ca.uky.edu/files/AGR233.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - foxtail-millet coldLimit, verbatim: 'Foxtail millet should be planted after there is no chance of frost and when the soil temperature has reached at least 65ºF. It is more sensitive to cold stress than sorghum.' (Page 1, planting paragraph)
+  - foxtail-millet coldLimit
+    - "Foxtail millet should be planted after there is no chance of frost and when the soil temperature has reached at least 65ºF. It is more sensitive to cold stress than sorghum." (Page 1, planting paragraph)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `umaine-extension-2008-wild-blueberries-bulletin-4263`
@@ -4614,7 +5174,8 @@ Fishman, Lisa; Hedstrom, Nellie. (2008). *Bulletin #4263, Vegetables and Fruits 
 - Archived: <https://web.archive.org/web/20260521012711/https://extension.umaine.edu/publications/4263e/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - harvest timing for lowbush-blueberry, verbatim: 'If possible, go to the fields and buy berries directly from growers during harvest season. Buy your supply when berries are at their peak, from July to mid-August' (Section ‘Selection’)
+  - harvest timing for lowbush-blueberry
+    - "If possible, go to the fields and buy berries directly from growers during harvest season. Buy your supply when berries are at their peak, from July to mid-August" (Section ‘Selection’)
 - **Caveat:** Published outside a peer-reviewed journal. Its dates are calibrated to the Down East wild blueberry barrens of Washington County, Maine, and this app places them at the same point in each garden's own frost-free season. Lowbush blueberry dates come from buying advice in a nutrition bulletin, read as the peak of the harvest season.
 
 #### `umass-extension-2008-cranberry-production-guide`
@@ -4624,7 +5185,8 @@ Averill, Anne; Caruso, Frank L.; DeMoranville, Carolyn J.; Jeranyama, Peter; LaF
 - URL: <http://scholarworks.umass.edu/cranberry_prod_guide/8>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - harvest timing for cranberry, verbatim: 'Harvesting typically begins around mid-September and continues through early November' (p. 3, fruit growth and development discussion ('The Cranberry Plant' chapter, before the 'Flowers' heading))
+  - harvest timing for cranberry
+    - "Harvesting typically begins around mid-September and continues through early November" (p. 3, fruit growth and development discussion ('The Cranberry Plant' chapter, before the 'Flowers' heading))
 - **Caveat:** Published outside a peer-reviewed journal. Its dates are calibrated to East Wareham in the cranberry-growing area of southeastern Massachusetts, and this app places them at the same point in each garden's own frost-free season.
 
 #### `umd-extension-2024-less-common-fruits`
@@ -4635,7 +5197,8 @@ Talabac, Miri. (2024). *Less Common Fruits for a Home Garden*. University of Mar
 - Archived: <https://web.archive.org/web/20260517021634/http://extension.umd.edu/resource/less-common-fruits-home-garden>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - harvest timing for elderberry, verbatim: 'Harvest is usually between mid-August and mid-September, depending on cultivar and location' (Elderberry section, ‘Harvesting’ subheading)
+  - harvest timing for elderberry
+    - "Harvest is usually between mid-August and mid-September, depending on cultivar and location" (Elderberry section, ‘Harvesting’ subheading)
 - **Caveat:** Published outside a peer-reviewed journal. Its dates are calibrated to Maryland, and this app places them at the same point in each garden's own frost-free season.
 
 #### `umn-2018-spring-frost-damage-on-soybean`
@@ -4646,7 +5209,8 @@ Potter, Bruce; Bongard, Phyllis; Naeve, Seth; Gunsolus, Jeff. (2018). *Spring fr
 - Archived: <https://web.archive.org/web/20261017213822/https://extension.umn.edu/agriculture/crop-production/soybean/spring-frost>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - soybean coldLimit, verbatim: 'To kill soybean tissue, temperatures usually need to be at or below 28 to 30 degrees Fahrenheit for several hours. However, an air temperature of 28 does not guarantee a soybean crop will freeze.' (Accordion 'Factors affecting survivability', 'Temperature')
+  - soybean coldLimit
+    - "To kill soybean tissue, temperatures usually need to be at or below 28 to 30 degrees Fahrenheit for several hours. However, an air temperature of 28 does not guarantee a soybean crop will freeze." (Accordion 'Factors affecting survivability', 'Temperature')
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `umn-2023-alfalfa-establishment-management-strategies`
@@ -4657,7 +5221,8 @@ Sheaffer, Craig; Wells, M. Samantha; Holen, Doug. (2023). *Alfalfa establishment
 - Archived: <https://web.archive.org/web/20260815223526/https://extension.umn.edu/planting-forages/alfalfa-establishment-management-strategies>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - alfalfa yearsToFirstHarvest, verbatim: 'Direct-seeded alfalfa should be harvested about 60 days following seeding and additional harvests taken before early September.' (Section 'Seeding alfalfa', accordion 'Weed control and companion crops with new seedings', paragraph 'Direct seeding wit)
+  - alfalfa yearsToFirstHarvest
+    - "Direct-seeded alfalfa should be harvested about 60 days following seeding and additional harvests taken before early September." (Section 'Seeding alfalfa', accordion 'Weed control and companion crops with new seedings', paragraph 'Direct seeding wit)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `umn-2026-short-stature-corn`
@@ -4668,7 +5233,8 @@ University of Minnesota Extension. (2026). *Changing the Architecture of the Mid
 - Archived: <https://web.archive.org/web/20260729154628/https://blog-crop-news.extension.umn.edu/2026/06/changing-architecture-of-midwest-rise.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - corn-grain height, verbatim: 'While traditional corn towers at 9 to 12 feet, new hybrids are keeping the canopy at 7 feet or less—without sacrificing the yields growers require.' (Minnesota Crop News blog post, June 27, 2026 (Cropcast episode summary with Dr. Jeff Coulter, UMN Extension Corn Special)
+  - corn-grain height
+    - "While traditional corn towers at 9 to 12 feet, new hybrids are keeping the canopy at 7 feet or less—without sacrificing the yields growers require." (Minnesota Crop News blog post, June 27, 2026 (Cropcast episode summary with Dr. Jeff Coulter, UMN Extension Corn Special))
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `umn-cpbt-jute-mallow`
@@ -4679,7 +5245,8 @@ Community Plant Breeding Team, University of Minnesota. (n.d.). *Jute Mallow: Co
 - Archived: <https://web.archive.org/web/20261017214047/https://cpbt.umn.edu/sites/cpbt.umn.edu/files/2025-03/Jute%20Mallow.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - jute-mallow light, verbatim: 'Full sun and fertile, well-draining soil' (Column 'Growing')
+  - jute-mallow light
+    - "Full sun and fertile, well-draining soil" (Column 'Growing')
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `umn-extension-2024-currants-gooseberries`
@@ -4690,9 +5257,12 @@ Wimmer, Madeline; Tepe, Emily S.; Hoover, Emily E. (2024). *Growing currants and
 - Archived: <https://web.archive.org/web/20261017211249/https://extension.umn.edu/garden-and-home/yard-and-garden/gardening-in-minnesota/growing-currants-and-gooseberries-in-the-home-garden>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - harvest timing for currant-red, verbatim: 'July, August: Harvest' (‘Care through the seasons’ checklist)
-  - harvest timing for currant-black, verbatim: 'July, August: Harvest' (‘Care through the seasons’ checklist)
-  - harvest timing for gooseberry, verbatim: 'July, August: Harvest' (‘Care through the seasons’ checklist)
+  - harvest timing for currant-red
+    - "July, August: Harvest" (‘Care through the seasons’ checklist)
+  - harvest timing for currant-black
+    - "July, August: Harvest" (‘Care through the seasons’ checklist)
+  - harvest timing for gooseberry
+    - "July, August: Harvest" (‘Care through the seasons’ checklist)
 - **Caveat:** Published outside a peer-reviewed journal. Its dates are calibrated to the Twin Cities area of Southern Minnesota, and this app places them at the same point in each garden's own frost-free season.
 
 #### `umn-extension-2024-horseradish`
@@ -4703,7 +5273,8 @@ University of Minnesota Extension. (2024). *Growing horseradish in home gardens*
 - Archived: <https://web.archive.org/web/20260604103515/https://extension.umn.edu/vegetables/growing-horseradish>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - harvest timing for horseradish, verbatim: 'Horseradish grows the most during late summer and early autumn. For this reason, delay fall harvest until late October or early November, or just before the ground freezes' ("Harvesting" section)
+  - harvest timing for horseradish
+    - "Horseradish grows the most during late summer and early autumn. For this reason, delay fall harvest until late October or early November, or just before the ground freezes" ("Harvesting" section)
 - **Caveat:** Published outside a peer-reviewed journal. Its dates are calibrated to Minnesota, represented by Minneapolis-St Paul, and this app places them at the same point in each garden's own frost-free season.
 
 #### `umn-extension-2024-kiwiberry`
@@ -4714,7 +5285,8 @@ Hoover, Emily; Luby, Jim; Guthrie, Bob; Tepe, Emily; Wannemuehler, Seth. (2024).
 - Archived: <https://web.archive.org/web/20260607162424/https://extension.umn.edu/fruit/kiwiberry>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - harvest timing for hardy-kiwi, verbatim: 'Late August to mid-October' (Table ‘Characteristics of kiwiberry species for Minnesota,’ row ‘Harvest date,’ column ‘A. arguta’)
+  - harvest timing for hardy-kiwi
+    - "Late August to mid-October" (Table ‘Characteristics of kiwiberry species for Minnesota,’ row ‘Harvest date,’ column ‘A. arguta’)
 - **Caveat:** Published outside a peer-reviewed journal. Its dates are calibrated to the Twin Cities area of Southern Minnesota, and this app places them at the same point in each garden's own frost-free season.
 
 #### `umn-extension-2024-sorrel`
@@ -4725,7 +5297,8 @@ University of Minnesota Extension. (2024). *Growing sorrel in home gardens*. Uni
 - Archived: <https://web.archive.org/web/20251110220244/https://extension.umn.edu/vegetables/growing-sorrel>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - harvest timing for sorrel, verbatim: 'Once the plants are established, you can harvest sorrel at any time from early spring until frost kills the growth' ("Harvest" section)
+  - harvest timing for sorrel
+    - "Once the plants are established, you can harvest sorrel at any time from early spring until frost kills the growth" ("Harvest" section)
 - **Caveat:** Published outside a peer-reviewed journal. Its dates are calibrated to Minnesota, and this app places them at the same point in each garden's own frost-free season.
 
 #### `umn-extension-2024-strawberries`
@@ -4736,7 +5309,8 @@ Hoover, Emily E.; Klodd, Annie; Tepe, Emily S.; Foulk, Doug. (2024). *Growing st
 - Archived: <https://web.archive.org/web/20260513161332/https://extension.umn.edu/fruit/growing-strawberries-home-garden>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - harvest timing for strawberry, verbatim: 'June-bearing strawberries produce a large, concentrated crop in mid-June to early July' (Section ‘Types of strawberries’ (Quick facts list))
+  - harvest timing for strawberry
+    - "June-bearing strawberries produce a large, concentrated crop in mid-June to early July" (Section ‘Types of strawberries’ (Quick facts list))
 - **Caveat:** Published outside a peer-reviewed journal. Its dates are calibrated to the Twin Cities area of Southern Minnesota, and this app places them at the same point in each garden's own frost-free season.
 
 #### `umn-extension-2026-asparagus`
@@ -4747,7 +5321,8 @@ University of Minnesota Extension. (2026). *Growing asparagus in home gardens*. 
 - Archived: <https://web.archive.org/web/20260615110752/https://extension.umn.edu/vegetables/growing-asparagus>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - harvest timing for asparagus, verbatim: 'The asparagus harvest season lasts about 6 to 8 weeks, from early May to late June in Minnesota' ("Harvest and storage > Harvest" section)
+  - harvest timing for asparagus
+    - "The asparagus harvest season lasts about 6 to 8 weeks, from early May to late June in Minnesota" ("Harvest and storage > Harvest" section)
 - **Caveat:** Published outside a peer-reviewed journal. Its dates are calibrated to Minnesota, represented by Minneapolis-St Paul, and this app places them at the same point in each garden's own frost-free season.
 
 #### `umn-extension-2026-blueberries`
@@ -4769,7 +5344,8 @@ Wimmer, Madeline. (2026). *Cold-climate grapes*. University of Minnesota Extensi
 - Archived: <https://web.archive.org/web/20261017211359/https://extension.umn.edu/fruit-and-vegetable-farming/cold-climate-grapes>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - harvest timing for grape, verbatim: 'In Minnesota, many varieties begin to grow in May, and the earliest-ripening varieties are harvested in mid-August, while later-ripening varieties may hang until mid-to-late October' (Section ‘Bud-break and harvest windows’)
+  - harvest timing for grape
+    - "In Minnesota, many varieties begin to grow in May, and the earliest-ripening varieties are harvested in mid-August, while later-ripening varieties may hang until mid-to-late October" (Section ‘Bud-break and harvest windows’)
 - **Caveat:** Published outside a peer-reviewed journal. Its dates are calibrated to the Twin Cities area of Southern Minnesota, and this app places them at the same point in each garden's own frost-free season.
 
 #### `umn-extension-2026-raspberries`
@@ -4791,7 +5367,8 @@ Lee, Jennifer. (2020). *Ground Cherries (Crow Wing County Master Gardener Volunt
 - Archived: <https://web.archive.org/web/20260316045139/https://crowwingmastergardeners.org/wp-content/uploads/2025/04/Plant-Guide-Ground-Cherries.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - ground-cherry coldLimit, verbatim: 'Indeterminate – Ground cherries continue to grow all season and continue producing fruit until killed by frost' (Plant Selection box, first bullet)
+  - ground-cherry coldLimit
+    - "Indeterminate – Ground cherries continue to grow all season and continue producing fruit until killed by frost" (Plant Selection box, first bullet)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `umn-extension-mackenzie-ground-cherries`
@@ -4802,7 +5379,8 @@ MacKenzie, Jill. (2024). *Growing tomatillos and ground cherries in home gardens
 - Archived: <https://web.archive.org/web/20260618070125/https://extension.umn.edu/vegetables/growing-tomatillos-and-ground-cherries>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - ground-cherry spacing, verbatim: 'Allow ground cherry plants 18 to 24 inches of space in all directions.' (Planting, Transplanting section)
+  - ground-cherry spacing
+    - "Allow ground cherry plants 18 to 24 inches of space in all directions." (Planting, Transplanting section)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `umn-extension-staple-vegetables-molokhia`
@@ -4813,8 +5391,10 @@ University of Minnesota Extension. (n.d.). *Growing staple vegetables from aroun
 - Archived: <https://web.archive.org/web/20261017214022/https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/growing-staple-vegetables-from-around-the-world-in-minnesota>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - jute-mallow spacing, verbatim: 'Row spacing: 30-36 inches. Within-row plant spacing: 2-3 inches for bunched greens, 6-12 inches for continual harvest.' (Section 'Growing guides', accordion 'Molokhia (Corchorus olitorius)', 'Planting tips for growing molokhia in Minnesota')
-  - jute-mallow daysToMaturity, verbatim: 'Days to harvest: 40-60 days for bunched greens. For continuous leaf harvest, start harvesting individually at 40 days and continue throughout the summer.' ('Planting tips for growing molokhia in Minnesota' list, item 'Days to harvest')
+  - jute-mallow spacing
+    - "Row spacing: 30-36 inches. Within-row plant spacing: 2-3 inches for bunched greens, 6-12 inches for continual harvest." (Section 'Growing guides', accordion 'Molokhia (Corchorus olitorius)', 'Planting tips for growing molokhia in Minnesota')
+  - jute-mallow daysToMaturity
+    - "Days to harvest: 40-60 days for bunched greens. For continuous leaf harvest, start harvesting individually at 40 days and continue throughout the summer." ('Planting tips for growing molokhia in Minnesota' list, item 'Days to harvest')
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `unh-extension-garlic-chives`
@@ -4825,11 +5405,16 @@ University of New Hampshire Extension. (n.d.). *How to grow garlic chives (Alliu
 - Archived: <https://web.archive.org/web/20260120053405/https://extension.unh.edu/resource/how-grow-garlic-chives-allium-tuberosum>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - garlic-chives spacing, verbatim: 'Sow lightly, and thin to 12 inches apart on all sides when seedlings are 2” tall.' (Planting paragraph (the Profile list on the same page also gives Plant Spacing: 12 inches and Row Spacing: 12 inches))
-  - garlic-chives height, verbatim: 'Plant Size: 18-24 inches tall; 12 inches wide' (Profile list, Plant Size line)
-  - garlic-chives width, verbatim: 'Plant Size: 18-24 inches tall; 12 inches wide' (Profile list, Plant Size line)
-  - garlic-chives coldLimit, verbatim: 'Hardy to USDA Zone 3.' (Planting paragraph)
-  - garlic-chives light, verbatim: 'Plant seeds in moist soil with good drainage, in full sun to part shade.' (Planting paragraph (the Profile list gives Sun: Full sun to part shade))
+  - garlic-chives spacing
+    - "Sow lightly, and thin to 12 inches apart on all sides when seedlings are 2” tall." (Planting paragraph (the Profile list on the same page also gives Plant Spacing: 12 inches and Row Spacing: 12 inches))
+  - garlic-chives height
+    - "Plant Size: 18-24 inches tall; 12 inches wide" (Profile list, Plant Size line)
+  - garlic-chives width
+    - "Plant Size: 18-24 inches tall; 12 inches wide" (Profile list, Plant Size line)
+  - garlic-chives coldLimit
+    - "Hardy to USDA Zone 3." (Planting paragraph)
+  - garlic-chives light
+    - "Plant seeds in moist soil with good drainage, in full sun to part shade." (Planting paragraph (the Profile list gives Sun: Full sun to part shade))
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `uog-2020-breadfruit-guam`
@@ -4840,7 +5425,8 @@ Bevacqua, Robert F.; Miller, Ross H. (2020). *Agroforestry on Guam: Breadfruit C
 - Archived: <https://web.archive.org/web/20250620094822/https://www.uog.edu/_resources/files/wptrc/Bread_Fruit_Final2.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - breadfruit spacing, verbatim: '‘Ma’afala’ is a relatively compact variety. A recommended spacing is 25 feet between trees in the rows and 50 feet between rows.' (p. 5 of 12, section 'Spacing' under Planting)
+  - breadfruit spacing
+    - "‘Ma’afala’ is a relatively compact variety. A recommended spacing is 25 feet between trees in the rows and 50 feet between rows." (p. 5 of 12, section 'Spacing' under Planting)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `uprm-2001-recao-culantro-publicacion-162`
@@ -4851,9 +5437,12 @@ Santiago Santos, Luis Reinaldo. (2001). *La producción de recao o culantro (Ery
 - Archived: <https://web.archive.org/web/20260415125100/https://www.uprm.edu/hortalizasygranosbasicos/wp-content/uploads/sites/330/2025/06/CONJUNTO-RECAO-162-copy.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - culantro spacing, verbatim: 'Entre las distancias de siembra recomendadas y más utilizadas por los agricultores, se encuentran: 6" x 6" (6 pulgadas entre hilera x 6 pulgadas entre plantas), 5" x 5", 6"x 3" y 6" x 2".' (Section 'Siembra', PDF page 25 (printed page 18))
-  - culantro daysToMaturity, verbatim: 'El recao tarda de tres a cuatro meses desde la siembra hasta la primera cosecha.' (Section 'Ciclo de cultivo vegetativo del recao', PDF page 16)
-  - culantro harvestSeason, verbatim: 'Al cabo de dos meses, la planta ha crecido de nuevo, dando paso a nuevas cosechas ... La mejor época de siembra es de octubre a abril, cuando las temperaturas son frescas, aunque se puede sembrar durante todo el año.' (Sections 'Ciclo de cultivo vegetativo del recao' (PDF page 16) and 'Siembra' (PDF page 25))
+  - culantro spacing
+    - "Entre las distancias de siembra recomendadas y más utilizadas por los agricultores, se encuentran: 6" x 6" (6 pulgadas entre hilera x 6 pulgadas entre plantas), 5" x 5", 6"x 3" y 6" x 2"." (Section 'Siembra', PDF page 25 (printed page 18))
+  - culantro daysToMaturity
+    - "El recao tarda de tres a cuatro meses desde la siembra hasta la primera cosecha." (Section 'Ciclo de cultivo vegetativo del recao', PDF page 16)
+  - culantro harvestSeason
+    - "Al cabo de dos meses, la planta ha crecido de nuevo, dando paso a nuevas cosechas [...] La mejor época de siembra es de octubre a abril, cuando las temperaturas son frescas, aunque se puede sembrar durante todo el año." (Sections 'Ciclo de cultivo vegetativo del recao' (PDF page 16) and 'Siembra' (PDF page 25))
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `usask-gardening-haskaps`
@@ -4864,7 +5453,8 @@ University of Saskatchewan, College of Agriculture and Bioresources. (n.d.). *Ha
 - Archived: <https://web.archive.org/web/20260618072933/https://gardening.usask.ca/gardening-advice/gardenline-nested-pages/food-plant-pages/fruit/haskap.php>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - haskap light, verbatim: 'Haskaps do best full sun to thrive. They can grow in part sun, but you will get less fruit. They are not suited to part shade or very shady conditions.' (USask Gardening (Gardenline), Haskaps page, Planting haskaps tab, Site selection)
+  - haskap light
+    - "Haskaps do best full sun to thrive. They can grow in part sun, but you will get less fruit. They are not suited to part shade or very shady conditions." (USask Gardening (Gardenline), Haskaps page, Planting haskaps tab, Site selection)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `usda-1948-vanilla-culture-puerto-rico`
@@ -4874,9 +5464,12 @@ Childers, Norman F. (1948). *Vanilla Culture in Puerto Rico (Circular No. 28, Fe
 - URL: <https://archive.org/details/CAT31289489>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - vanilla yearsToFirstHarvest, verbatim: 'They usually begin fruiting the third year after planting and continue fruiting for the next 3 to 5 years before dying.' (p. 38 (PDF p. 42 of 100), paragraph after Figure 26)
-  - vanilla harvestSeason, verbatim: 'The harvesting season in Puerto Rico usually begins in September and continues to the following June, the bulk of the crop being harvested in December to March, inclusive, as shown in table 7.' (p. 52 (PDF p. 56 of 100), section 'HARVESTING')
-  - vanilla light, verbatim: 'Vanilla appears to grow and fruit best under shade admitting from one-third to one-half full sunlight.' (p. 76 (PDF p. 82 of 100), RECOMMENDATIONS, item 4)
+  - vanilla yearsToFirstHarvest
+    - "They usually begin fruiting the third year after planting and continue fruiting for the next 3 to 5 years before dying." (p. 38 (PDF p. 42 of 100), paragraph after Figure 26)
+  - vanilla harvestSeason
+    - "The harvesting season in Puerto Rico usually begins in September and continues to the following June, the bulk of the crop being harvested in December to March, inclusive, as shown in table 7." (p. 52 (PDF p. 56 of 100), section 'HARVESTING')
+  - vanilla light
+    - "Vanilla appears to grow and fruit best under shade admitting from one-third to one-half full sunlight." (p. 76 (PDF p. 82 of 100), RECOMMENDATIONS, item 4)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `usda-nrcs-2000-plant-guide-echinacea-purpurea`
@@ -4887,7 +5480,8 @@ Stevens, Michelle. (2000). *Eastern purple coneflower, Echinacea purpurea (L.) M
 - Archived: <https://web.archive.org/web/20261017220837/https://plants.usda.gov/DocumentLibrary/plantguide/pdf/pg_ecpu.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - echinacea spacing, verbatim: 'In late spring or early summer, the hardy seedlings, now with a four-to-six inch root system, may be transplanted into the field or garden one or two feet apart.' (Section 'Seed Propagation', page 2 of the Plant Guide)
+  - echinacea spacing
+    - "In late spring or early summer, the hardy seedlings, now with a four-to-six inch root system, may be transplanted into the field or garden one or two feet apart." (Section 'Seed Propagation', page 2 of the Plant Guide)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `usda-nrcs-2006-plant-fact-sheet-alfalfa`
@@ -4898,7 +5492,8 @@ USDA NRCS Plant Materials Program. (2006). *Plant Fact Sheet: Alfalfa, Medicago 
 - Archived: <https://web.archive.org/web/20260609044556/https://plants.usda.gov/DocumentLibrary/factsheet/pdf/fs_mesa.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - alfalfa height, verbatim: 'Alfalfa’s stems are erect and grow from a woody crown to about 2 to 3 feet tall.' (p. 1, 'Description' section)
+  - alfalfa height
+    - "Alfalfa’s stems are erect and grow from a woody crown to about 2 to 3 feet tall." (p. 1, 'Description' section)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `usda-nrcs-florida-fruit-trees-fact-sheet-6`
@@ -4908,9 +5503,12 @@ USDA NRCS Brooksville Plant Materials Center. (n.d.). *Florida Plant Materials F
 - URL: <https://www.nrcs.usda.gov/plantmaterials/flpmctn14135.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - breadfruit height, verbatim: 'Top at 10 ft (3 m) to encourage lateral branches; annually as needed to 16-25 ft (4-8 m); unpruned to 40-50 ft (12-15 m)' (p. 2 of 6, table, row 'Breadfruit, Pana', column 'Pruning')
-  - breadfruit yearsToFirstHarvest, verbatim: 'Moderate to Moderately slow; vegetative or grafted trees- 2-4 yr; trees from seed 5-10 yr' (p. 2 of 6, table, row 'Breadfruit, Pana', column 'Growth Rate/Time to First Harvest')
-  - breadfruit coldLimit, verbatim: 'Killed <40 F (4.4 C)' (p. 2 of 6, table, row 'Breadfruit, Pana', column 'Min. Temp.')
+  - breadfruit height
+    - "Top at 10 ft (3 m) to encourage lateral branches; annually as needed to 16-25 ft (4-8 m); unpruned to 40-50 ft (12-15 m)" (p. 2 of 6, table, row 'Breadfruit, Pana', column 'Pruning')
+  - breadfruit yearsToFirstHarvest
+    - "Moderate to Moderately slow; vegetative or grafted trees- 2-4 yr; trees from seed 5-10 yr" (p. 2 of 6, table, row 'Breadfruit, Pana', column 'Growth Rate/Time to First Harvest')
+  - breadfruit coldLimit
+    - "Killed <40 F (4.4 C)" (p. 2 of 6, table, row 'Breadfruit, Pana', column 'Min. Temp.')
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `usda-nrcs-hurteau-black-walnut-plant-guide`
@@ -4921,8 +5519,10 @@ Hurteau, Matthew D. (n.d.). *Plant Guide: Black Walnut (Juglans nigra L.)*. USDA
 - Archived: <https://web.archive.org/web/20261017213318/https://plants.sc.egov.usda.gov/DocumentLibrary/plantguide/pdf/cs_juni.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - black-walnut height, verbatim: 'Black walnut is usually a medium sized tree ranging from 70-90 feet tall and 2-3 feet in diameter at breast height. However, black walnut can reach 150 feet tall and 8 feet in diameter at breast height.' (USDA NRCS Plant Guide (Juglans nigra), p. 1, "Description - General")
-  - black-walnut light, verbatim: 'Black walnut prefers full sun.' (USDA NRCS Plant Guide (Juglans nigra), p. 1, "Adaptation" section)
+  - black-walnut height
+    - "Black walnut is usually a medium sized tree ranging from 70-90 feet tall and 2-3 feet in diameter at breast height. However, black walnut can reach 150 feet tall and 8 feet in diameter at breast height." (USDA NRCS Plant Guide (Juglans nigra), p. 1, "Description - General")
+  - black-walnut light
+    - "Black walnut prefers full sun." (USDA NRCS Plant Guide (Juglans nigra), p. 1, "Adaptation" section)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `usda-nrcs-pigeonpea-plant-guide`
@@ -4933,11 +5533,18 @@ USDA NRCS Cape May Plant Materials Center. (n.d.). *Plant Guide: Pigeonpea, Caja
 - Archived: <https://web.archive.org/web/20260929154052/https://plants.sc.egov.usda.gov/DocumentLibrary/plantguide/pdf/pg_caca27.pdf>
 - Verification: URL-verified | Access: public-domain
 - Backs:
-  - verbatim: 'It is a shrub that can grow to 12 ft tall, but usually only reaches 3 to 6 ft'
-  - verbatim: 'Sow seeds 1.5 inches deep on 1 to 3 foot rows at 8 to 10 lb per acre'
-  - verbatim: 'C. cajan requires 65-80 days to flower and 50-75 additional days to create mature seeds (Mullen et al., 2003), however many varieties have been developed to flower earlier'
-  - verbatim: 'C. cajan grows best under hot conditions (65-86F)'; 'Frost will defoliate the plant'; 'Under good management, the plant can live up to five years'
-  - pigeon-pea photoperiod, verbatim: 'There is a day-neutral cultivar from Florida called ‘Amarillo’ that can be sown and harvested throughout the year (Duke, 1983).' (page 3), why the row carries no day-length gate
+  - pigeon-pea height
+    - "It is a shrub that can grow to 12 ft tall, but usually only reaches 3 to 6 ft"
+  - pigeon-pea spacing
+    - "Sow seeds 1.5 inches deep on 1 to 3 foot rows at 8 to 10 lb per acre"
+  - pigeon-pea daysToMaturity
+    - "C. cajan requires 65-80 days to flower and 50-75 additional days to create mature seeds (Mullen et al., 2003), however many varieties have been developed to flower earlier"
+  - pigeon-pea temperature, frost and lifespan
+    - "C. cajan grows best under hot conditions (65-86F)"
+    - "Frost will defoliate the plant"
+    - "Under good management, the plant can live up to five years"
+  - pigeon-pea photoperiod, why the row carries no day-length gate
+    - "There is a day-neutral cultivar from Florida called ‘Amarillo’ that can be sown and harvested throughout the year (Duke, 1983)." (page 3)
 - **Caveat:** A conservation-planting guide compiled from secondary sources (Cook et al. 2005, Mullen et al. 2003, Phatak et al. 1993, Duke 1983), and it reports no trial of its own.
 
 #### `usda-nrcs-plants-glycine-max-characteristics`
@@ -4948,7 +5555,8 @@ USDA Natural Resources Conservation Service. (n.d.). *PLANTS Database: Glycine m
 - Archived: <https://web.archive.org/web/20261017213704/https://plants.usda.gov/plant-profile/GLMA4/characteristics>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - soybean height, verbatim: 'Height, Mature (feet) | 3.0' (Plant Characteristics, 'Morphology/Physiology', field 'Height, Mature (feet)')
+  - soybean height
+    - "Height, Mature (feet) 3.0" (Plant Characteristics, 'Morphology/Physiology', field 'Height, Mature (feet)')
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `usda-plants-black-pepper`
@@ -4959,7 +5567,8 @@ USDA NRCS National Plant Data Team. (n.d.). *PLANTS Profile for Piper nigrum L. 
 - Archived: <https://web.archive.org/web/20250929201215/https://plants.usda.gov/plant-profile/PINI3>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - black-pepper invasiveStatus, verbatim: '"HasNoxiousStatuses":false,"NoxiousStatuses":null' (USDA PLANTS API profile for symbol PINI3 (Piper nigrum), field HasNoxiousStatuses, https://plantsservices.sc.egov.usda.g)
+  - black-pepper invasiveStatus
+    - ""HasNoxiousStatuses":false,"NoxiousStatuses":null" (USDA PLANTS API profile for symbol PINI3 (Piper nigrum), field HasNoxiousStatuses, https://plantsservices.sc.egov.usda.g)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `usfs-1989-hawaii-forest-trees-breadfruit`
@@ -4970,7 +5579,8 @@ Little, Elbert L., Jr.; Skolmen, Roger G. (1989). *Common Forest Trees of Hawaii
 - Archived: <https://web.archive.org/web/20260123061035/https://www.ctahr.hawaii.edu/gsp/doc/Forestry/Little_Skolmen_CFT/CFT_Artocarpus_altilis.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - breadfruit harvestSeason, verbatim: 'Fruits mature mainly from June to August in Hawaii.' (p. 1 of 3, description of the fruit)
+  - breadfruit harvestSeason
+    - "Fruits mature mainly from June to August in Hawaii." (p. 1 of 3, description of the fruit)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `usfs-1993-sullivan-feis-morus-rubra`
@@ -4981,7 +5591,8 @@ Sullivan, Janet. (1993). *Morus rubra, red mulberry (Fire Effects Information Sy
 - Archived: <https://web.archive.org/web/20260417063043/https://research.fs.usda.gov/feis/species-reviews/morrub>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - mulberry-red light, verbatim: 'Red mulberry grows best in the open, but is somewhat tolerant of shade' (USDA Forest Service Fire Effects Information System species review, section Successional Status)
+  - mulberry-red light
+    - "Red mulberry grows best in the open, but is somewhat tolerant of shade" (USDA Forest Service Fire Effects Information System species review, section Successional Status)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `usfs-2008-invasiveness-ranking-non-native-plants-alaska`
@@ -4992,7 +5603,8 @@ Carlson, Matthew L.; Lapina, Irina V.; Shephard, Michael; Conn, Jeffery S.; Dens
 - Archived: <https://web.archive.org/web/20250916005647/https://accs.uaa.alaska.edu/wp-content/uploads/Invasiveness_Ranking_System_for_Non-Native_Plants_Alaska.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - alfalfa invasiveStatus, verbatim: 'Medicago sativa ssp. sativa Alfalfa 13(30) 17 16 7 53(90) 59 Yes Yes Yes' (Appendix A (p. A-2), table of invasiveness ranks, row 'Medicago sativa ssp. sativa', column 'Invasiveness'. The same tab)
+  - alfalfa invasiveStatus
+    - "Medicago sativa ssp. sativa Alfalfa 13(30) 17 16 7 53(90) 59 Yes Yes Yes" (Appendix A (p. A-2), table of invasiveness ranks, row 'Medicago sativa ssp. sativa', column 'Invasiveness'. The same tab)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `usfs-2008-seed-manual-hippophae-rhamnoides`
@@ -5003,7 +5615,8 @@ Busing, Richard T.; Slabaugh, Paul E. (2008). *Hippophae rhamnoides L.: common s
 - Archived: <https://web.archive.org/web/20260403045946/https://research.fs.usda.gov/treesearch/32649>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - sea-buckthorn harvestSeason, verbatim: 'ripen in September or October (Hoag 1965; Hottes 1952) and frequently persist on the shrubs until the following March.' ("Flowering and fruiting" paragraph, p. 588 of the Woody Plant Seed Manual)
+  - sea-buckthorn harvestSeason
+    - "ripen in September or October (Hoag 1965; Hottes 1952) and frequently persist on the shrubs until the following March." ("Flowering and fruiting" paragraph, p. 588 of the Woody Plant Seed Manual)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `usfs-2014-ramps`
@@ -5014,7 +5627,8 @@ Chamberlain, Jim; Beegle, Dana; Lajeunesse Connette, Katie. (2014). *Forest Farm
 - Archived: <https://web.archive.org/web/20260703123027/https://www.fs.usda.gov/nac/assets/documents/agroforestrynotes/an47ff08.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - harvest timing for ramps, verbatim: 'The timing of harvest may differ geographically. For example, in southern Appalachia the optimal time to harvest is usually about the third week in April, whereas in cooler northern climates harvesting may be best a bit later' (p. 4, "Harvesting & Processing" section)
+  - harvest timing for ramps
+    - "The timing of harvest may differ geographically. For example, in southern Appalachia the optimal time to harvest is usually about the third week in April, whereas in cooler northern climates harvesting may be best a bit later" (p. 4, "Harvesting & Processing" section)
 - **Caveat:** Published outside a peer-reviewed journal. Its dates are calibrated to Southern Appalachia, represented by Asheville, NC, and this app places them at the same point in each garden's own frost-free season. The ramps harvest is the stated best week, since ramps are dug once in spring.
 
 #### `usu-2015-goji-in-the-garden`
@@ -5025,13 +5639,20 @@ Maughan, Tiffany; Black, Brent. (2015). *How to Grow Goji Berries In Your Garden
 - Archived: <https://web.archive.org/web/20260405235117/https://extension.usu.edu/yardandgarden/research/goji-in-the-garden>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - goji spacing, verbatim: 'If establishing multiple rows, leave 2 to 4 feet between plants within a row and 6 to 8 feet between rows.' ("Spacing" section)
-  - goji height, verbatim: 'When pruned, plants are typically 3 to 6 feet tall but if left without cultivation they can reach 12 feet.' ("Summary" section)
-  - goji width, verbatim: 'make sure there is enough room in all directions for the plant to reach full size and to allow for easy harvest (about 4 to 5 feet in all directions)' ("Spacing" section)
-  - goji yearsToFirstHarvest, verbatim: 'Both begin bearing 1 to 2 years after planting, although they will not reach full production for 3 to 5 years.' ("Recommended Goji Berry Cultivars" section)
-  - goji harvestSeason, verbatim: 'They will fruit from mid-summer to late fall.' ("How to Harvest and Use Goji Berries" section)
-  - goji coldLimit, verbatim: 'Goji are recommended for zones 4 to 7.' ("Summary" section)
-  - goji light, verbatim: 'Plant goji in a location with full sun (although some shade can be tolerated).' ("Site Selection" section)
+  - goji spacing
+    - "If establishing multiple rows, leave 2 to 4 feet between plants within a row and 6 to 8 feet between rows." ("Spacing" section)
+  - goji height
+    - "When pruned, plants are typically 3 to 6 feet tall but if left without cultivation they can reach 12 feet." ("Summary" section)
+  - goji width
+    - "make sure there is enough room in all directions for the plant to reach full size and to allow for easy harvest (about 4 to 5 feet in all directions)" ("Spacing" section)
+  - goji yearsToFirstHarvest
+    - "Both begin bearing 1 to 2 years after planting, although they will not reach full production for 3 to 5 years." ("Recommended Goji Berry Cultivars" section)
+  - goji harvestSeason
+    - "They will fruit from mid-summer to late fall." ("How to Harvest and Use Goji Berries" section)
+  - goji coldLimit
+    - "Goji are recommended for zones 4 to 7." ("Summary" section)
+  - goji light
+    - "Plant goji in a location with full sun (although some shade can be tolerated)." ("Site Selection" section)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `usu-2015-haskap-in-the-garden`
@@ -5042,10 +5663,14 @@ Lauritzen, Elisa; Maughan, Tiffany; Black, Brent. (2015). *Haskap in the Garden*
 - Archived: <https://web.archive.org/web/20260417145020/https://extension.usu.edu/yardandgarden/research/haskap-in-the-garden.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - haskap spacing, verbatim: 'For most cultivars, leaving 3 to 4 feet between plants within the row and 6 to 10 feet between rows is sufficient.' (Utah State University Extension, Haskap in the Garden, section Planting and Spacing, page 2)
-  - haskap height, verbatim: 'They can grow to be 6 feet high and wide and the form varies significantly, from low-growing to upright, depending on the variety.' (Utah State University Extension, Haskap in the Garden, section Haskap Plants, page 1)
-  - haskap width, verbatim: 'They can grow to be 6 feet high and wide and the form varies significantly, from low-growing to upright, depending on the variety.' (Utah State University Extension, Haskap in the Garden, section Haskap Plants, page 1)
-  - haskap harvestSeason, verbatim: 'Berries ripen in early to mid-June, usually just before strawberries begin producing.' (Utah State University Extension, Haskap in the Garden, section Haskap Plants, page 1)
+  - haskap spacing
+    - "For most cultivars, leaving 3 to 4 feet between plants within the row and 6 to 10 feet between rows is sufficient." (Utah State University Extension, Haskap in the Garden, section Planting and Spacing, page 2)
+  - haskap height
+    - "They can grow to be 6 feet high and wide and the form varies significantly, from low-growing to upright, depending on the variety." (Utah State University Extension, Haskap in the Garden, section Haskap Plants, page 1)
+  - haskap width
+    - "They can grow to be 6 feet high and wide and the form varies significantly, from low-growing to upright, depending on the variety." (Utah State University Extension, Haskap in the Garden, section Haskap Plants, page 1)
+  - haskap harvestSeason
+    - "Berries ripen in early to mid-June, usually just before strawberries begin producing." (Utah State University Extension, Haskap in the Garden, section Haskap Plants, page 1)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `usu-2020-english-lavender`
@@ -5056,11 +5681,16 @@ Crummitt, Keenen; Drost, Dan. (2020). *How to Grow English Lavender in Your Gard
 - Archived: <https://web.archive.org/web/20260909071347/https://extension.usu.edu/yardandgarden/research/english-lavender-in-the-garden>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - lavender spacing, verbatim: 'Space lavender plants 18-24 inches apart into light, well aerated, gravelly soil.' (“Planting and Spacing” section)
-  - lavender height, verbatim: 'Lavender grows about 1-2 feet tall and wide depending on variety and takes 3 years to reach full size.' (“Planting and Spacing” section)
-  - lavender width, verbatim: 'Lavender grows about 1-2 feet tall and wide depending on variety and takes 3 years to reach full size.' (“Planting and Spacing” section)
-  - lavender yearsToFirstHarvest, verbatim: 'During the first year, branches should be clipped to keep them from flowering and to encourage the development of lateral shoots.' (“How to Harvest and Store English Lavender” section)
-  - lavender light, verbatim: 'English Lavender (Lavandula angustifolias) thrives in full sun, well-drained soil with a pH of 6.5-7.5. Grow in full sun.' (Summary section)
+  - lavender spacing
+    - "Space lavender plants 18-24 inches apart into light, well aerated, gravelly soil." (“Planting and Spacing” section)
+  - lavender height
+    - "Lavender grows about 1-2 feet tall and wide depending on variety and takes 3 years to reach full size." (“Planting and Spacing” section)
+  - lavender width
+    - "Lavender grows about 1-2 feet tall and wide depending on variety and takes 3 years to reach full size." (“Planting and Spacing” section)
+  - lavender yearsToFirstHarvest
+    - "During the first year, branches should be clipped to keep them from flowering and to encourage the development of lateral shoots." (“How to Harvest and Store English Lavender” section)
+  - lavender light
+    - "English Lavender (Lavandula angustifolias) thrives in full sun, well-drained soil with a pH of 6.5-7.5. Grow in full sun." (Summary section)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `usu-2020-lemongrass`
@@ -5071,8 +5701,10 @@ Linse, Terra; Drost, Dan. (2020). *How to Grow Lemongrass in Your Garden*. Utah 
 - Archived: <https://web.archive.org/web/20260216232751/https://extension.usu.edu/yardandgarden/research/lemongrass-in-the-garden>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - lemongrass yearsToFirstHarvest, verbatim: 'Lemongrass grows slowly until the heat of summer arrives, then it increases in size dramatically. Typically plants will produce several harvestable stalks by the end of the summer.' (“Plants” section (Planting and Spacing))
-  - lemongrass harvestSeason, verbatim: 'In cooler areas of Utah, harvesting occurs at the end of the growing season just before the first fall frost. However, lemongrass can be harvested at any time, once the plant stalks have reached ½ inch thick.' (“How to Harvest and Store Lemongrass” section)
+  - lemongrass yearsToFirstHarvest
+    - "Lemongrass grows slowly until the heat of summer arrives, then it increases in size dramatically. Typically plants will produce several harvestable stalks by the end of the summer." (“Plants” section (Planting and Spacing))
+  - lemongrass harvestSeason
+    - "In cooler areas of Utah, harvesting occurs at the end of the growing season just before the first fall frost. However, lemongrass can be harvested at any time, once the plant stalks have reached ½ inch thick." (“How to Harvest and Store Lemongrass” section)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `usu-extension-2020-almonds-home-garden`
@@ -5083,12 +5715,18 @@ Roper, Teryl R.; Heflebower, Rick. (2020). *How to Grow Almonds in Your Garden*.
 - Archived: <https://web.archive.org/web/20260711173554/https://extension.usu.edu/yardandgarden/research/almonds-in-the-home-garden>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - almond spacing, verbatim: 'Almond trees grow quite large, and at maturity will occupy a space roughly 20 x 20 feet (10-12 foot radius from the trunk).' (USU Extension, "How to Grow Almonds in Your Garden", "Almond Tree Site Preparation" section)
-  - almond width, verbatim: 'Almond trees grow quite large, and at maturity will occupy a space roughly 20 x 20 feet (10-12 foot radius from the trunk).' (USU Extension, "How to Grow Almonds in Your Garden", "Almond Tree Site Preparation" section)
-  - almond yearsToFirstHarvest, verbatim: 'Almond trees, like all fruit trees, must mature before they will flower and produce nuts. Further, it is a desirable management practice to remove the flowers or immature fruit for the first 1 to 2 years after planting to allow the tree to grow without a crop. Don’t expect to harvest nuts for 4 to 6' (USU Extension, "Why Almond Trees Fail to Bear" > "Tree age" section)
-  - almond harvestSeason, verbatim: 'This is a premier cultivar in California. It blooms approximately the 3rd week in February in California’s central valley; matures at the end of August.' (USU Extension, "Almond Cultivar and Rootstock Selection" > "Nonpareil" section)
-  - almond coldLimit, verbatim: 'Temperatures below -10° F may damage the fruit buds during the winter, and temperatures below -20° F will damage the woody stems and branches of almond trees.' (USU Extension, "Why Almond Trees Fail to Bear" > "Winter injury" section)
-  - almond light, verbatim: 'Select a location that will receive full sun for at least ¾ of the day.' (USU Extension, "Almond Tree Site Preparation" section)
+  - almond spacing
+    - "Almond trees grow quite large, and at maturity will occupy a space roughly 20 x 20 feet (10-12 foot radius from the trunk)." (USU Extension, "How to Grow Almonds in Your Garden", "Almond Tree Site Preparation" section)
+  - almond width
+    - "Almond trees grow quite large, and at maturity will occupy a space roughly 20 x 20 feet (10-12 foot radius from the trunk)." (USU Extension, "How to Grow Almonds in Your Garden", "Almond Tree Site Preparation" section)
+  - almond yearsToFirstHarvest
+    - "Almond trees, like all fruit trees, must mature before they will flower and produce nuts. Further, it is a desirable management practice to remove the flowers or immature fruit for the first 1 to 2 years after planting to allow the tree to grow without a crop. Don’t expect to harvest nuts for 4 to 6" (USU Extension, "Why Almond Trees Fail to Bear" > "Tree age" section)
+  - almond harvestSeason
+    - "This is a premier cultivar in California. It blooms approximately the 3rd week in February in California’s central valley; matures at the end of August." (USU Extension, "Almond Cultivar and Rootstock Selection" > "Nonpareil" section)
+  - almond coldLimit
+    - "Temperatures below -10° F may damage the fruit buds during the winter, and temperatures below -20° F will damage the woody stems and branches of almond trees." (USU Extension, "Why Almond Trees Fail to Bear" > "Winter injury" section)
+  - almond light
+    - "Select a location that will receive full sun for at least ¾ of the day." (USU Extension, "Almond Tree Site Preparation" section)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `usu-extension-2020-watercress`
@@ -5099,7 +5737,8 @@ Kendrick, Trudy; Drost, Dan. (2020). *How to Grow Watercress in Your Garden (HG/
 - Archived: <https://web.archive.org/web/20260218053326/https://extension.usu.edu/yardandgarden/research/watercress-in-the-garden>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - harvest timing for watercress, verbatim: 'Harvest dime sized dark green leaves at any time during the year. ... Watercress can be harvested year round' ("How to Harvest and Store Watercress" section, p.2)
+  - harvest timing for watercress
+    - "Harvest dime sized dark green leaves at any time during the year. [...] Watercress can be harvested year round" ("How to Harvest and Store Watercress" section, p.2)
 - **Caveat:** Published outside a peer-reviewed journal. Its dates are calibrated to Utah, and this app places them at the same point in each garden's own frost-free season. The source says watercress is picked year round, longer than the frost-free season this app uses.
 
 #### `usu-extension-2023-comfrey`
@@ -5110,7 +5749,8 @@ Rolfe, Emmalee; Drost, Dan. (2023). *Comfrey in the Garden*. Utah State Universi
 - Archived: <https://web.archive.org/web/20260728170851/https://extension.usu.edu/yardandgarden/research/comfrey-in-the-garden>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - harvest timing for comfrey, verbatim: 'Once established, harvest leaves every 2 weeks throughout the growing season' ("Harvest and Storage > Fresh" section, p.2)
+  - harvest timing for comfrey
+    - "Once established, harvest leaves every 2 weeks throughout the growing season" ("Harvest and Storage > Fresh" section, p.2)
 - **Caveat:** Published outside a peer-reviewed journal. Its dates are calibrated to Utah, and this app places them at the same point in each garden's own frost-free season.
 
 #### `usu-extension-preserve-cherries`
@@ -5121,7 +5761,8 @@ Utah State University Extension, Preserve the Harvest. (n.d.). *How to Preserve 
 - Archived: <https://web.archive.org/web/20260624191608/https://extension.usu.edu/preserve-the-harvest/research/cherries>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - harvest timing for cherry-sweet, verbatim: 'From Box Elder County south to Salt Lake County, sweet cherries ripen around June 10 to the 25' (Season Availability section)
+  - harvest timing for cherry-sweet
+    - "From Box Elder County south to Salt Lake County, sweet cherries ripen around June 10 to the 25" (Season Availability section)
 - **Caveat:** Published outside a peer-reviewed journal. Its dates are calibrated to Utah from Box Elder County south to Salt Lake County, and this app places them at the same point in each garden's own frost-free season. Sweet cherry dates come from a food preservation page giving the northern Utah season, June 10 to 25.
 
 #### `usu-extension-treebrowser-pistachio`
@@ -5131,7 +5772,8 @@ Utah State University Extension, TreeBrowser. (n.d.). *Pistachio (Pistacia vera)
 - URL: <https://extension.usu.edu/treebrowser/catalog/pistachio>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - pistachio light, verbatim: 'Prefers full sun and well-drained soils.' (Utah State University Extension TreeBrowser, Pistachio (Pistacia vera) page, General description)
+  - pistachio light
+    - "Prefers full sun and well-drained soils." (Utah State University Extension TreeBrowser, Pistachio (Pistacia vera) page, General description)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `uvah-coaker1984-mixed-cropping`
@@ -5152,8 +5794,10 @@ University of Wisconsin-Madison Division of Extension, Crops and Soils. (n.d.). 
 - Archived: <https://web.archive.org/web/20260306024423/https://cropsandsoils.extension.wisc.edu/honeyberries/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - haskap yearsToFirstHarvest, verbatim: 'Plants will begin bearing a few fruit in years one and two, but three to four years are required for large quantities.' (UW-Madison Division of Extension, Honeyberries crop profile, first body paragraph)
-  - haskap coldLimit, verbatim: 'Plants are extremely cold hardy and can be grown in USDA zones 1-8.' (UW-Madison Division of Extension, Honeyberries crop profile, first body paragraph)
+  - haskap yearsToFirstHarvest
+    - "Plants will begin bearing a few fruit in years one and two, but three to four years are required for large quantities." (UW-Madison Division of Extension, Honeyberries crop profile, first body paragraph)
+  - haskap coldLimit
+    - "Plants are extremely cold hardy and can be grown in USDA zones 1-8." (UW-Madison Division of Extension, Honeyberries crop profile, first body paragraph)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `uwmadison-2013-uncommon-fruit-mulberry`
@@ -5164,7 +5808,8 @@ University of Wisconsin-Madison, Uncommon Fruit. (2013). *Mulberry (Morus ssp), 
 - Archived: <https://web.archive.org/web/20261017214509/https://uncommonfruit.cias.wisc.edu/mulberry/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - mulberry-black coldLimit, verbatim: 'The black mulberry, which is a small tree that lives longer, is said to have the best quality fruit, is the least winter hardy and will not tolerate temperatures below zero (Zone 7).' (UW-Madison Uncommon Fruit, Mulberry page, History and background paragraph)
+  - mulberry-black coldLimit
+    - "The black mulberry, which is a small tree that lives longer, is said to have the best quality fruit, is the least winter hardy and will not tolerate temperatures below zero (Zone 7)." (UW-Madison Uncommon Fruit, Mulberry page, History and background paragraph)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `uwmadison-extension-catnip`
@@ -5175,9 +5820,12 @@ Mahr, Susan. (2026). *Catnip, Nepeta cataria*. University of Wisconsin-Madison D
 - Archived: <https://web.archive.org/web/20261006164935/https://hort.extension.wisc.edu/articles/catnip-nepeta-cataria/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - catnip height, verbatim: 'Plants can grow up to 3 feet tall and wide under ideal conditions, and may form colonies from the short rhizomes.' (Section 'Overview', the paragraph that begins 'Plants die back to the ground in the winter')
-  - catnip width, verbatim: 'Plants can grow up to 3 feet tall and wide under ideal conditions, and may form colonies from the short rhizomes.' (Section 'Overview', the paragraph that begins 'Plants die back to the ground in the winter')
-  - catnip coldLimit, verbatim: 'Catnip is a vigorous and weedy herbaceous perennial native to Eurasia in the mint family (Lamiaceae) that is hardy in zones 3a to 9b.' (Section 'Overview', first full paragraph after the one-line summary)
+  - catnip height
+    - "Plants can grow up to 3 feet tall and wide under ideal conditions, and may form colonies from the short rhizomes." (Section 'Overview', the paragraph that begins 'Plants die back to the ground in the winter')
+  - catnip width
+    - "Plants can grow up to 3 feet tall and wide under ideal conditions, and may form colonies from the short rhizomes." (Section 'Overview', the paragraph that begins 'Plants die back to the ground in the winter')
+  - catnip coldLimit
+    - "Catnip is a vigorous and weedy herbaceous perennial native to Eurasia in the mint family (Lamiaceae) that is hardy in zones 3a to 9b." (Section 'Overview', first full paragraph after the one-line summary)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `uwmadison-extension-dandelion`
@@ -5188,9 +5836,12 @@ Mahr, Susan. (2026). *Dandelion, Taraxacum officinale*. University of Wisconsin-
 - Archived: <https://web.archive.org/web/20260222170106/https://hort.extension.wisc.edu/articles/dandelion-taraxacum-officinale/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - dandelion spacing, verbatim: 'Space the plants six to nine inches apart in rows twelve inches apart.' (Section 'Growing Dandelion')
-  - dandelion daysToMaturity, verbatim: 'Your crop should be ready in 85 to 95 days.' (Section 'Growing Dandelion')
-  - dandelion coldLimit, verbatim: 'They withstand frost and freezes and tolerate crowding.' (Section 'Overview', paragraph on growth habit)
+  - dandelion spacing
+    - "Space the plants six to nine inches apart in rows twelve inches apart." (Section 'Growing Dandelion')
+  - dandelion daysToMaturity
+    - "Your crop should be ready in 85 to 95 days." (Section 'Growing Dandelion')
+  - dandelion coldLimit
+    - "They withstand frost and freezes and tolerate crowding." (Section 'Overview', paragraph on growth habit)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `uwmadison-extension-mahr-garlic-chives`
@@ -5201,8 +5852,10 @@ Mahr, Susan. (n.d.). *Garlic Chives, Allium tuberosum*. University of Wisconsin-
 - Archived: <https://web.archive.org/web/20261006165125/https://hort.extension.wisc.edu/articles/garlic-chives-allium-tuberosum/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - garlic-chives harvestSeason, verbatim: 'Leaves can be harvested to eat anytime they are green.' (Second paragraph of the article)
-  - garlic-chives invasiveStatus, verbatim: 'This plant can be invasive under some conditions, so should be planted with care.' (Paragraph after the photo caption Garlic chives coming up in spring)
+  - garlic-chives harvestSeason
+    - "Leaves can be harvested to eat anytime they are green." (Second paragraph of the article)
+  - garlic-chives invasiveStatus
+    - "This plant can be invasive under some conditions, so should be planted with care." (Paragraph after the photo caption Garlic chives coming up in spring)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `vaishnavi-2020-garden-cress-botanical-description`
@@ -5213,7 +5866,8 @@ Vaishnavi; Gupta, Radhna; Choudhary, Preeti. (2020). *Botanical description of g
 - Archived: <https://web.archive.org/web/20250514151846/https://www.phytojournal.com/archives/2020/vol9issue5/PartAH/9-5-426-683.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - cress height, verbatim: 'The plants that grew were erect, glabrous and grew up to an average height of 50cm.' (Page 2426, Botanical description of garden cress plant (Table 4 on page 2427 gives Height 47-50cm))
+  - cress height
+    - "The plants that grew were erect, glabrous and grew up to an average height of 50cm." (Page 2426, Botanical description of garden cress plant (Table 4 on page 2427 gives Height 47-50cm))
 - **Caveat:** Read in full for the sentences quoted. The catalog row comments say which figure each sentence gives.
 
 #### `vce-2015-tree-fruit-home-garden`
@@ -5224,8 +5878,10 @@ Yuan, Rongcai. (2015). *Tree Fruit in the Home Garden (Publication 426-841)*. Vi
 - Archived: <https://web.archive.org/web/20260714002628/https://www.pubs.ext.vt.edu/426/426-841/426-841.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - quince spacing, verbatim: 'Quince | 15 | 1 | 5-6 | 30-40' (Virginia Cooperative Extension 426-841, Table 1 (Space requirement, yield, bearing age, and life expectancy of tree frui)
-  - quince yearsToFirstHarvest, verbatim: 'Quince | 15 | 1 | 5-6 | 30-40' (Virginia Cooperative Extension 426-841, Table 1, row Quince, column Bearing Age (years))
+  - quince spacing
+    - "Quince 15 1 5-6 30-40" (Virginia Cooperative Extension 426-841, Table 1 (Space requirement, yield, bearing age, and life expectancy of tree frui))
+  - quince yearsToFirstHarvest
+    - "Quince 15 1 5-6 30-40" (Virginia Cooperative Extension 426-841, Table 1, row Quince, column Bearing Age (years))
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `vce-2024-herb-culture-and-use`
@@ -5236,7 +5892,8 @@ Appling, Ashley; Latimer, Joyce. (2024). *Herb Culture and Use*. Virginia Cooper
 - Archived: <https://web.archive.org/web/20261017212157/https://www.pubs.ext.vt.edu/content/dam/pubs_ext_vt_edu/426/426-420/426-420.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - chamomile spacing, verbatim: 'Chamomile, German chamomile Matricaria recutita 8-24” 6-12” Grow from seed. Prefers a sandy, well-drained soil with a pH of 7.0-7.5 and lots of sun. Blooms in early to midsummer. Self seeds.' ("Herb Culture and Use" table, Annuals section, row for Chamomile/German chamomile (Matricaria recutita): Height and Plan)
+  - chamomile spacing
+    - "Chamomile, German chamomile Matricaria recutita 8-24” 6-12” Grow from seed. Prefers a sandy, well-drained soil with a pH of 7.0-7.5 and lots of sun. Blooms in early to midsummer. Self seeds." ("Herb Culture and Use" table, Annuals section, row for Chamomile/German chamomile (Matricaria recutita): Height and Plan)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `walters2018-basil-species-dli`
@@ -5246,7 +5903,8 @@ Walters, Kellie J.; Currey, Christopher J. (2018). *Effects of Nutrient Solution
 - DOI: [10.21273/HORTSCI13126-18](https://doi.org/10.21273/HORTSCI13126-18)
 - Verification: Crossref-verified | Access: open-access, evidence tier **A**
 - Backs:
-  - sweet basil under a high DLI of about 15 mol/m2/d against a low DLI of 7 or less, verbatim: 'Fresh and dry weight, height, and node number increased by 144%, 178%, 20%, and 18%, respectively, compared with plants grown under the low DLI, and branching was also stimulated'
+  - sweet basil under a high DLI of about 15 mol/m2/d against a low DLI of 7 or less
+    - "Fresh and dry weight, height, and node number increased by 144%, 178%, 20%, and 18%, respectively, compared with plants grown under the low DLI, and branching was also stimulated"
   - DLI had little effect on tissue nutrient concentration, where nutrient solution concentration did
 - **Caveat:** This entry rests on the abstract and the Crossref record. It's a greenhouse hydroponic trial of several basil species, and its two DLI levels bracket the response and fix no threshold.
 
@@ -5273,8 +5931,11 @@ Wilson, Jill E. (1988). *Rapid Multiplication of Yams (Dioscorea spp.)*. Univers
 - Archived: <https://web.archive.org/web/20260902005245/https://www3.ctahr.hawaii.edu/adap/Publications/Ireta_pubs/rapidyams.pdf>
 - Verification: URL-verified | Access: open-access
 - Backs:
-  - staking, verbatim: 'Stakes 1 to 2 m high are adequate'
-  - spacing of minisetts, verbatim: 'Plant the mini-setts at a spacing of 1 x 0.25 m or 1 x 0.5 m'; and ware yams grown from 500 g setts 'at a spacing of 100 x 25 cm' in the worked example
+  - staking
+    - "Stakes 1 to 2 m high are adequate"
+  - spacing of minisetts and of ware yams grown from 500 g setts, in the worked example
+    - "Plant the mini-setts at a spacing of 1 x 0.25 m or 1 x 0.5 m"
+    - "at a spacing of 100 x 25 cm"
 - **Caveat:** A seed-yam multiplication guide, so its spacings are for producing planting setts. It gives no months-to-harvest or temperature figures, which the catalog takes from ECOCROP.
 
 #### `wisniewski-harasym-2024-chinese-artichoke`
@@ -5285,7 +5946,8 @@ Wiśniewski, Rafał; Harasym, Joanna. (2024). *Chinese Artichoke (Stachys affini
 - Archived: <https://web.archive.org/web/20261017215243/https://pmc.ncbi.nlm.nih.gov/articles/PMC11314557/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - crosne light, verbatim: 'They prefer well-drained soil in a sunny location and thrive best in ordinary garden soil that is not too heavy.' (Section 2, Botanical Characteristics, cultivation paragraph that begins 'Chinese artichokes grow up to 45 cm in height')
+  - crosne light
+    - "They prefer well-drained soil in a sunny location and thrive best in ordinary garden soil that is not too heavy." (Section 2, Botanical Characteristics, cultivation paragraph that begins 'Chinese artichokes grow up to 45 cm in height')
 - **Caveat:** Read in full for the sentences quoted. The catalog row comments say which figure each sentence gives.
 
 #### `wsu-2000-strik-growing-kiwifruit`
@@ -5296,7 +5958,8 @@ Strik, Bernadine; Cahn, Helen. (2000). *Growing Kiwifruit (PNW 507)*. Pacific No
 - Archived: <https://web.archive.org/web/20260421004022/http://content.libraries.wsu.edu/index.php/utils/getfile/collection/cahnrs-arch/id/499/filename/96136182432004_pnw507.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - kiwifruit yearsToFirstHarvest, verbatim: 'It takes 3 or more years after planting to produce a commercial crop.' ("Vineyard Planning, Planting, and Spacing" section, p. 6)
+  - kiwifruit yearsToFirstHarvest
+    - "It takes 3 or more years after planting to produce a commercial crop." ("Vineyard Planning, Planting, and Spacing" section, p. 6)
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `wsu-2006-growing-marketing-lavender`
@@ -5307,7 +5970,8 @@ Beus, Curtis E. (2006). *Growing and Marketing Lavender (EB2005, Farming the Nor
 - Archived: <https://web.archive.org/web/20260913202108/https://wpcdn.web.wsu.edu/wp-ecommerce/uploads/sites/2/woocommerce_uploads/EB2005-epq142.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - lavender coldLimit, verbatim: 'Lavandula angustifolia are the hardiest of lavenders, and can survive winter temperatures of -15°C (5°F), or even colder if they are grown in well-drained soils. … Lavandula angustifolia varieties tend to be the hardiest lavenders, and can typically be grown in USDA Hardiness Zones 5 and above.' (“Lavandula angustifolia” section (p.2) and “Climate” section (p.3))
+  - lavender coldLimit
+    - "Lavandula angustifolia are the hardiest of lavenders, and can survive winter temperatures of -15°C (5°F), or even colder if they are grown in well-drained soils. [...] Lavandula angustifolia varieties tend to be the hardiest lavenders, and can typically be grown in USDA Hardiness Zones 5 and above." (“Lavandula angustifolia” section (p.2) and “Climate” section (p.3))
 - **Caveat:** Published outside a peer-reviewed journal.
 
 #### `yousefi2024-biocontrol`
@@ -5340,8 +6004,10 @@ Zhang, Qianwen; Bi, Guihong; Li, Tongyin; Wang, Qiushuang; Xing, Zhiheng; LeComp
 - Archived: <https://web.archive.org/web/20261017212924/https://pmc.ncbi.nlm.nih.gov/articles/PMC8847693/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
-  - tea spacing, verbatim: 'Plants were planted in three double row hedges, with 0.76 m between plants within a row, 0.91 m between inner rows, and 1.83 m between double rows.' (Materials and Methods)
-  - tea harvestSeason, verbatim: 'Fresh tea leaf samples containing one terminal bud and two leaves were collected in spring, summer, and fall in 2018 (on 10 April, 12 July, and 18 October, respectively).' (Materials and Methods)
+  - tea spacing
+    - "Plants were planted in three double row hedges, with 0.76 m between plants within a row, 0.91 m between inner rows, and 1.83 m between double rows." (Materials and Methods)
+  - tea harvestSeason
+    - "Fresh tea leaf samples containing one terminal bud and two leaves were collected in spring, summer, and fall in 2018 (on 10 April, 12 July, and 18 October, respectively)." (Materials and Methods)
 - **Caveat:** Read in full for the sentences quoted. The catalog row comments say which figure each sentence gives.
 
 #### `zhang2014-three-sisters-roots`
@@ -5372,9 +6038,12 @@ Zimmerman, Cynthia. (2020). *Helpline Hot Topic for June 2020: Moringa Oleifera*
 - Archived: <https://web.archive.org/web/20251205094334/https://ucanr.edu/sites/default/files/2020-07/329403.pdf>
 - Verification: URL-verified | Access: public-domain
 - Backs:
-  - verbatim: 'it grows from 9 to 16 feet per year if left uncropped. A fully mature tree can reach a height of 35 feet but can be cut back to 3-4 feet high'
-  - verbatim: it 'will die if it freezes completely, but can handle mild frost'
-  - verbatim: 'rainfall is limited to between 9 to 60 inches'
+  - moringa height
+    - "it grows from 9 to 16 feet per year if left uncropped. A fully mature tree can reach a height of 35 feet but can be cut back to 3-4 feet high"
+  - moringa coldLimit
+    - "will die if it freezes completely, but can handle mild frost"
+  - moringa rainfall
+    - "rainfall is limited to between 9 to 60 inches"
 - **Caveat:** A Master Gardener helpline note, compiled from secondary sources for the Fresno area.
 
 ## Climate & geodata
@@ -5421,7 +6090,8 @@ Canham, Charles D.; Finzi, Adrien C.; Pacala, Stephen W.; Burbank, Diane H. (199
 - DOI: [10.1139/x94-046](https://doi.org/10.1139/x94-046)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **B**
 - Backs:
-  - the forest-canopy comparison named in Decision Record 26, verbatim: 'The most shade-tolerant species (Fagus grandifolia Ehrh. and Tsuga canadensis (L.) Carr.) cast the deepest shade (<2% of full sun), while earlier successional species such as Quercus rubra L. and Fraxinus americana L. allowed greater light penetration (>5% full sun)'
+  - the forest-canopy comparison named in Decision Record 26
+    - "The most shade-tolerant species (Fagus grandifolia Ehrh. and Tsuga canadensis (L.) Carr.) cast the deepest shade (<2% of full sun), while earlier successional species such as Quercus rubra L. and Fraxinus americana L. allowed greater light penetration (>5% full sun)"
 - **Caveat:** The paper measures closed-canopy interior light by fisheye photography and quantum sensors, under overlapping crowns in a southern New England oak-northern hardwood forest. That's a different quantity from a single isolated urban tree's crown transmittance. This entry serves only as the closed-canopy comparison that Decision Record 26 names. Its light is lower than a lone tree's transmittance, as expected, and this app's default doesn't come from it. The journal version of record is paywalled. The copy the Canham lab self-archives at sortie-nd.org is a scanned PDF with no text layer, so this entry rests on OCR of that scan.
 
 #### `erez1990-dynamic-model`
@@ -5471,7 +6141,8 @@ Heisler, Gordon M. (1986). *Effects of individual trees on the solar radiation c
 - DOI: [10.1016/0304-4009(86)90008-2](https://doi.org/10.1016/0304-4009(86)90008-2)
 - Verification: Crossref-verified | Access: public-domain, evidence tier **B**
 - Backs:
-  - a corroborating figure for the tree-crown transmittance default, verbatim: 'a mid-sized sugar maple tree (Acer saccharum Marsh.) reduced irradiance in its shade on a south-facing wall by about 80% when in leaf, and by nearly 40% when leafless', implying roughly 0.20 in-leaf and 0.60 leafless transmittance, read here as a cross-check on the Konarska et al. 2014 crown-transmittance range and never as the shipped default
+  - a corroborating figure for the tree-crown transmittance default, implying roughly 0.20 in-leaf and 0.60 leafless transmittance, read here as a cross-check on the Konarska et al. 2014 crown-transmittance range and never as the shipped default
+    - "a mid-sized sugar maple tree (Acer saccharum Marsh.) reduced irradiance in its shade on a south-facing wall by about 80% when in leaf, and by nearly 40% when leafless"
 - **Caveat:** A USDA Forest Service work, public domain by 17 U.S.C. 105. This entry rests on the agency's own reprint and doesn't use the Elsevier version of record. The paper measures irradiance reduction on a vertical wall inside a tree's shadow: beam plus diffuse sky and crown-reflected radiation reaching a receiver. It doesn't measure transmittance straight through the crown, so its reductions read smaller than those from Konarska's direct-under-crown method. The paper's own Table II clear-day wall average across four sample trees is a 30-34% reduction leafless and 65-85% in-leaf. It backs a cross-check figure only, and this app's default doesn't rest on it.
 
 #### `jolly2005-growing-season-index`
@@ -5481,7 +6152,8 @@ Jolly, William M.; Nemani, Ramakrishna; Running, Steven W. (2005). *A generalize
 - DOI: [10.1111/j.1365-2486.2005.00930.x](https://doi.org/10.1111/j.1365-2486.2005.00930.x)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **B**
 - Backs:
-  - the three daily indicators, minimum temperature, vapor pressure deficit and day length, and their combination as a product, that a drawn deciduous tree's leaf-on months are read against, verbatim: 'We selected as variables: daylength (photoperiod), evaporative demand (vapor pressure deficit), and suboptimal (minimum) temperatures... A combined Growing Season Index (GSI) was derived as the product of the three indices'
+  - the three daily indicators, minimum temperature, vapor pressure deficit and day length, and their combination as a product, that a drawn deciduous tree's leaf-on months are read against
+    - "We selected as variables: daylength (photoperiod), evaporative demand (vapor pressure deficit), and suboptimal (minimum) temperatures [...] A combined Growing Season Index (GSI) was derived as the product of the three indices"
 - **Caveat:** Ten-day mean GSI values agreed with satellite greenness at nine sites, r>0.8 at eight of them, and matched field-observed leaf flush and coloration at Harvard Forest within 3 and 2 days. The app reads a drawn tree of unknown species against the same three thresholds, by calendar month from the site's typical year, where the paper works from its own ten-day means.
 
 #### `konarska2014-urban-tree-transmissivity`
@@ -5491,7 +6163,8 @@ Konarska, Janina; Lindberg, Fredrik; Larsson, Annika; Thorsson, Sofia; Holmer, B
 - DOI: [10.1007/s00704-013-1000-3](https://doi.org/10.1007/s00704-013-1000-3)
 - Verification: Crossref-verified | Access: paywalled, evidence tier **B**
 - Backs:
-  - the in-leaf crown transmittance of 0.033 used as the default for a drawn tree's crown, the midpoint of the paper's own range, verbatim: 'Average transmissivity of direct solar radiation through the foliated and defoliated tree crowns ranged from 1.3 to 5.3 % and from 40.2 to 51.9 %, respectively'
+  - the in-leaf crown transmittance of 0.033 used as the default for a drawn tree's crown, the midpoint of the paper's own range
+    - "Average transmissivity of direct solar radiation through the foliated and defoliated tree crowns ranged from 1.3 to 5.3 % and from 40.2 to 51.9 %, respectively"
   - the leafless crown transmittance of 0.46 used as the default for a drawn tree's crown, the midpoint of the defoliated range in the same sentence
 - **Caveat:** Transmissivity was measured with a pyranometer beneath the live crown against a rooftop reference, on five street trees (one conifer, four deciduous) in Göteborg, Sweden, over nine clear days. The figure is direct-beam transmissivity only. This app applies one transmittance to beam, diffuse and sky-view alike through a solid box crown, with none of a real crown's gaps. This app's default is the midpoint of the paper's own range and isn't a single measured mean. The underlying species are far north of most of this app's users.
 
@@ -5977,8 +6650,10 @@ U.S. Food and Drug Administration. (n.d.). *Import Alert 54-10: Detention Withou
 - Archived: <https://web.archive.org/web/20260919123443/https://www.accessdata.fda.gov/cms_ia/importalert_141.html>
 - Verification: URL-verified | Access: public-domain
 - Backs:
-  - Asarum caudatum is listed under 'Botanicals Known or Suspected to Contain Aristolochic Acid', verbatim: 'Asarum caudatum Lindl'
-  - the health risk, verbatim: 'In sum, products containing aristolochic acid cause renal damage and can cause or contribute to renal failure.'
+  - Asarum caudatum is listed under 'Botanicals Known or Suspected to Contain Aristolochic Acid'
+    - "Asarum caudatum Lindl"
+  - the health risk
+    - "In sum, products containing aristolochic acid cause renal damage and can cause or contribute to renal failure."
 - **Caveat:** A regulatory notice on dietary supplements and botanical products. It lists the species as known or suspected to contain the compound and gives no measured content for it, which is why the catalog keeps the plant and offers it only as a groundcover.
 
 #### `france-decret-2024-318`

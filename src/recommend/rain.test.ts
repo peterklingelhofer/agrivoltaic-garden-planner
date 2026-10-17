@@ -160,14 +160,25 @@ const CITATIONS = JSON.parse(
   readFileSync(`${import.meta.dir}/../../docs/CITATIONS.csl.json`, 'utf8'),
 ) as readonly {
   readonly id?: string
-  readonly custom?: { readonly backsClaims?: readonly string[]; readonly caveat?: string }
+  readonly custom?: {
+    readonly backsClaims?: readonly string[]
+    readonly quotes?: readonly { readonly text: string; readonly locator: string }[]
+    readonly caveat?: string
+  }
 }[]
 
-/** Everything one entry claims, its caveat included, as one string to search */
+/**
+ * Everything one entry claims, its quotes with their locators and its caveat included, as one
+ * string to search
+ */
 const claimText = (citation: string): string | undefined => {
   const entry = CITATIONS.find((candidate) => candidate.id === citation)
   if (entry === undefined) return undefined
-  return [...(entry.custom?.backsClaims ?? []), entry.custom?.caveat ?? ''].join('\n')
+  return [
+    ...(entry.custom?.backsClaims ?? []),
+    ...(entry.custom?.quotes ?? []).flatMap((quote) => [quote.text, quote.locator]),
+    entry.custom?.caveat ?? '',
+  ].join('\n')
 }
 
 const PINNED_NUMBERS: readonly PinnedNumber[] = [

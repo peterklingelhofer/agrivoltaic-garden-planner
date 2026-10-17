@@ -1,8 +1,8 @@
 #!/usr/bin/env bun
 /**
- * Checks every "verbatim" quote in the citation ledger (`custom.backsClaims` in
- * `docs/CITATIONS.csl.json`) against the text of its source, so a claim can be spot-checked
- * without fetching the source again, and records the quotes it found as receipts.
+ * Checks every quote in the citation ledger (`custom.quotes` in `docs/CITATIONS.csl.json`) against
+ * the text of its source, so a claim can be spot-checked without fetching the source again, and
+ * records the quotes it found as receipts.
  *
  * The cache
  *   The sources are read from a cache, a local folder of fetched sources that is never committed
@@ -14,14 +14,15 @@
  *   receipt its kind and size.
  *
  * What it checks
- *   Quoted spans that name a place in the source (section labels, breadcrumbs, table rows, short
- *   labels in parentheses) are skipped and counted as labels skipped. A cached text under 500
- *   bytes is a stub, such as a paywall or bot-check page, so its quotes are counted as stub text
- *   and not checked. A quote is split on its ellipses into segments and each segment is looked up
- *   in the cached text, both folded by `foldForMatch` in `src/data/verbatim.ts` (case, spacing and
- *   unit spellings ignored). A quote is found when every segment is found, partial when some are
- *   and not found when none are. A segment that is missing prints how far it matched and where it
- *   breaks, in folded text.
+ *   Every item of an entry's `custom.quotes` is a quote. An entry with no such field is read the
+ *   old way, from the quoted spans after the word verbatim in its claims, where a span that names
+ *   a place in the source (section labels, breadcrumbs, table rows, short labels in parentheses)
+ *   is skipped and counted as labels skipped. A cached text under 500 bytes is a stub, such as a
+ *   paywall or bot-check page, so its quotes are counted as stub text and not checked. A quote is
+ *   split on its ellipses into segments and each segment is looked up in the cached text, both
+ *   folded by `foldForMatch` in `src/data/verbatim.ts` (case, spacing and unit spellings ignored).
+ *   A quote is found when every segment is found, partial when some are and not found when none
+ *   are. A segment that is missing prints how far it matched and where it breaks, in folded text.
  *
  * Flags
  *   bun scripts/check-quotes.mjs [--cache DIR] [--strict] [--context] [--write-receipts]
@@ -73,6 +74,7 @@ import {
   quotesInClaim,
   splitSegments,
   stripTags,
+  verbatimQuotesOf,
 } from '../src/data/verbatim.ts'
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
@@ -370,19 +372,18 @@ async function main() {
   let labelsSkipped = 0
   for (const entry of ledger) {
     if (only.size && !only.has(entry.id)) continue
-    const claims = entry.custom?.backsClaims || []
-    for (const claim of claims) {
-      for (const { text, label } of quotesInClaim(claim)) {
-        if (label) labelsSkipped += 1
-        else jobs.push({ citekey: entry.id, quote: text })
+    for (const quote of verbatimQuotesOf(entry)) jobs.push({ citekey: entry.id, quote })
+    // an entry with no quotes field still carries its quotes in its claims, where a span that only
+    // names a place in the source is a label
+    if (entry.custom?.quotes === undefined) {
+      for (const claim of entry.custom?.backsClaims ?? []) {
+        labelsSkipped += quotesInClaim(claim).filter(({ label }) => label).length
       }
     }
   }
 
   const entryCount = new Set(jobs.map((j) => j.citekey)).size
-  console.log(
-    `Extracted ${jobs.length} quotes from ${entryCount} ledger entries mentioning "verbatim".\n`,
-  )
+  console.log(`Extracted ${jobs.length} quotes from ${entryCount} ledger entries.\n`)
 
   const textCache = new Map()
   const checked = []
