@@ -1,36 +1,8 @@
-import type { CitationId } from '../types/citation-ids.generated'
+import type { DerivedNumber, PinnedNumber, Provenance } from '../types/pinned'
 
-/**
- * Where a number in the rain model came from. Held in one place so no constant can drift from the
- * paper it was read out of without a test failing: `rain.test.ts` reads
- * `docs/CITATIONS.csl.json` and holds every `citation` and `quote` here against that entry's own
- * claim text
- */
-export interface Provenance {
-  /**
-   * The citation whose `backsClaims` or `quotes` carry this number, from `docs/CITATIONS.csl.json`
-   */
-  readonly citation: CitationId
-  /** Where in that source, spelled the way the citation's own claim spells it */
-  readonly locator: string
-  /** The words the citation uses for it, so a test can hold the two together */
-  readonly quote: string
-}
-
-/** One number read from a source, with the source's own words for it */
-export interface PinnedNumber extends Provenance {
-  readonly value: number
-}
-
-/**
- * One number this app arrives at itself, with no source behind it. A separate shape from
- * `PinnedNumber` so a derived number can never be read as a sourced one
- */
-export interface DerivedNumber {
-  readonly value: number
-  /** How this app arrives at the number, and what the sources leave open */
-  readonly derivation: string
-}
+// the shapes moved to `types/pinned`, where the catalog's pins use them too, and are re-exported so
+// the importers of this module keep working
+export type { DerivedNumber, PinnedNumber, Provenance }
 
 /**
  * Gunn and Kinzer 1949, Table 2 (p. 246): a raindrop's terminal fall speed by its equivalent

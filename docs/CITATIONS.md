@@ -323,12 +323,19 @@ Laub, Moritz; Pataczek, Lisa; Feuerbacher, Arndt; Zikeli, Sabine; Högy, Petra. 
   - RSR^2 term significant (p=0.0015): the linear '% shade = % yield loss' rule is statistically wrong
   - RSR x crop type interaction p<0.0001: crop group is a required model input
   - shade type (PV panels vs shade cloth vs nets) NOT significant, which licenses shade-cloth proxy data
+    - "Further, no significant differences were found whether cloths, PV panels or nets were used for shading." (p. 5)
   - Table S2 relative-yield predictions and 95% confidence intervals per crop group per RSR level
   - yield anchors at 40% RSR: berries 114%, fruits 113%, fruity veg 102%, forages 93%, leafy veg 86%, grain legumes 50%, corn 45%
+    - "Estimated yields at 40% RSR are 50% (CI 41 to 61%)." (p. 6)
+    - "In contrast to these crops, berries, fruits and fruity vegetables benefit at 20% of RSR (114, 114 and 108%, respectively) as well as at 40% RSR (114, 113 and 102% estimated yield, for berries, fruits and fruity vegetables, respectively; CI at 40% RSR: 84 to 154%, 84 to 152% and 67 to 156%, respectively)." (p. 6)
+    - "Forages are also estimated to have little susceptibility to RSR with an estimated yield of 103% at 20% RSR and 93% at 40% RSR (CI at 40% RSR: 75 to 117%)." (p. 6)
+    - "For leafy vegetables the estimate for 40% RSR is 86% (CI 61 to 120%)." (p. 6)
   - all crop groups decline above ~50% RSR
   - corn is the most shade-susceptible group, 45% of control at 40% RSR (95% CI 37-56%)
+    - "For maize, the crop type with the strongest and disproportionately largest yield loss in response to RSR, the estimated yield at 40% RSR is 45% (95% CI 37 to 56%)." (p. 6)
   - per-group shade-benefit optima
   - greenhouse experiments were explicitly excluded from the meta-analysis
+    - "Experiments from greenhouses as the system difference to AV was considered too large." (p. 3)
 - **Caveat:** The per-group curve coefficients this app uses aren't published anywhere: they're absent from the article, from supplement MOESM1 (the Fig. S1 caption, Table S1 listing the 58 publications, and Table S2's predictions), from MOESM2 (the raw dataset) and from the Zenodo record 10.5281/zenodo.5716091 (two xlsx data files). The app recovered them algebraically from the 162 published Table S2 points and the paper's own model specification, and they reproduce those points to within 0.07 percentage points. They're this app's figures, never Laub's published coefficients. The 67.2 to 156.1% range for fruity vegetables at 40% RSR is a 95% confidence interval: Table S2's caption and the main text both say so, and the paper's prediction intervals are drawn as gray lines in Fig. 3 and never tabulated. Group sizes: berries n = 5, fruits n = 7, fruity vegetables n = 3, leafy vegetables n = 4, C3 cereals n = 10, corn n = 10, tubers and root crops n = 2, grain legumes n = 14, forages n = 11, from 428 data points (340 without controls), 58 studies and 38 crop species. The three groups a garden leans on most, root crops, fruity vegetables and leafy vegetables, are the thinnest in the paper. The authors write that 'uncertainties due to random plot scale effects are large, while at country or continental scales the mean response to shading, represented by the confidence intervals, is the more valid estimator', and a single garden is the plot scale they call the more uncertain one.
 
 #### `marrou2013-lettuce-rue`

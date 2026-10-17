@@ -113,6 +113,7 @@ Each hop names the module that owns it. No hop is owned by two modules.
 | 17 | crop catalog, ECOCROP envelopes, Laub curves, DLI class table | `src/data/crops.ts` | `loadCropCatalog`, `laubCurve` |
 | 17b | CSL-JSON -> typed `CitationRecord` registry | `src/data/citations.ts` | `loadCitations` |
 | 17c | ledger DOIs and URLs -> Crossref and DataCite answers and page hashes in a snapshot, which an offline test holds the ledger to | `src/data/registry.ts`, `scripts/check-sources.mjs`, `docs/CITATIONS.registry.json`, `src/data/citation-registry.test.ts` | `agreement`, `driftBetween` |
+| 17d | catalog light figures, shade ceilings and Laub yield figures -> the source's own sentence for each, which an offline test holds to the ledger | `src/data/pinned-figures.ts`, `src/types/pinned.ts`, `src/data/pinned-figures.test.ts` | `PinnedNumber`, `PINNED_ROWS` |
 | 18 | companion rules, rotation constraints, traditional ecological knowledge (TEK) rules | `src/data/companions.ts`, `src/data/tek.ts` | `partitionCompanionRules` |
 | 19 | gates 1-6 | `src/recommend/stages/*` | `climateGate`, `lightGate`, ... , `rank` |
 | 19b | two crops in one bed -> per-term compatibility verdict | `src/recommend/compatibility.ts` | `evaluatePair`, `phOverlap` |

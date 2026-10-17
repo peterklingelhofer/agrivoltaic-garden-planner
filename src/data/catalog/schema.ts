@@ -4,6 +4,7 @@ import type { NonEmpty, SourcedCited } from '../../types/cited'
 import type { CitationId } from '../../types/citation-ids.generated'
 import type { PlantingRole } from '../../types/garden'
 import type { CropId } from '../../types/ids'
+import { PV_SHADE_CEILING, STRAWBERRY_SHADE_CEILING } from '../pinned-figures.ts'
 import { wildlifeOf } from './wildlife'
 import type {
   CanopyShape,
@@ -345,9 +346,9 @@ export const DLI_CLASSES: Readonly<Record<DliClass, DliClassSpec>> = {
     minMolM2Day: 25,
     targetLowMolM2Day: null,
     targetHighMolM2Day: null,
-    // 0.10 is the conservative end of Widmer's own 10 to 30 percent, and it's the one place
-    // this number is kept: no row overrides it
-    maxDesignRsr: 0.1,
+    // the conservative end of Widmer's own 10 to 30 percent, pinned to its sentence in
+    // `pinned-figures.ts`. This class is the one place the number is read: no row overrides it
+    maxDesignRsr: STRAWBERRY_SHADE_CEILING.value,
     maxDesignRsrTier: 'B',
     maxDesignRsrCitations: ['widmer-strawberry-dli'],
     maxDesignRsrNote: RSR_STRAWBERRY_BASIS,
@@ -374,7 +375,7 @@ export const DLI_CLASSES: Readonly<Record<DliClass, DliClassSpec>> = {
     minMolM2Day: 10,
     targetLowMolM2Day: 20,
     targetHighMolM2Day: 30,
-    maxDesignRsr: 0.2,
+    maxDesignRsr: PV_SHADE_CEILING.value,
     maxDesignRsrTier: 'B',
     maxDesignRsrCitations: ['zhang2025-tipping-points', 'laub2022-shade-meta'],
     maxDesignRsrNote: RSR_SEGMENTED_BASIS,
@@ -383,7 +384,7 @@ export const DLI_CLASSES: Readonly<Record<DliClass, DliClassSpec>> = {
     minMolM2Day: null,
     targetLowMolM2Day: 20,
     targetHighMolM2Day: 30,
-    maxDesignRsr: 0.2,
+    maxDesignRsr: PV_SHADE_CEILING.value,
     maxDesignRsrTier: 'B',
     maxDesignRsrCitations: ['zhang2025-tipping-points', 'laub2022-shade-meta'],
     maxDesignRsrNote: RSR_SEGMENTED_BASIS,

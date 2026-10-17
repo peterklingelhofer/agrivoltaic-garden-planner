@@ -1,5 +1,13 @@
 import type { NonEmpty } from '../../types/cited'
 import type { CitationId } from '../../types/citation-ids.generated'
+import {
+  BASIL_DLI_FLOOR,
+  LETTUCE_DLI_TARGET_HIGH,
+  RASPBERRY_DLI_FLOOR,
+  STRAWBERRY_DLI_FLOOR,
+  VINE_CROP_DLI_FLOOR,
+  WILD_GINGER_SURVIVAL_CEILING,
+} from '../pinned-figures.ts'
 import type { CropRow } from './schema'
 
 /**
@@ -146,6 +154,9 @@ const MEDITERRANEAN_SUBSHRUB_TEMP = [0, 12, 30, 40] as const
  * from the crop's sun-hour class, labeled as such and never presented as measurements. Rooting
  * depths marked with an fao56 citation are FAO-56 Table 22 midpoints. The rest fall back to a
  * per-class default
+ *
+ * Where `pinned-figures.ts` pins a figure to the cited work's own sentence, the row reads the
+ * figure from there
  */
 export const CROP_ROWS: readonly CropRow[] = [
   // Fruiting vegetables
@@ -162,7 +173,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     // Lycopersicon at 10 to 12 for minimum acceptable quality, 14 to 20 for good and 22 to 30
     // for high. The 15 is Runkle 2011's vine-crop figure, in a sentence that names no crop, and
     // it stays as the floor. Tier C: none of the three chains ends in a tomato experiment
-    15,
+    VINE_CROP_DLI_FLOOR.value,
     20,
     30,
     'C',
@@ -199,7 +210,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     // 10 to 12 minimum acceptable, 14 to 20 good, 22 to 30 high. VCE Table 3 has no pepper row,
     // so the 20 to 30 is the range it prints for tomato, and the 15 is Runkle's vine-crop
     // figure. Tier C for the same reason as tomato
-    15,
+    VINE_CROP_DLI_FLOOR.value,
     20,
     30,
     'C',
@@ -229,7 +240,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     'solanaceae',
     'bush',
     'warm',
-    15,
+    VINE_CROP_DLI_FLOOR.value,
     20,
     30,
     'C',
@@ -338,7 +349,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     // VCE SPES-720NP Table 3 prints "Cucumber 20-30" for the crop itself, and Runkle 2011
     // names cucumber among the vine crops at 15, preferably above 20. Purdue's chart has no
     // cucumber row, so this row doesn't cite it
-    15,
+    VINE_CROP_DLI_FLOOR.value,
     20,
     30,
     'C',
@@ -2272,7 +2283,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     // placing a failure point, which LETTUCE_CAVEAT says beside the number
     5.8,
     14.4,
-    17,
+    LETTUCE_DLI_TARGET_HIGH.value,
     'A',
     2,
     45,
@@ -2302,7 +2313,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     // head type
     5.8,
     14.4,
-    17,
+    LETTUCE_DLI_TARGET_HIGH.value,
     'A',
     2,
     65,
@@ -3113,7 +3124,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     // at which yield and quality were both high. 14.4 is Pennisi et al. 2020's optimum for basil as
     // for lettuce, and 17.8 is the top of Dou et al.'s range, where shoot mass was highest. Tier A:
     // BASIL_CAVEAT carries what each figure is
-    12.9,
+    BASIL_DLI_FLOOR.value,
     14.4,
     17.8,
     'A',
@@ -4021,7 +4032,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     // quantity from Widmer's agrivoltaic 25, which is the one the gate uses (Decision Record
     // 23). The tier is B: Widmer is a four-year study of 21 cases and states its figure in the
     // unit this row carries
-    25,
+    STRAWBERRY_DLI_FLOOR.value,
     25,
     30,
     'B',
@@ -4063,7 +4074,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     // 15 is Widmer 2026 verbatim for raspberry, on the same average-yield convention as strawberry.
     // The 18 to 25 band is this app's own: Widmer publishes no target and no shading figure for
     // raspberry
-    15,
+    RASPBERRY_DLI_FLOOR.value,
     18,
     25,
     'C',
@@ -6250,7 +6261,7 @@ export const CROP_ROWS: readonly CropRow[] = [
       // even as its surviving ramets grew faster. Only two light levels were measured, and
       // mid-summer air and soil were warmer in the clearcut too, so heat and drought ride along
       // with the light in every figure this paper reports
-      survivalCeiling: 36.4,
+      survivalCeiling: WILD_GINGER_SURVIVAL_CEILING.value,
       survivalCeilingTier: 'B',
       survivalCeilingCitations: ['nelson2007-late-seral-herbs'],
       survivalCeilingNote:

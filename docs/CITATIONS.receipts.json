@@ -1317,6 +1317,85 @@
         }
       }
     ],
+    "laub2022-shade-meta": [
+      {
+        "quote": "5adf49123abf144da35d28dad1706336f9c8c8a32c05e6b8870b7dcd07af8f4f",
+        "preview": "Estimated yields at 40% RSR are 50% (CI 41 to 61%).",
+        "found": {
+          "kind": "pdf",
+          "bytes": 800203,
+          "textSha256": "3fded802470d3e2bc6bb2de83650174fd79498806e478c58e478f715ab638d6c",
+          "via": "manual",
+          "date": "2026-10-17"
+        }
+      },
+      {
+        "quote": "770d6f9feeda21449f16539c69dafb8208d1bcefe8ab0b2da9a3b7b90f9b4784",
+        "preview": "Experiments from greenhouses as the system difference to AV ",
+        "found": {
+          "kind": "pdf",
+          "bytes": 800203,
+          "textSha256": "3fded802470d3e2bc6bb2de83650174fd79498806e478c58e478f715ab638d6c",
+          "via": "manual",
+          "date": "2026-10-17"
+        }
+      },
+      {
+        "quote": "63138528bb3b184218f1d318e62a58ad720e743c286d8ebd610ab1db967ebf92",
+        "preview": "For leafy vegetables the estimate for 40% RSR is 86% (CI 61 ",
+        "found": {
+          "kind": "pdf",
+          "bytes": 800203,
+          "textSha256": "3fded802470d3e2bc6bb2de83650174fd79498806e478c58e478f715ab638d6c",
+          "via": "manual",
+          "date": "2026-10-17"
+        }
+      },
+      {
+        "quote": "eccc246ae76575f635bcc87f79f2eded19ca8bf6c0c3e6764298eb3e2822d353",
+        "preview": "For maize, the crop type with the strongest and disproportio",
+        "found": {
+          "kind": "pdf",
+          "bytes": 800203,
+          "textSha256": "3fded802470d3e2bc6bb2de83650174fd79498806e478c58e478f715ab638d6c",
+          "via": "manual",
+          "date": "2026-10-17"
+        }
+      },
+      {
+        "quote": "e509bdceef538334785e010c665aa3b4d0d7590ac21a8b0d9dfc49bfc34dd4dd",
+        "preview": "Forages are also estimated to have little susceptibility to ",
+        "found": {
+          "kind": "pdf",
+          "bytes": 800203,
+          "textSha256": "3fded802470d3e2bc6bb2de83650174fd79498806e478c58e478f715ab638d6c",
+          "via": "manual",
+          "date": "2026-10-17"
+        }
+      },
+      {
+        "quote": "f65d48def908173ebbd3c3f540d39be255b570892cb46469849811d4aceca5a3",
+        "preview": "Further, no significant differences were found whether cloth",
+        "found": {
+          "kind": "pdf",
+          "bytes": 800203,
+          "textSha256": "3fded802470d3e2bc6bb2de83650174fd79498806e478c58e478f715ab638d6c",
+          "via": "manual",
+          "date": "2026-10-17"
+        }
+      },
+      {
+        "quote": "2dee034881ebcdd3d3b24df76362575958df376682964489ba4c6e902f4da776",
+        "preview": "In contrast to these crops, berries, fruits and fruity veget",
+        "found": {
+          "kind": "pdf",
+          "bytes": 800203,
+          "textSha256": "3fded802470d3e2bc6bb2de83650174fd79498806e478c58e478f715ab638d6c",
+          "via": "manual",
+          "date": "2026-10-17"
+        }
+      }
+    ],
     "lerner2020-purdue-planting-calendar": [
       {
         "quote": "c64c222202b9e74b63dc6daee70eab3eb13625d01c576acc21ddc20f69a41d07",
