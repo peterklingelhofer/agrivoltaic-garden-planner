@@ -37,6 +37,7 @@
     "verify-live": "bun scripts/verify-live.mjs",
     "quotes:check": "bun scripts/check-quotes.mjs",
     "citations:baseline": "bun scripts/citation-baseline.mjs",
+    "archive-sources": "bun scripts/archive-sources.mjs",
     "sources:check": "bun scripts/check-sources.mjs",
     "rust:test": "cargo test --manifest-path crates/agv-sim/Cargo.toml",
     "rust:wasm": "cargo build --release --manifest-path crates/agv-sim/Cargo.toml --target wasm32-unknown-unknown && bun run rust:ship",

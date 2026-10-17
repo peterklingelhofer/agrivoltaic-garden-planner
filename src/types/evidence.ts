@@ -49,6 +49,8 @@ export interface CitationRecord {
   readonly containerTitle: string | null
   readonly doi: string | null
   readonly url: string | null
+  /** Wayback Machine capture nearest the day the source was read, or null until one is recorded */
+  readonly archived: string | null
   readonly group: CitationGroup
   readonly verification: CitationVerification
   readonly accessLevel: CitationAccessLevel

@@ -29,6 +29,7 @@ interface CslEntry {
     readonly evidenceTier: string | null
     readonly backsClaims?: readonly string[]
     readonly caveat?: string
+    readonly archived?: string
   }
 }
 
@@ -49,6 +50,7 @@ const project = (entry: CslEntry): CitationRecord => {
     containerTitle: entry['container-title'] ?? null,
     doi: entry.DOI ?? null,
     url: entry.URL ?? null,
+    archived: entry.custom.archived ?? null,
     group: entry.custom.group as CitationRecord['group'],
     verification,
     accessLevel: entry.custom.accessLevel as CitationRecord['accessLevel'],

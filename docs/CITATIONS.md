@@ -41,6 +41,10 @@ Physics, geodata and software sources carry `null`: the scheme does not apply to
 | D | Traditional, plausible, untested | Folklore panel only, never affects layout |
 | E | No evidence, or directly contradicted | Folklore panel only, never affects layout |
 
+### Archived copies
+
+A source cited by URL also lists an Archived link to the Wayback Machine capture nearest the date it was read. The live page may have been revised or removed since then, so check the capture when a quoted figure doesn't match the live page. `scripts/archive-sources.mjs` finds or requests each capture and records its link.
+
 ### Receipts and baselines
 
 A receipt records that a verbatim quote was found in its source: the quote's hash and a
@@ -87,6 +91,7 @@ comes down.
 Allen, Gabe; Hickman, Tyler. (2023). *In Colorado, the soil beneath solar panels is ripe for growing crops*. Planet Forward
 
 - URL: <https://planetforward.org/story/soil-beneath-solar-panels/>
+- Archived: <https://web.archive.org/web/20260711142821/https://planetforward.org/story/soil-beneath-solar-panels/>
 - Verification: URL-verified | Access: public-domain
 - Backs:
   - at Jack's Solar Garden the trackers' shadows move across the ground through the day and rainwater is deposited along each panel's downward edge, and growers plant to the microclimates that makes
@@ -378,6 +383,7 @@ Pataczek, Lisa; Weselek, Axel; Bauerle, Andrea; Högy, Petra. (2023). *Agrivolta
 (2026). *Mexican graduates develop agrivoltaic system with rainwater harvesting, smart irrigation*. pv magazine
 
 - URL: <https://www.pv-magazine.com/2026/07/28/mexican-graduates-develop-agrivoltaic-system-with-rainwater-harvesting-smart-irrigation/>
+- Archived: <https://web.archive.org/web/20260731101933/https://www.pv-magazine.com/2026/07/28/mexican-graduates-develop-agrivoltaic-system-with-rainwater-harvesting-smart-irrigation/>
 - Verification: URL-verified | Access: public-domain
 - Backs:
   - a 2026 proposal pairing rainwater harvesting from the modules with sensor-driven subsurface drip, with the module count, the crops and the water recovered all undisclosed and nothing measured
@@ -388,6 +394,7 @@ Pataczek, Lisa; Weselek, Axel; Bauerle, Andrea; Högy, Petra. (2023). *Agrivolta
 (n.d.). *Agrivoltaics: the technical guide to integrated solar and agricultural systems*. PVcase
 
 - URL: <https://pvcase.com/blog/agrivoltaics>
+- Archived: <https://web.archive.org/web/20260616180311/https://pvcase.com/blog/agrivoltaics>
 - Verification: URL-verified | Access: public-domain
 - Backs:
   - design practice for the drip line: a gravel drip zone under the module edges, or trackers tilted during heavy rain to spread the water across the rows
@@ -713,6 +720,7 @@ Khan, M. Ryyan; Sakr, Enas; Sun, Xingshu; Bermel, Peter; Alam, Muhammad A. (2019
 King, David L.; Boyson, William E.; Kratochvil, Jay A. (2004). *Photovoltaic Array Performance Model*. Sandia National Laboratories SAND2004-3535
 
 - URL: <https://www.osti.gov/biblio/919131>
+- Archived: <https://web.archive.org/web/20260930014408/https://www.osti.gov/biblio/919131>
 - Verification: URL-verified | Access: public-domain, evidence tier **B**
 - Backs:
   - the alternative cell-temperature model, used to measure the model-form contribution to the LER energy band by running the chain both ways
@@ -723,6 +731,7 @@ King, David L.; Boyson, William E.; Kratochvil, Jay A. (2004). *Photovoltaic Arr
 King, David L.; Gonzalez, Sigifredo; Galbraith, Gary M.; Boyson, William E. (2007). *Performance Model for Grid-Connected Photovoltaic Inverters*. Sandia National Laboratories SAND2007-5036
 
 - URL: <https://www.osti.gov/biblio/920449>
+- Archived: <https://web.archive.org/web/20260902165401/https://www.osti.gov/biblio/920449>
 - Verification: URL-verified | Access: public-domain, evidence tier **B**
 - Backs:
   - the named upgrade path from the PVWatts inverter efficiency curve to a full inverter performance model
@@ -858,6 +867,7 @@ Perez, Richard; Seals, Robert; Michalsky, Joseph. (1993). *All-weather model for
 Ward, Greg. (n.d.). *gendaymtx - generate an annual Perez sky matrix from a weather tape*. Radiance manual pages
 
 - URL: <https://www.radiance-online.org/learning/documentation/manual-pages/pdfs/gendaymtx.pdf>
+- Archived: <https://web.archive.org/web/20250825022934/https://www.radiance-online.org/learning/documentation/manual-pages/pdfs/gendaymtx.pdf>
 - Verification: URL-verified | Access: open-access
 - Backs:
   - the cumulative-sky daylight-coefficient method this app's GPU pipeline reimplements
@@ -947,6 +957,7 @@ Spencer, J. W. (1971). *Fourier series representation of the position of the sun
 Stallknecht, Eric. (2025). *Calculating and Using Daily Light Integral (DLI): An Introductory Guide*. Virginia Cooperative Extension SPES-720NP
 
 - URL: <https://www.pubs.ext.vt.edu/content/dam/pubs_ext_vt_edu/spes/spes-720/SPES-720.pdf>
+- Archived: <https://web.archive.org/web/20260307184940/https://www.pubs.ext.vt.edu/content/dam/pubs_ext_vt_edu/spes/spes-720/SPES-720.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - DLI calculation guidance underpinning the DLI classification bands
@@ -976,6 +987,7 @@ Thevenard, D.; Haddad, K. (2006). *Ground reflectivity in the context of buildin
 Torres, Ariana P.; Lopez, Roberto G. (n.d.). *Measuring Daily Light Integral in a Greenhouse*. Commercial Greenhouse Production HO-238-W
 
 - URL: <https://www.extension.purdue.edu/extmedia/ho/ho-238-w.pdf>
+- Archived: <https://web.archive.org/web/20260914214324/https://www.extension.purdue.edu/extmedia/ho/ho-238-w.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - worked DLI integration example: 500 umol/m2/s over a 12 h photoperiod = 21.6 mol/m2/d
@@ -989,6 +1001,7 @@ Torres, Ariana P.; Lopez, Roberto G. (n.d.). *Measuring Daily Light Integral in 
 Torres, Ariana P.; Currey, Christopher J.; Lopez, Roberto G.; Faust, James E. (2010). *Measuring Daily Light Integral (DLI)*. Commercial Greenhouse Production HO-238-B-W
 
 - URL: <https://www.extension.purdue.edu/extmedia/ho/ho-238-b-w.pdf>
+- Archived: <https://web.archive.org/web/20260907111331/https://www.extension.purdue.edu/extmedia/ho/ho-238-b-w.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - DLI measurement guidance for the curated crop table
@@ -1047,6 +1060,7 @@ Kiehn, Ferdinand A.; Reimer, Mel. (1992). *Alternative crops for the prairies (A
 Alaska Center for Conservation Science, University of Alaska Anchorage. (n.d.). *Non-Native Plant Species List*. Alaska Center for Conservation Science (Alaska Exotic Plants Information Clearinghouse, AKEPIC)
 
 - URL: <https://accs.uaa.alaska.edu/invasive-species/non-native-plant-species-list/>
+- Archived: <https://web.archive.org/web/20260921110506/https://accs.uaa.alaska.edu/invasive-species/non-native-plant-species-list/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - dandelion invasiveStatus, verbatim: 'Taraxacum officinale F.H. Wigg. TAOF common dandelion 58 Asteraceae 1916 Alaska' (AKEPIC 'Non-Native Plant Species List' table (Alaska Center for Conservation Science), columns Scientific Name, Symbol, )
@@ -1057,6 +1071,7 @@ Alaska Center for Conservation Science, University of Alaska Anchorage. (n.d.). 
 Allen, Richard G.; Pereira, Luis S.; Raes, Dirk; Smith, Martin. (1998). *Crop evapotranspiration: Guidelines for computing crop water requirements*. Food and Agriculture Organization of the United Nations FAO Irrigation and Drainage Paper 56
 
 - URL: <https://www.fao.org/4/x0490e/x0490e00.htm>
+- Archived: <https://web.archive.org/web/20261013002639/https://www.fao.org/4/x0490e/x0490e00.htm>
 - Verification: UNVERIFIED | Access: open-access, evidence tier **A**
 - Backs:
   - crop coefficients (Table 22) and rooting depths for the soil/water stage of the recommendation pipeline
@@ -1067,6 +1082,7 @@ Allen, Richard G.; Pereira, Luis S.; Raes, Dirk; Smith, Martin. (1998). *Crop ev
 Andrews, Nick; Coop, Leonard; Stoven, Heather; Noordijk, Heidi; Heinrich, Aaron. (2021). *Vegetable degree-day models: An introduction for farmers and gardeners*. Oregon State University Extension Service EM 9305
 
 - URL: <https://extension.oregonstate.edu/sites/extd8/files/catalog/auto/EM9305.pdf>
+- Archived: <https://web.archive.org/web/20260314052805/https://extension.oregonstate.edu/sites/extd8/files/catalog/auto/EM9305.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **B**
 - Backs:
   - OSU Croptime coverage, verbatim: 'Croptime currently hosts 29 vegetable DD models and three summer annual weed models', which is the count behind ledger row A16
@@ -1081,6 +1097,7 @@ Andrews, Nick; Coop, Leonard; Stoven, Heather; Noordijk, Heidi; Heinrich, Aaron.
 Arkansas State Plant Board, Arkansas Department of Agriculture. (2025). *Code of Arkansas Rules, Title 2, Chapter II, Subchapter B, Part 50: Rules on Plant Diseases and Pests, 2 CAR 50-101 Public nuisance declared*. Arkansas Bureau of Legislative Research, Code of Arkansas Rules
 
 - URL: <https://webftp.blr.arkansas.gov/Home/FTPDocument?path=CAR%2FParts%2F2CARpt50.pdf>
+- Archived: <https://web.archive.org/web/20261017221536/https://webftp.blr.arkansas.gov/Home/FTPDocument?path=CAR%2FParts%2F2CARpt50.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - sunn-hemp invasiveStatus, verbatim: '(23) Crotalaria (Crotalaria spp.);' (2 CAR 50-101, subsection (d) Noxious weeds listed, item (23), page 5 of the PDF)
@@ -1122,6 +1139,7 @@ Both, A. J.; Albright, L. D.; Langhans, R. W.; Reiser, R. A.; Vinzant, B. G. (19
 Brechner, Melissa; Both, A. J. (2013). *Hydroponic Lettuce Handbook*. Cornell University Controlled Environment Agriculture Program
 
 - URL: <https://cpb-us-e1.wpmucdn.com/blogs.cornell.edu/dist/8/8824/files/2019/06/Cornell-CEA-Lettuce-Handbook-.pdf>
+- Archived: <https://web.archive.org/web/20261005233844/https://cpb-us-e1.wpmucdn.com/blogs.cornell.edu/dist/8/8824/files/2019/06/Cornell-CEA-Lettuce-Handbook-.pdf>
 - Verification: URL-verified | Access: open-access, evidence tier **B**
 - Backs:
   - lettuce target DLI, verbatim: 'A supplemental light intensity within the range of 100-200 umol/m2/s (for a total of 17 mol/m2/d of both natural and supplemental lighting) at the plant level is recommended. It should be noted that 17 mol/m2/d is the light integral that worked best for the particular cultivar of boston bibb lettuce that we used'
@@ -1144,6 +1162,7 @@ California Olive Committee and California Minor Crops Council. (2003). *A Pest M
 California Invasive Plant Council. (n.d.). *The Cal-IPC Inventory*. California Invasive Plant Council
 
 - URL: <https://www.cal-ipc.org/plants/inventory/>
+- Archived: <https://web.archive.org/web/20261002053929/https://www.cal-ipc.org/plants/inventory/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - shungiku invasiveStatus, verbatim: 'Glebionis coronaria | garland Chrysanthemum, crown daisy | Limited' (Cal-IPC Inventory web table (https://www.cal-ipc.org/plants/inventory/), columns 'Scientific name', 'Common names' and ')
@@ -1154,6 +1173,7 @@ California Invasive Plant Council. (n.d.). *The Cal-IPC Inventory*. California I
 Chamberlain, James L.; Beegle, Dana; Lajeunesse Connette, Katie. (2014). *Forest Farming Ramps*. USDA National Agroforestry Center AF Note-47
 
 - URL: <https://www.fs.usda.gov/nac/assets/documents/agroforestrynotes/an47ff08.pdf>
+- Archived: <https://web.archive.org/web/20260703123027/https://www.fs.usda.gov/nac/assets/documents/agroforestrynotes/an47ff08.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **B**
 - Backs:
   - ramps want high light during their own growing window, and the shade in a ramp habitat arrives after it
@@ -1164,6 +1184,7 @@ Chamberlain, James L.; Beegle, Dana; Lajeunesse Connette, Katie. (2014). *Forest
 Chan, Edwin; Elevitch, Craig R. (2006). *Cocos nucifera (coconut), Species Profiles for Pacific Island Agroforestry, ver. 2.1*. Permanent Agriculture Resources (Agroforestry Net), Holualoa, Hawaii (listed on the CTAHR Master Gardener plants page, University of Hawaii)
 
 - URL: <https://agroforestry.org/images/pdfs/Cocos-coconut.pdf>
+- Archived: <https://web.archive.org/web/20260916093154/https://agroforestry.org/images/pdfs/Cocos-coconut.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - coconut width, verbatim: 'The canopy has a diameter of 8–9 m (26–30 ft).' (p. 3 of 27, section 'BOTANICAL DESCRIPTION', paragraph 'Size')
@@ -1174,6 +1195,7 @@ Chan, Edwin; Elevitch, Craig R. (2006). *Cocos nucifera (coconut), Species Profi
 Snipes, Zack; Melgar, Juan Carlos. (2024). *In-Ground Citrus Production (HGIC 1364)*. Clemson Cooperative Extension, Home & Garden Information Center
 
 - URL: <https://hgic.clemson.edu/factsheet/in-ground-citrus-production/>
+- Archived: <https://web.archive.org/web/20260613215859/https://hgic.clemson.edu/factsheet/in-ground-citrus-production/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - orange yearsToFirstHarvest, verbatim: 'Young, grafted oranges, grapefruits, and mandarins must grow for 5 years before they will flower and produce fruit.' ("Purchasing Citrus" section)
@@ -1187,6 +1209,7 @@ Snipes, Zack; Melgar, Juan Carlos. (2024). *In-Ground Citrus Production (HGIC 13
 Tanner, Cory. (2025). *Pomegranate (Punica granatum): How to Grow, Care for, and Enjoy in South Carolina (HGIC 1359)*. Clemson Cooperative Extension, Home & Garden Information Center
 
 - URL: <https://hgic.clemson.edu/factsheet/pomegranate-punica-granatum-how-to-grow-care-for-and-enjoy-in-south-carolina/>
+- Archived: <https://web.archive.org/web/20260904181100/https://hgic.clemson.edu/factsheet/pomegranate-punica-granatum-how-to-grow-care-for-and-enjoy-in-south-carolina/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - pomegranate height, verbatim: 'This deciduous (rarely evergreen) shrub or small tree typically grows from 12 to 20 feet tall and nearly the same in spread.' ("Description: Identifying the Pomegranate Plant" section)
@@ -1229,6 +1252,7 @@ Colorado Department of Agriculture. (n.d.). *Noxious Weed Species in Colorado*. 
 Cornell University, Home Gardening. (2006). *Garden cress (Vegetable Growing Guide)*. Cornell University
 
 - URL: <http://www.gardening.cornell.edu/homegardening/scene3673.html>
+- Archived: <https://web.archive.org/web/20260531014909/http://www.gardening.cornell.edu/homegardening/scene3673.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - cress coldLimit, verbatim: 'Tolerates: frost' (Site and Plant Characteristics tab, Special Considerations)
@@ -1240,6 +1264,7 @@ Cornell University, Home Gardening. (2006). *Garden cress (Vegetable Growing Gui
 Cornell University, Department of Horticulture. (n.d.). *Quinces (Cydonia oblonga), Cornell Fruit Resources: Minor Fruits*. Cornell University
 
 - URL: <http://www.hort.cornell.edu/fruit/mfruit/quince.html>
+- Archived: <https://web.archive.org/web/20250625023002/http://www.hort.cornell.edu/fruit/mfruit/quince.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - quince coldLimit, verbatim: 'The flowers are susceptible to winter injury at temperatures below about -15 F, but trees are hardy in Zones 5 to 9.' (Cornell Fruit Resources, Quinces page, first paragraph)
@@ -1251,6 +1276,7 @@ Cornell University, Department of Horticulture. (n.d.). *Quinces (Cydonia oblong
 Crane, Jonathan H. (n.d.). *Lemon Growing in the Florida Home Landscape*. University of Florida IFAS Extension HS1153/HS402
 
 - URL: <https://ask.ifas.ufl.edu/publication/HS402>
+- Archived: <https://web.archive.org/web/20260614172052/https://ask.ifas.ufl.edu/publication/HS402>
 - Verification: URL-verified | Access: public-domain
 - Backs:
   - verbatim: 'Trees may reach 10-20 ft (3.1-6.1 m) in height' and are best 'maintained at 7 to 10 ft (2.1-3.1 m) high and 10 to 15 ft (3.1-4.6 m) wide'
@@ -1265,6 +1291,7 @@ Crane, Jonathan H. (n.d.). *Lemon Growing in the Florida Home Landscape*. Univer
 Crane, Jonathan H.; Wasielewski, Jeff; Balerdi, Carlos F.; Maguire, Ian. (n.d.). *Mango Growing in the Florida Home Landscape*. University of Florida IFAS Extension HS2/MG216
 
 - URL: <https://ask.ifas.ufl.edu/publication/MG216>
+- Archived: <https://web.archive.org/web/20261004065636/https://ask.ifas.ufl.edu/publication/MG216>
 - Verification: URL-verified | Access: public-domain
 - Backs:
   - verbatim: 'Left unpruned many mango varieties become medium to large (30 to 100 ft; 9.1 to 30.5 m) trees'
@@ -1279,6 +1306,7 @@ Crane, Jonathan H.; Wasielewski, Jeff; Balerdi, Carlos F.; Maguire, Ian. (n.d.).
 Crane, Jonathan H. (n.d.). *Papaya Growing in the Florida Home Landscape*. University of Florida IFAS Extension HS11/MG054
 
 - URL: <https://ask.ifas.ufl.edu/publication/MG054>
+- Archived: <https://web.archive.org/web/20260525145455/https://ask.ifas.ufl.edu/publication/MG054>
 - Verification: URL-verified | Access: public-domain
 - Backs:
   - verbatim: 'Giant arborescent plant to 33 ft (10 m) tall'
@@ -1303,6 +1331,7 @@ Cryan, Jessica; Musselman, Erin; Baumgardner, Ann; Osborn, Sara. (2024). *Yield,
 Shigeura, Gordon T.; Bullock, Richard M. (1983). *Guava (Psidium guajava L.) in Hawaii: History and Production (Research Extension Series 035)*. Hawaii Institute of Tropical Agriculture and Human Resources, University of Hawaii
 
 - URL: <https://www3.ctahr.hawaii.edu/oc/freepubs/pdf/RES-035.pdf>
+- Archived: <https://web.archive.org/web/20251204105754/https://www.ctahr.hawaii.edu/oc/freepubs/pdf/RES-035.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - guava width, verbatim: 'A properly pruned and trained tree can be confined to a foliage canopy approaching 4 meters (11 to 12 feet) in radius.' (CTAHR RES-035, section 'Orchard Design', Clonal orchard, PDF page 17)
@@ -1313,6 +1342,7 @@ Shigeura, Gordon T.; Bullock, Richard M. (1983). *Guava (Psidium guajava L.) in 
 Valenzuela, Hector; Smith, Jody. (2002). *Green Manure Crops: Lablab (SA-GM-7)*. College of Tropical Agriculture and Human Resources, University of Hawaii at Manoa
 
 - URL: <https://www3.ctahr.hawaii.edu/oc/freepubs/pdf/GreenManureCrops/lablab.pdf>
+- Archived: <https://web.archive.org/web/20260708105759/https://www.ctahr.hawaii.edu/oc/freepubs/pdf/GreenManureCrops/lablab.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - lablab light, verbatim: 'Lablab is also shade tolerant.' (Page 1, section 'Environmental requirements')
@@ -1324,6 +1354,7 @@ Valenzuela, Hector; Smith, Jody. (2002). *Green Manure Crops: Lablab (SA-GM-7)*.
 Bartholomew, Duane P.; Rohrbach, Kenneth G.; Evans, Dale O. (2002). *Pineapple Cultivation in Hawaii (F&N-7)*. College of Tropical Agriculture and Human Resources, University of Hawaii at Manoa
 
 - URL: <https://www.ctahr.hawaii.edu/oc/freepubs/pdf/f_n-7.pdf>
+- Archived: <https://web.archive.org/web/20260902194450/https://www3.ctahr.hawaii.edu/oc/freepubs/pdf/F_N-7.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - pineapple harvestSeason, verbatim: 'Fruits are harvested year-round for fresh market and canning operations.' (CTAHR F&N-7, 'Overview of Commercial Production Practices', first page, PDF page 1)
@@ -1334,6 +1365,7 @@ Bartholomew, Duane P.; Rohrbach, Kenneth G.; Evans, Dale O. (2002). *Pineapple C
 Fleming, Kent; Smith, Virginia Easton; Bittenbender, H. C. (2009). *The Economics of Cacao Production in Kona (AB-17)*. University of Hawai'i College of Tropical Agriculture and Human Resources (CTAHR)
 
 - URL: <https://www.ctahr.hawaii.edu/oc/freepubs/pdf/AB-17.pdf>
+- Archived: <https://web.archive.org/web/20251129220117/https://www.ctahr.hawaii.edu/oc/freepubs/pdf/AB-17.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - cacao spacing, verbatim: 'The example farm's tree spacing is 6 ft by 7 ft... some managers prefer a 5x12-ft spacing arrangement because it allows machinery to travel more freely between the rows.' (p. 3, orchard-size description)
@@ -1344,6 +1376,7 @@ Fleming, Kent; Smith, Virginia Easton; Bittenbender, H. C. (2009). *The Economic
 Clifford, Patti; Kobayashi, Kent. (2010). *Non-Invasive Fruit Trees for Gardens in Hawai'i (F_N-17)*. Hawai'i Invasive Species Council and College of Tropical Agriculture and Human Resources, University of Hawaii at Manoa
 
 - URL: <https://www.ctahr.hawaii.edu/oc/freepubs/pdf/F_N-17.pdf>
+- Archived: <https://web.archive.org/web/20260423080601/https://www.ctahr.hawaii.edu/oc/freepubs/pdf/F_N-17.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - macadamia yearsToFirstHarvest, verbatim: 'Harvest trees begin bearing fruit at 3–6 years' (CTAHR and Hawaii Invasive Species Council F_N-17, Macadamia entry, PDF page 6)
@@ -1354,6 +1387,7 @@ Clifford, Patti; Kobayashi, Kent. (2010). *Non-Invasive Fruit Trees for Gardens 
 Hamilton, Richard A.; Ito, Philip J.; Chia, C. L. (n.d.). *Macadamia: Hawaii's Dessert Nut (Circular 485)*. College of Tropical Agriculture and Human Resources, University of Hawaii at Manoa
 
 - URL: <https://www3.ctahr.hawaii.edu/oc/freepubs/pdf/C1-485.pdf>
+- Archived: <https://web.archive.org/web/20260901143437/https://www3.ctahr.hawaii.edu/oc/freepubs/pdf/C1-485.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - macadamia spacing, verbatim: '... 30 to 35 feet between rows and 16 to 20 feet between trees in the row are considered reasonable, depending on tree form and growth rate of the trees.' (CTAHR Circular 485, section 'Yields and Spacing', PDF page 8)
@@ -1365,6 +1399,7 @@ Hamilton, Richard A.; Ito, Philip J.; Chia, C. L. (n.d.). *Macadamia: Hawaii's D
 Watson, Donald P. (n.d.). *Coconut as an Ornamental (Circular 478)*. Hawaii Cooperative Extension Service, College of Tropical Agriculture and Human Resources, University of Hawaii
 
 - URL: <https://www.ctahr.hawaii.edu/oc/freepubs/pdf/C1-478.pdf>
+- Archived: <https://web.archive.org/web/20260801224447/https://www.ctahr.hawaii.edu/oc/freepubs/pdf/C1-478.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - coconut height, verbatim: 'Tall coconut palms may attain a height of more than 80 feet and live as long as 90 years. They begin to bear 6 to 10 years after planting. Dwarf coconut palms rarely grow to be more than 25 feet and bear fruit a little sooner.' (p. 3 of 16, opening section)
@@ -1375,6 +1410,7 @@ Watson, Donald P. (n.d.). *Coconut as an Ornamental (Circular 478)*. Hawaii Coop
 University of Hawaii Cooperative Extension Service. (1998). *Upland Taro*. College of Tropical Agriculture and Human Resources, University of Hawaii at Manoa Home Garden Vegetable HGV-18
 
 - URL: <https://www3.ctahr.hawaii.edu/oc/freepubs/pdf/HGV-18.pdf>
+- Archived: <https://web.archive.org/web/20260901125154/https://www3.ctahr.hawaii.edu/oc/freepubs/pdf/HGV-18.pdf>
 - Verification: URL-verified | Access: public-domain
 - Backs:
   - verbatim: 'use a guide string to plant 18-24 inches apart within rows 18-24 inches apart'
@@ -1408,6 +1444,7 @@ Dou, Haijie; Niu, Genhua; Gu, Mengmeng; Masabni, Joseph G. (2018). *Responses of
 Duke, James A. (1983). *Handbook of Energy Crops: Theobroma cacao (unpublished)*. Purdue University Center for New Crops & Plants Products (NewCROP)
 
 - URL: <https://www.hort.purdue.edu/newcrop/duke_energy/Theobroma_cacao.html>
+- Archived: <https://web.archive.org/web/20260921224616/https://www.hort.purdue.edu/newcrop/duke_energy/Theobroma_cacao.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - cacao height, verbatim: 'Small tree usually 4–8 m tall, rarely up to 20 m' ('Description' section)
@@ -1423,6 +1460,7 @@ Duke, James A. (1983). *Handbook of Energy Crops: Theobroma cacao (unpublished)*
 Duke, James A. (1983). *Corchorus olitorius L., in Handbook of Energy Crops (unpublished)*. Purdue University Center for New Crops and Plant Products (NewCROP)
 
 - URL: <https://hort.purdue.edu/newcrop/duke_energy/Corchorus_olitorius.html>
+- Archived: <https://web.archive.org/web/20261008155054/https://www.hort.purdue.edu/newcrop/duke_energy/Corchorus_olitorius.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - jute-mallow height, verbatim: 'Annual, much-branched herb 90-120 cm tall; stems glabrous.' ('Description' section)
@@ -1433,6 +1471,7 @@ Duke, James A. (1983). *Corchorus olitorius L., in Handbook of Energy Crops (unp
 Duke, James A. (1983). *Saccharum officinarum L., in Handbook of Energy Crops (unpublished)*. Purdue University Center for New Crops and Plant Products (NewCROP)
 
 - URL: <https://hort.purdue.edu/newcrop/duke_energy/Saccharum_officinarum.html>
+- Archived: <https://web.archive.org/web/20261011133421/https://hort.purdue.edu/newcrop/duke_energy/Saccharum_officinarum.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - sugarcane coldLimit, verbatim: 'Sugarcane in commercial production has endured a maximum of 53°C (127°F) and a minimum of -13°C (9°F). The high is endured by standing cane and the low by overwintering stubble. Standing stalks of sugarcane freeze at -4 to -5.5°C (25 to 22°F) depending on cv and length of exposure.' ('Ecology' section)
@@ -1443,6 +1482,7 @@ Duke, James A. (1983). *Saccharum officinarum L., in Handbook of Energy Crops (u
 Duke, James A. (1983). *Handbook of Energy Crops*. Unpublished; hosted by Purdue University NewCROP
 
 - URL: <https://hort.purdue.edu/newcrop/duke_energy/dukeindex.html>
+- Archived: <https://web.archive.org/web/20261012095420/https://hort.purdue.edu/newcrop/duke_energy/dukeindex.html>
 - Verification: URL-verified | Access: open-access, evidence tier **C**
 - Backs:
   - cassava, verbatim: 'Shrub or small tree, 1.3-5 m tall'; spacing 'usually 1.20 m to 1.50 m by 80 cm for good cvs on fertile soils; 1 m each way for weak cvs on poor soils'; 'Cassava is harvested in 10-14 months, depending on the cv, the cultural practices and the purpose of the crop'; cassava is 'reported to tolerate' shade
@@ -1465,6 +1505,7 @@ Animal and Plant Health Inspection Service, US Department of Agriculture. (2018)
 Elevitch, Craig R.; Manner, Harley I. (2006). *Artocarpus heterophyllus (jackfruit), Species Profiles for Pacific Island Agroforestry, ver. 1.1*. Permanent Agriculture Resources (Agroforestry Net), Holualoa, Hawaii (listed on the CTAHR Master Gardener plants page, University of Hawaii)
 
 - URL: <https://agroforestry.org/images/pdfs/A.heterophyllus-jackfruit.pdf>
+- Archived: <https://web.archive.org/web/20260926101738/https://agroforestry.org/images/pdfs/A.heterophyllus-jackfruit.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - jackfruit width, verbatim: 'The canopy diameter at 5 years old ranges from 3.5–6.7 m (11–22 ft) and can reach 10 m or more in older trees.' (p. 3 of 17, section 'Size and form')
@@ -1500,6 +1541,7 @@ Ernst, T. W.; Kher, S.; Stanton, D.; Rennie, D. C. (2018). *Plasmodiophora brass
 Hernández Bermejo, J. E.; León, J. (1994). *Neglected crops: 1492 from a different perspective (FAO Plant Production and Protection Series No. 26)*. Food and Agriculture Organization of the United Nations
 
 - URL: <https://openknowledge.fao.org/server/api/core/bitstreams/fbde779c-8968-4a7d-8df8-de28c2196aac/content>
+- Archived: <https://web.archive.org/web/20260502074154/https://openknowledge.fao.org/server/api/core/bitstreams/fbde779c-8968-4a7d-8df8-de28c2196aac/content>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - oca daysToMaturity, verbatim: 'The extensive growing period of seven to eight months exposes the crop for a longer time to attack from biotic and abiotic factors' (Chapter 'Andean tubers' (C. Arbizu and M. Tapia), section Oca, 'Prospects for improvement' (page 152 of the book, also o)
@@ -1513,6 +1555,7 @@ Hernández Bermejo, J. E.; León, J. (1994). *Neglected crops: 1492 from a diffe
 Food and Agriculture Organization of the United Nations. (n.d.). *Minor oil crops: Individual monographs, Cashew nut*. Food and Agriculture Organization of the United Nations
 
 - URL: <https://www.fao.org/4/x5043e/x5043E06.htm>
+- Archived: <https://web.archive.org/web/20261007121957/https://www.fao.org/4/X5043E/x5043E06.htm>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - cashew harvestSeason, verbatim: 'In India the main crop is ready for harvest between March and April. Some trees may produce an additional light crop between October and November (Woodroof).' (Section 'HARVESTING PERIODS' of the Cashew nut monograph)
@@ -1533,6 +1576,7 @@ Farazdaghi, H.; Harris, P. M. (1968). *Plant Competition and Crop Yield*. Nature
 Ferguson, J.M.; Weeks, W.W.; Fike, W.T. (1990). *Production of catnip in North Carolina*. Timber Press, in Advances in new crops (J. Janick and J.E. Simon, eds.), pp. 527-528, hosted by Purdue University NewCROP
 
 - URL: <https://hort.purdue.edu/newcrop/proceedings1990/V1-527.html>
+- Archived: <https://web.archive.org/web/20261017220054/https://hort.purdue.edu/newcrop/proceedings1990/V1-527.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - catnip yearsToFirstHarvest, verbatim: 'Seeds are sown into warm plantbeds 60-65 days prior to transplanting, which in North Carolina is generally between March 1 and April 1 ... Catnip is usually ready to harvest in August a time when the weather is too humid in North Carolina for proper curing.' (Sections 'TRANSPLANT PRODUCTION' and 'CURING')
@@ -1544,6 +1588,7 @@ Ferguson, J.M.; Weeks, W.W.; Fike, W.T. (1990). *Production of catnip in North C
 Fernández, E. C.; Viehmannová, I.; Lachman, J.; Milella, L. (2006). *Yacon [Smallanthus sonchifolius (Poeppig & Endlicher) H. Robinson]: a new crop in the Central Europe*. Plant, Soil and Environment 52(12):564-570 (Czech Academy of Agricultural Sciences)
 
 - URL: <https://pse.agriculturejournals.cz/pdfs/pse/2006/12/05.pdf>
+- Archived: <https://web.archive.org/web/20261017215232/https://pse.agriculturejournals.cz/pdfs/pse/2006/12/05.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - yacon coldLimit, verbatim: 'The first frosts (–1°C) in autumn can cause yacon frost burns on the overground parts (1 meter above the ground). Basal parts of the stem resist –2°C, and underground organs –3°C. In lower temperatures the tuberous roots crack.' (Journal page 568 (PDF page 5), Results and Discussion, section 'Influence of precipitation and temperature')
@@ -1585,6 +1630,7 @@ Finch, Stan; Billiald, Helen; Collier, Rosemary H. (2003). *Companion planting -
 Florida Invasive Species Council. (2025). *2025 Invasive Plant Species (the invasive plant species list used by the Florida Invasive Species Council)*. Florida Invasive Species Council, successor to the Florida Exotic Pest Plant Council
 
 - URL: <https://www.floridainvasives.org/plant-list/2025-invasive-plant-species/>
+- Archived: <https://web.archive.org/web/20260226093230/https://www.floridainvasives.org/plant-list/2025-invasive-plant-species/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - malanga invasiveStatus, verbatim: 'Xanthosoma sagittifolium | arrowleaf elephant's ear | N, C, S | II' (2025 Invasive Plant Species table, columns Scientific Name, Common Name, Zone, Category)
@@ -1595,6 +1641,7 @@ Florida Invasive Species Council. (2025). *2025 Invasive Plant Species (the inva
 Florida Invasive Species Council (formerly Florida Exotic Pest Plant Council). (2026). *FISC List of Invasive Plant Species, Category I and Category II (updated April 2026)*. Florida Invasive Species Council
 
 - URL: <https://www.floridainvasives.org/wp-content/uploads/2026/07/FISC-2026-Plant-List-Cat-I-II_April2026.pdf>
+- Archived: <https://web.archive.org/web/20261017214110/https://www.floridainvasives.org/wp-content/uploads/2026/07/FISC-2026-Plant-List-Cat-I-II_April2026.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - guava invasiveStatus, verbatim: 'Psidium guajava guava C, S' (FISC List of Invasive Plant Species, table 'FISC Category I', row Psidium guajava (columns Scientific Name, Common Name,)
@@ -1661,6 +1708,7 @@ Hargreaves, George H.; Samani, Zohrab A. (1985). *Reference Crop Evapotranspirat
 Harrington, J. F. (2013). *Soil temperature conditions for vegetable seed germination*. Oregon State University Extension Service
 
 - URL: <https://extension.oregonstate.edu/gardening/soil-compost/soil-temperature-conditions-vegetable-seed-germination>
+- Archived: <https://web.archive.org/web/20260805220201/https://extension.oregonstate.edu/gardening/soil-compost/soil-temperature-conditions-vegetable-seed-germination>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - minSoilTempC per crop: a minimum / optimum range / optimum / maximum soil temperature table in degrees F for roughly 30 vegetables, e.g. 'Tomato 50 60-85 85 95'
@@ -1672,6 +1720,7 @@ Harrington, J. F. (2013). *Soil temperature conditions for vegetable seed germin
 Hawaiian Ecosystems at Risk project, Pacific Island Ecosystems at Risk (PIER). (n.d.). *Anacardium occidentale (cashew): Hawaii-Pacific Weed Risk Assessment, Pacific Island Ecosystems at Risk (PIER)*. Hawaiian Ecosystems at Risk project (HEAR)
 
 - URL: <http://www.hear.org/pier/wra/pacific/anacardium_occidentale_htmlwra.htm>
+- Archived: <https://web.archive.org/web/20260711014415/http://www.hear.org/pier/wra/pacific/anacardium_occidentale_htmlwra.htm>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - cashew invasiveStatus, verbatim: 'RISK ASSESSMENT RESULTS: Low risk, score: 0' (Header of the Hawaii-Pacific Weed Risk Assessment page for Anacardium occidentale)
@@ -1682,6 +1731,7 @@ Hawaiian Ecosystems at Risk project, Pacific Island Ecosystems at Risk (PIER). (
 Hawaiian Ecosystems at Risk project (HEAR), Pacific Island Ecosystems at Risk (PIER). (n.d.). *Lagenaria siceraria risk assessment (Hawaii-Pacific Weed Risk Assessment)*. Hawaiian Ecosystems at Risk project
 
 - URL: <http://www.hear.org/pier/wra/pacific/lagenaria_siceraria_htmlwra.htm>
+- Archived: <https://web.archive.org/web/20230601224239/http://www.hear.org/pier/wra/pacific/lagenaria_siceraria_htmlwra.htm>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - bottle-gourd invasiveStatus, verbatim: 'RISK ASSESSMENT RESULTS: Low risk, score: 0' (HEAR (Hawaiian Ecosystems at Risk) Hawaii-Pacific Weed Risk Assessment page for Lagenaria siceraria)
@@ -1692,6 +1742,7 @@ Hawaiian Ecosystems at Risk project (HEAR), Pacific Island Ecosystems at Risk (P
 Hawaiian Ecosystems at Risk project (HEAR), Pacific Island Ecosystems at Risk (PIER). (n.d.). *Macadamia integrifolia risk assessment (Hawaii-Pacific Weed Risk Assessment)*. Hawaiian Ecosystems at Risk project
 
 - URL: <http://www.hear.org/pier/wra/pacific/macadamia_integrifolia_htmlwra.htm>
+- Archived: <https://web.archive.org/web/20261017214126/http://www.hear.org/pier/wra/pacific/macadamia_integrifolia_htmlwra.htm>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - macadamia invasiveStatus, verbatim: 'RISK ASSESSMENT RESULTS: Low risk, score: -1' (HEAR (Hawaiian Ecosystems at Risk) Hawaii-Pacific Weed Risk Assessment page for Macadamia integrifolia)
@@ -1702,6 +1753,7 @@ Hawaiian Ecosystems at Risk project (HEAR), Pacific Island Ecosystems at Risk (P
 US Forest Service, Pacific Island Ecosystems at Risk (PIER). (2018). *Carthamus tinctorius: info from PIER*. USDA Forest Service Institute of Pacific Islands Forestry, Pacific Island Ecosystems at Risk (PIER), hosted by the Hawaiian Ecosystems at Risk project (HEAR)
 
 - URL: <http://www.hear.org/pier/species/carthamus_tinctorius.htm>
+- Archived: <https://web.archive.org/web/20250328062158/http://www.hear.org/pier/species/carthamus_tinctorius.htm>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - safflower invasiveStatus, verbatim: 'Risk assessment results: High risk; score: 8 ( Hawaii-Pacific Weed Risk Assessment for Carthamus tinctorius )' (PIER species page, 'Risk assessment results' line)
@@ -1712,6 +1764,7 @@ US Forest Service, Pacific Island Ecosystems at Risk (PIER). (2018). *Carthamus 
 Pacific Island Ecosystems at Risk project (PIER). (n.d.). *Dysphania ambrosioides: info from PIER*. Hawaiian Ecosystems at Risk project (HEAR), PIER
 
 - URL: <http://www.hear.org/pier/species/dysphania_ambrosioides.htm>
+- Archived: <https://web.archive.org/web/20261017220035/http://www.hear.org/pier/species/dysphania_ambrosioides.htm>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - epazote invasiveStatus, verbatim: 'O‘ahu Island introduced invasive Wagner, Warren L./Herbst, Derral R./Sohmer, S. H. (1999) (p. 537)' (HEAR PIER species page 'Dysphania ambrosioides: info from PIER', table 'Presence', rows for the State of Hawaii (one per)
@@ -1722,6 +1775,7 @@ Pacific Island Ecosystems at Risk project (PIER). (n.d.). *Dysphania ambrosioide
 Pacific Island Ecosystems at Risk project (PIER). (n.d.). *Eryngium foetidum: info from PIER*. Hawaiian Ecosystems at Risk project (HEAR), PIER
 
 - URL: <http://www.hear.org/pier/species/eryngium_foetidum.htm>
+- Archived: <https://web.archive.org/web/20251211052305/http://www.hear.org/pier/species/eryngium_foetidum.htm>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - culantro invasiveStatus, verbatim: 'O‘ahu Island introduced invasive cultivated Wagner, Warren L./Herbst, Derral R./Sohmer, S. H. (1999) (p. 199)' (HEAR PIER species page 'Eryngium foetidum: info from PIER', table 'Presence', row for the State of Hawaii, O‘ahu Island,)
@@ -1732,6 +1786,7 @@ Pacific Island Ecosystems at Risk project (PIER). (n.d.). *Eryngium foetidum: in
 US Forest Service, Pacific Island Ecosystems at Risk (PIER). (2013). *Lablab purpureus: info from PIER*. USDA Forest Service Institute of Pacific Islands Forestry, Pacific Island Ecosystems at Risk (PIER), hosted by the Hawaiian Ecosystems at Risk project (HEAR)
 
 - URL: <http://www.hear.org/pier/species/lablab_purpureus.htm>
+- Archived: <https://web.archive.org/web/20261017221403/http://www.hear.org/pier/species/lablab_purpureus.htm>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - lablab invasiveStatus, verbatim: 'Risk assessment results: Evaluate, score: 5 ( Go to the risk assessment )' (PIER species page, 'Risk assessment results' line)
@@ -1742,6 +1797,7 @@ US Forest Service, Pacific Island Ecosystems at Risk (PIER). (2013). *Lablab pur
 US Forest Service, Pacific Island Ecosystems at Risk (PIER). (2011). *Setaria italica: info from PIER*. USDA Forest Service Institute of Pacific Islands Forestry, Pacific Island Ecosystems at Risk (PIER), hosted by the Hawaiian Ecosystems at Risk project (HEAR)
 
 - URL: <http://www.hear.org/pier/species/setaria_italica.htm>
+- Archived: <https://web.archive.org/web/20260215021723/http://www.hear.org/pier/species/setaria_italica.htm>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - foxtail-millet invasiveStatus, verbatim: 'Risk assessment results: Evaluate, score: 3 (Go to the risk assessment ( Australia )). High risk, score 9 (Go to the risk assessment ( Pacific )).' (PIER species page, 'Risk assessment results' lines)
@@ -1817,6 +1873,7 @@ Hummer, Kim E. (2006). *Blue Honeysuckle: A New Berry Crop for North America*. J
 Hannan, Joe. (2015). *Growing Aronia in Iowa*. Iowa State University Extension and Outreach, Yard and Garden
 
 - URL: <https://yardandgarden.extension.iastate.edu/article/2015/02-13/aronia.htm>
+- Archived: <https://web.archive.org/web/20260419193722/https://yardandgarden.extension.iastate.edu/article/2015/02-13/aronia.htm>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - harvest timing for aronia, verbatim: 'The fruit ripen from late August through mid-September' (Third paragraph of the article (fruiting-habit paragraph))
@@ -1827,6 +1884,7 @@ Hannan, Joe. (2015). *Growing Aronia in Iowa*. Iowa State University Extension a
 O'Malley, Patrick. (2019). *What is Chinese Chestnut?* Iowa State University Extension and Outreach, Yard and Garden
 
 - URL: <https://yardandgarden.extension.iastate.edu/article/2019/11/what-chinese-chestnut>
+- Archived: <https://web.archive.org/web/20260420012400/https://yardandgarden.extension.iastate.edu/article/2019/11/what-chinese-chestnut>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - chestnut height, verbatim: 'Eventually after several decades the trees can reach a height of 40-60’ and a spread of 30’ and potentially produce 50 lbs. of nuts.' (Iowa State University Extension, "What is Chinese Chestnut?" article)
@@ -1838,6 +1896,7 @@ O'Malley, Patrick. (2019). *What is Chinese Chestnut?* Iowa State University Ext
 Iowa State University Extension and Outreach. (2025). *Growing Rhubarb in Iowa*. Iowa State University Extension and Outreach, Yard and Garden
 
 - URL: <https://yardandgarden.extension.iastate.edu/how-to/growing-rhubarb-iowa>
+- Archived: <https://web.archive.org/web/20260626185155/https://yardandgarden.extension.iastate.edu/how-to/growing-rhubarb-iowa>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - harvest timing for rhubarb, verbatim: 'Begin harvesting rhubarb when stalks reach 10 to 15 inches long (usually sometime in April or early May in Iowa). Rhubarb can be harvested for eight to ten weeks, ending in mid-June' ("Harvesting > When to Harvest" section)
@@ -1848,6 +1907,7 @@ Iowa State University Extension and Outreach. (2025). *Growing Rhubarb in Iowa*.
 Iowa State University Extension and Outreach, Natural Resources. (n.d.). *Red Mulberry (Iowa Trees)*. Iowa State University Extension and Outreach
 
 - URL: <https://naturalresources.extension.iastate.edu/forestry/iowa_trees/trees/red_mulberry.html>
+- Archived: <https://web.archive.org/web/20260615140520/https://naturalresources.extension.iastate.edu/forestry/iowa_trees/trees/red_mulberry.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - mulberry-red height, verbatim: 'Height: 30-45 feet' (Iowa State University Extension, Natural Resources, Red Mulberry page, fact list at the top (last reviewed March 1, 2019)
@@ -1860,6 +1920,7 @@ Iowa State University Extension and Outreach, Natural Resources. (n.d.). *Red Mu
 ICAR-Indian Institute of Millets Research. (2017). *Recommended Package of Practices: Finger Millet (Eleusine coracana Gaertn.)*. ICAR-Indian Institute of Millets Research
 
 - URL: <https://www.millets.res.in/technologies/1-Recommended_Package_of_Practices-Finger_Millet.pdf>
+- Archived: <https://web.archive.org/web/20260116064853/https://millets.res.in/technologies/1-Recommended_Package_of_Practices-Finger_Millet.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - finger-millet spacing, verbatim: 'Maintenance of optimum plant population of 4-5 lakh plants ha-1 this is attained by line sowing using seed drill giving a spacing of 22.5-30 cm between rows and 7.5-10 cm between plants' ('Sowing/Planting' section)
@@ -1870,6 +1931,7 @@ ICAR-Indian Institute of Millets Research. (2017). *Recommended Package of Pract
 ICAR-Indian Institute of Millets Research. (n.d.). *Recommended package of practices: Foxtail millet (Setaria italica L.)*. ICAR-Indian Institute of Millets Research
 
 - URL: <https://www.millets.res.in/technologies/2-Recommended_Package_of_Practices-Foxtail_Millet.pdf>
+- Archived: <https://web.archive.org/web/20260116054858/https://millets.res.in/technologies/2-Recommended_Package_of_Practices-Foxtail_Millet.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - foxtail-millet spacing, verbatim: '25-30 cm between rows and 8-10 cm between plants within a row' (Page 1, heading 'Spacing')
@@ -1880,6 +1942,7 @@ ICAR-Indian Institute of Millets Research. (n.d.). *Recommended package of pract
 University of Illinois Extension. (n.d.). *Bay Laurel*. University of Illinois Extension
 
 - URL: <https://extension.illinois.edu/herbs/bay-laurel>
+- Archived: <https://web.archive.org/web/20260801075018/https://extension.illinois.edu/herbs/bay-laurel>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - harvest timing for bay-laurel, verbatim: 'Leaves can be harvested throughout the season as needed' ("Harvesting" section)
@@ -1890,6 +1953,7 @@ University of Illinois Extension. (n.d.). *Bay Laurel*. University of Illinois E
 University of Illinois Extension. (n.d.). *Caraway | Herbs | Illinois Extension*. University of Illinois Extension
 
 - URL: <https://extension.illinois.edu/herbs/caraway>
+- Archived: <https://web.archive.org/web/20260520042439/https://extension.illinois.edu/herbs/caraway>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - caraway height, verbatim: 'The second season the plant grows to 2 to 3 feet tall and produces a large, flat-topped flower head with white flowers.' (Opening paragraph)
@@ -1901,6 +1965,7 @@ University of Illinois Extension. (n.d.). *Caraway | Herbs | Illinois Extension*
 University of Illinois Extension. (n.d.). *Chives*. University of Illinois Extension
 
 - URL: <https://extension.illinois.edu/herbs/chives>
+- Archived: <https://web.archive.org/web/20260316020433/https://extension.illinois.edu/herbs/chives>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - harvest timing for chives, verbatim: 'Harvest chives throughout the season to prevent the leaves from becoming tough and to encourage formation of new bulblets' ("Harvesting" section)
@@ -1911,6 +1976,7 @@ University of Illinois Extension. (n.d.). *Chives*. University of Illinois Exten
 University of Illinois Extension. (n.d.). *Lemon Balm*. University of Illinois Extension
 
 - URL: <https://extension.illinois.edu/herbs/lemon-balm>
+- Archived: <https://web.archive.org/web/20260722033611/https://extension.illinois.edu/herbs/lemon-balm>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - harvest timing for lemon-balm, verbatim: 'Stems can be cut as needed anytime during the season preferably before flowering' ("Harvesting" section)
@@ -1921,6 +1987,7 @@ University of Illinois Extension. (n.d.). *Lemon Balm*. University of Illinois E
 University of Illinois Extension. (n.d.). *Lovage*. University of Illinois Extension
 
 - URL: <https://extension.illinois.edu/herbs/lovage>
+- Archived: <https://web.archive.org/web/20260608051235/https://extension.illinois.edu/herbs/lovage>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - harvest timing for lovage, verbatim: 'Leaves and stems can be used fresh anytime they are needed' ("Harvesting" section)
@@ -1931,6 +1998,7 @@ University of Illinois Extension. (n.d.). *Lovage*. University of Illinois Exten
 University of Illinois Extension. (n.d.). *Rosemary*. University of Illinois Extension
 
 - URL: <https://extension.illinois.edu/herbs/rosemary>
+- Archived: <https://web.archive.org/web/20260808094249/https://extension.illinois.edu/herbs/rosemary>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - harvest timing for rosemary, verbatim: 'The tender tips and foliage can be cut as needed throughout the growing season' ("Harvesting" section)
@@ -1941,6 +2009,7 @@ University of Illinois Extension. (n.d.). *Rosemary*. University of Illinois Ext
 University of Illinois Extension. (n.d.). *Sage*. University of Illinois Extension
 
 - URL: <https://extension.illinois.edu/herbs/sage>
+- Archived: <https://web.archive.org/web/20260615212638/https://extension.illinois.edu/herbs/sage>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - harvest timing for sage, verbatim: 'Leaves can be harvested through the season as needed' ("Harvest" section)
@@ -1951,6 +2020,7 @@ University of Illinois Extension. (n.d.). *Sage*. University of Illinois Extensi
 University of Illinois Extension. (n.d.). *Savory: Winter*. University of Illinois Extension
 
 - URL: <https://extension.illinois.edu/herbs/savory-winter>
+- Archived: <https://web.archive.org/web/20260312080832/https://extension.illinois.edu/herbs/savory-winter>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - harvest timing for winter-savory, verbatim: 'Young shoots and leaves can be harvested throughout the growing season' ("Harvest" section)
@@ -1961,6 +2031,7 @@ University of Illinois Extension. (n.d.). *Savory: Winter*. University of Illino
 University of Illinois Extension. (n.d.). *Tarragon: French*. University of Illinois Extension
 
 - URL: <https://extension.illinois.edu/herbs/tarragon-french>
+- Archived: <https://web.archive.org/web/20260421040030/https://extension.illinois.edu/herbs/tarragon-french>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - harvest timing for tarragon, verbatim: 'Young stem tips and leaves can be harvested as needed throughout the season' ("Harvesting" section)
@@ -1971,6 +2042,7 @@ University of Illinois Extension. (n.d.). *Tarragon: French*. University of Illi
 University of Illinois Extension. (n.d.). *Thyme*. University of Illinois Extension
 
 - URL: <https://extension.illinois.edu/herbs/thyme>
+- Archived: <https://web.archive.org/web/20260216045059/https://extension.illinois.edu/herbs/thyme>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - harvest timing for thyme, verbatim: 'Stems of thyme can be cut through the season but is best cut just before the plant starts to flower' ("Harvesting" section)
@@ -1981,6 +2053,7 @@ University of Illinois Extension. (n.d.). *Thyme*. University of Illinois Extens
 University of Illinois Extension. (n.d.). *Lemon Verbena (Herb Gardening)*. University of Illinois Extension
 
 - URL: <https://extension.illinois.edu/herbs/lemon-verbena>
+- Archived: <https://web.archive.org/web/20260516233307/https://extension.illinois.edu/herbs/lemon-verbena>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - lemon-verbena harvestSeason, verbatim: 'Harvest leaves as needed throughout the season.' (Harvesting section)
@@ -2012,6 +2085,7 @@ Kattge, Jens; Bönisch, Gerhard; Díaz, Sandra; Lavorel, Sandra. (2020). *TRY pl
 Directorate of Extension, Kerala Agricultural University. (2016). *Package of Practices Recommendations: Crops 2016 (15th edition)*. Kerala Agricultural University, Directorate of Extension
 
 - URL: <https://kau.in/sites/default/files/documents/pop2016.pdf>
+- Archived: <https://web.archive.org/web/20260119200851/https://kau.in/sites/default/files/documents/pop2016.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - black-pepper spacing, verbatim: 'The spacing recommended is 3 m x 3 m on plain lands and 2 m between plants in rows across the slope and 4 m between rows on sloppy lands.' (p. 138 (PDF p. 146 of 401), section 'Field planting' under BLACK PEPPER (Piper nigrum))
@@ -2075,6 +2149,7 @@ Klein, Alexandra-Maria; Vaissière, Bernard E.; Cane, James H.; Steffan-Dewenter
 K-State Research and Extension, Butler County. (n.d.). *Ground Cherry*. Kansas State University, K-State Research and Extension, Butler County
 
 - URL: <https://www.butler.k-state.edu/horticulture/gardener-resources/seed-libraries/groundcherry.html>
+- Archived: <https://web.archive.org/web/20261017215013/https://www.butler.k-state.edu/horticulture/gardener-resources/seed-libraries/groundcherry.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - ground-cherry daysToMaturity, verbatim: 'Usually, fruits will ripen ten to eleven weeks after transplanting outdoors.' (Harvest and Storage section)
@@ -2086,6 +2161,7 @@ K-State Research and Extension, Butler County. (n.d.). *Ground Cherry*. Kansas S
 Pomper, Kirk W.; Crabtree, Sheri B.; Lowe, Jeremy D. (2010). *Organic Production of Pawpaw*. Kentucky State University Cooperative Extension Program
 
 - URL: <https://www.kysu.edu/wp-content/uploads/2017/09/OrganicPawpawPBI-004-New-2.pdf>
+- Archived: <https://web.archive.org/web/20261017211855/https://www.kysu.edu/wp-content/uploads/2017/09/OrganicPawpawPBI-004-New-2.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - harvest timing for pawpaw, verbatim: 'Depending on the variety, fruit ripen in late-August to early-October. Fruit ripen on the same tree over about a 2 week period, which reflects an extended spring flowering period' (PBI-004, p. 1)
@@ -2096,6 +2172,7 @@ Pomper, Kirk W.; Crabtree, Sheri B.; Lowe, Jeremy D. (2010). *Organic Production
 Kubota Lab, The Ohio State University. (n.d.). *Environment*. Controlled Environment Berry Production Information
 
 - URL: <https://u.osu.edu/indoorberry/environment/>
+- Archived: <https://web.archive.org/web/20261017210823/https://u.osu.edu/indoorberry/environment/>
 - Verification: URL-verified | Access: open-access, evidence tier **C**
 - Backs:
   - greenhouse strawberry DLI guidance, verbatim: 'We recommend 12 mol/m2/day DLI to target as minimum level for good productivity and consider the optimum between 20-25 mol/m2/d'
@@ -2116,6 +2193,7 @@ Lai, Hangxian; Gao, Fake; Su, Hao; Zheng, Peng. (2022). *Nitrogen Distribution a
 Lerner, B. Rosie. (2020). *Indiana Vegetable Planting Calendar*. Purdue University Cooperative Extension Service HO-186-W
 
 - URL: <https://www.extension.purdue.edu/extmedia/HO/HO-186-W.pdf>
+- Archived: <https://web.archive.org/web/20251217183844/https://www.extension.purdue.edu/extmedia/ho/ho-186-w.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - frostOffsetDays by hardiness class, verbatim from Table 1: hardy (tolerates hard frost) 'plant 4-6 weeks before last spring frost'; semi-hardy (tolerates light frost) 'plant 2-4 weeks before last spring frost'; tender 'plant after average last spring frost (minimum air temp 50 F)'; very tender 'plant at least two weeks after average last spring frost (minimum air temp 60-65 F)'
@@ -2140,6 +2218,7 @@ Long, Yu; Tan, Xiaofeng; Zhu, Jing; An, Hua. (2024). *Response of blueberry phot
 LSU AgCenter. (2017). *Beans (Pub. 2309)*. Louisiana State University Agricultural Center
 
 - URL: <https://www.lsuagcenter.com/~/media/system/c/7/1/0/c710883aa4ed69a0304445fab01c9399/pub%202309%20beans%20gardening%20tipspdf.pdf>
+- Archived: <https://web.archive.org/web/20251108194758/https://www.lsuagcenter.com/~/media/system/c/7/1/0/c710883aa4ed69a0304445fab01c9399/pub%202309%20beans%20gardening%20tipspdf.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - lima-bean spacing, verbatim: 'Bush beans are planted in rows 3 feet apart. Plant 1/2 inch deep. After plants are up (7-12 days), thin limas to 3-5 inches apart... For pole beans, plant hills of two or three seeds every 12 inches apart in the row. Space these rows 3-4 feet apart.' (p. 1-2, 'Cultural Practices' section)
@@ -2152,6 +2231,7 @@ LSU AgCenter. (2017). *Beans (Pub. 2309)*. Louisiana State University Agricultur
 Timmerman, Anna. (2017). *Got Mirlitons? Or Chayote? How About Alligator Pears?* LSU AgCenter (Jefferson Parish Extension, "GNO Gardening" newsletter)
 
 - URL: <https://www.lsuagcenter.com/~/media/system/0/7/6/8/076829d1e19d5482e65dc24f45dfa6ae/january%202017pdf.pdf>
+- Archived: <https://web.archive.org/web/20251108222040/https://www.lsuagcenter.com/~/media/system/0/7/6/8/076829d1e19d5482e65dc24f45dfa6ae/january%202017pdf.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - chayote daysToMaturity, verbatim: 'The vine will die back in a frost, but a thick mulch around the roots will keep the plant happy and it will regrow in the spring. It typically takes 150 frost free days before the vine will produce more mirlitons.' (Feature article text, January 2017 "GNO Gardening" newsletter)
@@ -2162,6 +2242,7 @@ Timmerman, Anna. (2017). *Got Mirlitons? Or Chayote? How About Alligator Pears?*
 Magness, J.R.; Markle, G.M.; Compton, C.C. (1971). *Dandelion (Food and feed crops of the United States)*. Purdue University Center for New Crops and Plant Products (NewCROP), reproducing Magness et al. 1971
 
 - URL: <https://hort.purdue.edu/newcrop/Crops/Dandelion.html>
+- Archived: <https://web.archive.org/web/20261017220233/https://hort.purdue.edu/newcrop/Crops/Dandelion.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - dandelion width, verbatim: 'Cultivated forms may have rosettes of leaves spreading to 18 to 24 inches on established plants.' (Entry 'Dandelion' in Magness, Markle and Compton 1971, 'Food and feed crops of the United States', as reproduced by Purd)
@@ -2172,6 +2253,7 @@ Magness, J.R.; Markle, G.M.; Compton, C.C. (1971). *Dandelion (Food and feed cro
 Mahr, Susan. (2025). *Anise hyssop, Agastache foeniculum*. University of Wisconsin-Madison Division of Extension
 
 - URL: <https://hort.extension.wisc.edu/articles/anise-hyssop-agastache-foeniculum/>
+- Archived: <https://web.archive.org/web/20260514111527/https://hort.extension.wisc.edu/articles/anise-hyssop-agastache-foeniculum/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - harvest timing for anise-hyssop, verbatim: 'The best time to harvest foliage to dry is when the flowers are just past full bloom, as the oil content in the leaves is the highest at that time, but they can be used at any time' (main overview text (before the "Landscape Use" heading))
@@ -2182,6 +2264,7 @@ Mahr, Susan. (2025). *Anise hyssop, Agastache foeniculum*. University of Wiscons
 Maine Department of Agriculture, Conservation and Forestry, Horticulture Program. (2024). *Invasive Plants: Do Not Sell Plant List (Chapter 273, Criteria for Listing Invasive Terrestrial Plants)*. State of Maine
 
 - URL: <https://www.maine.gov/dacf/php/horticulture/invasiveplants.shtml>
+- Archived: <https://web.archive.org/web/20261011010722/https://www.maine.gov/dacf/php/horticulture/invasiveplants.shtml>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - sea-buckthorn invasiveStatus, verbatim: 'The invasive plants listed below are illegal to import, export, buy, sell or intentionally propagate for sale or distribution in Maine. The ban includes all cultivars, varieties and hybrids of these plants. ... Hippophae rhamnoides | Sea buckthorn | January 1, 2024' ("Do Not Sell Plant List" table, row for Hippophae rhamnoides (the 2024 handout PDF also names it, saved as maine-dacf-in)
@@ -2192,6 +2275,7 @@ Maine Department of Agriculture, Conservation and Forestry, Horticulture Program
 Manitoba Agriculture. (n.d.). *Sea Buckthorn Production in Manitoba*. Province of Manitoba
 
 - URL: <https://www.gov.mb.ca/agriculture/crops/crop-management/fruit-crops/sea-buckthorn-production.html>
+- Archived: <https://web.archive.org/web/20260604084535/https://www.gov.mb.ca/agriculture/crops/crop-management/fruit-crops/sea-buckthorn-production.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - sea-buckthorn spacing, verbatim: 'Plants should be spaced three feet (1 m) between plants and 13 feet (4 m) between rows.' ("Site Selection/Spacing/Rooting Depth" section)
@@ -2249,6 +2333,7 @@ Morra, M. J.; Kirkegaard, J. A. (2002). *Isothiocyanate release from soil-incorp
 Palmer, Dara. (2018). *Growing Serviceberries*. Montana State University Extension (MontGuide MT201821AG)
 
 - URL: <https://extension-store.montana.edu/montguides/growing-serviceberries>
+- Archived: <https://web.archive.org/web/20261017211507/https://extension-store.montana.edu/montguides/growing-serviceberries>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - harvest timing for serviceberry, verbatim: 'Serviceberry fruit ripens in late June through July' (Section ‘Harvest and Uses’)
@@ -2269,6 +2354,7 @@ Mt. Pleasant, Jane; Burt, Robert F. (2010). *Estimating Productivity of Traditio
 Henning, Jimmy C.; Nelson, C. J. (2017). *Alfalfa (G4550)*. University of Missouri Extension
 
 - URL: <https://extension.missouri.edu/publications/g4550>
+- Archived: <https://web.archive.org/web/20260412094455/https://extension.missouri.edu/publications/g4550>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - alfalfa harvestSeason, verbatim: 'For established stands, take the first (May 10 to 20) and second (June 15 to 25) cuttings when the plants are just beginning to bloom. For persistence of the stand, make two more harvests at about 35-day intervals before Sept. 15.' (Section 'Harvest management')
@@ -2279,6 +2365,7 @@ Henning, Jimmy C.; Nelson, C. J. (2017). *Alfalfa (G4550)*. University of Missou
 Myers, Rob. (2018). *Growing Millets for Grain, Forage or Cover Crop Use (G4164)*. University of Missouri Extension
 
 - URL: <https://extension.missouri.edu/publications/g4164>
+- Archived: <https://web.archive.org/web/20260617222052/https://extension.missouri.edu/publications/g4164>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - foxtail-millet daysToMaturity, verbatim: 'Maturity varies with foxtail, proso, Japanese and browntop millet being the fastest maturing types (60-90 days depending on planting date and variety and weather)' (Table 3 (Millet seeding rates and primary U.S. markets), footnote)
@@ -2289,6 +2376,7 @@ Myers, Rob. (2018). *Growing Millets for Grain, Forage or Cover Crop Use (G4164)
 Reid, William; Coggeshall, Mark; Garrett, H. E. "Gene"; Van Sambeek, Jerry. (2009). *Growing Black Walnut for Nut Production (AF1011)*. University of Missouri Center for Agroforestry
 
 - URL: <https://extension.missouri.edu/media/wysiwyg/Extensiondata/Pub/pdf/agguides/agroforestry/af1011.pdf>
+- Archived: <https://web.archive.org/web/20261017213309/https://extension.missouri.edu/media/wysiwyg/Extensiondata/Pub/pdf/agguides/agroforestry/af1011.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - black-walnut spacing, verbatim: 'Minimum tree spacing should be 25 to 30 feet depending on soil type.' (AF1011, "Orchard Design" section, p. 4)
@@ -2301,6 +2389,7 @@ Reid, William; Coggeshall, Mark; Garrett, H. E. "Gene"; Van Sambeek, Jerry. (200
 Revord, Ron; Gold, Michael; Meier, Nicholas; Webber, J. Bryan; Hunt, Ken; Warmund, Michele. (2022). *Growing and Marketing Chinese Chestnuts (AF1007)*. University of Missouri Center for Agroforestry
 
 - URL: <https://extension.missouri.edu/media/wysiwyg/Extensiondata/Pub/pdf/agguides/agroforestry/af1007.pdf>
+- Archived: <https://web.archive.org/web/20260609052850/https://extension.missouri.edu/media/wysiwyg/Extensiondata/Pub/pdf/agguides/agroforestry/af1007.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - chestnut spacing, verbatim: 'Chinese chestnut trees naturally form wide spreading crowns that grow to a height of 35 to 40 feet. Spacing your trees at least 40 to 50 feet apart will allow ample room for tree growth and allow easy access to all sides of the tree at harvest time.' (AF1007, "Backyard trees" section, p. 9)
@@ -2315,6 +2404,7 @@ Revord, Ron; Gold, Michael; Meier, Nicholas; Webber, J. Bryan; Hunt, Ken; Warmun
 Reid, William; Templemire, Aaron. (2022). *Growing Pecans in Missouri (AF1002)*. University of Missouri Center for Agroforestry
 
 - URL: <https://extension.missouri.edu/media/wysiwyg/Extensiondata/Pub/pdf/agguides/agroforestry/af1002.pdf>
+- Archived: <https://web.archive.org/web/20260421003223/https://extension.missouri.edu/media/wysiwyg/Extensiondata/Pub/pdf/agguides/agroforestry/af1002.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - pecan height, verbatim: 'The largest member of the hickory family, pecan trees often grow to a height of over 70 feet with a spread of greater than 80 feet.' (AF1002, p. 1 (introduction))
@@ -2327,6 +2417,7 @@ Reid, William; Templemire, Aaron. (2022). *Growing Pecans in Missouri (AF1002)*.
 Nakamura, Hiroshi; Abe, Jiro. (1989). *Growth and Yields of Winged Bean Grown in Different Seasons in Okinawa*. Japan Agricultural Research Quarterly 23: 71-77
 
 - URL: <https://www.jircas.go.jp/en/publication/jarq/23/1/71>
+- Archived: <https://web.archive.org/web/20251208131005/https://www.jircas.go.jp/en/publication/jarq/23/1/71>
 - Verification: URL-verified | Access: open-access, evidence tier **C**
 - Backs:
   - winged-bean photoperiod toHarvestDays, verbatim: 'UPS-31 15 92 Dec. 9 57 94' (Table 1, the September 28 sowing, row UPS-31: 57 days in the column whose footnote reads 'Number of days from germination to the first flowering'), plants sown into days shorter than 12 hours
@@ -2338,6 +2429,7 @@ Nakamura, Hiroshi; Abe, Jiro. (1989). *Growth and Yields of Winged Bean Grown in
 NC State Extension. (n.d.). *Diospyros virginiana (American Persimmon, Common Persimmon, Date Plum, Eastern Persimmon, Jove's Fruit, Persimmon, Possum Apples, Possumwood, Simmon, Winter Plum)*. NC State University Extension, Plant Toolbox
 
 - URL: <https://plants.ces.ncsu.edu/plants/diospyros-virginiana/>
+- Archived: <https://web.archive.org/web/20261012154934/https://plants.ces.ncsu.edu/plants/diospyros-virginiana/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - american-persimmon height, verbatim: 'Height: 30 ft. 0 in. - 80 ft. 0 in.' ("Dimensions" field)
@@ -2349,6 +2441,7 @@ NC State Extension. (n.d.). *Diospyros virginiana (American Persimmon, Common Pe
 NC State Extension. (n.d.). *Zingiber officinale | North Carolina Extension Gardener Plant Toolbox*. NC State Extension
 
 - URL: <https://plants.ces.ncsu.edu/plants/zingiber-officinale/>
+- Archived: <https://web.archive.org/web/20260520220212/https://plants.ces.ncsu.edu/plants/zingiber-officinale/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - ginger height, verbatim: 'Height: 2 ft. 0 in. - 4 ft. 0 in.' (Dimensions field, plant database entry)
@@ -2361,6 +2454,7 @@ NC State Extension. (n.d.). *Zingiber officinale | North Carolina Extension Gard
 NC State Extension. (n.d.). *Curcuma longa (Common Turmeric, Turmeric) | North Carolina Extension Gardener Plant Toolbox*. NC State Extension
 
 - URL: <https://plants.ces.ncsu.edu/plants/curcuma-longa/>
+- Archived: <https://web.archive.org/web/20260516175633/https://plants.ces.ncsu.edu/plants/curcuma-longa/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - turmeric height, verbatim: 'Height: 3 ft. 0 in. - 4 ft. 0 in.' (Dimensions field, plant database entry)
@@ -2374,6 +2468,7 @@ NC State Extension. (n.d.). *Curcuma longa (Common Turmeric, Turmeric) | North C
 North Carolina State Extension. (n.d.). *Aloysia citriodora (Lemon Beebrush, Lemon Verbena)*. North Carolina State Extension Gardener Plant Toolbox
 
 - URL: <https://plants.ces.ncsu.edu/plants/aloysia-citriodora/>
+- Archived: <https://web.archive.org/web/20260516104124/https://plants.ces.ncsu.edu/plants/aloysia-citriodora/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - lemon-verbena height, verbatim: 'Lemon verbena will grow 6 to 8 feet tall and wide in the ground but 2 to 4 feet tall and wide in a pot.' (Description, second paragraph (the Dimensions list gives Height: 6 ft. 0 in. - 8 ft. 0 in.))
@@ -2386,6 +2481,7 @@ North Carolina State Extension. (n.d.). *Aloysia citriodora (Lemon Beebrush, Lem
 North Carolina State Extension. (n.d.). *Stevia rebaudiana (Candy Leaf, Stevia, Sugar Leaf, Sweet Herb of Paraguay, Sweet Honey Leaf, Sweet Leaf)*. North Carolina State Extension Gardener Plant Toolbox
 
 - URL: <https://plants.ces.ncsu.edu/plants/stevia-rebaudiana/>
+- Archived: <https://web.archive.org/web/20260616095317/https://plants.ces.ncsu.edu/plants/stevia-rebaudiana/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - stevia height, verbatim: 'This plant grows up to 1 to 2 feet tall and equally as wide, and it is typically grown for its sweet tasting leaves that are ground to make a sugar substitute.' (Description, first paragraph (the Dimensions list gives Height: 1 ft. 0 in. - 2 ft. 0 in.))
@@ -2398,6 +2494,7 @@ North Carolina State Extension. (n.d.). *Stevia rebaudiana (Candy Leaf, Stevia, 
 NC State Extension. (n.d.). *Crotalaria juncea (Sunn Hemp)*. North Carolina State University and N.C. A&T State University, North Carolina Extension Gardener Plant Toolbox
 
 - URL: <https://plants.ces.ncsu.edu/plants/crotalaria-juncea/>
+- Archived: <https://web.archive.org/web/20260519100449/https://plants.ces.ncsu.edu/plants/crotalaria-juncea/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - sunn-hemp width, verbatim: 'Width: 0 ft. 6 in. - 1 ft. 0 in.' (Plant detail page, Attributes, Dimensions field)
@@ -2409,6 +2506,7 @@ NC State Extension. (n.d.). *Crotalaria juncea (Sunn Hemp)*. North Carolina Stat
 NC State Extension. (n.d.). *Glycine max (soybean), NC State Extension Gardener Plant Toolbox*. North Carolina State University and North Carolina A&T State University, N.C. Cooperative Extension
 
 - URL: <https://plants.ces.ncsu.edu/plants/glycine-max/>
+- Archived: <https://web.archive.org/web/20260316235206/https://plants.ces.ncsu.edu/plants/glycine-max/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - soybean width, verbatim: 'Width: 0 ft. 9 in. - 2 ft. 0 in.' (Plant detail page, 'Dimensions' under Attributes)
@@ -2420,6 +2518,7 @@ NC State Extension. (n.d.). *Glycine max (soybean), NC State Extension Gardener 
 NC State Extension. (n.d.). *Lablab purpureus (Hyacinth Bean, Indian Bean, Lablab)*. North Carolina State University and N.C. A&T State University, North Carolina Extension Gardener Plant Toolbox
 
 - URL: <https://plants.ces.ncsu.edu/plants/lablab-purpureus/>
+- Archived: <https://web.archive.org/web/20260729022231/https://plants.ces.ncsu.edu/plants/lablab-purpureus/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - lablab height, verbatim: 'Height: 10 ft. 0 in. - 25 ft. 0 in.' (Plant detail page, Attributes, Dimensions field)
@@ -2431,6 +2530,7 @@ NC State Extension. (n.d.). *Lablab purpureus (Hyacinth Bean, Indian Bean, Labla
 Shew, David. (n.d.). *Stevia Production in North Carolina*. North Carolina State University, Department of Plant Pathology and Center for Environmental Farming Systems
 
 - URL: <https://cefs.ncsu.edu/wp-content/uploads/Stevia-FAQ.pdf>
+- Archived: <https://web.archive.org/web/20261017215136/https://cefs.ncsu.edu/wp-content/uploads/Stevia-FAQ.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - stevia yearsToFirstHarvest, verbatim: 'In the year of establishment, the crop is harvested once in September (sometimes twice).' (Page 2, answer to question 4 (How is stevia harvested and prepared for market?))
@@ -2442,6 +2542,7 @@ Shew, David. (n.d.). *Stevia Production in North Carolina*. North Carolina State
 NC State Extension Gardener Plant Toolbox. (n.d.). *Momordica charantia (Ampalaya, Balsam Pear, Bitter Gourd, Bitter Melon)*. NC State Extension (North Carolina State University / North Carolina A&T State University Cooperative Extension)
 
 - URL: <https://plants.ces.ncsu.edu/plants/momordica-charantia/>
+- Archived: <https://web.archive.org/web/20260316183547/https://plants.ces.ncsu.edu/plants/momordica-charantia/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - bitter-melon height, verbatim: 'The plant itself, is about 4 to 6 inches high, but the vine will grow rapidly to 12 to 20 feet long in a single growing season. [...] Dimensions: Height: 12 ft. 0 in. - 20 ft. 0 in.' ("Description" text and structured "Dimensions" field, plant profile page)
@@ -2455,6 +2556,7 @@ NC State Extension Gardener Plant Toolbox. (n.d.). *Momordica charantia (Ampalay
 North Carolina State University Extension. (n.d.). *Arctium lappa (Great Burdock, Gobo), North Carolina Extension Gardener Plant Toolbox*. NC State Extension
 
 - URL: <https://plants.ces.ncsu.edu/plants/arctium-lappa/>
+- Archived: <https://web.archive.org/web/20260811110814/https://plants.ces.ncsu.edu/plants/arctium-lappa/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - burdock height, verbatim: 'Height: 2 ft. 0 in. - 10 ft. 0 in.' ('Dimensions' block of the Plant Toolbox page)
@@ -2468,6 +2570,7 @@ North Carolina State University Extension. (n.d.). *Arctium lappa (Great Burdock
 North Carolina State University Extension. (n.d.). *Tragopogon porrifolius (Common Salsify, Purple Goat's Beard, Oyster Plant), North Carolina Extension Gardener Plant Toolbox*. NC State Extension
 
 - URL: <https://plants.ces.ncsu.edu/plants/tragopogon-porrifolius/>
+- Archived: <https://web.archive.org/web/20260510145754/https://plants.ces.ncsu.edu/plants/tragopogon-porrifolius/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - salsify height, verbatim: 'larger species, up to 4 feet tall' ('Quick ID Hints' list on the Plant Toolbox page)
@@ -2479,6 +2582,7 @@ North Carolina State University Extension. (n.d.). *Tragopogon porrifolius (Comm
 Davis, Jeanine. (2023). *Commercial Luffa Sponge Gourd Production (Horticulture Information Leaflet)*. NC State University, NC State Extension
 
 - URL: <https://content.ces.ncsu.edu/commercial-luffa-sponge-gourd-production>
+- Archived: <https://web.archive.org/web/20260617064937/https://content.ces.ncsu.edu/commercial-luffa-sponge-gourd-production>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - luffa coldLimit, verbatim: 'Luffa should be transplanted outdoors after all danger of frost is past.' (NC State Extension, Commercial Luffa Sponge Gourd Production (Davis), section 'Selecting Seeds and Producing Transplants)
@@ -2490,6 +2594,7 @@ Davis, Jeanine. (2023). *Commercial Luffa Sponge Gourd Production (Horticulture 
 NC State Extension. (n.d.). *Malabar Spinach - Basella alba*. NC State Extension (NC State University / N.C. A&T State University Cooperative Extension)
 
 - URL: <https://plants.ces.ncsu.edu/plants/basella-alba/common-name/malabar-spinach/>
+- Archived: <https://web.archive.org/web/20260412190005/https://plants.ces.ncsu.edu/plants/basella-alba/common-name/malabar-spinach/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - malabar-spinach width, verbatim: 'Width: 2 ft. 0 in. - 3 ft. 0 in.' (Dimensions field, Basella alba plant profile (common name: Malabar Spinach))
@@ -2500,6 +2605,7 @@ NC State Extension. (n.d.). *Malabar Spinach - Basella alba*. NC State Extension
 NC State Extension. (n.d.). *Chamomile - Matricaria chamomilla*. NC State Extension (NC State University / N.C. A&T State University Cooperative Extension)
 
 - URL: <https://plants.ces.ncsu.edu/plants/matricaria-chamomilla/common-name/chamomile/>
+- Archived: <https://web.archive.org/web/20260509163340/https://plants.ces.ncsu.edu/plants/matricaria-chamomilla/common-name/chamomile/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - chamomile width, verbatim: 'Width: 0 ft. 6 in. - 2 ft. 0 in.' (Dimensions field, Matricaria chamomilla plant profile (common name: Chamomile))
@@ -2511,6 +2617,7 @@ NC State Extension. (n.d.). *Chamomile - Matricaria chamomilla*. NC State Extens
 NC State Extension. (n.d.). *Camellia sinensis*. NC State Extension, Plant Toolbox
 
 - URL: <https://plants.ces.ncsu.edu/plants/camellia-sinensis/>
+- Archived: <https://web.archive.org/web/20261011054710/https://plants.ces.ncsu.edu/plants/camellia-sinensis/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - tea height, verbatim: 'Height: 6 ft. 0 in. - 15 ft. 0 in.' ('Dimensions' field)
@@ -2523,6 +2630,7 @@ NC State Extension. (n.d.). *Camellia sinensis*. NC State Extension, Plant Toolb
 NC State Extension. (n.d.). *Linum usitatissimum*. NC State Extension, Plant Toolbox
 
 - URL: <https://plants.ces.ncsu.edu/plants/linum-usitatissimum/>
+- Archived: <https://web.archive.org/web/20260513074256/https://plants.ces.ncsu.edu/plants/linum-usitatissimum/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - flax light, verbatim: 'It does best in full sun and cannot grow in the shade.' ('Linum usitatissimum' plant toolbox page, description text)
@@ -2533,6 +2641,7 @@ NC State Extension. (n.d.). *Linum usitatissimum*. NC State Extension, Plant Too
 Parker, Michael. (2022). *Tree Fruits and Nuts (Chapter 15), North Carolina Extension Gardener Handbook, 2nd ed.* NC State Extension
 
 - URL: <https://content.ces.ncsu.edu/extension-gardener-handbook/15-tree-fruit-and-nuts>
+- Archived: <https://web.archive.org/web/20260727114116/https://content.ces.ncsu.edu/extension-gardener-handbook/15-tree-fruit-and-nuts>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - pecan light, verbatim: 'Fruit and nut trees need at least 6 hours of sunlight during the growing season.' (NC State Extension Gardener Handbook, Chapter 15, "Site Selection" > "Sunlight")
@@ -2543,6 +2652,7 @@ Parker, Michael. (2022). *Tree Fruits and Nuts (Chapter 15), North Carolina Exte
 NC State Extension. (n.d.). *Citrus x paradisi (Grapefruit)*. NC State University, NC State Extension (Plant Toolbox)
 
 - URL: <https://plants.ces.ncsu.edu/plants/citrus-x-paradisi/>
+- Archived: <https://web.archive.org/web/20260711180547/https://plants.ces.ncsu.edu/plants/citrus-x-paradisi/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - grapefruit height, verbatim: 'Height: 15 ft. 0 in. - 30 ft. 0 in.' ("Dimensions" field, Attributes list)
@@ -2554,6 +2664,7 @@ NC State Extension. (n.d.). *Citrus x paradisi (Grapefruit)*. NC State Universit
 NC State Extension. (n.d.). *Juglans regia (Black Sea Walnut, Common Walnut, English Walnut, Persian Walnut)*. NC State University, NC State Extension (Plant Toolbox)
 
 - URL: <https://plants.ces.ncsu.edu/plants/juglans-regia/>
+- Archived: <https://web.archive.org/web/20261009004000/https://plants.ces.ncsu.edu/plants/juglans-regia/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - walnut height, verbatim: 'Height: 40 ft. 0 in. - 60 ft. 0 in.' (NC State Plant Toolbox, Juglans regia page, "Dimensions" section)
@@ -2566,6 +2677,7 @@ NC State Extension. (n.d.). *Juglans regia (Black Sea Walnut, Common Walnut, Eng
 NC State Extension. (n.d.). *Ziziphus jujuba (Chinese Date, Common Jujuba)*. NC State University, NC State Extension (Plant Toolbox)
 
 - URL: <https://plants.ces.ncsu.edu/plants/ziziphus-jujuba/>
+- Archived: <https://web.archive.org/web/20260510150609/https://plants.ces.ncsu.edu/plants/ziziphus-jujuba/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - jujube width, verbatim: 'Width: 10 ft. 0 in. - 30 ft. 0 in.' ("Dimensions" field, Attributes list)
@@ -2576,6 +2688,7 @@ NC State Extension. (n.d.). *Ziziphus jujuba (Chinese Date, Common Jujuba)*. NC 
 North Carolina Extension Gardener Plant Toolbox. (n.d.). *Carum carvi (Caraway, Meridian Fennel, Persian Cumin) | North Carolina Extension Gardener Plant Toolbox*. NC State Extension
 
 - URL: <https://plants.ces.ncsu.edu/plants/carum-carvi/>
+- Archived: <https://web.archive.org/web/20260617012704/https://plants.ces.ncsu.edu/plants/carum-carvi/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - caraway width, verbatim: 'Carawy will grow 1 to 2 feet tall and spread 1 foot wide and prefers full sun to light shade in moist well-drained garden soil.' (Description, second paragraph. The source spells the name 'Carawy'. The Dimensions field on the same page reads 'Width: )
@@ -2588,6 +2701,7 @@ North Carolina Extension Gardener Plant Toolbox. (n.d.). *Carum carvi (Caraway, 
 North Carolina Extension Gardener Plant Toolbox. (n.d.). *Nepeta cataria (Catmint, Catnip, Catswort) | North Carolina Extension Gardener Plant Toolbox*. NC State Extension
 
 - URL: <https://plants.ces.ncsu.edu/plants/nepeta-cataria/>
+- Archived: <https://web.archive.org/web/20260511215201/https://plants.ces.ncsu.edu/plants/nepeta-cataria/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - catnip light, verbatim: '‘Cataria’ catmint requires good drainage and full sun to part shade but tolerates many soil types. The plant is resistant to drought, dry soil, and air pollution but is somewhat intolerant of heat and humidity, so give it some afternoon shade.' (Description, second paragraph (the Light field reads 'Full sun (6 or more hours of direct sunlight a day)' and 'Partial )
@@ -2598,6 +2712,7 @@ North Carolina Extension Gardener Plant Toolbox. (n.d.). *Nepeta cataria (Catmin
 North Carolina Extension Gardener Plant Toolbox. (n.d.). *Cuminum cyminum (Cumin, Cummin, Jeera) | North Carolina Extension Gardener Plant Toolbox*. NC State Extension
 
 - URL: <https://plants.ces.ncsu.edu/plants/cuminum-cyminum/>
+- Archived: <https://web.archive.org/web/20260610032531/https://plants.ces.ncsu.edu/plants/cuminum-cyminum/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - cumin spacing, verbatim: 'When seedlings are 2 inches tall, thin them to 1 plant every 4 to 8 inches.' (Description, second paragraph (planting instructions))
@@ -2612,6 +2727,7 @@ North Carolina Extension Gardener Plant Toolbox. (n.d.). *Cuminum cyminum (Cumin
 North Carolina Extension Gardener Plant Toolbox. (n.d.). *Taraxacum officinale (Dandelion, Lion's Tooth) | North Carolina Extension Gardener Plant Toolbox*. NC State Extension
 
 - URL: <https://plants.ces.ncsu.edu/plants/taraxacum-officinale/>
+- Archived: <https://web.archive.org/web/20260825122450/https://plants.ces.ncsu.edu/plants/taraxacum-officinale/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - dandelion height, verbatim: 'Height: 0 ft. 2 in. - 0 ft. 6 in.' (Attributes, field 'Dimensions')
@@ -2623,6 +2739,7 @@ North Carolina Extension Gardener Plant Toolbox. (n.d.). *Taraxacum officinale (
 North Carolina Extension Gardener Plant Toolbox. (n.d.). *Echinacea purpurea (Coneflower, Eastern Purple Coneflower, Purple Coneflower, Purple Rudbeckia) | North Carolina Extension Gardener Plant Toolbox*. NC State Extension
 
 - URL: <https://plants.ces.ncsu.edu/plants/echinacea-purpurea/>
+- Archived: <https://web.archive.org/web/20260618095222/https://plants.ces.ncsu.edu/plants/echinacea-purpurea/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - echinacea height, verbatim: 'Height: 3 ft. 0 in. - 4 ft. 0 in.' (Attributes, field 'Dimensions')
@@ -2636,6 +2753,7 @@ North Carolina Extension Gardener Plant Toolbox. (n.d.). *Echinacea purpurea (Co
 North Carolina Extension Gardener Plant Toolbox. (n.d.). *Dysphania ambrosioides (Epazote, Jusuit's Tea, Mexican Tea, Paico, Wormseed) | North Carolina Extension Gardener Plant Toolbox*. NC State Extension
 
 - URL: <https://plants.ces.ncsu.edu/plants/dysphania-ambrosioides/>
+- Archived: <https://web.archive.org/web/20260618100735/https://plants.ces.ncsu.edu/plants/dysphania-ambrosioides/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - epazote light, verbatim: 'This plant does best in full sun and moderately fertile moist well-drained soil.' (Description, third paragraph (the Light field reads 'Full sun (6 or more hours of direct sunlight a day)'))
@@ -2646,6 +2764,7 @@ North Carolina Extension Gardener Plant Toolbox. (n.d.). *Dysphania ambrosioides
 NC State Extension. (n.d.). *North Carolina Extension Gardener Plant Toolbox*. North Carolina State University
 
 - URL: <https://plants.ces.ncsu.edu/>
+- Archived: <https://web.archive.org/web/20260912002513/https://plants.ces.ncsu.edu/>
 - Verification: URL-verified | Access: public-domain
 - Backs:
   - cassava (Manihot esculenta): height and width 6 to 10 ft, USDA zones 10a to 12b, full sun or partial shade
@@ -2659,6 +2778,7 @@ NC State Extension. (n.d.). *North Carolina Extension Gardener Plant Toolbox*. N
 NC State Extension. (n.d.). *Lagenaria siceraria (bottle gourd, calabash)*. NC State University, NC State Extension (Plant Toolbox)
 
 - URL: <https://plants.ces.ncsu.edu/plants/lagenaria-siceraria/>
+- Archived: <https://web.archive.org/web/20260417123805/https://plants.ces.ncsu.edu/plants/lagenaria-siceraria/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - bottle-gourd spacing, verbatim: 'Plant several seeds in mounds 3 feet apart if growing on supports or 4 to 6 feet apart is the vine will trail on the ground.' (NC State Plant Toolbox, Lagenaria siceraria page, description (the sentence has the source's own typo 'is the vine'))
@@ -2671,6 +2791,7 @@ NC State Extension. (n.d.). *Lagenaria siceraria (bottle gourd, calabash)*. NC S
 NC State Extension. (n.d.). *Luffa aegyptiaca (sponge gourd, luffa)*. NC State University, NC State Extension (Plant Toolbox)
 
 - URL: <https://plants.ces.ncsu.edu/plants/luffa-aegyptiaca/>
+- Archived: <https://web.archive.org/web/20260113082906/https://plants.ces.ncsu.edu/plants/luffa-aegyptiaca/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - luffa width, verbatim: 'Width: 1 ft. 0 in. - 3 ft. 0 in.' (NC State Plant Toolbox, Luffa aegyptiaca page, 'Dimensions')
@@ -2681,6 +2802,7 @@ NC State Extension. (n.d.). *Luffa aegyptiaca (sponge gourd, luffa)*. NC State U
 NC State Extension. (n.d.). *Macadamia integrifolia (Australian Nut, Macadamia, Macadamia Nut, Queensland Nut)*. NC State University, NC State Extension (Plant Toolbox)
 
 - URL: <https://plants.ces.ncsu.edu/plants/macadamia-integrifolia/>
+- Archived: <https://web.archive.org/web/20260606014338/https://plants.ces.ncsu.edu/plants/macadamia-integrifolia/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - macadamia height, verbatim: 'Height: 30 ft. 0 in. - 50 ft. 0 in.' (NC State Plant Toolbox, Macadamia integrifolia page, 'Dimensions')
@@ -2694,6 +2816,7 @@ NC State Extension. (n.d.). *Macadamia integrifolia (Australian Nut, Macadamia, 
 Zeleznik, Joseph. (2024). *Sea-Buckthorn (F2195)*. North Dakota State University Extension
 
 - URL: <https://www.ndsu.edu/agriculture/extension/publications/sea-buckthorn>
+- Archived: <https://web.archive.org/web/20261017221144/https://www.ndsu.edu/agriculture/extension/publications/sea-buckthorn>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - sea-buckthorn light, verbatim: 'Light: Full sun to partial shade.' ("Preferences" section)
@@ -2704,6 +2827,7 @@ Zeleznik, Joseph. (2024). *Sea-Buckthorn (F2195)*. North Dakota State University
 NDSU Extension Service. (2026). *Flax Production for Oil and Seed in North Dakota (A1038)*. North Dakota State University Extension
 
 - URL: <https://www.ndsu.edu/agriculture/extension/publications/flax-production-oil-and-seed-north-dakota>
+- Archived: <https://web.archive.org/web/20261008135224/https://www.ndsu.edu/agriculture/extension/publications/flax-production-oil-and-seed-north-dakota>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - flax spacing, verbatim: 'A stand of 70 plants per square foot is desired. However, if uniform, stands of 30 to 40 plants per square foot may provide a satisfactory yield... Seeding rates of 25 to 45 pounds per acre are common.' ('Seeding Flax' section)
@@ -2717,6 +2841,7 @@ NDSU Extension Service. (2026). *Flax Production for Oil and Seed in North Dakot
 Zeleznik, Joseph. (2024). *Black Walnut (F2209)*. North Dakota State University Extension
 
 - URL: <https://www.ndsu.edu/agriculture/extension/publications/black-walnut>
+- Archived: <https://web.archive.org/web/20261017213425/https://www.ndsu.edu/agriculture/extension/publications/black-walnut>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - black-walnut width, verbatim: 'The largest tree in North Dakota is 65 feet tall with a canopy spread of 50 feet.' (NDSU Extension F2209, "Description" section)
@@ -2728,6 +2853,7 @@ Zeleznik, Joseph. (2024). *Black Walnut (F2209)*. North Dakota State University 
 NDSU Extension. (n.d.). *Fall Frost Damage to Field Crops*. North Dakota State University Extension
 
 - URL: <https://www.ndsu.edu/agriculture/ag-hub/ag-topics/crop-production/crops/corn/fall-frost-damage-field-crops>
+- Archived: <https://web.archive.org/web/20251109071529/https://www.ndsu.edu/agriculture/ag-hub/ag-topics/crop-production/crops/corn/fall-frost-damage-field-crops>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - corn-grain coldLimit, verbatim: 'CORN: Usually damaged by temperatures in 28 degree range or less.' ('Fall Frost Damage to Field Crops' page, CORN section)
@@ -2738,6 +2864,7 @@ NDSU Extension. (n.d.). *Fall Frost Damage to Field Crops*. North Dakota State U
 (n.d.). *NDAWN Corn Growing Degree Days Information*. North Dakota Agricultural Weather Network, North Dakota State University
 
 - URL: <https://ndawn.ndsu.nodak.edu/help-corn-growing-degree-days.html>
+- Archived: <https://web.archive.org/web/20260318061528/https://ndawn.ndsu.nodak.edu/help-corn-growing-degree-days.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - corn GDD base temperature, verbatim: 'Scientists have determined the lower base temperature for corn is 50 F (10 C)'
@@ -2763,6 +2890,7 @@ Nelson, Cara R.; Halpern, Charles B.; Antos, Joseph A. (2007). *Variation in res
 Herrera, Esteban. (1997). *Growing Pistachios in New Mexico (Circular 532)*. New Mexico State University Cooperative Extension Service
 
 - URL: <https://pubs.nmsu.edu/_circulars/CR532/index.html>
+- Archived: <https://web.archive.org/web/20251209074808/https://pubs.nmsu.edu/_circulars/CR532/index.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - pistachio spacing, verbatim: 'Tree spacing in New Mexico varies mostly from 17 feet by 17 feet to 20 feet by 20 feet (few growers have planted to 24 feet by 24 feet).' (NMSU Circular 532, section Spacing and Planting Procedures)
@@ -2777,6 +2905,7 @@ Herrera, Esteban. (1997). *Growing Pistachios in New Mexico (Circular 532)*. New
 Yao, Shengrui. (2023). *Jujube: Chinese Date in New Mexico (Guide H-330)*. New Mexico State University Cooperative Extension Service
 
 - URL: <https://pubs.nmsu.edu/_h/H330/>
+- Archived: <https://web.archive.org/web/20260826080628/https://pubs.nmsu.edu/_h/H330/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - jujube height, verbatim: 'Jujube is a deciduous fruit/ornamental tree, 15 to 30 ft in height, with very hard, strong wood.' ("DESCRIPTION" section, "Tree" subsection)
@@ -2788,6 +2917,7 @@ Yao, Shengrui. (2023). *Jujube: Chinese Date in New Mexico (Guide H-330)*. New M
 National Park Service, Mid-Atlantic Exotic Plant Management Team. (n.d.). *National Park Service, Mid-Atlantic Exotic Plant Management Team Invasive Plant List*. Center for Invasive Species and Ecosystem Health, University of Georgia (invasive.org)
 
 - URL: <https://www.invasive.org/species/list/187>
+- Archived: <https://web.archive.org/web/20260618110458/https://www.invasive.org/species/list/187>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - goji invasiveStatus, verbatim: 'matrimony vine (Lycium barbarum L.)' (invasive.org species list 187, titled "National Park Service, Mid-Atlantic Exotic Plant Management Team Invasive Plant L)
@@ -2809,6 +2939,7 @@ National Research Council. (1981). *The Winged Bean: A High-Protein Crop for the
 National Research Council. (1989). *Lost Crops of the Incas: Little-Known Plants of the Andes with Promise for Worldwide Cultivation*. National Academy Press
 
 - URL: <https://nap.nationalacademies.org/read/1398/chapter/10>
+- Archived: <https://web.archive.org/web/20251005020734/https://nap.nationalacademies.org/read/1398/chapter/10>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - oca height, verbatim: 'Oca is a compact, perennial, tuberous herb, usually 20-30 cm high, with cylindrical, succulent stems that vary in color from yellow and green to a purplish red.' (Oca chapter, 'Species Information', Description (page 91))
@@ -2820,6 +2951,7 @@ National Research Council. (1989). *Lost Crops of the Incas: Little-Known Plants
 Joy, Robert; Peterson, J. S. (2006). *Plant guide for sunn hemp (Crotalaria juncea L.)*. USDA Natural Resources Conservation Service, Plant Materials Center and National Plant Data Center
 
 - URL: <https://plants.usda.gov/DocumentLibrary/plantguide/pdf/pg_crju.pdf>
+- Archived: <https://web.archive.org/web/20261017221423/https://plants.usda.gov/DocumentLibrary/plantguide/pdf/pg_crju.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - sunn-hemp spacing, verbatim: 'If broadcasted, seed at a rate of 40 to 60 pounds of live seed per acre. If drilled, the rate should be 30 to 50 pounds per acre in 6-inch rows.' (Page 1, section 'Establishment')
@@ -2832,6 +2964,7 @@ Joy, Robert; Peterson, J. S. (2006). *Plant guide for sunn hemp (Crotalaria junc
 Sheahan, Christopher M. (2012). *Plant guide for lablab (Lablab purpureus)*. USDA Natural Resources Conservation Service, Cape May Plant Materials Center
 
 - URL: <https://plants.usda.gov/DocumentLibrary/plantguide/pdf/pg_lapu6.pdf>
+- Archived: <https://web.archive.org/web/20261017221232/https://plants.usda.gov/DocumentLibrary/plantguide/pdf/pg_lapu6.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - lablab spacing, verbatim: 'The seed should be sown 1 to 4 in. deep at 11–18 lb/acre on rows 2.5 ft wide with roughly 1 to 1.5 ft between plants (Cook et al., 2005).' (Page 2, section 'Establishment')
@@ -2842,6 +2975,7 @@ Sheahan, Christopher M. (2012). *Plant guide for lablab (Lablab purpureus)*. USD
 Sheahan, Christopher M. (2014). *Plant guide for foxtail millet (Setaria italica)*. USDA Natural Resources Conservation Service, Cape May Plant Materials Center
 
 - URL: <https://plants.usda.gov/DocumentLibrary/plantguide/pdf/pg_seit.pdf>
+- Archived: <https://web.archive.org/web/20260312060103/https://plants.usda.gov/DocumentLibrary/plantguide/pdf/pg_seit.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - foxtail-millet height, verbatim: 'It is an introduced, annual, warm-season crop that grows 2–5 ft (60-152 cm) tall.' (Page 1, section 'Description', paragraph 'General')
@@ -2852,6 +2986,7 @@ Sheahan, Christopher M. (2014). *Plant guide for foxtail millet (Setaria italica
 Oikeh, S. O.; Nwilene, F. E.; Agunbiade, T. A.; Oladimeji, O.; Ajayi, O.; Semon, M.; Tsunematsu, H.; Samejima, H. (n.d.). *Growing upland rice: a production handbook*. Africa Rice Center (WARDA)
 
 - URL: <https://www.fao.org/fileadmin/user_upload/ivc/docs/uplandrice.pdf>
+- Archived: <https://web.archive.org/web/20260812114737/https://www.fao.org/fileadmin/user_upload/ivc/docs/uplandrice.pdf>
 - Verification: URL-verified | Access: open-access
 - Backs:
   - spacing, verbatim: 'Dibbling at 30 x 30 cm or 20 x 20 cm: seed rate: 50-60 kg/ha' and 'Drilling at 25-30 cm row spacing and 5 cm within row; seed rate: 75-80 kg/ha'
@@ -2875,6 +3010,7 @@ Olanrewaju, Oluwaseyi Samuel; Oyatomi, Olaniyi; Babalola, Olubukola Oluranti; Ab
 Olsen, Shawn. (2018). *Suggested Vegetable Planting Dates for Utah*. Utah State University Extension
 
 - URL: <https://extension.usu.edu/yardandgarden/research/suggested-vegetable-planting-dates-for-utah>
+- Archived: <https://web.archive.org/web/20260711114646/https://extension.usu.edu/yardandgarden/research/suggested-vegetable-planting-dates-for-utah>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - frostOffsetDays as a four-group ladder, verbatim: 'Group A: Hardy (Plant as soon as the soil dries out in the spring.)'; 'Group B: Semi-Hardy (Plants a week or two after A group or about 2 weeks before average last spring frost.)'; 'Group C: Tender (Plant on the average date of the last spring frost)'; 'Group D: Very Tender (Plant when the soil is warm, about 2 weeks after C group.)'
@@ -2888,6 +3024,7 @@ Olsen, Shawn. (2018). *Suggested Vegetable Planting Dates for Utah*. Utah State 
 Ontario Ministry of Agriculture, Food and Rural Affairs. (2012). *Specialty Cropportunities: Gobo*. OMAFRA, Government of Ontario
 
 - URL: <https://www.omafra.gov.on.ca/CropOp/en/spec_veg/root_tuber_veg/gobo.html>
+- Archived: <https://web.archive.org/web/20261017215326/https://www.omafra.gov.on.ca/CropOp/en/spec_veg/root_tuber_veg/gobo.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - burdock spacing, verbatim: 'In-row spacing 15-30 cm Between row spacing 60-90 cm' (Gobo crop profile, rows 'In-row spacing' and 'Between row spacing')
@@ -2899,6 +3036,7 @@ Ontario Ministry of Agriculture, Food and Rural Affairs. (2012). *Specialty Crop
 Ontario Ministry of Agriculture, Food and Rural Affairs. (2012). *Specialty Cropportunities - Stevia*. Ontario Ministry of Agriculture, Food and Rural Affairs
 
 - URL: <https://www.omafra.gov.on.ca/CropOp/en/indus_misc/pharm/stev.html>
+- Archived: <https://web.archive.org/web/20261017215120/https://www.omafra.gov.on.ca/CropOp/en/indus_misc/pharm/stev.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - stevia daysToMaturity, verbatim: '54-104 days depending on day length sensitivity of cultivar.' (Days to harvest entry (the same page gives Propagation method: Transplants))
@@ -2910,6 +3048,7 @@ Ontario Ministry of Agriculture, Food and Rural Affairs. (2012). *Specialty Crop
 Ontario Ministry of Agriculture, Food and Rural Affairs. (2022). *Agronomy Guide for Field Crops (Publication 811), Chapter 6: Spring and Winter Canola*. Ontario Ministry of Agriculture, Food and Rural Affairs (OMAFRA)
 
 - URL: <https://www.ontario.ca/files/2022-10/omafra-agronomy-guide-for-field-crops-chapter-6-en-2022-10-13.pdf>
+- Archived: <https://web.archive.org/web/20261017212700/https://www.ontario.ca/files/2022-10/omafra-agronomy-guide-for-field-crops-chapter-6-en-2022-10-13.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - canola spacing, verbatim: 'The optimum plant stand is 75–130 healthy plants/m2 (7–13 plants/ft2) while 54 plants/m2 (5 plants/ft2) is the minimum for maintaining yield potential. In a 19 cm (7.5 in.) row width this is equivalent to 14–25 plants/m (4.5–6 plants/ft) of row.' (p. 160, 'Seeding Rate' section)
@@ -2922,6 +3061,7 @@ Ontario Ministry of Agriculture, Food and Rural Affairs. (2022). *Agronomy Guide
 Oplinger, E. S.; Putnam, D. H.; Kaminski, A. R.; Hanson, C. V.; Oelke, E. A.; Schulte, E. E.; Doll, J. D. (1990). *Sesame*. Alternative Field Crops Manual
 
 - URL: <https://hort.purdue.edu/newcrop/afcm/sesame.html>
+- Archived: <https://web.archive.org/web/20260902222112/https://hort.purdue.edu/newcrop/afcm/sesame.html>
 - Verification: URL-verified | Access: public-domain
 - Backs:
   - verbatim: 'Sesame is an erect annual (or occasionally a perennial) that grows to a height of 20 to 60 in., depending on the variety and the growing conditions'
@@ -2936,6 +3076,7 @@ Oplinger, E. S.; Putnam, D. H.; Kaminski, A. R.; Hanson, C. V.; Oelke, E. A.; Sc
 Armah-Agyeman, Grace; Loiland, Jim; Karow, Russell S.; Hang, Anne N. (2002). *Safflower (Dryland Cropping Systems, EM 8792)*. Oregon State University Extension Service
 
 - URL: <https://extension.oregonstate.edu/sites/extd8/files/documents/em8792.pdf>
+- Archived: <https://web.archive.org/web/20251112131006/https://extension.oregonstate.edu/sites/extd8/files/documents/em8792.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - safflower height, verbatim: 'It stands 1 to 4 feet tall at maturity.' (Page 1, section 'Description')
@@ -2949,6 +3090,7 @@ Armah-Agyeman, Grace; Loiland, Jim; Karow, Russell S.; Hang, Anne N. (2002). *Sa
 Oregon State University. (2013). *Six exotic vegetables for Oregon gardeners to try*. Oregon State University Newsroom (quotes Jim Myers, OSU Extension Service vegetable breeder)
 
 - URL: <https://news.oregonstate.edu/news/six-exotic-vegetables-oregon-gardeners-try>
+- Archived: <https://web.archive.org/web/20261017215200/https://news.oregonstate.edu/news/six-exotic-vegetables-oregon-gardeners-try>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - oca coldLimit, verbatim: 'It can't survive frost but tubers will overwinter in the ground as long as they do not freeze.' (Oca paragraph of the news release dated June 14, 2013)
@@ -2959,6 +3101,7 @@ Oregon State University. (2013). *Six exotic vegetables for Oregon gardeners to 
 Oregon State University Forage Information System. (2016). *Alfalfa (Medicago sativa L.), Forage Information System*. Oregon State University
 
 - URL: <https://forages.oregonstate.edu/group/1701/alfalfa>
+- Archived: <https://web.archive.org/web/20251206055050/https://forages.oregonstate.edu/group/1701/alfalfa>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - alfalfa spacing, verbatim: 'For pure stands, a seeding rate of 12-15 lb/a (26.5-33 kg/ha) planted in 6-inch rows is usually sufficient for a good stand of alfalfa.' (Section 'Establishment and Management', subsection 'Establishment')
@@ -2970,6 +3113,7 @@ Oregon State University Forage Information System. (2016). *Alfalfa (Medicago sa
 Strik, Bernadine; Dixon, Emily; Detweiler, Amy Jo; Sanchez, Nicole. (2021). *Growing Kiwifruit in Your Home Garden (EM 9322)*. Oregon State University Extension Service
 
 - URL: <https://extension.oregonstate.edu/catalog/em-9322-growing-kiwifruit-your-home-garden>
+- Archived: <https://web.archive.org/web/20260420133132/https://extension.oregonstate.edu/catalog/em-9322-growing-kiwifruit-your-home-garden>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - kiwifruit spacing, verbatim: 'One plant needs about 15 feet of space. Plant two vines 15 feet apart and leave about 6 feet on each end.' ("Planting" section, p. 7)
@@ -2985,6 +3129,7 @@ Strik, Bernadine; Dixon, Emily; Detweiler, Amy Jo; Sanchez, Nicole. (2021). *Gro
 Olsen, Jeff. (2006). *Growing Walnuts in Oregon (EM 8907)*. Oregon State University Extension Service
 
 - URL: <https://extension.oregonstate.edu/catalog/em-8907-growing-walnuts-oregon>
+- Archived: <https://web.archive.org/web/20260709105444/https://extension.oregonstate.edu/catalog/em-8907-growing-walnuts-oregon>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - walnut spacing, verbatim: 'Walnut trees usually are planted about 30 feet apart.' (EM 8907, "Planting" section)
@@ -2998,6 +3143,7 @@ Olsen, Jeff. (2006). *Growing Walnuts in Oregon (EM 8907)*. Oregon State Univers
 Penhallegon, Ross. (2006). *Lingonberry production guide for the Pacific Northwest*. Oregon State University Extension Service (PNW Extension Publication, PNW 583)
 
 - URL: <https://extension.oregonstate.edu/catalog/pnw-583-lingonberry-production-guide-pacific-northwest>
+- Archived: <https://web.archive.org/web/20260923201300/https://extension.oregonstate.edu/catalog/pnw-583-lingonberry-production-guide-pacific-northwest>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - harvest timing for lingonberry, verbatim: 'There are two bloom periods: March to April and July to August. The fruit ripens in mid-August and mid-October, respectively' (Section ‘Bloom’, p. 4)
@@ -3018,6 +3164,7 @@ Olsen, Jeff L.; Peachey, Ed. (2013). *Growing Hazelnuts in the Pacific Northwest
 Getty, Brooke; Townsend, Shaun; Detweiler, Amy Jo. (2015). *Growing hops in the home garden*. Oregon State University Extension Service (EM 9115)
 
 - URL: <https://extension.oregonstate.edu/catalog/em-9115-growing-hops-home-garden>
+- Archived: <https://web.archive.org/web/20261017211522/https://extension.oregonstate.edu/catalog/em-9115-growing-hops-home-garden>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - harvest timing for hops, verbatim: 'In both Western and Central Oregon, hops typically mature between August 15 and September 15, depending on the cultivar and growing season conditions' (Section ‘Harvesting and storage’)
@@ -3028,6 +3175,7 @@ Getty, Brooke; Townsend, Shaun; Detweiler, Amy Jo. (2015). *Growing hops in the 
 Strik, Bernadine; Dixon, Emily; Detweiler, Amy Jo; Sanchez, Nicole. (2020). *Growing blackberries in your home garden*. Oregon State University Extension Service (EC 1303)
 
 - URL: <https://extension.oregonstate.edu/catalog/ec-1303-growing-blackberries-your-home-garden>
+- Archived: <https://web.archive.org/web/20260827040330/https://extension.oregonstate.edu/catalog/ec-1303-growing-blackberries-your-home-garden>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - harvest timing for blackberry, verbatim: 'All cultivars are summer-bearing (‘Triple Crown’, for example) and are the latest summer-bearing cultivars, fruiting from early August to September or October in the Willamette Valley' (Section ‘Blackberry types > Growth type’, paragraph on semierect cultivars)
@@ -3038,6 +3186,7 @@ Strik, Bernadine; Dixon, Emily; Detweiler, Amy Jo; Sanchez, Nicole. (2020). *Gro
 Olsen, Jeff L. (2025). *Growing tree fruits and nuts at home*. Oregon State University Extension Service
 
 - URL: <https://extension.oregonstate.edu/catalog/ec-819-growing-tree-fruits-nuts-home>
+- Archived: <https://web.archive.org/web/20260510092429/https://extension.oregonstate.edu/catalog/ec-819-growing-tree-fruits-nuts-home>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - harvest timing for apple, read from Table 3, "Approximate time of maturity": July for Lodi through October for Braeburn, Fuji, Golden Delicious and the other late varieties
@@ -3054,6 +3203,7 @@ Olsen, Jeff L. (2025). *Growing tree fruits and nuts at home*. Oregon State Univ
 Oregon State University Extension Service. (n.d.). *20 Mediterranean Tastes You Can Grow at Home*. Oregon State University Extension Service
 
 - URL: <https://extension.oregonstate.edu/sites/extd8/files/documents/12846/mediterraneanedibles-morgan.pdf>
+- Archived: <https://web.archive.org/web/20261017214436/https://extension.oregonstate.edu/sites/extd8/files/documents/12846/mediterraneanedibles-morgan.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - quince harvestSeason, verbatim: 'Harvest in October or later – wait for yellow color and light citrusy odor to develop.' (OSU Extension handout 20 Mediterranean Tastes You Can Grow at Home, page 2, quince entry)
@@ -3064,6 +3214,7 @@ Oregon State University Extension Service. (n.d.). *20 Mediterranean Tastes You 
 Oregon State University, Department of Horticulture. (n.d.). *Cydonia oblonga (Landscape Plants)*. Oregon State University, College of Agricultural Sciences, Department of Horticulture
 
 - URL: <https://landscapeplants.oregonstate.edu/plants/cydonia-oblonga>
+- Archived: <https://web.archive.org/web/20260122143703/https://landscapeplants.oregonstate.edu/plants/cydonia-oblonga>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - quince height, verbatim: 'Deciduous tree/shrub, rounded, 15 x 15 ft (4.5 x 4.5 m).' (OSU Landscape Plants, Cydonia oblonga page, description paragraph)
@@ -3098,6 +3249,7 @@ Pennisi, Giuseppina; Pistillo, Alessandro; Orsini, Francesco; Cellini, Antonio; 
 Plant Pono (Coordinating Group on Alien Pest Species). (n.d.). *Arctium lappa (great burdock, greater burdock, gobo), Hawaii-Pacific Weed Risk Assessment result*. Plant Pono, publishing the Hawaii-Pacific Weed Risk Assessment
 
 - URL: <https://plantpono.org/hpwra/arctium-lappa/>
+- Archived: <https://web.archive.org/web/20260606134338/https://plantpono.org/hpwra/arctium-lappa/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - burdock invasiveStatus, verbatim: 'In Hawai‘i, A. lappa is considered a high-risk species and is not recommended for cultivation.' (Plant Pono page, second paragraph, with the result box 'High Risk', Score 9, Date Screened May 14, 2019)
@@ -3108,6 +3260,7 @@ Plant Pono (Coordinating Group on Alien Pest Species). (n.d.). *Arctium lappa (g
 Plant Pono (Coordinating Group on Alien Pest Species). (n.d.). *Tragopogon porrifolius (goat's beard, salsify, vegetable-oyster), Hawaii-Pacific Weed Risk Assessment result*. Plant Pono, publishing the Hawaii-Pacific Weed Risk Assessment
 
 - URL: <https://plantpono.org/hpwra/tragopogon-porrifolius/>
+- Archived: <https://web.archive.org/web/20260711025519/https://plantpono.org/hpwra/tragopogon-porrifolius/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - salsify invasiveStatus, verbatim: 'Tragopogon porrifolius is naturalized in Hawaiʻi and possesses traits that are cause for concern in tropical island ecosystems.' (Plant Pono page, 'Risks & Threats' paragraph, with the result box 'High Risk', Score 6.5, Date Screened February 24, 201)
@@ -3128,6 +3281,7 @@ Postma, Johannes A.; Lynch, Jonathan P. (2012). *Complementarity in root archite
 Dasuki, U.A.; van den Bergh, M.H. (n.d.). *Chrysanthemum coronarium L. (PROSEA)*. Plant Resources of South-East Asia (PROSEA), hosted by Pl@ntUse
 
 - URL: <https://uses.plantnet-project.org/en/Chrysanthemum_coronarium_(PROSEA)>
+- Archived: <https://web.archive.org/web/20261017220732/https://uses.plantnet-project.org/en/Chrysanthemum_coronarium_(PROSEA)>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - shungiku spacing, verbatim: 'Plant spacing depends on harvesting stage (seedlings or mature plants) and harvesting method (pulling or repeated cuts) but varies from 5-15 cm × 5-15 cm.' (Section 'Agronomy')
@@ -3153,6 +3307,7 @@ Morimoto, Y.; Mvere, B. (2004). *Lagenaria siceraria (Molina) Standl., record fr
 Fondio, L.; Grubben, G. J. H. (2011). *Corchorus olitorius L., PROTA (Plant Resources of Tropical Africa) record, Pl@ntUse mirror*. PROTA Foundation, mirrored by Pl@ntUse (Pl@ntNet)
 
 - URL: <https://plantuse.plantnet.org/en/Corchorus_olitorius_(PROTA)>
+- Archived: <https://web.archive.org/web/20260604100617/https://plantuse.plantnet.org/en/Corchorus_olitorius_%28PROTA%29>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - jute-mallow coldLimit, verbatim: 'The optimal temperature is 25–32°C. Growth stops below 15°C. Jew’s mallow is a short-day species.' (Section 'Ecology')
@@ -3163,6 +3318,7 @@ Fondio, L.; Grubben, G. J. H. (2011). *Corchorus olitorius L., PROTA (Plant Reso
 Schmidt, Claudia; Cornelisse, Sarah; Kime, Lynn. (2026). *Agritourism Diversification: Lavender Production*. Penn State Extension
 
 - URL: <https://extension.psu.edu/agritourism-diversification-lavender-production>
+- Archived: <https://web.archive.org/web/20260419090042/https://extension.psu.edu/agritourism-diversification-lavender-production>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - lavender harvestSeason, verbatim: 'Harvest is accomplished by hand and can occur throughout the summer months.' (“Harvest” section)
@@ -3173,6 +3329,7 @@ Schmidt, Claudia; Cornelisse, Sarah; Kime, Lynn. (2026). *Agritourism Diversific
 Gibson, Mary Jo R. (2026). *Growing Ground Cherries*. Penn State Extension
 
 - URL: <https://extension.psu.edu/growing-ground-cherries>
+- Archived: <https://web.archive.org/web/20261017214931/https://extension.psu.edu/growing-ground-cherries>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - ground-cherry height, verbatim: 'Although most are 1 to 3 feet tall, they sprawl.' (Body text, paragraph beginning As you plan your garden)
@@ -3183,6 +3340,7 @@ Gibson, Mary Jo R. (2026). *Growing Ground Cherries*. Penn State Extension
 Cantwell, Marita; Nie, Xunli; Zong, Ru Jing; Yamaguchi, Mas. (1996). *Asian Vegetables: Selected Fruit and Leafy Types*. Purdue University Center for New Crops and Plant Products (reprint of a chapter in J. Janick, ed., Progress in new crops, ASHS Press, pp. 488-495)
 
 - URL: <https://hort.purdue.edu/newcrop/proceedings1996/V3-488.html>
+- Archived: <https://web.archive.org/web/20261017214908/https://hort.purdue.edu/newcrop/proceedings1996/V3-488.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - garlic-chives yearsToFirstHarvest, verbatim: 'Limited harvesting is done during the first year's growth so that reserves build up in the roots.' (Chinese chives section (Purdue NewCROP copy of Cantwell et al. 1996, pp. 488-495))
@@ -3193,6 +3351,7 @@ Cantwell, Marita; Nie, Xunli; Zong, Ru Jing; Yamaguchi, Mas. (1996). *Asian Vege
 Purdue University Center for New Crops and Plant Products (NewCrop). (1997). *Chamomile*. Purdue University
 
 - URL: <https://hort.purdue.edu/newcrop/med-aro/factsheets/CHAMOMILE.html>
+- Archived: <https://web.archive.org/web/20261017212247/https://hort.purdue.edu/newcrop/med-aro/factsheets/CHAMOMILE.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - chamomile height, verbatim: 'This many-branched, erect-growing annual, formerly classified as Matricaria chamomilla L., reaches a height of about 0.3 meter and has yellow disc white ray flowers.' (Fact sheet body text, paragraph on German chamomile (Matricaria recutita))
@@ -3203,6 +3362,7 @@ Purdue University Center for New Crops and Plant Products (NewCrop). (1997). *Ch
 Robinson, Andrew P.; Conley, Shawn P. (2007). *Soybean Production Systems: Plant Populations and Seeding Rates for Soybeans (AY-217-W)*. Purdue University Cooperative Extension Service
 
 - URL: <https://www.extension.purdue.edu/extmedia/ay/ay-217-w.pdf>
+- Archived: <https://web.archive.org/web/20250615172131/https://www.extension.purdue.edu/extmedia/ay/ay-217-w.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - soybean spacing, verbatim: 'To maximize yields in most environments growers should have no less than 100,000 uniformly standing plants per acre in 7.5- and 15-inch rows and no less than 80,000 uniformly standing plants per acre in 30-inch rows.' (p. 3, paragraph above Table 1. Table 1 'Recommended Seeding Rates and Plant Populations at Different Row Widths', row 'R)
@@ -3213,6 +3373,7 @@ Robinson, Andrew P.; Conley, Shawn P. (2007). *Soybean Production Systems: Plant
 Woodmansee, John E. (2025). *Divine Fruit?* Purdue Extension, Whitley County
 
 - URL: <https://extension.purdue.edu/news/county/whitley/2025/11/divine-fruit.html>
+- Archived: <https://web.archive.org/web/20260611010156/https://extension.purdue.edu/news/county/whitley/2025/11/divine-fruit.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - american-persimmon harvestSeason, verbatim: 'Farlee said that persimmon fruit normally ripens in September and October, but some trees hold fruit well into winter.' (main text (quoting Purdue forestry extension specialist Lenny Farlee))
@@ -3223,6 +3384,7 @@ Woodmansee, John E. (2025). *Divine Fruit?* Purdue Extension, Whitley County
 Christmas, Ellsworth P.; Hawkins, Stephen S. (n.d.). *Winter Canola -- An Alternative Crop in Indiana (AY-272)*. Purdue University Cooperative Extension Service
 
 - URL: <https://www.extension.purdue.edu/extmedia/AY/AY-272.html>
+- Archived: <https://web.archive.org/web/20241203075724/https://www.extension.purdue.edu/extmedia/AY/AY-272.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - canola height, verbatim: 'In the spring it bolts, reaching a height of 3 to 5 feet, and produces bright yellow flowers.' (Publication AY-272, main text)
@@ -3233,6 +3395,7 @@ Christmas, Ellsworth P.; Hawkins, Stephen S. (n.d.). *Winter Canola -- An Altern
 Simon, J.E.; Chadwick, A.F.; Craker, L.E. (1984). *DANDELION (Aromatic and Medicinal Plants factsheet, from Herbs: An Indexed Bibliography)*. Purdue University Center for New Crops and Plant Products (NewCROP), summarising Archon Books 1984
 
 - URL: <https://hort.purdue.edu/newcrop/med-aro/factsheets/DANDELION.html>
+- Archived: <https://web.archive.org/web/20261017220554/https://hort.purdue.edu/newcrop/med-aro/factsheets/DANDELION.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - dandelion harvestSeason, verbatim: 'Roots are generally harvested in spring or fall of the second year, while leaves and flower heads are gathered from cultivated and wild plants throughout the growing season.' (Purdue NewCROP 'Aromatic and Medicinal Plants' factsheet DANDELION, which summarises Simon, Chadwick and Craker 1984, la)
@@ -3243,6 +3406,7 @@ Simon, J.E.; Chadwick, A.F.; Craker, L.E. (1984). *DANDELION (Aromatic and Medic
 Ampim, Peter A. Y.; Rivera-Ocasio, Dania. (n.d.). *Cocoyam (fact sheet)*. Prairie View A&M University, College of Agriculture and Human Sciences (USDA NIFA 1890 Capacity Building Grant)
 
 - URL: <https://www.pvamu.edu/cafnr/wp-content/uploads/sites/27/Fact-Sheet-Cocoyam.pdf>
+- Archived: <https://web.archive.org/web/20250912064010/https://www.pvamu.edu/cafnr/wp-content/uploads/sites/27/Fact-Sheet-Cocoyam.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - malanga height, verbatim: 'It can be 1.3 to 2.5 meters tall.' (Page 2, 'Plant description')
@@ -3253,6 +3417,7 @@ Ampim, Peter A. Y.; Rivera-Ocasio, Dania. (n.d.). *Cocoyam (fact sheet)*. Prairi
 Ampim, Peter A. Y.; Rivera-Ocasio, Dania. (n.d.). *Epazote (specialty crops fact sheet)*. Prairie View A&M University, College of Agriculture and Human Sciences
 
 - URL: <https://www.pvamu.edu/cafnr/wp-content/uploads/sites/27/Fact-Sheet-Epazote.pdf>
+- Archived: <https://web.archive.org/web/20240909134659/https://www.pvamu.edu/cafnr/wp-content/uploads/sites/27/Fact-Sheet-Epazote.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - epazote spacing, verbatim: 'Plant 200 plants/m2 (19 plants/ft2). Space plants 5-8 cm. (2-3 in.) apart.' (Page 1, block 'PROPAGATION')
@@ -3265,6 +3430,7 @@ Ampim, Peter A. Y.; Rivera-Ocasio, Dania. (n.d.). *Epazote (specialty crops fact
 Ragone, Diane. (2006). *Artocarpus altilis (breadfruit), Species Profiles for Pacific Island Agroforestry, ver. 2.1*. Permanent Agriculture Resources (Agroforestry Net), Holualoa, Hawaii (copy hosted by the CTAHR Master Gardener program, University of Hawaii)
 
 - URL: <https://gms.ctahr.hawaii.edu/gs/handler/getmedia.ashx?moid=3135&dt=3&g=12>
+- Archived: <https://web.archive.org/web/20260627124345/https://gms.ctahr.hawaii.edu/gs/handler/getmedia.ashx?moid=3135&dt=3&g=12>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - breadfruit width, verbatim: 'Trees can reach heights of 18 m (60 ft) or more but are typically 12–15 m (40–50 ft). Some varieties are relatively short-statured, reaching average heights of 9 m (30 ft). The canopy is generally about two-thirds of the height.' (p. 12 of 17, section 'Size in an urban environment')
@@ -3276,6 +3442,7 @@ Ragone, Diane. (2006). *Artocarpus altilis (breadfruit), Species Profiles for Pa
 Rodrigues, Thiara L. M.; Silva, Maria E. P.; Gurgel, Ely S. C.; Oliveira, Mozaniel S.; Lucas, Flavia C. A. (2022). *Eryngium foetidum L. (Apiaceae): A Literature Review of Traditional Uses, Chemical Composition, and Pharmacological Activities*. Evidence-based Complementary and Alternative Medicine (Hindawi)
 
 - URL: <https://pmc.ncbi.nlm.nih.gov/articles/PMC8938054/>
+- Archived: <https://web.archive.org/web/20261017220153/https://pmc.ncbi.nlm.nih.gov/articles/PMC8938054/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - culantro height, verbatim: 'classified as a rustic tropical vegetable of herbaceous habit, measuring 45 cm in height' (Section 3.1 'Botanical Aspects, Propagation, and Cultural Treatments')
@@ -3296,6 +3463,7 @@ Rollings, Rosi; Goulson, Dave. (2019). *Quantifying the attractiveness of garden
 Rothenberger, Ray R. (n.d.). *Growing Herbs at Home*. University of Missouri Extension
 
 - URL: <https://extension.missouri.edu/publications/g6470>
+- Archived: <https://web.archive.org/web/20260510045450/https://extension.missouri.edu/publications/g6470>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - harvest timing for mint, verbatim: 'Leaves and stems may be picked anytime' (page 4, "Herb descriptions (continued)", Spearmint entry)
@@ -3306,6 +3474,7 @@ Rothenberger, Ray R. (n.d.). *Growing Herbs at Home*. University of Missouri Ext
 Runkle, Erik. (2011). *Lighting Greenhouse Vegetables*. GPN (Greenhouse Product News) 42
 
 - URL: <https://www.canr.msu.edu/uploads/resources/pdfs/lightingvegetables.pdf>
+- Archived: <https://web.archive.org/web/20251112020947/https://www.canr.msu.edu/uploads/resources/pdfs/lightingvegetables.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - minimum DLI for vine crops (tomato, pepper, cucumber), verbatim: 'A recommended minimum DLI for lettuce production is 12 to 14 mol/m2/d, whereas at least 15 (and preferably more than 20) mol/m2/d is suggested for vine crops'
@@ -3318,6 +3487,7 @@ Runkle, Erik. (2011). *Lighting Greenhouse Vegetables*. GPN (Greenhouse Product 
 Runkle, Erik. (2019). *DLI 'Requirements'*. GPN (Greenhouse Product News)
 
 - URL: <https://gpnmag.com/article/dli-requirements/>
+- Archived: <https://web.archive.org/web/20261017211139/https://gpnmag.com/article/dli-requirements/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - Extension's own objection to the concept this app gates on, verbatim: 'Growers sometimes ask for the DLI "requirement" of a particular crop, or type of crops. In my opinion, there is no such thing as a DLI requirement because, with some notable exceptions, most plants can grow under a wide range of environmental conditions, including different DLIs. Growth of crops also depends on carbon dioxide (CO2) concentration and especially temperature, as well as crop culture. Therefore, providing a DLI requirement is both subjective and situational.'
@@ -3330,6 +3500,7 @@ Runkle, Erik. (2019). *DLI 'Requirements'*. GPN (Greenhouse Product News)
 Wyenandt, Andy; Nitzsche, Peter. (2025). *Diagnosing and Controlling Fungal Diseases of Tomato in the Home Garden*. Rutgers New Jersey Agricultural Experiment Station FS547
 
 - URL: <https://njaes.rutgers.edu/fs547/>
+- Archived: <https://web.archive.org/web/20260712092924/https://njaes.rutgers.edu/fs547/>
 - Verification: URL-verified | Access: public-domain, evidence tier **B**
 - Backs:
   - the Solanaceae rotation interval this app applies, verbatim: 'A minimum rotation of three years is considered essential to help reduce populations of soil-borne fungi'
@@ -3341,6 +3512,7 @@ Wyenandt, Andy; Nitzsche, Peter. (2025). *Diagnosing and Controlling Fungal Dise
 Reiners, Steve; Nitzsche, Peter. (2021). *Growing Tomatoes in the Home Garden*. Rutgers New Jersey Agricultural Experiment Station FS678
 
 - URL: <https://njaes.rutgers.edu/fs678/>
+- Archived: <https://web.archive.org/web/20260711142636/https://njaes.rutgers.edu/fs678/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - the laxer rotation figure in the same extension service, verbatim: 'If possible, plant tomatoes in an area where tomatoes, peppers, eggplants, and potatoes have not grown for at least two years to help avoid soil-borne disease problems'
@@ -3360,6 +3532,7 @@ Sahli, A.; Dakhlaoui, H.; Aïachi Mezghani, M.; Bornaz, S.; Aounallah, M. K.; He
 Unangst-Rufenacht, Graham. (2021). *Seakale: Commercial Opportunities for New Perennial Crops and Climate Smart Agriculture (Final Report, Project FNE18-895)*. USDA Northeast SARE (Sustainable Agriculture Research and Education), with University of Vermont Extension as technical advisor
 
 - URL: <https://projects.sare.org/project-reports/fne18-895/>
+- Archived: <https://web.archive.org/web/20260511183820/https://projects.sare.org/project-reports/fne18-895/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - harvest timing for sea-kale, verbatim: 'Seakale provides a harvest of shoot (in May) and broccoli florets (in early June), which presents farmers with an opportunity to functionally integrate Seakale into their cropping when there are few other crops available for harvest' (Project summary/rationale narrative (opening section, before "Description of farm operation"))
@@ -3400,6 +3573,7 @@ Servicio de Información Agroalimentaria y Pesquera (SIAP). (2019). *Epazote*. S
 Singh, Hardeep. (2025). *Moringa Oleifera (Miracle tree)*. UCCE Central Sierra Agriculture
 
 - URL: <https://ucanr.edu/site/ucce-central-sierra-agriculture/article/moringa-oleifera-miracle-tree>
+- Archived: <https://web.archive.org/web/20251205080837/https://ucanr.edu/site/ucce-central-sierra-agriculture/article/moringa-oleifera-miracle-tree>
 - Verification: URL-verified | Access: public-domain
 - Backs:
   - spacing, verbatim: moringa 'could be grown for leaves and/or pods and spaced 3 to 6 feet apart accordingly'
@@ -3422,6 +3596,7 @@ Snyder, S. A. (1993). *Comptonia peregrina, sweetfern*. Fire Effects Information
 Snyder, R. L.; de Melo-Abreu, J. P. (2005). *Frost protection: fundamentals, practice and economics, Volume 1*. Food and Agriculture Organization of the United Nations FAO Environment and Natural Resources Series 10
 
 - URL: <https://www.fao.org/4/y7223e/y7223e00.htm>
+- Archived: <https://web.archive.org/web/20260905213907/https://www.fao.org/4/y7223e/y7223e00.htm>
 - Verification: URL-verified | Access: public-domain, evidence tier **A**
 - Backs:
   - radiative frost and advective frost are different events, and only the radiative kind is reduced by putting something between the ground and the sky
@@ -3433,6 +3608,7 @@ Snyder, R. L.; de Melo-Abreu, J. P. (2005). *Frost protection: fundamentals, pra
 Sperling, Calvin R.; King, Steven R. (1990). *Andean Tuber Crops: Worldwide Potential (pages 428-435 in Advances in New Crops, Timber Press)*. Purdue University Center for New Crops and Plant Products (symposium proceedings host)
 
 - URL: <https://hort.purdue.edu/newcrop/proceedings1990/V1-428.html>
+- Archived: <https://web.archive.org/web/20251005020747/https://hort.purdue.edu/newcrop/proceedings1990/V1-428.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - oca spacing, verbatim: 'Planting is done in rows or hills 80-100 cm apart with plants spaced 40-60 cm apart in the rows (Rea 1975).' (Section 'Cultural Practices' under 'Agricultural Requirements' (pages 428-435 of Advances in New Crops, Timber Press, 19)
@@ -3454,6 +3630,7 @@ Strik, Bernadine C.; Clark, John R.; Finn, Chad E.; Bañados, M. Pilar. (2007). 
 Rodriguez, David. (2011). *Harvesting Oriental Persimmons*. Texas A&M AgriLife Extension Service, Bexar County
 
 - URL: <https://bexar-tx.tamu.edu/earth-kind-horticulture/best-plants-for-bexar-county-south-texas/harvesting-oriental-persimmons/>
+- Archived: <https://web.archive.org/web/20260512093521/https://bexar-tx.tamu.edu/earth-kind-horticulture/best-plants-for-bexar-county-south-texas/harvesting-oriental-persimmons/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - persimmon harvestSeason, verbatim: 'Oriental persimmons generally start ripening around late October through the early part of December in San Antonio and surrounding areas.' (main text)
@@ -3464,6 +3641,7 @@ Rodriguez, David. (2011). *Harvesting Oriental Persimmons*. Texas A&M AgriLife E
 Stein, Larry; Nesbitt, Monte; Kamas, Jim. (2013). *Persimmons (E-611, Texas Fruit and Nut Production)*. Texas A&M AgriLife Extension Service
 
 - URL: <https://aggie-horticulture.tamu.edu/fruit-nut/wp-content/uploads/sites/6/2015/04/persimmons_2015.pdf>
+- Archived: <https://web.archive.org/web/20260910071551/https://aggie-horticulture.tamu.edu/fruit-nut/wp-content/uploads/sites/6/2015/04/persimmons_2015.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - persimmon spacing, verbatim: 'Plant the trees every 15 to 18 feet in rows that are 20 feet apart.' ("Site preparation and planning" section, p. 3)
@@ -3474,6 +3652,7 @@ Stein, Larry; Nesbitt, Monte; Kamas, Jim. (2013). *Persimmons (E-611, Texas Frui
 Stein, Larry; Gu, Mengmeng; Li, Qiansheng. (2018). *Jujubes - Easiest Tree Fruit for Home Gardeners (HORT-PU-138)*. Texas A&M AgriLife Extension Service
 
 - URL: <https://mytexas.ag.tamu.edu/publications/jujubes-easiest-tree-fruit-for-home-gardeners/>
+- Archived: <https://web.archive.org/web/20261017221010/https://mytexas.ag.tamu.edu/publications/jujubes-easiest-tree-fruit-for-home-gardeners/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - jujube spacing, verbatim: 'Space them 6 to 12 feet apart.' ("Planting" section)
@@ -3485,6 +3664,7 @@ Stein, Larry; Gu, Mengmeng; Li, Qiansheng. (2018). *Jujubes - Easiest Tree Fruit
 Sauls, Julian W. (n.d.). *Citrus*. Texas A&M AgriLife Extension, Aggie Horticulture
 
 - URL: <https://aggie-horticulture.tamu.edu/fruit-nut/fact-sheets/citrus/>
+- Archived: <https://web.archive.org/web/20260421045345/https://aggie-horticulture.tamu.edu/fruit-nut/fact-sheets/citrus/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - orange light, verbatim: 'Citrus requires full sunlight for optimum growth and production.' ("Site Selection" section)
@@ -3547,6 +3727,7 @@ Tirmenstein, D. A. (1991). *Vaccinium angustifolium, lowbush blueberry*. Fire Ef
 Tamil Nadu Agricultural University. (2011). *HORT 282 :: Lecture 06 :: CUMIN*. Tamil Nadu Agricultural University
 
 - URL: <http://eagri.org/eagri50/HORT282/lec06.html>
+- Archived: <https://web.archive.org/web/20260813231432/http://eagri.org/eagri50/HORT282/lec06.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - cumin height, verbatim: 'It is an herbaceous annual plant, with a slender branched stem 20–30 cm tall.' (Section 'Botany')
@@ -3557,6 +3738,7 @@ Tamil Nadu Agricultural University. (2011). *HORT 282 :: Lecture 06 :: CUMIN*. T
 Tamil Nadu Agricultural University. (2013). *Ragi*. Tamil Nadu Agricultural University, Agritech Portal
 
 - URL: <https://agritech.tnau.ac.in/agriculture/CropProduction/Millets/millets_ragi.html>
+- Archived: <https://web.archive.org/web/20261017212638/https://agritech.tnau.ac.in/agriculture/CropProduction/Millets/millets_ragi.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - finger-millet height, verbatim: 'Height (cm) | 75-80 | 85-90 | 115-120 [for varieties CO 9, CO 13 and CO (Ra) 14 respectively]' ('Particulars of Ragi Strains' table)
@@ -3568,6 +3750,7 @@ Tamil Nadu Agricultural University. (2013). *Ragi*. Tamil Nadu Agricultural Univ
 Tamil Nadu Agricultural University. (n.d.). *Horticulture :: Spice Crops :: Pepper (Black pepper, Piper nigrum L.)*. Tamil Nadu Agricultural University, Agritech Portal
 
 - URL: <https://agritech.tnau.ac.in/horticulture/horti_spice%20crops_pepper.html>
+- Archived: <https://web.archive.org/web/20261017215715/https://agritech.tnau.ac.in/horticulture/horti_spice%20crops_pepper.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - black-pepper height, verbatim: 'Prune excessive foliage of the standards and limit the height of the standards to about 6 m.' (Section 'Aftercultivation')
@@ -3580,6 +3763,7 @@ Tamil Nadu Agricultural University. (n.d.). *Horticulture :: Spice Crops :: Pepp
 Tamil Nadu Agricultural University. (n.d.). *Safflower (Carthamus tinctorius), Crop Production, Oil Seeds*. Tamil Nadu Agricultural University, Agritech Portal
 
 - URL: <https://agritech.tnau.ac.in/agriculture/oilseeds_safflower.html>
+- Archived: <https://web.archive.org/web/20260609111519/https://www.agritech.tnau.ac.in/agriculture/oilseeds_safflower.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - safflower spacing, verbatim: 'Adopt a spacing of 45 cm between rows and 15 cm between plants.' (Section 'Preparation of the field', item 5 Spacing)
@@ -3590,6 +3774,7 @@ Tamil Nadu Agricultural University. (n.d.). *Safflower (Carthamus tinctorius), C
 Tamil Nadu Agricultural University. (n.d.). *Horticulture :: Medicinal Crops :: Stevia*. Tamil Nadu Agricultural University, TNAU Agritech Portal
 
 - URL: <https://agritech.tnau.ac.in/horticulture/horti_medicinal%20crops_stevia.html>
+- Archived: <https://web.archive.org/web/20261017215058/https://agritech.tnau.ac.in/horticulture/horti_medicinal%20crops_stevia.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - stevia spacing, verbatim: 'Rooted cuttings are planted at a spacing of 45X45 cm, with a total plant density in the order of 30,000 plants per ha.' (Planting section)
@@ -3610,6 +3795,7 @@ Tribhuvan, Kishor U.; N, Mustafa; Gidhi, Anupama; Singh, Devendra K.; Kumar, Sau
 Klingaman, Gerald. (2008). *Plant of the Week: Hyacinth Bean*. University of Arkansas System Division of Agriculture, Cooperative Extension Service
 
 - URL: <https://www.uaex.uada.edu/yard-garden/resource-library/plant-week/hyacinth-bean-10-03-08.aspx>
+- Archived: <https://web.archive.org/web/20261017221340/https://www.uaex.uada.edu/yard-garden/resource-library/plant-week/hyacinth-bean-10-03-08.aspx>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - lablab daysToMaturity, verbatim: 'It takes about 90 days from planting until the first pods are produced.' (Plant of the Week article, paragraph on flowers and pods)
@@ -3621,6 +3807,7 @@ Klingaman, Gerald. (2008). *Plant of the Week: Hyacinth Bean*. University of Ark
 University of Arkansas Division of Agriculture Cooperative Extension Service. (2017). *Plant of the Week: Camellia sinensis, Tea*. University of Arkansas Division of Agriculture Cooperative Extension Service
 
 - URL: <https://www.uaex.uada.edu/yard-garden/resource-library/plant-week/Camellia-sinensis-Tea-10-27-2017.aspx>
+- Archived: <https://web.archive.org/web/20261017213021/https://www.uaex.uada.edu/yard-garden/resource-library/plant-week/Camellia-sinensis-Tea-10-27-2017.aspx>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - tea light, verbatim: 'Plants are understory shrubs in nature and grow in moderate to heavy shade, but tea plantations are almost always in open fields in full sun.' ('Camellia sinensis (Tea Plant)' page text)
@@ -3631,6 +3818,7 @@ University of Arkansas Division of Agriculture Cooperative Extension Service. (2
 Andersen, Craig R. (n.d.). *Garden Cress (Home Gardening Series, FSA6084)*. University of Arkansas System Division of Agriculture, Cooperative Extension Service
 
 - URL: <https://www.uaex.uada.edu/publications/pdf/FSA-6084.pdf>
+- Archived: <https://web.archive.org/web/20261017215029/https://www.uaex.uada.edu/publications/pdf/FSA-6084.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - cress spacing, verbatim: 'Spacing – 1 to 2 inches' (Page 1, Culture box (the same page says Sow 10 to 15 seeds per foot of row and Garden cress is not usually thinned))
@@ -3642,6 +3830,7 @@ Andersen, Craig R. (n.d.). *Garden Cress (Home Gardening Series, FSA6084)*. Univ
 Andersen, Craig R. (n.d.). *Salsify (FSA6094, Home Gardening Series)*. University of Arkansas System Division of Agriculture, Cooperative Extension Service
 
 - URL: <https://www.uaex.uada.edu/publications/PDF/FSA-6094.pdf>
+- Archived: <https://web.archive.org/web/20261017215302/https://www.uaex.uada.edu/publications/PDF/FSA-6094.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - salsify coldLimit, verbatim: 'Because of its ability to withstand a hard freeze in the winter, salsify may be harvested until early spring.' (Page 1, introduction)
@@ -3652,6 +3841,7 @@ Andersen, Craig R. (n.d.). *Salsify (FSA6094, Home Gardening Series)*. Universit
 Bradley, Lucy; Maurer, Michael. (2024). *Deciduous Fruit & Nuts for the Low Desert (az1269)*. The University of Arizona Cooperative Extension
 
 - URL: <https://www.extension.arizona.edu/sites/default/files/2025-05/az1269_Deciduous-Fruit-and-Nuts-for-the-Low-Desert.pdf>
+- Archived: <https://web.archive.org/web/20251107224409/https://extension.arizona.edu/sites/default/files/2025-05/az1269_Deciduous-Fruit-and-Nuts-for-the-Low-Desert.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - quince chillHours, verbatim: 'Cold hardy, yet low chilling requirement of 300 hours.' (az1269, under both Orange Quince and Pineapple Quince, page 3, and the chart's Chilling Hours column, page 7)
@@ -3662,6 +3852,7 @@ Bradley, Lucy; Maurer, Michael. (2024). *Deciduous Fruit & Nuts for the Low Dese
 Smith, Richard; Baameur, Aziz; Bari, Mohammad; Cahn, Michael; Giraud, Deborah; Natwick, Eric; Takele, Eta. (2008). *Artichoke Production in California (UC ANR Publication 7221)*. University of California Division of Agriculture and Natural Resources
 
 - URL: <https://ucanr.edu/sites/default/files/2026-04/anrcatalog%20Artichoke%20Production%20in%20California%207221.pdf>
+- Archived: <https://web.archive.org/web/20260610083635/https://ucanr.edu/sites/default/files/2026-04/anrcatalog%20Artichoke%20Production%20in%20California%207221.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - harvest timing for globe-artichoke, verbatim: 'Perennial artichokes are harvested year-round, but the highest volume of production occurs between March and May' (p. 4, "Harvesting and Handling" section)
@@ -3672,6 +3863,7 @@ Smith, Richard; Baameur, Aziz; Bari, Mohammad; Cahn, Michael; Giraud, Deborah; N
 UC Master Gardeners, Sacramento County. (2012). *Growing Citrus in Sacramento (Garden Notes GN127)*. University of California Cooperative Extension, Sacramento County
 
 - URL: <https://ucanr.edu/sites/default/files/2013-07/72239.pdf>
+- Archived: <https://web.archive.org/web/20261017213132/https://ucanr.edu/sites/default/files/2013-07/72239.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - orange spacing, verbatim: 'Space standard trees at least 12 feet apart, and dwarf trees 8 to 10 feet apart.' (PLANTING section, p. 1 of 4)
@@ -3686,6 +3878,7 @@ UC Master Gardeners, Sacramento County. (2012). *Growing Citrus in Sacramento (G
 Silva, Yolanda. (n.d.). *Yacon: What is it?* UC Cooperative Extension Alameda County and UC Master Gardener Program of Alameda County
 
 - URL: <https://ucanr.edu/sites/default/files/2019-04/301726.pdf>
+- Archived: <https://web.archive.org/web/20250712195058/https://ucanr.edu/sites/default/files/2019-04/301726.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - yacon height, verbatim: 'the plant typically grows 4 to 8 feet tall, depending on variety.' (Page 1 (one-page fact sheet))
@@ -3696,6 +3889,7 @@ Silva, Yolanda. (n.d.). *Yacon: What is it?* UC Cooperative Extension Alameda Co
 Johnson, Hunter. (1983). *Jicama*. University of California Cooperative Extension, Small Farms Network
 
 - URL: <https://ucanr.edu/program/uc-anr-small-farms-network/jicama>
+- Archived: <https://web.archive.org/web/20260214141431/https://ucanr.edu/program/uc-anr-small-farms-network/jicama>
 - Verification: URL-verified | Access: open-access, evidence tier **C**
 - Backs:
   - jicama spacing, verbatim: 'Rows should be two to three feet apart with plants eight to 10 inches apart in the row.' (section 'Cultural Requirements'), the 9 in by 2.5 ft midpoints, 0.17 m² a plant, 42 cm on a square grid
@@ -3706,6 +3900,7 @@ Johnson, Hunter. (1983). *Jicama*. University of California Cooperative Extensio
 UCCE Master Gardener Program of Santa Clara County. (n.d.). *Growing Fabulous Citrus*. University of California Cooperative Extension, Santa Clara County
 
 - URL: <https://ucanr.edu/sites/default/files/2020-02/319461.pdf>
+- Archived: <https://web.archive.org/web/20251205073346/https://ucanr.edu/sites/default/files/2020-02/319461.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - orange height, verbatim: 'Navel - Standard tree 20 to 25 feet high, dwarf 8 feet.' ("Sweet oranges" section, p. 4 of 6)
@@ -3720,6 +3915,7 @@ UCCE Master Gardener Program of Santa Clara County. (n.d.). *Growing Fabulous Ci
 O'Connell, Neil V.; Kallsen, Craig E.; Klonsky, Karen M.; De Moura, Richard L. (2010). *Sample Costs to Establish an Orchard and Produce Lemons, San Joaquin Valley South, Low Volume Irrigation*. University of California Cooperative Extension
 
 - URL: <https://coststudyfiles.ucdavis.edu/uploads/cs_public/57/c4/57c4611c-f2bb-4bde-9b77-a343ca9f0a62/lemonvs10.pdf>
+- Archived: <https://web.archive.org/web/20250730185518/https://coststudyfiles.ucdavis.edu/uploads/cs_public/57/c4/57c4611c-f2bb-4bde-9b77-a343ca9f0a62/lemonvs10.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - harvest timing for lemon, verbatim: 'Typically one-third of the orchard is picked in each of three harvests over the growing season. Lemons are picked and graded by size and normally harvested from mid October through March' (LM-VS-10, p. 8)
@@ -3730,6 +3926,7 @@ O'Connell, Neil V.; Kallsen, Craig E.; Klonsky, Karen M.; De Moura, Richard L. (
 Brand, Mark H. (n.d.). *Hippophae rhamnoides, Common Seabuckthorn*. University of Connecticut Plant Database
 
 - URL: <https://plantdatabase.uconn.edu/detail.php?pid=205>
+- Archived: <https://web.archive.org/web/20261017221124/https://plantdatabase.uconn.edu/detail.php?pid=205>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - sea-buckthorn width, verbatim: '10' to 25' tall with an equal or greater width' ("Habit and Form" entry)
@@ -3740,6 +3937,7 @@ Brand, Mark H. (n.d.). *Hippophae rhamnoides, Common Seabuckthorn*. University o
 Richardson, Matthew L.; Arlotta, Caitlin G. (2019). *Growing Roselle (Hibiscus sabdariffa) for Home or Business Production in the Mid-Atlantic (Fact Sheet 001)*. University of the District of Columbia
 
 - URL: <http://docs-do-not-link.udc.edu/causes/Fact_Sheet%20-%20Growing_Roselle.pdf>
+- Archived: <https://web.archive.org/web/20260114214912/http://docs-do-not-link.udc.edu/causes/Fact_Sheet%20-%20Growing_Roselle.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - roselle spacing, verbatim: 'Plant roselle outdoors in areas that get full sun once the danger of frost has passed. This is a very shrubby plant, so plants should be spaced at least 3-4 feet apart and watered regularly.' (p. 1, right column, section 'Cultivation')
@@ -3787,6 +3985,7 @@ Stephens, James M. (1994). *Jicama: Pachyrhizus erosus (L.) Urban (HS615)*. Univ
 Stephens, James M. (1994). *Roselle, Hibiscus sabdariffa L. (HS659), archival copy reviewed May 2003*. University of Florida Institute of Food and Agricultural Sciences, Florida Cooperative Extension Service
 
 - URL: <https://journals.flvc.org/edis/article/download/139843/144801/280434>
+- Archived: <https://web.archive.org/web/20261017213851/https://journals.flvc.org/edis/article/download/139843/144801/280434>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - roselle height, verbatim: 'The okra-like plant is an annual, 5-7 feet in height, with lobed leaves sometimes used for greens.' (p. 1, section 'DESCRIPTION')
@@ -3808,6 +4007,7 @@ Stephens, James M. (1994). *Bean, Winged - Psophocarpus tetragonolobus (L.) D.C.
 Stephens, James M. (2003). *Chayote — Sechium edule (Jacq.) Sw.* University of Florida, IFAS Extension (EDIS), publication HS579
 
 - URL: <https://journals.flvc.org/edis/article/download/139590/144628/279059>
+- Archived: <https://web.archive.org/web/20261017212457/https://journals.flvc.org/edis/article/download/139590/144628/279059>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - chayote spacing, verbatim: 'Plant one fruit per hill in hills spaced 12 feet apart and in rows spaced 12 feet apart.' ("Culture" section)
@@ -3818,6 +4018,7 @@ Stephens, James M. (2003). *Chayote — Sechium edule (Jacq.) Sw.* University of
 Stephens, James M. (2003). *Salsify - Tragopogon porrifolius L. (HS662)*. University of Florida IFAS Extension (EDIS archival copy, reviewed May 2003)
 
 - URL: <https://journals.flvc.org/edis/article/view/139847>
+- Archived: <https://web.archive.org/web/20260211013551/https://journals.flvc.org/edis/article/view/139847>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - salsify spacing, verbatim: 'The seedlings should be thinned to 3-4 inches apart in rows 18-24 inches apart.' (Page 1, section 'Culture')
@@ -3829,6 +4030,7 @@ Stephens, James M. (2003). *Salsify - Tragopogon porrifolius L. (HS662)*. Univer
 Baucum, L.; Rice, R. W.; Muralles, L. (2009). *Backyard Sugarcane (SS-AGR-253), archival copy revised October 2009*. University of Florida Institute of Food and Agricultural Sciences, Florida Cooperative Extension Service
 
 - URL: <https://ufdcimages.uflib.ufl.edu/IR/00/00/34/15/00001/SC05200.pdf>
+- Archived: <https://web.archive.org/web/20131206213904/https://ufdcimages.uflib.ufl.edu/IR/00/00/34/15/00001/SC05200.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - sugarcane spacing, verbatim: 'Sugarcane can be planted as a single row (a typical configuration for windbreaks) or in multiple, parallel rows with a distance of from 4 -10 feet between the rows.' (p. 3, section 'Planting')
@@ -3842,6 +4044,7 @@ Baucum, L.; Rice, R. W.; Muralles, L. (2009). *Backyard Sugarcane (SS-AGR-253), 
 Knight, R. J., Jr.; Sauls, Julian W. (2009). *The Passion Fruit (HS60)*. UF/IFAS Extension, University of Florida
 
 - URL: <https://ufdcimages.uflib.ufl.edu/IR/00/00/33/95/00001/MG32800.pdf>
+- Archived: <https://web.archive.org/web/20260211092542/https://ufdcimages.uflib.ufl.edu/IR/00/00/33/95/00001/MG32800.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - passion-fruit spacing, verbatim: 'In Florida, passion vines are planted 3-4.5 m (10-15 ft.) apart in rows 4.5-6 m (1 5-20 ft.) apart.' (UF/IFAS HS60 (archival copy, reviewed 2009), section 'Planting and Trellising', PDF page 2)
@@ -3853,6 +4056,7 @@ Knight, R. J., Jr.; Sauls, Julian W. (2009). *The Passion Fruit (HS60)*. UF/IFAS
 Gilman, Edward F.; Watson, Dennis G. (2014). *Diospyros kaki: Japanese Persimmon (ENH388/ST229)*. UF/IFAS Extension, University of Florida
 
 - URL: <https://journals.flvc.org/edis/article/view/141253>
+- Archived: <https://web.archive.org/web/20260315093053/https://journals.flvc.org/edis/article/view/141253>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - persimmon height, verbatim: 'Height: 20 to 30 feet' ("Description" section)
@@ -3865,6 +4069,7 @@ Gilman, Edward F.; Watson, Dennis G. (2014). *Diospyros kaki: Japanese Persimmon
 Rouse, Robert E.; Zekri, Mongi. (2015). *Citrus Culture in the Home Landscape (HS132)*. University of Florida IFAS Extension (publication HS132)
 
 - URL: <https://edis.ifas.ufl.edu/publication/HS132>
+- Archived: <https://web.archive.org/web/20260124024310/https://edis.ifas.ufl.edu/publication/HS132>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - grapefruit spacing, verbatim: 'For home plantings, the spacing recommended should be a minimum of 15 feet between trees.' ("Site Selection" section)
@@ -3877,6 +4082,7 @@ Rouse, Robert E.; Zekri, Mongi. (2015). *Citrus Culture in the Home Landscape (H
 Crane, Jonathan H.; Balerdi, Carlos F. (2016). *Guava Growing in the Florida Home Landscape (HS4, MG045)*. UF/IFAS Extension, University of Florida
 
 - URL: <https://edis.ifas.ufl.edu/publication/MG045>
+- Archived: <https://web.archive.org/web/20260116120147/https://edis.ifas.ufl.edu/publication/MG045>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - guava spacing, verbatim: 'Depending upon ultimate tree size, trees should be planted 15 to 25 ft (4.6–7.6 m) away from other trees and structures and power lines.' (UF/IFAS HS4 (MG045), section 'Spacing', PDF page 3)
@@ -3891,6 +4097,7 @@ Crane, Jonathan H.; Balerdi, Carlos F. (2016). *Guava Growing in the Florida Hom
 Crane, Jonathan H.; Balerdi, Carlos F.; Maguire, Ian. (2016). *Jackfruit Growing in the Florida Home Landscape (HS882/MG370)*. University of Florida, Institute of Food and Agricultural Sciences (UF/IFAS) Extension
 
 - URL: <https://edis.ifas.ufl.edu/publication/MG370>
+- Archived: <https://web.archive.org/web/20251202205941/https://edis.ifas.ufl.edu/publication/mg370>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - jackfruit spacing, verbatim: 'If little or no pruning is planned, then jackfruit in the home landscape should be planted 25 to 30 feet (7.6–9.1 m) away from other trees and structures. If annual or semi-annual pruning is practiced jackfruit trees may be planted 20 to 25 feet (6.1–7.6 m) away from other trees and structures.' (Spacing section)
@@ -3906,6 +4113,7 @@ Crane, Jonathan H.; Balerdi, Carlos F.; Maguire, Ian. (2016). *Jackfruit Growing
 Balerdi, Carlos F.; Maguire, Ian; Crane, Jonathan H. (2016). *Lychee Growing in the Florida Home Landscape (HS6/MG051)*. University of Florida, Institute of Food and Agricultural Sciences (UF/IFAS) Extension
 
 - URL: <https://edis.ifas.ufl.edu/publication/MG051>
+- Archived: <https://web.archive.org/web/20251220015127/https://edis.ifas.ufl.edu/publication/MG051>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - lychee spacing, verbatim: 'Lychee trees in the home landscape should be planted 25 to 30 feet or more (7.6 to 9.1 m) away from buildings, other trees, and electrical wires.' (Spacing section)
@@ -3920,6 +4128,7 @@ Balerdi, Carlos F.; Maguire, Ian; Crane, Jonathan H. (2016). *Lychee Growing in 
 UF/IFAS Center for Aquatic and Invasive Plants. (2017). *Ziziphus jujuba - UF/IFAS Assessment of Non-Native Plants in Florida's Natural Areas*. University of Florida, Institute of Food and Agricultural Sciences
 
 - URL: <https://assessment.ifas.ufl.edu/assessments/ziziphus-jujuba/>
+- Archived: <https://web.archive.org/web/20261011022226/https://assessment.ifas.ufl.edu/assessments/ziziphus-jujuba/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - jujube invasiveStatus, verbatim: 'Not considered a problem species at this time. May be recommended by IFAS. Reassessed every 10 years.' (Assessment page, "For Status Assessments" (assessment dates 2007 and 2017, conclusion "Not a problem species (un-documen)
@@ -3930,6 +4139,7 @@ UF/IFAS Center for Aquatic and Invasive Plants. (2017). *Ziziphus jujuba - UF/IF
 Gilman, Edward F.; Hilbert, Deborah; Watson, Dennis G.; Klein, Ryan; Koeser, Andrew; McLean, Drew C. (2018). *Litchi chinensis: Lychee (ENH-523/ST364)*. University of Florida, Institute of Food and Agricultural Sciences (UF/IFAS) Extension
 
 - URL: <https://edis.ifas.ufl.edu/publication/ST364>
+- Archived: <https://web.archive.org/web/20260123195931/https://edis.ifas.ufl.edu/publication/st364>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - lychee height, verbatim: 'Lychee trees can eventually reach 30 to 50-feet in height with a 30 to 50-foot spread but will reach about 30 feet tall 30-years after planting in a landscape creating a wonderful shade, framing, or specimen tree.' (Introduction, and Description section 'Height: 30 to 50 feet')
@@ -3942,6 +4152,7 @@ Gilman, Edward F.; Hilbert, Deborah; Watson, Dennis G.; Klein, Ryan; Koeser, And
 Crane, Jonathan H.; Balerdi, Carlos F.; Orfanedes, Michael S. (2019). *Tropical and Subtropical Fruit Crops for the Home Landscape: Alternatives to Citrus (HS812, MG373)*. UF/IFAS Extension, University of Florida
 
 - URL: <https://edis.ifas.ufl.edu/publication/MG373>
+- Archived: <https://web.archive.org/web/20251220051123/https://edis.ifas.ufl.edu/publication/MG373>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - guava harvestSeason, verbatim: 'Season: August–October, February–March.' (UF/IFAS MG373 (HS812), 'Invasive Fruit Crops', Guava entry, PDF page 5)
@@ -3955,6 +4166,7 @@ Crane, Jonathan H.; Balerdi, Carlos F.; Orfanedes, Michael S. (2019). *Tropical 
 Broschat, Timothy K.; Crane, Jonathan H. (2020). *The Coconut Palm in Florida (HS40)*. University of Florida, Institute of Food and Agricultural Sciences (UF/IFAS) Extension, Horticultural Sciences Department (copy hosted at growables.org)
 
 - URL: <https://www.growables.org/information/TropicalFruit/documents/CoconutPalm.pdf>
+- Archived: <https://web.archive.org/web/20260921055128/https://www.growables.org/information/TropicalFruit/documents/CoconutPalm.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - coconut spacing, verbatim: 'Commercially, the trees are planted at spacings of 18–30 feet (5.5–9.1 m) apart.' (p. 3 of 6, section 'Planting and Spacing')
@@ -3969,6 +4181,7 @@ Broschat, Timothy K.; Crane, Jonathan H. (2020). *The Coconut Palm in Florida (H
 Qiu, Yuheng; Liu, Guodong. (2022). *Chayote—A Potential Vegetable Crop for Florida*. University of Florida, IFAS Extension (EDIS), publication HS1454
 
 - URL: <https://journals.flvc.org/edis/article/download/124902/136472>
+- Archived: <https://web.archive.org/web/20260305141610/https://journals.flvc.org/edis/article/download/124902/136472>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - chayote height, verbatim: 'The stem can grow up to 50 feet (Lira Saade 2020); therefore, trellis support is recommended to help plant growth (Stephens 2018). [...] A trellis, usually 6 feet tall, which allows people to walk beneath for cultivation, should be placed near the plant for supporting the climbing vine (Stephens 201' ("Botanical Description" and "General Description" sections)
@@ -3981,6 +4194,7 @@ Qiu, Yuheng; Liu, Guodong. (2022). *Chayote—A Potential Vegetable Crop for Flo
 Marek, Amanda S.; Bailey, Mark T.; Hansen, Gail. (2022). *Edible Ornamental Landscaping Guide for North-Central Florida (ENH1354/EP618)*. University of Florida IFAS Extension (EDIS)
 
 - URL: <https://edis.ifas.ufl.edu/publication/EP618>
+- Archived: <https://web.archive.org/web/20251226034238/https://edis.ifas.ufl.edu/publication/EP618>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - lemongrass spacing, verbatim: 'Lemongrass can serve as a living privacy fence, growing to approximately 6′ tall and 4′ wide, by planting them about 4′ apart, center-to-center, to allow proper airflow.' (“Landscaping with Lemongrass” section)
@@ -4005,6 +4219,7 @@ Wang, Qingren; Li, Yuncong; Klassen, Waldemar; Hanlon, Edward A. (2022). *Sunn H
 Gutierrez Laredo, Sergio Marcelo; Chen, Jianjun; Liu, Guodong. (2022). *Yacon, a Potential Tuberous Crop for Florida (HS1435)*. University of Florida IFAS Extension (EDIS)
 
 - URL: <https://ask.ifas.ufl.edu/publication/HS1435>
+- Archived: <https://web.archive.org/web/20260713002731/https://ask.ifas.ufl.edu/publication/HS1435>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - yacon spacing, verbatim: 'rooted stem cuttings or plants propagated from corms can be planted in beds with 3- or 4-foot center-to-center spacing (Chqoue Delago et al. 2013) with 30–40 inches for plant spacing (Herman and Heller 1997).' (Section 'Yacon Cultivation')
@@ -4018,6 +4233,7 @@ Gutierrez Laredo, Sergio Marcelo; Chen, Jianjun; Liu, Guodong. (2022). *Yacon, a
 Fisher, Paul; Freyre, Rosanna; Gómez, Celina; Pearson, Brian; Sanchez-Jones, Tatiana; Steed, Shawn; Laughlin, Wanda; Hochmuth, Robert; Wasielewski, Jeff; Lieurance, Deah; Harmon, Carrie; Paret, Mathews; Osborne, Lance; Athearn, Kevin; Sargent, Steven; Zhang, Mengzi. (2023). *Ginger, Galangal, and Turmeric Production in Florida*. University of Florida IFAS Extension (EDIS ENH1374/EP638)
 
 - URL: <https://edis.ifas.ufl.edu/publication/EP638>
+- Archived: <https://web.archive.org/web/20260119183127/https://edis.ifas.ufl.edu/publication/EP638>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - turmeric daysToMaturity, verbatim: 'Ginger and turmeric rhizomes harvested approximately seven months after planting (i.e., winter harvest) are suitable for curing and selling in retail and as an ingredient for making preserves.' (Harvest Maturity section)
@@ -4028,6 +4244,7 @@ Fisher, Paul; Freyre, Rosanna; Gómez, Celina; Pearson, Brian; Sanchez-Jones, Ta
 Liu, Guodong; Li, Yuncong; Migliaccio, Kati W. (2023). *Luffa: an Asian Vegetable Emerging in Florida (HS1285)*. UF/IFAS Extension, University of Florida
 
 - URL: <https://edis.ifas.ufl.edu/publication/HS1285>
+- Archived: <https://web.archive.org/web/20251126193620/https://edis.ifas.ufl.edu/publication/HS1285>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - luffa spacing, verbatim: 'For planting or transplanting, the distance between plants is usually 3 feet, and the distance between rows is 6 feet.' (UF/IFAS HS1285 (EDIS page), section 'Cultivation Method')
@@ -4040,6 +4257,7 @@ Liu, Guodong; Li, Yuncong; Migliaccio, Kati W. (2023). *Luffa: an Asian Vegetabl
 Gilman, Edward F.; Klein, Ryan W.; Hansen, Gail. (2023). *Passiflora edulis Passion Fruit, Purple Granadilla (FPS456)*. UF/IFAS Extension, University of Florida
 
 - URL: <https://edis.ifas.ufl.edu/publication/FP456>
+- Archived: <https://web.archive.org/web/20260209131333/https://edis.ifas.ufl.edu/publication/FP456>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - passion-fruit coldLimit, verbatim: 'USDA hardiness zones: 9B through 11' (UF/IFAS FPS456, 'General Information' list, PDF page 2)
@@ -4051,6 +4269,7 @@ Gilman, Edward F.; Klein, Ryan W.; Hansen, Gail. (2023). *Passiflora edulis Pass
 Folta, Kevin M.; Huff, Dustin; Sarkhosh, Ali. (2024). *Jujube as a Florida Fruit Crop (HS1477)*. University of Florida IFAS Extension (publication HS1477)
 
 - URL: <https://edis.ifas.ufl.edu/publication/HS1477>
+- Archived: <https://web.archive.org/web/20250906132503/https://edis.ifas.ufl.edu/publication/HS1477>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - jujube harvestSeason, verbatim: 'Fruits are borne on new growth (Figure 14) and expand through the summer months, typically ripening in August and September in Florida.' ("Fruit Quality" section)
@@ -4062,6 +4281,7 @@ Folta, Kevin M.; Huff, Dustin; Sarkhosh, Ali. (2024). *Jujube as a Florida Fruit
 Liu, Guodong; Li, Yuncong; Dinkins, David; Wells, Bonnie; Wang, Qingren; Cui, Yuqi. (2024). *Long Squash: an Asian Vegetable Expanding in Florida (HS1272), the bottle gourd grown for young fruit*. UF/IFAS Extension, University of Florida
 
 - URL: <https://edis.ifas.ufl.edu/publication/HS1272>
+- Archived: <https://web.archive.org/web/20260120213700/https://edis.ifas.ufl.edu/publication/HS1272>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - bottle-gourd height, verbatim: 'The vine has tendrils for climbing and can be up to 30 feet in length; hence, trellis support systems are needed for high yields of good quality (Figure 1).' (UF/IFAS HS1272 (EDIS page), second paragraph)
@@ -4072,6 +4292,7 @@ Liu, Guodong; Li, Yuncong; Dinkins, David; Wells, Bonnie; Wang, Qingren; Cui, Yu
 Qiu, Yuheng; Liu, Guodong. (2024). *Florida Cultivation Guide for Malabar Spinach*. University of Florida IFAS Extension (publication HS1371)
 
 - URL: <https://edis.ifas.ufl.edu/publication/HS1371>
+- Archived: <https://web.archive.org/web/20260119172001/https://edis.ifas.ufl.edu/publication/HS1371>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - malabar-spinach height, verbatim: 'Because Malabar spinach is a fast-growing vine that can grow six feet or even longer (Parkell et al. 2016), it is typically grown on a trellis or fence to help climbing and to facilitate periodic pruning by cutting off the fleshy leaves and overlong vines to keep desired shape (Cornell 2006, Singh e' ("Growing Conditions" section)
@@ -4085,6 +4306,7 @@ Qiu, Yuheng; Liu, Guodong. (2024). *Florida Cultivation Guide for Malabar Spinac
 Wu, Xingbo; Moon, Pamela; Chambers, Alan; Crane, Jonathan. (2024). *Vanilla Growing in South Florida (HS1348)*. University of Florida, Institute of Food and Agricultural Sciences (UF/IFAS) Extension
 
 - URL: <https://edis.ifas.ufl.edu/publication/HS1348>
+- Archived: <https://web.archive.org/web/20260121203231/https://edis.ifas.ufl.edu/publication/HS1348>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - vanilla spacing, verbatim: 'Spacing recommendations are to plant vines 1–3 m (3–10 ft) apart with 2.5–3 m (8–10 ft) between rows.' (Section 'Production Methods')
@@ -4099,6 +4321,7 @@ Wu, Xingbo; Moon, Pamela; Chambers, Alan; Crane, Jonathan. (2024). *Vanilla Grow
 Balerdi, Carlos F.; Maguire, Ian; McLaughlin, John; Crane, Jonathan H. (2025). *Cashew Apple Fruit Growing in the Florida Home Landscape (HS1127/HS377)*. University of Florida, Institute of Food and Agricultural Sciences (UF/IFAS) Extension
 
 - URL: <https://edis.ifas.ufl.edu/publication/HS377>
+- Archived: <https://web.archive.org/web/20260202042559/https://edis.ifas.ufl.edu/publication/HS377>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - cashew spacing, verbatim: 'Cashew trees in the home landscape should be planted 15 to 20 feet or more (4.6 to 6.1 m) away from buildings, electrical wires, or other trees.' (Spacing section)
@@ -4113,6 +4336,7 @@ Balerdi, Carlos F.; Maguire, Ian; McLaughlin, John; Crane, Jonathan H. (2025). *
 Graves, Keighly; Wilber, Wendy; Wichman, Tom; Lewis, Claire; Hansen, Gail; Klein, Ryan. (2025). *Ananas comosus: Pineapple (FPS039)*. UF/IFAS Extension, University of Florida
 
 - URL: <https://edis.ifas.ufl.edu/publication/FP039>
+- Archived: <https://web.archive.org/web/20260106033537/https://edis.ifas.ufl.edu/publication/FP039>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - pineapple invasiveStatus, verbatim: 'Invasive potential: not known to be invasive' (UF/IFAS FPS039, 'General Information' list, PDF page 3)
@@ -4123,6 +4347,7 @@ Graves, Keighly; Wilber, Wendy; Wichman, Tom; Lewis, Claire; Hansen, Gail; Klein
 Crane, Jonathan H. (2025). *Pineapple Growing in the Florida Home Landscape (HS7, MG055)*. UF/IFAS Extension, University of Florida
 
 - URL: <https://edis.ifas.ufl.edu/publication/MG055>
+- Archived: <https://web.archive.org/web/20251212041347/https://edis.ifas.ufl.edu/publication/MG055>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - pineapple spacing, verbatim: 'The distance between individual pineapple plants ranges from 12 to 36 inches (21–91 cm).' (UF/IFAS HS7 (MG055), section 'Spacing and Pruning', PDF page 3)
@@ -4138,6 +4363,7 @@ Crane, Jonathan H. (2025). *Pineapple Growing in the Florida Home Landscape (HS7
 UF/IFAS Center for Aquatic and Invasive Plants. (2026). *Passiflora edulis, UF/IFAS Assessment of Non-Native Plants in Florida's Natural Areas*. University of Florida, Institute of Food and Agricultural Sciences
 
 - URL: <https://assessment.ifas.ufl.edu/assessments/passiflora-edulis/>
+- Archived: <https://web.archive.org/web/20260906000221/https://assessment.ifas.ufl.edu/assessments/passiflora-edulis/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - passion-fruit invasiveStatus, verbatim: 'Predicted to be invasive and not recommended by IFAS.' (UF/IFAS Assessment of Non-Native Plants in Florida's Natural Areas, Passiflora edulis page, 'Conclusions by Zone' (Centr)
@@ -4148,6 +4374,7 @@ UF/IFAS Center for Aquatic and Invasive Plants. (2026). *Passiflora edulis, UF/I
 Liu, Guodong; Wang, Qingren; Li, Yuncong; Dinkins, David; Wells, Bonnie; Cui, Yuqi. (2026). *Bitter Melon—an Asian Vegetable Expanding in Florida*. University of Florida, IFAS Extension (EDIS), publication HS1271
 
 - URL: <https://edis.ifas.ufl.edu/hs1271>
+- Archived: <https://web.archive.org/web/20261017212350/https://edis.ifas.ufl.edu/hs1271>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - bitter-melon spacing, verbatim: 'Distance between rows should be 5 to 6 feet and spacing between plants should be between 3 and 5 feet (Freeman et al. 2015).' ("Cultural Practices" section)
@@ -4159,6 +4386,7 @@ Liu, Guodong; Wang, Qingren; Li, Yuncong; Dinkins, David; Wells, Bonnie; Cui, Yu
 Beuzelin, Julien M.; Dittmar, Peter J.; Desaeger, Johan; Zotarelli, Lincoln; Zhang, Shouan; Wang, Qingren; Frey, Craig; Mészáros, Anna. (2026). *Chapter 15. Root Crop Production (Vegetable Production Handbook, HS965/CV300, revised 8/2026)*. University of Florida IFAS Extension (EDIS)
 
 - URL: <https://journals.flvc.org/edis/article/view/134126>
+- Archived: <https://web.archive.org/web/20260308010405/https://journals.flvc.org/edis/article/view/134126>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - malanga spacing, verbatim: 'Distance between rows (in) 48 52 52 Distance between plants (ft) 2 1 1' (Table 5, 'Planting information for cassava, taro, and malanga', column Malanga (the last column), PDF page 2)
@@ -4171,6 +4399,7 @@ Beuzelin, Julien M.; Dittmar, Peter J.; Desaeger, Johan; Zotarelli, Lincoln; Zha
 UF/IFAS Extension. (n.d.). *Roselle, Gardening Solutions*. University of Florida Institute of Food and Agricultural Sciences
 
 - URL: <https://gardeningsolutions.ifas.ufl.edu/plants/edibles/vegetables/roselle/>
+- Archived: <https://web.archive.org/web/20261008141806/https://gardeningsolutions.ifas.ufl.edu/plants/edibles/vegetables/roselle/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - roselle coldLimit, verbatim: 'It is only hardy in zones 9-10, and is damaged by frosts or freezes; plan your harvest before temperatures drop below 40° F.' (Section 'Planting and Care', paragraph on soil and hardiness)
@@ -4182,6 +4411,7 @@ UF/IFAS Extension. (n.d.). *Roselle, Gardening Solutions*. University of Florida
 UF/IFAS Extension. (n.d.). *Culantro*. University of Florida, Institute of Food and Agricultural Sciences, Gardening Solutions
 
 - URL: <https://gardeningsolutions.ifas.ufl.edu/plants/edibles/vegetables/culantro/>
+- Archived: <https://web.archive.org/web/20260604114054/https://gardeningsolutions.ifas.ufl.edu/plants/edibles/vegetables/culantro/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - culantro light, verbatim: 'Contrary to most herbs and vegetables, culantro does best in a shady area. Shade also aides in keeping your plant from bolting, that is, producing its cream-colored flowers and going to seed.' (Section 'Planting and Care')
@@ -4192,6 +4422,7 @@ UF/IFAS Extension. (n.d.). *Culantro*. University of Florida, Institute of Food 
 University of Florida IFAS Extension, Gardening Solutions. (n.d.). *Ginger – Gardening Solutions*. University of Florida IFAS Extension
 
 - URL: <https://gardeningsolutions.ifas.ufl.edu/plants/edibles/vegetables/ginger/>
+- Archived: <https://web.archive.org/web/20260509172730/https://gardeningsolutions.ifas.ufl.edu/plants/edibles/vegetables/ginger/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - ginger spacing, verbatim: 'Space pieces about 15 inches apart as the underground structure will expand over the course of the year.' (Planting and Care section)
@@ -4204,6 +4435,7 @@ University of Florida IFAS Extension, Gardening Solutions. (n.d.). *Ginger – G
 UF/IFAS Extension Gardening Solutions. (n.d.). *Mulberry (Gardening Solutions)*. University of Florida IFAS Extension, Gardening Solutions
 
 - URL: <https://gardeningsolutions.ifas.ufl.edu/plants/edibles/fruits/mulberry/>
+- Archived: <https://web.archive.org/web/20260617022805/https://gardeningsolutions.ifas.ufl.edu/plants/edibles/fruits/mulberry/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - mulberry-black light, verbatim: 'These trees do best in full sun to light shade.' (UF/IFAS Gardening Solutions, Mulberry page, Planting and Care section)
@@ -4214,6 +4446,7 @@ UF/IFAS Extension Gardening Solutions. (n.d.). *Mulberry (Gardening Solutions)*.
 University of Florida IFAS Extension, Gardening Solutions. (n.d.). *Turmeric – Gardening Solutions*. University of Florida IFAS Extension
 
 - URL: <https://gardeningsolutions.ifas.ufl.edu/plants/edibles/vegetables/turmeric/>
+- Archived: <https://web.archive.org/web/20260606201455/https://gardeningsolutions.ifas.ufl.edu/plants/edibles/vegetables/turmeric/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - turmeric spacing, verbatim: 'Space them 15 inches in the row and 15 inches between the row.' (Planting Tips section)
@@ -4224,6 +4457,7 @@ University of Florida IFAS Extension, Gardening Solutions. (n.d.). *Turmeric –
 UF/IFAS Invasive Plant Working Group, Center for Aquatic and Invasive Plants. (n.d.). *Artocarpus altilis (breadfruit): Assessment of Non-Native Plants in Florida's Natural Areas*. University of Florida, Institute of Food and Agricultural Sciences (UF/IFAS) Extension
 
 - URL: <https://assessment.ifas.ufl.edu/assessments/artocarpus-altilis/>
+- Archived: <https://web.archive.org/web/20261006070250/https://assessment.ifas.ufl.edu/assessments/artocarpus-altilis/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - breadfruit invasiveStatus, verbatim: 'Low Risk for invasion, therefore Not considered a problem species at this time. May be recommended by IFAS. Reassessed every 10 years.' (Conclusions by Zone, Central, North, South: 'Low Invasion Risk', predictive tool score -1, assessment dates 2014 and 202)
@@ -4234,6 +4468,7 @@ UF/IFAS Invasive Plant Working Group, Center for Aquatic and Invasive Plants. (n
 UF/IFAS Invasive Plant Working Group, Center for Aquatic and Invasive Plants. (n.d.). *Artocarpus heterophyllus (jackfruit): Assessment of Non-Native Plants in Florida's Natural Areas*. University of Florida, Institute of Food and Agricultural Sciences (UF/IFAS) Extension
 
 - URL: <https://assessment.ifas.ufl.edu/assessments/artocarpus-heterophyllus/>
+- Archived: <https://web.archive.org/web/20261006070250/https://assessment.ifas.ufl.edu/assessments/artocarpus-heterophyllus/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - jackfruit invasiveStatus, verbatim: 'Not considered a problem species at this time. May be recommended by IFAS. Reassessed every 10 years.' (Conclusions by Zone, Central, North, South: 'Not a problem species (un-documented)', assessment dates 2007 and 2018)
@@ -4244,6 +4479,7 @@ UF/IFAS Invasive Plant Working Group, Center for Aquatic and Invasive Plants. (n
 Sirchia, Julia. (2026). *Heat-Tolerant Edibles for the Summer: Roselle*. UF/IFAS Extension Pasco County
 
 - URL: <https://blogs.ifas.ufl.edu/pascoco/2026/06/11/heat-tolerant-edibles-for-the-summer-home-garden/>
+- Archived: <https://web.archive.org/web/20261017213914/https://blogs.ifas.ufl.edu/pascoco/2026/06/11/heat-tolerant-edibles-for-the-summer-home-garden/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - roselle width, verbatim: 'roselle can easily grow 4 to 7 feet tall and 3 to 5 feet wide.' (Introduction paragraph)
@@ -4254,6 +4490,7 @@ Sirchia, Julia. (2026). *Heat-Tolerant Edibles for the Summer: Roselle*. UF/IFAS
 Busbee, Larry; Stevens, Sandy; Andrews, Frances; Criss, Josh. (2025). *Sugarcane (Santa Rosa County Cooperative Extension Teaching and Demonstration Gardens)*. UF/IFAS Extension Santa Rosa County
 
 - URL: <https://sfyl.ifas.ufl.edu/media/sfylifasufledu/santa-rosa/docs/pdfs/demo-garden-5/Sugarcane-final.pdf>
+- Archived: <https://web.archive.org/web/20251220030236/https://sfyl.ifas.ufl.edu/media/sfylifasufledu/santa-rosa/docs/pdfs/demo-garden-5/Sugarcane-final.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - sugarcane height, verbatim: 'Height: 3 to 12 feet Spread: 3 to 10 feet' (Plant data block under the introductory text, field 'Height')
@@ -4265,6 +4502,7 @@ Busbee, Larry; Stevens, Sandy; Andrews, Frances; Criss, Josh. (2025). *Sugarcane
 MacLean, Dan; Martino, Karina G.; Scherm, Harald; Horton, Dan L. (2022). *Pomegranate Production (Circular 997)*. University of Georgia Cooperative Extension
 
 - URL: <https://fieldreport.caes.uga.edu/publications/C997/>
+- Archived: <https://web.archive.org/web/20261017213255/https://fieldreport.caes.uga.edu/publications/C997/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - pomegranate spacing, verbatim: 'Traditional spacing for an orchard is 18′ x 18′ (134 trees/acre).' ("Orchard Establishment" section)
@@ -4279,6 +4517,7 @@ MacLean, Dan; Martino, Karina G.; Scherm, Harald; Horton, Dan L. (2022). *Pomegr
 Tubbs, R. Scott. (2024). *2024 Corn Production Guide*. University of Georgia Cooperative Extension
 
 - URL: <https://grains.caes.uga.edu/content/dam/caes-subsite/grains/docs/corn/2024-Corn-Production-Guide.pdf>
+- Archived: <https://web.archive.org/web/20261017212557/https://grains.caes.uga.edu/content/dam/caes-subsite/grains/docs/corn/2024-Corn-Production-Guide.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - corn-grain spacing, verbatim: 'Current plant population recommendations for irrigated corn in Georgia are between 28,000 to 36,000 plants per acre... In dryland cropping systems current plant population recommendations are between 18,000 and 20,000 plants per acre in sandy soils... Traditional row-spacings utilized in Georgia pro' (p. 6, 'Plant Population and Row Spacing' section; Table 4 (p. 8) converts these to within-row inches by row width)
@@ -4290,6 +4529,7 @@ Tubbs, R. Scott. (2024). *2024 Corn Production Guide*. University of Georgia Coo
 Dorn, Sheri. (2025). *Herbs in Southern Gardens (Bulletin 1170)*. University of Georgia Cooperative Extension
 
 - URL: <https://fieldreport.caes.uga.edu/publications/B1170/herbs-in-southern-gardens/>
+- Archived: <https://web.archive.org/web/20251108200934/https://fieldreport.caes.uga.edu/publications/B1170/herbs-in-southern-gardens/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - lemon-verbena spacing, verbatim: 'Lemon Verbena (p) Spring 3–4 ft Seed, cutting 3–5 ft Branching/woody Full sun, partial shade' (Table Herb Cultivation Recommendations, column Spacing, row Lemon Verbena (p))
@@ -4300,6 +4540,7 @@ Dorn, Sheri. (2025). *Herbs in Southern Gardens (Bulletin 1170)*. University of 
 Krewer, Gerard W.; Crocker, Thomas F.; Bertrand, Paul F.; Horton, Dan L. (2026). *Minor Fruits and Nuts in Georgia (Bulletin 992)*. University of Georgia Cooperative Extension
 
 - URL: <https://fieldreport.caes.uga.edu/publications/b992/minor-fruits-and-nuts-in-georgia/>
+- Archived: <https://web.archive.org/web/20260712082442/https://fieldreport.caes.uga.edu/publications/B992/minor-fruits-and-nuts-in-georgia/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - mulberry-black harvestSeason, verbatim: 'The fruit are borne on current season’s growth and ripen in May in Georgia.' (UGA Cooperative Extension Bulletin 992, Minor Fruits and Nuts in Georgia, Mulberry section)
@@ -4310,6 +4551,7 @@ Krewer, Gerard W.; Crocker, Thomas F.; Bertrand, Paul F.; Horton, Dan L. (2026).
 Westerfield, Robert. (2022). *Home Garden Planting Chart*. University of Georgia Cooperative Extension Bulletin 577
 
 - URL: <https://secure.caes.uga.edu/extension/publications/files/html/B577/B577PlantingChart.pdf>
+- Archived: <https://web.archive.org/web/20251108044452/https://secure.caes.uga.edu/extension/publications/files/html/B577/B577PlantingChart.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - days to maturity per crop, e.g. 'Tomato 70-85', 'Radish 25-30', 'Onion (mature) 100-120'
@@ -4322,6 +4564,7 @@ Westerfield, Robert. (2022). *Home Garden Planting Chart*. University of Georgia
 Wells, Lenny; Hudson, William G.; Brock, Jason H. (2024). *Pecan Trees for the Home or Backyard Orchard (Bulletin 1348)*. University of Georgia Cooperative Extension
 
 - URL: <https://extension.uga.edu/publications/detail.html?number=B1348&title=pecan-trees-for-the-home-or-backyard-orchard>
+- Archived: <https://web.archive.org/web/20261017213545/https://extension.uga.edu/publications/detail.html?number=B1348&title=pecan-trees-for-the-home-or-backyard-orchard>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - pecan spacing, verbatim: 'Yard and home orchard trees should be spaced at least 60 to 80 feet apart so they will not crowd as they reach maturity and so thinning will not be required.' (UGA Bulletin 1348, "Location and Spacing" section)
@@ -4333,6 +4576,7 @@ Wells, Lenny; Hudson, William G.; Brock, Jason H. (2024). *Pecan Trees for the H
 Kaiser, Cheryl; Ernst, Matt. (2017). *American Persimmon (CCD-CP-1)*. Center for Crop Diversification, University of Kentucky College of Agriculture, Food and Environment
 
 - URL: <https://ccd.uky.edu/sites/default/files/2024-11/ccd-cp-001_american-persimmon.pdf>
+- Archived: <https://web.archive.org/web/20251204222526/https://ccd.uky.edu/sites/default/files/2024-11/ccd-cp-001_american-persimmon.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - american-persimmon spacing, verbatim: 'A tree spacing of 20 feet between trees in the row and 27 feet between rows has worked well.' ("Site selection, planting, and maintenance" section, p. 2)
@@ -4345,6 +4589,7 @@ Kaiser, Cheryl; Ernst, Matt. (2017). *American Persimmon (CCD-CP-1)*. Center for
 Ernst, Matt. (2017). *Malabar Spinach*. Center for Crop Diversification, University of Kentucky College of Agriculture, Food and Environment (publication CCD-CP-130)
 
 - URL: <https://publications.mgcafe.uky.edu/sites/publications.ca.uky.edu/files/malabar.pdf>
+- Archived: <https://web.archive.org/web/20261017212334/https://publications.mgcafe.uky.edu/sites/publications.ca.uky.edu/files/malabar.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - malabar-spinach spacing, verbatim: 'Malabar spinach may be direct seeded in rows spaced 1 foot apart, with seeds spaced 1 to 2 inches and thinned to 6 inches between plants.' ("Production considerations > Site selection and planting" section, p. 2)
@@ -4355,6 +4600,7 @@ Ernst, Matt. (2017). *Malabar Spinach*. Center for Crop Diversification, Univers
 Teutsch, Chris; Smith, Ray; Keene, Tom; Henning, Jimmy C. (2018). *Foxtail Millet (AGR-233)*. University of Kentucky Cooperative Extension Service
 
 - URL: <https://publications.mgcafe.uky.edu/sites/publications.ca.uky.edu/files/AGR233.pdf>
+- Archived: <https://web.archive.org/web/20261017221222/https://publications.mgcafe.uky.edu/sites/publications.ca.uky.edu/files/AGR233.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - foxtail-millet coldLimit, verbatim: 'Foxtail millet should be planted after there is no chance of frost and when the soil temperature has reached at least 65ºF. It is more sensitive to cold stress than sorghum.' (Page 1, planting paragraph)
@@ -4365,6 +4611,7 @@ Teutsch, Chris; Smith, Ray; Keene, Tom; Henning, Jimmy C. (2018). *Foxtail Mille
 Fishman, Lisa; Hedstrom, Nellie. (2008). *Bulletin #4263, Vegetables and Fruits for Health: Wild Blueberries*. University of Maine Cooperative Extension
 
 - URL: <https://extension.umaine.edu/publications/4263e/>
+- Archived: <https://web.archive.org/web/20260521012711/https://extension.umaine.edu/publications/4263e/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - harvest timing for lowbush-blueberry, verbatim: 'If possible, go to the fields and buy berries directly from growers during harvest season. Buy your supply when berries are at their peak, from July to mid-August' (Section ‘Selection’)
@@ -4385,6 +4632,7 @@ Averill, Anne; Caruso, Frank L.; DeMoranville, Carolyn J.; Jeranyama, Peter; LaF
 Talabac, Miri. (2024). *Less Common Fruits for a Home Garden*. University of Maryland Extension, Home and Garden Information Center
 
 - URL: <https://extension.umd.edu/resource/less-common-fruits-home-garden>
+- Archived: <https://web.archive.org/web/20260517021634/http://extension.umd.edu/resource/less-common-fruits-home-garden>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - harvest timing for elderberry, verbatim: 'Harvest is usually between mid-August and mid-September, depending on cultivar and location' (Elderberry section, ‘Harvesting’ subheading)
@@ -4395,6 +4643,7 @@ Talabac, Miri. (2024). *Less Common Fruits for a Home Garden*. University of Mar
 Potter, Bruce; Bongard, Phyllis; Naeve, Seth; Gunsolus, Jeff. (2018). *Spring frost damage on soybean*. University of Minnesota Extension
 
 - URL: <https://extension.umn.edu/agriculture/crop-production/soybean/spring-frost>
+- Archived: <https://web.archive.org/web/20261017213822/https://extension.umn.edu/agriculture/crop-production/soybean/spring-frost>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - soybean coldLimit, verbatim: 'To kill soybean tissue, temperatures usually need to be at or below 28 to 30 degrees Fahrenheit for several hours. However, an air temperature of 28 does not guarantee a soybean crop will freeze.' (Accordion 'Factors affecting survivability', 'Temperature')
@@ -4405,6 +4654,7 @@ Potter, Bruce; Bongard, Phyllis; Naeve, Seth; Gunsolus, Jeff. (2018). *Spring fr
 Sheaffer, Craig; Wells, M. Samantha; Holen, Doug. (2023). *Alfalfa establishment: Management strategies*. University of Minnesota Extension
 
 - URL: <https://extension.umn.edu/planting-forages/alfalfa-establishment-management-strategies>
+- Archived: <https://web.archive.org/web/20260815223526/https://extension.umn.edu/planting-forages/alfalfa-establishment-management-strategies>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - alfalfa yearsToFirstHarvest, verbatim: 'Direct-seeded alfalfa should be harvested about 60 days following seeding and additional harvests taken before early September.' (Section 'Seeding alfalfa', accordion 'Weed control and companion crops with new seedings', paragraph 'Direct seeding wit)
@@ -4415,6 +4665,7 @@ Sheaffer, Craig; Wells, M. Samantha; Holen, Doug. (2023). *Alfalfa establishment
 University of Minnesota Extension. (2026). *Changing the Architecture of the Midwest: The Rise of Short Stature Corn*. University of Minnesota Extension, Minnesota Crop News
 
 - URL: <https://blog-crop-news.extension.umn.edu/2026/06/changing-architecture-of-midwest-rise.html>
+- Archived: <https://web.archive.org/web/20260729154628/https://blog-crop-news.extension.umn.edu/2026/06/changing-architecture-of-midwest-rise.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - corn-grain height, verbatim: 'While traditional corn towers at 9 to 12 feet, new hybrids are keeping the canopy at 7 feet or less—without sacrificing the yields growers require.' (Minnesota Crop News blog post, June 27, 2026 (Cropcast episode summary with Dr. Jeff Coulter, UMN Extension Corn Special)
@@ -4425,6 +4676,7 @@ University of Minnesota Extension. (2026). *Changing the Architecture of the Mid
 Community Plant Breeding Team, University of Minnesota. (n.d.). *Jute Mallow: Corchorus olitorius and Corchorus capsularis*. University of Minnesota
 
 - URL: <https://cpbt.umn.edu/sites/cpbt.umn.edu/files/2025-03/Jute%20Mallow.pdf>
+- Archived: <https://web.archive.org/web/20261017214047/https://cpbt.umn.edu/sites/cpbt.umn.edu/files/2025-03/Jute%20Mallow.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - jute-mallow light, verbatim: 'Full sun and fertile, well-draining soil' (Column 'Growing')
@@ -4435,6 +4687,7 @@ Community Plant Breeding Team, University of Minnesota. (n.d.). *Jute Mallow: Co
 Wimmer, Madeline; Tepe, Emily S.; Hoover, Emily E. (2024). *Growing currants and gooseberries in the home garden*. University of Minnesota Extension
 
 - URL: <https://extension.umn.edu/garden-and-home/yard-and-garden/gardening-in-minnesota/growing-currants-and-gooseberries-in-the-home-garden>
+- Archived: <https://web.archive.org/web/20261017211249/https://extension.umn.edu/garden-and-home/yard-and-garden/gardening-in-minnesota/growing-currants-and-gooseberries-in-the-home-garden>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - harvest timing for currant-red, verbatim: 'July, August: Harvest' (‘Care through the seasons’ checklist)
@@ -4447,6 +4700,7 @@ Wimmer, Madeline; Tepe, Emily S.; Hoover, Emily E. (2024). *Growing currants and
 University of Minnesota Extension. (2024). *Growing horseradish in home gardens*. University of Minnesota Extension
 
 - URL: <https://extension.umn.edu/vegetables/growing-horseradish>
+- Archived: <https://web.archive.org/web/20260604103515/https://extension.umn.edu/vegetables/growing-horseradish>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - harvest timing for horseradish, verbatim: 'Horseradish grows the most during late summer and early autumn. For this reason, delay fall harvest until late October or early November, or just before the ground freezes' ("Harvesting" section)
@@ -4457,6 +4711,7 @@ University of Minnesota Extension. (2024). *Growing horseradish in home gardens*
 Hoover, Emily; Luby, Jim; Guthrie, Bob; Tepe, Emily; Wannemuehler, Seth. (2024). *Growing kiwiberry in the home garden*. University of Minnesota Extension
 
 - URL: <https://extension.umn.edu/fruit/kiwiberry>
+- Archived: <https://web.archive.org/web/20260607162424/https://extension.umn.edu/fruit/kiwiberry>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - harvest timing for hardy-kiwi, verbatim: 'Late August to mid-October' (Table ‘Characteristics of kiwiberry species for Minnesota,’ row ‘Harvest date,’ column ‘A. arguta’)
@@ -4467,6 +4722,7 @@ Hoover, Emily; Luby, Jim; Guthrie, Bob; Tepe, Emily; Wannemuehler, Seth. (2024).
 University of Minnesota Extension. (2024). *Growing sorrel in home gardens*. University of Minnesota Extension
 
 - URL: <https://extension.umn.edu/vegetables/growing-sorrel>
+- Archived: <https://web.archive.org/web/20251110220244/https://extension.umn.edu/vegetables/growing-sorrel>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - harvest timing for sorrel, verbatim: 'Once the plants are established, you can harvest sorrel at any time from early spring until frost kills the growth' ("Harvest" section)
@@ -4477,6 +4733,7 @@ University of Minnesota Extension. (2024). *Growing sorrel in home gardens*. Uni
 Hoover, Emily E.; Klodd, Annie; Tepe, Emily S.; Foulk, Doug. (2024). *Growing strawberries in the home garden*. University of Minnesota Extension
 
 - URL: <https://extension.umn.edu/fruit/growing-strawberries-home-garden>
+- Archived: <https://web.archive.org/web/20260513161332/https://extension.umn.edu/fruit/growing-strawberries-home-garden>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - harvest timing for strawberry, verbatim: 'June-bearing strawberries produce a large, concentrated crop in mid-June to early July' (Section ‘Types of strawberries’ (Quick facts list))
@@ -4487,6 +4744,7 @@ Hoover, Emily E.; Klodd, Annie; Tepe, Emily S.; Foulk, Doug. (2024). *Growing st
 University of Minnesota Extension. (2026). *Growing asparagus in home gardens*. University of Minnesota Extension
 
 - URL: <https://extension.umn.edu/vegetables/growing-asparagus>
+- Archived: <https://web.archive.org/web/20260615110752/https://extension.umn.edu/vegetables/growing-asparagus>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - harvest timing for asparagus, verbatim: 'The asparagus harvest season lasts about 6 to 8 weeks, from early May to late June in Minnesota' ("Harvest and storage > Harvest" section)
@@ -4497,6 +4755,7 @@ University of Minnesota Extension. (2026). *Growing asparagus in home gardens*. 
 Tepe, Emily S.; Hoover, Emily E.; Luby, James; Klodd, Annie; Schuh, Marissa. (2026). *Growing blueberries in the home garden*. University of Minnesota Extension
 
 - URL: <https://extension.umn.edu/garden-and-home/yard-and-garden/gardening-in-minnesota/growing-blueberries-in-the-home-garden>
+- Archived: <https://web.archive.org/web/20261002071746/https://extension.umn.edu/garden-and-home/yard-and-garden/gardening-in-minnesota/growing-blueberries-in-the-home-garden>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - harvest timing for blueberry, from the ‘Care through the seasons’ checklist, which marks July for ‘Harvest’
@@ -4507,6 +4766,7 @@ Tepe, Emily S.; Hoover, Emily E.; Luby, James; Klodd, Annie; Schuh, Marissa. (20
 Wimmer, Madeline. (2026). *Cold-climate grapes*. University of Minnesota Extension
 
 - URL: <https://extension.umn.edu/fruit-and-vegetable-farming/cold-climate-grapes>
+- Archived: <https://web.archive.org/web/20261017211359/https://extension.umn.edu/fruit-and-vegetable-farming/cold-climate-grapes>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - harvest timing for grape, verbatim: 'In Minnesota, many varieties begin to grow in May, and the earliest-ripening varieties are harvested in mid-August, while later-ripening varieties may hang until mid-to-late October' (Section ‘Bud-break and harvest windows’)
@@ -4517,6 +4777,7 @@ Wimmer, Madeline. (2026). *Cold-climate grapes*. University of Minnesota Extensi
 University of Minnesota Extension. (2026). *Growing raspberries in the home garden*. University of Minnesota Extension
 
 - URL: <https://extension.umn.edu/fruit/growing-raspberries-home-garden>
+- Archived: <https://web.archive.org/web/20260513160707/https://extension.umn.edu/fruit/growing-raspberries-home-garden>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - harvest timing for raspberry, from the ‘Care through the seasons’ checklist for summer-bearing raspberries, which marks July and August for ‘Harvest’
@@ -4527,6 +4788,7 @@ University of Minnesota Extension. (2026). *Growing raspberries in the home gard
 Lee, Jennifer. (2020). *Ground Cherries (Crow Wing County Master Gardener Volunteer Program plant guide)*. University of Minnesota Extension, Crow Wing County Master Gardener Volunteer Program
 
 - URL: <https://crowwingmastergardeners.org/wp-content/uploads/2025/04/Plant-Guide-Ground-Cherries.pdf>
+- Archived: <https://web.archive.org/web/20260316045139/https://crowwingmastergardeners.org/wp-content/uploads/2025/04/Plant-Guide-Ground-Cherries.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - ground-cherry coldLimit, verbatim: 'Indeterminate – Ground cherries continue to grow all season and continue producing fruit until killed by frost' (Plant Selection box, first bullet)
@@ -4537,6 +4799,7 @@ Lee, Jennifer. (2020). *Ground Cherries (Crow Wing County Master Gardener Volunt
 MacKenzie, Jill. (2024). *Growing tomatillos and ground cherries in home gardens*. University of Minnesota Extension
 
 - URL: <https://extension.umn.edu/vegetables/growing-tomatillos-and-ground-cherries>
+- Archived: <https://web.archive.org/web/20260618070125/https://extension.umn.edu/vegetables/growing-tomatillos-and-ground-cherries>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - ground-cherry spacing, verbatim: 'Allow ground cherry plants 18 to 24 inches of space in all directions.' (Planting, Transplanting section)
@@ -4547,6 +4810,7 @@ MacKenzie, Jill. (2024). *Growing tomatillos and ground cherries in home gardens
 University of Minnesota Extension. (n.d.). *Growing staple vegetables from around the world in Minnesota (Molokhia, Corchorus olitorius)*. University of Minnesota Extension
 
 - URL: <https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/growing-staple-vegetables-from-around-the-world-in-minnesota>
+- Archived: <https://web.archive.org/web/20261017214022/https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/growing-staple-vegetables-from-around-the-world-in-minnesota>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - jute-mallow spacing, verbatim: 'Row spacing: 30-36 inches. Within-row plant spacing: 2-3 inches for bunched greens, 6-12 inches for continual harvest.' (Section 'Growing guides', accordion 'Molokhia (Corchorus olitorius)', 'Planting tips for growing molokhia in Minnesota')
@@ -4558,6 +4822,7 @@ University of Minnesota Extension. (n.d.). *Growing staple vegetables from aroun
 University of New Hampshire Extension. (n.d.). *How to grow garlic chives (Allium tuberosum)*. University of New Hampshire Extension
 
 - URL: <https://extension.unh.edu/resource/how-grow-garlic-chives-allium-tuberosum>
+- Archived: <https://web.archive.org/web/20260120053405/https://extension.unh.edu/resource/how-grow-garlic-chives-allium-tuberosum>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - garlic-chives spacing, verbatim: 'Sow lightly, and thin to 12 inches apart on all sides when seedlings are 2” tall.' (Planting paragraph (the Profile list on the same page also gives Plant Spacing: 12 inches and Row Spacing: 12 inches))
@@ -4572,6 +4837,7 @@ University of New Hampshire Extension. (n.d.). *How to grow garlic chives (Alliu
 Bevacqua, Robert F.; Miller, Ross H. (2020). *Agroforestry on Guam: Breadfruit Cultivation*. University of Guam, Western Pacific Tropical Research Center
 
 - URL: <https://www.uog.edu/_resources/files/wptrc/Bread_Fruit_Final2.pdf>
+- Archived: <https://web.archive.org/web/20250620094822/https://www.uog.edu/_resources/files/wptrc/Bread_Fruit_Final2.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - breadfruit spacing, verbatim: '‘Ma’afala’ is a relatively compact variety. A recommended spacing is 25 feet between trees in the rows and 50 feet between rows.' (p. 5 of 12, section 'Spacing' under Planting)
@@ -4582,6 +4848,7 @@ Bevacqua, Robert F.; Miller, Ross H. (2020). *Agroforestry on Guam: Breadfruit C
 Santiago Santos, Luis Reinaldo. (2001). *La producción de recao o culantro (Eryngium foetidum L.) en Puerto Rico (Publicación 162)*. Universidad de Puerto Rico, Recinto Universitario de Mayagüez, Colegio de Ciencias Agrícolas, Estación Experimental Agrícola
 
 - URL: <https://www.uprm.edu/hortalizasygranosbasicos/wp-content/uploads/sites/330/2025/06/CONJUNTO-RECAO-162-copy.pdf>
+- Archived: <https://web.archive.org/web/20260415125100/https://www.uprm.edu/hortalizasygranosbasicos/wp-content/uploads/sites/330/2025/06/CONJUNTO-RECAO-162-copy.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - culantro spacing, verbatim: 'Entre las distancias de siembra recomendadas y más utilizadas por los agricultores, se encuentran: 6" x 6" (6 pulgadas entre hilera x 6 pulgadas entre plantas), 5" x 5", 6"x 3" y 6" x 2".' (Section 'Siembra', PDF page 25 (printed page 18))
@@ -4594,6 +4861,7 @@ Santiago Santos, Luis Reinaldo. (2001). *La producción de recao o culantro (Ery
 University of Saskatchewan, College of Agriculture and Bioresources. (n.d.). *Haskaps (Gardening at USask)*. University of Saskatchewan
 
 - URL: <https://gardening.usask.ca/gardening-advice/gardenline-nested-pages/food-plant-pages/fruit/haskap.php>
+- Archived: <https://web.archive.org/web/20260618072933/https://gardening.usask.ca/gardening-advice/gardenline-nested-pages/food-plant-pages/fruit/haskap.php>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - haskap light, verbatim: 'Haskaps do best full sun to thrive. They can grow in part sun, but you will get less fruit. They are not suited to part shade or very shady conditions.' (USask Gardening (Gardenline), Haskaps page, Planting haskaps tab, Site selection)
@@ -4616,6 +4884,7 @@ Childers, Norman F. (1948). *Vanilla Culture in Puerto Rico (Circular No. 28, Fe
 Stevens, Michelle. (2000). *Eastern purple coneflower, Echinacea purpurea (L.) Moench, Plant Guide*. USDA Natural Resources Conservation Service, National Plant Data Center
 
 - URL: <https://plants.usda.gov/DocumentLibrary/plantguide/pdf/pg_ecpu.pdf>
+- Archived: <https://web.archive.org/web/20261017220837/https://plants.usda.gov/DocumentLibrary/plantguide/pdf/pg_ecpu.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - echinacea spacing, verbatim: 'In late spring or early summer, the hardy seedlings, now with a four-to-six inch root system, may be transplanted into the field or garden one or two feet apart.' (Section 'Seed Propagation', page 2 of the Plant Guide)
@@ -4626,6 +4895,7 @@ Stevens, Michelle. (2000). *Eastern purple coneflower, Echinacea purpurea (L.) M
 USDA NRCS Plant Materials Program. (2006). *Plant Fact Sheet: Alfalfa, Medicago sativa L.* USDA Natural Resources Conservation Service
 
 - URL: <https://plants.usda.gov/DocumentLibrary/factsheet/pdf/fs_mesa.pdf>
+- Archived: <https://web.archive.org/web/20260609044556/https://plants.usda.gov/DocumentLibrary/factsheet/pdf/fs_mesa.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - alfalfa height, verbatim: 'Alfalfa’s stems are erect and grow from a woody crown to about 2 to 3 feet tall.' (p. 1, 'Description' section)
@@ -4648,6 +4918,7 @@ USDA NRCS Brooksville Plant Materials Center. (n.d.). *Florida Plant Materials F
 Hurteau, Matthew D. (n.d.). *Plant Guide: Black Walnut (Juglans nigra L.)*. USDA Natural Resources Conservation Service, National Plant Data Center
 
 - URL: <https://plants.sc.egov.usda.gov/DocumentLibrary/plantguide/pdf/cs_juni.pdf>
+- Archived: <https://web.archive.org/web/20261017213318/https://plants.sc.egov.usda.gov/DocumentLibrary/plantguide/pdf/cs_juni.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - black-walnut height, verbatim: 'Black walnut is usually a medium sized tree ranging from 70-90 feet tall and 2-3 feet in diameter at breast height. However, black walnut can reach 150 feet tall and 8 feet in diameter at breast height.' (USDA NRCS Plant Guide (Juglans nigra), p. 1, "Description - General")
@@ -4659,6 +4930,7 @@ Hurteau, Matthew D. (n.d.). *Plant Guide: Black Walnut (Juglans nigra L.)*. USDA
 USDA NRCS Cape May Plant Materials Center. (n.d.). *Plant Guide: Pigeonpea, Cajanus cajan (L.) Millsp.* United States Department of Agriculture, Natural Resources Conservation Service
 
 - URL: <https://plants.sc.egov.usda.gov/DocumentLibrary/plantguide/pdf/pg_caca27.pdf>
+- Archived: <https://web.archive.org/web/20260929154052/https://plants.sc.egov.usda.gov/DocumentLibrary/plantguide/pdf/pg_caca27.pdf>
 - Verification: URL-verified | Access: public-domain
 - Backs:
   - verbatim: 'It is a shrub that can grow to 12 ft tall, but usually only reaches 3 to 6 ft'
@@ -4673,6 +4945,7 @@ USDA NRCS Cape May Plant Materials Center. (n.d.). *Plant Guide: Pigeonpea, Caja
 USDA Natural Resources Conservation Service. (n.d.). *PLANTS Database: Glycine max (L.) Merr., soybean (GLMA4), Plant Characteristics*. USDA Natural Resources Conservation Service
 
 - URL: <https://plants.usda.gov/plant-profile/GLMA4/characteristics>
+- Archived: <https://web.archive.org/web/20261017213704/https://plants.usda.gov/plant-profile/GLMA4/characteristics>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - soybean height, verbatim: 'Height, Mature (feet) | 3.0' (Plant Characteristics, 'Morphology/Physiology', field 'Height, Mature (feet)')
@@ -4683,6 +4956,7 @@ USDA Natural Resources Conservation Service. (n.d.). *PLANTS Database: Glycine m
 USDA NRCS National Plant Data Team. (n.d.). *PLANTS Profile for Piper nigrum L. (black pepper), symbol PINI3*. USDA Natural Resources Conservation Service, PLANTS Database
 
 - URL: <https://plants.usda.gov/plant-profile/PINI3>
+- Archived: <https://web.archive.org/web/20250929201215/https://plants.usda.gov/plant-profile/PINI3>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - black-pepper invasiveStatus, verbatim: '"HasNoxiousStatuses":false,"NoxiousStatuses":null' (USDA PLANTS API profile for symbol PINI3 (Piper nigrum), field HasNoxiousStatuses, https://plantsservices.sc.egov.usda.g)
@@ -4693,6 +4967,7 @@ USDA NRCS National Plant Data Team. (n.d.). *PLANTS Profile for Piper nigrum L. 
 Little, Elbert L., Jr.; Skolmen, Roger G. (1989). *Common Forest Trees of Hawaii (Native and Introduced): 'Ulu, breadfruit, Artocarpus altilis (USDA Forest Service Agriculture Handbook 679)*. USDA Forest Service, 1989 (reprint by College of Tropical Agriculture and Human Resources, University of Hawaii at Manoa, 2003)
 
 - URL: <https://www.ctahr.hawaii.edu/gsp/doc/Forestry/Little_Skolmen_CFT/CFT_Artocarpus_altilis.pdf>
+- Archived: <https://web.archive.org/web/20260123061035/https://www.ctahr.hawaii.edu/gsp/doc/Forestry/Little_Skolmen_CFT/CFT_Artocarpus_altilis.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - breadfruit harvestSeason, verbatim: 'Fruits mature mainly from June to August in Hawaii.' (p. 1 of 3, description of the fruit)
@@ -4703,6 +4978,7 @@ Little, Elbert L., Jr.; Skolmen, Roger G. (1989). *Common Forest Trees of Hawaii
 Sullivan, Janet. (1993). *Morus rubra, red mulberry (Fire Effects Information System species review)*. U.S. Department of Agriculture, Forest Service, Rocky Mountain Research Station, Fire Sciences Laboratory
 
 - URL: <https://research.fs.usda.gov/feis/species-reviews/morrub>
+- Archived: <https://web.archive.org/web/20260417063043/https://research.fs.usda.gov/feis/species-reviews/morrub>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - mulberry-red light, verbatim: 'Red mulberry grows best in the open, but is somewhat tolerant of shade' (USDA Forest Service Fire Effects Information System species review, section Successional Status)
@@ -4713,6 +4989,7 @@ Sullivan, Janet. (1993). *Morus rubra, red mulberry (Fire Effects Information Sy
 Carlson, Matthew L.; Lapina, Irina V.; Shephard, Michael; Conn, Jeffery S.; Densmore, Roseann; Spencer, Page; Heys, Jeff; Riley, Julie; Nielsen, Jamie. (2008). *Invasiveness Ranking System for Non-Native Plants of Alaska (R10-TP-143)*. USDA Forest Service, Alaska Region
 
 - URL: <https://accs.uaa.alaska.edu/wp-content/uploads/Invasiveness_Ranking_System_for_Non-Native_Plants_Alaska.pdf>
+- Archived: <https://web.archive.org/web/20250916005647/https://accs.uaa.alaska.edu/wp-content/uploads/Invasiveness_Ranking_System_for_Non-Native_Plants_Alaska.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - alfalfa invasiveStatus, verbatim: 'Medicago sativa ssp. sativa Alfalfa 13(30) 17 16 7 53(90) 59 Yes Yes Yes' (Appendix A (p. A-2), table of invasiveness ranks, row 'Medicago sativa ssp. sativa', column 'Invasiveness'. The same tab)
@@ -4723,6 +5000,7 @@ Carlson, Matthew L.; Lapina, Irina V.; Shephard, Michael; Conn, Jeffery S.; Dens
 Busing, Richard T.; Slabaugh, Paul E. (2008). *Hippophae rhamnoides L.: common seabuckthorn (The Woody Plant Seed Manual, Agriculture Handbook 727)*. USDA Forest Service
 
 - URL: <https://research.fs.usda.gov/treesearch/32649>
+- Archived: <https://web.archive.org/web/20260403045946/https://research.fs.usda.gov/treesearch/32649>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - sea-buckthorn harvestSeason, verbatim: 'ripen in September or October (Hoag 1965; Hottes 1952) and frequently persist on the shrubs until the following March.' ("Flowering and fruiting" paragraph, p. 588 of the Woody Plant Seed Manual)
@@ -4733,6 +5011,7 @@ Busing, Richard T.; Slabaugh, Paul E. (2008). *Hippophae rhamnoides L.: common s
 Chamberlain, Jim; Beegle, Dana; Lajeunesse Connette, Katie. (2014). *Forest Farming Ramps (Agroforestry Notes, AF Note-47)*. USDA Forest Service, USDA National Agroforestry Center
 
 - URL: <https://www.fs.usda.gov/nac/assets/documents/agroforestrynotes/an47ff08.pdf>
+- Archived: <https://web.archive.org/web/20260703123027/https://www.fs.usda.gov/nac/assets/documents/agroforestrynotes/an47ff08.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - harvest timing for ramps, verbatim: 'The timing of harvest may differ geographically. For example, in southern Appalachia the optimal time to harvest is usually about the third week in April, whereas in cooler northern climates harvesting may be best a bit later' (p. 4, "Harvesting & Processing" section)
@@ -4743,6 +5022,7 @@ Chamberlain, Jim; Beegle, Dana; Lajeunesse Connette, Katie. (2014). *Forest Farm
 Maughan, Tiffany; Black, Brent. (2015). *How to Grow Goji Berries In Your Garden*. Utah State University Extension
 
 - URL: <https://extension.usu.edu/yardandgarden/research/goji-in-the-garden>
+- Archived: <https://web.archive.org/web/20260405235117/https://extension.usu.edu/yardandgarden/research/goji-in-the-garden>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - goji spacing, verbatim: 'If establishing multiple rows, leave 2 to 4 feet between plants within a row and 6 to 8 feet between rows.' ("Spacing" section)
@@ -4759,6 +5039,7 @@ Maughan, Tiffany; Black, Brent. (2015). *How to Grow Goji Berries In Your Garden
 Lauritzen, Elisa; Maughan, Tiffany; Black, Brent. (2015). *Haskap in the Garden*. Utah State University Extension
 
 - URL: <https://extension.usu.edu/yardandgarden/research/haskap-in-the-garden.pdf>
+- Archived: <https://web.archive.org/web/20260417145020/https://extension.usu.edu/yardandgarden/research/haskap-in-the-garden.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - haskap spacing, verbatim: 'For most cultivars, leaving 3 to 4 feet between plants within the row and 6 to 10 feet between rows is sufficient.' (Utah State University Extension, Haskap in the Garden, section Planting and Spacing, page 2)
@@ -4772,6 +5053,7 @@ Lauritzen, Elisa; Maughan, Tiffany; Black, Brent. (2015). *Haskap in the Garden*
 Crummitt, Keenen; Drost, Dan. (2020). *How to Grow English Lavender in Your Garden*. Utah State University Extension
 
 - URL: <https://extension.usu.edu/yardandgarden/research/english-lavender-in-the-garden>
+- Archived: <https://web.archive.org/web/20260909071347/https://extension.usu.edu/yardandgarden/research/english-lavender-in-the-garden>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - lavender spacing, verbatim: 'Space lavender plants 18-24 inches apart into light, well aerated, gravelly soil.' (“Planting and Spacing” section)
@@ -4786,6 +5068,7 @@ Crummitt, Keenen; Drost, Dan. (2020). *How to Grow English Lavender in Your Gard
 Linse, Terra; Drost, Dan. (2020). *How to Grow Lemongrass in Your Garden*. Utah State University Extension
 
 - URL: <https://extension.usu.edu/yardandgarden/research/lemongrass-in-the-garden>
+- Archived: <https://web.archive.org/web/20260216232751/https://extension.usu.edu/yardandgarden/research/lemongrass-in-the-garden>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - lemongrass yearsToFirstHarvest, verbatim: 'Lemongrass grows slowly until the heat of summer arrives, then it increases in size dramatically. Typically plants will produce several harvestable stalks by the end of the summer.' (“Plants” section (Planting and Spacing))
@@ -4797,6 +5080,7 @@ Linse, Terra; Drost, Dan. (2020). *How to Grow Lemongrass in Your Garden*. Utah 
 Roper, Teryl R.; Heflebower, Rick. (2020). *How to Grow Almonds in Your Garden*. Utah State University Extension
 
 - URL: <https://extension.usu.edu/yardandgarden/research/almonds-in-the-home-garden>
+- Archived: <https://web.archive.org/web/20260711173554/https://extension.usu.edu/yardandgarden/research/almonds-in-the-home-garden>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - almond spacing, verbatim: 'Almond trees grow quite large, and at maturity will occupy a space roughly 20 x 20 feet (10-12 foot radius from the trunk).' (USU Extension, "How to Grow Almonds in Your Garden", "Almond Tree Site Preparation" section)
@@ -4812,6 +5096,7 @@ Roper, Teryl R.; Heflebower, Rick. (2020). *How to Grow Almonds in Your Garden*.
 Kendrick, Trudy; Drost, Dan. (2020). *How to Grow Watercress in Your Garden (HG/Garden/2008-03pr, "Watercress in the Garden")*. Utah State University Extension
 
 - URL: <https://extension.usu.edu/yardandgarden/research/watercress-in-the-garden>
+- Archived: <https://web.archive.org/web/20260218053326/https://extension.usu.edu/yardandgarden/research/watercress-in-the-garden>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - harvest timing for watercress, verbatim: 'Harvest dime sized dark green leaves at any time during the year. ... Watercress can be harvested year round' ("How to Harvest and Store Watercress" section, p.2)
@@ -4822,6 +5107,7 @@ Kendrick, Trudy; Drost, Dan. (2020). *How to Grow Watercress in Your Garden (HG/
 Rolfe, Emmalee; Drost, Dan. (2023). *Comfrey in the Garden*. Utah State University Extension
 
 - URL: <https://extension.usu.edu/yardandgarden/research/comfrey-in-the-garden>
+- Archived: <https://web.archive.org/web/20260728170851/https://extension.usu.edu/yardandgarden/research/comfrey-in-the-garden>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - harvest timing for comfrey, verbatim: 'Once established, harvest leaves every 2 weeks throughout the growing season' ("Harvest and Storage > Fresh" section, p.2)
@@ -4832,6 +5118,7 @@ Rolfe, Emmalee; Drost, Dan. (2023). *Comfrey in the Garden*. Utah State Universi
 Utah State University Extension, Preserve the Harvest. (n.d.). *How to Preserve Cherries*. Utah State University Extension
 
 - URL: <https://extension.usu.edu/preserve-the-harvest/research/cherries>
+- Archived: <https://web.archive.org/web/20260624191608/https://extension.usu.edu/preserve-the-harvest/research/cherries>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - harvest timing for cherry-sweet, verbatim: 'From Box Elder County south to Salt Lake County, sweet cherries ripen around June 10 to the 25' (Season Availability section)
@@ -4862,6 +5149,7 @@ Uvah, I. I. I.; Coaker, T. H. (1984). *Effect of mixed cropping on some insect p
 University of Wisconsin-Madison Division of Extension, Crops and Soils. (n.d.). *Honeyberries (crop profile)*. University of Wisconsin-Madison Division of Extension
 
 - URL: <https://cropsandsoils.extension.wisc.edu/honeyberries/>
+- Archived: <https://web.archive.org/web/20260306024423/https://cropsandsoils.extension.wisc.edu/honeyberries/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - haskap yearsToFirstHarvest, verbatim: 'Plants will begin bearing a few fruit in years one and two, but three to four years are required for large quantities.' (UW-Madison Division of Extension, Honeyberries crop profile, first body paragraph)
@@ -4873,6 +5161,7 @@ University of Wisconsin-Madison Division of Extension, Crops and Soils. (n.d.). 
 University of Wisconsin-Madison, Uncommon Fruit. (2013). *Mulberry (Morus ssp), Uncommon Fruit: Observations from Carandale Farm*. University of Wisconsin-Madison
 
 - URL: <https://uncommonfruit.cias.wisc.edu/mulberry/>
+- Archived: <https://web.archive.org/web/20261017214509/https://uncommonfruit.cias.wisc.edu/mulberry/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - mulberry-black coldLimit, verbatim: 'The black mulberry, which is a small tree that lives longer, is said to have the best quality fruit, is the least winter hardy and will not tolerate temperatures below zero (Zone 7).' (UW-Madison Uncommon Fruit, Mulberry page, History and background paragraph)
@@ -4883,6 +5172,7 @@ University of Wisconsin-Madison, Uncommon Fruit. (2013). *Mulberry (Morus ssp), 
 Mahr, Susan. (2026). *Catnip, Nepeta cataria*. University of Wisconsin-Madison Division of Extension, Wisconsin Horticulture
 
 - URL: <https://hort.extension.wisc.edu/articles/catnip-nepeta-cataria/>
+- Archived: <https://web.archive.org/web/20261006164935/https://hort.extension.wisc.edu/articles/catnip-nepeta-cataria/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - catnip height, verbatim: 'Plants can grow up to 3 feet tall and wide under ideal conditions, and may form colonies from the short rhizomes.' (Section 'Overview', the paragraph that begins 'Plants die back to the ground in the winter')
@@ -4895,6 +5185,7 @@ Mahr, Susan. (2026). *Catnip, Nepeta cataria*. University of Wisconsin-Madison D
 Mahr, Susan. (2026). *Dandelion, Taraxacum officinale*. University of Wisconsin-Madison Division of Extension, Wisconsin Horticulture
 
 - URL: <https://hort.extension.wisc.edu/articles/dandelion-taraxacum-officinale/>
+- Archived: <https://web.archive.org/web/20260222170106/https://hort.extension.wisc.edu/articles/dandelion-taraxacum-officinale/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - dandelion spacing, verbatim: 'Space the plants six to nine inches apart in rows twelve inches apart.' (Section 'Growing Dandelion')
@@ -4907,6 +5198,7 @@ Mahr, Susan. (2026). *Dandelion, Taraxacum officinale*. University of Wisconsin-
 Mahr, Susan. (n.d.). *Garlic Chives, Allium tuberosum*. University of Wisconsin-Madison Division of Extension, Wisconsin Horticulture
 
 - URL: <https://hort.extension.wisc.edu/articles/garlic-chives-allium-tuberosum/>
+- Archived: <https://web.archive.org/web/20261006165125/https://hort.extension.wisc.edu/articles/garlic-chives-allium-tuberosum/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - garlic-chives harvestSeason, verbatim: 'Leaves can be harvested to eat anytime they are green.' (Second paragraph of the article)
@@ -4918,6 +5210,7 @@ Mahr, Susan. (n.d.). *Garlic Chives, Allium tuberosum*. University of Wisconsin-
 Vaishnavi; Gupta, Radhna; Choudhary, Preeti. (2020). *Botanical description of garden cress (Lepidium sativum L.) plant and physical characteristics of its seeds*. Journal of Pharmacognosy and Phytochemistry 9: 2424-2428
 
 - URL: <https://www.phytojournal.com/archives/2020/vol9issue5/PartAH/9-5-426-683.pdf>
+- Archived: <https://web.archive.org/web/20250514151846/https://www.phytojournal.com/archives/2020/vol9issue5/PartAH/9-5-426-683.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - cress height, verbatim: 'The plants that grew were erect, glabrous and grew up to an average height of 50cm.' (Page 2426, Botanical description of garden cress plant (Table 4 on page 2427 gives Height 47-50cm))
@@ -4928,6 +5221,7 @@ Vaishnavi; Gupta, Radhna; Choudhary, Preeti. (2020). *Botanical description of g
 Yuan, Rongcai. (2015). *Tree Fruit in the Home Garden (Publication 426-841)*. Virginia Cooperative Extension, Virginia Tech
 
 - URL: <https://www.pubs.ext.vt.edu/426/426-841/426-841.html>
+- Archived: <https://web.archive.org/web/20260714002628/https://www.pubs.ext.vt.edu/426/426-841/426-841.html>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - quince spacing, verbatim: 'Quince | 15 | 1 | 5-6 | 30-40' (Virginia Cooperative Extension 426-841, Table 1 (Space requirement, yield, bearing age, and life expectancy of tree frui)
@@ -4939,6 +5233,7 @@ Yuan, Rongcai. (2015). *Tree Fruit in the Home Garden (Publication 426-841)*. Vi
 Appling, Ashley; Latimer, Joyce. (2024). *Herb Culture and Use*. Virginia Cooperative Extension (publication 426-420)
 
 - URL: <https://www.pubs.ext.vt.edu/content/dam/pubs_ext_vt_edu/426/426-420/426-420.pdf>
+- Archived: <https://web.archive.org/web/20261017212157/https://www.pubs.ext.vt.edu/content/dam/pubs_ext_vt_edu/426/426-420/426-420.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - chamomile spacing, verbatim: 'Chamomile, German chamomile Matricaria recutita 8-24” 6-12” Grow from seed. Prefers a sandy, well-drained soil with a pH of 7.0-7.5 and lots of sun. Blooms in early to midsummer. Self seeds.' ("Herb Culture and Use" table, Annuals section, row for Chamomile/German chamomile (Matricaria recutita): Height and Plan)
@@ -4975,6 +5270,7 @@ Weston, Leslie A.; Alsaadawi, Ibrahim S.; Baerson, Scott R. (2013). *Sorghum All
 Wilson, Jill E. (1988). *Rapid Multiplication of Yams (Dioscorea spp.)*. University of the South Pacific Institute for Research, Extension and Training in Agriculture; hosted by the University of Hawaii CTAHR ADAP archive IRETA Publication No. 3/88, Agdex 175-40
 
 - URL: <https://www3.ctahr.hawaii.edu/adap/Publications/Ireta_pubs/rapidyams.pdf>
+- Archived: <https://web.archive.org/web/20260902005245/https://www3.ctahr.hawaii.edu/adap/Publications/Ireta_pubs/rapidyams.pdf>
 - Verification: URL-verified | Access: open-access
 - Backs:
   - staking, verbatim: 'Stakes 1 to 2 m high are adequate'
@@ -4986,6 +5282,7 @@ Wilson, Jill E. (1988). *Rapid Multiplication of Yams (Dioscorea spp.)*. Univers
 Wiśniewski, Rafał; Harasym, Joanna. (2024). *Chinese Artichoke (Stachys affinis Bunge): The Nutritional Profile, Bioactive Profile and Food Applications - A Review*. Molecules 29(15):3525 (MDPI)
 
 - URL: <https://pmc.ncbi.nlm.nih.gov/articles/PMC11314557/>
+- Archived: <https://web.archive.org/web/20261017215243/https://pmc.ncbi.nlm.nih.gov/articles/PMC11314557/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - crosne light, verbatim: 'They prefer well-drained soil in a sunny location and thrive best in ordinary garden soil that is not too heavy.' (Section 2, Botanical Characteristics, cultivation paragraph that begins 'Chinese artichokes grow up to 45 cm in height')
@@ -4996,6 +5293,7 @@ Wiśniewski, Rafał; Harasym, Joanna. (2024). *Chinese Artichoke (Stachys affini
 Strik, Bernadine; Cahn, Helen. (2000). *Growing Kiwifruit (PNW 507)*. Pacific Northwest Extension (Oregon State University / Washington State University / University of Idaho)
 
 - URL: <https://content.libraries.wsu.edu/index.php/utils/getfile/collection/cahnrs-arch/id/499/filename/96136182432004_pnw507.pdf>
+- Archived: <https://web.archive.org/web/20260421004022/http://content.libraries.wsu.edu/index.php/utils/getfile/collection/cahnrs-arch/id/499/filename/96136182432004_pnw507.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - kiwifruit yearsToFirstHarvest, verbatim: 'It takes 3 or more years after planting to produce a commercial crop.' ("Vineyard Planning, Planting, and Spacing" section, p. 6)
@@ -5006,6 +5304,7 @@ Strik, Bernadine; Cahn, Helen. (2000). *Growing Kiwifruit (PNW 507)*. Pacific No
 Beus, Curtis E. (2006). *Growing and Marketing Lavender (EB2005, Farming the Northwest series)*. Washington State University Extension
 
 - URL: <https://wpcdn.web.wsu.edu/wp-ecommerce/uploads/sites/2/woocommerce_uploads/EB2005-epq142.pdf>
+- Archived: <https://web.archive.org/web/20260913202108/https://wpcdn.web.wsu.edu/wp-ecommerce/uploads/sites/2/woocommerce_uploads/EB2005-epq142.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - lavender coldLimit, verbatim: 'Lavandula angustifolia are the hardiest of lavenders, and can survive winter temperatures of -15°C (5°F), or even colder if they are grown in well-drained soils. … Lavandula angustifolia varieties tend to be the hardiest lavenders, and can typically be grown in USDA Hardiness Zones 5 and above.' (“Lavandula angustifolia” section (p.2) and “Climate” section (p.3))
@@ -5038,6 +5337,7 @@ Yu, Yang; Stomph, Tjeerd-Jan; Makowski, David; van der Werf, Wopke. (2015). *Tem
 Zhang, Qianwen; Bi, Guihong; Li, Tongyin; Wang, Qiushuang; Xing, Zhiheng; LeCompte, Judson; Harkess, Richard L. (2022). *Color Shade Nets Affect Plant Growth and Seasonal Leaf Quality of Camellia sinensis Grown in Mississippi, the United States*. Frontiers in Nutrition
 
 - URL: <https://pmc.ncbi.nlm.nih.gov/articles/PMC8847693/>
+- Archived: <https://web.archive.org/web/20261017212924/https://pmc.ncbi.nlm.nih.gov/articles/PMC8847693/>
 - Verification: URL-verified | Access: public-domain, evidence tier **C**
 - Backs:
   - tea spacing, verbatim: 'Plants were planted in three double row hedges, with 0.76 m between plants within a row, 0.91 m between inner rows, and 1.83 m between double rows.' (Materials and Methods)
@@ -5069,6 +5369,7 @@ Ziegler, H.; Hüser, R. (1963). *Fixation of Atmospheric Nitrogen by Root Nodule
 Zimmerman, Cynthia. (2020). *Helpline Hot Topic for June 2020: Moringa Oleifera*. University of California Agriculture and Natural Resources, Master Gardener Program of Fresno County
 
 - URL: <https://ucanr.edu/sites/default/files/2020-07/329403.pdf>
+- Archived: <https://web.archive.org/web/20251205094334/https://ucanr.edu/sites/default/files/2020-07/329403.pdf>
 - Verification: URL-verified | Access: public-domain
 - Backs:
   - verbatim: 'it grows from 9 to 16 feet per year if left uncropped. A fully mature tree can reach a height of 35 feet but can be cut back to 3-4 feet high'
@@ -5229,6 +5530,7 @@ McKenney, Daniel W.; Pedlar, John H.; Lawrence, Kevin; DeBoer, Kaitlin. (2025). 
 Palecki, Michael; Durre, Imke; Applequist, Scott; Arguez, Anthony; Lawrimore, Jay. (2021). *U.S. Climate Normals 2020: U.S. Annual/Seasonal Climate Normals (1991-2020), freeze/frost date probability normals*. NOAA National Centers for Environmental Information
 
 - URL: <https://www.ncei.noaa.gov/products/land-based-station/us-climate-normals>
+- Archived: <https://web.archive.org/web/20260730010247/https://www.ncei.noaa.gov/products/land-based-station/us-climate-normals>
 - Verification: URL-verified | Access: public-domain
 - Backs:
   - the exceedance-percentile freeze/frost date product behind the lastSpringFreeze and firstFallFreeze percentile curves
@@ -5363,6 +5665,7 @@ Richardson, E. Arlo; Seeley, Schuyler D.; Walker, David R. (1974). *A model for 
 (2023). *2023 USDA Plant Hardiness Zone Map*. USDA Agricultural Research Service and PRISM Climate Group, Oregon State University
 
 - URL: <https://planthardiness.ars.usda.gov/>
+- Archived: <https://web.archive.org/web/20260730013513/https://planthardiness.ars.usda.gov/>
 - Verification: URL-verified | Access: open-access
 - Backs:
   - hardiness zone gating for perennials
@@ -5648,6 +5951,7 @@ Yuan, Zhengjie; Xu, Jie; Shen, Le. (2022). *Valuation of Ecosystem Services for 
 (2021). *DIN SPEC 91434:2021-05 Agri-Photovoltaik-Anlagen - Anforderungen an die landwirtschaftliche Hauptnutzung*. DIN e.V. DIN SPEC 91434:2021-05
 
 - URL: <https://www.dinmedia.de/en/technical-rule/din-spec-91434/337886742>
+- Archived: <https://web.archive.org/web/20260513221512/https://www.dinmedia.de/en/technical-rule/din-spec-91434/337886742>
 - Verification: URL-verified | Access: open-access
 - Backs:
   - Germany: 66% of reference yield, 2.10 m clearance, <10% / <15% area loss
@@ -5660,6 +5964,7 @@ Yuan, Zhengjie; Xu, Jie; Shen, Le. (2022). *Valuation of Ecosystem Services for 
 (2024). *DIN SPEC 91492:2024-06 Agri-Photovoltaik-Anlagen - Anforderungen an die Nutztierhaltung*. DIN e.V. DIN SPEC 91492:2024-06
 
 - URL: <https://www.dinmedia.de/en/technical-rule/din-spec-91492/379601163>
+- Archived: <https://web.archive.org/web/20261017205803/https://www.dinmedia.de/en/technical-rule/din-spec-91492/379601163>
 - Verification: URL-verified | Access: open-access
 - Backs:
   - the livestock counterpart to DIN SPEC 91434, out of scope for a garden tool and recorded for completeness
@@ -5669,6 +5974,7 @@ Yuan, Zhengjie; Xu, Jie; Shen, Le. (2022). *Valuation of Ecosystem Services for 
 U.S. Food and Drug Administration. (n.d.). *Import Alert 54-10: Detention Without Physical Examination of Bulk/Finished Dietary Supplements Products Containing Aristolochic Acid*. U.S. Food and Drug Administration
 
 - URL: <https://www.accessdata.fda.gov/cms_ia/importalert_141.html>
+- Archived: <https://web.archive.org/web/20260919123443/https://www.accessdata.fda.gov/cms_ia/importalert_141.html>
 - Verification: URL-verified | Access: public-domain
 - Backs:
   - Asarum caudatum is listed under 'Botanicals Known or Suspected to Contain Aristolochic Acid', verbatim: 'Asarum caudatum Lindl'
@@ -5691,6 +5997,7 @@ U.S. Food and Drug Administration. (n.d.). *Import Alert 54-10: Detention Withou
 (2023). *Decreto MASE 22 dicembre 2023, n. 436 (DM Agrivoltaico)*. Ministero dell'Ambiente e della Sicurezza Energetica DM 436/2023
 
 - URL: <https://www.mase.gov.it/portale/documents/d/guest/dec-436-2023-pdf>
+- Archived: <https://web.archive.org/web/20250926093637/https://www.mase.gov.it/portale/documents/d/guest/dec-436-2023-pdf>
 - Verification: URL-verified | Access: public-domain
 - Backs:
   - Italy: >=70% of area remains agricultural, 2.1 m clearance for crops, 60% producibility ratio
@@ -5703,6 +6010,7 @@ U.S. Food and Drug Administration. (n.d.). *Import Alert 54-10: Detention Withou
 (2024). *営農型太陽光発電に係る農地転用許可制度上の取扱いに関するガイドライン*. 農林水産省農村振興局 (MAFF Rural Development Bureau) 5-Nōshin-2825
 
 - URL: <https://www.maff.go.jp/j/nousin/noukei/totiriyo/attach/pdf/einogata-57.pdf>
+- Archived: <https://web.archive.org/web/20251218195358/https://www.maff.go.jp/j/nousin/noukei/totiriyo/attach/pdf/einogata-57.pdf>
 - Verification: URL-verified | Access: public-domain
 - Backs:
   - Japan: 80% of regional average yield, 2 m clearance
@@ -5714,6 +6022,7 @@ U.S. Food and Drug Administration. (n.d.). *Import Alert 54-10: Detention Withou
 (n.d.). *225 CMR 20.00: Solar Massachusetts Renewable Target (SMART) Program*. Commonwealth of Massachusetts 225 CMR 20.00
 
 - URL: <https://www.mass.gov/regulations/225-CMR-2000-solar-massachusetts-renewable-target-smart-program>
+- Archived: <https://web.archive.org/web/20260907120813/https://www.mass.gov/regulations/225-CMR-2000-solar-massachusetts-renewable-target-smart-program>
 - Verification: UNVERIFIED | Access: public-domain
 - Backs:
   - the legacy SMART regulatory basis, superseded
@@ -5764,6 +6073,7 @@ U.S. Food and Drug Administration. (n.d.). *Import Alert 54-10: Detention Withou
 (2023). *UNI/PdR 148:2023 Sistemi agrivoltaici - Integrazione di attività agricole e impianti fotovoltaici*. UNI UNI/PdR 148:2023
 
 - URL: <https://store.uni.com/uni-pdr-148-2023>
+- Archived: <https://web.archive.org/web/20260907093752/https://store.uni.com/uni-pdr-148-2023>
 - Verification: URL-verified | Access: open-access
 - Backs:
   - the Italian technical practice document accompanying DM 436/2023
@@ -5777,6 +6087,7 @@ U.S. Food and Drug Administration. (n.d.). *Import Alert 54-10: Detention Withou
 (n.d.). *Electric Power Monthly, Table 5.6.A: Average Price of Electricity to Ultimate Customers by End-Use Sector, by State*. U.S. Energy Information Administration
 
 - URL: <https://www.eia.gov/electricity/monthly/epm_table_grapher.php?t=epmt_5_6_a>
+- Archived: <https://web.archive.org/web/20260905203258/https://www.eia.gov/electricity/monthly/epm_table_grapher.php?t=epmt_5_6_a>
 - Verification: URL-verified | Access: public-domain
 - Backs:
   - the residential retail price of electricity for a US state, in cents per kilowatt-hour
@@ -5788,6 +6099,7 @@ U.S. Food and Drug Administration. (n.d.). *Import Alert 54-10: Detention Withou
 (n.d.). *FAO ECOCROP crop ecological requirements database*. Food and Agriculture Organization of the United Nations
 
 - URL: <https://gaez.fao.org/pages/ecocrop>
+- Archived: <https://web.archive.org/web/20260821172120/https://gaez.fao.org/pages/ecocrop/>
 - Verification: URL-verified | Access: open-access
 - Backs:
   - decision 9: bundled FAO ECOCROP (~2568 species)
@@ -5799,6 +6111,7 @@ U.S. Food and Drug Administration. (n.d.). *Import Alert 54-10: Detention Withou
 (n.d.). *NASA POWER API*. NASA Langley Research Center
 
 - URL: <https://power.larc.nasa.gov/docs/services/api/>
+- Archived: <https://web.archive.org/web/20260820221908/https://power.larc.nasa.gov/docs/services/api/>
 - Verification: UNVERIFIED | Access: public-domain
 - Backs:
   - decision 9: browser-direct fallback weather source, CORS verified against the live endpoint
@@ -5808,6 +6121,7 @@ U.S. Food and Drug Administration. (n.d.). *Import Alert 54-10: Detention Withou
 (n.d.). *Nominatim Usage Policy*. OpenStreetMap Foundation
 
 - URL: <https://operations.osmfoundation.org/policies/nominatim/>
+- Archived: <https://web.archive.org/web/20260807081006/https://operations.osmfoundation.org/policies/nominatim/>
 - Verification: UNVERIFIED | Access: open-access
 - Backs:
   - decision 9: Nominatim geocoding at 1 request/second with a required User-Agent header
@@ -5817,6 +6131,7 @@ U.S. Food and Drug Administration. (n.d.). *Import Alert 54-10: Detention Withou
 (n.d.). *NSRDB Data Downloads API (GOES PSM v4.0.0)*. National Laboratory of the Rockies
 
 - URL: <https://developer.nlr.gov/docs/solar/nsrdb/>
+- Archived: <https://web.archive.org/web/20260625161933/https://developer.nlr.gov/docs/solar/nsrdb/>
 - Verification: URL-verified | Access: public-domain
 - Backs:
   - decision 9: the NSRDB is worker-proxied for API-key secrecy
@@ -5828,6 +6143,7 @@ U.S. Food and Drug Administration. (n.d.). *Import Alert 54-10: Detention Withou
 (n.d.). *Open-Meteo Historical Weather API and Satellite Radiation API*. Open-Meteo
 
 - URL: <https://open-meteo.com/en/licence>
+- Archived: <https://web.archive.org/web/20260809155104/https://open-meteo.com/en/licence>
 - Verification: URL-verified | Access: open-access
 - Backs:
   - decision 9: the only global, keyless, CORS-enabled, CC BY 4.0 commercial-use source returning GHI+DNI+DHI
@@ -5840,6 +6156,7 @@ U.S. Food and Drug Administration. (n.d.). *Import Alert 54-10: Detention Withou
 (n.d.). *PVGIS 5.3 non-interactive API*. European Commission Joint Research Centre
 
 - URL: <https://joint-research-centre.ec.europa.eu/photovoltaic-geographical-information-system-pvgis/getting-started-pvgis/api-non-interactive-service_en>
+- Archived: <https://web.archive.org/web/20260307064217/https://joint-research-centre.ec.europa.eu/photovoltaic-geographical-information-system-pvgis/getting-started-pvgis/api-non-interactive-service_en>
 - Verification: URL-verified | Access: open-access
 - Backs:
   - decision 9: PVGIS must be worker-proxied because it explicitly forbids AJAX by written policy
@@ -5849,6 +6166,7 @@ U.S. Food and Drug Administration. (n.d.). *Import Alert 54-10: Detention Withou
 (n.d.). *pvlib-python*. pvlib community
 
 - URL: <https://pvlib-python.readthedocs.io/>
+- Archived: <https://web.archive.org/web/20261017210708/https://pvlib-python.readthedocs.io/>
 - Verification: UNVERIFIED | Access: open-access
 - Backs:
   - the BSD-3 reference implementation of SPA, the Perez transposition model, DIRINT and bifacial.infinite_sheds
@@ -5859,6 +6177,7 @@ U.S. Food and Drug Administration. (n.d.). *Import Alert 54-10: Detention Withou
 (n.d.). *@react-three/fiber*. Poimandres
 
 - URL: <https://github.com/pmndrs/react-three-fiber>
+- Archived: <https://web.archive.org/web/20260817233242/https://github.com/pmndrs/react-three-fiber>
 - Verification: UNVERIFIED | Access: open-access
 - Backs:
   - decision 13: @react-three/fiber 9.6.1, NOT v10
@@ -5868,6 +6187,7 @@ U.S. Food and Drug Administration. (n.d.). *Import Alert 54-10: Detention Withou
 (n.d.). *PV Performance Modeling Collaborative Modeling Guide*. Sandia National Laboratories
 
 - URL: <https://pvpmc.sandia.gov/modeling-guide/>
+- Archived: <https://web.archive.org/web/20260902165330/https://pvpmc.sandia.gov/modeling-guide/>
 - Verification: UNVERIFIED | Access: public-domain
 - Backs:
   - reference derivations for the Perez sky diffuse model, SPA and plane-of-array irradiance
@@ -5877,6 +6197,7 @@ U.S. Food and Drug Administration. (n.d.). *Import Alert 54-10: Detention Withou
 (n.d.). *SunCalc*. Vladimir Agafonkin
 
 - URL: <https://github.com/mourner/suncalc>
+- Archived: <https://web.archive.org/web/20260808213159/https://github.com/mourner/suncalc>
 - Verification: UNVERIFIED | Access: open-access
 - Backs:
   - decision 2.4: SunCalc 2.0.1 permitted for sunrise/sunset/twilight/moon UI chrome only
@@ -5887,6 +6208,7 @@ U.S. Food and Drug Administration. (n.d.). *Import Alert 54-10: Detention Withou
 (n.d.). *three.js*. three.js contributors
 
 - URL: <https://github.com/mrdoob/three.js>
+- Archived: <https://web.archive.org/web/20260730204910/https://github.com/mrdoob/three.js>
 - Verification: UNVERIFIED | Access: open-access
 - Backs:
   - decision 13: three 0.185.1 as the 3D renderer

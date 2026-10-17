@@ -9,6 +9,9 @@ import { loadTekRules } from './tek'
 
 const ids = (cslEntries as readonly { readonly id: string }[]).map((entry) => entry.id)
 
+// a full capture link: the timestamp is 14 digits, and the captured URL follows it
+const ARCHIVE_LINK = /^https:\/\/web\.archive\.org\/web\/\d{14}\//
+
 describe('citation registry', () => {
   it('pins the generated citekey union to the CSL-JSON, the single source of truth', () => {
     expect([...CITATION_IDS]).toEqual([...ids].sort())
@@ -21,6 +24,7 @@ describe('citation registry', () => {
       expect(record.title.length).toBeGreaterThan(0)
       expect(record.group.length).toBeGreaterThan(0)
       if (record.peerReviewed) expect(PEER_REVIEWED_TYPES).toContain(record.type)
+      if (record.archived !== null) expect(record.archived, record.id).toMatch(ARCHIVE_LINK)
     }
   })
 

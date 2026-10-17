@@ -66,6 +66,7 @@ const render = (e) => {
   const lines = [`#### \`${e.id}\``, '', reference(e), '']
   if (e.DOI) lines.push(`- DOI: [${e.DOI}](https://doi.org/${e.DOI})`)
   else if (e.URL) lines.push(`- URL: <${e.URL}>`)
+  if (c.archived) lines.push(`- Archived: <${c.archived}>`)
   const tier = c.evidenceTier ? `, evidence tier **${c.evidenceTier}**` : ''
   lines.push(
     `- Verification: ${verificationLabel[c.verification] ?? c.verification} | Access: ${c.accessLevel}${tier}`,
