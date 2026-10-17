@@ -460,7 +460,7 @@ Weselek, Axel; Bauerle, Andrea; Hartung, Jens; Zikeli, Sabine; Lewandowski, Iris
 - Backs:
   - the sign of the shade effect flips between years, and the 2017 figures are the significant ones: fresh-matter tuber yield 23.6 t/ha under the array against 28.8 t/ha on the reference in 2017 (-18.2%, p = 0.005) and 25.5 against 23.0 t/ha in 2018 (+11%, p = 0.034), winter wheat grain yield 4.6 against 5.7 t/ha in 2017 (-18.7%, p = 0.03) and 4.7 against 4.6 t/ha in 2018 (+2.7%, not significant, p = 0.78). The 7.2% and 8% figures quoted elsewhere are two-year averages
   - decision 4: weather input must be a TMY, never a single year
-  - temperate-site cooling under panels, verbatim: 'In both, 2017 (n = 132 days) and 2018 (n = 112 days) daily mean air temperature was significantly lower by about 1.1 C on average. This effect was found across the whole year but was most prevalent during summertime. However, on 7 days in 2017 and 18 days in 2018, measured air temperature was higher under AV' (page 7), which agrees in direction with the Arizona and Oregon results
+  - temperate-site cooling under panels, verbatim: 'In both, 2017 (n = 132 days) and 2018 (n = 112 days) daily mean air temperature was significantly lower by about 1.1 °C on average. This effect was found across the whole year but was most prevalent during summertime. However, on 7 days in 2017 and 18 days in 2018, measured air temperature was higher under AV' (page 7), which agrees in direction with the Arizona and Oregon results
   - reduced soil moisture at Heggelbach, contradicting the Arizona and Oregon increases, verbatim: 'Soil moisture was significantly decreased under AV on 26 days in 2017 and on 133 days in 2018. In 2017, significant differences only occurred during wintertime from the end of November onwards. Similar results were observed in 2018, where daily mean soil moisture was significantly lower under AV until the middle of April and from the end of October onwards', so the significant reductions fall in winter and the shoulder seasons and the authors attribute the difference from the irrigated sites to irrigation (page 6)
   - crop development was slightly delayed under the array and the visible differences had gone by final harvest (page 12)
 - **Caveat:** The sentence 'air temperature tended to be higher underneath the AV facility on days with high solar radiation or low wind speeds' is Weselek reporting Marrou et al. 2013b as a contrast to their own result, introduced by 'In contrast' and closed by 'the opposing results'. Reading it as Weselek's own finding inverts the sign of what they measured.
@@ -1054,7 +1054,7 @@ Allen, Richard G.; Pereira, Luis S.; Raes, Dirk; Smith, Martin. (1998). *Crop ev
 
 Andrews, Nick; Coop, Leonard; Stoven, Heather; Noordijk, Heidi; Heinrich, Aaron. (2021). *Vegetable degree-day models: An introduction for farmers and gardeners*. Oregon State University Extension Service EM 9305
 
-- URL: <https://extension.oregonstate.edu/catalog/pub/em9305>
+- URL: <https://extension.oregonstate.edu/sites/extd8/files/catalog/auto/EM9305.pdf>
 - Verification: URL-verified | Access: public-domain, evidence tier **B**
 - Backs:
   - OSU Croptime coverage, verbatim: 'Croptime currently hosts 29 vegetable DD models and three summer annual weed models', which is the count behind ledger row A16
@@ -2677,19 +2677,6 @@ NC State Extension. (n.d.). *Macadamia integrifolia (Australian Nut, Macadamia, 
   - macadamia light, verbatim: 'Light: Full sun (6 or more hours of direct sunlight a day)' (NC State Plant Toolbox, Macadamia integrifolia page, 'Cultural Conditions')
 - **Caveat:** Published outside a peer-reviewed journal.
 
-#### `ndsu-2015-flax-production`
-
-NDSU Extension Service. (2015). *Flax Production in North Dakota (A1038)*. North Dakota State University Extension
-
-- URL: <https://www.ag.ndsu.edu/publications/crops/flax-production-in-north-dakota/a1038-flax-production-nd.pdf>
-- Verification: URL-verified | Access: public-domain, evidence tier **C**
-- Backs:
-  - flax spacing, verbatim: 'A stand of 70 plants per square foot is desired. However, if uniform, stands of 30 to 40 plants per square foot may provide a satisfactory yield... Seeding rates of 25 to 45 pounds per acre are common.' ('Seeding Flax' section)
-  - flax height, verbatim: 'Flax grows to a height of 24 to 36 inches.' ('Growth and Development' section)
-  - flax daysToMaturity, verbatim: 'It requires a 50-day vegetative period, 25-day flowering period and about 35 days to mature. In years when moisture is available, the maturation period may extend until a hard frost kills the crop.' ('Growth and Development' section)
-  - flax coldLimit, verbatim: 'Seedling plants just emerging (breaking ground) are the most susceptible to injury but can withstand temperatures down to 28 F for a few hours. After the seedlings have a second leaf, they can withstand temperatures into the low 20 F range.' ('Seeding Flax' section)
-- **Caveat:** Published outside a peer-reviewed journal.
-
 #### `ndsu-2024-sea-buckthorn-f2195`
 
 Zeleznik, Joseph. (2024). *Sea-Buckthorn (F2195)*. North Dakota State University Extension
@@ -2699,6 +2686,19 @@ Zeleznik, Joseph. (2024). *Sea-Buckthorn (F2195)*. North Dakota State University
 - Backs:
   - sea-buckthorn light, verbatim: 'Light: Full sun to partial shade.' ("Preferences" section)
 - **Caveat:** Published outside a peer-reviewed journal.
+
+#### `ndsu-2026-flax-production`
+
+NDSU Extension Service. (2026). *Flax Production for Oil and Seed in North Dakota (A1038)*. North Dakota State University Extension
+
+- URL: <https://www.ndsu.edu/agriculture/extension/publications/flax-production-oil-and-seed-north-dakota>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - flax spacing, verbatim: 'A stand of 70 plants per square foot is desired. However, if uniform, stands of 30 to 40 plants per square foot may provide a satisfactory yield... Seeding rates of 25 to 45 pounds per acre are common.' ('Seeding Flax' section)
+  - flax height, verbatim: 'Flax grows to a height of 20 to 30 inches.' ('Growth and Development' section)
+  - flax daysToMaturity, verbatim: 'It requires a 50-day vegetative period, a 20- to 25-day flowering period and an extra 25 to 30 days to reach maturity. In years with adequate moisture and wet fall conditions, the maturation period may extend until a hard frost kills the crop, with new flowers continuing to emerge until then.' ('Growth and Development' section)
+  - flax coldLimit, verbatim: 'Seedling plants just emerging (breaking ground) are the most susceptible to injury, but can withstand temperatures down to 28 degrees Fahrenheit for a few hours. After the seedlings have a second leaf, they can withstand temperatures in the low 20 degrees range.' ('Seeding Flax' section)
+- **Caveat:** Published outside a peer-reviewed journal. The May 2020 revision, archived at https://web.archive.org/web/20200730124756/https://www.ag.ndsu.edu/publications/crops/flax-production-in-north-dakota/a1038-flax-production-nd.pdf, gave a height of 24 to 36 inches, a 25-day flowering period and about 35 days to mature. The September 2026 revision quoted here gives 20 to 30 inches, a 20- to 25-day flowering period and an extra 25 to 30 days.
 
 #### `ndsu-extension-2024-black-walnut`
 
