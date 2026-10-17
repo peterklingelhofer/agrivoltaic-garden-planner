@@ -41,6 +41,18 @@ Physics, geodata and software sources carry `null`: the scheme does not apply to
 | D | Traditional, plausible, untested | Folklore panel only, never affects layout |
 | E | No evidence, or directly contradicted | Folklore panel only, never affects layout |
 
+### Receipts and baselines
+
+A receipt records that a verbatim quote was found in its source: the quote's hash and a
+description of the text it was found in, since the texts themselves are copyrighted and stay on
+one machine. `src/data/citation-receipts.test.ts` holds `CITATIONS.receipts.json` against this
+ledger offline, so a quote whose words change after it was checked fails CI until
+`bun scripts/check-quotes.mjs --write-receipts` finds the new wording. `CITATIONS.baseline.json`
+holds three counts that can only go down: the entries still marked unverified, the quotes without
+a receipt and the quotes written with a bare ellipsis. `src/data/citation-baseline.test.ts` fails
+when any of them goes up, and `bun run citations:baseline --write` lowers the baseline when one
+comes down.
+
 ### Counts
 
 | Verification | n |
