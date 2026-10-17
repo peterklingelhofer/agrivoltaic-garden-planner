@@ -35,6 +35,7 @@
     "deploy": "bun run build:deploy && wrangler deploy --env production",
     "verify-deploy": "node scripts/verify-deploy.mjs",
     "verify-live": "bun scripts/verify-live.mjs",
+    "quotes:check": "bun scripts/check-quotes.mjs",
     "rust:test": "cargo test --manifest-path crates/agv-sim/Cargo.toml",
     "rust:wasm": "cargo build --release --manifest-path crates/agv-sim/Cargo.toml --target wasm32-unknown-unknown && bun run rust:ship",
     "rust:ship": "cp crates/agv-sim/target/wasm32-unknown-unknown/release/agv_sim.wasm public/agv-sim.wasm",
