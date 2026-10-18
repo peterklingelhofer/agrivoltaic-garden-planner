@@ -394,7 +394,7 @@
       "quotes": [
         {
           "text": "Croptime currently hosts 29 vegetable DD models and three summer annual weed models",
-          "locator": "",
+          "locator": "p. 5",
           "claim": 0
         }
       ],
@@ -4064,6 +4064,11 @@
           "text": "Experiments from greenhouses as the system difference to AV was considered too large.",
           "locator": "p. 3",
           "claim": 9
+        },
+        {
+          "text": "At around 50% of shading, all crops show susceptibility.",
+          "locator": "p. 7",
+          "claim": 6
         }
       ],
       "caveat": "The per-group curve coefficients this app uses aren't published anywhere: they're absent from the article, from supplement MOESM1 (the Fig. S1 caption, Table S1 listing the 58 publications, and Table S2's predictions), from MOESM2 (the raw dataset) and from the Zenodo record 10.5281/zenodo.5716091 (two xlsx data files). The app recovered them algebraically from the 162 published Table S2 points and the paper's own model specification, and they reproduce those points to within 0.07 percentage points. They're this app's figures, never Laub's published coefficients. The 67.2 to 156.1% range for fruity vegetables at 40% RSR is a 95% confidence interval: Table S2's caption and the main text both say so, and the paper's prediction intervals are drawn as gray lines in Fig. 3 and never tabulated. Group sizes: berries n = 5, fruits n = 7, fruity vegetables n = 3, leafy vegetables n = 4, C3 cereals n = 10, corn n = 10, tubers and root crops n = 2, grain legumes n = 14, forages n = 11, from 428 data points (340 without controls), 58 studies and 38 crop species. The three groups a garden leans on most, root crops, fruity vegetables and leafy vegetables, are the thinnest in the paper. The authors write that 'uncertainties due to random plot scale effects are large, while at country or continental scales the mean response to shading, represented by the confidence intervals, is the more valid estimator', and a single garden is the plot scale they call the more uncertain one."
@@ -4666,12 +4671,12 @@
       "quotes": [
         {
           "text": "Lettuce yield was maintained through an improved Radiation Interception Efficiency (RIE) in the shade, while Radiation Conversion Efficiency (RCE) did not change significantly",
-          "locator": "",
+          "locator": "p. 54",
           "claim": 0
         },
         {
           "text": "Thermal time was calculated from air temperature measurement above control plots (CPs): indeed no significant difference in cumulated thermal time was measured between FD, HD and the control plots, whatever reference temperature is used (crop or air temperature) (not shown)",
-          "locator": "",
+          "locator": "p. 57",
           "claim": 1
         }
       ],
@@ -5474,12 +5479,12 @@
       "quotes": [
         {
           "text": "Scientists have determined the lower base temperature for corn is 50 F (10 C)",
-          "locator": "",
+          "locator": "first paragraph",
           "claim": 0
         },
         {
           "text": "The upper limit for corn is 86 F (30 C)",
-          "locator": "",
+          "locator": "first paragraph",
           "claim": 1
         }
       ],
@@ -5655,22 +5660,22 @@
       "quotes": [
         {
           "text": "Group A: Hardy (Plant as soon as the soil dries out in the spring.)",
-          "locator": "",
+          "locator": "\"Cool-Season Vegetables\" section, \"Group A: Hardy\"",
           "claim": 0
         },
         {
-          "text": "Group B: Semi-Hardy (Plants a week or two after A group or about 2 weeks before average last spring frost.)",
-          "locator": "",
+          "text": "Group B: Semi-Hardy (Plants a week or two after 'A' group or about 2 weeks before average last spring frost.)",
+          "locator": "\"Cool-Season Vegetables\" section, \"Group B: Semi-Hardy\"",
           "claim": 0
         },
         {
-          "text": "Group C: Tender (Plant on the average date of the last spring frost)",
-          "locator": "",
+          "text": "Group C: Tender (Plant on the average date of the last spring frost-about when first apples reach full bloom.)",
+          "locator": "\"Warm-Season Vegetables\" section, \"Group C: Tender\"",
           "claim": 0
         },
         {
-          "text": "Group D: Very Tender (Plant when the soil is warm, about 2 weeks after C group.)",
-          "locator": "",
+          "text": "Group D: Very Tender (Plant when the soil is warm, about 2 weeks after 'C' group.)",
+          "locator": "\"Warm-Season Vegetables\" section, \"Group D: Very Tender\"",
           "claim": 0
         }
       ],
@@ -6684,12 +6689,12 @@
       "quotes": [
         {
           "text": "A recommended minimum DLI for lettuce production is 12 to 14 mol/m2/d, whereas at least 15 (and preferably more than 20) mol/m2/d is suggested for vine crops",
-          "locator": "",
+          "locator": "p. 42",
           "claim": 0
         },
         {
           "text": "As a general rule, a 1 percent increase in DLI increases production by 1 percent",
-          "locator": "",
+          "locator": "p. 42",
           "claim": 1
         }
       ],
@@ -7179,10 +7184,18 @@
       "accessLevel": "public-domain",
       "evidenceTier": "C",
       "backsClaims": [
-        "DLI calculation guidance underpinning the DLI classification bands"
+        "DLI calculation guidance underpinning the DLI classification bands",
+        "Table 3 prints 14 to 20 mol/m2/d for spinach, the spinach row's target band"
       ],
       "caveat": null,
-      "archived": "https://web.archive.org/web/20260307184940/https://www.pubs.ext.vt.edu/content/dam/pubs_ext_vt_edu/spes/spes-720/SPES-720.pdf"
+      "archived": "https://web.archive.org/web/20260307184940/https://www.pubs.ext.vt.edu/content/dam/pubs_ext_vt_edu/spes/spes-720/SPES-720.pdf",
+      "quotes": [
+        {
+          "text": "Table 3. Suggested average daily light integral (DLI; mol/m2/d) for example crops. [...] Spinach 14-20",
+          "locator": "Table 3, p. 3",
+          "claim": 1
+        }
+      ]
     }
   },
   {
@@ -7638,7 +7651,7 @@
       "quotes": [
         {
           "text": "we recommend that greenhouse growers provide a minimum of 10 to 12 mol/m2/d of light during the finish stage to produce many shade-intolerant floriculture crops",
-          "locator": "",
+          "locator": "p. 3",
           "claim": 1
         }
       ],
@@ -8210,12 +8223,12 @@
       "quotes": [
         {
           "text": "Based on the point where the standardized regression line crosses zero, the minimal DLI recommendation for maintaining average yield was 15 mol m-2 d-1 for raspberry and 25 mol m-2 d-1 for strawberries.",
-          "locator": "",
+          "locator": "p. 4",
           "claim": 0
         },
         {
           "text": "Based on our findings, we recommend a minimum DLI of 25 mol m-2 d-1 [...] corresponded to an estimated total shading of 10-30%, depending on the type of cover",
-          "locator": "",
+          "locator": "p. 7",
           "claim": 1
         }
       ],
@@ -8558,17 +8571,17 @@
       "quotes": [
         {
           "text": "Results from segmented regression lines revealed that at shading rates below 20%, crop yield shows no statistically significant difference from the control group (p = 0.084) [...] In the shading scale between 20% and 30% (which does not significantly change the microclimate), lower yield is observed (p < 0.01)",
-          "locator": "",
+          "locator": "p. 6",
           "claim": 1
         },
         {
           "text": "To reduce the impact on the growth of crops, the shading caused by PV systems should preferably not exceed 20%, but such a strategy might sacrifice energy generation per unit of land",
-          "locator": "",
+          "locator": "p. 11",
           "claim": 2
         },
         {
           "text": "Additionally, some variability is present in the climate conditions of the studies reporting yield increase, but in summary, the climates share some main features: hot summers, limited precipitation and (semi-) arid conditions (Fig. 9)",
-          "locator": "",
+          "locator": "p. 6",
           "claim": 3
         }
       ],
@@ -8733,22 +8746,22 @@
       "quotes": [
         {
           "text": "A supplemental light intensity within the range of 100-200 umol/m2/s (for a total of 17 mol/m2/d of both natural and supplemental lighting) at the plant level is recommended. It should be noted that 17 mol/m2/d is the light integral that worked best for the particular cultivar of boston bibb lettuce that we used",
-          "locator": "",
+          "locator": "p. 13",
           "claim": 0
         },
         {
           "text": "For some cultivars, 15 or mol/m2/d is the maximum amount of light that can be used before the physiological condition called tipburn occurs",
-          "locator": "",
+          "locator": "p. 13",
           "claim": 1
         },
         {
           "text": "Without the air flow, we were not able to go over 12 mol/m2/d",
-          "locator": "",
+          "locator": "p. 14",
           "claim": 1
         },
         {
           "text": "the same total daily accumulated light (~22 mol/m2/d). Anecdotal evidence shows that some lettuce seedlings can tolerate 30 mol/m2/d",
-          "locator": "",
+          "locator": "p. 10",
           "claim": 2
         }
       ],
@@ -8896,12 +8909,12 @@
       "quotes": [
         {
           "text": "A progressive increase of biomass production for both lettuce and basil up to a PPFD of 250 umol m-2 s-1 was observed, whereas no further yield increases were associated with higher PPFD (300 umol m-2 s-1)",
-          "locator": "",
+          "locator": "the abstract",
           "claim": 1
         },
         {
           "text": "a PPFD of 250 umol m-2 s-1 seems suitable for optimizing yield and resource use efficiency in red and blue LED lighting for indoor cultivation of lettuce and basil under the prevailing conditions of the used indoor farming set-up",
-          "locator": "",
+          "locator": "the abstract",
           "claim": 2
         }
       ],
@@ -8966,7 +8979,7 @@
       "quotes": [
         {
           "text": "we suggest a DLI of 12.9 mol/m2/d for sweet basil commercial production in indoor vertical farming to minimize the energy cost while maintaining a high yield and nutritional quality",
-          "locator": "",
+          "locator": "the abstract",
           "claim": 1
         }
       ],
@@ -9023,7 +9036,7 @@
       "quotes": [
         {
           "text": "Fresh and dry weight, height, and node number increased by 144%, 178%, 20%, and 18%, respectively, compared with plants grown under the low DLI, and branching was also stimulated",
-          "locator": "",
+          "locator": "the abstract",
           "claim": 0
         }
       ],
@@ -9127,12 +9140,12 @@
       "quotes": [
         {
           "text": "We recommend 12 mol/m2/day DLI to target as minimum level for good productivity and consider the optimum between 20-25 mol/m2/d",
-          "locator": "",
+          "locator": "paragraph headed \"DLI\"",
           "claim": 0
         },
         {
           "text": "Under DLI exceeding 30 mol/m2/d, strawberry plants tend to be stressed (shading is required in that case)",
-          "locator": "",
+          "locator": "paragraph headed \"DLI\"",
           "claim": 1
         }
       ],
@@ -9190,32 +9203,32 @@
       "quotes": [
         {
           "text": "Left unpruned many mango varieties become medium to large (30 to 100 ft; 9.1 to 30.5 m) trees",
-          "locator": "",
+          "locator": "\"Description\" section, \"Tree\" subsection",
           "claim": 0
         },
         {
           "text": "may be planted 12 to 15 feet (3.7 to 4.6 m) apart from other trees, buildings, and power lines",
-          "locator": "",
+          "locator": "\"Spacing and Pruning\" section",
           "claim": 1
         },
         {
           "text": "Grafted trees will begin to bear 3 to 5 years after planting",
-          "locator": "",
+          "locator": "\"Production (Crop Yields)\" section",
           "claim": 2
         },
         {
           "text": "mature trees can withstand air temperatures as low as 25F (-3.9C)",
-          "locator": "",
+          "locator": "\"Climate\" section",
           "claim": 3
         },
         {
           "text": "young trees may be killed at 29F to 30F (-1.7C to -1.1C)",
-          "locator": "",
+          "locator": "\"Climate\" section",
           "claim": 3
         },
         {
           "text": "mango trees should be planted in full sun for best growth and fruit production",
-          "locator": "",
+          "locator": "\"Planting a Mango Tree\" section, \"Site Selection\" subsection",
           "claim": 4
         }
       ],
@@ -9260,22 +9273,22 @@
       "quotes": [
         {
           "text": "Giant arborescent plant to 33 ft (10 m) tall",
-          "locator": "",
+          "locator": "\"Description\" section, \"Tree and Tree Types\" subsection",
           "claim": 0
         },
         {
           "text": "Papaya plants should be planted in full sun and at least 7 to 10 ft (2.1-3.1 m) away from other plants, buildings, and power lines",
-          "locator": "",
+          "locator": "\"Spacing and Pruning\" section",
           "claim": 1
         },
         {
           "text": "Well-cared-for plants may begin to produce flowers 4 months after planting and fruit 7 to 11 months after planting",
-          "locator": "",
+          "locator": "\"Production (Crop Yields)\" section",
           "claim": 2
         },
         {
           "text": "Papaya plants are not tolerant of freezing temperatures and are damaged or killed below 31F (-0.6C)",
-          "locator": "",
+          "locator": "\"Climate\" section",
           "claim": 3
         }
       ],
@@ -9321,32 +9334,32 @@
       "quotes": [
         {
           "text": "Trees may reach 10-20 ft (3.1-6.1 m) in height",
-          "locator": "",
+          "locator": "\"Description\" section, \"Tree\" subsection",
           "claim": 0
         },
         {
           "text": "maintained at 7 to 10 ft (2.1-3.1 m) high and 10 to 15 ft (3.1-4.6 m) wide",
-          "locator": "",
+          "locator": "\"Lemon Trees, Lawn Care, Mulch, and Pruning\" section, \"Pruning\" subsection",
           "claim": 0
         },
         {
           "text": "15 to 25 feet or more (6.1 to 7.6 m) away from buildings and other trees",
-          "locator": "",
+          "locator": "\"Placement in the Landscape\" section",
           "claim": 1
         },
         {
           "text": "Young trees usually begin fruit production in the third year",
-          "locator": "",
+          "locator": "\"Fruit Production\" section",
           "claim": 2
         },
         {
           "text": "defoliated at 22-24F (-4.4 to -5.6C), severe wood damaged at 20F (-6.7C), flowers and young fruit are killed at 29F (-1.7C)",
-          "locator": "",
+          "locator": "\"Climatic Adaptation\" section",
           "claim": 3
         },
         {
           "text": "should be planted in full sun",
-          "locator": "",
+          "locator": "\"Placement in the Landscape\" section",
           "claim": 4
         }
       ],
@@ -9431,37 +9444,37 @@
       "quotes": [
         {
           "text": "Shrub or small tree, 1.3-5 m tall",
-          "locator": "",
+          "locator": "Manihot esculenta page, \"Description\" section",
           "claim": 0
         },
         {
           "text": "usually 1.20 m to 1.50 m by 80 cm for good cvs on fertile soils; 1 m each way for weak cvs on poor soils",
-          "locator": "",
+          "locator": "Manihot esculenta page, \"Cultivation\" section",
           "claim": 0
         },
         {
           "text": "Cassava is harvested in 10-14 months, depending on the cv, the cultural practices and the purpose of the crop",
-          "locator": "",
+          "locator": "Manihot esculenta page, \"Harvesting\" section",
           "claim": 0
         },
         {
           "text": "reported to tolerate",
-          "locator": "",
+          "locator": "Manihot esculenta page, \"Ecology\" section",
           "claim": 0
         },
         {
           "text": "Erect annual grass, to 1.2 m tall",
-          "locator": "",
+          "locator": "Oryza sativa page, \"Description\" section",
           "claim": 1
         },
         {
           "text": "spaced 10-20 cm apart in 20-30 cm rows",
-          "locator": "",
+          "locator": "Oryza sativa page, \"Cultivation\" section",
           "claim": 1
         },
         {
           "text": "From planting to harvest varies: 4 months in Italy, 6 months in monsoon regions of Asia, and 135 days for some cvs in the US",
-          "locator": "",
+          "locator": "Oryza sativa page, \"Harvesting\" section",
           "claim": 1
         }
       ],
@@ -9538,32 +9551,32 @@
       "quotes": [
         {
           "text": "Sesame is an erect annual (or occasionally a perennial) that grows to a height of 20 to 60 in., depending on the variety and the growing conditions",
-          "locator": "",
+          "locator": "\"III. Growth Habits\" section",
           "claim": 0
         },
         {
           "text": "Populations of 250,000 to 300,000 plants/acre in 18 to 30 in. rows have given the highest yields",
-          "locator": "",
+          "locator": "\"V. Cultural Practices\" section, \"C. Method and Rate of Seeding\"",
           "claim": 1
         },
         {
           "text": "Sesame is ready for harvesting 90 to 150 days after planting",
-          "locator": "",
+          "locator": "\"V. Cultural Practices\" section, \"I. Harvesting\"",
           "claim": 2
         },
         {
           "text": "Daytime temperatures of 77F to 80F are optimal; below 68F, growth is reduced, and at 50F germination and growth is inhibited",
-          "locator": "",
+          "locator": "\"IV. Environment Requirements\" section, \"A. Climate\"",
           "claim": 3
         },
         {
           "text": "Commercial varieties of sesame require 90 to 120 frostfree days",
-          "locator": "",
+          "locator": "\"IV. Environment Requirements\" section, \"A. Climate\"",
           "claim": 3
         },
         {
           "text": "A minimum rainfall of 20 to 26 in. per season is necessary for reasonable yields",
-          "locator": "",
+          "locator": "\"IV. Environment Requirements\" section, \"A. Climate\"",
           "claim": 4
         }
       ],
@@ -9608,32 +9621,32 @@
       "quotes": [
         {
           "text": "It is a shrub that can grow to 12 ft tall, but usually only reaches 3 to 6 ft",
-          "locator": "",
+          "locator": "page 2",
           "claim": 0
         },
         {
           "text": "Sow seeds 1.5 inches deep on 1 to 3 foot rows at 8 to 10 lb per acre",
-          "locator": "",
+          "locator": "page 2",
           "claim": 1
         },
         {
           "text": "C. cajan requires 65-80 days to flower and 50-75 additional days to create mature seeds (Mullen et al., 2003), however many varieties have been developed to flower earlier",
-          "locator": "",
+          "locator": "page 2",
           "claim": 2
         },
         {
           "text": "C. cajan grows best under hot conditions (65-86F)",
-          "locator": "",
+          "locator": "page 2",
           "claim": 3
         },
         {
           "text": "Frost will defoliate the plant",
-          "locator": "",
+          "locator": "page 2",
           "claim": 3
         },
         {
           "text": "Under good management, the plant can live up to five years",
-          "locator": "",
+          "locator": "page 3",
           "claim": 3
         },
         {
@@ -9710,32 +9723,32 @@
       "quotes": [
         {
           "text": "Dibbling at 30 x 30 cm or 20 x 20 cm: seed rate: 50-60 kg/ha",
-          "locator": "",
+          "locator": "p. 10",
           "claim": 0
         },
         {
           "text": "Drilling at 25-30 cm row spacing and 5 cm within row; seed rate: 75-80 kg/ha",
-          "locator": "",
+          "locator": "p. 10",
           "claim": 0
         },
         {
           "text": "Early maturing (< 90-100 days)",
-          "locator": "",
+          "locator": "p. 7",
           "claim": 1
         },
         {
           "text": "Medium maturing (100-120 days)",
-          "locator": "",
+          "locator": "p. 7",
           "claim": 1
         },
         {
           "text": "Late maturing (> 120 days)",
-          "locator": "",
+          "locator": "p. 7",
           "claim": 1
         },
         {
           "text": "Select your site in an ecological zone with at least 14-20 mm of five-day rainfall during the growing cycle",
-          "locator": "",
+          "locator": "p. 6",
           "claim": 2
         }
       ],
@@ -9786,22 +9799,22 @@
       "quotes": [
         {
           "text": "use a guide string to plant 18-24 inches apart within rows 18-24 inches apart",
-          "locator": "",
+          "locator": "p. 1",
           "claim": 0
         },
         {
           "text": "Upland taro is ready for harvest 8-10 months after planting",
-          "locator": "",
+          "locator": "p. 2",
           "claim": 1
         },
         {
           "text": "best results are obtained on deep, well drained, friable loams with pH 5.5-6.5",
-          "locator": "",
+          "locator": "p. 1",
           "claim": 2
         },
         {
           "text": "It is best adapted to a warm, moist environment. Evenly distributed rainfall is ideal",
-          "locator": "",
+          "locator": "p. 1",
           "claim": 2
         }
       ],
@@ -9851,17 +9864,17 @@
       "quotes": [
         {
           "text": "Stakes 1 to 2 m high are adequate",
-          "locator": "",
+          "locator": "p. 9",
           "claim": 0
         },
         {
           "text": "Plant the mini-setts at a spacing of 1 x 0.25 m or 1 x 0.5 m",
-          "locator": "",
+          "locator": "p. 9",
           "claim": 1
         },
         {
           "text": "at a spacing of 100 x 25 cm",
-          "locator": "",
+          "locator": "p. 5",
           "claim": 1
         }
       ],
@@ -9911,17 +9924,17 @@
       "quotes": [
         {
           "text": "it grows from 9 to 16 feet per year if left uncropped. A fully mature tree can reach a height of 35 feet but can be cut back to 3-4 feet high",
-          "locator": "",
+          "locator": "p. 2",
           "claim": 0
         },
         {
           "text": "will die if it freezes completely, but can handle mild frost",
-          "locator": "",
+          "locator": "p. 1",
           "claim": 1
         },
         {
           "text": "rainfall is limited to between 9 to 60 inches",
-          "locator": "",
+          "locator": "p. 1",
           "claim": 2
         }
       ],
@@ -9972,12 +9985,12 @@
       "quotes": [
         {
           "text": "could be grown for leaves and/or pods and spaced 3 to 6 feet apart accordingly",
-          "locator": "",
+          "locator": "second paragraph",
           "claim": 0
         },
         {
           "text": "In California, winter frosts could kill the moringa and therefore it is cut back to one foot and covered with plastic during the winters",
-          "locator": "",
+          "locator": "second paragraph",
           "claim": 1
         }
       ],
@@ -10037,7 +10050,7 @@
       "quotes": [
         {
           "text": "Average transmissivity of direct solar radiation through the foliated and defoliated tree crowns ranged from 1.3 to 5.3 % and from 40.2 to 51.9 %, respectively",
-          "locator": "",
+          "locator": "the abstract",
           "claim": 0
         }
       ],
@@ -10079,7 +10092,7 @@
       "quotes": [
         {
           "text": "a mid-sized sugar maple tree (Acer saccharum Marsh.) reduced irradiance in its shade on a south-facing wall by about 80% when in leaf, and by nearly 40% when leafless",
-          "locator": "",
+          "locator": "p. 337, the abstract",
           "claim": 0
         }
       ],
@@ -10133,7 +10146,7 @@
       "quotes": [
         {
           "text": "The most shade-tolerant species (Fagus grandifolia Ehrh. and Tsuga canadensis (L.) Carr.) cast the deepest shade (<2% of full sun), while earlier successional species such as Quercus rubra L. and Fraxinus americana L. allowed greater light penetration (>5% full sun)",
-          "locator": "",
+          "locator": "the abstract",
           "claim": 0
         }
       ],
@@ -10183,7 +10196,7 @@
       "quotes": [
         {
           "text": "We selected as variables: daylength (photoperiod), evaporative demand (vapor pressure deficit), and suboptimal (minimum) temperatures [...] A combined Growing Season Index (GSI) was derived as the product of the three indices",
-          "locator": "",
+          "locator": "the abstract",
           "claim": 0
         }
       ],
@@ -10908,12 +10921,12 @@
       "quotes": [
         {
           "text": "Growers sometimes ask for the DLI \"requirement\" of a particular crop, or type of crops. In my opinion, there is no such thing as a DLI requirement because, with some notable exceptions, most plants can grow under a wide range of environmental conditions, including different DLIs. Growth of crops also depends on carbon dioxide (CO2) concentration and especially temperature, as well as crop culture. Therefore, providing a DLI requirement is both subjective and situational.",
-          "locator": "",
+          "locator": "first paragraph",
           "claim": 0
         },
         {
           "text": "there can be negative outcomes for some crops when the DLI is too high. Examples include leaf tip burn of some lettuces",
-          "locator": "",
+          "locator": "\"Too Little or Too Much\" section",
           "claim": 2
         }
       ],
@@ -10976,17 +10989,17 @@
       "quotes": [
         {
           "text": "Plants in row 4 yielded the highest fruit weight (~ 3.5 kg per plant), which declined significantly and progressively in adjacent rows. The yields in rows 3 and 5 were similar to row 4 while rows 2 and 6 showed a significant reduction in yield (~ 2.6 kg/plant) compared with row 4.",
-          "locator": "",
+          "locator": "p. 7",
           "claim": 0
         },
         {
           "text": "The relative gradual reduction in irradiation levels in rows 1-7, compared to row 4, were 92.7%, 19.3%, 11.9%, 0.0%, 8.6%, 16.5%, and 91.2%, respectively",
-          "locator": "",
+          "locator": "p. 5",
           "claim": 1
         },
         {
           "text": "A coverage of up to 26% of the land area with PV modules did not significantly affect plant growth or fruit quality",
-          "locator": "",
+          "locator": "p. 16",
           "claim": 2
         }
       ],
@@ -11047,12 +11060,12 @@
       "quotes": [
         {
           "text": "Total yield of all crops studied was lower at the rows closer to the solar panels, especially on eggplants",
-          "locator": "",
+          "locator": "p. 1",
           "claim": 0
         },
         {
           "text": "while quality of the fruit, expressed as the marketable percentage of the harvested fruit, was higher closer to the modules row for eggplant, but was unaffected for tomatoes and peppers",
-          "locator": "",
+          "locator": "p. 1",
           "claim": 1
         }
       ],
@@ -11170,12 +11183,12 @@
       "quotes": [
         {
           "text": "While some yield reduction is to be expected, resulting from less sunlight reaching the plant canopy and ground occupied by support structures, the generated electricity provides a low-risk supplemental income to farmers",
-          "locator": "",
+          "locator": "p. 1",
           "claim": 0
         },
         {
           "text": "agrivoltaic systems use a lower ground coverage ratio compared to normal solar farms and the PV panels are often mounted higher above the ground in order to facilitate the movement of agricultural equipment and to reduce the contrast between shaded and non-shaded areas",
-          "locator": "",
+          "locator": "p. 1",
           "claim": 1
         }
       ],
@@ -11230,12 +11243,12 @@
       "quotes": [
         {
           "text": "A minimum rotation of three years is considered essential to help reduce populations of soil-borne fungi",
-          "locator": "",
+          "locator": "\"Control Measures for Fungal Diseases in the Home Garden\" section",
           "claim": 0
         },
         {
           "text": "Each year, plant tomatoes in a new location away from areas where tomatoes, eggplant, potatoes, or peppers have been grown in the past, since these vegetables all have similar disease problems",
-          "locator": "",
+          "locator": "\"Control Measures for Fungal Diseases in the Home Garden\" section",
           "claim": 1
         }
       ],
@@ -11290,7 +11303,7 @@
       "quotes": [
         {
           "text": "If possible, plant tomatoes in an area where tomatoes, peppers, eggplants, and potatoes have not grown for at least two years to help avoid soil-borne disease problems",
-          "locator": "",
+          "locator": "\"Planting Site and Soil Preparation\" section",
           "claim": 0
         }
       ],
@@ -11386,7 +11399,7 @@
         },
         {
           "text": "A preliminary, theoretical analysis of potential revenues of the photovoltaic yield showed that reductions in crop yield can be overcompensated by the energy generated by the PV system",
-          "locator": "",
+          "locator": "the abstract",
           "claim": 1
         }
       ],
@@ -11536,12 +11549,12 @@
         },
         {
           "text": "survival rates were ca. 30% of those in the forest (year 1; Fig. 2a-c)",
-          "locator": "",
+          "locator": "p. 2884",
           "claim": 1
         },
         {
           "text": "For Asarum, ramet survival remained depressed in the harvest area (Fig. 2a)",
-          "locator": "",
+          "locator": "p. 2884",
           "claim": 2
         }
       ],
@@ -13670,12 +13683,12 @@
       "quotes": [
         {
           "text": "Asarum caudatum Lindl",
-          "locator": "",
+          "locator": "\"Guidance\" section",
           "claim": 0
         },
         {
           "text": "In sum, products containing aristolochic acid cause renal damage and can cause or contribute to renal failure.",
-          "locator": "",
+          "locator": "\"Reason for Alert\" section",
           "claim": 1
         }
       ],

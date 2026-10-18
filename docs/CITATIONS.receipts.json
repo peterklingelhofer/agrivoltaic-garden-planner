@@ -717,6 +717,85 @@
         }
       }
     ],
+    "duke1983-energy-crops-purdue": [
+      {
+        "quote": "d72d777d2806de16246b7c26580058e775878d10586c8f3f9c0810add5cc8462",
+        "preview": "Cassava is harvested in 10-14 months, depending on the cv, t",
+        "found": {
+          "kind": "html",
+          "bytes": 23729,
+          "textSha256": "f766d6fbc114b153ec7e7ee95e52da423806d1f1e3c6bb695b98fe69f4ced3fe",
+          "via": "e-html",
+          "date": "2026-10-18"
+        }
+      },
+      {
+        "quote": "340f129ecb09a67db30a43903df9218990caeb04f0600661b7bdcb9915f2f887",
+        "preview": "Erect annual grass, to 1.2 m tall",
+        "found": {
+          "kind": "html",
+          "bytes": 23729,
+          "textSha256": "f766d6fbc114b153ec7e7ee95e52da423806d1f1e3c6bb695b98fe69f4ced3fe",
+          "via": "e-html",
+          "date": "2026-10-18"
+        }
+      },
+      {
+        "quote": "5a900e2b369f67f9adc67e3d07c2445ecf1d8609652f87a8850832bec94c69b8",
+        "preview": "From planting to harvest varies: 4 months in Italy, 6 months",
+        "found": {
+          "kind": "html",
+          "bytes": 23729,
+          "textSha256": "f766d6fbc114b153ec7e7ee95e52da423806d1f1e3c6bb695b98fe69f4ced3fe",
+          "via": "e-html",
+          "date": "2026-10-18"
+        }
+      },
+      {
+        "quote": "5151794cefccd84e892eda7b4e76d3f5674c99bb035cf09abdeb4794a91f6b9a",
+        "preview": "Shrub or small tree, 1.3-5 m tall",
+        "found": {
+          "kind": "html",
+          "bytes": 23729,
+          "textSha256": "f766d6fbc114b153ec7e7ee95e52da423806d1f1e3c6bb695b98fe69f4ced3fe",
+          "via": "e-html",
+          "date": "2026-10-18"
+        }
+      },
+      {
+        "quote": "85fff74efd0108e54784b97d163d5861b9e89fedfe7f783414381e86119f33d2",
+        "preview": "reported to tolerate",
+        "found": {
+          "kind": "html",
+          "bytes": 23729,
+          "textSha256": "f766d6fbc114b153ec7e7ee95e52da423806d1f1e3c6bb695b98fe69f4ced3fe",
+          "via": "e-html",
+          "date": "2026-10-18"
+        }
+      },
+      {
+        "quote": "84742a0fb3db7b41b034ecde8c2683a368d3149454a4325805046a41b7623288",
+        "preview": "spaced 10-20 cm apart in 20-30 cm rows",
+        "found": {
+          "kind": "html",
+          "bytes": 23729,
+          "textSha256": "f766d6fbc114b153ec7e7ee95e52da423806d1f1e3c6bb695b98fe69f4ced3fe",
+          "via": "e-html",
+          "date": "2026-10-18"
+        }
+      },
+      {
+        "quote": "2038bc259122cc35032ddfc6c1070b16d512c1895ccb887422a7c67edefc3753",
+        "preview": "usually 1.20 m to 1.50 m by 80 cm for good cvs on fertile so",
+        "found": {
+          "kind": "html",
+          "bytes": 23729,
+          "textSha256": "f766d6fbc114b153ec7e7ee95e52da423806d1f1e3c6bb695b98fe69f4ced3fe",
+          "via": "e-html",
+          "date": "2026-10-18"
+        }
+      }
+    ],
     "ecfr-7cfr-360-200-noxious-weeds": [
       {
         "quote": "6b535beaeaada05675ffb5a805ded2755c381437e8b18f7368d19d7e33212b01",
@@ -991,6 +1070,19 @@
         }
       }
     ],
+    "heisler1986-single-tree-irradiance": [
+      {
+        "quote": "a0ce71c4671175e03769ec8a04e9bace23e6ee5bf4505a2ee0962b11111d14b3",
+        "preview": "a mid-sized sugar maple tree (Acer saccharum Marsh.) reduced",
+        "found": {
+          "kind": "pdf",
+          "bytes": 9328749,
+          "textSha256": "7191fcfdfd4c68a97151cc265219b64250d397ddb28e6d5762490e14d4c816c1",
+          "via": "hand",
+          "date": "2026-10-18"
+        }
+      }
+    ],
     "iastate-extension-2015-aronia": [
       {
         "quote": "5ac7d611508c3dc4cceabf399a0f11c5e53e44db87ea3b1715e1d7d60159cf0b",
@@ -1256,6 +1348,19 @@
         }
       }
     ],
+    "konarska2014-urban-tree-transmissivity": [
+      {
+        "quote": "abee2ea43037cefa0209e0221f6b1db43684b003108b9690a05db69cc018fabe",
+        "preview": "Average transmissivity of direct solar radiation through the",
+        "found": {
+          "kind": "html",
+          "bytes": 113723,
+          "textSha256": "298bb32b5749c656ee0deb2bd7a95501b4efe924c9c94bd56081119b798ee077",
+          "via": "hand",
+          "date": "2026-10-18"
+        }
+      }
+    ],
     "kstate-butler-county-ground-cherry": [
       {
         "quote": "35c4f11964bfa9f6ece20b99f8ab428df416304a838fffc4d5f6bed1ef6ca4f4",
@@ -1318,6 +1423,17 @@
       }
     ],
     "laub2022-shade-meta": [
+      {
+        "quote": "1ccf2aa4f3993601bcae662028f9e15c17887e217a1e1b95e927be71b5a722ad",
+        "preview": "At around 50% of shading, all crops show susceptibility.",
+        "found": {
+          "kind": "pdf",
+          "bytes": 800203,
+          "textSha256": "3fded802470d3e2bc6bb2de83650174fd79498806e478c58e478f715ab638d6c",
+          "via": "manual",
+          "date": "2026-10-18"
+        }
+      },
       {
         "quote": "5adf49123abf144da35d28dad1706336f9c8c8a32c05e6b8870b7dcd07af8f4f",
         "preview": "Estimated yields at 40% RSR are 50% (CI 41 to 61%).",
@@ -2470,6 +2586,19 @@
         }
       }
     ],
+    "nelson2007-late-seral-herbs": [
+      {
+        "quote": "f67d22674c3439efef947cc14f293f2818a9885950ad4875f9abc38e4c81d4ca",
+        "preview": "survival rates were ca. 30% of those in the forest (year 1; ",
+        "found": {
+          "kind": "pdf",
+          "bytes": 2167410,
+          "textSha256": "d0a65bcca9bc96d12cf980c683327304f26ae98824bd7d6850a8db63e1ad778b",
+          "via": "hand",
+          "date": "2026-10-18"
+        }
+      }
+    ],
     "nmsu-1997-growing-pistachios-new-mexico": [
       {
         "quote": "8e445bade307a010a700e926d64ae8b3fb3d9f86aefcd9b9a9eff3c8a4420bc9",
@@ -2692,6 +2821,39 @@
           "textSha256": "542cf2bf4d10192188d6ff46ad74b83a0281ecc5c750477e7e89f9a51c1b77dc",
           "via": "e-html",
           "date": "2026-10-17"
+        }
+      },
+      {
+        "quote": "1df22e6be9c5a9f59242253befe3b9de90a661c02cf7f5215f8d15e0f2e2cc9e",
+        "preview": "Group B: Semi-Hardy (Plants a week or two after 'A' group or",
+        "found": {
+          "kind": "html",
+          "bytes": 72575,
+          "textSha256": "542cf2bf4d10192188d6ff46ad74b83a0281ecc5c750477e7e89f9a51c1b77dc",
+          "via": "e-html",
+          "date": "2026-10-18"
+        }
+      },
+      {
+        "quote": "7b7b3606abc582b63e6dd18b474cbba3b9e55b1c40dc7e89be403573fa0446d7",
+        "preview": "Group C: Tender (Plant on the average date of the last sprin",
+        "found": {
+          "kind": "html",
+          "bytes": 72575,
+          "textSha256": "542cf2bf4d10192188d6ff46ad74b83a0281ecc5c750477e7e89f9a51c1b77dc",
+          "via": "e-html",
+          "date": "2026-10-18"
+        }
+      },
+      {
+        "quote": "ea78bde18ac89f779ff3e7ca021dae6e5917b7502bee4fd3e904bd1c4fe21b39",
+        "preview": "Group D: Very Tender (Plant when the soil is warm, about 2 w",
+        "found": {
+          "kind": "html",
+          "bytes": 72575,
+          "textSha256": "542cf2bf4d10192188d6ff46ad74b83a0281ecc5c750477e7e89f9a51c1b77dc",
+          "via": "e-html",
+          "date": "2026-10-18"
         }
       }
     ],
@@ -3419,6 +3581,30 @@
         }
       }
     ],
+    "runkle2019-dli-requirements": [
+      {
+        "quote": "65fc9675f0f1cc27fd9954ae22c8d41d1d1f164e20faaf1aa0b7a351d63c8f6c",
+        "preview": "Growers sometimes ask for the DLI \"requirement\" of a particu",
+        "found": {
+          "kind": "html",
+          "bytes": 129737,
+          "textSha256": "256e0d9a78690c18c86c68b215324f7e673e2282949e2dcdb355132ba9b6f782",
+          "via": "hand",
+          "date": "2026-10-18"
+        }
+      },
+      {
+        "quote": "80cef96861aa77cf3fdb2cf980773ee42fc4d795a3326270ec51df72f3b4b9ba",
+        "preview": "there can be negative outcomes for some crops when the DLI i",
+        "found": {
+          "kind": "html",
+          "bytes": 129737,
+          "textSha256": "256e0d9a78690c18c86c68b215324f7e673e2282949e2dcdb355132ba9b6f782",
+          "via": "hand",
+          "date": "2026-10-18"
+        }
+      }
+    ],
     "rutgers-fs547-tomato-diseases": [
       {
         "quote": "a63b35301cf631b123c8ed2b6bfe244dc0440a45c41941a7167d918240152369",
@@ -3503,6 +3689,19 @@
           "textSha256": "07bba942344b8f1ae8659e52346dcccc17686155cedc6c53ff279d799a973ffb",
           "via": "e-html",
           "date": "2026-10-17"
+        }
+      }
+    ],
+    "stallknecht2025-vce-dli": [
+      {
+        "quote": "513448cf3175708d14f06280175c09253a2e05e62e79dfda311904c5a1b87df8",
+        "preview": "Table 3. Suggested average daily light integral (DLI; mol/m2",
+        "found": {
+          "kind": "pdf",
+          "bytes": 748667,
+          "textSha256": "ee575050055710a1c8ea2d1230f2732a7e878ac27193549dae4768f258da41e9",
+          "via": "a-direct",
+          "date": "2026-10-18"
         }
       }
     ],

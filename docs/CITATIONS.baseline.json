@@ -2,9 +2,9 @@
   "format": 1,
   "counts": {
     "unverifiedEntries": 16,
-    "quotesWithoutReceipt": 97,
+    "quotesWithoutReceipt": 82,
     "quotesWithBareEllipsis": 0,
-    "quotesWithoutLocator": 101,
+    "quotesWithoutLocator": 0,
     "claimsStillQuoting": 0
   }
 }

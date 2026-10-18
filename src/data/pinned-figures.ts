@@ -20,7 +20,7 @@ import type { PinnedNumber } from '../types/pinned'
 export const VINE_CROP_DLI_FLOOR: PinnedNumber = {
   value: 15,
   citation: 'runkle2011-vegetable-dli',
-  locator: '',
+  locator: 'p. 42',
   quote:
     'A recommended minimum DLI for lettuce production is 12 to 14 mol/m2/d, whereas at least 15 (and preferably more than 20) mol/m2/d is suggested for vine crops',
 }
@@ -35,7 +35,7 @@ const WIDMER_REGRESSION_QUOTE =
 export const STRAWBERRY_DLI_FLOOR: PinnedNumber = {
   value: 25,
   citation: 'widmer-strawberry-dli',
-  locator: '',
+  locator: 'p. 4',
   quote: WIDMER_REGRESSION_QUOTE,
 }
 
@@ -43,7 +43,7 @@ export const STRAWBERRY_DLI_FLOOR: PinnedNumber = {
 export const RASPBERRY_DLI_FLOOR: PinnedNumber = {
   value: 15,
   citation: 'widmer-strawberry-dli',
-  locator: '',
+  locator: 'p. 4',
   quote: WIDMER_REGRESSION_QUOTE,
 }
 
@@ -56,7 +56,7 @@ export const STRAWBERRY_SHADE_CEILING: PinnedNumber = {
   value: 0.1,
   spelled: '10',
   citation: 'widmer-strawberry-dli',
-  locator: '',
+  locator: 'p. 7',
   quote:
     'Based on our findings, we recommend a minimum DLI of 25 mol m-2 d-1 [...] corresponded to an estimated total shading of 10-30%, depending on the type of cover',
 }
@@ -69,7 +69,7 @@ export const PV_SHADE_CEILING: PinnedNumber = {
   value: 0.2,
   spelled: '20%',
   citation: 'zhang2025-tipping-points',
-  locator: '',
+  locator: 'p. 11',
   quote:
     'To reduce the impact on the growth of crops, the shading caused by PV systems should preferably not exceed 20%, but such a strategy might sacrifice energy generation per unit of land',
 }
@@ -81,7 +81,7 @@ export const PV_SHADE_CEILING: PinnedNumber = {
 export const BASIL_DLI_FLOOR: PinnedNumber = {
   value: 12.9,
   citation: 'dou2018-basil-dli',
-  locator: '',
+  locator: 'the abstract',
   quote:
     'we suggest a DLI of 12.9 mol/m2/d for sweet basil commercial production in indoor vertical farming to minimize the energy cost while maintaining a high yield and nutritional quality',
 }
@@ -93,7 +93,7 @@ export const BASIL_DLI_FLOOR: PinnedNumber = {
 export const LETTUCE_DLI_TARGET_HIGH: PinnedNumber = {
   value: 17,
   citation: 'brechner2013-cornell-lettuce-handbook',
-  locator: '',
+  locator: 'p. 13',
   quote:
     'A supplemental light intensity within the range of 100-200 umol/m2/s (for a total of 17 mol/m2/d of both natural and supplemental lighting) at the plant level is recommended. It should be noted that 17 mol/m2/d is the light integral that worked best for the particular cultivar of boston bibb lettuce that we used',
 }
