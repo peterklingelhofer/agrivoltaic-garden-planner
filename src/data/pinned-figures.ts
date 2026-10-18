@@ -75,6 +75,20 @@ export const PV_SHADE_CEILING: PinnedNumber = {
 }
 
 /**
+ * The potato row's own shade ceiling, as a fraction of the light: the level at which Laub et al.
+ * 2022 say all crops show susceptibility, the last of the three phases (benefit, tolerance,
+ * susceptibility) they sort shade responses into. Weselek et al. 2021 grew potato under an array
+ * at about 30 percent shade and print no threshold, so the sentence that prints the 50 is Laub's
+ */
+export const POTATO_SHADE_CEILING: PinnedNumber = {
+  value: 0.5,
+  spelled: '50%',
+  citation: 'laub2022-shade-meta',
+  locator: 'p. 7',
+  quote: 'At around 50% of shading, all crops show susceptibility.',
+}
+
+/**
  * The basil minimum, mol/m2/d: the level Dou et al. 2018 suggest for commercial production, the
  * lowest of their five at which yield and quality were both high
  */
@@ -96,6 +110,32 @@ export const LETTUCE_DLI_TARGET_HIGH: PinnedNumber = {
   locator: 'p. 13',
   quote:
     'A supplemental light intensity within the range of 100-200 umol/m2/s (for a total of 17 mol/m2/d of both natural and supplemental lighting) at the plant level is recommended. It should be noted that 17 mol/m2/d is the light integral that worked best for the particular cultivar of boston bibb lettuce that we used',
+}
+
+const VCE_SPINACH_QUOTE =
+  'Table 3. Suggested average daily light integral (DLI; mol/m2/d) for example crops. [...] Spinach 14-20'
+
+/**
+ * The bottom of the spinach target band, mol/m2/d. Virginia Cooperative Extension's Table 3 prints
+ * 14 to 20 mol/m2/d for spinach, a greenhouse figure the table cites no spinach study for. Both
+ * ends of the row's target band come from that one table row
+ */
+export const SPINACH_DLI_TARGET_LOW: PinnedNumber = {
+  value: 14,
+  citation: 'stallknecht2025-vce-dli',
+  locator: 'Table 3, p. 3',
+  quote: VCE_SPINACH_QUOTE,
+}
+
+/**
+ * The top of the spinach target band, mol/m2/d. It comes from the same Table 3 row as the bottom,
+ * so the two pins share one quote
+ */
+export const SPINACH_DLI_TARGET_HIGH: PinnedNumber = {
+  value: 20,
+  citation: 'stallknecht2025-vce-dli',
+  locator: 'Table 3, p. 3',
+  quote: VCE_SPINACH_QUOTE,
 }
 
 /**
@@ -172,11 +212,20 @@ export const LAUB_YIELD_AT_40_PERCENT: Readonly<Record<LaubProseGroup, PinnedNum
 }
 
 /**
- * The crop rows that read a pin, and for which column. `rows.ts` takes each value from here, and
+ * The crop rows that read a pin, and for which column: a row's minimum, either end of its target
+ * band, or its own shade ceiling. `rows.ts` takes each value from here, and
  * `pinned-figures.test.ts` holds each row's tuple and its expanded record to it
  */
 export const PINNED_ROWS: Readonly<
-  Record<string, { dliMin?: PinnedNumber; dliTargetHigh?: PinnedNumber }>
+  Record<
+    string,
+    {
+      dliMin?: PinnedNumber
+      dliTargetLow?: PinnedNumber
+      dliTargetHigh?: PinnedNumber
+      maxRsr?: PinnedNumber
+    }
+  >
 > = {
   tomato: { dliMin: VINE_CROP_DLI_FLOOR },
   'pepper-sweet': { dliMin: VINE_CROP_DLI_FLOOR },
@@ -187,13 +236,13 @@ export const PINNED_ROWS: Readonly<
   basil: { dliMin: BASIL_DLI_FLOOR },
   'lettuce-leaf': { dliTargetHigh: LETTUCE_DLI_TARGET_HIGH },
   'lettuce-head': { dliTargetHigh: LETTUCE_DLI_TARGET_HIGH },
+  spinach: { dliTargetLow: SPINACH_DLI_TARGET_LOW, dliTargetHigh: SPINACH_DLI_TARGET_HIGH },
+  potato: { maxRsr: POTATO_SHADE_CEILING },
 }
 
 /**
- * How many rows that cite a source for their light figures carry no pin. The test lets the count
- * fall and refuses a rise, so a newly cited row gets a pin or is counted here on purpose. Two rows
- * stand today: `potato`, whose band is this app's own because neither work it cites prints a daily
- * light integral, and `spinach`, whose 14 to 20 is Virginia Extension's Table 3, which the ledger
- * holds no quote for
+ * How many rows that cite a source for their light figures carry no pin. No such row goes
+ * unpinned today, and the count stays so a newly cited row either gets a pin or is counted here on
+ * purpose. The test refuses a rise above it
  */
-export const UNPINNED_CITED_ROWS = 2
+export const UNPINNED_CITED_ROWS = 0

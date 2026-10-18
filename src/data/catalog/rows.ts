@@ -3,7 +3,10 @@ import type { CitationId } from '../../types/citation-ids.generated'
 import {
   BASIL_DLI_FLOOR,
   LETTUCE_DLI_TARGET_HIGH,
+  POTATO_SHADE_CEILING,
   RASPBERRY_DLI_FLOOR,
+  SPINACH_DLI_TARGET_HIGH,
+  SPINACH_DLI_TARGET_LOW,
   STRAWBERRY_DLI_FLOOR,
   VINE_CROP_DLI_FLOOR,
   WILD_GINGER_SURVIVAL_CEILING,
@@ -1506,7 +1509,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     {
       zr: 0.5,
       p: 0.35,
-      maxRsr: 0.5,
+      maxRsr: POTATO_SHADE_CEILING.value,
       maxRsrTier: 'B',
       maxRsrNote: POTATO_CEILING_NOTE,
       betweenCm: 75,
@@ -1520,8 +1523,8 @@ export const CROP_ROWS: readonly CropRow[] = [
     'Oxalidaceae',
     'oca|new zealand yam',
     // laubGroup, dliClass, habit, archetype and DLI figures as potato, the catalog's other crop
-    // planted from a seed tuber, at tier C: potato's tier B and its shade ceiling rest on a trial
-    // of potato itself
+    // planted from a seed tuber, at tier C: potato's tier B rests on a trial of potato itself and
+    // its shade ceiling on Laub's sentence (`POTATO_SHADE_CEILING`)
     'tubers-root-crops',
     'root-tuber',
     'upright-herb',
@@ -2343,8 +2346,8 @@ export const CROP_ROWS: readonly CropRow[] = [
     // and 20.2 mol/m2/d and found the optimum at 17.3, a plant-factory setting that places no
     // minimum, so the 6 floor stays this app's own
     6,
-    14,
-    20,
+    SPINACH_DLI_TARGET_LOW.value,
+    SPINACH_DLI_TARGET_HIGH.value,
     'C',
     2,
     42,

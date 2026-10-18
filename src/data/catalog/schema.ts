@@ -4,7 +4,13 @@ import type { NonEmpty, SourcedCited } from '../../types/cited'
 import type { CitationId } from '../../types/citation-ids.generated'
 import type { PlantingRole } from '../../types/garden'
 import type { CropId } from '../../types/ids'
-import { PV_SHADE_CEILING, STRAWBERRY_SHADE_CEILING } from '../pinned-figures.ts'
+import {
+  LETTUCE_DLI_TARGET_HIGH,
+  PV_SHADE_CEILING,
+  RASPBERRY_DLI_FLOOR,
+  STRAWBERRY_DLI_FLOOR,
+  STRAWBERRY_SHADE_CEILING,
+} from '../pinned-figures.ts'
 import { wildlifeOf } from './wildlife'
 import type {
   CanopyShape,
@@ -318,7 +324,8 @@ export const DLI_CLASSES: Readonly<Record<DliClass, DliClassSpec>> = {
   'leafy-greens': {
     minMolM2Day: 6,
     targetLowMolM2Day: 12,
-    targetHighMolM2Day: 17,
+    // the Cornell handbook's 17, pinned to its sentence in `pinned-figures.ts`
+    targetHighMolM2Day: LETTUCE_DLI_TARGET_HIGH.value,
     maxDesignRsr: 0.4,
     maxDesignRsrTier: 'C',
     maxDesignRsrCitations: LAUB_CEILING,
@@ -334,7 +341,8 @@ export const DLI_CLASSES: Readonly<Record<DliClass, DliClassSpec>> = {
     maxDesignRsrNote: RSR_CLASS_BASIS,
   },
   'cane-bush-berries': {
-    minMolM2Day: 15,
+    // Widmer's raspberry minimum stands for the class
+    minMolM2Day: RASPBERRY_DLI_FLOOR.value,
     targetLowMolM2Day: null,
     targetHighMolM2Day: null,
     maxDesignRsr: 0.3,
@@ -343,7 +351,7 @@ export const DLI_CLASSES: Readonly<Record<DliClass, DliClassSpec>> = {
     maxDesignRsrNote: RSR_BERRY_BASIS,
   },
   strawberry: {
-    minMolM2Day: 25,
+    minMolM2Day: STRAWBERRY_DLI_FLOOR.value,
     targetLowMolM2Day: null,
     targetHighMolM2Day: null,
     // the conservative end of Widmer's own 10 to 30 percent, pinned to its sentence in
@@ -356,7 +364,9 @@ export const DLI_CLASSES: Readonly<Record<DliClass, DliClassSpec>> = {
   brassicas: {
     minMolM2Day: null,
     targetLowMolM2Day: 12,
-    targetHighMolM2Day: 17,
+    // the brassica band is an inference from the leafy-greens band (Decision Record 6 marks it
+    // inferred), so it moves with that pin
+    targetHighMolM2Day: LETTUCE_DLI_TARGET_HIGH.value,
     maxDesignRsr: 0.3,
     maxDesignRsrTier: 'C',
     maxDesignRsrCitations: LAUB_CEILING,

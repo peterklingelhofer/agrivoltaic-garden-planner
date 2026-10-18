@@ -47,8 +47,8 @@ const PINS: readonly (readonly [name: string, pin: PinnedNumber])[] = [
 const cropRow = (id: string): CropRow | undefined => CROP_ROWS.find((row) => row[0] === id)
 
 describe('pinned-figures: the numbers against the bibliography', () => {
-  it('sweeps the eight named pins and the seven Laub ones', () => {
-    expect(PINS.length).toBeGreaterThanOrEqual(15)
+  it('sweeps the eleven named pins and the seven Laub ones', () => {
+    expect(PINS.length).toBeGreaterThanOrEqual(18)
     expect(Object.keys(FIGURES.LAUB_YIELD_AT_40_PERCENT)).toHaveLength(7)
   })
 
@@ -115,6 +115,12 @@ describe('pinned-figures: the catalog reads them', () => {
         )
         expect(cited, `${id} cites ${pins.dliMin.citation}`).toContain(pins.dliMin.citation)
       }
+      if (pins.dliTargetLow !== undefined) {
+        expect(row[9], `${id} dliTargetLow`).toBe(pins.dliTargetLow.value)
+        expect(cited, `${id} cites ${pins.dliTargetLow.citation}`).toContain(
+          pins.dliTargetLow.citation,
+        )
+      }
       if (pins.dliTargetHigh !== undefined) {
         expect(row[10], `${id} dliTargetHigh`).toBe(pins.dliTargetHigh.value)
         // the record's target is the middle of the row's band
@@ -123,6 +129,14 @@ describe('pinned-figures: the catalog reads them', () => {
         )
         expect(cited, `${id} cites ${pins.dliTargetHigh.citation}`).toContain(
           pins.dliTargetHigh.citation,
+        )
+      }
+      if (pins.maxRsr !== undefined) {
+        expect(row[17]?.maxRsr, `${id} maxRsr`).toBe(pins.maxRsr.value)
+        expect(cited, `${id} cites ${pins.maxRsr.citation}`).toContain(pins.maxRsr.citation)
+        // the record holds the design shade ceiling as light.maxDesignRsr
+        expect(light.maxDesignRsr.value as number, `${id} light.maxDesignRsr`).toBe(
+          pins.maxRsr.value,
         )
       }
     }
@@ -138,6 +152,14 @@ describe('pinned-figures: the catalog reads them', () => {
     expect(DLI_CLASSES.strawberry.maxDesignRsrCitations).toContain(
       STRAWBERRY_SHADE_CEILING.citation,
     )
+  })
+
+  it('has the classes that carry a pinned light figure read it from the pin', () => {
+    const { STRAWBERRY_DLI_FLOOR, RASPBERRY_DLI_FLOOR, LETTUCE_DLI_TARGET_HIGH } = FIGURES
+    expect(DLI_CLASSES.strawberry.minMolM2Day).toBe(STRAWBERRY_DLI_FLOOR.value)
+    expect(DLI_CLASSES['cane-bush-berries'].minMolM2Day).toBe(RASPBERRY_DLI_FLOOR.value)
+    expect(DLI_CLASSES['leafy-greens'].targetHighMolM2Day).toBe(LETTUCE_DLI_TARGET_HIGH.value)
+    expect(DLI_CLASSES.brassicas.targetHighMolM2Day).toBe(LETTUCE_DLI_TARGET_HIGH.value)
   })
 
   it('has the wild ginger row read its survival ceiling from the pin', () => {
