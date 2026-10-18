@@ -98,6 +98,27 @@ const Reference = ({
           {record.title}
         </a>
       )}
+      {/*
+        The saved copy of a page that can move or vanish. A work cited by DOI has none on purpose,
+        because the DOI is the durable link. The title leads the accessible name so a screen reader
+        can tell these links apart, since every one reads "archived copy"
+      */}
+      {record.archived === null ? null : (
+        <>
+          {' '}
+          (
+          <a
+            href={record.archived}
+            target="_blank"
+            rel="noreferrer"
+            data-testid={`link-source-archive-${record.id}`}
+            aria-label={`${record.title}, archived copy`}
+          >
+            archived copy
+          </a>
+          )
+        </>
+      )}
       {record.caveat === null ? null : (
         <em data-testid={`readout-source-caveat-${record.id}`}> {record.caveat}</em>
       )}

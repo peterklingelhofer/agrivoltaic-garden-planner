@@ -51,3 +51,32 @@ describe('the scope of the whole tool is stated once, plainly', () => {
     await harness.unmount()
   })
 })
+
+// A page a source cites can move or vanish, so a work with a URL carries a saved copy beside its
+// title. A work cited by DOI has none on purpose, because the DOI is the durable link
+describe('the archived copy of a work', () => {
+  it('links the saved copy and leads its accessible name with the title', async () => {
+    const registry = await loadCitations()
+    const record = [...registry.values()].find((r) => r.archived !== null)
+    if (record === undefined) throw new Error('no work carries an archived copy')
+    const harness = await mount(<SourcesPanel />)
+    const link = harness.get(`link-source-archive-${record.id}`)
+    expect(link.getAttribute('href')).toBe(record.archived)
+    expect(link.textContent).toBe('archived copy')
+    expect(link.getAttribute('target')).toBe('_blank')
+    // the title leads, so the many links that all read "archived copy" can be told apart
+    expect(link.getAttribute('aria-label')).toStartWith(record.title)
+    await harness.unmount()
+  })
+
+  it('draws no link for a work with no saved copy', async () => {
+    const registry = await loadCitations()
+    const record = [...registry.values()].find((r) => r.archived === null)
+    if (record === undefined) throw new Error('every work carries an archived copy')
+    const harness = await mount(<SourcesPanel />)
+    // the row itself renders, so the absent link can't come from an empty list
+    expect(harness.find(`item-source-${record.id}`)).not.toBeNull()
+    expect(harness.find(`link-source-archive-${record.id}`)).toBeNull()
+    await harness.unmount()
+  })
+})
