@@ -1,5 +1,5 @@
 {
-  "checked": "2026-10-17T22:22:59.912Z",
+  "checked": "2026-10-20T12:18:52.536Z",
   "dois": {
     "adhikary2025-clubroot-review": {
       "agrees": {
@@ -10078,6 +10078,13 @@
       "finalUrl": "https://www.mass.gov/regulations/225-CMR-2800-solar-massachusetts-renewable-target-smart-program",
       "status": 404,
       "url": "https://www.mass.gov/regulations/225-CMR-2800-solar-massachusetts-renewable-target-smart-program"
+    },
+    "ma-doer-shading-analysis-tool": {
+      "bodySha256": "1db35ec4114f06586c99714336c21e7a6042c109c0d9e78b4e6cf6d95610a25a",
+      "checked": "2026-10-20T12:18:52.604Z",
+      "finalUrl": "https://massgov.github.io/DOER/doer.html",
+      "status": 200,
+      "url": "https://massgov.github.io/DOER/doer.html"
     },
     "ma-smart-astgu-guideline": {
       "bodySha256": null,

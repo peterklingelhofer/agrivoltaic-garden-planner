@@ -6733,12 +6733,14 @@ U.S. Food and Drug Administration. (n.d.). *Import Alert 54-10: Detention Withou
 
 #### `ma-doer-shading-analysis-tool`
 
-(n.d.). *DOER Shading Analysis Tool for Dual-use Agricultural STGUs*. Massachusetts Department of Energy Resources
+(n.d.). *Dual-Use Shading Analysis Tool*. Massachusetts Department of Energy Resources
 
+- URL: <https://massgov.github.io/DOER/doer.html>
+- Archived: <https://web.archive.org/web/20261020121717/https://massgov.github.io/DOER/doer.html>
 - Verification: URL-verified | Access: public-domain
 - Backs:
   - DOER mandates applicants use its own Shading Analysis Tool, so a third-party computed result has no regulatory standing
-- **Caveat:** DOER's Shading Analysis Tool is a public S3 app, and its own footer says it's under construction.
+- **Caveat:** A web app published under the Commonwealth's massgov GitHub organization and credited to the UMass Amherst Clean Energy Extension. It computes no sun position: fixed tables give the sun on the 15th of each month for Eastern, Central or Western Massachusetts, at angles that match NOAA's at half past each clock hour of the Growing Season Hours, Eastern time with daylight saving. A point's figure is the share of those moments it spends in a panel's shadow, counting direct sun only with every moment weighted the same, and the tool reports the most shaded point beside the least shaded and the average, over March to October by default. This app totals the light itself every 15 minutes, diffuse sky included, so the two figures can differ.
 
 #### `ma-smart-astgu-guideline`
 
