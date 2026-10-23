@@ -16,7 +16,7 @@ import type {
   Radians,
   SquareMeters,
 } from '../types/units'
-import { clamp, cosDeg, normalizeDegrees, radiansToDegrees, sinDeg } from './math'
+import { clamp, cosDeg, DEG_TO_RAD, normalizeDegrees, radiansToDegrees, sinDeg } from './math'
 import { nameplateAcKw } from './pv/inverter'
 
 export const groundCoverRatio: (collectorWidthM: Meters, pitchM: Meters) => number = (
@@ -113,7 +113,7 @@ export const surfaceOrientation: (
   solarAzimuthDeg: Degrees,
 ) => SurfaceOrientation = (array, solarElevationDeg, solarAzimuthDeg) => {
   const { geometry, tracker } = array
-  const rotationDeg = trackerRotationDeg(tracker, solarElevationDeg, solarAzimuthDeg)
+  const rotationDeg = trackerRotationDeg(array, solarElevationDeg, solarAzimuthDeg)
   const isSingleAxis =
     tracker.mode === 'single-axis-horizontal-ns' || tracker.mode === 'single-axis-tilted'
   const axisAzimuthDeg = isSingleAxis ? tracker.axisAzimuthDeg : geometry.rowAzimuthDeg
@@ -132,10 +132,11 @@ export const surfaceOrientation: (
 }
 
 export const trackerRotationDeg: (
-  tracker: TrackerConfig,
+  array: PvArray,
   solarElevationDeg: Degrees,
   solarAzimuthDeg: Degrees,
-) => Degrees = (tracker, solarElevationDeg, solarAzimuthDeg) => {
+) => Degrees = (array, solarElevationDeg, solarAzimuthDeg) => {
+  const { tracker } = array
   switch (tracker.mode) {
     case 'fixed':
       return tracker.tiltDeg
@@ -148,7 +149,18 @@ export const trackerRotationDeg: (
       const zp =
         sinDeg(zenithDeg) * cosDeg(deltaAzDeg) * sinDeg(tracker.axisTiltDeg) +
         cosDeg(zenithDeg) * cosDeg(tracker.axisTiltDeg)
-      const rotation = radiansToDegrees(Math.atan2(xp, zp))
+      const ideal = radiansToDegrees(Math.atan2(xp, zp)) as Degrees
+      // backtracking turns the row back from the ideal until its shadow just clears the next row,
+      // and the stop applies after it, the order pvlib's `tracking.singleaxis` uses. The profile
+      // angle is folded above the horizon for a sun behind a tilted axis, as pvlib folds it
+      const rotation = tracker.backtracking
+        ? backtrackRotationDeg(
+            ideal,
+            array.geometry.pitchM,
+            array.geometry.collectorWidthM,
+            (Math.abs(90 - Math.abs(ideal)) * DEG_TO_RAD) as Radians,
+          )
+        : ideal
       return clamp(rotation, -tracker.maxRotationDeg, tracker.maxRotationDeg) as Degrees
     }
     case 'dual-axis': {

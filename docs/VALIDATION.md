@@ -17,6 +17,7 @@ in a test file a reader can run.
 | Solar position | NREL/TP-560-34302 worked example, `pvlib.solarposition.spa_python` | `src/sim/solar.test.ts` (`< 0.001 deg` on every angle), `crates/agv-sim/tests/nrel_spa.rs` |
 | Irradiance decomposition (Erbs, DISC, DIRINT, Engerer2) | Erbs 1982's published polynomial, `pvlib`'s published DIRINT and DISC output | `crates/agv-sim/tests/pvlib_decomposition.rs` |
 | Plane-of-array transposition (Perez 1990) | `pvlib.irradiance.perez`, all eight sky-clearness bins | `crates/agv-sim/tests/pvlib_transposition.rs` (`< 0.1 W/m2`) |
+| Single-axis tracker rotation, backtracking on | `pvlib.tracking.singleaxis` (`tracker_theta`), level and tilted axes, three ground cover ratios | `crates/agv-sim/tests/pvlib_tracking.rs`, `src/sim/geometry.test.ts` (`< 1e-6 deg`) |
 | Ground/module view factor (degenerate infinite-row case) | `pvlib.bifacial.utils.vf_ground_sky_2d` | `src/sim/shading.test.ts` (`vfGroundSky2dOracle`, `0.002` absolute) |
 | PV chain loss stack | PVWatts v5's own documented default combined loss (14.08%) | `src/sim/pv/chain.test.ts` (`combinedLossFraction(PVWATTS_DEFAULT_LOSSES)`) |
 | Module temperature, inverter clipping | Faiman 2008, King et al. 2007 (Sandia inverter model), by formula | `crates/agv-sim/tests/geometry_spec.rs` (both thermal models reduce to air temperature in the dark, and the inverter clips at its rating), cited in `PV_CHAIN_PROVENANCE` |

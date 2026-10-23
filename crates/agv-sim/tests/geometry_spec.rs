@@ -69,7 +69,10 @@ fn ground_cover_ratio_is_its_own_definition() {
 fn a_fixed_array_never_rotates() {
     for elevation in [-10.0, 0.0, 5.0, 45.0, 89.0] {
         for azimuth in [0.0, 90.0, 180.0, 270.0] {
-            assert_eq!(tracker_rotation_deg(&FIXED_30, elevation, azimuth), 30.0);
+            assert_eq!(
+                tracker_rotation_deg(&array(FIXED_30), elevation, azimuth),
+                30.0
+            );
         }
     }
 }
@@ -85,14 +88,14 @@ fn a_horizontal_tracker_follows_the_sun_across_the_sky() {
         max_rotation_deg: 60.0,
         backtracking: false,
     };
-    let morning = tracker_rotation_deg(&tracker, 20.0, 90.0);
-    let noon = tracker_rotation_deg(&tracker, 60.0, 180.0);
-    let evening = tracker_rotation_deg(&tracker, 20.0, 270.0);
+    let morning = tracker_rotation_deg(&array(tracker), 20.0, 90.0);
+    let noon = tracker_rotation_deg(&array(tracker), 60.0, 180.0);
+    let evening = tracker_rotation_deg(&array(tracker), 20.0, 270.0);
     assert!(morning > 45.0, "morning rotation was {morning}");
     assert!(noon.abs() < 1e-9, "noon rotation was {noon}");
     assert!(evening < -45.0, "evening rotation was {evening}");
     // and it never exceeds its own stop
-    assert!(tracker_rotation_deg(&tracker, 1.0, 90.0).abs() <= 60.0 + 1e-9);
+    assert!(tracker_rotation_deg(&array(tracker), 1.0, 90.0).abs() <= 60.0 + 1e-9);
 }
 
 /// Below the horizon every tracker parks flat, because there's nothing to track
@@ -114,7 +117,7 @@ fn every_tracker_parks_below_the_horizon() {
             max_rotation_deg: 50.0,
         },
     ] {
-        assert_eq!(tracker_rotation_deg(&tracker, -1.0, 180.0), 0.0);
+        assert_eq!(tracker_rotation_deg(&array(tracker), -1.0, 180.0), 0.0);
     }
 }
 
@@ -125,9 +128,9 @@ fn a_dual_axis_tracker_faces_the_sun_until_it_cannot() {
         max_rotation_deg: 60.0,
         min_elevation_deg: 5.0,
     };
-    assert!((tracker_rotation_deg(&tracker, 50.0, 180.0) - 40.0).abs() < 1e-12);
+    assert!((tracker_rotation_deg(&array(tracker), 50.0, 180.0) - 40.0).abs() < 1e-12);
     // 10 degrees of elevation wants 80 of tilt, and the stop is 60
-    assert!((tracker_rotation_deg(&tracker, 10.0, 180.0) - 60.0).abs() < 1e-12);
+    assert!((tracker_rotation_deg(&array(tracker), 10.0, 180.0) - 60.0).abs() < 1e-12);
 }
 
 /// The panel count is rows times modules per row times how many stack up the slope, and the

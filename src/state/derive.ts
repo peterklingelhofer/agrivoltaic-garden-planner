@@ -66,7 +66,7 @@ export const panelOrientation = (
 ): PanelOrientation => {
   const tracker = array.tracker
   const rotationDeg = attemptOr(
-    () => trackerRotationDeg(tracker, degrees(elevationDeg), degrees(azimuthDeg)) as number,
+    () => trackerRotationDeg(array, degrees(elevationDeg), degrees(azimuthDeg)) as number,
     () => fallbackRotationDeg(tracker, elevationDeg, azimuthDeg),
   )
   if (tracker.mode === 'fixed') {

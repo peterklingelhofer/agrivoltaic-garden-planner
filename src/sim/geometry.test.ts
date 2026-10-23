@@ -28,6 +28,7 @@ import {
   panelSnapshot,
   projectedGroundCoverRatio,
   sceneExtent,
+  trackerRotationDeg,
 } from './geometry'
 
 const DEG_TO_RAD = Math.PI / 180
@@ -104,6 +105,88 @@ describe('minimumPitchM', () => {
       expected,
       9,
     )
+  })
+})
+
+/**
+ * pvlib 0.16.1's `tracking.singleaxis` with `backtrack=True`, its `tracker_theta` at ten suns
+ * (apparent zenith, azimuth) across a summer day. The same rows pin the Rust copy in
+ * `crates/agv-sim/tests/pvlib_tracking.rs`. The last sun sits behind the tilted axis, where the
+ * ideal rotation passes 90 degrees
+ */
+const PVLIB_SUNS = [
+  [88, 62],
+  [80, 75],
+  [70, 88],
+  [55, 100],
+  [35, 125],
+  [20, 180],
+  [45, 245],
+  [72, 275],
+  [86, 296],
+  [84, 330],
+] as const
+
+const PVLIB_BACKTRACKING = [
+  {
+    axisTiltDeg: 0,
+    axisAzimuthDeg: 180,
+    maxRotationDeg: 60,
+    gcr: 0.5,
+    thetas: [
+      -2.268428912, -10.703290937, -23.177877285, -54.586816547, -29.837566478, 0, 42.186261181,
+      20.264118424, 4.475796987, 12.423179667,
+    ],
+  },
+  {
+    axisTiltDeg: 0,
+    axisAzimuthDeg: 180,
+    maxRotationDeg: 90,
+    gcr: 0.25,
+    thetas: [
+      -6.830432442, -35.570527903, -69.988776342, -54.586816547, -29.837566478, 0, 42.186261181,
+      71.935701973, 13.626524728, 43.499947639,
+    ],
+  },
+  {
+    axisTiltDeg: 0,
+    axisAzimuthDeg: 0,
+    maxRotationDeg: 55,
+    gcr: 0.4,
+    thetas: [
+      3.405095523, 16.330992865, 38.804958386, 54.586816547, 29.837566478, 0, -42.186261181,
+      -32.759797448, -6.732702229, -19.078227109,
+    ],
+  },
+  {
+    axisTiltDeg: 20,
+    axisAzimuthDeg: 180,
+    maxRotationDeg: 60,
+    gcr: 0.4,
+    thetas: [
+      -29.210287896, -6.91649598, -33.355631134, -53.928996393, -28.037137931, 0, 39.892077369,
+      26.330317085, 18.841337483, 60,
+    ],
+  },
+] as const
+describe('trackerRotationDeg against pvlib', () => {
+  it('backtracks where pvlib does, and stops where it does', () => {
+    for (const row of PVLIB_BACKTRACKING) {
+      const array = makeArray(
+        { collectorWidthM: 2 as Meters, pitchM: (2 / row.gcr) as Meters },
+        {
+          mode: row.axisTiltDeg === 0 ? 'single-axis-horizontal-ns' : 'single-axis-tilted',
+          axisTiltDeg: row.axisTiltDeg as Degrees,
+          axisAzimuthDeg: row.axisAzimuthDeg as Degrees,
+          maxRotationDeg: row.maxRotationDeg as Degrees,
+          backtracking: true,
+        },
+      )
+      PVLIB_SUNS.forEach(([zenith, azimuth], index) => {
+        const rotation = trackerRotationDeg(array, (90 - zenith) as Degrees, azimuth as Degrees)
+        expect(rotation).toBeCloseTo(row.thetas[index] ?? Number.NaN, 6)
+      })
+    }
   })
 })
 

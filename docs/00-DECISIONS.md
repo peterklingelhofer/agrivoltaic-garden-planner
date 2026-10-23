@@ -174,7 +174,8 @@ visibility from space-invariant weather.
 - The shade-free backtracking criterion is `acos(min(1, (P/W) sin psi))`, with P the row pitch, W
   the collector width and psi the sun's profile angle. Deriving it from the shadow-width expression
   gives `sin psi`, which matches pvlib's `cos(tracker rotation)` because rotation = 90 - psi. A `cos
-  psi` form fails both checks.
+  psi` form fails both checks. A single-axis tracker set to backtrack turns back from its ideal
+  rotation by that amount before its stop applies, the order pvlib's `tracking.singleaxis` uses.
 - Tracking arrays bake at their peak-elevation pose. The daylight-coefficient factorization requires
   time-invariant geometry, so fixed tilt is exact, tracking is an approximation, and the UI discloses
   it.

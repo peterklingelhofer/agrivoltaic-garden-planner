@@ -8,7 +8,7 @@
 //! rotation rule can't read an axis tilt off a fixed-tilt array at all
 
 use crate::geom::{Extent2D, GridSpec, Vec2M, Vec3M};
-use crate::math::{clamp, cos_deg, normalize_degrees, sin_deg, RAD_TO_DEG};
+use crate::math::{clamp, cos_deg, normalize_degrees, sin_deg, DEG_TO_RAD, RAD_TO_DEG};
 use crate::pv::inverter::nameplate_ac_kw;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -192,7 +192,7 @@ pub fn surface_orientation(
     solar_elevation_deg: f64,
     solar_azimuth_deg: f64,
 ) -> SurfaceOrientation {
-    let rotation_deg = tracker_rotation_deg(&array.tracker, solar_elevation_deg, solar_azimuth_deg);
+    let rotation_deg = tracker_rotation_deg(array, solar_elevation_deg, solar_azimuth_deg);
     let surface_azimuth_deg = match &array.tracker {
         Tracker::Fixed {
             surface_azimuth_deg,
@@ -216,16 +216,17 @@ pub fn surface_orientation(
 }
 
 pub fn tracker_rotation_deg(
-    tracker: &Tracker,
+    array: &PvArray,
     solar_elevation_deg: f64,
     solar_azimuth_deg: f64,
 ) -> f64 {
-    match tracker {
+    match &array.tracker {
         Tracker::Fixed { tilt_deg, .. } => *tilt_deg,
         Tracker::SingleAxis {
             axis_tilt_deg,
             axis_azimuth_deg,
             max_rotation_deg,
+            backtracking,
             ..
         } => {
             if solar_elevation_deg <= 0.0 {
@@ -236,11 +237,22 @@ pub fn tracker_rotation_deg(
             let xp = sin_deg(zenith_deg) * sin_deg(delta_az_deg);
             let zp = sin_deg(zenith_deg) * cos_deg(delta_az_deg) * sin_deg(*axis_tilt_deg)
                 + cos_deg(zenith_deg) * cos_deg(*axis_tilt_deg);
-            clamp(
-                xp.atan2(zp) * RAD_TO_DEG,
-                -max_rotation_deg,
-                *max_rotation_deg,
-            )
+            let ideal = xp.atan2(zp) * RAD_TO_DEG;
+            // backtracking turns the row back from the ideal until its shadow just clears the next
+            // row, and the stop applies after it, the order pvlib's `tracking.singleaxis` uses. The
+            // profile angle is folded above the horizon for a sun behind a tilted axis, as pvlib
+            // folds it
+            let rotation = if *backtracking {
+                backtrack_rotation_deg(
+                    ideal,
+                    array.geometry.pitch_m,
+                    array.geometry.collector_width_m,
+                    (90.0 - ideal.abs()).abs() * DEG_TO_RAD,
+                )
+            } else {
+                ideal
+            };
+            clamp(rotation, -max_rotation_deg, *max_rotation_deg)
         }
         Tracker::DualAxis {
             max_rotation_deg,
