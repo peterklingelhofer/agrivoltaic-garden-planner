@@ -109,6 +109,37 @@ fn reference_tilt_deg(tracker: &Tracker) -> f64 {
     }
 }
 
+/// The steepest a row ever stands: a fixed row's own tilt, and a tracker's stop
+fn steepest_tilt_deg(tracker: &Tracker) -> f64 {
+    match tracker {
+        Tracker::Fixed { tilt_deg, .. } => *tilt_deg,
+        Tracker::SingleAxis {
+            max_rotation_deg, ..
+        }
+        | Tracker::DualAxis {
+            max_rotation_deg, ..
+        }
+        | Tracker::AgroOptimized { max_rotation_deg } => *max_rotation_deg,
+    }
+}
+
+/// How high a row's lower and upper edges stand at a tilt, as (lower, upper).
+///
+/// A fixed row stands on its lower edge at the clearance height and rises its whole slant width
+/// from there. Every tracking mode turns about its torque tube, so for those the clearance height
+/// is the axis, and the two edges dip and rise half the collector width about it
+pub fn edge_heights_m(array: &PvArray, tilt_deg: f64) -> (f64, f64) {
+    let g = &array.geometry;
+    let rise_m = g.collector_width_m * sin_deg(tilt_deg);
+    match array.tracker {
+        Tracker::Fixed { .. } => (g.clearance_height_m, g.clearance_height_m + rise_m),
+        _ => (
+            g.clearance_height_m - rise_m / 2.0,
+            g.clearance_height_m + rise_m / 2.0,
+        ),
+    }
+}
+
 /// How many modules stack up the slope, implied by collector width over module height
 pub fn module_stack_count(array: &PvArray) -> usize {
     let raw = array.geometry.collector_width_m / array.module.height_m;
@@ -142,8 +173,7 @@ pub fn derived_array_metrics(array: &PvArray) -> DerivedArrayMetrics {
             array.geometry.pitch_m,
             tilt_deg,
         ),
-        max_height_m: array.geometry.clearance_height_m
-            + array.geometry.collector_width_m * sin_deg(tilt_deg),
+        max_height_m: edge_heights_m(array, steepest_tilt_deg(&array.tracker)).1,
         nameplate_dc_kw: dc,
         nameplate_ac_kw: nameplate_ac_kw(dc, None),
     }
@@ -296,11 +326,9 @@ pub fn panel_snapshot(
         let fy = cos_deg(surface_azimuth_deg);
 
         let half_span_w = (g.collector_width_m * cos_deg(tilt_deg)) / 2.0;
-        let rise_h = g.collector_width_m * sin_deg(tilt_deg);
         let module_length_m = g.row_length_m / g.modules_per_row as f64;
         let half_len = module_length_m / 2.0;
-        let lower_z = g.clearance_height_m;
-        let upper_z = g.clearance_height_m + rise_h;
+        let (lower_z, upper_z) = edge_heights_m(array, tilt_deg);
         let normal = crate::geom::UnitVec3 {
             x: fx * sin_deg(tilt_deg),
             y: fy * sin_deg(tilt_deg),

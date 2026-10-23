@@ -82,6 +82,25 @@ describe('array metrics', () => {
     expect(metrics.maxHeightM).toBeGreaterThan(array.geometry.clearanceHeightM)
   })
 
+  it('hangs a tracker from its axis at the clearance height', () => {
+    const array = makeArray(1, {
+      tracker: {
+        mode: 'single-axis-horizontal-ns',
+        axisTiltDeg: degrees(0),
+        axisAzimuthDeg: degrees(180),
+        maxRotationDeg: degrees(55),
+        backtracking: true,
+      },
+    })
+    const { clearanceHeightM, collectorWidthM } = array.geometry
+    expect(arrayMetrics(array).maxHeightM).toBeCloseTo(
+      clearanceHeightM + (collectorWidthM / 2) * Math.sin((55 * Math.PI) / 180),
+      9,
+    )
+    const { torqueTubes } = arrayLayout(array, 20, 90)
+    for (const tube of torqueTubes) expect(tube[1]).toBeCloseTo(clearanceHeightM, 9)
+  })
+
   it('lays out one module per row, column and stack level', () => {
     const array = makeArray(1)
     const layout = arrayLayout(array, 45, 180)

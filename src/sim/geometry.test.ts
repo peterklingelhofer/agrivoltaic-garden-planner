@@ -20,6 +20,8 @@ import type {
 } from '../types/units'
 import {
   backtrackRotationDeg,
+  derivedArrayMetrics,
+  edgeReachM,
   gridForExtent,
   groundCoverRatio,
   minimumPitchM,
@@ -133,6 +135,25 @@ describe('panelSnapshot', () => {
       expect(lowerA?.zM).toBeCloseTo(3, 12)
       expect(lowerB?.zM).toBeCloseTo(3, 12)
     }
+    expect(edgeReachM(fixed).lowerM).toBeCloseTo(3, 12)
+  })
+
+  it('turns a tracker about its axis at clearanceHeightM', () => {
+    const tracker = makeArray(
+      {},
+      { mode: 'dual-axis', maxRotationDeg: 60 as Degrees, minElevationDeg: 5 as Degrees },
+    )
+    // 10 degrees of elevation wants 80 of tilt, and the stop holds it at 60: half the 2 m
+    // collector times sin 60 either side of the 3 m axis
+    const halfRise = Math.sin(60 * DEG_TO_RAD)
+    const snapshot = panelSnapshot([tracker], 0 as EpochMillis, 10 as Degrees, 180 as Degrees)
+    for (const panel of snapshot.panels) {
+      const heights = panel.corners.vertices.map((vertex) => vertex.zM)
+      expect(Math.min(...heights)).toBeCloseTo(3 - halfRise, 12)
+      expect(Math.max(...heights)).toBeCloseTo(3 + halfRise, 12)
+    }
+    expect(edgeReachM(tracker).lowerM).toBeCloseTo(3 - halfRise, 12)
+    expect(derivedArrayMetrics(tracker).maxHeightM).toBeCloseTo(3 + halfRise, 12)
   })
 
   /**

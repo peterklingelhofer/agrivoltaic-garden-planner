@@ -33,6 +33,12 @@ both understate rear-side gain and overstate row-shading loss. The overstated ro
 0.13% of the year on the shipped default array at its wide 9 m pitch, and the understated rear gain
 is unquantified, a known limit.
 
+A fixed row stands on its lower edge, which sits at the clearance height. A tracking row turns about
+its torque tube, so in every tracking mode the clearance height is the axis, and at a rotation theta
+the lower edge dips `(W/2) sin theta` below it while the upper edge rises as far above, W being the
+collector width. The Massachusetts tracker floor is measured at the horizontal position, which puts
+it at the axis.
+
 ### 2.2 Ray tracing: a validation reference only
 
 `bifacial_radiance` takes 12.7 to 88 h against 2 to 4 min for view factors, with no gain in

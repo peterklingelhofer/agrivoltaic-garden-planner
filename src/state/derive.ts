@@ -13,10 +13,15 @@ const fallbackMetrics = (array: PvArray): DerivedArrayMetrics => {
   const tiltDeg = array.tracker.mode === 'fixed' ? array.tracker.tiltDeg : degrees(0)
   const gcr = pitchM > 0 ? collectorWidthM / pitchM : 0
   const dcKw = (rowCount * modulesPerRow * array.module.nameplateWp) / 1000
+  // a fixed row rises its whole width off its lower edge, a tracker half its width off its axis
+  const riseM =
+    array.tracker.mode === 'fixed'
+      ? collectorWidthM * Math.sin(tiltDeg * DEG)
+      : (collectorWidthM / 2) * Math.sin(array.tracker.maxRotationDeg * DEG)
   return {
     groundCoverRatio: fraction(gcr),
     projectedGroundCoverRatio: fraction(gcr * Math.cos(tiltDeg * DEG)),
-    maxHeightM: meters(array.geometry.clearanceHeightM + collectorWidthM * Math.sin(tiltDeg * DEG)),
+    maxHeightM: meters(array.geometry.clearanceHeightM + riseM),
     nameplateDcKw: kilowattsDc(dcKw),
     nameplateAcKw: kilowattsAc(dcKw / DEFAULT_DC_AC_RATIO),
   }
@@ -126,7 +131,12 @@ export const arrayLayout = (
     const rowOffset = (row - (g.rowCount - 1) / 2) * g.pitchM
     const rx = ox + across.x * rowOffset
     const rz = oz + across.z * rowOffset
-    const hubY = g.clearanceHeightM + (g.collectorWidthM / 2) * Math.sin(tilt)
+    // a fixed row stands on its lower edge at the clearance height, and a tracker turns about
+    // its torque tube there
+    const hubY =
+      array.tracker.mode === 'fixed'
+        ? g.clearanceHeightM + (g.collectorWidthM / 2) * Math.sin(tilt)
+        : g.clearanceHeightM
     torqueTubes.push([rx, hubY, rz])
     const postCount = Math.max(2, Math.ceil(spanM / 6) + 1)
     for (let post = 0; post < postCount; post += 1) {

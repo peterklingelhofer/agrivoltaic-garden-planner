@@ -1,4 +1,5 @@
 import { clamp } from '../../data/util'
+import { edgeReachM } from '../../sim/geometry'
 import { unsourcedClaim } from '../../types/cited'
 import type { Crop } from '../../types/crop'
 import type { Bed, CanopyTier } from '../../types/garden'
@@ -71,9 +72,10 @@ export const crowdingIndex = (crop: Crop, bed: Bed): number => {
 export const crowdingYieldPenalty = (index: number): Fraction =>
   (clamp(index / 2, 0, 1) ** 0.8 * MAX_CROWDING_YIELD_PENALTY.value) as Fraction
 
+// the lowest any panel edge comes, which on a tracker is its lower edge at the stop
 const clearanceOf = (arrays: readonly PvArray[]): number => {
   let lowest = Number.POSITIVE_INFINITY
-  for (const array of arrays) lowest = Math.min(lowest, array.geometry.clearanceHeightM)
+  for (const array of arrays) lowest = Math.min(lowest, edgeReachM(array).lowerM)
   return Number.isFinite(lowest) ? lowest : Number.POSITIVE_INFINITY
 }
 

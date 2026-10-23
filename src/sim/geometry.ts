@@ -41,6 +41,36 @@ const referenceTiltDeg = (tracker: TrackerConfig): Degrees => {
   }
 }
 
+/** The steepest a row ever stands: a fixed row's own tilt, and a tracker's stop */
+const steepestTiltDeg = (tracker: TrackerConfig): Degrees =>
+  tracker.mode === 'fixed' ? tracker.tiltDeg : tracker.maxRotationDeg
+
+export interface EdgeHeights {
+  readonly lowerM: Meters
+  readonly upperM: Meters
+}
+
+/**
+ * How high a row's lower and upper edges stand at a tilt. A fixed row stands on its lower edge at
+ * the clearance height and rises its whole slant width from there. Every tracking mode turns
+ * about its torque tube, so for those the clearance height is the axis, and the two edges dip and
+ * rise half the collector width about it
+ */
+export const edgeHeightsM: (array: PvArray, tiltDeg: Degrees) => EdgeHeights = (array, tiltDeg) => {
+  const { clearanceHeightM, collectorWidthM } = array.geometry
+  const riseM = collectorWidthM * sinDeg(tiltDeg)
+  return array.tracker.mode === 'fixed'
+    ? { lowerM: clearanceHeightM, upperM: (clearanceHeightM + riseM) as Meters }
+    : {
+        lowerM: (clearanceHeightM - riseM / 2) as Meters,
+        upperM: (clearanceHeightM + riseM / 2) as Meters,
+      }
+}
+
+/** The lowest and the highest any part of a row ever reaches, posed at its steepest */
+export const edgeReachM: (array: PvArray) => EdgeHeights = (array) =>
+  edgeHeightsM(array, steepestTiltDeg(array.tracker))
+
 /** How many modules stack up the slope, implied by collector width over module height */
 export const moduleStackCount: (array: PvArray) => number = (array) =>
   Math.max(1, Math.round(array.geometry.collectorWidthM / array.module.heightM))
@@ -64,7 +94,7 @@ export const derivedArrayMetrics: (array: PvArray) => DerivedArrayMetrics = (arr
       geometry.pitchM,
       tiltDeg,
     ) as Fraction,
-    maxHeightM: (geometry.clearanceHeightM + geometry.collectorWidthM * sinDeg(tiltDeg)) as Meters,
+    maxHeightM: edgeReachM(array).upperM,
     nameplateDcKw: nameplateDcKw(array),
     nameplateAcKw: nameplateAcKw(nameplateDcKw(array)),
   }
@@ -190,11 +220,9 @@ export const panelSnapshot: (
     const fy = cosDeg(surfaceAzimuthDeg)
 
     const halfSpanW = (geometry.collectorWidthM * cosDeg(tiltDeg)) / 2
-    const riseH = geometry.collectorWidthM * sinDeg(tiltDeg)
     const moduleLengthM = geometry.rowLengthM / geometry.modulesPerRow
     const halfLen = moduleLengthM / 2
-    const lowerZ = geometry.clearanceHeightM
-    const upperZ = (geometry.clearanceHeightM + riseH) as Meters
+    const { lowerM: lowerZ, upperM: upperZ } = edgeHeightsM(array, tiltDeg)
     const normal = { x: fx * sinDeg(tiltDeg), y: fy * sinDeg(tiltDeg), z: cosDeg(tiltDeg) }
 
     for (let k = 0; k < geometry.rowCount; k += 1) {

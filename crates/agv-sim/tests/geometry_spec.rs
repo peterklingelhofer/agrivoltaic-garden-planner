@@ -9,7 +9,7 @@
 
 use agv_sim::geom::{Extent2D, GridSpec, UnitVec3, Vec2M, Vec3M};
 use agv_sim::geometry::{
-    grid_for_extent, ground_cover_ratio, module_count, panel_snapshot,
+    derived_array_metrics, grid_for_extent, ground_cover_ratio, module_count, panel_snapshot,
     projected_ground_cover_ratio, surface_orientation, tracker_rotation_deg, ModuleSpec, PvArray,
     RowGeometry, Tracker,
 };
@@ -154,6 +154,42 @@ fn the_snapshot_puts_every_panel_where_the_geometry_says() {
     // and the normal is a unit vector, which nothing downstream checks
     let n = panels[0].normal;
     assert!((n.x * n.x + n.y * n.y + n.z * n.z - 1.0).abs() < 1e-12);
+}
+
+/// A tracker turns about its torque tube, which stands at the clearance height, so a panel posed
+/// at 60 degrees reaches half the collector width times sin 60 either side of it. The array's
+/// height readout is the same pose at the stop, and a fixed row still rises its whole width off
+/// its lower edge
+#[test]
+fn a_tracker_turns_about_its_axis_at_the_clearance_height() {
+    let tracked = array(Tracker::DualAxis {
+        max_rotation_deg: 60.0,
+        min_elevation_deg: 5.0,
+    });
+    // 10 degrees of elevation wants 80 of tilt, and the stop holds it at 60. Half the 2 m
+    // collector is 1 m
+    let panels = panel_snapshot(&[tracked], 10.0, 180.0);
+    let half_rise = (60.0f64).to_radians().sin();
+    for panel in &panels {
+        assert!((panel.tilt_deg - 60.0).abs() < 1e-12);
+        let lowest = panel.corners.iter().map(|c| c.z_m).fold(f64::MAX, f64::min);
+        let highest = panel.corners.iter().map(|c| c.z_m).fold(f64::MIN, f64::max);
+        assert!(
+            (lowest - (2.5 - half_rise)).abs() < 1e-9,
+            "lowest corner {lowest}"
+        );
+        assert!(
+            (highest - (2.5 + half_rise)).abs() < 1e-9,
+            "highest corner {highest}"
+        );
+    }
+    let tallest = derived_array_metrics(&tracked).max_height_m;
+    assert!(
+        (tallest - (2.5 + half_rise)).abs() < 1e-9,
+        "max height {tallest}"
+    );
+    let fixed = derived_array_metrics(&array(FIXED_30)).max_height_m;
+    assert!((fixed - 3.5).abs() < 1e-9, "fixed max height {fixed}");
 }
 
 /// A tracker turns the rows, so the surface azimuth must move with it, and a fixed array's must

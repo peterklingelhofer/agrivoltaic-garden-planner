@@ -1,5 +1,6 @@
 import type { ThreeEvent } from '@react-three/fiber'
 import { Color, Quaternion, Shape, Vector3, type Ray } from 'three'
+import { edgeReachM } from '../sim/geometry'
 import { pointInPolygon, polygonOf, rectangleRing } from '../state/geom'
 import { seasonalScale } from '../state/season'
 import type { Cutter } from './csg'
@@ -160,11 +161,11 @@ interface PanelCeiling {
 /**
  * The ground each array stands over, and how much room is under it.
  *
- * The ceiling is `clearanceHeightM`, the module's underside at its LOW edge. `assignCanopyTier`
- * draws its overstory line at `clearanceHeightM` too, so a plant it has already refused as
- * overstory is a plant the picture draws stopped. A tilted row does hold more room than this
- * uphill, and claiming it would need the tracker's live pose, which would make a plant's drawn
- * height a function of the time of day.
+ * The ceiling is the module's underside at its LOW edge, which on a tracker is that edge at the
+ * stop (`edgeReachM`). `assignCanopyTier` draws its overstory line there too, so a plant it has
+ * already refused as overstory is a plant the picture draws stopped. A tilted row does hold more
+ * room than this uphill, and claiming it would need the tracker's live pose, which would make a
+ * plant's drawn height a function of the time of day.
  *
  * The footprint is taken at the widest a row can ever be in plan, `collectorWidthM` flat with no
  * projection by the tilt, for that same reason. Along the row it is the span `arrayLayout`
@@ -185,7 +186,7 @@ const panelCeilings = (arrays: readonly PvArray[], bedHeightM: number): readonly
           -g.rowAzimuthDeg,
         ),
       ),
-      heightM: Math.max(0, g.clearanceHeightM - PANEL_HEADROOM_M - bedHeightM),
+      heightM: Math.max(0, edgeReachM(array).lowerM - PANEL_HEADROOM_M - bedHeightM),
     }
   })
 
