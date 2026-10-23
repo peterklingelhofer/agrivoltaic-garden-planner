@@ -282,6 +282,48 @@ const nsrdbCsv = (
   return [...metadata, header, ...rows].join('\n')
 }
 
+/**
+ * The three lines an NSRDB GOES v4 typical-year file opens with, cut after the wind speed. Its
+ * metadata names carry "Clearsky GHI Units" and "GHI Units", ahead of the column header
+ */
+const NSRDB_GOES_HEAD = [
+  [
+    'Source,Location ID,City,State,Country,Latitude,Longitude,Time Zone,Elevation,Local Time Zone',
+    'Clearsky DHI Units,Clearsky DNI Units,Clearsky GHI Units,Dew Point Units,DHI Units,DNI Units',
+    'GHI Units,Solar Zenith Angle Units,Temperature Units,Pressure Units,Relative Humidity Units',
+    'Precipitable Water Units,Wind Direction Units,Wind Speed Units',
+  ].join(','),
+  'NSRDB,1231092,-,-,-,40.49,-74.42,0,25,-5,w/m2,w/m2,w/m2,c,w/m2,w/m2,w/m2,Degree,c,mbar,%,cm,Degrees,m/s',
+  [
+    'Year,Month,Day,Hour,Minute,Temperature,Alpha,Aerosol Optical Depth,Asymmetry,Clearsky DHI',
+    'Clearsky DNI,Clearsky GHI,Cloud Fill Flag,Cloud Type,Dew Point,DHI,DNI,Fill Flag,GHI,Ozone',
+    'Relative Humidity,Solar Zenith Angle,SSA,Surface Albedo,Pressure,Precipitable Water',
+    'Wind Direction,Wind Speed',
+  ].join(','),
+]
+
+describe('an NSRDB GOES file is read from its column header', () => {
+  // every column its own value, and GHI stepping by the hour so a shifted row shows
+  const row = (hour: number): string =>
+    [2019, 1, 1, hour % 24, 30, 20, 1.4, 0.1, 0.59, 90, 900, 950, 0, 0, 10, 100, 200, 0]
+      .concat([300 + (hour % 7), 0.3, 50, 60, 0.9, 0.16, 1000, 2, 180, 3])
+      .join(',')
+  const csv = [...NSRDB_GOES_HEAD, ...Array.from({ length: HOURS_PER_TMY }, (_, h) => row(h))]
+
+  it('takes each irradiance and the temperature from its own column, from the first hour', () => {
+    const record = normalizeWeather({ source: 'nsrdb-psm3', body: csv.join('\n') }, AMHERST)
+    const { typical } = record
+    expect(typical.ghiWM2[0]).toBe(300)
+    expect(typical.ghiWM2[1]).toBe(301)
+    expect(typical.ghiWM2[HOURS_PER_TMY - 1]).toBe(300 + ((HOURS_PER_TMY - 1) % 7))
+    expect(typical.dniWM2[0]).toBe(200)
+    expect(typical.dhiWM2[0]).toBe(100)
+    expect(typical.dryBulbC[0]).toBe(20)
+    expect(typical.windDirectionDeg?.[0]).toBe(180)
+    expect(record.elevationM).toBe(25)
+  })
+})
+
 describe('a CSV carries a wind direction column when its header has one', () => {
   it('reads the Wind Direction column NSRDB style', () => {
     const record = normalizeWeather({ source: 'nsrdb-psm3', body: nsrdbCsv(true) }, AMHERST)

@@ -593,9 +593,15 @@ export const parseCsvColumns = (
   readonly hours: number
 } => {
   const lines = csv.split(/\r?\n/).filter((line) => line.trim().length > 0)
-  const headerIndex = lines.findIndex((line) =>
-    /ghi|shortwave|allsky_sfc_sw_dwn|g\(h\)/i.test(line),
+  // NSRDB writes its metadata's field names above the column header, "GHI Units" among them, so
+  // the header is the first line naming irradiance with a row of numbers under it, and the first
+  // line naming it at all only where no such line exists
+  const namesIrradiance = (line: string): boolean =>
+    /ghi|shortwave|allsky_sfc_sw_dwn|g\(h\)/i.test(line)
+  const aboveRows = lines.findIndex(
+    (line, index) => namesIrradiance(line) && /^\s*-?\d/.test(lines[index + 1] ?? ''),
   )
+  const headerIndex = aboveRows >= 0 ? aboveRows : lines.findIndex(namesIrradiance)
   const columns = emptyColumns(HOURS_PER_TMY)
   // an all-zero year is a fabricated one: refuse the file
   if (headerIndex < 0) throw csvHasNoIrradiance(upstream)
