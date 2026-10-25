@@ -6,7 +6,8 @@ import { banded, interval } from '../types/band'
 import type { Bed, GardenPlot, Planting } from '../types/garden'
 import { bedId, cropId, plantingId } from '../types/ids'
 import { SCHEMA_VERSION } from '../types/persist'
-import { dayOfYear, epochMillis, fraction, meters, type Fraction } from '../types/units'
+import type { PvArray } from '../types/pv'
+import { dayOfYear, degrees, epochMillis, fraction, meters, type Fraction } from '../types/units'
 import { makeArray, makeBed, makeHouse, makePlot, makeTree } from './defaults'
 import { DEFAULT_WIZARD_ANSWERS } from './onboarding'
 import {
@@ -247,6 +248,31 @@ describe('what is persisted', () => {
       plot.arrays[0]?.derived.groundCoverRatio ?? 0,
       6,
     )
+  })
+
+  it('lifts a saved tracker to its floor, whatever height and spacing were stored', () => {
+    const design = realisticDesign()
+    const plot = design.plot as GardenPlot
+    const base = makeArray(1)
+    // a payload with the axis near the ground and the rows closer together than they are wide
+    const stored: PvArray = {
+      ...base,
+      geometry: { ...base.geometry, clearanceHeightM: meters(0.5), pitchM: meters(1) },
+      tracker: {
+        mode: 'single-axis-horizontal-ns',
+        axisTiltDeg: degrees(0),
+        axisAzimuthDeg: degrees(180),
+        maxRotationDeg: degrees(55),
+        backtracking: true,
+      },
+    }
+    const back = roundTrip({ ...design, plot: { ...plot, arrays: [stored] } })
+    const geometry = back.plot?.arrays[0]?.geometry
+    expect(geometry?.clearanceHeightM).toBeCloseTo(
+      (base.geometry.collectorWidthM / 2) * Math.sin((55 * Math.PI) / 180),
+      9,
+    )
+    expect(geometry?.pitchM).toBe(base.geometry.collectorWidthM)
   })
 
   it('leaves brands intact, because a brand is a phantom type with no runtime key', () => {

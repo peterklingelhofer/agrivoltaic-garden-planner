@@ -86,6 +86,17 @@ describe('the printed plan', () => {
     expect(panelLine(array)).toBe(
       '3 rows of 12 panels running east to west, 9.0 m apart, 2.5 m of headroom, fixed at 25 degrees facing south',
     )
+    const tracker = withDerived({
+      ...array,
+      tracker: {
+        mode: 'single-axis-horizontal-ns',
+        axisTiltDeg: degrees(0),
+        axisAzimuthDeg: degrees(180),
+        maxRotationDeg: degrees(55),
+        backtracking: true,
+      },
+    })
+    expect(panelLine(tracker)).toContain('2.5 m to the axis, on a tracker that follows the sun')
     expect(compassLabel(0)).toBe('north')
     expect(compassLabel(135)).toBe('south-east')
     expect(compassLabel(359)).toBe('north')

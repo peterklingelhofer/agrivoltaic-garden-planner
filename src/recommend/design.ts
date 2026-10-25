@@ -12,7 +12,7 @@ import {
   MA_TRACKING_CLEARANCE_M,
 } from '../sim/compliance'
 import { decompose, selectDecompositionModel } from '../sim/decomposition'
-import { derivedArrayMetrics, equatorFacingAzimuth } from '../sim/geometry'
+import { derivedArrayMetrics, edgeReachM, equatorFacingAzimuth } from '../sim/geometry'
 import { cosDeg, radiansToDegrees, sinDeg } from '../sim/math'
 import type { SimulationOptions } from '../sim/pipeline'
 import { FINAL_OPTIONS, runSimulation } from '../sim/pipeline'
@@ -553,7 +553,9 @@ const tiltedCandidate = (
           ? `Panels are fixed at ${finalTiltDeg.toFixed(0)} degrees, which is the tilt that generated the most over a year of this site's own weather. It was measured a degree at a time from ${String(REFERENCE_MIN_TILT_DEG)} to ${String(REFERENCE_MAX_TILT_DEG)} degrees, because this is the design that is meant to generate the most and a rule of thumb that puts it below the balanced one would make the name wrong`
           : `Panels are fixed at ${finalTiltDeg.toFixed(0)} degrees, which is ${TILT_LATITUDE_FACTOR[archetype].toFixed(2)} of the site latitude of ${latitude.toFixed(0)} degrees, a published rule of thumb anchored on the energy optimum near 0.85 of latitude. Nothing on this plot was measured to arrive at it. Tilting steeper from here shrinks each row's footprint on the ground and brings the rows closer together, how much light that leaves the beds is the measured figure beside this design`,
     `Rows sit ${pitchM.toFixed(1)} m apart, which puts about ${(projected * 100).toFixed(0)} percent of the ground under panel as seen from overhead. That's the footprint the shade budget for this planting allows. The light the plot loses is a separate figure, measured over the whole year and reported with this design. It comes out lower than the footprint where light reaches in from the sides, and higher where ${geometry.rowCount === 1 ? 'the rows are close enough for their shadows to sweep most of the ground' : `all ${String(geometry.rowCount)} rows put a moving shadow over most of the plot`}`,
-    `Headroom under the lowest panel edge is ${plan.clearanceM.toFixed(2)} m`,
+    tracking
+      ? `The panels turn on an axis ${plan.clearanceM.toFixed(2)} m up, and at the steepest turn their lower edge comes down to ${edgeReachM({ geometry, tracker }).lowerM.toFixed(2)} m`
+      : `Headroom under the lowest panel edge is ${plan.clearanceM.toFixed(2)} m`,
     ...compromises,
   ].join('. ')
   return {
@@ -1287,7 +1289,8 @@ const summaryOf = (evaluated: Evaluated, control: Evaluated): string => {
       : geometry.rowAzimuthDeg === 90
         ? 'running east to west'
         : 'running north to south'
-  return `${String(geometry.rowCount)} row${geometry.rowCount === 1 ? '' : 's'} of panels ${orientation}, ${geometry.pitchM.toFixed(1)} m apart, with ${geometry.clearanceHeightM.toFixed(1)} m of headroom underneath. Your plot keeps about ${kept} percent of the daylight it gets with no panels, and ${String(production.cropsAvailable.length)} of the ${String(control.production.cropsAvailable.length)} plants that suit your site still work under it`
+  const clearance = candidate.tracker.mode === 'fixed' ? 'of headroom underneath' : 'to the axis'
+  return `${String(geometry.rowCount)} row${geometry.rowCount === 1 ? '' : 's'} of panels ${orientation}, ${geometry.pitchM.toFixed(1)} m apart, with ${geometry.clearanceHeightM.toFixed(1)} m ${clearance}. Your plot keeps about ${kept} percent of the daylight it gets with no panels, and ${String(production.cropsAvailable.length)} of the ${String(control.production.cropsAvailable.length)} plants that suit your site still work under it`
 }
 
 /**

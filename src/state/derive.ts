@@ -1,62 +1,42 @@
-import { derivedArrayMetrics, trackerRotationDeg } from '../sim/geometry'
-import { DEFAULT_DC_AC_RATIO } from '../sim/pv/inverter'
-import type { DerivedArrayMetrics, PvArray, TrackerConfig } from '../types/pv'
-import { degrees, fraction, kilowattsAc, kilowattsDc, meters } from '../types/units'
-import { attemptOr } from './safe'
+import {
+  derivedArrayMetrics,
+  edgeHeightsM,
+  minClearanceHeightM,
+  trackerRotationDeg,
+} from '../sim/geometry'
+import type { PvArray } from '../types/pv'
+import { degrees, meters } from '../types/units'
 
 const DEG = Math.PI / 180
 
-const clamp = (value: number, lo: number, hi: number): number => Math.min(hi, Math.max(lo, value))
-
-const fallbackMetrics = (array: PvArray): DerivedArrayMetrics => {
-  const { collectorWidthM, pitchM, rowCount, modulesPerRow } = array.geometry
-  const tiltDeg = array.tracker.mode === 'fixed' ? array.tracker.tiltDeg : degrees(0)
-  const gcr = pitchM > 0 ? collectorWidthM / pitchM : 0
-  const dcKw = (rowCount * modulesPerRow * array.module.nameplateWp) / 1000
-  // a fixed row rises its whole width off its lower edge, a tracker half its width off its axis
-  const riseM =
-    array.tracker.mode === 'fixed'
-      ? collectorWidthM * Math.sin(tiltDeg * DEG)
-      : (collectorWidthM / 2) * Math.sin(array.tracker.maxRotationDeg * DEG)
+/**
+ * A tracker's rows pass through flat, so its pitch is at least the collector width. Its axis
+ * stands at least as high as the lower edge dips at the stop, so no edge goes underground
+ */
+const settled = (array: PvArray): PvArray => {
+  if (array.tracker.mode === 'fixed') return array
+  const { clearanceHeightM, collectorWidthM, pitchM } = array.geometry
+  const floorM = minClearanceHeightM(array)
+  if (clearanceHeightM >= floorM && pitchM >= collectorWidthM) return array
   return {
-    groundCoverRatio: fraction(gcr),
-    projectedGroundCoverRatio: fraction(gcr * Math.cos(tiltDeg * DEG)),
-    maxHeightM: meters(array.geometry.clearanceHeightM + riseM),
-    nameplateDcKw: kilowattsDc(dcKw),
-    nameplateAcKw: kilowattsAc(dcKw / DEFAULT_DC_AC_RATIO),
+    ...array,
+    geometry: {
+      ...array.geometry,
+      clearanceHeightM: meters(Math.max(clearanceHeightM, floorM)),
+      pitchM: meters(Math.max(pitchM, collectorWidthM)),
+    },
   }
 }
 
-// GCR comes from src/sim when the physics module is live and from the closed form otherwise,
-// so the readout never disagrees with itself
-export const arrayMetrics = (array: PvArray): DerivedArrayMetrics =>
-  attemptOr(
-    () => derivedArrayMetrics(array),
-    () => fallbackMetrics(array),
-  )
-
-export const withDerived = (array: PvArray): PvArray => ({ ...array, derived: arrayMetrics(array) })
+export const withDerived = (array: PvArray): PvArray => {
+  const next = settled(array)
+  return { ...next, derived: derivedArrayMetrics(next) }
+}
 
 export interface PanelOrientation {
   readonly tiltDeg: number
   readonly surfaceAzimuthDeg: number
   readonly rotationDeg: number
-}
-
-const fallbackRotationDeg = (
-  tracker: TrackerConfig,
-  elevationDeg: number,
-  azimuthDeg: number,
-): number => {
-  if (tracker.mode === 'fixed') return tracker.tiltDeg
-  if (tracker.mode === 'dual-axis') return clamp(90 - elevationDeg, 0, tracker.maxRotationDeg)
-  if (tracker.mode === 'agro-optimized') return tracker.maxRotationDeg
-  const axis = tracker.axisAzimuthDeg * DEG
-  const raw = Math.atan2(
-    Math.cos(elevationDeg * DEG) * Math.sin(azimuthDeg * DEG - axis),
-    Math.max(Math.sin(elevationDeg * DEG), 1e-4),
-  )
-  return clamp(raw / DEG, -tracker.maxRotationDeg, tracker.maxRotationDeg)
 }
 
 export const panelOrientation = (
@@ -65,10 +45,11 @@ export const panelOrientation = (
   azimuthDeg: number,
 ): PanelOrientation => {
   const tracker = array.tracker
-  const rotationDeg = attemptOr(
-    () => trackerRotationDeg(array, degrees(elevationDeg), degrees(azimuthDeg)) as number,
-    () => fallbackRotationDeg(tracker, elevationDeg, azimuthDeg),
-  )
+  const rotationDeg = trackerRotationDeg(
+    array,
+    degrees(elevationDeg),
+    degrees(azimuthDeg),
+  ) as number
   if (tracker.mode === 'fixed') {
     return {
       tiltDeg: tracker.tiltDeg,
@@ -131,12 +112,10 @@ export const arrayLayout = (
     const rowOffset = (row - (g.rowCount - 1) / 2) * g.pitchM
     const rx = ox + across.x * rowOffset
     const rz = oz + across.z * rowOffset
-    // a fixed row stands on its lower edge at the clearance height, and a tracker turns about
-    // its torque tube there
-    const hubY =
-      array.tracker.mode === 'fixed'
-        ? g.clearanceHeightM + (g.collectorWidthM / 2) * Math.sin(tilt)
-        : g.clearanceHeightM
+    // the torque tube sits midway between the edges, half the rise above a fixed row's lower edge
+    // and at the clearance height on a tracker
+    const { lowerM, upperM } = edgeHeightsM(array, degrees(orientation.tiltDeg))
+    const hubY = (lowerM + upperM) / 2
     torqueTubes.push([rx, hubY, rz])
     const postCount = Math.max(2, Math.ceil(spanM / 6) + 1)
     for (let post = 0; post < postCount; post += 1) {
@@ -163,5 +142,3 @@ export const arrayLayout = (
   }
   return { orientation, modules, stackCount, posts, torqueTubes }
 }
-
-export { clamp }

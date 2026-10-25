@@ -24,6 +24,7 @@ import {
   edgeReachM,
   gridForExtent,
   groundCoverRatio,
+  minClearanceHeightM,
   minimumPitchM,
   panelSnapshot,
   projectedGroundCoverRatio,
@@ -219,6 +220,7 @@ describe('panelSnapshot', () => {
       expect(lowerB?.zM).toBeCloseTo(3, 12)
     }
     expect(edgeReachM(fixed).lowerM).toBeCloseTo(3, 12)
+    expect(minClearanceHeightM(fixed)).toBe(0)
   })
 
   it('turns a tracker about its axis at clearanceHeightM', () => {
@@ -236,6 +238,7 @@ describe('panelSnapshot', () => {
       expect(Math.max(...heights)).toBeCloseTo(3 + halfRise, 12)
     }
     expect(edgeReachM(tracker).lowerM).toBeCloseTo(3 - halfRise, 12)
+    expect(minClearanceHeightM(tracker)).toBeCloseTo(halfRise, 12)
     expect(derivedArrayMetrics(tracker).maxHeightM).toBeCloseTo(3 + halfRise, 12)
   })
 

@@ -98,7 +98,8 @@ export const panelLine = (array: PvArray): string => {
     tracker.mode === 'fixed'
       ? `fixed at ${String(Math.round(tracker.tiltDeg))} degrees facing ${compassLabel(tracker.surfaceAzimuthDeg)}`
       : 'on a tracker that follows the sun'
-  return `${plural(geometry.rowCount, 'row', 'rows')} of ${plural(geometry.modulesPerRow, 'panel', 'panels')} running ${rowsRun(geometry.rowAzimuthDeg)}, ${geometry.pitchM.toFixed(1)} m apart, ${geometry.clearanceHeightM.toFixed(1)} m of headroom, ${mounting}`
+  const clearance = tracker.mode === 'fixed' ? 'of headroom' : 'to the axis'
+  return `${plural(geometry.rowCount, 'row', 'rows')} of ${plural(geometry.modulesPerRow, 'panel', 'panels')} running ${rowsRun(geometry.rowAzimuthDeg)}, ${geometry.pitchM.toFixed(1)} m apart, ${geometry.clearanceHeightM.toFixed(1)} m ${clearance}, ${mounting}`
 }
 
 const bedSize = (bed: Bed): string => {

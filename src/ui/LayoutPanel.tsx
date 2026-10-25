@@ -1,4 +1,5 @@
 import type { ReactElement } from 'react'
+import { minClearanceHeightM } from '../sim/geometry'
 import { useAppStore } from '../state/store'
 import { meters } from '../types/units'
 import { DetailSwitch, HeightStep, MountingStep, SearchProgress } from './AnswerPanels'
@@ -35,7 +36,9 @@ const MovePanels = (): ReactElement | null => {
       <SliderField
         testId="control-panels-headroom"
         label="How high the panels sit"
-        min={0.5}
+        // the floor is rounded up to the slider's own tenth, so the thumb never sits below what
+        // the store allows
+        min={Math.max(0.5, Math.ceil(minClearanceHeightM(array) * 10) / 10)}
         max={4.5}
         step={0.1}
         value={geometry.clearanceHeightM}

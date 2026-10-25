@@ -37,7 +37,9 @@ A fixed row stands on its lower edge, which sits at the clearance height. A trac
 its torque tube, so in every tracking mode the clearance height is the axis, and at a rotation theta
 the lower edge dips `(W/2) sin theta` below it while the upper edge rises as far above, W being the
 collector width. The Massachusetts tracker floor is measured at the horizontal position, which puts
-it at the axis.
+it at the axis. The editor, the saved-design loader and the agent keep a tracker's axis at least
+that dip above the ground and its pitch at least the collector width, since its rows pass through
+flat.
 
 ### 2.2 Ray tracing: a validation reference only
 

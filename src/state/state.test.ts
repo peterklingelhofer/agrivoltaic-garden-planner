@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from 'bun:test'
 import { viridis } from './colormap'
-import { makeArray } from './defaults'
-import { arrayLayout, arrayMetrics } from './derive'
+import { DEFAULT_ROW_GEOMETRY, makeArray } from './defaults'
+import { arrayLayout } from './derive'
 import {
   polygonAreaM2,
   polygonOf,
@@ -14,6 +14,7 @@ import {
 import { overlayField } from './overlay'
 import { resetAppStore, useAppStore } from './store'
 import { sunVector } from './sun'
+import { derivedArrayMetrics } from '../sim/geometry'
 import { degrees, meters } from '../types/units'
 
 beforeEach(() => resetAppStore())
@@ -73,7 +74,7 @@ describe('sun vector', () => {
 describe('array metrics', () => {
   it('derives GCR from collector width over pitch', () => {
     const array = makeArray(1)
-    const metrics = arrayMetrics(array)
+    const metrics = derivedArrayMetrics(array)
     expect(metrics.groundCoverRatio).toBeCloseTo(
       array.geometry.collectorWidthM / array.geometry.pitchM,
       6,
@@ -93,12 +94,35 @@ describe('array metrics', () => {
       },
     })
     const { clearanceHeightM, collectorWidthM } = array.geometry
-    expect(arrayMetrics(array).maxHeightM).toBeCloseTo(
+    expect(derivedArrayMetrics(array).maxHeightM).toBeCloseTo(
       clearanceHeightM + (collectorWidthM / 2) * Math.sin((55 * Math.PI) / 180),
       9,
     )
     const { torqueTubes } = arrayLayout(array, 20, 90)
     for (const tube of torqueTubes) expect(tube[1]).toBeCloseTo(clearanceHeightM, 9)
+  })
+
+  it('keeps a tracker off the ground and its rows apart, and leaves a fixed row alone', () => {
+    const tracker = makeArray(1, {
+      geometry: { ...DEFAULT_ROW_GEOMETRY, clearanceHeightM: meters(0.5), pitchM: meters(1) },
+      tracker: {
+        mode: 'single-axis-horizontal-ns',
+        axisTiltDeg: degrees(0),
+        axisAzimuthDeg: degrees(180),
+        maxRotationDeg: degrees(55),
+        backtracking: true,
+      },
+    })
+    const { clearanceHeightM, collectorWidthM, pitchM } = tracker.geometry
+    // the axis stands as high as the lower edge dips at the stop, and the rows pass through flat
+    expect(clearanceHeightM).toBeCloseTo((collectorWidthM / 2) * Math.sin((55 * Math.PI) / 180), 9)
+    expect(pitchM).toBe(collectorWidthM)
+
+    const fixed = makeArray(1, {
+      geometry: { ...DEFAULT_ROW_GEOMETRY, clearanceHeightM: meters(0), pitchM: meters(1) },
+    })
+    expect(fixed.geometry.clearanceHeightM).toBe(0)
+    expect(fixed.geometry.pitchM).toBe(1)
   })
 
   it('lays out one module per row, column and stack level', () => {

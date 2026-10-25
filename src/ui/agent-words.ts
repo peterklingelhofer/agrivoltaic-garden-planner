@@ -251,7 +251,7 @@ const named = (catalog: readonly Crop[], ids: readonly string[]): string =>
  * to be apart from
  */
 const arrayClause = (array: ArrayAssumptions): string =>
-  `${formatLength(array.clearanceM, array.unit)} of headroom${array.rowCount > 1 ? `, rows ${formatLength(array.pitchM, array.unit)} apart` : ''}${array.tiltDeg === null ? '' : `, tilted ${array.tiltDeg.toFixed(0)} degrees`}`
+  `${formatLength(array.clearanceM, array.unit)} ${array.tiltDeg === null ? 'to the axis' : 'of headroom'}${array.rowCount > 1 ? `, rows ${formatLength(array.pitchM, array.unit)} apart` : ''}${array.tiltDeg === null ? '' : `, tilted ${array.tiltDeg.toFixed(0)} degrees`}`
 
 /**
  * The same question a second time running, without the paragraph that explains it.

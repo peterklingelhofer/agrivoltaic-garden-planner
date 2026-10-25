@@ -230,7 +230,7 @@ const ScenarioCard = ({
             />
             <Readout
               id={`onboarding-clearance-${archetype}`}
-              label="Room under the panels"
+              label={candidate.tracker.mode === 'fixed' ? 'Room under the panels' : 'Axis height'}
               value={formatLength(candidate.geometry.clearanceHeightM, unit)}
             />
           </div>

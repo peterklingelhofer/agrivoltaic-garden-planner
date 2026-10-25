@@ -56,7 +56,10 @@ export interface EdgeHeights {
  * about its torque tube, so for those the clearance height is the axis, and the two edges dip and
  * rise half the collector width about it
  */
-export const edgeHeightsM: (array: PvArray, tiltDeg: Degrees) => EdgeHeights = (array, tiltDeg) => {
+export const edgeHeightsM: (
+  array: Pick<PvArray, 'geometry' | 'tracker'>,
+  tiltDeg: Degrees,
+) => EdgeHeights = (array, tiltDeg) => {
   const { clearanceHeightM, collectorWidthM } = array.geometry
   const riseM = collectorWidthM * sinDeg(tiltDeg)
   return array.tracker.mode === 'fixed'
@@ -68,8 +71,17 @@ export const edgeHeightsM: (array: PvArray, tiltDeg: Degrees) => EdgeHeights = (
 }
 
 /** The lowest and the highest any part of a row ever reaches, posed at its steepest */
-export const edgeReachM: (array: PvArray) => EdgeHeights = (array) =>
+export const edgeReachM: (array: Pick<PvArray, 'geometry' | 'tracker'>) => EdgeHeights = (array) =>
   edgeHeightsM(array, steepestTiltDeg(array.tracker))
+
+/**
+ * The lowest the clearance height can be set before an edge goes underground. A fixed row stands
+ * on its lower edge, so that is 0, and a tracker's axis has to stand as high as its lower edge
+ * dips at the stop
+ */
+export const minClearanceHeightM: (array: Pick<PvArray, 'geometry' | 'tracker'>) => Meters = (
+  array,
+) => (array.geometry.clearanceHeightM - edgeReachM(array).lowerM) as Meters
 
 /** How many modules stack up the slope, implied by collector width over module height */
 export const moduleStackCount: (array: PvArray) => number = (array) =>

@@ -1,6 +1,6 @@
 import { useMemo, type ReactElement } from 'react'
+import { derivedArrayMetrics, minClearanceHeightM } from '../sim/geometry'
 import { makeArray } from '../state/defaults'
-import { arrayMetrics } from '../state/derive'
 import { useAppStore } from '../state/store'
 import type { PvArray, TrackingMode } from '../types/pv'
 import { degrees, fraction, meters, wattsPeak } from '../types/units'
@@ -120,7 +120,7 @@ export const ArrayPanel = (): ReactElement => {
     () => plot?.arrays.find((a) => a.id === selectedArrayId) ?? plot?.arrays[0] ?? null,
     [plot, selectedArrayId],
   )
-  const derived = useMemo(() => (array ? arrayMetrics(array) : null), [array])
+  const derived = useMemo(() => (array ? derivedArrayMetrics(array) : null), [array])
 
   const patchGeometry = (patch: Partial<PvArray['geometry']>): void => {
     if (!array) return
@@ -197,9 +197,11 @@ export const ArrayPanel = (): ReactElement => {
           <div className="row">
             <NumberField
               testId="control-array-clearance"
-              label="Headroom underneath"
+              label={array.tracker.mode === 'fixed' ? 'Headroom underneath' : 'Axis height'}
               unit={unit}
-              min={0}
+              // a number input steps from its min, so the floor is rounded up to the tenth the
+              // step moves in
+              min={showLimit(Math.ceil(minClearanceHeightM(array) * 10) / 10, unit)}
               step={lengthStep(unit, 0.1)}
               value={showLength(array.geometry.clearanceHeightM, unit, roundTenth)}
               onChange={(value) =>
@@ -340,7 +342,8 @@ export const ArrayPanel = (): ReactElement => {
             two are equal only when the panels lie flat. The trade names for the fields above, if
             you have a datasheet to copy from: a panel is a module, the width of one row is the
             collector width, row spacing center to center is the pitch, headroom is the clearance
-            height, and a direction in degrees clockwise from north is an azimuth.
+            height (on a tracker, the height of the axis the panels turn on), and a direction in
+            degrees clockwise from north is an azimuth.
           </InfoTip>
           <Action
             testId="action-array-remove"
