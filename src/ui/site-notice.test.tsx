@@ -11,7 +11,13 @@ import { getAppState, resetAppStore, useAppStore } from '../state/store'
 import { SiteNotice } from './SiteNotice'
 import { SitePanel } from './SitePanel'
 import { mount } from './testkit'
-import { capitalizeSentence, siteNoticeText, soilSampledNote, waitLabel } from './site-notice'
+import {
+  capitalizeSentence,
+  siteNoticeText,
+  soilPhNote,
+  soilSampledNote,
+  waitLabel,
+} from './site-notice'
 
 /**
  * The failure path had no door.
@@ -369,5 +375,13 @@ describe('the soil map sentence', () => {
   it('says how far away the nearest reading was taken, and nothing for the point itself', () => {
     expect(soilSampledNote({ sampledKm: 3 })).toContain('about 3 km away')
     expect(soilSampledNote({})).toBeNull()
+  })
+
+  it('speaks only for a map pH outside the limed band, and says what it does to the ranking', () => {
+    const note = soilPhNote({ phUnits: 4.8, sourceId: 'soilgrids' })
+    expect(note).toContain('pH 4.8')
+    expect(note).toContain('limed')
+    expect(soilPhNote({ phUnits: 6.5, sourceId: 'soilgrids' })).toBeNull()
+    expect(soilPhNote({ phUnits: 4.8, sourceId: 'user' })).toBeNull()
   })
 })

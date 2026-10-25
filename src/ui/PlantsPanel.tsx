@@ -13,7 +13,7 @@ import type { Bed } from '../types/garden'
 import type { BedId, CropId } from '../types/ids'
 import type { GrowingWindow } from '../types/light'
 import type { PolycultureSuggestion, PreferenceKind } from '../types/polyculture'
-import type { Site } from '../types/site'
+import { isMapSoil, type Site } from '../types/site'
 import { SelectedBedPlanting } from './BedPanel'
 import { Action, Toggle } from './controls'
 import { approxCount, bedName, cropName } from './format'
@@ -178,38 +178,35 @@ const useReplantOnLikes = (): readonly [ReplantStatus | null, () => void] => {
 
 /* ------------------------------------ the soil pH notice ---------------------------------- */
 
-/** A typed value is the grower's own word and the assumed loam already says it's a guess, so only
- * these two source ids are an actual reading off the soil map */
-const MAP_SOIL_SOURCES: ReadonlySet<Bed['soil']['sourceId']> = new Set(['soilgrids', 'ssurgo'])
-
-/** A map pH earns a notice once it rules out at least this share of what the climate allows */
+/** A map pH earns a notice once it counts against at least this share of what the climate allows */
 const SOIL_PH_NOTICE_SHARE = 0.25
 
 interface SoilPhImpact {
   readonly phUnits: number
-  readonly excludedCount: number
+  readonly penalizedCount: number
   readonly allowedCount: number
   /** How many beds this reading applies to, for "bed is / its" against "beds are / their" */
   readonly mapBedCount: number
 }
 
 /**
- * Whether the engine's own soil stage refuses this crop on pH, computed fresh against the bed.
- * The ranked outcome can't say: a crop the light gate has already dropped from a bed never
- * reaches this stage in the real ranking, and would go uncounted there
+ * Whether the engine's own soil stage holds this crop back on pH, computed fresh against the bed.
+ * It reads the soil-ph limiting factor, whether the stage passed the crop with a lower score or
+ * refused it. The ranked outcome can't say: a crop the light gate has already dropped from a bed
+ * never reaches this stage in the real ranking, and would go uncounted there
  */
-const failsOnSoilPh = (crop: Crop, bed: Bed, site: Site): boolean => {
+const penalizedOnSoilPh = (crop: Crop, bed: Bed, site: Site): boolean => {
   const outcome = soilWaterStage(crop, bed, site)
-  return !outcome.passed && outcome.limiting?.cause.kind === 'soil-ph'
+  return outcome.limiting?.cause.kind === 'soil-ph'
 }
 
 /**
- * What the map-read beds rule out of what the climate allows, or null when there's no map-read
- * bed, no ranking or catalog yet, or the reading stays under the share above.
+ * What the map-read beds' pH counts against, of what the climate allows, or null when there's no
+ * map-read bed, no ranking or catalog yet, or the reading stays under the share above.
  *
  * `resolveSite` stamps one map answer on every bed that hasn't been typed over, so the map-read
  * beds share one pH, and this counts crops for one of them: the figure is the same for every bed
- * that reading applies to, because `failsOnSoilPh` reads only the crop and the bed's own pH
+ * that reading applies to, because `penalizedOnSoilPh` reads only the crop and the bed's own pH
  */
 const soilPhImpactOf = (
   beds: readonly Bed[],
@@ -217,7 +214,7 @@ const soilPhImpactOf = (
   catalog: readonly Crop[],
   site: Site | null,
 ): SoilPhImpact | null => {
-  const mapBeds = beds.filter((bed) => MAP_SOIL_SOURCES.has(bed.soil.sourceId))
+  const mapBeds = beds.filter((bed) => isMapSoil(bed.soil))
   const bed = mapBeds[0]
   if (bed === undefined || site === null || sets.status !== 'ready') return null
   const ranked = sets.value.find((set) => set.bedId === bed.id)?.ranked ?? EMPTY_LIST
@@ -226,25 +223,25 @@ const soilPhImpactOf = (
     (item) =>
       !(item.outcome.verdict === 'excluded' && item.outcome.limiting.stage === 'climate-gate'),
   )
-  const excludedCount = allowed.filter((item) => {
+  const penalizedCount = allowed.filter((item) => {
     const crop = catalog.find((entry) => entry.id === item.cropId)
-    return crop !== undefined && failsOnSoilPh(crop, bed, site)
+    return crop !== undefined && penalizedOnSoilPh(crop, bed, site)
   }).length
-  if (allowed.length === 0 || excludedCount / allowed.length < SOIL_PH_NOTICE_SHARE) return null
+  if (allowed.length === 0 || penalizedCount / allowed.length < SOIL_PH_NOTICE_SHARE) return null
   return {
     phUnits: bed.soil.phUnits,
-    excludedCount,
+    penalizedCount,
     allowedCount: allowed.length,
     mapBedCount: mapBeds.length,
   }
 }
 
-/** One line for the step: the map-read beds' own pH, what it rules out of what the climate
- * allows, and where to change it */
+/** One line for the step: the map-read beds' own pH, how much of what the climate allows it
+ * counts against, and where to change it */
 const soilPhNoticeText = (impact: SoilPhImpact | null): string | null => {
   if (impact === null) return null
   const single = impact.mapBedCount === 1
-  return `pH ${impact.phUnits.toFixed(1)} from the soil map rules out ${String(impact.excludedCount)} of the ${String(impact.allowedCount)} plants that suit this climate. If your ${single ? 'bed is' : 'beds are'} filled with bought soil, set ${single ? 'its' : 'their'} pH under Change the beds on the ground step.`
+  return `pH ${impact.phUnits.toFixed(1)} from the soil map counts against ${String(impact.penalizedCount)} of the ${String(impact.allowedCount)} plants that suit this climate. If your ${single ? 'bed is' : 'beds are'} filled with bought soil, set ${single ? 'its' : 'their'} pH under Change the beds on the ground step.`
 }
 
 /** The one notice for the step: see `soilPhNoticeText` */

@@ -1074,6 +1074,12 @@ yet." Hardiness computed from the weather record reads "USDA-style, computed fro
 record". The place step goes further, saying whether the map held no reading near the point or was
 never reached.
 
+**A map pH lowers, a typed pH refuses.** A pH read off the soil map is the native soil's estimate on
+a 250 m pixel, often sampled kilometers away, and a vegetable bed is usually limed to 6 to 7. So a
+map pH never refuses a crop: it lowers the soil term through the same trapezoid, the crop carries a
+soil-ph limiting factor that says so, and the place step says what the map read. A pH the visitor
+typed keeps the refusals, the hard envelope (blueberry's) and the zero membership both.
+
 **Normals fall back and the cache is global.** Where the daily normals fail, they fall to NASA POWER
 daily data from the visitor's own browser, named as the source, so a successful hourly leg is kept.
 Open-Meteo's allowance is pooled across every visitor behind the Worker: about 600 weighted calls

@@ -118,6 +118,10 @@ export interface SoilProfile {
   readonly unreachable?: true
 }
 
+/** A reading off the soil map, as against a typed value or the assumed loam */
+export const isMapSoil = (soil: Pick<SoilProfile, 'sourceId'>): boolean =>
+  soil.sourceId === 'soilgrids' || soil.sourceId === 'ssurgo'
+
 export type SoilTexture =
   | 'sand'
   | 'loamy-sand'

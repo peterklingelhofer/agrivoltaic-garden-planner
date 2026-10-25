@@ -15,7 +15,7 @@ import { Picker, type PickerHandle } from './Picker'
 import { SeasonSummary } from './SeasonSummary'
 import { SiteNotice } from './SiteNotice'
 import { SiteVerdict } from './SiteVerdict'
-import { elevationUnknownWords, siteNoticeText, soilSampledNote } from './site-notice'
+import { elevationUnknownWords, siteNoticeText, soilPhNote, soilSampledNote } from './site-notice'
 import { timezoneWords } from './timezone-words'
 import { useAddressSearch } from './useAddressSearch'
 
@@ -286,6 +286,12 @@ export const SitePanel = (): ReactElement => {
       {resolved === null || soilSampledNote(resolved.soil) === null ? null : (
         <p className="notice notice-idle" data-testid="status-site-soil-sampled">
           {soilSampledNote(resolved.soil)}
+        </p>
+      )}
+      {/* the ranking's treatment of a map pH is said where the lookup happened */}
+      {resolved === null || soilPhNote(resolved.soil) === null ? null : (
+        <p className="notice notice-idle" data-testid="status-site-soil-ph">
+          {soilPhNote(resolved.soil)}
         </p>
       )}
       {/*

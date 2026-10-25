@@ -86,12 +86,12 @@ const seedTwoBeds = async (
 
 /**
  * The engine's own count for a bed: of the crops the climate allows there, how many
- * `soilWaterStage` itself refuses on pH. Called directly, the way the component counts, so a
- * test pins the rule the component follows
+ * `soilWaterStage` itself holds back on pH, passed with a lower score or refused. Called
+ * directly, the way the component counts, so a test pins the rule the component follows
  */
 const expectedSoilPhCount = (
   bedId: BedId,
-): { readonly allowed: number; readonly excluded: number } => {
+): { readonly allowed: number; readonly penalized: number } => {
   const state = getAppState()
   const ranked =
     state.sets.status === 'ready'
@@ -104,16 +104,16 @@ const expectedSoilPhCount = (
   const catalog = state.catalog.status === 'ready' ? state.catalog.value : []
   const site = state.site.status === 'ready' ? state.site.value : null
   const bed = state.plot?.beds.find((entry) => entry.id === bedId)
-  const excluded =
+  const penalized =
     site === null || bed === undefined
       ? 0
       : allowed.filter((item) => {
           const crop = catalog.find((entry) => entry.id === item.cropId)
           if (crop === undefined) return false
           const outcome = soilWaterStage(crop, bed, site)
-          return !outcome.passed && outcome.limiting?.cause.kind === 'soil-ph'
+          return outcome.limiting?.cause.kind === 'soil-ph'
         }).length
-  return { allowed: allowed.length, excluded }
+  return { allowed: allowed.length, penalized }
 }
 
 const catalog = () => {
@@ -297,15 +297,15 @@ describe('the soil pH notice', () => {
     const harness = await mount(<PlantsPanel />)
     const sunny = expectedSoilPhCount(BED_1)
     const shady = expectedSoilPhCount(BED_2)
-    // soilWaterStage reads only the crop and the bed's own pH, so the shadier bed refuses no fewer
+    // soilWaterStage reads only the crop and the bed's own pH, so the shadier bed holds back no fewer
     expect(shady).toEqual(sunny)
     // the fixture pH is chosen to clear the notice's own quarter share by a wide margin
-    expect(sunny.excluded / sunny.allowed).toBeGreaterThanOrEqual(0.25)
+    expect(sunny.penalized / sunny.allowed).toBeGreaterThanOrEqual(0.25)
     expect(harness.all('status-plants-soil-ph').length).toBe(1)
     const notice = harness.get('status-plants-soil-ph').textContent ?? ''
     expect(notice).toContain('pH 5.0')
     expect(notice).toContain(
-      `rules out ${String(sunny.excluded)} of the ${String(sunny.allowed)} plants`,
+      `counts against ${String(sunny.penalized)} of the ${String(sunny.allowed)} plants`,
     )
     expect(notice).toContain('Change the beds')
     await harness.unmount()
@@ -319,12 +319,12 @@ describe('the soil pH notice', () => {
     await harness.unmount()
   })
 
-  it('says nothing when a map pH rules out only a few', async () => {
+  it('says nothing when a map pH counts against only a few', async () => {
     const soil: SoilProfile = { ...bedFixture(BED_1).soil, sourceId: 'soilgrids' }
     await seedTwoBeds({ soil })
     const harness = await mount(<PlantsPanel />)
     const counts = expectedSoilPhCount(BED_1)
-    expect(counts.excluded / counts.allowed).toBeLessThan(0.25)
+    expect(counts.penalized / counts.allowed).toBeLessThan(0.25)
     expect(harness.find('status-plants-soil-ph')).toBeNull()
     await harness.unmount()
   })

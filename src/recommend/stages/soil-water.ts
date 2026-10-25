@@ -2,7 +2,7 @@ import { clamp } from '../../data/util'
 import type { Crop } from '../../types/crop'
 import type { Bed } from '../../types/garden'
 import type { LimitingFactor } from '../../types/recommend'
-import type { Site } from '../../types/site'
+import { isMapSoil, type Site } from '../../types/site'
 import type { Fraction } from '../../types/units'
 import { trapezoidMembership } from '../membership'
 
@@ -20,6 +20,10 @@ export interface SoilWaterOutcome {
 export const HARD_PH_ENVELOPE_WIDTH = 2
 
 export const MAX_DROUGHT_PENALTY = 0.35
+
+/** The band a vegetable bed is usually limed to, which is what a map pH is measured against in words */
+export const LIMED_BED_PH_MIN = 6
+export const LIMED_BED_PH_MAX = 7
 
 /** The single test for "this crop's pH is physiology, not a preference" */
 export const hardPhEnvelope = (crop: Crop): boolean =>
@@ -50,9 +54,29 @@ export const droughtPenaltyFor = (crop: Crop, bed: Bed, site: Site): Fraction =>
   return (sensitivity * drynessOf(site) * MAX_DROUGHT_PENALTY) as Fraction
 }
 
+/**
+ * A map pH is the native soil's estimate on a 250 m pixel, and a vegetable bed is usually limed.
+ * So the map can lower a crop's standing through the same trapezoid, and a typed value alone can
+ * rule it out
+ */
 export const soilWaterStage = (crop: Crop, bed: Bed, site: Site): SoilWaterOutcome => {
   const phFit = trapezoidMembership(bed.soil.phUnits, crop.envelope.soilPh)
   const droughtPenalty = droughtPenaltyFor(crop, bed, site)
+
+  if (isMapSoil(bed.soil) && (hardPhConstraint(crop, bed) || phFit === 0)) {
+    const { absoluteMin, absoluteMax } = crop.envelope.soilPh
+    return {
+      passed: true,
+      fit: phFit,
+      droughtPenalty,
+      limiting: {
+        stage: 'soil-water',
+        cause: { kind: 'soil-ph' },
+        membership: phFit,
+        explanation: `The soil map reads pH ${bed.soil.phUnits.toFixed(1)} here, outside the ${absoluteMin.toFixed(1)} to ${absoluteMax.toFixed(1)} this crop tolerates. Vegetable beds are usually limed to ${String(LIMED_BED_PH_MIN)} to ${String(LIMED_BED_PH_MAX)}, so this lowers the score and doesn't rule the crop out`,
+      },
+    }
+  }
 
   if (hardPhConstraint(crop, bed)) {
     return {
