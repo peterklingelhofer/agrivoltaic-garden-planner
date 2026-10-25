@@ -25,6 +25,9 @@ import {
  * the fold, without pressing anything
  */
 
+/** A near-neutral pH typed into the bed, so it's the grower's word and no longer the map's */
+const NEUTRAL_PH = 6.5
+
 const anchoredOnBlueberry = async (page: Page): Promise<void> => {
   await rankedBed(page, { soil: acidSoilBody(ACID_PH) })
   await setBedSoilPh(page, ACID_PH)
@@ -215,8 +218,10 @@ test.describe('polyculture suggestions', () => {
     page,
   }) => {
     await rankedBed(page)
-    // the default bed is near-neutral, and blueberry's pH envelope is physiology, so the ranking
-    // rules it out before any preference could ask for it
+    // a pH the grower typed is the bed's own, where a map reading only counts against a crop, and
+    // blueberry's envelope is physiology, so a typed near-neutral bed rules it out before any
+    // preference could ask for it
+    await setBedSoilPh(page, NEUTRAL_PH)
     await expect(page.getByTestId('control-plants-like-blueberry')).toHaveCount(0)
     await openFold(page, 'details-plants-more')
     await expect(page.getByTestId('item-polyculture-preference-blueberry')).toHaveCount(0)
