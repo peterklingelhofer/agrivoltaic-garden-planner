@@ -1,20 +1,20 @@
 {
   "version": 5,
-  "savedAtUtcMillis": 1791735624455,
+  "savedAtUtcMillis": 1792935010352,
   "sceneTimeUtcMillis": 1723491000000,
   "example": {
     "label": "Example agrivoltaic garden, Bergen, Norway",
-    "generatedAtUtc": "2026-10-11T16:20:24.455Z",
+    "generatedAtUtc": "2026-10-25T13:30:10.352Z",
     "generator": "scripts/bake-example-garden.mjs",
     "siteLabel": "Bergen, Norway",
     "weather": "open-meteo typical meteorological year, 8760 hours",
     "backend": "tregenza-mf1",
     "targetCellSizeM": 0.4,
-    "bakeElapsedMs": 1804,
-    "quantizationErrorMolM2Day": 0.003299713134765625,
+    "bakeElapsedMs": 1760,
+    "quantizationErrorMolM2Day": 0.0034637451171875,
     "notes": [
       "70 x 90 cells at 0.4 m, baked on the CPU reference backend",
-      "1117 binned sun directions, tregenza-mf1 sky, 2 sub-steps per hour",
+      "1118 binned sun directions, tregenza-mf1 sky, 2 sub-steps per hour",
       "9 plantings, each ranked against this bake and derived through derivePlanting"
     ]
   },

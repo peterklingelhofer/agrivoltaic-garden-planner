@@ -1,17 +1,17 @@
 {
   "version": 5,
-  "savedAtUtcMillis": 1791735618741,
+  "savedAtUtcMillis": 1792935007040,
   "sceneTimeUtcMillis": 1723491000000,
   "example": {
     "label": "Example agrivoltaic garden, Amherst, Massachusetts",
-    "generatedAtUtc": "2026-10-11T16:20:18.741Z",
+    "generatedAtUtc": "2026-10-25T13:30:07.040Z",
     "generator": "scripts/bake-example-garden.mjs",
     "siteLabel": "Amherst, Massachusetts",
     "weather": "open-meteo typical meteorological year, 8760 hours",
     "backend": "tregenza-mf1",
     "targetCellSizeM": 0.4,
-    "bakeElapsedMs": 2037,
-    "quantizationErrorMolM2Day": 0.004512786865234375,
+    "bakeElapsedMs": 2060,
+    "quantizationErrorMolM2Day": 0.004428863525390625,
     "notes": [
       "70 x 90 cells at 0.4 m, baked on the CPU reference backend",
       "1255 binned sun directions, tregenza-mf1 sky, 2 sub-steps per hour",
@@ -315,40 +315,40 @@
           "waterHarvesting": [],
           "plantings": [
             {
-              "id": "bed-4:brussels-sprouts:132",
+              "id": "bed-4:tomatillo:88",
               "bedId": "bed-4",
-              "cropId": "brussels-sprouts",
+              "cropId": "tomatillo",
               "cultivarId": null,
               "role": "target-crop",
               "tier": "shrub",
-              "sowDay": 132,
-              "harvestStartDay": 277,
-              "harvestEndDay": 291,
-              "plantCount": 10
+              "sowDay": 88,
+              "harvestStartDay": 249,
+              "harvestEndDay": 305,
+              "plantCount": 3
             },
             {
-              "id": "bed-4:clover-crimson:93",
+              "id": "bed-4:chervil:93",
               "bedId": "bed-4",
-              "cropId": "clover-crimson",
+              "cropId": "chervil",
               "cultivarId": null,
-              "role": "cover",
+              "role": "target-crop",
               "tier": "herb-ground",
               "sowDay": 93,
-              "harvestStartDay": 183,
-              "harvestEndDay": 197,
-              "plantCount": 527
+              "harvestStartDay": 143,
+              "harvestEndDay": 157,
+              "plantCount": 96
             },
             {
-              "id": "bed-4:teff:130",
+              "id": "bed-4:aronia:91",
               "bedId": "bed-4",
-              "cropId": "teff",
+              "cropId": "aronia",
               "cultivarId": null,
               "role": "target-crop",
               "tier": "mid-canopy",
-              "sowDay": 130,
-              "harvestStartDay": 263,
-              "harvestEndDay": 277,
-              "plantCount": 150
+              "sowDay": 91,
+              "harvestStartDay": 245,
+              "harvestEndDay": 266,
+              "plantCount": 1
             }
           ]
         }
