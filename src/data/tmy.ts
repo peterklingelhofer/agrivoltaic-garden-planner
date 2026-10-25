@@ -382,8 +382,7 @@ const stackByYear = (
     cursor.set(year, position + 1)
   }
   for (const [year, count] of cursor) {
-    const expected = isLeap(year) ? HOURS_PER_TMY : HOURS_PER_TMY
-    if (count < expected * 0.95) stacked.delete(year)
+    if (count < HOURS_PER_TMY * 0.95) stacked.delete(year)
   }
   return stacked
 }
@@ -746,6 +745,8 @@ interface PackOptions {
   readonly windDirectionPresent: boolean
 }
 
+const MARCH_FIRST_HOUR = at(MONTH_START_DAY, 2) * HOURS_PER_DAY
+
 const pack = (
   source: WeatherSourceId,
   columns: Columns,
@@ -754,9 +755,12 @@ const pack = (
   options: PackOptions,
 ): TmySeries => {
   const startUtcMillis = Date.UTC(options.baseYear, 0, 1) as EpochMillis
+  // the series has no February 29, so in a leap year the hours from March 1 on land a day later
+  const leapDayHours = isLeap(options.baseYear) ? HOURS_PER_DAY : 0
   const utcMillis = new Float64Array(HOURS_PER_TMY)
   for (let hour = 0; hour < HOURS_PER_TMY; hour += 1) {
-    utcMillis[hour] = startUtcMillis + hour * 3_600_000
+    const calendarHour = hour < MARCH_FIRST_HOUR ? hour : hour + leapDayHours
+    utcMillis[hour] = startUtcMillis + calendarHour * 3_600_000
   }
   const decomposition: DecompositionModel = componentsPresent(columns) ? 'passthrough' : 'erbs'
   return {

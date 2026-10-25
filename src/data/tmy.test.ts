@@ -90,6 +90,25 @@ describe('the weather record keeps the years the typical one was assembled from'
     }
   })
 
+  it('stamps the 8,760 hours on a calendar without February 29, a leap year included', () => {
+    // 2024 is a leap year, and it's both the typical year's base year and a measured year
+    const monthHours = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31].map((days) => days * 24)
+    const hoursPerMonth = (utcMillis: Float64Array): number[] => {
+      const months = Array.from(utcMillis, (millis) => new Date(millis).getUTCMonth())
+      return Array.from({ length: 12 }, (_, month) => months.filter((m) => m === month).length)
+    }
+    const series = [
+      { baseYear: TMY_END_YEAR, weather: record.typical },
+      ...record.years.map(({ year, weather }) => ({ baseYear: year, weather })),
+    ]
+    for (const { baseYear, weather } of series) {
+      expect(hoursPerMonth(weather.utcMillis)).toEqual(monthHours)
+      // 1,416 hours is January and a 28-day February
+      expect(weather.utcMillis[1_416]).toBe(Date.UTC(baseYear, 2, 1))
+      expect(weather.utcMillis[HOURS_PER_TMY - 1]).toBe(Date.UTC(baseYear, 11, 31, 23))
+    }
+  })
+
   it('still assembles the typical year, labeled as one, from those same years', () => {
     expect(record.typical.provenance.isTypicalMeteorologicalYear).toBe(true)
     expect(record.typical.startUtcMillis).toBe(Date.UTC(TMY_END_YEAR, 0, 1))
