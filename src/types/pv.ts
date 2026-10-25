@@ -70,6 +70,10 @@ export type TrackerConfig =
   | DualAxisTracking
   | AgroOptimizedTracking
 
+/** The two modes that turn about one axis, the only ones that can backtrack */
+export const isSingleAxisTracker = (tracker: TrackerConfig): tracker is SingleAxisTracking =>
+  tracker.mode === 'single-axis-horizontal-ns' || tracker.mode === 'single-axis-tilted'
+
 export interface DerivedArrayMetrics {
   readonly groundCoverRatio: Fraction
   readonly projectedGroundCoverRatio: Fraction

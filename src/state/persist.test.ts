@@ -6,7 +6,7 @@ import { banded, interval } from '../types/band'
 import type { Bed, GardenPlot, Planting } from '../types/garden'
 import { bedId, cropId, plantingId } from '../types/ids'
 import { SCHEMA_VERSION } from '../types/persist'
-import type { PvArray } from '../types/pv'
+import type { PvArray, SingleAxisTracking } from '../types/pv'
 import { dayOfYear, degrees, epochMillis, fraction, meters, type Fraction } from '../types/units'
 import { makeArray, makeBed, makeHouse, makePlot, makeTree } from './defaults'
 import { DEFAULT_WIZARD_ANSWERS } from './onboarding'
@@ -273,6 +273,29 @@ describe('what is persisted', () => {
       9,
     )
     expect(geometry?.pitchM).toBe(base.geometry.collectorWidthM)
+  })
+
+  it('reads a tracker saved before the backtracking flag as backtracking, and keeps an off one off', () => {
+    const design = realisticDesign()
+    const plot = design.plot as GardenPlot
+    const tracker: SingleAxisTracking = {
+      mode: 'single-axis-horizontal-ns',
+      axisTiltDeg: degrees(0),
+      axisAzimuthDeg: degrees(180),
+      maxRotationDeg: degrees(55),
+      backtracking: true,
+    }
+    // what an older build wrote: the same tracker with no backtracking key at all
+    const { backtracking: _flag, ...older } = tracker
+    const arrays = [
+      makeArray(1, { tracker: older as PvArray['tracker'] }),
+      makeArray(2, { tracker: { ...tracker, backtracking: false } }),
+    ]
+    const back = roundTrip({ ...design, plot: { ...plot, arrays } })
+    const flags = (back.plot?.arrays ?? []).map((array) =>
+      array.tracker.mode === 'single-axis-horizontal-ns' ? array.tracker.backtracking : null,
+    )
+    expect(flags).toEqual([true, false])
   })
 
   it('leaves brands intact, because a brand is a phantom type with no runtime key', () => {

@@ -1,11 +1,12 @@
 import type { Extent2D, GridSpec, Polygon2D, Ring2D, Vec3M } from '../types/geo'
 import { panelId } from '../types/ids'
-import type {
-  DerivedArrayMetrics,
-  PanelPolygon,
-  PanelSnapshot,
-  PvArray,
-  TrackerConfig,
+import {
+  type DerivedArrayMetrics,
+  isSingleAxisTracker,
+  type PanelPolygon,
+  type PanelSnapshot,
+  type PvArray,
+  type TrackerConfig,
 } from '../types/pv'
 import type {
   Degrees,
@@ -126,9 +127,9 @@ export const surfaceOrientation: (
 ) => SurfaceOrientation = (array, solarElevationDeg, solarAzimuthDeg) => {
   const { geometry, tracker } = array
   const rotationDeg = trackerRotationDeg(array, solarElevationDeg, solarAzimuthDeg)
-  const isSingleAxis =
-    tracker.mode === 'single-axis-horizontal-ns' || tracker.mode === 'single-axis-tilted'
-  const axisAzimuthDeg = isSingleAxis ? tracker.axisAzimuthDeg : geometry.rowAzimuthDeg
+  const axisAzimuthDeg = isSingleAxisTracker(tracker)
+    ? tracker.axisAzimuthDeg
+    : geometry.rowAzimuthDeg
   return {
     rotationDeg,
     tiltDeg: Math.abs(rotationDeg) as Degrees,

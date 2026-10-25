@@ -245,7 +245,7 @@ const named = (catalog: readonly Crop[], ids: readonly string[]): string =>
   list(ids.map((id) => cropName(catalog, id as Parameters<typeof cropName>[1])))
 
 /**
- * The array's headroom, row spacing and tilt, in the unit the design is kept in.
+ * The array's headroom or axis height, row spacing and tilt, in the unit the design is kept in.
  *
  * One row has no spacing to give, so the pitch is said only where a second row has something
  * to be apart from

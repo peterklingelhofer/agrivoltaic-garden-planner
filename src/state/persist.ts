@@ -10,7 +10,7 @@ import {
   type StorageOutcome,
   type StorageStatus,
 } from '../types/persist'
-import type { PvArray } from '../types/pv'
+import { isSingleAxisTracker, type PvArray } from '../types/pv'
 import type { SeasonEconomy, SimulationState } from '../types/simulation'
 import { epochMillis, type EpochMillis } from '../types/units'
 import {
@@ -430,7 +430,18 @@ const normalizePlot = (plot: GardenPlot): GardenPlot => ({
     areaM2: polygonAreaM2(bed.footprint),
     soil: { ...bed.soil, sourceId: bed.soil.sourceId ?? 'default' },
   })),
-  arrays: plot.arrays.map((array: PvArray) => withDerived(array)),
+  // a design saved before the backtracking flag existed carries none, and every tracker the app
+  // writes backtracks, so a missing flag reads as on
+  arrays: plot.arrays.map((array: PvArray) =>
+    withDerived(
+      isSingleAxisTracker(array.tracker)
+        ? {
+            ...array,
+            tracker: { ...array.tracker, backtracking: array.tracker.backtracking ?? true },
+          }
+        : array,
+    ),
+  ),
 })
 
 const isSeasonRecord = (value: unknown): boolean =>

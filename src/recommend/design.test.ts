@@ -26,6 +26,7 @@ import {
   bedsFitSentence,
   candidatesFor,
   type DesignDependencies,
+  fitToMaxHeight,
   groundLightPlan,
   lightAdequateBedCount,
   shadeBudgetFor,
@@ -239,6 +240,36 @@ describe('the height limit is a hard limit', () => {
     if (candidate.tracker.mode !== 'fixed') throw new Error('fixed')
     expect(candidate.tracker.tiltDeg).toBe(90)
     expect(envelopeHeightM(candidate)).toBeLessThanOrEqual(2.4 + 1e-9)
+  })
+
+  it('calls the clearance the axis on a tracker and the headroom on a fixed row', () => {
+    const plan = { clearanceM: 3.4, tiltDeg: 55, stackCount: 2 }
+    const tracker = {
+      unitM: 1.762,
+      riseFactor: 0.5,
+      tiltAdjustable: false,
+      minTiltDeg: 10,
+      clearanceNoun: 'the axis',
+    }
+    // with a 30 degree tilt floor the fixed row can't flatten enough, so both reach the clearance
+    const fixed = {
+      unitM: 1.762,
+      riseFactor: 1,
+      tiltAdjustable: true,
+      minTiltDeg: 30,
+      clearanceNoun: 'the headroom under the panels',
+    }
+    const said = (model: Parameters<typeof fitToMaxHeight>[1], limit: number): string =>
+      fitToMaxHeight(plan, model, limit).compromises.join('. ')
+
+    expect(said(tracker, 4)).toContain('lowered the axis to')
+    expect(said(tracker, 2.5)).toContain('forced the axis down to')
+    expect(said(fixed, 4)).toContain('lowered the headroom under the panels to')
+    expect(said(fixed, 2.5)).toContain('forced the headroom under the panels down to')
+    for (const limit of [4, 2.5]) {
+      expect(said(tracker, limit)).not.toContain('headroom')
+      expect(said(fixed, limit)).not.toContain('the axis')
+    }
   })
 })
 

@@ -1,6 +1,7 @@
+import { act } from 'react'
 import { beforeEach, describe, expect, it } from 'bun:test'
 import type { OverlayChannel } from '../state/slices'
-import { resetAppStore, useAppStore } from '../state/store'
+import { getAppState, resetAppStore, useAppStore } from '../state/store'
 import { ArrayPanel } from './ArrayPanel'
 import { GroundPanel } from './BedPanel'
 import { OverlayPanel } from './OverlayPanel'
@@ -115,6 +116,43 @@ describe('the editor speaks the same language as the questions that led into it'
     for (const term of ['module', 'collector width', 'pitch', 'clearance height', 'azimuth']) {
       expect(tip, term).toContain(term)
     }
+    await harness.unmount()
+  })
+
+  it('asks for backtracking in words, on the single-axis trackers only', async () => {
+    const harness = await mount(<ArrayPanel />)
+    const choose = async (mode: string): Promise<void> => {
+      const select = harness.get('control-array-tracking') as HTMLSelectElement
+      const setter = Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype, 'value')?.set
+      setter?.call(select, mode)
+      await act(async () => {
+        select.dispatchEvent(new Event('change', { bubbles: true }))
+      })
+    }
+    const isOn = (): boolean =>
+      (harness.get('control-array-backtracking') as HTMLInputElement).checked
+
+    // the starting array is a fixed tilt, which has no axis to turn back on
+    expect(harness.find('control-array-backtracking')).toBeNull()
+    await choose('single-axis-horizontal-ns')
+    expect(labelsOf(harness)).toContain("Turn back at low sun so the rows don't shade each other")
+    expect(isOn()).toBe(true)
+    await harness.click('control-array-backtracking')
+    const tracker = getAppState().plot?.arrays[0]?.tracker
+    if (tracker?.mode !== 'single-axis-horizontal-ns') throw new Error('single-axis-horizontal-ns')
+    expect(tracker.backtracking).toBe(false)
+
+    // the tilted axis has the switch too, and the other two trackers have nothing to turn back
+    await choose('single-axis-tilted')
+    expect(isOn()).toBe(true)
+    for (const mode of ['dual-axis', 'agro-optimized']) {
+      await choose(mode)
+      expect(harness.find('control-array-backtracking'), mode).toBeNull()
+    }
+
+    // the trade term stays in the tip, for whoever came with a datasheet
+    await harness.click('info-array-gcr')
+    expect(harness.get('info-array-gcr-bubble').textContent).toContain('backtracking')
     await harness.unmount()
   })
 

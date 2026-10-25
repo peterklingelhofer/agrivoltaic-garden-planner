@@ -2,9 +2,9 @@ import { useMemo, type ReactElement } from 'react'
 import { derivedArrayMetrics, minClearanceHeightM } from '../sim/geometry'
 import { makeArray } from '../state/defaults'
 import { useAppStore } from '../state/store'
-import type { PvArray, TrackingMode } from '../types/pv'
+import { isSingleAxisTracker, type PvArray, type TrackingMode } from '../types/pv'
 import { degrees, fraction, meters, wattsPeak } from '../types/units'
-import { Action, NumberField, SelectField, SliderField } from './controls'
+import { Action, NumberField, SelectField, SliderField, Toggle } from './controls'
 import { formatDegrees, formatLength } from './format'
 import { InfoTip } from './InfoTip'
 import { lengthStep, showLength, showLimit, toMeters, useLengthUnit } from './length-units'
@@ -93,17 +93,29 @@ const TrackerFields = ({
     )
   }
   return (
-    <NumberField
-      testId="control-array-max-rotation"
-      label="How far the panels turn"
-      unit="deg"
-      min={0}
-      max={90}
-      value={roundTenth(tracker.maxRotationDeg)}
-      onChange={(value) =>
-        onChange({ ...array, tracker: { ...tracker, maxRotationDeg: degrees(value) } })
-      }
-    />
+    <>
+      <NumberField
+        testId="control-array-max-rotation"
+        label="How far the panels turn"
+        unit="deg"
+        min={0}
+        max={90}
+        value={roundTenth(tracker.maxRotationDeg)}
+        onChange={(value) =>
+          onChange({ ...array, tracker: { ...tracker, maxRotationDeg: degrees(value) } })
+        }
+      />
+      {isSingleAxisTracker(tracker) ? (
+        <Toggle
+          testId="control-array-backtracking"
+          label="Turn back at low sun so the rows don't shade each other"
+          checked={tracker.backtracking}
+          onChange={(checked) =>
+            onChange({ ...array, tracker: { ...tracker, backtracking: checked } })
+          }
+        />
+      ) : null}
+    </>
   )
 }
 
@@ -342,8 +354,8 @@ export const ArrayPanel = (): ReactElement => {
             two are equal only when the panels lie flat. The trade names for the fields above, if
             you have a datasheet to copy from: a panel is a module, the width of one row is the
             collector width, row spacing center to center is the pitch, headroom is the clearance
-            height (on a tracker, the height of the axis the panels turn on), and a direction in
-            degrees clockwise from north is an azimuth.
+            height (on a tracker, the height of the axis the panels turn on), turning back at low
+            sun is backtracking, and a direction in degrees clockwise from north is an azimuth.
           </InfoTip>
           <Action
             testId="action-array-remove"

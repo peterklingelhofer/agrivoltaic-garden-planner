@@ -178,6 +178,7 @@ visibility from space-invariant weather.
   gives `sin psi`, which matches pvlib's `cos(tracker rotation)` because rotation = 90 - psi. A `cos
   psi` form fails both checks. A single-axis tracker set to backtrack turns back from its ideal
   rotation by that amount before its stop applies, the order pvlib's `tracking.singleaxis` uses.
+  The editor's switch for it is on by default.
 - Tracking arrays bake at their peak-elevation pose. The daylight-coefficient factorization requires
   time-invariant geometry, so fixed tilt is exact, tracking is an approximation, and the UI discloses
   it.

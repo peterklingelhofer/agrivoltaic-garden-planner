@@ -295,6 +295,11 @@ interface HeightModel {
   readonly riseFactor: number
   readonly tiltAdjustable: boolean
   readonly minTiltDeg: number
+  /**
+   * The words the compromise sentences use for the clearance: "the headroom under the panels"
+   * for a fixed or vertical row and "the axis" for a tracker
+   */
+  readonly clearanceNoun: string
 }
 
 const envelopeHeightM = (plan: HeightPlan, model: HeightModel): number =>
@@ -360,8 +365,8 @@ export const fitToMaxHeight = (
     ].filter((entry): entry is string => entry !== null)
     compromises.push(
       below.length === 0
-        ? `Your ${limit} m height limit lowered the headroom under the panels to ${clearanceM.toFixed(2)} m`
-        : `Your ${limit} m height limit forced the headroom under the panels down to ${clearanceM.toFixed(2)} m, below ${below.join(' and ')}. Working under it will be cramped, and in Massachusetts the layout would need an exception`,
+        ? `Your ${limit} m height limit lowered ${model.clearanceNoun} to ${clearanceM.toFixed(2)} m`
+        : `Your ${limit} m height limit forced ${model.clearanceNoun} down to ${clearanceM.toFixed(2)} m, below ${below.join(' and ')}. Working under it will be cramped, and in Massachusetts the layout would need an exception`,
     )
     plan = { ...plan, clearanceM }
   }
@@ -492,6 +497,7 @@ const tiltedCandidate = (
     riseFactor: tracking ? 0.5 : 1,
     tiltAdjustable: !tracking,
     minTiltDeg: REFERENCE_MIN_TILT_DEG,
+    clearanceNoun: tracking ? 'the axis' : 'the headroom under the panels',
   }
   const { plan, compromises } = fitToMaxHeight(
     {
@@ -546,7 +552,7 @@ const tiltedCandidate = (
   }
   const rationale = [
     tracking
-      ? `Rows track the sun about a north-south axis, so the panels follow it from morning to evening. Tracking is only offered here because the site is at ${latitude.toFixed(0)} degrees of latitude and the design can carry the 10 ft of headroom the Massachusetts fast-track rules ask of a tracker${measured === null ? '' : ", and it's only taken because it out-generated every fixed tilt on this plot"}`
+      ? `Rows track the sun about a north-south axis, so the panels follow it from morning to evening. Tracking is only offered here because the site is at ${latitude.toFixed(0)} degrees of latitude and the design can carry the 10 ft the Massachusetts fast-track rules ask of a tracker's axis${measured === null ? '' : ", and it's only taken because it out-generated every fixed tilt on this plot"}`
       : archetype === 'food-first' && measured !== null
         ? `Panels are fixed at ${finalTiltDeg.toFixed(0)} degrees, the angle between ${String(REFERENCE_MIN_TILT_DEG)} and ${String(REFERENCE_MAX_TILT_DEG)} that puts the least panel over this plot as seen from overhead: a steeper row covers less ground, a flatter row sits further from the next so fewer rows fit, and this is where the two come out lowest for a plot this size. The light figure beside this design is measured from that arrangement`
         : measured !== null
@@ -575,6 +581,7 @@ const verticalCandidate = (answers: OnboardingAnswers): ArrayCandidate => {
     riseFactor: 1,
     tiltAdjustable: false,
     minTiltDeg: 90,
+    clearanceNoun: 'the headroom under the panels',
   }
   const { plan, compromises } = fitToMaxHeight(
     { clearanceM: VERTICAL_CLEARANCE_M, tiltDeg: 90, stackCount: VERTICAL_MODULES_UP },
