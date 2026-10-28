@@ -9,12 +9,14 @@ Apache-2.0, and its own documents and data are under CC BY 4.0.
 
 **[Live app](https://garden.peterklingelhofer.com)** · [Modeling documents](https://garden.peterklingelhofer.com/docs/)
 
-[![Ten planted beds under three rows of panels in Amherst, Massachusetts: the whole-year light map on the ground beside the light step, which lists each bed's share of open sky and its daily light integral](docs/readme-screenshot.webp)](https://garden.peterklingelhofer.com)
+[![Twelve seasons of a garden under fixed panel rows and single-axis trackers in Amherst, Massachusetts: the fruit bushes along the front grow from first-year plants to full size while the beds behind change crops every season](docs/readme-seasons.webp)](https://garden.peterklingelhofer.com)
 
 You give it a place and a rough rectangle. It looks up that site's sun, weather and soil, simulates
 how much light reaches the ground once panels are over it, and computes which crops still suit each
 bed and what to plant when. The tool shows a trade-off: every panel that generates electricity takes
 light off the ground, and the app measures what that costs.
+
+![A garden under fixed panel rows and single-axis trackers in Amherst, Massachusetts, with the app's daily light integral map on the ground for each month: the shade behind each row stretches in winter and shrinks in summer, and the beds are full by July and bare again by December](docs/readme-light-map.gif)
 
 It works at **garden scale**: beds a person can reach across, paths a wheelbarrow fits down,
 arrays of a few rows. Farm planning is out of scope: it models no tractor or implement access.
