@@ -12,7 +12,7 @@ import { CSM } from 'three/examples/jsm/csm/CSM.js'
 import { attempt } from '../state/safe'
 import { sceneCloud, scenePlot, useAppStore } from '../state/store'
 import { sunAt } from '../state/sun'
-import { cascadeShadowRadius, keyLight, penumbraWidthM } from './lighting'
+import { cascadeShadowRadius, keyLight, keyUnderCloud, penumbraWidthM } from './lighting'
 import { occluderHeightM } from './sceneMath'
 import type { RenderQuality } from './quality'
 import type { EpochMillis } from '../types/units'
@@ -54,12 +54,13 @@ export const SunRig = ({
   const keyRef = useRef<DirectionalLight | null>(null)
 
   const sun = useMemo(() => sunAt(location, atUtcMillis), [location, atUtcMillis])
-  // the beam under the hour's measured cloud: the sky dome carries the diffuse look of it, and
-  // the key light carries the direct share it took, which is the larger of the two
+  // the beam under the fortnight's measured cloud: the sky dome carries the diffuse look of it, and
+  // the key light carries the direct share it took, which is the larger of the two. A fully
+  // overcast fortnight takes half the beam (`keyUnderCloud`)
   const cloud = useAppStore(sceneCloud)
   const { color, intensity } = useMemo(() => {
     const clear = keyLight(sun.elevationDeg)
-    return { color: clear.color, intensity: clear.intensity * (1 - cloud) }
+    return { color: clear.color, intensity: keyUnderCloud(clear.intensity, cloud) }
   }, [sun.elevationDeg, cloud])
 
   const penumbraM = penumbraWidthM(occluderHeightM(plot), sun.elevationDeg)

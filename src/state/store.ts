@@ -11,6 +11,7 @@ import { fetchRetailPrice, usStateOf } from '../data/retail-price'
 import { resolveSite, SITE_PARTS } from '../data/site'
 import { UpstreamError } from '../data/http'
 import { loadTekRules } from '../data/tek'
+import { extraterrestrialRadiationMjM2Day } from '../data/water'
 import { DEFAULT_COMPATIBILITY_WEIGHTS } from '../recommend/compatibility'
 import { zoneReason } from '../recommend/layout'
 import {
@@ -37,9 +38,8 @@ import { FINAL_OPTIONS, runSimulation, type SimulationOptions } from '../sim/pip
 import { chainOptionsFor } from '../sim/pv/chain'
 import { NO_ARRAY_ENERGY_RATIO } from '../sim/pv/ler'
 import { pvEnergyReport } from '../sim/pv/report'
-import { clearnessIndex, cloudCover } from '../sim/clearness'
+import { CLOUD_WINDOW_HALF_DAYS, cloudOverDays } from '../sim/clearness'
 import { groundSnowCover } from '../sim/snow'
-import { extraterrestrialNormal, observerFor, spaPosition } from '../sim/solar'
 import { utcOffsetMinutesAt } from '../sim/timezone'
 import { createSimClient, type SimClient } from '../sim/worker/client'
 import type { CompanionRule, PartitionedCompanionRules } from '../types/companion'
@@ -2679,48 +2679,60 @@ const seasonYearShown = (state: AppState): SeasonYear | null => {
 }
 
 /**
- * The hour of weather under the clock, and the sun it had, on the seasons step only.
+ * The site and weather the scene draws recorded weather from, on the seasons step only.
  *
  * The weather is the year the season ran on where that was a measured year, and the typical
- * year otherwise, so a season played on 2016 is drawn under 2016's own hours: its cloud, read as
- * the measured sun against a clear one (`src/sim/clearness.ts`), and its rain. Off the seasons
- * step both are zero, because the planner's picture makes no claim about any hour's weather
- * and its baselines are held to that. Null where there's no site, no weather, or no sun
+ * year otherwise, so a season played on 2016 is drawn under 2016's own weather. Null off the
+ * seasons step, because the planner's picture makes no claim about any hour's weather and its
+ * baselines are held to that. Null too where there's no site or no weather
+ */
+const sceneRecord = (state: AppState): Pick<SeasonYear, 'site' | 'weather'> | null => {
+  if (state.sidebarStep !== 'seasons') return null
+  if (state.site.status !== 'ready' || state.weather.status !== 'ready') return null
+  return { site: state.site.value, weather: seasonYearShown(state)?.weather ?? state.weather.value }
+}
+
+/**
+ * The hour of weather under the clock, on the seasons step only: the rain that fell in it and its
+ * air temperature. The cloud has its own reader, `sceneCloud`, which looks at the days around the
+ * clock. Null where there's no record to draw from (`sceneRecord`)
  */
 const sceneHour = (
   state: AppState,
-): {
-  readonly ghiWM2: number
-  readonly rainMm: number
-  readonly airTempC: number
-  readonly zenithDeg: number
-  readonly i0: number
-} | null => {
-  if (state.sidebarStep !== 'seasons') return null
-  if (state.site.status !== 'ready' || state.weather.status !== 'ready') return null
-  const weather = seasonYearShown(state)?.weather ?? state.weather.value
-  // read outside the closure below: narrowing doesn't survive into one
-  const site = state.site.value
+): { readonly rainMm: number; readonly airTempC: number } | null => {
+  const record = sceneRecord(state)
+  if (record === null) return null
+  const { weather } = record
   const date = new Date(state.timeUtcMillis)
   const index = Math.min(
     weather.ghiWM2.length - 1,
     (dayOfYearUtc(state.timeUtcMillis) - 1) * 24 + date.getUTCHours(),
   )
-  const position = attempt(() => spaPosition(state.timeUtcMillis, observerFor(site)))
-  if (!position.ok) return null
   return {
-    ghiWM2: weather.ghiWM2[index] ?? 0,
     rainMm: weather.precipMm?.[index] ?? 0,
     airTempC: weather.dryBulbC[index] ?? 0,
-    zenithDeg: position.value.zenithDeg,
-    i0: extraterrestrialNormal(position.value.earthRadiusVectorAu),
   }
 }
 
-/** 0 clear to 1 overcast for the hour the scene is on. A number, so it can be subscribed to */
+/** Watt-hours in a megajoule, to put the day's sun outside the atmosphere in the record's units */
+const WH_PER_MJ = 1e6 / 3600
+
+/**
+ * 0 clear to 1 overcast for the fortnight around the day the scene is on, from the measured sun
+ * against the sun outside the atmosphere (`src/sim/clearness.ts`). The season plays a calendar
+ * step at a time, and an hour's cloud would flip the light on every one. A number, so it can be
+ * subscribed to
+ */
 export const sceneCloud = (state: AppState): number => {
-  const hour = sceneHour(state)
-  return hour === null ? 0 : cloudCover(clearnessIndex(hour.ghiWM2, hour.zenithDeg, hour.i0))
+  const record = sceneRecord(state)
+  if (record === null) return 0
+  const { site, weather } = record
+  return cloudOverDays(
+    weather.ghiWM2,
+    (day) => extraterrestrialRadiationMjM2Day(site.location.latitudeDeg, day) * WH_PER_MJ,
+    dayOfYearUtc(state.timeUtcMillis) - 1,
+    CLOUD_WINDOW_HALF_DAYS,
+  )
 }
 
 /**

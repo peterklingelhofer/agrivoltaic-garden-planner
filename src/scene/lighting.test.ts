@@ -10,6 +10,7 @@ import {
   TONE_MAPPING_EXPOSURE,
   horizonColor,
   HORIZON_HAZE,
+  keyUnderCloud,
 } from './lighting'
 
 /**
@@ -116,6 +117,14 @@ describe('keyLight', () => {
 
   it('keeps a usable color below the cutoff', () => {
     expect(keyLight(-10)).toEqual({ color: [1, 1, 1], intensity: 0 })
+  })
+})
+
+describe('keyUnderCloud', () => {
+  it('keeps all of the beam under a clear sky and half of it under full cloud', () => {
+    const { intensity } = keyLight(45)
+    expect(keyUnderCloud(intensity, 0)).toBe(intensity)
+    expect(keyUnderCloud(intensity, 1)).toBe(intensity / 2)
   })
 })
 

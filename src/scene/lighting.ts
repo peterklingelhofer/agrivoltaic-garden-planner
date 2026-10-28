@@ -145,6 +145,16 @@ export const keyLight = (elevationDeg: number): KeyLight => {
 }
 
 /**
+ * The share of the key light a fully overcast stretch takes. Half, so the beam dims under cloud
+ * and stays on, and a step of the season's playback moves it half as far as a full share would
+ */
+const CLOUD_DIMMING = 0.5
+
+/** The key light's intensity under `cloud`, 0 for a clear sky to 1 for an overcast one */
+export const keyUnderCloud = (intensity: number, cloud: number): number =>
+  intensity * (1 - CLOUD_DIMMING * cloud)
+
+/**
  * Exposure. A 0.18-reflectance Lambertian surface normal to the beam at 60 deg solar elevation
  * renders at a relative luminance of sRGB 118, which is middle gray. This is a luminance
  * target: the beam isn't neutral, so that surface renders 125,117,104 at 60 deg

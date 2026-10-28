@@ -124,8 +124,8 @@ describe('the ground the camera sees and the ground the chain reads', () => {
 
 /**
  * The weather the scene shows is the record's, on the seasons step, and nothing anywhere else.
- * A season run on a measured year hands the scene that year's own hours: the rain that fell in
- * the hour the clock is on, and the cloud read as the measured sun against a clear one
+ * A season run on a measured year hands the scene that year's own weather: the rain that fell in
+ * the hour the clock is on, and the cloud read from the measured sun over the days around it
  */
 describe('weather reaching the scene, from the year the season ran on', () => {
   const report = (year: number | null): SeasonReport => ({
@@ -182,7 +182,7 @@ describe('weather reaching the scene, from the year the season ran on', () => {
     expect(sceneCloud(useAppStore.getState())).toBe(0)
   })
 
-  it('is the hour of the year the season ran on: its rain and its cloud, while it plays', () => {
+  it('is the year the season ran on: the hour’s rain and fortnight’s cloud, while it plays', () => {
     seed()
     useAppStore.setState({
       sweeping: true,
@@ -213,8 +213,9 @@ describe('weather reaching the scene, from the year the season ran on', () => {
       simulation: { ...useAppStore.getState().simulation, reports: [report(null)] },
     })
     expect(sceneRainMmPerHour(useAppStore.getState())).toBe(0)
-    // the fixture year builds its sun in solar time and the scene reads the hour through NREL
-    // SPA in UTC, so even its clear sky isn't read as fully clear. What holds is the order
+    // the fixture's clear sky gives about 0.65 of the sun outside the atmosphere over a fortnight,
+    // short of the 0.75 a clear sky is read against, so it reads a little cloudy. What holds is
+    // the order
     const clear = sceneCloud(useAppStore.getState())
     expect(clear).toBeLessThan(dim)
     expect(clear).toBeLessThan(0.6)

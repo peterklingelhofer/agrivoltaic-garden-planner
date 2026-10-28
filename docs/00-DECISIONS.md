@@ -798,11 +798,15 @@ bed short of water shows paler, warmer topsoil (`driedBy`), every tint a multipl
 reflectance.
 
 The scene shows the recorded weather, and only on the seasons step. After a season has run, the
-scene shows that year's own hour: its cloud, read as the clearness index of the measured sun against
-a clear one (`src/sim/clearness.ts`), drawn on the sky dome and taken off the key light's intensity,
-its rain as a point cloud at the hour's own rate, and snow from that year's monthly normals. Off the
-step all three revert and the sky's cloud stays at zero, because the planner's picture claims
-nothing about an hour's weather.
+scene shows that year's own weather. Its cloud is read over the fortnight around the clock's day, as
+the measured sun over the sun outside the atmosphere (`src/sim/clearness.ts`). It's drawn on the sky
+dome, and an overcast fortnight takes half the key light's intensity at most. The season plays 25
+calendar steps a second, and an hour's cloud would flip the light between full and off on every
+one, a flash WCAG 2.3.1 limits to three a second. Read over a fortnight, the key light moves by a
+thirtieth of its clear intensity at most for each day a step covers, so playback can only drift
+it. Rain is drawn as a point cloud at the hour's own rate, and snow comes from that year's monthly
+normals. Off the step all three revert and the sky's cloud stays at zero, because the planner's
+picture claims nothing about an hour's weather.
 
 ## 15. The test runner and the rules it imposes
 

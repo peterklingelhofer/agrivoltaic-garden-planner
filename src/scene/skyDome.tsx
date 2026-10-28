@@ -21,7 +21,7 @@ export interface DomeProps {
   readonly sun: readonly [number, number, number]
   readonly scaleM: number
   readonly sunDisc: boolean
-  /** 0 clear to 1 overcast, from the record's own hour. Nothing where the model makes no claim */
+  /** 0 clear to 1 overcast, from the record's fortnight. Nothing where the model makes no claim */
   readonly cloud?: number
 }
 
@@ -44,8 +44,8 @@ export const SkyDome = ({ name, sun, scaleM, sunDisc, cloud = 0 }: DomeProps): R
   setUniform(sky.material, 'mieCoefficient', SKY.mieCoefficient)
   setUniform(sky.material, 'mieDirectionalG', SKY.mieDirectionalG)
   // procedural cloud shades nothing and reaches no simulation, so it's drawn only where the
-  // model has made the claim: the seasons step, from the clearness index of the hour the clock
-  // is on in the year the season ran (`sceneCloud`). Everywhere else it stays at zero
+  // model has made the claim: the seasons step, from the clearness index of the fortnight around
+  // the clock's day in the year the season ran (`sceneCloud`). Everywhere else it stays at zero
   setUniform(sky.material, 'cloudCoverage', cloud)
   setUniform(sky.material, 'showSunDisc', sunDisc ? 1 : 0)
   sky.material.uniforms.sunPosition?.value.set(sun[0], sun[1], sun[2])
