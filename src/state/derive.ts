@@ -82,6 +82,8 @@ export interface ArrayLayout {
   readonly modules: readonly ModulePlacement[]
   readonly stackCount: number
   readonly posts: readonly (readonly [number, number, number])[]
+  /** How tall each post stands, from the ground up to the torque tube */
+  readonly postHeightM: number
   readonly torqueTubes: readonly (readonly [number, number, number])[]
 }
 
@@ -107,15 +109,15 @@ export const arrayLayout = (
   const torqueTubes: (readonly [number, number, number])[] = []
   const ox = g.originM.xM
   const oz = -g.originM.yM
+  // the torque tube sits midway between the edges, half the rise above a fixed row's lower edge
+  // and at the clearance height on a tracker
+  const { lowerM, upperM } = edgeHeightsM(array, degrees(orientation.tiltDeg))
+  const hubY = (lowerM + upperM) / 2
 
   for (let row = 0; row < g.rowCount; row += 1) {
     const rowOffset = (row - (g.rowCount - 1) / 2) * g.pitchM
     const rx = ox + across.x * rowOffset
     const rz = oz + across.z * rowOffset
-    // the torque tube sits midway between the edges, half the rise above a fixed row's lower edge
-    // and at the clearance height on a tracker
-    const { lowerM, upperM } = edgeHeightsM(array, degrees(orientation.tiltDeg))
-    const hubY = (lowerM + upperM) / 2
     torqueTubes.push([rx, hubY, rz])
     const postCount = Math.max(2, Math.ceil(spanM / 6) + 1)
     for (let post = 0; post < postCount; post += 1) {
@@ -140,5 +142,5 @@ export const arrayLayout = (
       }
     }
   }
-  return { orientation, modules, stackCount, posts, torqueTubes }
+  return { orientation, modules, stackCount, posts, postHeightM: hubY, torqueTubes }
 }

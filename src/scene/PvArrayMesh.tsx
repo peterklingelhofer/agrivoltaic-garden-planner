@@ -122,7 +122,7 @@ export const PvArrayMesh = ({
     layout.orientation.surfaceAzimuthDeg,
   )
   const spanM = Math.min(array.geometry.rowLengthM, array.geometry.modulesPerRow * widthM)
-  const postHeight = Math.max(0.4, array.geometry.clearanceHeightM)
+  const postHeight = Math.max(0.4, layout.postHeightM)
 
   return (
     <group

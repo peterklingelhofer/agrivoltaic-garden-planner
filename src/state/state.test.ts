@@ -150,6 +150,20 @@ describe('array metrics', () => {
       Math.hypot((second?.[0] ?? 0) - (first?.[0] ?? 0), (second?.[2] ?? 0) - (first?.[2] ?? 0)),
     ).toBeCloseTo(array.geometry.pitchM, 6)
   })
+
+  it('stands every post from the ground up to the torque tube', () => {
+    const array = makeArray(1, {
+      tracker: { mode: 'fixed', tiltDeg: degrees(25), surfaceAzimuthDeg: degrees(180) },
+    })
+    const { posts, postHeightM, torqueTubes } = arrayLayout(array, 45, 180)
+    const tubeHeight = torqueTubes[0]?.[1] ?? Number.NaN
+    expect(posts.length).toBeGreaterThan(0)
+    // a post is centered halfway up, so it only reaches the tube at the tube's full height
+    for (const post of posts) {
+      expect(post[1] - postHeightM / 2).toBeCloseTo(0, 9)
+      expect(post[1] + postHeightM / 2).toBeCloseTo(tubeHeight, 9)
+    }
+  })
 })
 
 describe('colormap', () => {
