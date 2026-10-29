@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { EMPTY_LIST } from '../state/slices'
 import { useAppStore } from '../state/store'
 import type { CitationId } from '../types/citation-ids.generated'
-import type { Cited, Provenance } from '../types/cited'
+import { type Cited, citedReason, type Provenance } from '../types/cited'
 import type { Crop } from '../types/crop'
 import type { DataTier } from '../types/evidence'
 import type { LimitingFactorKind } from '../types/recommend'
@@ -45,17 +45,6 @@ export interface DliEvidence {
   readonly reason: string
   readonly summary: string
 }
-
-const reasonOf = (cited: Cited<number>): string =>
-  cited.provenance === 'inferred'
-    ? cited.basis
-    : cited.provenance === 'unsourced'
-      ? cited.justification
-      : cited.provenance === 'derived'
-        ? cited.derivation
-        : cited.provenance === 'computed'
-          ? cited.model
-          : (cited.caveat ?? '')
 
 /**
  * A Tier C figure is this app's own inference from the crop's sun label, so the sentence says so:
@@ -113,7 +102,7 @@ export const dliEvidence = (crop: Crop, kind: DliThresholdKind): DliEvidence | n
     classInference: cited.provenance === 'inferred',
     value,
     citations: cited.citations,
-    reason: reasonOf(cited),
+    reason: citedReason(cited),
     summary: summaryOf(kind, label, value, cited),
   }
 }

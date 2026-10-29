@@ -12,7 +12,7 @@
   "scripts": {
     "preinstall": "node scripts/only-bun.mjs",
     "dev": "VITE_AGENT=${VITE_AGENT:-off} vite",
-    "build": "bun run rust:wasm && tsc -b && vite build && node scripts/render-docs.mjs",
+    "build": "bun run rust:wasm && tsc -b && vite build && bun scripts/render-docs.mjs",
     "preview": "vite preview",
     "test": "bun run rust:wasm && bun run test:dom && bun run test:scene",
     "test:dom": "bun test ./src/ ./workers/ --parallel --preload ./test/dom.ts --path-ignore-patterns='**/scene/*.test.tsx'",

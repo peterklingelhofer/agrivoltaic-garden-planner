@@ -29,6 +29,8 @@ const wantAgent = process.env.AGENT === 'on'
 /** A marker the bundler can't fold away while the agent is in the build: the toolbar's own id */
 const AGENT_MARKER = 'action-toolbar-ask'
 const MODEL_CONFIG = '/models/Xenova/all-MiniLM-L6-v2/config.json'
+const CROP_PAGE = '/docs/crops.html'
+const CROP_CSV = '/docs/crop-light.csv'
 
 const failures = []
 const notes = []
@@ -62,6 +64,23 @@ else {
       "the deployed bundle carries the agent, and it's meant to be off in production: something set VITE_AGENT=on",
     )
   }
+}
+
+// the crop page and its CSV come from the docs step of the build. The SPA fallback would answer
+// for either one if the step never ran, so the body is read, as with the model config
+const cropPage = await get(CROP_PAGE)
+if (!cropPage.body.includes('<title>Crop light figures |')) {
+  failures.push(
+    `${CROP_PAGE} isn't the crop page (content-type ${cropPage.type}), so the docs step never ran or its output wasn't deployed`,
+  )
+}
+const cropCsv = await get(CROP_CSV)
+if (cropCsv.body.startsWith('id,crop,')) {
+  notes.push(`${CROP_CSV}, ${String(cropCsv.body.trimEnd().split('\n').length)} lines`)
+} else {
+  failures.push(
+    `${CROP_CSV} isn't the crop table's CSV (content-type ${cropCsv.type}), so the docs step never ran or its output wasn't deployed`,
+  )
 }
 
 if (wantAgent) {

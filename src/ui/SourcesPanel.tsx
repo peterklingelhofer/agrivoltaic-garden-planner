@@ -216,6 +216,10 @@ export const SourcesPanel = (): ReactElement => {
         behind every figure, including the record of modeling decisions, the validation record and
         the full list of citations.
       </p>
+      <p className="panel-sub" data-testid="readout-sources-crops">
+        <a href="/docs/crops.html">Crop light figures</a>: every crop in the catalog with its light
+        floor, target band and shade ceiling, and the tier and sources of each.
+      </p>
       {/* said politely and out of the way: the highlight below is the visual half of the same
           message, and neither of them interrupts whatever the reader was doing */}
       <p className="visually-hidden" role="status" data-testid="status-source-jump">

@@ -61,7 +61,7 @@ const BASIL: NonEmpty<CitationId> = [
 const LETTUCE_CAVEAT =
   '5.8 mol/m2/d is the lowest level Pennisi et al. 2020 grew lettuce at (100 µmol/m2/s for 16 h), where it still produced a crop with the least biomass. Kelly et al. 2020 grew two cultivars from 6.9. No cited trial places a failure point below that, so the floor is where measurement stops. The target runs from Pennisi et al.’s optimum, 14.4, past which yield stopped rising, to the Cornell CEA program’s 17. Every trial behind these numbers is a growth chamber or a greenhouse at a fixed photoperiod, and none measured an outdoor bed'
 const BASIL_CAVEAT =
-  "12.9 mol/m2/d is the level Dou et al. 2018 suggest for commercial production, the lowest of their five light levels at which yield and nutritional quality were both high. 9.3 is the lowest level they grew it at, where it produced a crop with shoot fresh weight 35 to 44 percent below the three higher levels. Walters and Currey 2018 grew sweet basil at about 7 and about 15 mol/m2/d and report fresh weight 144 percent higher at the high level, which inverts to 59 percent less at the low one, a figure this app derives and the paper doesn't print. The target runs from Pennisi et al. 2020’s optimum, 14.4, to 17.8, the top of Dou et al.’s range, where shoot mass was highest"
+  "12.9 mol/m2/d is the level Dou et al. 2018 suggest for commercial production, the lowest of their five light levels at which yield and nutritional quality were both high. 9.3 is the lowest level they grew it at, where it produced a crop with shoot fresh weight 35 to 44 percent below the three higher levels. Walters and Currey 2018 grew sweet basil at about 7 and about 15 mol/m2/d and report fresh weight 144 percent higher at the high level, which inverts to 59 percent less at the low one, a figure derived from theirs that the paper doesn't print. The target runs from Pennisi et al. 2020’s optimum, 14.4, to 17.8, the top of Dou et al.’s range, where shoot mass was highest"
 
 /**
  * Tomato, both peppers and cucumber share one record: the numbers come from the same two
@@ -70,17 +70,17 @@ const BASIL_CAVEAT =
  * number
  */
 const VINE_CROP_CAVEAT =
-  'The 15 is Runkle 2011’s figure for vine crops as a group, "at least 15 (and preferably more than 20)", in a sentence that names no crop. The lowest band Purdue HO-238-B-W marks acceptable for tomato and pepper is 10 to 12. The 20 to 30 is the range Virginia Cooperative Extension’s Table 3 prints for tomato. Both are greenhouse figures and neither traces to a tomato experiment. The yield curve for these crops is Laub’s fruity-vegetables group, three studies (bell pepper under nets and sweet pepper under cloth, both subtropical, and squash), none of them tomato and none under panels. The field trials this app cites (Mata et al. 2026 at Bridgeton, Ben Naim et al. 2025 in Israel) measured yield losses that grew with shading, with no gain measured anywhere'
+  'The 15 is Runkle 2011’s figure for vine crops as a group, "at least 15 (and preferably more than 20)", in a sentence that names no crop. The lowest band Purdue HO-238-B-W marks acceptable for tomato and pepper is 10 to 12. The 20 to 30 is the range Virginia Cooperative Extension’s Table 3 prints for tomato. Both are greenhouse figures and neither traces to a tomato experiment. The yield curve for these crops is Laub’s fruity-vegetables group, three studies (bell pepper under nets and sweet pepper under cloth, both subtropical, and squash), none of them tomato and none under panels. The field trials cited for these crops (Mata et al. 2026 at Bridgeton, Ben Naim et al. 2025 in Israel) measured yield losses that grew with shading, with no gain measured anywhere'
 
 /** Spinach carries Virginia Extension's own spinach row, and a floor that table doesn't print */
 const SPINACH_CAVEAT =
-  'Virginia Cooperative Extension’s Table 3 prints 14 to 20 mol/m2/d for spinach, which is this row’s target. It’s a greenhouse figure, and the table cites no spinach study for it. The 6 floor is this app’s own: Gao et al. 2020 grew spinach from 11.5 to 20.2 with an optimum at 17.3, so the trial starts too high to place a minimum'
+  'Virginia Cooperative Extension’s Table 3 prints 14 to 20 mol/m2/d for spinach, which is this row’s target. It’s a greenhouse figure, and the table cites no spinach study for it. The 6 floor is the catalog’s own: Gao et al. 2020 grew spinach from 11.5 to 20.2 with an optimum at 17.3, so the trial starts too high to place a minimum'
 
 /** Strawberry and raspberry are the two rows an agrivoltaic trial states a DLI for */
 const STRAWBERRY_CAVEAT =
   '25 mol/m2/d is the level Widmer et al. 2026 found maintains trial-average yield under agrivoltaic cover, from a four-year study of 21 cases in Switzerland, every one substrate-grown under a protective cover. The 30 at the top of the band is where the Ohio State Kubota Lab’s greenhouse guidance reports strawberry plants tend to be stressed. Neither figure is a failure point, and transfer to an in-ground bed is an extrapolation'
 const RASPBERRY_CAVEAT =
-  '15 mol/m2/d is the level Widmer et al. 2026 found maintains trial-average yield for raspberry, on the same convention as strawberry. They publish no target band and no shading percentage for raspberry, so the 18 to 25 is this app’s own'
+  '15 mol/m2/d is the level Widmer et al. 2026 found maintains trial-average yield for raspberry, on the same convention as strawberry. They publish no target band and no shading percentage for raspberry, so the 18 to 25 is the catalog’s own'
 
 /** The one row whose shade ceiling a trial on the crop itself stands behind */
 const POTATO_CEILING_NOTE =
@@ -88,7 +88,7 @@ const POTATO_CEILING_NOTE =
 
 /** Potato keeps a tier B record for its shade behavior, and neither cited work prints a DLI */
 const POTATO_CAVEAT =
-  'Weselek et al. 2021 grew potato under an array at about 30 percent shade and Laub et al. 2022 place tubers and root crops on their own response curve. Neither prints a daily light integral for potato, so the 12 and the 18 to 25 are this app’s own band. The tier shown comes from the shade studies'
+  'Weselek et al. 2021 grew potato under an array at about 30 percent shade and Laub et al. 2022 place tubers and root crops on their own response curve. Neither prints a daily light integral for potato, so the 12 and the 18 to 25 are the catalog’s own band. The tier comes from the shade studies'
 
 /**
  * Where a crop's Laub group is an analogy, its row says in one sentence which fact makes it one.

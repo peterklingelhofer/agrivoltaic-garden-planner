@@ -108,3 +108,19 @@ export const unsourcedClaim = <T>(
 
 export const isUnsourced = <T>(cited: Cited<T>): cited is UnsourcedCited<T> =>
   cited.provenance === 'unsourced'
+
+/**
+ * What stands behind the figure, in the record's own words: the basis of an inference, the
+ * justification of an unsourced claim, the derivation or model of a computed one, the caveat of a
+ * record. Read beside the number by the DLI evidence panel and by the docs crop table
+ */
+export const citedReason = <T>(cited: Cited<T>): string =>
+  cited.provenance === 'inferred'
+    ? cited.basis
+    : cited.provenance === 'unsourced'
+      ? cited.justification
+      : cited.provenance === 'derived'
+        ? cited.derivation
+        : cited.provenance === 'computed'
+          ? cited.model
+          : (cited.caveat ?? '')

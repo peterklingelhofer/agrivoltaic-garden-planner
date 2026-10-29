@@ -86,6 +86,9 @@ citekey missing from the corpus is a compile error.
 - `docs/VALIDATION.md`: which numbers have been checked against something outside the app
 - `docs/STATIC-LAYERS.md`: the bundled climate grids
 - `docs/CITATIONS.md`: the corpus, with verification status and evidence tier per source
+- [Crop light figures](https://garden.peterklingelhofer.com/docs/crops.html): every crop in the
+  catalog with its light floor, target band and shade ceiling, and the tier and sources of each,
+  generated from the catalog at build time
 
 ## Status
 

@@ -634,7 +634,7 @@ const sourced = <T>(
  * so it reads 0 or at least 28
  */
 const TIPBURN_CEILING_CLAIM =
-  'Cornell’s CEA (controlled-environment agriculture) lettuce handbook puts the light level where tipburn starts at 12 to 17 mol/m2/d, depending on cultivar and on airflow. A greenhouse controls these, and a field bed can’t. In Both et al. 1997, 17 was the level that produced a marketable head with a downward fan preventing tipburn. A three-day rule would be this app’s own, with no source, and monthly light can’t test one. What’s shown is whether a whole month sits above the ceiling'
+  'Cornell’s CEA (controlled-environment agriculture) lettuce handbook puts the light level where tipburn starts at 12 to 17 mol/m2/d, depending on cultivar and on airflow. A greenhouse controls these, and a field bed can’t. In Both et al. 1997, 17 was the level that produced a marketable head with a downward fan preventing tipburn. A three-day rule would have no source behind it, and monthly light can’t test one, so the ceiling is read over a whole month'
 
 export const expandRow = (row: CropRow): Crop => {
   const [
