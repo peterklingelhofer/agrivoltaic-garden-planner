@@ -17,6 +17,7 @@ import type { Fraction, Meters, MolPerM2Day, SquareMeters } from '../types/units
 import { cropCalendar } from './calendar'
 import { runRecommendationPipeline } from './pipeline'
 import { derivePlanting } from './planting'
+import { seasonLightFor } from './stages/light-gate'
 import { DEFAULT_WEIGHTS } from './stages/rank'
 import {
   allocateSpace,
@@ -24,6 +25,7 @@ import {
   AMBITION_CLASSES,
   askedForSignal,
   emptyPreferences,
+  inferredLightAdmissionsOf,
   measuredLightEnvelope,
   orchardScale,
   preferredCropIdsOf,
@@ -167,7 +169,7 @@ describe('space is a first-class constraint', () => {
 })
 
 describe('a blueberry anchor', () => {
-  it('builds acid-soil polycultures around it and never offers a brassica', () => {
+  it('builds acid-soil polycultures around it and refuses brussels sprouts beside it', () => {
     const set = suggest(preferences([prefer('blueberry', 'require')]))
     expect(set.anchorCropIds).toEqual(['blueberry' as CropId])
     expect(set.suggestions.length).toBeGreaterThan(0)
@@ -177,13 +179,16 @@ describe('a blueberry anchor', () => {
     expect(partners.has('blueberry')).toBe(true)
     for (const suggestion of set.suggestions) {
       expect(suggestion.cropIds).toContain('blueberry' as CropId)
+      // every partner's optimum reaches into blueberry's band, which ends at 5.5
       for (const cropId of suggestion.cropIds) {
-        expect(crop(cropId as string).envelope.soilPh.optimumMin).toBeLessThanOrEqual(5.5)
+        expect(crop(cropId as string).envelope.soilPh.optimumMin).toBeLessThan(5.5)
       }
     }
-    const refusedKale = set.refused.find((entry) => entry.cropId === ('kale' as CropId))
-    expect(refusedKale?.reason).toMatch(/pH/)
-    expect(refusedKale?.conflictsWithCropId).toBe('blueberry' as CropId)
+    // broccoli can't live at this bed's pH 5 at all, so the pipeline drops it before any pairing.
+    // Brussels sprouts tolerates 4.5 and reaches the pairing, where its optimum of 6 to 7 is refused
+    const refused = set.refused.find((entry) => entry.cropId === ('brussels-sprouts' as CropId))
+    expect(refused?.reason).toMatch(/pH/)
+    expect(refused?.conflictsWithCropId).toBe('blueberry' as CropId)
   })
 
   it('carries a per-term breakdown, a banded LER and an honest confidence', () => {
@@ -560,6 +565,19 @@ describe('an inference never passes for a measurement', () => {
       expect(refusal.limiting?.cause).toEqual({ kind: 'max-design-rsr' })
       expect(crop(refusal.cropId as string).light.maxDesignRsr.provenance).not.toBe('inferred')
     }
+  })
+
+  it("calls a shade limit its row sets apart from its class the catalog's own figure", () => {
+    const ramps = crop('ramps')
+    const light = bedLightFixture('bed-a', 0.72)
+    const seasonLight = seasonLightFor(ramps, light, siteFixture(), 20)
+    const envelope = measuredLightEnvelope(catalog)
+    const admission = inferredLightAdmissionsOf(ramps, light, seasonLight, envelope).find(
+      (entry) => entry.threshold === 'max-design-rsr',
+    )
+    expect(admission?.explanation).toContain(
+      "75 percent shade limit, the catalog's own figure for this crop.",
+    )
   })
 
   it('leaves a bed inside the measured envelope alone', () => {

@@ -166,10 +166,10 @@ const bestJointPh = (
 export const phOverlap = (a: Crop, b: Crop): PhOverlap => {
   const left = a.envelope.soilPh
   const right = b.envelope.soilPh
-  const optimum = phWindow(
-    Math.max(left.optimumMin, right.optimumMin),
-    Math.min(left.optimumMax, right.optimumMax),
-  )
+  const optimumLow = Math.max(left.optimumMin, right.optimumMin)
+  const optimumHigh = Math.min(left.optimumMax, right.optimumMax)
+  // two plateaus that meet at one pH share no band, so an overlap has to have width
+  const optimum = optimumLow < optimumHigh ? phWindow(optimumLow, optimumHigh) : null
   const tolerated = phWindow(
     Math.max(left.absoluteMin, right.absoluteMin),
     Math.min(left.absoluteMax, right.absoluteMax),
@@ -187,8 +187,8 @@ export const phOverlap = (a: Crop, b: Crop): PhOverlap => {
 /**
  * A crop whose absolute pH span is narrow enough to reflect physiology
  * can't be moved to a compromise, so disjoint optima where either
- * side is that narrow is a hard conflict. Blueberry, alone in
- * this catalog in optimizing below pH 6.2, is exactly that crop
+ * side is that narrow is a hard conflict. Blueberry, whose span
+ * runs 4.0 to 6.0, is exactly that crop
  */
 export const phTerm = (a: Crop, b: Crop, weights: CompatibilityWeights): CompatibilityTerm => {
   const overlap = phOverlap(a, b)
@@ -240,7 +240,7 @@ export const phTerm = (a: Crop, b: Crop, weights: CompatibilityWeights): Compati
     2 * overlap.jointMembership - 1,
     true,
     'B',
-    `${range(a)} and ${range(b)}, so neither is at its optimum. The compromise is pH ${compromise}, where each sits at about ${Math.round(overlap.jointMembership * 100)} percent of its envelope (how well that pH suits it, with 100 at its optimum)`,
+    `${range(a)} and ${range(b)}. The compromise is pH ${compromise}, where each sits at about ${Math.round(overlap.jointMembership * 100)} percent of its envelope (how well that pH suits it, with 100 at its optimum)`,
     citations,
     weights,
   )

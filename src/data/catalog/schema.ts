@@ -11,6 +11,7 @@ import {
   STRAWBERRY_DLI_FLOOR,
   STRAWBERRY_SHADE_CEILING,
 } from '../pinned-figures.ts'
+import { ECOCROP_PH } from './ecocrop-ph.generated'
 import { wildlifeOf } from './wildlife'
 import type {
   CanopyShape,
@@ -299,10 +300,13 @@ export interface DliClassSpec {
 const LAUB_CEILING: NonEmpty<CitationId> = ['laub2022-shade-meta']
 
 const RSR_CLASS_BASIS =
-  'The shade ceiling is the conservative end of this app’s own range for the crop, set below the shade the cited meta-analysis classes as tolerable. No shade trial was run on this crop'
+  'The shade ceiling is the conservative end of this app’s own range for the crop, set below the shade the cited meta-analysis classes as tolerable. No cited work measured it for this crop'
 
 const RSR_BERRY_BASIS =
   'It’s this app’s own conservative bound for a class that spans cane fruit, tree fruit and coffee, none of which has a cited shade trial. Laub et al. 2022 class berries as benefiting from shade to 55 percent RSR (relative shade ratio), so this ceiling sits well inside the published range'
+
+const RSR_ROW_BASIS =
+  'The shade ceiling is the catalog’s own figure for this crop, set apart from its class’s by analogy with crops of its kind, and kept inside what the cited meta-analysis classes as tolerable. No cited work measured it for this crop'
 
 const RSR_SEGMENTED_BASIS =
   'Zhang et al. 2025, a meta-analysis over 20 countries, fit a segmented regression on shading rate: below 20 percent shading, yield shows no statistically significant difference from the control (p = 0.084), and from 20 to 30 percent yield is lower (p < 0.01). The paper recommends that shading from PV systems "should preferably not exceed 20%". The regression pools crops and resolves none of them on its own'
@@ -562,7 +566,12 @@ export type CropRow = readonly [
   overrides?: CropOverrides,
 ]
 
-const DEFAULT_PH: readonly [number, number, number, number] = [5, 6, 7.2, 8]
+/**
+ * The pH trapezoid of a row that carries no range of its own and matched no ECOCROP row in
+ * `docs/ecocrop-ph.json`. Those are the crops ECOCROP doesn't hold, the ones it holds only a
+ * genus neighbor of, and the Brassica rapa types it doesn't split out
+ */
+export const DEFAULT_PH: readonly [number, number, number, number] = [5, 6, 7.2, 8]
 
 /**
  * Mean degree-days accumulated per calendar day in the archetype's own season,
@@ -722,16 +731,21 @@ export const expandRow = (row: CropRow): Crop => {
             citations: overrides.harvest.citations,
           }
 
+  // a row's own transcription wins over the ECOCROP row it matched in docs/ecocrop-ph.json
+  const tablePh = overrides.ph === undefined ? ECOCROP_PH[id] : undefined
   const envelope: EcocropEnvelope = {
     temperatureC: trapezoid(overrides.temp ?? arch.temperatureC),
     annualRainfallMm: trapezoid(overrides.rain ?? arch.rainfallMm),
-    soilPh: trapezoid(overrides.ph ?? DEFAULT_PH),
+    soilPh: trapezoid(overrides.ph ?? tablePh ?? DEFAULT_PH),
     cycleLengthDays: {
       min: ((overrides.cycle ?? arch.cycleDays)[0] ?? 60) as Days,
       max: ((overrides.cycle ?? arch.cycleDays)[1] ?? 200) as Days,
     },
     koppenCodes: overrides.koppen ?? arch.koppenCodes,
-    citations: overrides.envCitations ?? ['fao-ecocrop'],
+    // Recocrop's copy of ECOCROP is where a matched row's pH was read, so it's cited beside it
+    citations:
+      overrides.envCitations ??
+      (tablePh === undefined ? ['fao-ecocrop'] : ['fao-ecocrop', 'hijmans-recocrop']),
   }
 
   return {
@@ -761,7 +775,8 @@ export const expandRow = (row: CropRow): Crop => {
         maxDesignRsr as Fraction,
         overrides.maxRsrTier ?? classSpec.maxDesignRsrTier,
         classSpec.maxDesignRsrCitations,
-        overrides.maxRsrNote ?? classSpec.maxDesignRsrNote,
+        overrides.maxRsrNote ??
+          (maxDesignRsr === classSpec.maxDesignRsr ? classSpec.maxDesignRsrNote : RSR_ROW_BASIS),
       ),
       shadeBenefitingWhenWaterLimited: shade === 2,
     },

@@ -211,6 +211,21 @@ describe('the light when a design comes back', () => {
     expect(state().bedLight[0]?.monthlyMeanDliMolM2Day[6]).toBeCloseTo(10, 5)
   })
 
+  /**
+   * A typed figure is the same answer as the cards, so typing one reads the beds again and so does
+   * undoing it. The card moves first, outside the step undone, so only the figure is what moved
+   */
+  it('reads the beds again when a shade figure is typed, and when it comes back', () => {
+    bake()
+    state().answerOnboarding({ exposure: 'overshadowed' })
+    const earlier = shot()
+    state().answerOnboarding({ surroundingsShadePercent: 45 })
+    // the figure stands in for the card's 60 percent and takes 45
+    expect(state().bedLight[0]?.monthlyMeanDliMolM2Day[6]).toBeCloseTo(5.5, 5)
+    state().restoreDesign(earlier)
+    expect(state().bedLight[0]?.monthlyMeanDliMolM2Day[6]).toBeCloseTo(4, 5)
+  })
+
   it('reads the compliance checks again when the frost percentile comes back', () => {
     bake()
     const earlier = shot()

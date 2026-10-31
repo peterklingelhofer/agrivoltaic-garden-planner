@@ -8,6 +8,7 @@ import { getAppState, resetAppStore, useAppStore } from '../state/store'
 import { ACID_SOIL, seedRankedStore } from '../state/testkit'
 import type { Crop } from '../types/crop'
 import type { CropId } from '../types/ids'
+import type { CropRecommendation } from '../types/recommend'
 import { dependenceNote, forageNote, nativeNote } from './format'
 import { PlantsPanel } from './PlantsPanel'
 import { RANKED_LIMIT } from './RecommendationPanel'
@@ -54,6 +55,11 @@ beforeEach(() => {
   resetAppStore()
 })
 
+/** A ranked crop the pipeline recommended, so its outcome carries a score */
+type Recommended = CropRecommendation & {
+  readonly outcome: Extract<CropRecommendation['outcome'], { readonly verdict: 'recommended' }>
+}
+
 describe('how much of the ranking a bed shows', () => {
   /**
    * The cap is the whole point, so this asserts the count. Not merely the presence of a switch: a
@@ -93,26 +99,33 @@ describe('how much of the ranking a bed shows', () => {
    */
   it('says once above the tied head what holds none of them back, and not on each row', async () => {
     await seedRankedStore()
-    // the acid bed ranks a clear leader, so the second recommended crop is lifted level with the
-    // first: a tie of two, which is the smallest head the sentence is written for
+    // the head is built here: the second recommended crop lifted level with the first and every
+    // other recommended crop pushed well below the tie margin, a tie of two, which is the smallest
+    // head the sentence is written for. The acid bed's own ranking puts several crops level at the
+    // top, since the ECOCROP pH ranges give more than one its optimum at this pH
     const seeded = rankedSet()
-    const leaders = seeded.ranked.filter((entry) => entry.outcome.verdict === 'recommended')
-    const [first, second] = leaders
-    if (first?.outcome.verdict !== 'recommended' || second?.outcome.verdict !== 'recommended') {
+    const leaders = seeded.ranked.filter(
+      (entry): entry is Recommended => entry.outcome.verdict === 'recommended',
+    )
+    const [first, second, ...others] = leaders
+    if (first === undefined || second === undefined) {
       throw new Error('the seeded bed recommends fewer than two crops')
     }
-    const level = {
-      ...second,
-      outcome: {
-        ...second.outcome,
-        score: { ...second.outcome.score, total: first.outcome.score.total },
-      },
-    }
+    const scored = (entry: Recommended, total: number): Recommended => ({
+      ...entry,
+      outcome: { ...entry.outcome, score: { ...entry.outcome.score, total } },
+    })
+    const rescored = new Map([
+      [second.cropId, scored(second, first.outcome.score.total)],
+      ...others.map(
+        (entry) => [entry.cropId, scored(entry, entry.outcome.score.total / 2)] as const,
+      ),
+    ])
     useAppStore.setState({
       sets: ready([
         {
           ...seeded,
-          ranked: seeded.ranked.map((entry) => (entry.cropId === second.cropId ? level : entry)),
+          ranked: seeded.ranked.map((entry) => rescored.get(entry.cropId) ?? entry),
         },
       ]),
     })

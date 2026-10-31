@@ -1866,6 +1866,39 @@
     }
   },
   {
+    "id": "hijmans-recocrop",
+    "type": "dataset",
+    "title": "Recocrop: ECOCROP model parameters (inst/parameters/ecocrop.rds)",
+    "author": [
+      {
+        "family": "Hijmans",
+        "given": "Robert J."
+      }
+    ],
+    "publisher": "GitHub",
+    "URL": "https://github.com/cropmodels/Recocrop/blob/master/inst/parameters/ecocrop.rds",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          29
+        ]
+      ]
+    },
+    "note": "The FAO ECOCROP crop ecological requirements as the Recocrop R package ships them on its master branch: 1,710 taxa in 35 columns, under the package license GPL (>=3), with DESCRIPTION at version 0.4-0. The catalog reads the four soil pH cutoffs (PHMIN, PHOPMN, PHOPMX, PHMAX) into the rows that carry no transcription of their own. A crop is matched by botanical name: its binomial, then its catalog synonyms, then a hand map for renamed taxa and for species that ECOCROP splits into varieties. Each match, its route and its four values are recorded per crop in docs/ecocrop-ph.json.",
+    "custom": {
+      "group": "software",
+      "verification": "url-verified",
+      "accessLevel": "open-access",
+      "evidenceTier": null,
+      "backsClaims": [
+        "the soil pH trapezoid (absolute minimum, optimal minimum, optimal maximum, absolute maximum) of each catalog crop that matches an ECOCROP row and carries no pH transcription of its own"
+      ],
+      "caveat": "It's a copy of ECOCROP. Its SCIENTNAME field stops at 27 characters and carries misspelled epithets (Carthamus tinctoius, Castanea mollisima). Its CODE isn't the EcoPort sheet id that FAO's data sheets use: cassava is CODE 5 here and sheet 1420 there. Two codes are shared by two rows each, English walnut's 78 among them, so a crop's row is named by NAME and SCIENTNAME together. A catalog row that carries its own pH transcription keeps it, and a few of those differ from this copy by more than half a pH unit at a cutoff."
+    }
+  },
+  {
     "id": "farazdaghi1968-competition-yield",
     "type": "article-journal",
     "title": "Plant Competition and Crop Yield",
@@ -20082,6 +20115,47 @@
       ],
       "caveat": "Published outside a peer-reviewed journal.",
       "archived": "https://web.archive.org/web/20260417145020/https://extension.usu.edu/yardandgarden/research/haskap-in-the-garden.pdf"
+    }
+  },
+  {
+    "id": "ut-w362d-youth-gardening",
+    "type": "report",
+    "title": "Youth Gardening in Tennessee: Ten Favorite Plants for Youth Gardeners in Tennessee",
+    "author": [
+      {
+        "family": "Gonzalez",
+        "given": "Emily A."
+      }
+    ],
+    "number": "W 362-D",
+    "publisher": "University of Tennessee Extension",
+    "URL": "https://knox.tennessee.edu/wp-content/uploads/sites/202/2020/11/W362D-Youth-Gardening-in-TN-10-Favorite-Plants-for-Youth.pdf",
+    "accessed": {
+      "date-parts": [
+        [
+          2026,
+          10,
+          29
+        ]
+      ]
+    },
+    "note": "Retrieved 2026-10-29 and read in full for the sentence quoted. The sheet prints no year; its file sits under the 2020/11 upload path.",
+    "custom": {
+      "group": "horticulture",
+      "verification": "url-verified",
+      "accessLevel": "public-domain",
+      "evidenceTier": "C",
+      "backsClaims": [
+        "arugula optimum soil pH 6 to 6.8"
+      ],
+      "quotes": [
+        {
+          "text": "Prefers rich, humus soil with pH of 6 to 6.8",
+          "locator": "University of Tennessee Extension, W 362-D, Arugula, Soil Conditions, page 2",
+          "claim": 0
+        }
+      ],
+      "caveat": "A youth-gardening guide, so the figure is a garden preference and no trial. The sheet prints no outer bounds, so the catalog's absolute bounds for arugula stay the default's 5 and 8 around its 6 to 6.8 optimum."
     }
   },
   {

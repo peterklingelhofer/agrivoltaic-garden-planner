@@ -103,6 +103,13 @@ describe('the DLI threshold a crop was gated on names its own evidence', () => {
     expect(raspberry?.reason).toContain('Widmer')
   })
 
+  it('calls a shade ceiling its row sets apart from its class a figure for this crop', async () => {
+    const catalog = await loadCropCatalog()
+    const apple = dliEvidence(cropBy(catalog, 'apple'), 'max-design-rsr')
+    expect(apple?.summary).toContain("this app's own figure for this crop,")
+    expect(apple?.summary).not.toContain('class')
+  })
+
   it('distinguishes a measured threshold from an inferred one on primitives', async () => {
     const catalog = await loadCropCatalog()
     const measured = dliEvidence(cropBy(catalog, 'lettuce-leaf'), 'minimum')

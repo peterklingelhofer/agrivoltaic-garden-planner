@@ -35,6 +35,7 @@ const answersFor = (patch: Partial<OnboardingAnswers> = {}): OnboardingAnswers =
   objective: { food: 0.4, energy: 0.3, water: 0.2, simplicity: 0.1 },
   ambition: 'mixed-vegetables',
   exposure: 'open',
+  surroundingsShadePercent: null,
   mounting: 'ground-rows',
   maxHeightM: null,
   irrigationAvailable: true,

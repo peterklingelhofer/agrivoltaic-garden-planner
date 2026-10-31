@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- the same three icons, at the same ?v=, as the planner's page and the docs site -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=2" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2" />
+    <link
+      rel="preload"
+      href="/fonts/ubuntu-sans-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crop finder: which crops suit a place</title>
+    <meta
+      name="description"
+      content="Type a place, your soil pH and how much shade the ground gets, and see which crops in the catalog suit it, with the light, season and soil behind each verdict."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Crop finder: which crops suit a place" />
+    <meta
+      property="og:description"
+      content="Type a place, your soil pH and how much shade the ground gets, and see which crops in the catalog suit it, with the light, season and soil behind each verdict."
+    />
+    <meta property="og:url" content="https://garden.peterklingelhofer.com/crops/" />
+  </head>
+  <body>
+    <div id="crops-root"></div>
+    <!-- what a crawler, a link preview or a browser with scripts off sees: what the page does, and
+         the static table it reads, which works without them -->
+    <noscript>
+      <main
+        style="
+          max-width: 42rem;
+          margin: 3rem auto;
+          padding: 0 1.25rem;
+          font: 16px/1.6 ui-serif, Georgia, serif;
+        "
+      >
+        <h1>Crop finder</h1>
+        <p>
+          The finder needs JavaScript to look a place up. The table it reads, every crop in the
+          catalog with its light figures, is on the
+          <a href="/docs/crops.html">crop light figures</a> page.
+        </p>
+      </main>
+    </noscript>
+    <script type="module" src="/src/crops/main.tsx"></script>
+  </body>
+</html>

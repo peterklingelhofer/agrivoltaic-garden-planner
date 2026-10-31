@@ -1,0 +1,218 @@
+/* The crop finder's layout, on the planner's tokens and components, so dark mode and every
+   control look the same on both pages */
+
+/* the planner holds its page still and scrolls one column. This page scrolls as a whole */
+html,
+body {
+  height: auto;
+  overflow: auto;
+}
+
+body {
+  background: var(--bg);
+}
+
+.crops-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 20px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--panel);
+}
+
+.crops-bar a {
+  color: var(--accent);
+}
+
+.crops-bar a:first-child {
+  color: var(--text);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.crops-bar a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.crops-main {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 16px 16px 48px;
+}
+
+.crops-main h1 {
+  margin: 8px 0 4px;
+  font-size: 22px;
+}
+
+.crops-lede {
+  margin: 0 0 16px;
+  color: var(--muted);
+}
+
+.crops-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.crops-column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+/* a 24rem column of questions beside the answers, once there's room for both */
+@media (min-width: 900px) {
+  .crops-layout {
+    display: grid;
+    grid-template-columns: 24rem minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+.crops-main .panel {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+/* a field and the i that explains it, side by side, the i level with the input */
+.crops-tipped {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.crops-tipped > .field,
+.crops-tipped > .readout-note {
+  flex: 1 1 auto;
+  margin: 0;
+}
+
+.crops-tipped > .infotip {
+  margin-bottom: 5px;
+}
+
+/* the place's readouts carry sentences, so each takes a full line with its label above it */
+.crops-read .readouts {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+}
+
+.crops-read .readout {
+  flex-direction: column;
+  gap: 2px;
+}
+
+.crops-line {
+  display: block;
+}
+
+/* Eight columns need about 600px, more than the answers' column has until the window is past
+   1150px, so the table scrolls in its own box, both ways, no taller than the window. The header
+   row sticks to the top of the box and the crop names to its left edge, so a row and its column
+   stay named while either scroll moves */
+.crops-table-box {
+  overflow: auto;
+  max-height: 85svh;
+}
+
+.crops-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.crops-table th,
+.crops-table td {
+  padding: 5px 6px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.crops-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--panel);
+  color: var(--muted);
+  font-weight: 600;
+  /* a collapsed border stays behind with the table, so the rule under a stuck header is drawn */
+  border-bottom: none;
+  box-shadow: inset 0 -1px 0 var(--control-border);
+}
+
+.crops-table tbody th {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: var(--panel);
+}
+
+.crops-table thead th:first-child {
+  left: 0;
+  z-index: 3;
+}
+
+.crops-sort {
+  font: inherit;
+  padding: 0;
+  border: none;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+
+.crops-sort:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.crops-sort-mark {
+  margin-left: 4px;
+  font-size: 9px;
+}
+
+.crops-crop {
+  font-weight: 600;
+  min-width: 7rem;
+}
+
+.crops-botanical {
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+  font-style: italic;
+  font-weight: 400;
+}
+
+.crops-verdict {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.crops-verdict[data-verdict='recommended'] {
+  color: var(--ok);
+}
+
+.crops-verdict[data-verdict='marginal'] {
+  color: var(--warn);
+}
+
+.crops-verdict[data-verdict='excluded'] {
+  color: var(--muted);
+}
+
+/* a figure's parts break only between each other: its words carry no-break spaces */
+.crops-figure {
+  min-width: 6rem;
+}

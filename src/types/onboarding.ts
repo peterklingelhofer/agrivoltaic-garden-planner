@@ -37,6 +37,11 @@ export interface OnboardingAnswers {
   readonly objective: DesignObjective
   readonly ambition: GrowingAmbition
   readonly exposure: SiteExposure
+  /**
+   * The share of the open-sky light the surroundings take, in percent, as the person typed it, or
+   * null when the three-answer card stands. A figure stands in for the card while it's set
+   */
+  readonly surroundingsShadePercent: number | null
   readonly mounting: MountingPreference
   readonly maxHeightM: Meters | null
   readonly irrigationAvailable: boolean

@@ -200,7 +200,7 @@ describe('what the cold open is allowed to say', () => {
       planted('bed-bright', ['bean-pole', 'brussels-sprouts']),
     ])
     const clause = lightDemandClause(catalog, plot, 'bed-dim' as BedId, 'bed-bright' as BedId)
-    expect(clause).toBe('Beans and peas want more light than shade-tolerant herbs do.')
+    expect(clause).toBe('Beans and peas want more light than shade herbs do.')
     // the crops standing in the beds are what the classes were derived FROM, so neither the
     // crop nor its cultivar is ever the thing the sentence promises anything about
     expect(clause).not.toContain('ramps')

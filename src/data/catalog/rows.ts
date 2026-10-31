@@ -70,7 +70,7 @@ const BASIL_CAVEAT =
  * number
  */
 const VINE_CROP_CAVEAT =
-  'The 15 is Runkle 2011’s figure for vine crops as a group, "at least 15 (and preferably more than 20)", in a sentence that names no crop. The lowest band Purdue HO-238-B-W marks acceptable for tomato and pepper is 10 to 12. The 20 to 30 is the range Virginia Cooperative Extension’s Table 3 prints for tomato. Both are greenhouse figures and neither traces to a tomato experiment. The yield curve for these crops is Laub’s fruity-vegetables group, three studies (bell pepper under nets and sweet pepper under cloth, both subtropical, and squash), none of them tomato and none under panels. The field trials cited for these crops (Mata et al. 2026 at Bridgeton, Ben Naim et al. 2025 in Israel) measured yield losses that grew with shading, with no gain measured anywhere'
+  'The 15 is Runkle 2011’s figure for vine crops as a group, "at least 15 (and preferably more than 20)", in a sentence that names no crop. The lowest band Purdue HO-238-B-W marks acceptable for tomato and pepper is 10 to 12. The 20 to 30 is the range Virginia Cooperative Extension’s Table 3 prints for tomato. Both are greenhouse figures and neither traces to a tomato experiment. The yield curve for these crops is Laub’s fruity-vegetables group, three studies (bell pepper under nets and sweet pepper under cloth, both subtropical, and squash), none of them tomato. The field trials cited for these crops (Mata et al. 2026 at Bridgeton, Ben Naim et al. 2025 in Israel) measured yield losses that grew with shading, with no gain measured anywhere'
 
 /** Spinach carries Virginia Extension's own spinach row, and a floor that table doesn't print */
 const SPINACH_CAVEAT =
@@ -2461,7 +2461,15 @@ export const CROP_ROWS: readonly CropRow[] = [
     12,
     0.25,
     0.2,
-    { succession: 10 },
+    {
+      succession: 10,
+      // UT Extension W 362-D: arugula "Prefers rich, humus soil with pH of 6 to 6.8", the optimum.
+      // The sheet prints no outer bounds, so the absolute bounds stay the catalog default's 5 and
+      // 8. ECOCROP's Eruca sativa row reads 7 to 8.5, which would refuse arugula in every garden
+      // soil under 7, so the row's own range stands over the table
+      ph: [5, 6, 6.8, 8],
+      envCitations: ['fao-ecocrop', 'ut-w362d-youth-gardening'],
+    },
   ],
   [
     'cress',
@@ -3460,6 +3468,9 @@ export const CROP_ROWS: readonly CropRow[] = [
     'leafy-greens',
     'bush',
     'hardy-perennial',
+    // Purdue HO-238-B-W's chart marks Lavendula at 8 to 10 for minimum acceptable quality, 12 to 16
+    // for good and 18 to 30 for high, grades for a greenhouse pot. The row keeps 12 and 18 to 25, the
+    // cautious end for a field plot, and cites nothing for light
     12,
     18,
     25,
@@ -3536,6 +3547,9 @@ export const CROP_ROWS: readonly CropRow[] = [
     'leafy-greens',
     'bush',
     'hardy-perennial',
+    // Purdue HO-238-B-W's chart marks Thymus at 8 to 10 for minimum acceptable quality, 12 to 16
+    // for good and 18 to 30 for high, grades for a greenhouse pot. The row keeps 12 and 18 to 25, the
+    // cautious end for a field plot, and cites nothing for light
     12,
     18,
     25,
@@ -4193,7 +4207,7 @@ export const CROP_ROWS: readonly CropRow[] = [
     'Caprifoliaceae',
     'haskap|honeyberry|blue honeysuckle',
     // laubGroup, dliClass, habit, archetype, DLI figures and tier as blueberry, the catalog's
-    // other early bush berry. No usable ECOCROP sheet, so the envelope is currant-black's, the
+    // other early bush berry. No usable ECOCROP sheet and no ECOCROP row, so the envelope is the
     // archetype's with the default pH, since blueberry's is set by its acid soil
     'berries',
     'cane-bush-berries',
@@ -4243,8 +4257,8 @@ export const CROP_ROWS: readonly CropRow[] = [
     },
   ],
 
-  // Acid-soil guild. Highbush blueberry is the only crop in this catalog that optimizes
-  // below pH 6.2, so without these species an acid bed has nothing to pair with. Every pH
+  // Acid-soil guild. Highbush blueberry optimizes at pH 4.5 to 5.5 and can't be moved off that
+  // band, so without these species an acid bed has little to pair with. Every pH
   // trapezoid below except cranberry's and sweetfern's is transcribed verbatim from the
   // named FEIS species review. The DLI figures are class-level inferences as everywhere else
   [
@@ -4273,7 +4287,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       ph: [2.7, 4, 4.9, 8.2],
       envCitations: ['tirmenstein1991-lingonberry-feis'],
       maxRsr: 0.5,
-      maxRsrTier: 'C',
       // Oregon State University Extension Service (PNW Extension Publication, PNW 583), for
       // Willamette Valley, Oregon: "There are two bloom periods: March to April and July to August.
       // The fruit ripens in mid-August and mid-October, respectively". The median last spring
@@ -4409,7 +4422,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       ph: [3.5, 4.5, 6, 7],
       envCitations: ['coladonato1994-teaberry-feis'],
       maxRsr: 0.75,
-      maxRsrTier: 'C',
     },
   ],
   [
@@ -4470,7 +4482,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       chillHours: 800,
       deciduous: true,
       maxRsr: 0.45,
-      maxRsrTier: 'C',
       // University of Minnesota Extension, for Southern Minnesota (Twin Cities area): "July,
       // August: Harvest". The median last spring freeze there is Apr 23 at Minneapolis-St Paul Intl
       // AP, MN, so picking starts 69 days after it and runs 61 days
@@ -4511,7 +4522,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       chillHours: 800,
       deciduous: true,
       maxRsr: 0.4,
-      maxRsrTier: 'C',
       // University of Minnesota Extension, for Southern Minnesota (Twin Cities area): "July,
       // August: Harvest". The median last spring freeze there is Apr 23 at Minneapolis-St Paul Intl
       // AP, MN, so picking starts 69 days after it and runs 61 days
@@ -4552,7 +4562,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       chillHours: 800,
       deciduous: true,
       maxRsr: 0.45,
-      maxRsrTier: 'C',
       // University of Minnesota Extension, for Southern Minnesota (Twin Cities area): "July,
       // August: Harvest". The median last spring freeze there is Apr 23 at Minneapolis-St Paul Intl
       // AP, MN, so picking starts 69 days after it and runs 61 days
@@ -4715,7 +4724,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       coldC: -34,
       yearsToMature: 3,
       maxRsr: 0.1,
-      maxRsrTier: 'C',
       laubNote: NO_COMPARABLE_CROP_NOTE,
       // University of Minnesota Extension, for Minnesota (Minneapolis-St Paul): "The asparagus
       // harvest season lasts about 6 to 8 weeks, from early May to late June in Minnesota". The
@@ -4794,7 +4802,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       deciduous: true,
       support: 'trellis',
       maxRsr: 0.1,
-      maxRsrTier: 'C',
       // University of Minnesota Extension, for Southern Minnesota (Twin Cities area): "In
       // Minnesota, many varieties begin to grow in May, and the earliest-ripening varieties are
       // harvested in mid-August, while later-ripening varieties may hang until mid-to-late
@@ -4838,7 +4845,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       yearsToMature: 6,
       chillHours: 800,
       maxRsr: 0.1,
-      maxRsrTier: 'C',
       // Oregon State University Extension Service, for Western Oregon valleys (Willamette Valley),
       // Oregon, Area 1 in the publication's own map: Table 3, "Approximate time of maturity": July
       // for Lodi through October for Braeburn, Fuji, Golden Delicious and the other late varieties.
@@ -4893,7 +4899,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       // hours between 32 and 45 F from November 1 to February 15, the band chillingHours counts
       chillHours: 300,
       maxRsr: 0.1,
-      maxRsrTier: 'C',
       // OSU Extension, 20 Mediterranean Tastes You Can Grow at Home, for western Oregon (Salem AP
       // (McNary Field), OR, USW00024232, Apr 3 median last spring freeze): "Harvest in October or
       // later", picking starts 181 days after the freeze and runs 30 days
@@ -4933,7 +4938,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       yearsToMature: 6,
       chillHours: 700,
       maxRsr: 0.1,
-      maxRsrTier: 'C',
       // Oregon State University Extension Service, for Western Oregon valleys (Willamette Valley),
       // Oregon, Area 1 and 2 in the publication's own map: Table 8, "Approximate time of maturity":
       // Aug 1 - 15 for Starkrimson through Sept 20 - 30 for Comice. The median last spring freeze
@@ -4975,7 +4979,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       yearsToMature: 4,
       chillHours: 750,
       maxRsr: 0.1,
-      maxRsrTier: 'C',
       // Oregon State University Extension Service, for Western Oregon valleys (Willamette Valley),
       // Oregon, Area 1 and 2 in the publication's own map: Table 7, "Approximate time of maturity":
       // early August for Harko and Red Haven through late August for Improved Elberta and Veteran.
@@ -5029,7 +5032,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       // almond trees"
       coldC: -28.9,
       maxRsr: 0.1,
-      maxRsrTier: 'C',
       // FAO-56 Table 22, "Almonds": Zr 1.0-2.0 m, p 0.40, the 1.5 m midpoint
       zr: 1.5,
       p: 0.4,
@@ -5088,7 +5090,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       // trees", -12.2 C
       coldC: -12.2,
       maxRsr: 0.1,
-      maxRsrTier: 'C',
       // FAO-56 Table 22, "Pistachios": Zr 1.0-1.5 m, p 0.40, the 1.25 m midpoint
       zr: 1.25,
       p: 0.4,
@@ -5131,7 +5132,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       yearsToMature: 5,
       chillHours: 800,
       maxRsr: 0.1,
-      maxRsrTier: 'C',
       // Oregon State University Extension Service, for Western Oregon valleys (Willamette Valley),
       // Oregon, Area 1 in the publication's own map: Table 10, European varieties: Sept 1 - 15 for
       // Parsons and Stanley through Oct. 1 for Moyer Perfecto. The median last spring freeze there
@@ -5173,7 +5173,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       yearsToMature: 6,
       chillHours: 1000,
       maxRsr: 0.1,
-      maxRsrTier: 'C',
       // Utah State University Extension, for Box Elder County south to Salt Lake County, Utah:
       // "From Box Elder County south to Salt Lake County, sweet cherries ripen around June 10 to
       // the 25". The median last spring freeze there is Apr 8 at Salt Lake City Intl AP, UT, so
@@ -5212,7 +5211,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       yearsToMature: 5,
       chillHours: 1100,
       maxRsr: 0.1,
-      maxRsrTier: 'C',
       // Oregon State University Extension Service, for Western Oregon valleys (Willamette Valley),
       // Oregon, Area 1 and 2 in the publication's own map: Table 5, sour varieties: July for
       // Balaton, Montmorency and North Star. The median last spring freeze there is Apr 3 at Salem
@@ -5253,7 +5251,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       yearsToMature: 4,
       chillHours: 700,
       maxRsr: 0.1,
-      maxRsrTier: 'C',
       // Oregon State University Extension Service, for Western Oregon valleys (Willamette Valley),
       // Oregon, Area 1 and 2 in the publication's own map: Table 4, "Approximate time of maturity":
       // July for Puget Gold, Rival, Royal (Blenheim) and the rest. The median last spring freeze
@@ -5295,7 +5292,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       yearsToMature: 4,
       deciduous: true,
       maxRsr: 0.1,
-      maxRsrTier: 'C',
       // Oregon State University Extension Service, for Western Oregon valleys (Willamette Valley),
       // Oregon, Area 1 in the publication's own map: Table 6, "Approximate time of maturity":
       // August for Brown Turkey, Desert King and Lattarula. The median last spring freeze there is
@@ -5350,7 +5346,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       coldC: -28.9,
       deciduous: true,
       maxRsr: 0.1,
-      maxRsrTier: 'C',
       // NC State Extension Gardener Handbook ch. 15, for North Carolina (Raleigh-Durham
       // International AP, NC, USW00013722, Mar 31 median last spring freeze), Table 15-6:
       // "Mulberry, red | 8 - 10 | May to June", picking starts 31 days after the freeze and runs
@@ -5401,7 +5396,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       coldC: -17.8,
       deciduous: true,
       maxRsr: 0.1,
-      maxRsrTier: 'C',
       // UGA Bulletin 992, for Georgia (Macon Middle Georgia Regional AP, GA, USW00003813, Mar 21
       // median last spring freeze), in a paragraph on mulberries in general rather than black
       // mulberry alone: "The fruit are borne on current season’s growth and ripen in May in
@@ -5452,7 +5446,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       // hardier types surviving... down to 7 degrees F", the warmer, more typical end
       coldC: -12.5,
       maxRsr: 0.1,
-      maxRsrTier: 'C',
       // UGA Circular 997, for Tifton, GA (Ponder Farm, USC00098703, Mar 11 median last spring
       // freeze): "Early cultivars will begin to ripen near the end of August, and will continue
       // through to October or early November for the late-maturing cultivars", picking starts
@@ -5503,7 +5496,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       // in hot, humid conditions", -28.9 C. The University of Arizona gives -28 F
       coldC: -28.9,
       maxRsr: 0.1,
-      maxRsrTier: 'C',
       // UF/IFAS HS1477, for Florida (Gainesville Regional AP, FL, USW00012816, Mar 3 median last
       // spring freeze): "Fruits are borne on new growth (Figure 14) and expand through the summer
       // months, typically ripening in August and September in Florida", picking starts 151 days
@@ -5541,8 +5533,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       yearsToMature: 6,
       chillHours: 800,
       deciduous: true,
-      maxRsr: 0.3,
-      maxRsrTier: 'C',
       // Oregon State University Extension Service, for Oregon (Willamette Valley hazelnut
       // industry): "Blank nuts fall before good nuts. After blanks have fallen and just before good
       // nuts begin to drop (usually at the end of August), it might be desirable to do a final
@@ -5599,7 +5589,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       // the Carpathian selection specifically, coldC follows hazelnut's own figure instead
       coldC: -29,
       maxRsr: 0.1,
-      maxRsrTier: 'C',
       // OSU EM 8907, for the Willamette Valley, western Oregon (Salem AP (McNary Field), OR,
       // USW00024232, Apr 3 median last spring freeze): "This usually happens in October",
       // picking starts 181 days after the freeze and runs 30 days
@@ -5654,7 +5643,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       // NDSU Extension F2209: "Hardiness: Zone 4"
       coldC: -34.4,
       maxRsr: 0.1,
-      maxRsrTier: 'C',
       // University of Missouri Center for Agroforestry AF1011, for central Missouri (Columbia
       // Regional AP, MO, USW00003945, Apr 7 median last spring freeze): "early-ripening
       // cultivars mature Sept. 1-14... Mid-season cultivars ripen Sept. 15-28 and late-ripening
@@ -5706,7 +5694,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       // AF1007: "Chinese chestnuts can tolerate -20 F temperatures when fully dormant"
       coldC: -28.9,
       maxRsr: 0.1,
-      maxRsrTier: 'C',
       // University of Missouri Center for Agroforestry AF1007, for central Missouri (Columbia
       // Regional AP, MO, USW00003945, Apr 7 median last spring freeze): "stretching from
       // September into October in Missouri", picking starts 147 days after the freeze and runs
@@ -5759,7 +5746,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       // own cold floor
       coldC: -34.4,
       maxRsr: 0.1,
-      maxRsrTier: 'C',
       // UGA Bulletin 1348, for Georgia's pecan belt (Albany SW Georgia Regional AP, GA,
       // USW00013869, Mar 8 median last spring freeze): cultivars 'Carter' and 'McMillian' have
       // "estimated harvest date[s]" of October 18 and October 20, picking starts 221 days after
@@ -5800,7 +5786,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       yearsToMature: 7,
       deciduous: true,
       maxRsr: 0.45,
-      maxRsrTier: 'C',
       // Kentucky State University Cooperative Extension Program, for Kentucky (Frankfort, home of
       // the KSU Pawpaw Research Program): "Depending on the variety, fruit ripen in late-August to
       // early-October. Fruit ripen on the same tree over about a 2 week period, which reflects an
@@ -5852,7 +5837,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       // read (readFullText false), so this row doesn't use it, as pawpaw
       coldC: -26,
       maxRsr: 0.45,
-      maxRsrTier: 'C',
       // Texas A&M AgriLife Extension (Bexar County), for San Antonio, TX (USW00012921, Feb 26
       // median last spring freeze): "Oriental persimmons generally start ripening around late
       // October through the early part of December in San Antonio and surrounding areas",
@@ -5906,7 +5890,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       // (readFullText false), so this row doesn't use it, as pawpaw
       coldC: -26,
       maxRsr: 0.45,
-      maxRsrTier: 'C',
       // Purdue Extension (Whitley County), quoting forestry specialist Lenny Farlee, for Indiana
       // (Fort Wayne Intl AP, IN, USW00014827, Apr 24 median last spring freeze): "persimmon
       // fruit normally ripens in September and October", picking starts 130 days after the
@@ -6193,7 +6176,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       yearsToMature: 7,
       chillHours: 800,
       maxRsr: 0.2,
-      maxRsrTier: 'C',
       harvestDays: 30,
     },
   ],
@@ -6221,7 +6203,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       yearsToMature: 4,
       deciduous: true,
       maxRsr: 0.45,
-      maxRsrTier: 'C',
       harvestDays: 21,
     },
   ],
@@ -6256,7 +6237,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       // and, on the hottest month's edge, to Mumbai
       coldWinterOnly: true,
       maxRsr: 0.75,
-      maxRsrTier: 'C',
       // Nelson, Halpern and Antos 2007 tagged Asarum caudatum ramets in old-growth Douglas-fir
       // forest and the clearcut beside it in Washington. Page 2882: growing-season PPFD averaged
       // 36.4 mol/m2/d in the clearcut against 8.6 in the forest, and clearcut ramet survival fell
@@ -6299,7 +6279,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       coldWinterOnly: true,
       window: [3, 5],
       maxRsr: 0.75,
-      maxRsrTier: 'C',
       // USDA Forest Service, USDA National Agroforestry Center, for Southern Appalachia
       // (represented by Asheville, NC): "The timing of harvest may differ geographically. For
       // example, in southern Appalachia the optimal time to harvest is usually about the third week
@@ -6727,7 +6706,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       // as apple and grape: the berry class ceiling is Laub's berries, so a tree fruit takes
       // the 0.1 floor as its own Tier C inference
       maxRsr: 0.1,
-      maxRsrTier: 'C',
       // University of California Cooperative Extension, for San Joaquin Valley South, California
       // (Tulare and Kern counties): "Typically one-third of the orchard is picked in each of three
       // harvests over the growing season. Lemons are picked and graded by size and normally
@@ -6793,7 +6771,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       zr: 1.3,
       p: 0.5,
       maxRsr: 0.1,
-      maxRsrTier: 'C',
       // UC Cooperative Extension, Santa Clara County, for San Jose, CA (USW00023293, Jan 12
       // median last spring freeze): "Washington Navel - harvest Dec - May", picking starts 323
       // days after the freeze and runs 181 days
@@ -6857,7 +6834,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       zr: 1.35,
       p: 0.5,
       maxRsr: 0.1,
-      maxRsrTier: 'C',
       // UF/IFAS HS132 Table 1, for Florida, with Orlando standing in (Orlando Intl AP, FL,
       // USW00012815, Jan 25 median last spring freeze): "Marsh (White flesh) ... Midseason
       // (Nov-May)", picking starts 280 days after the freeze and runs 211 days
@@ -6924,7 +6900,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       zr: 1.3,
       p: 0.5,
       maxRsr: 0.1,
-      maxRsrTier: 'C',
       // UCCE Santa Clara County, for San Jose, CA (USW00023293, Jan 12 median last spring
       // freeze): Bearss lime "Harvest Aug-Mar", picking starts 201 days after the freeze and
       // runs 242 days
@@ -6986,7 +6961,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       zr: 1.3,
       p: 0.5,
       maxRsr: 0.1,
-      maxRsrTier: 'C',
       // UCCE Santa Clara County, for San Jose, CA (USW00023293, Jan 12 median last spring
       // freeze): Satsuma, "a group of varieties including Owari... Harvest Dec - Apr, depending
       // on variety", picking starts 323 days after the freeze and runs 150 days
@@ -7043,7 +7017,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       koppen: [...AW, ...AR, ...BW, ...BS, ...CS],
       // as apple and grape: the 0.1 floor as the tree fruit's own Tier C inference
       maxRsr: 0.1,
-      maxRsrTier: 'C',
       laubNote: OUTSIDE_SCOPE_NOTE,
     },
   ],
@@ -7098,7 +7071,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       // ECOCROP sheet 1804 climate zones: Aw, Ar, Bs, Cf, Cs, Cw
       koppen: [...AW, ...AR, ...BS, ...CF, ...CS, ...CW],
       maxRsr: 0.1,
-      maxRsrTier: 'C',
       // No harvest override: UF/IFAS MG373's "Season: August-October, February-March" is south
       // Florida's, where NCEI's 1991-2020 normals give no median freeze (Homestead, USC00084095,
       // flag Y), so the row keeps the catalog window, as mango
@@ -7155,7 +7127,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       // ECOCROP sheet 459 climate zones: Aw, Ar, Cf, Cs, Cw
       koppen: [...AW, ...AR, ...CF, ...CS, ...CW],
       maxRsr: 0.1,
-      maxRsrTier: 'C',
       // No harvest override: UF/IFAS HS882's "The main fruiting season is in summer and fall" is
       // south Florida's, where NCEI's 1991-2020 normals give no median freeze (Miami Intl AP,
       // USW00012839, flag Y), so the row keeps the catalog window, as mango
@@ -7210,7 +7181,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       // ECOCROP sheet 3423 climate zones: Aw, Ar
       koppen: [...AW, ...AR],
       maxRsr: 0.1,
-      maxRsrTier: 'C',
       // No harvest override: the USDA Forest Service's "Fruits mature mainly from June to August
       // in Hawaii" is lowland Hawaii's, where NCEI's 1991-2020 normals give no median freeze
       // (Honolulu Intl AP, USW00022521, flag Y), so the row keeps the catalog window, as mango
@@ -7269,7 +7239,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       // ECOCROP sheet 744 climate zones: Aw, Ar
       koppen: [...AW, ...AR],
       maxRsr: 0.1,
-      maxRsrTier: 'C',
       // UF/IFAS HS40: "Harvesting of coconuts occurs throughout the year"
       harvest: { wholeSeason: true, citations: ['ufifas-2020-coconut-palm-florida'] },
       laubNote: OUTSIDE_SCOPE_NOTE,
@@ -7324,7 +7293,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       // ECOCROP sheet 401 climate zones: Aw, Bs, Cs, Cw
       koppen: [...AW, ...BS, ...CS, ...CW],
       maxRsr: 0.1,
-      maxRsrTier: 'C',
       // No harvest override: the FAO monograph's "In India the main crop is ready for harvest
       // between March and April" is India's, which no NCEI station covers, and UF/IFAS HS377
       // limits US planting to frost-free places, so the row keeps the catalog window, as mango
@@ -7379,7 +7347,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       // ECOCROP sheet 1357 climate zones: Aw, Cf, Cs, Cw
       koppen: [...AW, ...CF, ...CS, ...CW],
       maxRsr: 0.1,
-      maxRsrTier: 'C',
       // No harvest override: UF/IFAS HS6's "Mid-May to early July in Florida, depending upon
       // variety" is south Florida's, where NCEI's 1991-2020 normals give no median freeze (Miami
       // Intl AP, USW00012839, flag Y), so the row keeps the catalog window, as mango
@@ -7847,7 +7814,8 @@ export const CROP_ROWS: readonly CropRow[] = [
     'Olea europaea',
     'Oleaceae',
     'olive',
-    // laubGroup, dliClass, habit and DLI figures as the fig row
+    // laubGroup, dliClass, habit, DLI figures and maxRsr as the fig row, so the shade ceiling is
+    // the tree fruit's 0.1, as apple and pear
     'fruits',
     'cane-bush-berries',
     'spreading-tree',
@@ -7888,6 +7856,7 @@ export const CROP_ROWS: readonly CropRow[] = [
       cycle: [365, 365],
       // ECOCROP sheet 1553 climate zones: Ar, Bs, Cs
       koppen: [...AR, ...BS, ...CS],
+      maxRsr: 0.1,
       laubNote: OUTSIDE_SCOPE_NOTE,
       // California Olive Committee / California Minor Crops Council, for San Joaquin and Sacramento
       // Valleys, California (table-cultivar production areas): "Table olive harvest usually begins
@@ -7946,7 +7915,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       // ECOCROP sheet 1659 climate zones: Aw, Ar
       koppen: [...AW, ...AR],
       maxRsr: 0.1,
-      maxRsrTier: 'C',
       laubNote: OUTSIDE_SCOPE_NOTE,
     },
   ],
@@ -7996,7 +7964,6 @@ export const CROP_ROWS: readonly CropRow[] = [
       // Avocado's tropical pair (Aw, Ar) would refuse the Cfa of southeast Queensland, where the
       // species is native
       maxRsr: 0.1,
-      maxRsrTier: 'C',
       // No harvest override: CTAHR Circular 485's "from about August through January" is
       // Hawaii's, where NCEI's 1991-2020 normals give no median freeze (Hilo, USW00021504, flag
       // Y), so the row keeps the catalog window, as mango
@@ -8413,6 +8380,9 @@ export const CROP_ROWS: readonly CropRow[] = [
     'leafy-greens',
     'bush',
     'warm',
+    // Purdue HO-238-B-W's chart marks Tagetes at 8 to 10 for minimum acceptable quality, 12 to 16
+    // for good and 18 to 30 for high, grades for a greenhouse pot. The row keeps 10 and 16 to 24, the
+    // cautious end for a field plot, and cites nothing for light
     10,
     16,
     24,
@@ -8433,6 +8403,9 @@ export const CROP_ROWS: readonly CropRow[] = [
     'leafy-greens',
     'upright-herb',
     'warm',
+    // Purdue HO-238-B-W's chart marks Tagetes at 8 to 10 for minimum acceptable quality, 12 to 16
+    // for good and 18 to 30 for high, grades for a greenhouse pot. The row keeps 10 and 16 to 24, the
+    // cautious end for a field plot, and cites nothing for light
     10,
     16,
     24,
@@ -8699,6 +8672,9 @@ export const CROP_ROWS: readonly CropRow[] = [
     'leafy-greens',
     'groundcover',
     'cool',
+    // Purdue HO-238-B-W's chart marks Lobularia at 6 to 8 for minimum acceptable quality, 10 to 12
+    // for good and 14 to 30 for high, grades for a greenhouse pot. The row keeps 6 and 12 to 18, the
+    // cautious end for a field plot, and cites nothing for light
     6,
     12,
     18,
@@ -9005,6 +8981,9 @@ export const CROP_ROWS: readonly CropRow[] = [
     'forages-c3-pasture',
     'upright-herb',
     'hardy-perennial',
+    // Purdue HO-238-B-W's chart marks Echinacea at 8 to 10 for minimum acceptable quality, 12 to 16
+    // for good and 18 to 30 for high, grades for a greenhouse pot. The row keeps 10 and 16 to 24, the
+    // cautious end for a field plot, and cites nothing for light
     10,
     16,
     24,
@@ -9089,6 +9068,9 @@ export const CROP_ROWS: readonly CropRow[] = [
     'forages-c3-pasture',
     'upright-herb',
     'hardy-perennial',
+    // Purdue HO-238-B-W's chart marks Coreopsis at 8 to 10 for minimum acceptable quality, 12 to 16
+    // for good and 18 to 30 for high, grades for a greenhouse pot. The row keeps 10 and 16 to 24, the
+    // cautious end for a field plot, and cites nothing for light
     10,
     16,
     24,

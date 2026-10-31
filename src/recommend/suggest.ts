@@ -1,5 +1,5 @@
 import { partitionCompanionRules } from '../data/companions'
-import { cropLabel } from '../data/crops'
+import { cropLabel, dliClassLimits } from '../data/crops'
 import { clamp, monthsInWindow } from '../data/util'
 import { banded, interval, unsafeBandMidpoint } from '../types/band'
 import type { Banded } from '../types/band'
@@ -375,7 +375,7 @@ export const inferredLightAdmissionsOf = (
       threshold: 'max-design-rsr',
       inferredValue: ceiling.value,
       measuredEnvelopeValue: envelope.deepestRsr,
-      explanation: `The panels and anything drawn shade this bed ${(seasonLight.bakedRsr * 100).toFixed(0)} percent across ${crop.id as string}'s season. It's allowed here only by a ${(ceiling.value * 100).toFixed(0)} percent shade limit inferred from its crop class. No measured figure in this catalog supports more than ${(envelope.deepestRsr * 100).toFixed(0)} percent shade`,
+      explanation: `The panels and anything drawn shade this bed ${(seasonLight.bakedRsr * 100).toFixed(0)} percent across ${crop.id as string}'s season. It's allowed here only by a ${(ceiling.value * 100).toFixed(0)} percent shade limit${ceiling.value === dliClassLimits(crop.dliClass).maxDesignRsr ? ' inferred from its crop class' : ", the catalog's own figure for this crop"}. No measured figure in this catalog supports more than ${(envelope.deepestRsr * 100).toFixed(0)} percent shade`,
     })
   }
   const floor = crop.light.dliMinMolM2Day

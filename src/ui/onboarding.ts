@@ -115,15 +115,23 @@ export const AMBITION_OPTIONS: readonly ChoiceOption<GrowingAmbition>[] = [
   },
 ]
 
-const shadePercent = (exposure: SiteExposure): string =>
-  String(Math.round(SURROUNDINGS_SHADE[exposure] * 100))
+/** A card's share in percent, the unit a typed figure is written in */
+export const shadePercent = (exposure: SiteExposure): number =>
+  Math.round(SURROUNDINGS_SHADE[exposure] * 100)
 
 /**
  * What the surroundings answer does: it dims the light every bed is judged by, from the one table
  * the layout search spends its shade budget from. The figures are the whole sentence, since the
  * answer is a crude factor and the face should say so
  */
-export const EXPOSURE_HELP = `Part of the day takes about ${shadePercent('partly-sheltered')}% off every bed's light, and most of the day takes ${shadePercent('overshadowed')}%`
+export const EXPOSURE_HELP = `Part of the day takes about ${String(shadePercent('partly-sheltered'))}% off every bed's light, and most of the day takes ${String(shadePercent('overshadowed'))}%`
+
+/**
+ * What a typed shade figure is. The surroundings step and the crop finder both print it, so the
+ * figure the two of them take is defined in one set of words
+ */
+export const SHADE_PERCENT_HELP =
+  "It's the share of full sun the space loses to shade across the growing season, from trees, buildings, cloth or anything else."
 
 // the three labels carry the question on their own, so no option explains itself underneath
 export const EXPOSURE_OPTIONS: readonly ChoiceOption<SiteExposure>[] = [

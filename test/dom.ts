@@ -11,7 +11,7 @@
  *
  * The cost is that the ~126 files that need no DOM get one anyway. Four modules branch on `typeof
  * navigator/document === 'undefined'` (`src/scene/quality.ts`, `src/agent/connection.ts`,
- * `src/scene/useInvalidate.ts`, `src/ui/SitePanel.tsx`), so a test that wants the bare-node branch
+ * `src/scene/useInvalidate.ts`, `src/ui/PlaceSearch.tsx`), so a test that wants the bare-node branch
  * has to delete the global itself and say so. That's more honest than a file-header comment nobody
  * reads: it puts the requirement in the test that has it
  */

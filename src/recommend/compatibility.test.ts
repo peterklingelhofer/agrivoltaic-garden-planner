@@ -66,14 +66,27 @@ beforeAll(async () => {
 })
 
 describe('soil pH intersection', () => {
-  it("refuses blueberry with a brassica because blueberry can't be moved off its band", () => {
-    const overlap = phOverlap(crop('blueberry'), crop('kale'))
+  it("refuses blueberry with broccoli because blueberry can't be moved off its band", () => {
+    const overlap = phOverlap(crop('blueberry'), crop('broccoli'))
     expect(overlap.optimum).toBeNull()
     expect(overlap.hardEnvelopeCropIds).toContain('blueberry' as CropId)
-    const term = phTerm(crop('blueberry'), crop('kale'), DEFAULT_COMPATIBILITY_WEIGHTS)
+    const term = phTerm(crop('blueberry'), crop('broccoli'), DEFAULT_COMPATIBILITY_WEIGHTS)
     expect(term.verdict).toBe('conflict')
-    expect(term.explanation).toMatch(/for physiological reasons/)
-    expect(evaluatePair(crop('blueberry'), crop('kale'), contextWith()).compatible).toBe(false)
+    expect(term.explanation).toMatch(/share is 5\.8\. .* for physiological reasons/)
+    expect(evaluatePair(crop('blueberry'), crop('broccoli'), contextWith()).compatible).toBe(false)
+  })
+
+  it("refuses blueberry with tomato, whose optimum only meets blueberry's at pH 5.5", () => {
+    // ECOCROP's optimal minimum is 5.5 for 83 crops, where blueberry's optimum ends. Two plateaus
+    // that meet at one pH share no band, so the pair is a conflict, as it is for a crop whose
+    // optimum starts higher
+    const overlap = phOverlap(crop('blueberry'), crop('tomato'))
+    expect(crop('tomato').envelope.soilPh.optimumMin).toBe(5.5)
+    expect(overlap.optimum).toBeNull()
+    expect(overlap.compromisePh).toBe(5.5)
+    expect(phTerm(crop('blueberry'), crop('tomato'), DEFAULT_COMPATIBILITY_WEIGHTS).verdict).toBe(
+      'conflict',
+    )
   })
 
   it('passes blueberry with lingonberry, which shares its optimum band', () => {
@@ -98,7 +111,7 @@ describe('soil pH intersection', () => {
     expect(overlap.jointMembership).toBeGreaterThan(0)
   })
 
-  it('clears exactly the acid guild to share a bed with blueberry and nothing else', () => {
+  it("clears exactly the crops that share a band of blueberry's optimum, pH 4.5 to 5.5", () => {
     const compatible = catalog
       .filter(
         (candidate) =>
@@ -108,52 +121,45 @@ describe('soil pH intersection', () => {
       )
       .map((candidate) => candidate.id as string)
       .sort()
-    // the acid guild, plus the tropical staples whose ECOCROP envelopes reach down to pH 3.5 to
-    // 4.5 (cassava 4 to 9, taro 4.3 to 8.2, banana 4 to 8.4, coffee 4.3 to 8.4, cacao 4 to 8,
-    // orange 4 to 8.3, tea 4 to 6, pineapple 3.5 to 9, cashew 3.8 to 8.7, and so on), plus lime,
-    // lemon verbena, lychee and adzuki bean at their own 5 floor, which is a fact about those
-    // crops and the reason a blueberry bed isn't the dead end for them that it's for a tomato.
-    // Olive's floor is 5.3, so it stays out
+    // the acid guild, the crops whose own range optimizes from pH 5 or lower (cacao, orange, tea,
+    // pineapple, cashew and so on) and the crops ECOCROP optimizes from 5.0 or 5.4 (oat, potato,
+    // sweet potato, kale and collards among them). A crop whose optimum starts at 5.5, where
+    // blueberry's ends, shares no band with it and stays out: tomato, bok choy, cassava, banana.
+    // Measured on the catalog as it stands, so a pH range change fails here on purpose
     expect(compatible).toEqual([
-      'adzuki-bean',
       'avocado',
-      'banana',
-      'breadfruit',
+      'bambara-groundnut',
+      'bay-laurel',
+      'buckwheat',
       'cacao',
       'cashew',
-      'cassava',
       'coconut',
-      'coffee',
+      'collards',
       'cranberry',
-      'guava',
-      'jackfruit',
-      'lemon-verbena',
-      'lime',
+      'cumin',
+      'dandelion',
+      'kale',
+      'lablab',
+      'lemon-balm',
+      'lemongrass',
       'lingonberry',
       'lowbush-blueberry',
-      'lychee',
       'macadamia',
-      'malanga',
-      'mango',
-      'moringa',
-      'mung-bean',
+      'napier-grass',
+      'oat',
       'orange',
-      'papaya',
       'pearl-millet',
       'pigeon-pea',
       'pineapple',
-      'plantain',
-      'rice-upland',
-      'sesame',
-      'sorghum-grain',
+      'potato',
+      'ryegrass-perennial',
+      'sage',
+      'stevia',
       'sugarcane',
+      'sweet-potato',
       'sweetfern',
-      'taro',
       'tea',
       'teaberry',
-      'teff',
-      'vanilla',
-      'yam-greater',
     ])
   })
 })

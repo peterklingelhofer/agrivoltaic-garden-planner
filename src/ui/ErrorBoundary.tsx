@@ -4,8 +4,12 @@ import { Action } from './controls'
 export interface ErrorBoundaryProps {
   readonly label: string
   readonly testId: string
+  /** What a reload keeps, where it isn't the saved garden the planner promises */
+  readonly note?: string
   readonly children: ReactNode
 }
+
+const RELOAD_NOTE = 'Reload the page: your garden is saved in this browser.'
 
 interface ErrorBoundaryState {
   readonly message: string | null
@@ -37,7 +41,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
           <h2>{this.props.label}</h2>
         </header>
         <p className="notice notice-error">
-          Something in the app broke. Reload the page: your garden is saved in this browser.
+          Something in the app broke. {this.props.note ?? RELOAD_NOTE}
         </p>
         <Action testId="action-app-reload" onClick={() => location.reload()}>
           Reload

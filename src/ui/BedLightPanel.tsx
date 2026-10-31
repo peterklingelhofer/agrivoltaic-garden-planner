@@ -33,7 +33,7 @@ export const BedLightPanel = (): ReactElement => {
   const beds = useAppStore((s) => s.plot?.beds ?? null)
   const rasterReady = useAppStore((s) => s.raster.status === 'ready')
   const surroundings = surroundingsNote(
-    useAppStore((s) => s.answers.exposure),
+    useAppStore((s) => s.answers),
     useAppStore((s) => s.plot?.obstructions ?? EMPTY_LIST),
   )
   // the site's own frost window once the place is resolved, so the months printed are its own

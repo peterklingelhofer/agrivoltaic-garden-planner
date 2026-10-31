@@ -1,4 +1,5 @@
 import type { ReactElement } from 'react'
+import { clamp } from '../data/util'
 import type { DesignProgress } from '../recommend/design'
 import { useAppStore } from '../state/store'
 import { meters } from '../types/units'
@@ -11,6 +12,8 @@ import {
   EXPOSURE_OPTIONS,
   MOUNTING_OPTIONS,
   roundTenth,
+  SHADE_PERCENT_HELP,
+  shadePercent,
 } from './onboarding'
 
 /**
@@ -28,9 +31,11 @@ const percent = (value: number): string => `${String(Math.round(value * 100))}%`
 
 export const SurroundingsStep = (): ReactElement => {
   const exposure = useAppStore((s) => s.answers.exposure)
+  const figure = useAppStore((s) => s.answers.surroundingsShadePercent)
   const answer = useAppStore((s) => s.answerOnboarding)
   // a drawn house or tree answers this question itself (Decision Record 26), so the three answers
-  // are grayed out because a geometry already says the same thing
+  // are grayed out because a geometry already says the same thing. A typed figure grays the cards
+  // too, since it stands in for them
   const houses = useAppStore((s) => s.plot?.obstructions.length ?? 0)
   return (
     <>
@@ -40,17 +45,45 @@ export const SurroundingsStep = (): ReactElement => {
         legend={ANSWER_QUESTIONS.exposure}
         options={EXPOSURE_OPTIONS}
         value={exposure}
-        disabled={houses > 0}
+        disabled={houses > 0 || figure !== null}
         onChange={(next) => answer({ exposure: next })}
       />
       {houses > 0 ? (
         <p className="panel-sub" data-testid="readout-onboarding-exposure-house">
           With a house or tree drawn, the light check uses it and ignores this answer.
         </p>
-      ) : (
+      ) : figure === null ? (
         <p className="panel-sub" data-testid="readout-onboarding-exposure-help">
           {EXPOSURE_HELP}
         </p>
+      ) : (
+        <p className="panel-sub" data-testid="readout-onboarding-shade-help">
+          Your figure stands in for the three answers. {SHADE_PERCENT_HELP}
+        </p>
+      )}
+      {/* turned on, the figure starts at the card's own share, so nothing on screen moves */}
+      <Toggle
+        testId="control-onboarding-shade-known"
+        label="I know how much shade the space gets"
+        checked={figure !== null}
+        disabled={houses > 0}
+        onChange={(checked) =>
+          answer({ surroundingsShadePercent: checked ? shadePercent(exposure) : null })
+        }
+      />
+      {figure === null ? null : (
+        <NumberField
+          testId="control-onboarding-shade-percent"
+          label="Shade over the season"
+          unit="%"
+          min={0}
+          max={100}
+          step={5}
+          value={figure}
+          disabled={houses > 0}
+          // held to the range the saved design accepts, so a typo can't make the answers unreadable
+          onChange={(value) => answer({ surroundingsShadePercent: clamp(value, 0, 100) })}
+        />
       )}
     </>
   )

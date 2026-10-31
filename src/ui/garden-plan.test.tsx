@@ -133,6 +133,15 @@ describe('what the guided setup planted', () => {
     await harness.unmount()
   })
 
+  /** A typed figure stood in for the card when the search ran, so the figure is what's named */
+  it('names a typed shade figure in place of the card it stood in for', async () => {
+    getAppState().answerOnboarding({ exposure: 'partly-sheltered', surroundingsShadePercent: 45 })
+    await generate()
+    const harness = await mount(<GardenPlanPanel />)
+    expect(harness.get('readout-plan-exposure').textContent).toBe('Your figure of 45% shade')
+    await harness.unmount()
+  })
+
   it('spells out a mix of your own, which no name would say anything about', async () => {
     getAppState().answerOnboarding({
       objective: { food: 0.7, energy: 0.1, water: 0.1, simplicity: 0.1 },

@@ -136,7 +136,9 @@ const OptimizedFor = (): ReactElement => {
           value={
             obstructions.length > 0
               ? drawnLabel(obstructions)
-              : labelOf(EXPOSURE_OPTIONS, answers.exposure)
+              : answers.surroundingsShadePercent === null
+                ? labelOf(EXPOSURE_OPTIONS, answers.exposure)
+                : `Your figure of ${String(Math.round(answers.surroundingsShadePercent))}% shade`
           }
         />
       </div>

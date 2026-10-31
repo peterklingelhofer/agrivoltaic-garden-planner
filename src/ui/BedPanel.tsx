@@ -18,6 +18,8 @@ import { dayOfYearUtc } from '../state/sun'
 import type { BedCalendar } from '../types/calendar'
 import type { Crop } from '../types/crop'
 import type { Bed, CanopyTier, Planting, PlantingRole } from '../types/garden'
+import { irrigationOf } from '../types/garden'
+import { IRRIGATION_OPTIONS } from './irrigation-options'
 import type { Polygon2D } from '../types/geo'
 import type { BedId, CropId, PlantingId } from '../types/ids'
 import type { PvArray } from '../types/pv'
@@ -56,15 +58,6 @@ import { ObstructionsSection } from './ObstructionsSection'
 import { formatAreaBothUnits, roundTenth } from './onboarding'
 import { Panel, Readout } from './Panel'
 import { bringIntoView } from './scroll-into-view'
-
-const IRRIGATION: readonly (readonly [Bed['irrigation']['method'], string])[] = [
-  ['none', 'None'],
-  ['hand', 'Hand'],
-  ['sprinkler', 'Sprinkler'],
-  ['drip', 'Drip'],
-  ['subsurface-drip', 'Subsurface drip'],
-  ['flood', 'Flood'],
-]
 
 /** The ranked head, so the primary path is never a bare alphabetical list of the whole catalog */
 export const PICKER_LIMIT = 12
@@ -1325,9 +1318,13 @@ export const GroundPanel = (): ReactElement => {
               testId="control-bed-irrigation"
               label="Irrigation"
               value={bed.irrigation.method}
-              options={IRRIGATION}
+              options={IRRIGATION_OPTIONS}
+              // the flag the rules read and the depth the scene draws follow the method
               onChange={(method) =>
-                upsertBed({ ...bed, irrigation: { ...bed.irrigation, method } })
+                upsertBed({
+                  ...bed,
+                  irrigation: irrigationOf(method, bed.irrigation.appliedMmPerYear || undefined),
+                })
               }
             />
             <Toggle

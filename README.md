@@ -89,6 +89,8 @@ citekey missing from the corpus is a compile error.
 - [Crop light figures](https://garden.peterklingelhofer.com/docs/crops.html): every crop in the
   catalog with its light floor, target band and shade ceiling, and the tier and sources of each,
   generated from the catalog at build time
+- [Crop finder](https://garden.peterklingelhofer.com/crops/): the catalog read against a place,
+  its climate, soil pH and the shade over the ground
 
 ## Status
 

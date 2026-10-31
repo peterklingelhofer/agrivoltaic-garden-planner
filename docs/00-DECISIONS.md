@@ -262,21 +262,24 @@ pepper and cucumber rows carry that as their caveat.
 
 ### DLI thresholds (mol/m2/d, min -> target, max design RSR)
 
+A class groups crops by the light they need, so it spans families and growth habits, and its name
+says what it holds.
+
 | Class | Min | Target | Max RSR |
 |---|---|---|---|
-| Understory herbs | 2-4 | 4-10 | 60-75% |
-| Leafy greens | 6 | 12-17 | 40-50% (tipburn >17 for a month) |
-| Forages / C3 pasture | - | - | 45-50% |
-| Cane/bush berries | 15 | - | 30-35% |
+| Shade herbs and woodland greens | 2-4 | 4-10 | 60-75% |
+| Leafy greens, herbs and flowers | 6 | 12-17 | 40-50% (tipburn >17 for a month) |
+| Cover crops, forages, millets and meadow flowers | - | - | 45-50% |
+| Berries, orchard fruit, nuts and vines | 15 | - | 30-35% |
 | Strawberry | 25 | - | 10-30% (Widmer's own range, collapsed to 10%) |
 | Brassicas | - | 12-17 (inferred) | 30-40% |
-| Root/tuber | none established | - | 15-25% |
-| Solanaceae | 10-12 | 20-30 | 20-25% temperate, to 40% arid |
-| Cucurbits | - | 20-30 | 20-30% |
+| Roots and tubers | none established | - | 15-25% |
+| Tomatoes, peppers and eggplant | 10-12 | 20-30 | 20-25% temperate, to 40% arid |
+| Cucurbits and other fruiting plants | - | 20-30 | 20-30% |
 | Alliums | none established | - | <=15% (bulb thickening light-limited) |
-| Legumes (grain) | - | - | <=10% |
-| C3 cereals | - | - | <=15% |
-| Corn / C4 | - | - | <=10% |
+| Beans, peas and other legumes | - | - | <=10% |
+| Cereals, pseudocereals and oilseeds | - | - | <=15% |
+| Corn and sugarcane | - | - | <=10% |
 
 Strawberry is split from Laub's lumped berry group on the authority of Widmer et al. 2026, a 21-site
 Swiss study and the only source expressing agrivoltaic limits directly as DLI.
@@ -478,7 +481,7 @@ it's a fact about a bed, and the soil stage scores it against the bed's own soil
 ### 10b. Crop-vs-crop compatibility and polyculture suggestions
 
 Stages 1 to 6 compare one crop against the site. `src/recommend/compatibility.ts` compares two crops
-proposed for one bed, so the tool won't co-plant blueberry with a brassica at pH 6.5 to 7.0. It runs
+proposed for one bed, so the tool won't co-plant blueberry with broccoli, which optimizes at pH 6.0 to 6.8. It runs
 after the per-crop pipeline and never re-gates a crop. Eight terms, each from data already held,
 each with its own verdict, citations and grade:
 
@@ -494,10 +497,11 @@ each with its own verdict, citations and grade:
 | Allelopathy | grade C, D and E rules of an allelopathy kind | never: it warns without scoring |
 
 Disjoint optimum bands are reconciled with a compromise soil pH only where both envelopes are
-preferences. Blueberry's envelope is physiology: it's the only crop of 163 optimizing below pH 6.2,
-and section 3 of `src/recommend/stages/soil-water.ts` reads its span of 4.0 to 6.0 that way. So
-blueberry beside a brassica is refused outright, and the refusal names the pH 5.7 compromise neither
-crop can live at.
+preferences. Blueberry's envelope is physiology: section 3 of `src/recommend/stages/soil-water.ts`
+reads its span of 4.0 to 6.0 that way. So blueberry beside broccoli is refused outright, and the
+refusal names the pH 5.8 compromise at which neither crop is at its best. Two optimum bands that
+meet at one pH, blueberry's top of 5.5 and the 5.5 at which ECOCROP starts 83 crops' optima, share
+no band, so that pair is refused too.
 
 `src/recommend/suggest.ts` takes required, preferred, avoided and excluded crops as a
 `PreferenceSet` and returns ranked combinations. Space is a hard constraint: every crop gets one
@@ -965,7 +969,7 @@ neighbors isn't offered, and nor is rotating a bed by hand.
 
 ECOCROP holds no daily light integral, its light field being a descriptor, so no row cites
 `fao-ecocrop` for one and the schema default cites nothing. Against Torres et al. 2010 (Purdue
-HO-238-B-W) and Stallknecht 2025 (Virginia Cooperative Extension, VCE SPES-720NP), each of the 204
+HO-238-B-W) and Stallknecht 2025 (Virginia Cooperative Extension, VCE SPES-720NP), each of the 259
 Tier C rows is in one of three states. The three Tier A and two Tier B rows cite work on the crop
 itself and are set out under the tiers below.
 
@@ -976,20 +980,25 @@ itself and are set out under the tiers below.
    and Runkle: the 15 at the foot of all four is Runkle's figure for vine crops as a group, and the
    peppers' 20 to 30 is the range VCE prints for tomato. Every row but hot pepper carries a comment
    naming the row or the band.
-2. **Printed nowhere**, 195 rows. They cite nothing for light and carry one sentence: "This app's
+2. **Printed nowhere**, 243 rows. They cite nothing for light and carry one sentence: "This app's
    own figure, set by analogy with the crops in its class for which a published DLI exists. No cited
    work measured it for this crop, and the sources step lists it as a gap. Trust the ordering it
    gives, and treat the number itself as provisional." The sources step lists every one, as the
    sentence says.
-3. **Contradicting the cited document**, three rows: cilantro at 10 to 16 where VCE prints 15 to 20,
+3. **Contradicting the cited document**, ten rows: cilantro at 10 to 16 where VCE prints 15 to 20,
    summer squash at 18 to 25 where VCE prints "Zucchini 20-30", parsley at 10 to 16 where VCE prints
-   10 to 15. Each row keeps its number and drops the VCE citation, and its comment names the
-   difference, since a citation that doesn't hold its number fails any spot check.
+   10 to 15, and seven rows set above the Purdue chart's grades for a greenhouse pot: thyme and
+   lavender at 12 and 18 to 25 where the chart marks Thymus and Lavendula at 8 to 10 for minimum
+   acceptable quality, 12 to 16 for good and 18 to 30 for high, the two marigolds, lanceleaf
+   coreopsis and echinacea at 10 and 16 to 24 against the same bands for Tagetes, Coreopsis and
+   Echinacea, and sweet alyssum at 6 and 12 to 18 where Lobularia reads 6 to 8, 10 to 12 and 14 to
+   30. Each row keeps its number and cites nothing for light, and its comment names the difference,
+   since a citation that doesn't hold its number fails any spot check.
 
 On screen an inferred figure reads "no cited work measured it for this crop", because "nothing was
 measured for this crop" would be untrue of spinach.
 
-**The tiers.** 3 A, 2 B and 204 C, and a Tier C figure is never shown as a measurement. A is leaf
+**The tiers.** 3 A, 2 B and 259 C, and a Tier C figure is never shown as a measurement. A is leaf
 lettuce, head lettuce and basil, on per-crop trials: Both et al. 1997 for Cornell's 17 mol/m2/d,
 read in Brechner and Both 2013, Kelly et al. 2020 (lettuce at 6.9, 10.4, 15.6), Pennisi et al. 2020
 (lettuce and basil 5.8 to 17.3, optimum 14.4), Dou et al. 2018 (basil 9.3 to 17.8, 12.9 for
@@ -1010,7 +1019,7 @@ and Widmer's 25 maintains trial-average yield under agrivoltaic cover. The gate 
 being the agrivoltaic one, and the OSU 30 tops the band.
 
 The yield band names its study count beside the citation, "dominated by crop response: the leafy
-vegetables curve, 4 studies (Laub et al. 2022)", from `cropResponseLabel`, so a reader sees 66
+vegetables curve, 4 studies (Laub et al. 2022)", from `cropResponseLabel`, so a reader sees 78
 greens sitting on a four-study curve without opening a file.
 
 **Constants with no source.** The water model's basal coefficient is FAO-56 chapter 9 equations 97
@@ -1218,12 +1227,18 @@ the seasonal pair, and a bake with no crown in it runs the opaque test alone.
 
 **What it replaces.** With no house and no tree, the surroundings share of Record 25 applies. Once
 one is drawn the share applies nowhere, the drawn geometry being the answer: every reader goes
-through `exposureInForce`, so the bed light, the layout search and the shade budget agree. The
+through `answersInForce`, so the bed light, the layout search and the shade budget agree. The
 question is disabled with a sentence saying why, the light step's note names what was drawn, and the
 plan card says so. The question stays for anyone who won't draw, and the share table keeps its
 unsourced claim. A house keeps beds and rows out: the layout search places neither inside one, and a
 hand placement that overlaps gets a sentence on the check step, with drags never blocked. A tree
 restricts no placement: a bed may stand under a crown.
+
+**A typed figure.** Beside the three answers, a grower who knows how much shade the space gets can
+type it as the share of full sun lost over the growing season, and the figure stands in for the
+answers while it's set. It works like the answers: it dims every bed's light before the ranking
+reads it, and the design ceiling never reads it. A drawn house or tree sets it aside the way it
+sets the answers aside.
 
 **Where it lives.** `GardenPlot.obstructions` (schema 5) holds both kinds in one list, and it's
 empty for every garden saved at schema 4 and for the three shipped examples. A house needs four
@@ -1416,3 +1431,29 @@ gate refuses the crop, its calendar gives no dates and carries the gate's own se
 temperatures higher than 32°C or lower than 18°C inhibit flowering even under otherwise suitable
 short-day conditions." The gate reads day length alone, so it's lenient where an autumn turns cool
 before the frost.
+
+## 30. The catalog's soil pH ranges come from ECOCROP
+
+A crop's soil pH trapezoid came from one of two places: a range transcribed from an FAO ECOCROP
+data sheet, which 50 rows carry, or the catalog's default of 5, 6, 7.2 and 8, which the other 214
+carried. The default made most of the catalog indifferent to soil, so a typed pH moved few verdicts
+and said nothing about the crop. A row with no range of its own now reads ECOCROP's four cutoffs,
+the absolute and optimal minimum and maximum, from the copy of ECOCROP's parameter table that the
+Recocrop R package ships. A crop is matched by botanical name: its binomial, then a catalog synonym,
+then a hand map for renamed taxa and for the species ECOCROP splits into varieties, where the
+catalog's crop is one variety (dent maize for grain corn, the garden beet, the western radish).
+`docs/ecocrop-ph.json` records each match, its route and its four values, and
+`scripts/generate-ecocrop.mjs` writes the table the catalog reads from it. 170 rows read ECOCROP,
+50 keep their own transcription, and 44 keep the default: the crops ECOCROP doesn't hold, the ones
+it holds only a genus neighbor of, and the Brassica rapa types it doesn't split out.
+
+**A row's own range wins.** Six transcriptions differ from Recocrop's copy by more than half a
+unit at a cutoff (lowbush blueberry and cranberry on purpose, moringa, finger millet, avocado and
+vanilla from FAO's online sheets), and each stands until the sheet is read again.
+
+**What moved.** On the test fixture in open sun at a typed pH of 6.5, one crop of 264 changed its
+verdict: arugula, whose ECOCROP row (Eruca sativa) runs 7 to 8.5, a span narrow enough for the
+soil stage to read as physiology. Garden arugula grows nearer neutral, so its row carries UT
+Extension's 6 to 6.8 as its own optimum, and the counts stand. ECOCROP starts the optimum of 83
+crops at pH 5.5, where blueberry's ends, so the compatibility rule now reads two optimum bands
+that meet at one pH as sharing no band (record 10b), and 33 crops share blueberry's.

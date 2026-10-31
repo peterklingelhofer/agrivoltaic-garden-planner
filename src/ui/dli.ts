@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import { dliClassLimits } from '../data/crops'
 import { EMPTY_LIST } from '../state/slices'
 import { useAppStore } from '../state/store'
 import type { CitationId } from '../types/citation-ids.generated'
@@ -51,19 +52,22 @@ export interface DliEvidence {
  * "(Purdue, VCE)" beside the number reads as the number's source. A light figure that cites a work
  * gets no sentence of its own, because what the work prints differs by row (a group's figure, this
  * crop's target, this crop's own number), and the reason printed after it says which. A maximum
- * design shade is the app's own bound for the crop's class, set inside the meta-analysis it cites,
- * so it reads the same with or without the citation
+ * design shade is the app's own bound for the crop or its class, set inside the meta-analysis it
+ * cites, so it reads the same with or without the citation
  */
 const summaryOf = (
   kind: DliThresholdKind,
   label: string,
   value: string,
   cited: Cited<number>,
+  crop: Crop,
 ): string =>
   cited.provenance === 'inferred'
-    ? cited.citations.length === 0 || kind === 'max-design-rsr'
-      ? `${label} ${value} is this app's own figure for the crop's class, and no cited work measured it for this crop`
-      : `${label} ${value}`
+    ? kind === 'max-design-rsr' && cited.value !== dliClassLimits(crop.dliClass).maxDesignRsr
+      ? `${label} ${value} is this app's own figure for this crop, and no cited work measured it`
+      : cited.citations.length === 0 || kind === 'max-design-rsr'
+        ? `${label} ${value} is this app's own figure for the crop's class, and no cited work measured it for this crop`
+        : `${label} ${value}`
     : cited.provenance === 'unsourced'
       ? `${label} ${value} has no source among the works listed in Sources`
       : `${label} ${value} is read from a Tier ${cited.tier} source`
@@ -103,7 +107,7 @@ export const dliEvidence = (crop: Crop, kind: DliThresholdKind): DliEvidence | n
     value,
     citations: cited.citations,
     reason: citedReason(cited),
-    summary: summaryOf(kind, label, value, cited),
+    summary: summaryOf(kind, label, value, cited, crop),
   }
 }
 

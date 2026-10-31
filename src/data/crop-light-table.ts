@@ -23,8 +23,11 @@ import { cropLabel } from './crops'
  */
 export type LightBasis = 'class' | 'printed' | 'trial' | 'study'
 
-/** `own` is this app's bound for the class, `study` a study in the quantity the ceiling uses */
-export type CeilingBasis = 'own' | 'study'
+/**
+ * `own` is this app's bound for the class, `row` the catalog's own figure for this crop, apart
+ * from its class, `study` a study in the quantity the ceiling uses
+ */
+export type CeilingBasis = 'own' | 'row' | 'study'
 
 /**
  * Days for an annual or biennial, years to full size for a perennial whose row sets them, and
@@ -98,21 +101,65 @@ export interface CropLightTable {
   readonly notes: readonly CropLightNote[]
 }
 
+/**
+ * Each column of the docs site's crop table and the short explainer its hover shows, an empty
+ * one for a header with none. The crop finder's table reads the same words where its columns
+ * are the catalog's
+ */
+export const CROP_LIGHT_HEADERS: readonly (readonly [string, string])[] = [
+  ['Crop', ''],
+  ['Botanical name', 'Genus and species'],
+  ['Family', 'The plant family'],
+  ['Light floor (mol/m²/d)', 'The minimum amount of light for this crop to produce'],
+  ['Target light band (mol/m²/d)', 'The optimal amount of light for this crop'],
+  [
+    'Research tier',
+    "How solid the light floor and band are. A is measured on this crop, B a shade or field study of it, and C is the catalog's own figure, set by analogy with the crops in its class that have a published number. The word after it says where the number came from: the class, a cited table, a trial or a study.",
+  ],
+  [
+    'Shade ceiling (%)',
+    'The share of full sun the crop can lose to shade across its season before yield suffers, set at the cautious end of a range',
+  ],
+  [
+    'Research tier',
+    "How solid the shade ceiling is. B rests on a shade study in this same unit: a pooled regression across crops found no significant yield loss below 20 percent shading, and a Swiss strawberry study put its limit at 10 to 30 percent. C is the catalog's own bound, kept inside what a meta-analysis of shade trials found tolerable, with no shade trial on the crop itself. The word after it says whose figure it is: the class's, or the catalog's for this crop alone.",
+  ],
+  ['Shade benefit', "Says in heat when the crop tends to like some shade where it's hot and dry."],
+  [
+    'Maturity',
+    'Days from sowing to harvest, or from transplanting when it says so. Perennials show years to full size where the catalog has them.',
+  ],
+  [
+    'Spacing (cm)',
+    'Plant spacing in centimeters. The first number is the gap between plants along a row, the second the gap between rows.',
+  ],
+  ['Sources', ''],
+]
+
+/** A crop's maturity the way both tables print it: "70 days from transplant", "3 years", "perennial" */
+export const maturityText = (maturity: CropMaturity): string => {
+  if (maturity.kind === 'days')
+    return `${maturity.days} days${maturity.from === 'transplant' ? ' from transplant' : ''}`
+  if (maturity.kind === 'perennial') return 'perennial'
+  if (maturity.years < 1) return 'under a year'
+  return maturity.years === 1 ? '1 year' : `${maturity.years} years`
+}
+
 /** The decision record's names for the classes, in its order */
 export const CLASS_NAME: Readonly<Record<DliClass, string>> = {
-  'understory-herbs': 'Understory herbs',
-  'leafy-greens': 'Leafy greens',
-  'forages-c3-pasture': 'Forages and C3 pasture',
-  'cane-bush-berries': 'Cane and bush berries',
+  'understory-herbs': 'Shade herbs and woodland greens',
+  'leafy-greens': 'Leafy greens, herbs and flowers',
+  'forages-c3-pasture': 'Cover crops, forages, millets and meadow flowers',
+  'cane-bush-berries': 'Berries, orchard fruit, nuts and vines',
   strawberry: 'Strawberry',
   brassicas: 'Brassicas',
   'root-tuber': 'Roots and tubers',
-  solanaceae: 'Solanaceae',
-  cucurbits: 'Cucurbits',
+  solanaceae: 'Tomatoes, peppers and eggplant',
+  cucurbits: 'Cucurbits and other fruiting plants',
   alliums: 'Alliums',
-  'grain-legumes': 'Grain legumes',
-  'c3-cereals': 'C3 cereals',
-  'corn-c4': 'Corn and other C4 crops',
+  'grain-legumes': 'Beans, peas and other legumes',
+  'c3-cereals': 'Cereals, pseudocereals and oilseeds',
+  'corn-c4': 'Corn and sugarcane',
 }
 
 const lightBasisOf = (cited: SourcedCited<number>): LightBasis =>
@@ -124,8 +171,8 @@ const lightBasisOf = (cited: SourcedCited<number>): LightBasis =>
       ? 'trial'
       : 'study'
 
-const ceilingBasisOf = (cited: SourcedCited<number>): CeilingBasis =>
-  cited.provenance === 'inferred' ? 'own' : 'study'
+const ceilingBasisOf = (cited: SourcedCited<number>, classFigure: number): CeilingBasis =>
+  cited.provenance === 'inferred' ? (cited.value === classFigure ? 'own' : 'row') : 'study'
 
 /** What the app prints beside the figure, read from the same field the DLI evidence panel reads */
 const noteOf = citedReason
@@ -141,6 +188,7 @@ const draft = (row: CropRow): Draft => {
   const crop = expandRow(row)
   const overrides = row[17] ?? {}
   const light = crop.light
+  const spec = DLI_CLASSES[crop.dliClass]
   const name = cropLabel(crop)
   const maturity: CropMaturity =
     crop.thermal !== null
@@ -164,7 +212,7 @@ const draft = (row: CropRow): Draft => {
         kind: 'ceiling',
         text: noteOf(light.maxDesignRsr),
         value: null,
-        classDefault: overrides.maxRsrNote === undefined,
+        classDefault: noteOf(light.maxDesignRsr) === spec.maxDesignRsrNote,
       },
     },
   ]
@@ -210,7 +258,7 @@ const draft = (row: CropRow): Draft => {
       lightNote: noteOf(light.dliMinMolM2Day),
       ceiling: light.maxDesignRsr.value,
       ceilingTier: light.maxDesignRsr.tier,
-      ceilingBasis: ceilingBasisOf(light.maxDesignRsr),
+      ceilingBasis: ceilingBasisOf(light.maxDesignRsr, spec.maxDesignRsr),
       ceilingCitations: light.maxDesignRsr.citations,
       ceilingNote: noteOf(light.maxDesignRsr),
       disorderCeiling: disorder === null ? null : disorder.value,

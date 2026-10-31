@@ -5,7 +5,7 @@ import type { CropId } from '../../types/ids'
 import type { ExceedancePercentile, FrostExceedanceCurve, Site } from '../../types/site'
 import { molPerM2Day } from '../../types/units'
 import type { Celsius, Days, DayOfYear } from '../../types/units'
-import { shadedBySurroundings } from '../surroundings'
+import { SURROUNDINGS_SHADE, shadedBySurroundings } from '../surroundings'
 import { bedLightFixture, FROST_EVERY_YEAR, frostFreeSiteFixture, siteFixture } from '../testkit'
 import { lightGate } from './light-gate'
 
@@ -135,7 +135,7 @@ describe('lightGate holds the design ceiling to the bake alone', () => {
     const open = bedLightFixture('bed-open', 0, 36, BRIGHT)
     const outcome = lightGate(
       tomato,
-      shadedBySurroundings(open, 'partly-sheltered'),
+      shadedBySurroundings(open, SURROUNDINGS_SHADE['partly-sheltered']),
       siteFixture(),
       PERCENTILE,
     )
@@ -152,7 +152,7 @@ describe('lightGate holds the design ceiling to the bake alone', () => {
     for (const exposure of ['open', 'partly-sheltered'] as const) {
       const outcome = lightGate(
         tomato,
-        shadedBySurroundings(panelShaded, exposure),
+        shadedBySurroundings(panelShaded, SURROUNDINGS_SHADE[exposure]),
         siteFixture(),
         PERCENTILE,
       )
@@ -168,7 +168,7 @@ describe('lightGate holds the design ceiling to the bake alone', () => {
     const panelShaded = bedLightFixture('bed-panels', 0.25, 36, BRIGHT)
     const outcome = lightGate(
       tomato,
-      shadedBySurroundings(panelShaded, 'partly-sheltered'),
+      shadedBySurroundings(panelShaded, SURROUNDINGS_SHADE['partly-sheltered']),
       siteFixture(),
       PERCENTILE,
     )

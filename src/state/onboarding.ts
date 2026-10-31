@@ -1,7 +1,8 @@
 import { DEFAULT_MAX_CROPS_PER_BED } from '../recommend/suggest'
 import { evenFootprints } from '../recommend/layout'
-import { exposureInForce } from '../recommend/surroundings'
+import { answersInForce } from '../recommend/surroundings'
 import type { Bed, GardenPlot, Irrigation } from '../types/garden'
+import { irrigationOf } from '../types/garden'
 import type { LatLon } from '../types/geo'
 import type {
   ArrayCandidate,
@@ -15,7 +16,7 @@ import type {
 } from '../types/onboarding'
 import type { PvArray } from '../types/pv'
 import type { SoilProfile } from '../types/site'
-import { meters, millimetersPerYear, type Meters } from '../types/units'
+import { meters, type Meters } from '../types/units'
 import { DEFAULT_SOIL, makeArray, makeBed, makePlot } from './defaults'
 import { withDerived } from './derive'
 import { extentOf, polygonOf, rectangleRing, vec2 } from './geom'
@@ -110,6 +111,7 @@ export const DEFAULT_WIZARD_ANSWERS: WizardAnswers = {
   objective: BALANCED,
   ambition: 'mixed-vegetables',
   exposure: 'open',
+  surroundingsShadePercent: null,
   mounting: 'any',
   maxHeightM: null,
   irrigationAvailable: true,
@@ -135,6 +137,8 @@ export const SEARCH_ANSWER_FIELDS: readonly (keyof WizardAnswers)[] = [
   'objective',
   'ambition',
   'exposure',
+  // read through the same share as `exposure`, which it overrides while it's set
+  'surroundingsShadePercent',
   'mounting',
   'maxHeightM',
   'irrigationAvailable',
@@ -175,13 +179,12 @@ export const answersOf = (
 ): OnboardingAnswers => {
   const size = plotSizeOf(plot)
   return {
-    ...answers,
+    // a drawn house answers what is already around the space, so the search reads that over the
+    // three-answer card and the typed figure the moment one stands (Decision Record 26)
+    ...answersInForce(plot?.obstructions ?? [], answers),
     plotWidthM: size.widthM,
     plotDepthM: size.depthM,
     objective: normalizeObjective(answers.objective),
-    // a drawn house answers what is already around the space, so the search reads that over
-    // the three-answer share the moment one stands (Decision Record 26)
-    exposure: exposureInForce(plot?.obstructions ?? [], answers.exposure),
     location,
     locationLabel,
   }
@@ -192,11 +195,8 @@ export const answersOf = (
  * water-limited pathway in the recommender, so answering "no" and being handed drip beds
  * would have the ranking score crops against water nobody can give them
  */
-export const irrigationFor = (answers: WizardAnswers): Irrigation => ({
-  method: answers.irrigationAvailable ? 'drip' : 'none',
-  available: answers.irrigationAvailable,
-  appliedMmPerYear: millimetersPerYear(answers.irrigationAvailable ? 180 : 0),
-})
+export const irrigationFor = (answers: WizardAnswers): Irrigation =>
+  irrigationOf(answers.irrigationAvailable ? 'drip' : 'none')
 
 /**
  * Simplicity is a preference for fewer things to look after, so it's what caps how many

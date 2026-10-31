@@ -167,8 +167,8 @@ describe('crop light table: what a tier may claim', () => {
     ).toEqual([])
   })
 
-  it('gives a tier C ceiling the basis own and a tier B ceiling the basis study', () => {
-    expect(flagged((row) => row.ceilingTier === 'C' && row.ceilingBasis !== 'own')).toEqual([])
+  it('gives a tier C ceiling the basis own or row and a tier B ceiling the basis study', () => {
+    expect(flagged((row) => row.ceilingTier === 'C' && row.ceilingBasis === 'study')).toEqual([])
     expect(flagged((row) => row.ceilingTier === 'B' && row.ceilingBasis !== 'study')).toEqual([])
   })
 
@@ -192,7 +192,10 @@ describe('crop light table: what a tier may claim', () => {
       if (row.ceilingTier !== ceiling.tier) {
         problems.push(`${row.id}: ceiling tier ${row.ceilingTier}, record ${ceiling.tier}`)
       }
-      if ((row.ceilingBasis === 'own') !== (ceiling.provenance === 'inferred')) {
+      const classFigure = DLI_CLASSES[source[5]].maxDesignRsr
+      const basis =
+        ceiling.provenance !== 'inferred' ? 'study' : ceiling.value === classFigure ? 'own' : 'row'
+      if (row.ceilingBasis !== basis) {
         problems.push(`${row.id}: ceiling basis ${row.ceilingBasis}, record ${ceiling.provenance}`)
       }
     }
@@ -268,13 +271,16 @@ describe('crop light table: notes', () => {
     }
   })
 
-  it('calls a note a class default exactly when none of its crops overrides that note', () => {
-    const overrideOf = { light: 'dliCaveat', ceiling: 'maxRsrNote' } as const
+  it('calls a light note a class default when no crop overrides it, a ceiling note when its class wrote it', () => {
     for (const note of table.notes) {
       if (note.kind !== 'light' && note.kind !== 'ceiling') continue
       for (const { id } of note.crops) {
-        const overridden = rowOf(id)[17]?.[overrideOf[note.kind]] !== undefined
-        expect(note.classDefault, `${id} on ${labelOf(note)}`).toBe(!overridden)
+        const row = rowOf(id)
+        const classDefault =
+          note.kind === 'light'
+            ? row[17]?.dliCaveat === undefined
+            : note.text === DLI_CLASSES[row[5]].maxDesignRsrNote
+        expect(note.classDefault, `${id} on ${labelOf(note)}`).toBe(classDefault)
       }
     }
   })

@@ -218,7 +218,8 @@ export const SourcesPanel = (): ReactElement => {
       </p>
       <p className="panel-sub" data-testid="readout-sources-crops">
         <a href="/docs/crops.html">Crop light figures</a>: every crop in the catalog with its light
-        floor, target band and shade ceiling, and the tier and sources of each.
+        floor, target band and shade ceiling, and the tier and sources of each. The{' '}
+        <a href="/crops/">crop finder</a> reads the same catalog against any place.
       </p>
       {/* said politely and out of the way: the highlight below is the visual half of the same
           message, and neither of them interrupts whatever the reader was doing */}

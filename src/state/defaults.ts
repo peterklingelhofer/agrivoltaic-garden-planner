@@ -1,5 +1,6 @@
 import { CROWN_TRANSMITTANCE_IN_LEAF, CROWN_TRANSMITTANCE_LEAFLESS } from '../data/canopy'
 import type { Bed, GardenPlot, Obstruction } from '../types/garden'
+import { irrigationOf } from '../types/garden'
 import type { LatLon, Polygon2D } from '../types/geo'
 import { DEFAULT_GROUND_COVER } from '../types/ground'
 import type { GrowingWindow } from '../types/light'
@@ -13,7 +14,6 @@ import {
   degreesLongitude,
   fraction,
   meters,
-  millimetersPerYear,
   wattsPeak,
 } from '../types/units'
 import { withDerived } from './derive'
@@ -162,11 +162,7 @@ export const makeBed = (index: number, patch: Partial<Bed> = {}): Bed => {
     footprint,
     areaM2: polygonAreaM2(footprint),
     soil: DEFAULT_SOIL,
-    irrigation: {
-      method: 'drip',
-      available: true,
-      appliedMmPerYear: millimetersPerYear(180),
-    },
+    irrigation: irrigationOf('drip'),
     raisedHeightM: meters(0.35),
     modifiers: [],
     waterHarvesting: [],

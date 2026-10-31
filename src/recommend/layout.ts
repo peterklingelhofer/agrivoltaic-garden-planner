@@ -12,7 +12,7 @@ import type { House } from '../types/garden'
 import type { Polygon2D } from '../types/geo'
 import { bedId as asBedId } from '../types/ids'
 import type { DliRaster, GrowingWindow } from '../types/light'
-import type { BedLayout, BedPlacement, LightZoneKind, SiteExposure } from '../types/onboarding'
+import type { BedLayout, BedPlacement, LightZoneKind } from '../types/onboarding'
 import type { PvArray } from '../types/pv'
 import type { Fraction, MolPerM2Day } from '../types/units'
 import { overlapsAHouse } from './overlap'
@@ -81,9 +81,10 @@ export interface LayoutRequest {
   readonly window: GrowingWindow
   readonly maxBeds?: number
   /**
-   * What already shades the space. Each placed bed's light carries its share (`surroundings.ts`)
+   * What already shades the space, as the share of the open-sky light it takes
+   * (`surroundingsShare`). Each placed bed's light carries it
    */
-  readonly exposure?: SiteExposure
+  readonly surroundings?: Fraction
   /** Drawn houses a bed may never be placed inside. A tree is never policed (Decision Record 26) */
   readonly houses?: readonly House[]
   /**
@@ -538,7 +539,7 @@ const placementsFor = (
   lengthM: number,
   raster: DliRaster,
   field: SeasonField,
-  exposure: SiteExposure,
+  surroundings: Fraction,
 ): readonly BedPlacement[] =>
   slots.map((slot, index) => {
     const bedId = asBedId(`bed-${String(index + 1)}`)
@@ -556,7 +557,7 @@ const placementsFor = (
       },
       // the panels' shade places the bed and names its zone. The crops it is then ranked for
       // are judged on that light with the surroundings' share taken off as well
-      light: shadedBySurroundings(bedLightOf(raster, bedId, footprint), exposure),
+      light: shadedBySurroundings(bedLightOf(raster, bedId, footprint), surroundings),
       reason: zoneReason(slot.kind, measured.shadeRatio),
     }
   })
@@ -596,6 +597,7 @@ export const placeBeds = (request: LayoutRequest): Derivation<BedLayout> => {
   const limit = bedLimit(request.maxBeds)
   const halfM = usableCrossM / 2
   const field = seasonField(request.raster, request.window)
+  const surroundings = request.surroundings ?? (0 as Fraction)
   const refusals: string[] = []
 
   // every call tags its slots with the span it cut them from (`Slot.run`), so a bed that
@@ -616,7 +618,7 @@ export const placeBeds = (request: LayoutRequest): Derivation<BedLayout> => {
   const even = (reason: string): Derivation<BedLayout> => {
     const slid = settle(interleave(cutSlots('even-light', [-halfM, halfM]), limit))
     const beds = clearOfHouses(
-      placementsFor(slid.slots, axis, lengthM, request.raster, field, request.exposure ?? 'open'),
+      placementsFor(slid.slots, axis, lengthM, request.raster, field, surroundings),
       request.houses ?? [],
       refusals,
     )
@@ -660,7 +662,7 @@ export const placeBeds = (request: LayoutRequest): Derivation<BedLayout> => {
   // below isn't guarded for a band that empties out entirely, which no plot has shown yet
   const slid = settle(interleave(slots, limit))
   const beds = clearOfHouses(
-    placementsFor(slid.slots, axis, lengthM, request.raster, field, request.exposure ?? 'open'),
+    placementsFor(slid.slots, axis, lengthM, request.raster, field, surroundings),
     request.houses ?? [],
     refusals,
   )

@@ -2,6 +2,7 @@ import { DEFAULT_ECONOMY_INPUTS, isCurrencyCode } from '../data/economy'
 import { DEFAULT_FROST_PERCENTILE } from '../data/site'
 import { DEFAULT_COMPATIBILITY_WEIGHTS } from '../recommend/compatibility'
 import { DEFAULT_MAX_CROPS_PER_BED, emptyPreferences } from '../recommend/suggest'
+import { irrigationOf } from '../types/garden'
 import type { Bed, GardenPlot } from '../types/garden'
 import { isGroundCover, nearestGroundCover } from '../types/ground'
 import {
@@ -237,6 +238,17 @@ export const MIGRATIONS: Readonly<Record<number, Migration>> = {
     isRecord(design) && isRecord(design.plot) && design.plot.obstructions === undefined
       ? { ...design, plot: { ...design.plot, obstructions: [] } }
       : design,
+  /**
+   * 5 to 6: a shade figure could now be typed beside the three surroundings answers, and a design
+   * saved before that typed none, so the card it chose still stands. A payload with no answers at
+   * all is left alone: there's no answer to type a figure beside
+   */
+  5: (design) =>
+    isRecord(design) &&
+    isRecord(design.answers) &&
+    design.answers.surroundingsShadePercent === undefined
+      ? { ...design, answers: { ...design.answers, surroundingsShadePercent: null } }
+      : design,
 }
 
 export type Migrated =
@@ -429,6 +441,9 @@ const normalizePlot = (plot: GardenPlot): GardenPlot => ({
     ...bed,
     areaM2: polygonAreaM2(bed.footprint),
     soil: { ...bed.soil, sourceId: bed.soil.sourceId ?? 'default' },
+    // a design saved while the bed panel wrote the method alone can say None and still carry the
+    // watered flag the rules read, so the flag and the depth are read off the method again
+    irrigation: irrigationOf(bed.irrigation.method, bed.irrigation.appliedMmPerYear || undefined),
   })),
   // a design saved before the backtracking flag existed carries none, and every tracker the app
   // writes backtracks, so a missing flag reads as on
@@ -612,6 +627,10 @@ const DECODERS: Decoders = {
         OBJECTIVE_KEYS.every((key) => num((value.objective as Record<string, unknown>)[key])) &&
         oneOf(AMBITIONS, value.ambition) &&
         oneOf(EXPOSURES, value.exposure) &&
+        (value.surroundingsShadePercent === null ||
+          (num(value.surroundingsShadePercent) &&
+            value.surroundingsShadePercent >= 0 &&
+            value.surroundingsShadePercent <= 100)) &&
         oneOf(MOUNTINGS, value.mounting) &&
         (value.maxHeightM === null || (num(value.maxHeightM) && value.maxHeightM > 0)) &&
         bool(value.irrigationAvailable) &&

@@ -16,19 +16,19 @@ import { formatDli } from './format'
  * class is where the evidence actually lives
  */
 export const DLI_CLASS_LABEL: Readonly<Record<DliClass, string>> = {
-  'understory-herbs': 'shade-tolerant herbs',
-  'leafy-greens': 'salad leaves',
-  'forages-c3-pasture': 'grasses and clovers',
-  'cane-bush-berries': 'bush and cane berries',
+  'understory-herbs': 'shade herbs',
+  'leafy-greens': 'leafy greens and herbs',
+  'forages-c3-pasture': 'cover crops and forages',
+  'cane-bush-berries': 'berries, orchard fruit and nuts',
   strawberry: 'strawberries',
   brassicas: 'cabbages and their kin',
   'root-tuber': 'roots and tubers',
   solanaceae: 'tomatoes and peppers',
-  cucurbits: 'squashes and cucumbers',
+  cucurbits: 'cucurbits and fruiting plants',
   alliums: 'onions and leeks',
   'grain-legumes': 'beans and peas',
-  'c3-cereals': 'grains',
-  'corn-c4': 'sweet corn',
+  'c3-cereals': 'cereals and oilseeds',
+  'corn-c4': 'corn and sugarcane',
 }
 
 export interface ColdOpenBed {

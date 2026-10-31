@@ -6411,6 +6411,19 @@
         }
       }
     ],
+    "ut-w362d-youth-gardening": [
+      {
+        "quote": "b8e99c279dd356048c72efd3d46da8164e00438f6881713e494ad0abb7b9f820",
+        "preview": "Prefers rich, humus soil with pH of 6 to 6.8",
+        "found": {
+          "kind": "pdf",
+          "bytes": 9656078,
+          "textSha256": "a5377a34f73a9d775908d5c0538c9476a108d41fc234aca88b7e2d223bf82584",
+          "via": "manual",
+          "date": "2026-10-29"
+        }
+      }
+    ],
     "uwextension-honeyberries": [
       {
         "quote": "bbd76aba8198a6926f1d4572d8685b67c2200572d9352f19e0f866eaac5e235e",

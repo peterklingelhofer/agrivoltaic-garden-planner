@@ -66,7 +66,7 @@ const CROPS = {
   file: 'crops.html',
   title: 'Crop light figures',
   blurb:
-    "Every crop in the catalog with the least light it needs, its target band and the most panel shade it's allowed",
+    "Every crop in the catalog with the least light it needs, its target band and the most shade it's allowed",
   after: '00-DECISIONS.md',
 }
 const GENERATED = [CROPS]
@@ -310,15 +310,6 @@ const classTarget = ({ targetLowMolM2Day: low, targetHighMolM2Day: high }) => {
   return band === '' ? 'no class target' : `target ${band}`
 }
 
-const maturityText = (maturity) => {
-  if (maturity === null) return ''
-  if (maturity.kind === 'days')
-    return `${maturity.days} days${maturity.from === 'transplant' ? ' from transplant' : ''}`
-  if (maturity.kind === 'perennial') return 'perennial'
-  if (maturity.years < 1) return 'under a year'
-  return maturity.years === 1 ? '1 year' : `${maturity.years} years`
-}
-
 /** What a crop's own note is about, as the label before it in the name's hover */
 const NOTE_SUBJECT = { light: 'Light figures', ceiling: 'Shade ceiling' }
 const noteSubject = (note) =>
@@ -326,37 +317,6 @@ const noteSubject = (note) =>
   `${note.kind.charAt(0).toUpperCase()}${note.kind.slice(1)} ceiling ${note.value} mol/m²/d`
 
 const sameIds = (a, b) => a.length === b.length && a.every((id, i) => id === b[i])
-
-/** Each header and the short explainer its hover shows, an empty one for a header with none */
-const HEADERS = [
-  ['Crop', ''],
-  ['Botanical name', 'Genus and species'],
-  ['Family', 'The plant family'],
-  ['Light floor (mol/m²/d)', 'The least light the crop gets by on'],
-  ['Target light band (mol/m²/d)', 'Where it does well.'],
-  [
-    'Research tier',
-    "How solid the light floor and band are. A is measured on this crop, B a shade or field study of it, and C is the catalog's own figure, set by analogy with the crops in its class that have a published number. The word after it says where the number came from: the class, a cited table, a trial or a study.",
-  ],
-  [
-    'Shade ceiling (%)',
-    "The most of a bed's light the panels may take over the crop's season, set at the cautious end of a range.",
-  ],
-  [
-    'Research tier',
-    "How solid the shade ceiling is. B rests on a shade study in this same unit: a pooled regression across crops found no significant yield loss below 20 percent shading, and a Swiss strawberry study put its limit at 10 to 30 percent. C is the catalog's own bound for the class, kept inside what a meta-analysis of shade trials found tolerable, with no shade trial on the crop itself.",
-  ],
-  ['Shade benefit', "Says in heat when the crop tends to like some shade where it's hot and dry."],
-  [
-    'Maturity',
-    'Days from sowing to harvest, or from transplanting when it says so. Perennials show years to full size where the catalog has them.',
-  ],
-  [
-    'Spacing (cm)',
-    'Plant spacing in centimeters. The first number is the gap between plants along a row, the second the gap between rows.',
-  ],
-  ['Sources', ''],
-]
 
 /**
  * Adds the filter box and the floating header to the crop table. A script builds both and the
@@ -427,16 +387,17 @@ const FILTER_SCRIPT = `<script>
 
 /**
  * The crop page's body: the table the app reads, grouped by class. What the app prints beside a
- * figure is in the headers' hovers for the shared notes and on the crop's name for its own
+ * figure is in the headers' hovers for the shared notes and on the crop's name for its own. The
+ * headers and the maturity words come from the table's own module, which the crop finder reads too
  */
-const cropsBody = (table, csl) => {
+const cropsBody = (table, csl, { headers, maturityText }) => {
   const link = (id) => `<a href="./CITATIONS.html#${esc(id)}">${esc(citationLabel(csl, id))}</a>`
 
   const groupRow = ({ dliClass, name, spec, rows }) => {
     const cites = spec.maxDesignRsrCitations.map(link).join(', ')
     const ceiling = Math.round(spec.maxDesignRsr * 100)
     const floor = spec.minMolM2Day === null ? 'No class floor' : `Class floor ${spec.minMolM2Day}`
-    return `<tr class="group"><th colspan="12" id="class-${esc(dliClass)}">${esc(name)}: ${cropCount(rows.length)}. ${floor}, ${classTarget(spec)}, ceiling ${ceiling}% (${cites})</th></tr>`
+    return `<tr class="group"><th colspan="12" id="class-${esc(dliClass)}"><span class="noted" title="A class groups crops by the light they need, so it spans families and growth habits, and its name says what it holds.">${esc(name)}</span>: ${cropCount(rows.length)}. ${floor}, ${classTarget(spec)}, ceiling ${ceiling}% (${cites})</th></tr>`
   }
 
   // a ceiling's sources show in the row only where they differ from the class's, which the
@@ -488,11 +449,12 @@ const cropsBody = (table, csl) => {
 
   return `<div class="crops"><p class="note">${esc(STANDING_NOTE)}</p>
 <table>
-<thead><tr>${HEADERS.map(([text, tip]) => (tip ? `<th title="${esc(tip)}">${esc(text)}</th>` : `<th>${esc(text)}</th>`)).join('')}</tr></thead>
+<thead><tr>${headers.map(([text, tip]) => (tip ? `<th title="${esc(tip)}">${esc(text)}</th>` : `<th>${esc(text)}</th>`)).join('')}</tr></thead>
 ${bodies.join('\n')}
 </table>
 <h1>Crop light figures</h1>
 <p><a href="./crop-light.csv">Download the table as CSV</a>, with the notes included. Curated from USDA and land-grant Extension publications, FAO ECOCROP and FAO Irrigation and Drainage Paper 56 Table 22.</p>
+<p><a href="/crops/">Find the crops that suit a place</a>: the same catalog read against a location, its soil and the shade over its ground.</p>
 </div>
 ${FILTER_SCRIPT}`
 }
@@ -540,7 +502,7 @@ const main = async () => {
   }
 
   const { CROP_ROWS } = await import(new URL('src/data/catalog/rows.ts', ROOT).href)
-  const { cropLightTable, cropLightCsv } = await import(
+  const { cropLightTable, cropLightCsv, CROP_LIGHT_HEADERS, maturityText } = await import(
     new URL('src/data/crop-light-table.ts', ROOT).href
   )
   const table = cropLightTable(CROP_ROWS)
@@ -553,7 +515,7 @@ const main = async () => {
   const registry = JSON.parse(readFileSync(new URL('docs/CITATIONS.registry.json', ROOT), 'utf8'))
   const cropsHtml = page({
     title: CROPS.title,
-    body: wrapTables(cropsBody(table, csl)),
+    body: wrapTables(cropsBody(table, csl, { headers: CROP_LIGHT_HEADERS, maturityText })),
     home: './',
     description: CROPS.blurb,
     aside: sourcesAsOf(table, csl, registry),
@@ -586,7 +548,7 @@ const main = async () => {
       <ul class="index">
         ${list}
       </ul>
-      <p><a href="/">Open the tool</a>. No sign-up, nothing stored on a server.</p>`,
+      <p><a href="/">Open the tool</a>, or <a href="/crops/">find the crops that suit a place</a>. No sign-up, nothing stored on a server.</p>`,
   })
   writeFileSync(new URL('index.html', OUT), index)
   bytes += Buffer.byteLength(index)

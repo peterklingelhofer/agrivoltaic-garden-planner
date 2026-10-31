@@ -1,0 +1,2793 @@
+{
+  "source": {
+    "citekey": "hijmans-recocrop",
+    "file": "inst/parameters/ecocrop.rds",
+    "repository": "https://github.com/cropmodels/Recocrop",
+    "fetched": "2026-10-29",
+    "license": "GPL (>=3)"
+  },
+  "crops": {
+    "tomato": {
+      "matchedBy": "hand",
+      "catalogName": "Solanum lycopersicum",
+      "ecocrop": {
+        "NAME": "Tomato",
+        "SCIENTNAME": "Lycopersicon esculentum M.",
+        "CODE": 17,
+        "PHMIN": 5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 6.8,
+        "PHMAX": 7.5
+      }
+    },
+    "pepper-sweet": {
+      "matchedBy": "binomial",
+      "catalogName": "Capsicum annuum",
+      "ecocrop": {
+        "NAME": "Sweet pepper",
+        "SCIENTNAME": "Capsicum annuum L.",
+        "CODE": 33,
+        "PHMIN": 4.5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 6.8,
+        "PHMAX": 7
+      }
+    },
+    "pepper-hot": {
+      "matchedBy": "binomial",
+      "catalogName": "Capsicum frutescens",
+      "ecocrop": {
+        "NAME": "Hot pepper",
+        "SCIENTNAME": "Capsicum frutescens L.",
+        "CODE": 480,
+        "PHMIN": 4.3,
+        "PHOPMN": 5.5,
+        "PHOPMX": 6.8,
+        "PHMAX": 8.3
+      }
+    },
+    "eggplant": {
+      "matchedBy": "binomial",
+      "catalogName": "Solanum melongena",
+      "ecocrop": {
+        "NAME": "Eggplant",
+        "SCIENTNAME": "Solanum melongena L.",
+        "CODE": 70,
+        "PHMIN": 4.3,
+        "PHOPMN": 5.5,
+        "PHOPMX": 6.8,
+        "PHMAX": 8.5
+      }
+    },
+    "tomatillo": {
+      "matchedBy": "binomial",
+      "catalogName": "Physalis philadelphica",
+      "ecocrop": {
+        "NAME": "Tomatillo *",
+        "SCIENTNAME": "Physalis philadelphica Lam.",
+        "CODE": 1644,
+        "PHMIN": 5,
+        "PHOPMN": 6,
+        "PHOPMX": 7,
+        "PHMAX": 8
+      }
+    },
+    "cucumber": {
+      "matchedBy": "binomial",
+      "catalogName": "Cucumis sativus",
+      "ecocrop": {
+        "NAME": "Cucumber",
+        "SCIENTNAME": "Cucumis sativus L.",
+        "CODE": 49,
+        "PHMIN": 4.5,
+        "PHOPMN": 6,
+        "PHOPMX": 7.5,
+        "PHMAX": 8.7
+      }
+    },
+    "bitter-melon": {
+      "matchedBy": "binomial",
+      "catalogName": "Momordica charantia",
+      "ecocrop": {
+        "NAME": "Bitter gourd *",
+        "SCIENTNAME": "Momordica charantia L.",
+        "CODE": 160,
+        "PHMIN": 4.5,
+        "PHOPMN": 6,
+        "PHOPMX": 6.5,
+        "PHMAX": 8
+      }
+    },
+    "bottle-gourd": {
+      "matchedBy": "binomial",
+      "catalogName": "Lagenaria siceraria",
+      "ecocrop": {
+        "NAME": "Bottle gourd *",
+        "SCIENTNAME": "Lagenaria siceraria (M) St.",
+        "CODE": 161,
+        "PHMIN": 4.5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 7,
+        "PHMAX": 7.5
+      }
+    },
+    "luffa": {
+      "matchedBy": "hand",
+      "catalogName": "Luffa aegyptiaca",
+      "ecocrop": {
+        "NAME": "Smooth luffa *",
+        "SCIENTNAME": "Luffa cylindrica (L.) M.J.R",
+        "CODE": 166,
+        "PHMIN": 4.3,
+        "PHOPMN": 5.5,
+        "PHOPMX": 6.5,
+        "PHMAX": 8.3
+      }
+    },
+    "chayote": {
+      "matchedBy": "binomial",
+      "catalogName": "Sechium edule",
+      "ecocrop": {
+        "NAME": "Choyote",
+        "SCIENTNAME": "Sechium edule (Jacq) Swartz",
+        "CODE": 162,
+        "PHMIN": 4.3,
+        "PHOPMN": 5.5,
+        "PHOPMX": 7,
+        "PHMAX": 8
+      }
+    },
+    "squash-summer": {
+      "matchedBy": "binomial",
+      "catalogName": "Cucurbita pepo",
+      "ecocrop": {
+        "NAME": "Vegetable marrow",
+        "SCIENTNAME": "Cucurbita pepo L.",
+        "CODE": 168,
+        "PHMIN": 4.5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 6.8,
+        "PHMAX": 8.3
+      }
+    },
+    "squash-winter": {
+      "matchedBy": "binomial",
+      "catalogName": "Cucurbita maxima",
+      "ecocrop": {
+        "NAME": "Squash gourd",
+        "SCIENTNAME": "Cucurbita maxima Duch ex L.",
+        "CODE": 50,
+        "PHMIN": 5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 7.5,
+        "PHMAX": 8.5
+      }
+    },
+    "pumpkin": {
+      "matchedBy": "binomial",
+      "catalogName": "Cucurbita moschata",
+      "ecocrop": {
+        "NAME": "Pumpkin",
+        "SCIENTNAME": "Cucurbita moschata (Duch.)",
+        "CODE": 163,
+        "PHMIN": 4.5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 7.5,
+        "PHMAX": 8.3
+      }
+    },
+    "melon": {
+      "matchedBy": "binomial",
+      "catalogName": "Cucumis melo",
+      "ecocrop": {
+        "NAME": "Musk melon",
+        "SCIENTNAME": "Cucumis melo L.",
+        "CODE": 72,
+        "PHMIN": 5,
+        "PHOPMN": 6,
+        "PHOPMX": 7.5,
+        "PHMAX": 8.7
+      }
+    },
+    "watermelon": {
+      "matchedBy": "binomial",
+      "catalogName": "Citrullus lanatus",
+      "ecocrop": {
+        "NAME": "Watermelon",
+        "SCIENTNAME": "Citrullus lanatus (T) Mansf",
+        "CODE": 47,
+        "PHMIN": 5.5,
+        "PHOPMN": 6,
+        "PHOPMX": 7,
+        "PHMAX": 7.5
+      }
+    },
+    "okra": {
+      "matchedBy": "binomial",
+      "catalogName": "Abelmoschus esculentus",
+      "ecocrop": {
+        "NAME": "Okra, lady fingers",
+        "SCIENTNAME": "Abelmoschus esculentus (L.)",
+        "CODE": 34,
+        "PHMIN": 4.5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 7,
+        "PHMAX": 8.7
+      }
+    },
+    "roselle": {
+      "matchedBy": "hand",
+      "catalogName": "Hibiscus sabdariffa",
+      "ecocrop": {
+        "NAME": "Roselle (sabdariffe)",
+        "SCIENTNAME": "Hibiscus sabdariffa L.v sa.",
+        "CODE": 37,
+        "PHMIN": 4.5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 7,
+        "PHMAX": 8.5
+      }
+    },
+    "bean-bush": {
+      "matchedBy": "binomial",
+      "catalogName": "Phaseolus vulgaris",
+      "ecocrop": {
+        "NAME": "Bean, Common",
+        "SCIENTNAME": "Phaseolus vulgaris L.",
+        "CODE": 61,
+        "PHMIN": 4,
+        "PHOPMN": 5.5,
+        "PHOPMX": 7.5,
+        "PHMAX": 9
+      }
+    },
+    "bean-pole": {
+      "matchedBy": "binomial",
+      "catalogName": "Phaseolus vulgaris",
+      "ecocrop": {
+        "NAME": "Bean, Common",
+        "SCIENTNAME": "Phaseolus vulgaris L.",
+        "CODE": 61,
+        "PHMIN": 4,
+        "PHOPMN": 5.5,
+        "PHOPMX": 7.5,
+        "PHMAX": 9
+      }
+    },
+    "lablab": {
+      "matchedBy": "binomial",
+      "catalogName": "Lablab purpureus",
+      "ecocrop": {
+        "NAME": "Hyacinth bean",
+        "SCIENTNAME": "Lablab purpureus Medik.",
+        "CODE": 105,
+        "PHMIN": 4.5,
+        "PHOPMN": 5,
+        "PHOPMX": 7.5,
+        "PHMAX": 8
+      }
+    },
+    "lima-bean": {
+      "matchedBy": "binomial",
+      "catalogName": "Phaseolus lunatus",
+      "ecocrop": {
+        "NAME": "Lima bean",
+        "SCIENTNAME": "Phaseolus lunatus L.",
+        "CODE": 108,
+        "PHMIN": 4.5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 7,
+        "PHMAX": 8.4
+      }
+    },
+    "winged-bean": {
+      "matchedBy": "binomial",
+      "catalogName": "Psophocarpus tetragonolobus",
+      "ecocrop": {
+        "NAME": "Bean, Winged",
+        "SCIENTNAME": "Psophocarpus tetragonolobus",
+        "CODE": 120,
+        "PHMIN": 4.3,
+        "PHOPMN": 5.5,
+        "PHOPMX": 7,
+        "PHMAX": 8.5
+      }
+    },
+    "bean-runner": {
+      "matchedBy": "binomial",
+      "catalogName": "Phaseolus coccineus",
+      "ecocrop": {
+        "NAME": "Scarlet runner bean",
+        "SCIENTNAME": "Phaseolus coccineus L.",
+        "CODE": 115,
+        "PHMIN": 5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 7,
+        "PHMAX": 8.2
+      }
+    },
+    "pea-garden": {
+      "matchedBy": "binomial",
+      "catalogName": "Pisum sativum",
+      "ecocrop": {
+        "NAME": "Pea",
+        "SCIENTNAME": "Pisum sativum L.",
+        "CODE": 48,
+        "PHMIN": 4.5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 7,
+        "PHMAX": 8.3
+      }
+    },
+    "fava-bean": {
+      "matchedBy": "binomial",
+      "catalogName": "Vicia faba",
+      "ecocrop": {
+        "NAME": "Broad bean",
+        "SCIENTNAME": "Vicia faba L.",
+        "CODE": 51,
+        "PHMIN": 4.5,
+        "PHOPMN": 6,
+        "PHOPMX": 7,
+        "PHMAX": 8.6
+      }
+    },
+    "cowpea": {
+      "matchedBy": "binomial",
+      "catalogName": "Vigna unguiculata",
+      "ecocrop": {
+        "NAME": "Cowpea",
+        "SCIENTNAME": "Vigna unguiculata unguic. L",
+        "CODE": 30,
+        "PHMIN": 4.3,
+        "PHOPMN": 5.5,
+        "PHOPMX": 7.5,
+        "PHMAX": 8.8
+      }
+    },
+    "tepary-bean": {
+      "matchedBy": "binomial",
+      "catalogName": "Phaseolus acutifolius",
+      "ecocrop": {
+        "NAME": "Tepary bean",
+        "SCIENTNAME": "Phaseolus acutifolius Gray",
+        "CODE": 117,
+        "PHMIN": 5,
+        "PHOPMN": 6,
+        "PHOPMX": 7,
+        "PHMAX": 8
+      }
+    },
+    "soybean-edamame": {
+      "matchedBy": "binomial",
+      "catalogName": "Glycine max",
+      "ecocrop": {
+        "NAME": "Soyabean",
+        "SCIENTNAME": "Glycine max (L.) Merrill",
+        "CODE": 7,
+        "PHMIN": 4.5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 6.5,
+        "PHMAX": 8.4
+      }
+    },
+    "soybean": {
+      "matchedBy": "binomial",
+      "catalogName": "Glycine max",
+      "ecocrop": {
+        "NAME": "Soyabean",
+        "SCIENTNAME": "Glycine max (L.) Merrill",
+        "CODE": 7,
+        "PHMIN": 4.5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 6.5,
+        "PHMAX": 8.4
+      }
+    },
+    "lentil": {
+      "matchedBy": "binomial",
+      "catalogName": "Lens culinaris",
+      "ecocrop": {
+        "NAME": "Lentil",
+        "SCIENTNAME": "Lens culinaris Medikus",
+        "CODE": 56,
+        "PHMIN": 4.5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 7.5,
+        "PHMAX": 8.2
+      }
+    },
+    "chickpea": {
+      "matchedBy": "binomial",
+      "catalogName": "Cicer arietinum",
+      "ecocrop": {
+        "NAME": "Chick pea",
+        "SCIENTNAME": "Cicer arietinum L.",
+        "CODE": 52,
+        "PHMIN": 4.7,
+        "PHOPMN": 6,
+        "PHOPMX": 8.5,
+        "PHMAX": 9.5
+      }
+    },
+    "peanut": {
+      "matchedBy": "binomial",
+      "catalogName": "Arachis hypogaea",
+      "ecocrop": {
+        "NAME": "Groundnut",
+        "SCIENTNAME": "Arachis hypogaea L.",
+        "CODE": 24,
+        "PHMIN": 4.5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 6.5,
+        "PHMAX": 8.5
+      }
+    },
+    "bambara-groundnut": {
+      "matchedBy": "synonym",
+      "catalogName": "Vigna subterranea",
+      "ecocrop": {
+        "NAME": "Bambara groundnut *",
+        "SCIENTNAME": "Voandzeia subterranea (L)T.",
+        "CODE": 121,
+        "PHMIN": 4.3,
+        "PHOPMN": 5,
+        "PHOPMX": 6.5,
+        "PHMAX": 7
+      }
+    },
+    "sweet-corn": {
+      "matchedBy": "binomial",
+      "catalogName": "Zea mays",
+      "ecocrop": {
+        "NAME": "Sweet Corn",
+        "SCIENTNAME": "Zea mays v.saccharata Sturt",
+        "CODE": 1204,
+        "PHMIN": 4.5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 6.8,
+        "PHMAX": 7.5
+      }
+    },
+    "corn-grain": {
+      "matchedBy": "hand",
+      "catalogName": "Zea mays",
+      "ecocrop": {
+        "NAME": "Dent maize",
+        "SCIENTNAME": "Zea mays v. indentata Sturt",
+        "CODE": 1202,
+        "PHMIN": 5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 7,
+        "PHMAX": 8
+      }
+    },
+    "wheat-spring": {
+      "matchedBy": "binomial",
+      "catalogName": "Triticum aestivum",
+      "ecocrop": {
+        "NAME": "Wheat, common",
+        "SCIENTNAME": "Triticum aestivum L.",
+        "CODE": 8,
+        "PHMIN": 5.5,
+        "PHOPMN": 6,
+        "PHOPMX": 7,
+        "PHMAX": 8.5
+      }
+    },
+    "barley": {
+      "matchedBy": "binomial",
+      "catalogName": "Hordeum vulgare",
+      "ecocrop": {
+        "NAME": "Barley",
+        "SCIENTNAME": "Hordeum vulgare L.",
+        "CODE": 9,
+        "PHMIN": 6,
+        "PHOPMN": 6.5,
+        "PHOPMX": 7.5,
+        "PHMAX": 8
+      }
+    },
+    "oat": {
+      "matchedBy": "binomial",
+      "catalogName": "Avena sativa",
+      "ecocrop": {
+        "NAME": "Oats",
+        "SCIENTNAME": "Avena sativa L.",
+        "CODE": 16,
+        "PHMIN": 4.5,
+        "PHOPMN": 5,
+        "PHOPMX": 6,
+        "PHMAX": 7.5
+      }
+    },
+    "rye-cereal": {
+      "matchedBy": "binomial",
+      "catalogName": "Secale cereale",
+      "ecocrop": {
+        "NAME": "Rye",
+        "SCIENTNAME": "Secale cereale L.",
+        "CODE": 18,
+        "PHMIN": 4.5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 6,
+        "PHMAX": 8
+      }
+    },
+    "quinoa": {
+      "matchedBy": "binomial",
+      "catalogName": "Chenopodium quinoa",
+      "ecocrop": {
+        "NAME": "Quinoa",
+        "SCIENTNAME": "Chenopodium quinoa Willden.",
+        "CODE": 761,
+        "PHMIN": 4.5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 8,
+        "PHMAX": 9.5
+      }
+    },
+    "amaranth-grain": {
+      "matchedBy": "binomial",
+      "catalogName": "Amaranthus cruentus",
+      "ecocrop": {
+        "NAME": "Spanish greens",
+        "SCIENTNAME": "Amaranthus cruentus L.",
+        "CODE": 452,
+        "PHMIN": 4.3,
+        "PHOPMN": 5.5,
+        "PHOPMX": 7,
+        "PHMAX": 7.5
+      }
+    },
+    "flax": {
+      "matchedBy": "binomial",
+      "catalogName": "Linum usitatissimum",
+      "ecocrop": {
+        "NAME": "Linseed",
+        "SCIENTNAME": "Linum usitatissimum L.",
+        "CODE": 73,
+        "PHMIN": 5.5,
+        "PHOPMN": 6,
+        "PHOPMX": 6.5,
+        "PHMAX": 7
+      }
+    },
+    "canola": {
+      "matchedBy": "hand",
+      "catalogName": "Brassica napus",
+      "ecocrop": {
+        "NAME": "Swede rap",
+        "SCIENTNAME": "Brassica napus L.",
+        "CODE": 89,
+        "PHMIN": 5.5,
+        "PHOPMN": 6.5,
+        "PHOPMX": 7.6,
+        "PHMAX": 8
+      }
+    },
+    "safflower": {
+      "matchedBy": "hand",
+      "catalogName": "Carthamus tinctorius",
+      "ecocrop": {
+        "NAME": "Safflower",
+        "SCIENTNAME": "Carthamus tinctoius L.",
+        "CODE": 44,
+        "PHMIN": 5,
+        "PHOPMN": 6.5,
+        "PHOPMX": 7.5,
+        "PHMAX": 8
+      }
+    },
+    "potato": {
+      "matchedBy": "binomial",
+      "catalogName": "Solanum tuberosum",
+      "ecocrop": {
+        "NAME": "Potato",
+        "SCIENTNAME": "Solanum tuberosum L.",
+        "CODE": 1,
+        "PHMIN": 4.2,
+        "PHOPMN": 5,
+        "PHOPMX": 6.2,
+        "PHMAX": 8.5
+      }
+    },
+    "oca": {
+      "matchedBy": "binomial",
+      "catalogName": "Oxalis tuberosa",
+      "ecocrop": {
+        "NAME": "Oca *",
+        "SCIENTNAME": "Oxalis tuberosa Molina",
+        "CODE": 1000,
+        "PHMIN": 5.3,
+        "PHOPMN": 6,
+        "PHOPMX": 7,
+        "PHMAX": 7.8
+      }
+    },
+    "crosne": {
+      "matchedBy": "binomial",
+      "catalogName": "Stachys affinis",
+      "ecocrop": {
+        "NAME": "Chinese artichoke *",
+        "SCIENTNAME": "Stachys affinis Bunge",
+        "CODE": 352,
+        "PHMIN": 5.5,
+        "PHOPMN": 6,
+        "PHOPMX": 6.5,
+        "PHMAX": 7
+      }
+    },
+    "sweet-potato": {
+      "matchedBy": "binomial",
+      "catalogName": "Ipomoea batatas",
+      "ecocrop": {
+        "NAME": "Sweet potato",
+        "SCIENTNAME": "Ipomoea batatas (L.) Lam.",
+        "CODE": 22,
+        "PHMIN": 4,
+        "PHOPMN": 5,
+        "PHOPMX": 7,
+        "PHMAX": 8
+      }
+    },
+    "carrot": {
+      "matchedBy": "binomial",
+      "catalogName": "Daucus carota",
+      "ecocrop": {
+        "NAME": "Carrot",
+        "SCIENTNAME": "Daucus carota L.",
+        "CODE": 62,
+        "PHMIN": 4.2,
+        "PHOPMN": 5.8,
+        "PHOPMX": 6.8,
+        "PHMAX": 8.7
+      }
+    },
+    "beet": {
+      "matchedBy": "hand",
+      "catalogName": "Beta vulgaris",
+      "ecocrop": {
+        "NAME": "Garden beet",
+        "SCIENTNAME": "Beta vulgaris L. v crassa",
+        "CODE": 458,
+        "PHMIN": 5,
+        "PHOPMN": 6,
+        "PHOPMX": 6.8,
+        "PHMAX": 8.3
+      }
+    },
+    "radish": {
+      "matchedBy": "hand",
+      "catalogName": "Raphanus sativus",
+      "ecocrop": {
+        "NAME": "Radish, Western",
+        "SCIENTNAME": "Raphanus sativus L. (S.R.)",
+        "CODE": 1617,
+        "PHMIN": 5.2,
+        "PHOPMN": 6,
+        "PHOPMX": 7,
+        "PHMAX": 8.3
+      }
+    },
+    "turnip": {
+      "matchedBy": "hand",
+      "catalogName": "Brassica rapa",
+      "ecocrop": {
+        "NAME": "Turnip rap",
+        "SCIENTNAME": "Brassica rapa L. v rapifera",
+        "CODE": 91,
+        "PHMIN": 4.3,
+        "PHOPMN": 6,
+        "PHOPMX": 6.8,
+        "PHMAX": 7.5
+      }
+    },
+    "rutabaga": {
+      "matchedBy": "binomial",
+      "catalogName": "Brassica napus",
+      "ecocrop": {
+        "NAME": "Rutabaga *",
+        "SCIENTNAME": "Brassica napus L. Napobras.",
+        "CODE": 443,
+        "PHMIN": 4.8,
+        "PHOPMN": 5.5,
+        "PHOPMX": 7,
+        "PHMAX": 7.8
+      }
+    },
+    "parsnip": {
+      "matchedBy": "binomial",
+      "catalogName": "Pastinaca sativa",
+      "ecocrop": {
+        "NAME": "Parsnip",
+        "SCIENTNAME": "Pastinaca sativa L.",
+        "CODE": 442,
+        "PHMIN": 5.8,
+        "PHOPMN": 6,
+        "PHOPMX": 6.8,
+        "PHMAX": 8.3
+      }
+    },
+    "salsify": {
+      "matchedBy": "binomial",
+      "catalogName": "Tragopogon porrifolius",
+      "ecocrop": {
+        "NAME": "Salsify *",
+        "SCIENTNAME": "Tragopogon porrifolius L.",
+        "CODE": 316,
+        "PHMIN": 6,
+        "PHOPMN": 6.5,
+        "PHOPMX": 7.5,
+        "PHMAX": 8
+      }
+    },
+    "celeriac": {
+      "matchedBy": "binomial",
+      "catalogName": "Apium graveolens",
+      "ecocrop": {
+        "NAME": "Celeriac",
+        "SCIENTNAME": "Apium graveolens L. v rapac",
+        "CODE": 367,
+        "PHMIN": 5.3,
+        "PHOPMN": 6,
+        "PHOPMX": 6.8,
+        "PHMAX": 8.3
+      }
+    },
+    "kohlrabi": {
+      "matchedBy": "binomial",
+      "catalogName": "Brassica oleracea",
+      "ecocrop": {
+        "NAME": "Kohlrabi",
+        "SCIENTNAME": "Brassica oleracea L.v gong.",
+        "CODE": 156,
+        "PHMIN": 5.5,
+        "PHOPMN": 6,
+        "PHOPMX": 6.5,
+        "PHMAX": 8.5
+      }
+    },
+    "jerusalem-artichoke": {
+      "matchedBy": "binomial",
+      "catalogName": "Helianthus tuberosus",
+      "ecocrop": {
+        "NAME": "Jerusalem artichoke *",
+        "SCIENTNAME": "Helianthus tuberosus L.",
+        "CODE": 460,
+        "PHMIN": 4.5,
+        "PHOPMN": 6,
+        "PHOPMX": 6.6,
+        "PHMAX": 8.3
+      }
+    },
+    "yacon": {
+      "matchedBy": "synonym",
+      "catalogName": "Smallanthus sonchifolius",
+      "ecocrop": {
+        "NAME": "Yacon",
+        "SCIENTNAME": "Polymnia sonchifolia P.& E.",
+        "CODE": 1223,
+        "PHMIN": 5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 6.5,
+        "PHMAX": 7
+      }
+    },
+    "horseradish": {
+      "matchedBy": "binomial",
+      "catalogName": "Armoracia rusticana",
+      "ecocrop": {
+        "NAME": "Horseradish",
+        "SCIENTNAME": "Armoracia rusticana P.Gaer.",
+        "CODE": 369,
+        "PHMIN": 4.5,
+        "PHOPMN": 6,
+        "PHOPMX": 7,
+        "PHMAX": 8.7
+      }
+    },
+    "ginger": {
+      "matchedBy": "binomial",
+      "catalogName": "Zingiber officinale",
+      "ecocrop": {
+        "NAME": "Ginger",
+        "SCIENTNAME": "Zingiber officinale Rosc.",
+        "CODE": 364,
+        "PHMIN": 4.3,
+        "PHOPMN": 6,
+        "PHOPMX": 7,
+        "PHMAX": 7.5
+      }
+    },
+    "turmeric": {
+      "matchedBy": "hand",
+      "catalogName": "Curcuma longa",
+      "ecocrop": {
+        "NAME": "Tumeric *",
+        "SCIENTNAME": "Curcuma domestica Val.",
+        "CODE": 716,
+        "PHMIN": 5.5,
+        "PHOPMN": 6,
+        "PHOPMX": 7,
+        "PHMAX": 7.5
+      }
+    },
+    "onion-bulb": {
+      "matchedBy": "hand",
+      "catalogName": "Allium cepa",
+      "ecocrop": {
+        "NAME": "Onion",
+        "SCIENTNAME": "Allium cepa L. v cepa",
+        "CODE": 27,
+        "PHMIN": 4.3,
+        "PHOPMN": 6,
+        "PHOPMX": 7,
+        "PHMAX": 8.3
+      }
+    },
+    "shallot": {
+      "matchedBy": "binomial",
+      "catalogName": "Allium cepa",
+      "ecocrop": {
+        "NAME": "Shallot",
+        "SCIENTNAME": "Allium cepa L. v aggregatum",
+        "CODE": 447,
+        "PHMIN": 5.5,
+        "PHOPMN": 6,
+        "PHOPMX": 7,
+        "PHMAX": 7.5
+      }
+    },
+    "garlic": {
+      "matchedBy": "binomial",
+      "catalogName": "Allium sativum",
+      "ecocrop": {
+        "NAME": "Garlic",
+        "SCIENTNAME": "Allium sativum L.",
+        "CODE": 220,
+        "PHMIN": 5,
+        "PHOPMN": 6,
+        "PHOPMX": 6.6,
+        "PHMAX": 8.5
+      }
+    },
+    "leek": {
+      "matchedBy": "binomial",
+      "catalogName": "Allium ampeloprasum",
+      "ecocrop": {
+        "NAME": "Leek",
+        "SCIENTNAME": "Allium ampeloprasum L.v p.",
+        "CODE": 446,
+        "PHMIN": 4.5,
+        "PHOPMN": 6,
+        "PHOPMX": 6.5,
+        "PHMAX": 7.5
+      }
+    },
+    "scallion": {
+      "matchedBy": "binomial",
+      "catalogName": "Allium fistulosum",
+      "ecocrop": {
+        "NAME": "Welsh onion",
+        "SCIENTNAME": "Allium fistulosum L.",
+        "CODE": 449,
+        "PHMIN": 5.5,
+        "PHOPMN": 6.6,
+        "PHOPMX": 7.4,
+        "PHMAX": 8.5
+      }
+    },
+    "chives": {
+      "matchedBy": "binomial",
+      "catalogName": "Allium schoenoprasum",
+      "ecocrop": {
+        "NAME": "Chives",
+        "SCIENTNAME": "Allium schoenoprasum L.",
+        "CODE": 448,
+        "PHMIN": 5,
+        "PHOPMN": 6,
+        "PHOPMX": 6.6,
+        "PHMAX": 8.2
+      }
+    },
+    "garlic-chives": {
+      "matchedBy": "binomial",
+      "catalogName": "Allium tuberosum",
+      "ecocrop": {
+        "NAME": "Chinese chives",
+        "SCIENTNAME": "Allium tuberosum Rottler",
+        "CODE": 450,
+        "PHMIN": 5.3,
+        "PHOPMN": 6,
+        "PHOPMX": 6.8,
+        "PHMAX": 8.3
+      }
+    },
+    "lettuce-leaf": {
+      "matchedBy": "binomial",
+      "catalogName": "Lactuca sativa",
+      "ecocrop": {
+        "NAME": "Lettuce",
+        "SCIENTNAME": "Lactuca sativa L.",
+        "CODE": 63,
+        "PHMIN": 4.2,
+        "PHOPMN": 6,
+        "PHOPMX": 7,
+        "PHMAX": 7.5
+      }
+    },
+    "lettuce-head": {
+      "matchedBy": "binomial",
+      "catalogName": "Lactuca sativa",
+      "ecocrop": {
+        "NAME": "Lettuce",
+        "SCIENTNAME": "Lactuca sativa L.",
+        "CODE": 63,
+        "PHMIN": 4.2,
+        "PHOPMN": 6,
+        "PHOPMX": 7,
+        "PHMAX": 7.5
+      }
+    },
+    "spinach": {
+      "matchedBy": "binomial",
+      "catalogName": "Spinacia oleracea",
+      "ecocrop": {
+        "NAME": "Spinach",
+        "SCIENTNAME": "Spinacia oleracea L.",
+        "CODE": 441,
+        "PHMIN": 5.3,
+        "PHOPMN": 6,
+        "PHOPMX": 7.5,
+        "PHMAX": 8.3
+      }
+    },
+    "swiss-chard": {
+      "matchedBy": "binomial",
+      "catalogName": "Beta vulgaris",
+      "ecocrop": {
+        "NAME": "Swiss chard",
+        "SCIENTNAME": "Beta vulgaris L. v cicla",
+        "CODE": 459,
+        "PHMIN": 5.5,
+        "PHOPMN": 6,
+        "PHOPMX": 6.5,
+        "PHMAX": 8.3
+      }
+    },
+    "kale": {
+      "matchedBy": "hand",
+      "catalogName": "Brassica oleracea",
+      "ecocrop": {
+        "NAME": "Collards",
+        "SCIENTNAME": "Brassica oleracea L.v acep.",
+        "CODE": 155,
+        "PHMIN": 4.5,
+        "PHOPMN": 5.4,
+        "PHOPMX": 6,
+        "PHMAX": 8.3
+      }
+    },
+    "collards": {
+      "matchedBy": "binomial",
+      "catalogName": "Brassica oleracea",
+      "ecocrop": {
+        "NAME": "Collards",
+        "SCIENTNAME": "Brassica oleracea L.v acep.",
+        "CODE": 155,
+        "PHMIN": 4.5,
+        "PHOPMN": 5.4,
+        "PHOPMX": 6,
+        "PHMAX": 8.3
+      }
+    },
+    "mustard-greens": {
+      "matchedBy": "binomial",
+      "catalogName": "Brassica juncea",
+      "ecocrop": {
+        "NAME": "Leaf mustard",
+        "SCIENTNAME": "Brassica juncea (L.) Czern.",
+        "CODE": 157,
+        "PHMIN": 5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 6.5,
+        "PHMAX": 8
+      }
+    },
+    "arugula": {
+      "matchedBy": "hand",
+      "catalogName": "Eruca vesicaria",
+      "ecocrop": {
+        "NAME": "Garden rocket *",
+        "SCIENTNAME": "Eruca sativa Miller",
+        "CODE": 1647,
+        "PHMIN": 7,
+        "PHOPMN": 7.5,
+        "PHOPMX": 8,
+        "PHMAX": 8.5
+      }
+    },
+    "cress": {
+      "matchedBy": "binomial",
+      "catalogName": "Lepidium sativum",
+      "ecocrop": {
+        "NAME": "Garden cress *",
+        "SCIENTNAME": "Lepidium sativum L.",
+        "CODE": 745,
+        "PHMIN": 5.5,
+        "PHOPMN": 6,
+        "PHOPMX": 7,
+        "PHMAX": 7.5
+      }
+    },
+    "shungiku": {
+      "matchedBy": "synonym",
+      "catalogName": "Glebionis coronaria",
+      "ecocrop": {
+        "NAME": "Garland chrysanthemum *",
+        "SCIENTNAME": "Chrysanthemum coronarium L.",
+        "CODE": 1601,
+        "PHMIN": 5.3,
+        "PHOPMN": 6,
+        "PHOPMX": 6.5,
+        "PHMAX": 7.3
+      }
+    },
+    "bok-choy": {
+      "matchedBy": "binomial",
+      "catalogName": "Brassica rapa",
+      "ecocrop": {
+        "NAME": "Pak choi",
+        "SCIENTNAME": "Brassica rapa L. Pak Choi",
+        "CODE": 1600,
+        "PHMIN": 5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 7,
+        "PHMAX": 7.5
+      }
+    },
+    "endive": {
+      "matchedBy": "binomial",
+      "catalogName": "Cichorium endivia",
+      "ecocrop": {
+        "NAME": "Endive",
+        "SCIENTNAME": "Cichorium endivia L.",
+        "CODE": 360,
+        "PHMIN": 5.3,
+        "PHOPMN": 6.5,
+        "PHOPMX": 7.8,
+        "PHMAX": 8.5
+      }
+    },
+    "radicchio": {
+      "matchedBy": "binomial",
+      "catalogName": "Cichorium intybus",
+      "ecocrop": {
+        "NAME": "Chicory",
+        "SCIENTNAME": "Cichorium intybus L.",
+        "CODE": 359,
+        "PHMIN": 4.5,
+        "PHOPMN": 6,
+        "PHOPMX": 7,
+        "PHMAX": 8.3
+      }
+    },
+    "dandelion": {
+      "matchedBy": "binomial",
+      "catalogName": "Taraxacum officinale",
+      "ecocrop": {
+        "NAME": "Dandelion *",
+        "SCIENTNAME": "Taraxacum officinale Weber",
+        "CODE": 757,
+        "PHMIN": 4.5,
+        "PHOPMN": 5,
+        "PHOPMX": 6.5,
+        "PHMAX": 8.3
+      }
+    },
+    "celery": {
+      "matchedBy": "binomial",
+      "catalogName": "Apium graveolens",
+      "ecocrop": {
+        "NAME": "Celery",
+        "SCIENTNAME": "Apium graveolens L. v dulce",
+        "CODE": 357,
+        "PHMIN": 4.5,
+        "PHOPMN": 5.8,
+        "PHOPMX": 6.8,
+        "PHMAX": 8.3
+      }
+    },
+    "nz-spinach": {
+      "matchedBy": "hand",
+      "catalogName": "Tetragonia tetragonoides",
+      "ecocrop": {
+        "NAME": "New Zealand spinach *",
+        "SCIENTNAME": "Tetragonia tetragonioides P",
+        "CODE": 482,
+        "PHMIN": 6,
+        "PHOPMN": 6.5,
+        "PHOPMX": 7,
+        "PHMAX": 7.5
+      }
+    },
+    "malabar-spinach": {
+      "matchedBy": "binomial",
+      "catalogName": "Basella alba",
+      "ecocrop": {
+        "NAME": "Ceylon spinach",
+        "SCIENTNAME": "Basella alba L.",
+        "CODE": 355,
+        "PHMIN": 4.3,
+        "PHOPMN": 5.5,
+        "PHOPMX": 7,
+        "PHMAX": 7.5
+      }
+    },
+    "jute-mallow": {
+      "matchedBy": "binomial",
+      "catalogName": "Corchorus olitorius",
+      "ecocrop": {
+        "NAME": "Long-fruited Jute",
+        "SCIENTNAME": "Corchorus olitorius L.",
+        "CODE": 65,
+        "PHMIN": 5,
+        "PHOPMN": 6.5,
+        "PHOPMX": 7,
+        "PHMAX": 8.6
+      }
+    },
+    "watercress": {
+      "matchedBy": "binomial",
+      "catalogName": "Nasturtium officinale",
+      "ecocrop": {
+        "NAME": "Watercress",
+        "SCIENTNAME": "Nasturtium officinale R.Br.",
+        "CODE": 461,
+        "PHMIN": 4.5,
+        "PHOPMN": 6.5,
+        "PHOPMX": 7.5,
+        "PHMAX": 8.3
+      }
+    },
+    "orach": {
+      "matchedBy": "binomial",
+      "catalogName": "Atriplex hortensis",
+      "ecocrop": {
+        "NAME": "Garden oarch *",
+        "SCIENTNAME": "Atriplex hortensis L.",
+        "CODE": 821,
+        "PHMIN": 5,
+        "PHOPMN": 6.5,
+        "PHOPMX": 7.5,
+        "PHMAX": 8.2
+      }
+    },
+    "purslane": {
+      "matchedBy": "binomial",
+      "catalogName": "Portulaca oleracea",
+      "ecocrop": {
+        "NAME": "Purslane *",
+        "SCIENTNAME": "Portulaca oleracea L.",
+        "CODE": 1613,
+        "PHMIN": 4.3,
+        "PHOPMN": 5.5,
+        "PHOPMX": 7,
+        "PHMAX": 8.3
+      }
+    },
+    "sea-kale": {
+      "matchedBy": "binomial",
+      "catalogName": "Crambe maritima",
+      "ecocrop": {
+        "NAME": "Seakale *",
+        "SCIENTNAME": "Crambe maritima L.",
+        "CODE": 499,
+        "PHMIN": 6,
+        "PHOPMN": 6.5,
+        "PHOPMX": 7.5,
+        "PHMAX": 8
+      }
+    },
+    "cabbage": {
+      "matchedBy": "binomial",
+      "catalogName": "Brassica oleracea",
+      "ecocrop": {
+        "NAME": "Cabbage",
+        "SCIENTNAME": "Brassica oleracea L.v capi.",
+        "CODE": 41,
+        "PHMIN": 5,
+        "PHOPMN": 6,
+        "PHOPMX": 7.5,
+        "PHMAX": 8.3
+      }
+    },
+    "broccoli": {
+      "matchedBy": "hand",
+      "catalogName": "Brassica oleracea",
+      "ecocrop": {
+        "NAME": "Sprouting broccoli",
+        "SCIENTNAME": "Brassica oleracea L.v ital.",
+        "CODE": 358,
+        "PHMIN": 5.5,
+        "PHOPMN": 6,
+        "PHOPMX": 6.8,
+        "PHMAX": 8.5
+      }
+    },
+    "cauliflower": {
+      "matchedBy": "binomial",
+      "catalogName": "Brassica oleracea",
+      "ecocrop": {
+        "NAME": "Cauliflower",
+        "SCIENTNAME": "Brassica oleracea L.v botr.",
+        "CODE": 153,
+        "PHMIN": 5.5,
+        "PHOPMN": 6,
+        "PHOPMX": 7,
+        "PHMAX": 8.5
+      }
+    },
+    "brussels-sprouts": {
+      "matchedBy": "binomial",
+      "catalogName": "Brassica oleracea",
+      "ecocrop": {
+        "NAME": "Brussels sprouts",
+        "SCIENTNAME": "Brassica oleracea L.v gemm.",
+        "CODE": 152,
+        "PHMIN": 4.5,
+        "PHOPMN": 6,
+        "PHOPMX": 7,
+        "PHMAX": 7.8
+      }
+    },
+    "romanesco": {
+      "matchedBy": "hand",
+      "catalogName": "Brassica oleracea",
+      "ecocrop": {
+        "NAME": "Cauliflower",
+        "SCIENTNAME": "Brassica oleracea L.v botr.",
+        "CODE": 153,
+        "PHMIN": 5.5,
+        "PHOPMN": 6,
+        "PHOPMX": 7,
+        "PHMAX": 8.5
+      }
+    },
+    "basil": {
+      "matchedBy": "binomial",
+      "catalogName": "Ocimum basilicum",
+      "ecocrop": {
+        "NAME": "Basil *",
+        "SCIENTNAME": "Ocimum basilicum L.",
+        "CODE": 719,
+        "PHMIN": 4.3,
+        "PHOPMN": 6,
+        "PHOPMX": 7,
+        "PHMAX": 8.2
+      }
+    },
+    "stevia": {
+      "matchedBy": "binomial",
+      "catalogName": "Stevia rebaudiana",
+      "ecocrop": {
+        "NAME": "Stevia *",
+        "SCIENTNAME": "Stevia rebaudiana (Bertoni)",
+        "CODE": 1633,
+        "PHMIN": 4,
+        "PHOPMN": 5,
+        "PHOPMX": 6.5,
+        "PHMAX": 7.5
+      }
+    },
+    "parsley": {
+      "matchedBy": "binomial",
+      "catalogName": "Petroselinum crispum",
+      "ecocrop": {
+        "NAME": "Parsley",
+        "SCIENTNAME": "Petroselinum crispum Mill.",
+        "CODE": 385,
+        "PHMIN": 5.3,
+        "PHOPMN": 6,
+        "PHOPMX": 7.5,
+        "PHMAX": 8.3
+      }
+    },
+    "cilantro": {
+      "matchedBy": "binomial",
+      "catalogName": "Coriandrum sativum",
+      "ecocrop": {
+        "NAME": "Coriander *",
+        "SCIENTNAME": "Coriandrum sativum L.",
+        "CODE": 485,
+        "PHMIN": 4,
+        "PHOPMN": 5.5,
+        "PHOPMX": 7.5,
+        "PHMAX": 8
+      }
+    },
+    "dill": {
+      "matchedBy": "binomial",
+      "catalogName": "Anethum graveolens",
+      "ecocrop": {
+        "NAME": "Dill *",
+        "SCIENTNAME": "Anethum graveolens L.",
+        "CODE": 483,
+        "PHMIN": 5,
+        "PHOPMN": 6,
+        "PHOPMX": 7,
+        "PHMAX": 8
+      }
+    },
+    "cumin": {
+      "matchedBy": "binomial",
+      "catalogName": "Cuminum cyminum",
+      "ecocrop": {
+        "NAME": "Cumin",
+        "SCIENTNAME": "Cuminum cyminum L.",
+        "CODE": 738,
+        "PHMIN": 4.5,
+        "PHOPMN": 5,
+        "PHOPMX": 6.5,
+        "PHMAX": 8.3
+      }
+    },
+    "caraway": {
+      "matchedBy": "binomial",
+      "catalogName": "Carum carvi",
+      "ecocrop": {
+        "NAME": "Caraway *",
+        "SCIENTNAME": "Carum carvi L.",
+        "CODE": 1169,
+        "PHMIN": 4.8,
+        "PHOPMN": 6,
+        "PHOPMX": 7,
+        "PHMAX": 7.8
+      }
+    },
+    "mint": {
+      "matchedBy": "binomial",
+      "catalogName": "Mentha spicata",
+      "ecocrop": {
+        "NAME": "Spearmint *",
+        "SCIENTNAME": "Mentha spicata L. v. crispa",
+        "CODE": 728,
+        "PHMIN": 4.5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 6.5,
+        "PHMAX": 8.3
+      }
+    },
+    "oregano": {
+      "matchedBy": "binomial",
+      "catalogName": "Origanum vulgare",
+      "ecocrop": {
+        "NAME": "Oregano *",
+        "SCIENTNAME": "Origanum vulgare L.",
+        "CODE": 729,
+        "PHMIN": 4.5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 7,
+        "PHMAX": 8.7
+      }
+    },
+    "lemongrass": {
+      "matchedBy": "binomial",
+      "catalogName": "Cymbopogon citratus",
+      "ecocrop": {
+        "NAME": "West Indian lemongrass*",
+        "SCIENTNAME": "Cymbopogon citratus (DC.) S",
+        "CODE": 805,
+        "PHMIN": 4.3,
+        "PHOPMN": 5,
+        "PHOPMX": 5.8,
+        "PHMAX": 7.3
+      }
+    },
+    "lavender": {
+      "matchedBy": "binomial",
+      "catalogName": "Lavandula angustifolia",
+      "ecocrop": {
+        "NAME": "True lavender *",
+        "SCIENTNAME": "Lavandula angustifolia Mill",
+        "CODE": 1244,
+        "PHMIN": 5.8,
+        "PHOPMN": 6.5,
+        "PHOPMX": 7.5,
+        "PHMAX": 8.3
+      }
+    },
+    "chamomile": {
+      "matchedBy": "hand",
+      "catalogName": "Matricaria chamomilla",
+      "ecocrop": {
+        "NAME": "German camomile *",
+        "SCIENTNAME": "Matricaria recutita L.",
+        "CODE": 1250,
+        "PHMIN": 5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 6.5,
+        "PHMAX": 7
+      }
+    },
+    "thyme": {
+      "matchedBy": "binomial",
+      "catalogName": "Thymus vulgaris",
+      "ecocrop": {
+        "NAME": "Thyme *",
+        "SCIENTNAME": "Thymus vulgaris L.",
+        "CODE": 736,
+        "PHMIN": 4.5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 6.5,
+        "PHMAX": 8
+      }
+    },
+    "rosemary": {
+      "matchedBy": "hand",
+      "catalogName": "Salvia rosmarinus",
+      "ecocrop": {
+        "NAME": "Rosemary",
+        "SCIENTNAME": "Rosmarinus officinalis L.",
+        "CODE": 408,
+        "PHMIN": 4.5,
+        "PHOPMN": 6,
+        "PHOPMX": 7.5,
+        "PHMAX": 8.7
+      }
+    },
+    "sage": {
+      "matchedBy": "binomial",
+      "catalogName": "Salvia officinalis",
+      "ecocrop": {
+        "NAME": "Sage *",
+        "SCIENTNAME": "Salvia officinalis L.",
+        "CODE": 731,
+        "PHMIN": 4.2,
+        "PHOPMN": 5,
+        "PHOPMX": 6.5,
+        "PHMAX": 8.3
+      }
+    },
+    "tarragon": {
+      "matchedBy": "binomial",
+      "catalogName": "Artemisia dracunculus",
+      "ecocrop": {
+        "NAME": "Tarragon *",
+        "SCIENTNAME": "Artemisia dracunculus L.",
+        "CODE": 735,
+        "PHMIN": 4.9,
+        "PHOPMN": 5.5,
+        "PHOPMX": 7,
+        "PHMAX": 7.5
+      }
+    },
+    "lemon-balm": {
+      "matchedBy": "binomial",
+      "catalogName": "Melissa officinalis",
+      "ecocrop": {
+        "NAME": "Sweet balm *",
+        "SCIENTNAME": "Melissa officinalis L.",
+        "CODE": 1145,
+        "PHMIN": 4.5,
+        "PHOPMN": 5,
+        "PHOPMX": 6,
+        "PHMAX": 7.8
+      }
+    },
+    "lovage": {
+      "matchedBy": "binomial",
+      "catalogName": "Levisticum officinale",
+      "ecocrop": {
+        "NAME": "Lovage *",
+        "SCIENTNAME": "Levisticum officinale Koch",
+        "CODE": 1241,
+        "PHMIN": 5,
+        "PHOPMN": 6,
+        "PHOPMX": 7,
+        "PHMAX": 7.8
+      }
+    },
+    "fennel-bulb": {
+      "matchedBy": "binomial",
+      "catalogName": "Foeniculum vulgare",
+      "ecocrop": {
+        "NAME": "Fennel *",
+        "SCIENTNAME": "Foeniculum vulgare Mill.",
+        "CODE": 486,
+        "PHMIN": 4.8,
+        "PHOPMN": 6.5,
+        "PHOPMX": 7.5,
+        "PHMAX": 8.2
+      }
+    },
+    "chervil": {
+      "matchedBy": "binomial",
+      "catalogName": "Anthriscus cerefolium",
+      "ecocrop": {
+        "NAME": "Chervil *",
+        "SCIENTNAME": "Anthriscus cerefolium L.",
+        "CODE": 725,
+        "PHMIN": 5.5,
+        "PHOPMN": 6,
+        "PHOPMX": 7,
+        "PHMAX": 8.2
+      }
+    },
+    "epazote": {
+      "matchedBy": "synonym",
+      "catalogName": "Dysphania ambrosioides",
+      "ecocrop": {
+        "NAME": "Wormseed *",
+        "SCIENTNAME": "Chenopodium ambrosioides L.",
+        "CODE": 765,
+        "PHMIN": 5,
+        "PHOPMN": 6.5,
+        "PHOPMX": 7.5,
+        "PHMAX": 8.7
+      }
+    },
+    "bay-laurel": {
+      "matchedBy": "binomial",
+      "catalogName": "Laurus nobilis",
+      "ecocrop": {
+        "NAME": "Sweet bay *",
+        "SCIENTNAME": "Laurus nobilis L.",
+        "CODE": 720,
+        "PHMIN": 4.5,
+        "PHOPMN": 5,
+        "PHOPMX": 6.5,
+        "PHMAX": 8.2
+      }
+    },
+    "catnip": {
+      "matchedBy": "binomial",
+      "catalogName": "Nepeta cataria",
+      "ecocrop": {
+        "NAME": "Catnip *",
+        "SCIENTNAME": "Nepeta cataria L.",
+        "CODE": 1149,
+        "PHMIN": 4.9,
+        "PHOPMN": 5.5,
+        "PHOPMX": 6.5,
+        "PHMAX": 7.5
+      }
+    },
+    "strawberry": {
+      "matchedBy": "binomial",
+      "catalogName": "Fragaria x ananassa",
+      "ecocrop": {
+        "NAME": "Garden strawberry",
+        "SCIENTNAME": "Fragaria x ananassa (D.) G.",
+        "CODE": 88,
+        "PHMIN": 4.5,
+        "PHOPMN": 6,
+        "PHOPMX": 6.8,
+        "PHMAX": 8.2
+      }
+    },
+    "raspberry": {
+      "matchedBy": "binomial",
+      "catalogName": "Rubus idaeus",
+      "ecocrop": {
+        "NAME": "Red raspberry",
+        "SCIENTNAME": "Rubus idaeus L.",
+        "CODE": 439,
+        "PHMIN": 4.5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 6.5,
+        "PHMAX": 7.8
+      }
+    },
+    "blackberry": {
+      "matchedBy": "hand",
+      "catalogName": "Rubus spp.",
+      "ecocrop": {
+        "NAME": "Blackberry *",
+        "SCIENTNAME": "Rubus spp",
+        "CODE": 830,
+        "PHMIN": 4.5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 6.5,
+        "PHMAX": 7.8
+      }
+    },
+    "blueberry": {
+      "matchedBy": "binomial",
+      "catalogName": "Vaccinium corymbosum",
+      "ecocrop": {
+        "NAME": "Highbush blueberry",
+        "SCIENTNAME": "Vaccinium corymbosum L.",
+        "CODE": 391,
+        "PHMIN": 4,
+        "PHOPMN": 4.5,
+        "PHOPMX": 5,
+        "PHMAX": 5.5
+      }
+    },
+    "lowbush-blueberry": {
+      "matchedBy": "binomial",
+      "catalogName": "Vaccinium angustifolium",
+      "ecocrop": {
+        "NAME": "Lowbush blueberry",
+        "SCIENTNAME": "Vaccinium angustifolium Ait",
+        "CODE": 390,
+        "PHMIN": 4,
+        "PHOPMN": 4.5,
+        "PHOPMX": 5,
+        "PHMAX": 5.5
+      }
+    },
+    "cranberry": {
+      "matchedBy": "binomial",
+      "catalogName": "Vaccinium macrocarpon",
+      "ecocrop": {
+        "NAME": "Cranberry",
+        "SCIENTNAME": "Vaccinium macrocarpon Ait.",
+        "CODE": 389,
+        "PHMIN": 4.5,
+        "PHOPMN": 5,
+        "PHOPMX": 5.5,
+        "PHMAX": 6
+      }
+    },
+    "currant-red": {
+      "matchedBy": "binomial",
+      "catalogName": "Ribes rubrum",
+      "ecocrop": {
+        "NAME": "Red currant *",
+        "SCIENTNAME": "Ribes rubrum",
+        "CODE": 405,
+        "PHMIN": 6,
+        "PHOPMN": 6.5,
+        "PHOPMX": 7.5,
+        "PHMAX": 8
+      }
+    },
+    "currant-black": {
+      "matchedBy": "binomial",
+      "catalogName": "Ribes nigrum",
+      "ecocrop": {
+        "NAME": "Black currant *",
+        "SCIENTNAME": "Ribes nigrum L.",
+        "CODE": 404,
+        "PHMIN": 6,
+        "PHOPMN": 6.5,
+        "PHOPMX": 7.5,
+        "PHMAX": 8
+      }
+    },
+    "gooseberry": {
+      "matchedBy": "binomial",
+      "catalogName": "Ribes uva-crispa",
+      "ecocrop": {
+        "NAME": "European gooseberry",
+        "SCIENTNAME": "Ribes uva-crispa L.",
+        "CODE": 407,
+        "PHMIN": 5,
+        "PHOPMN": 6,
+        "PHOPMX": 7,
+        "PHMAX": 7.5
+      }
+    },
+    "elderberry": {
+      "matchedBy": "binomial",
+      "catalogName": "Sambucus canadensis",
+      "ecocrop": {
+        "NAME": "Eastern elderberry *",
+        "SCIENTNAME": "Sambucus canadensis L.",
+        "CODE": 396,
+        "PHMIN": 5.3,
+        "PHOPMN": 6,
+        "PHOPMX": 6.5,
+        "PHMAX": 7.3
+      }
+    },
+    "rhubarb": {
+      "matchedBy": "hand",
+      "catalogName": "Rheum rhabarbarum",
+      "ecocrop": {
+        "NAME": "Garden rhubarb *",
+        "SCIENTNAME": "Rheum rhaponticum L.",
+        "CODE": 479,
+        "PHMIN": 5.3,
+        "PHOPMN": 6,
+        "PHOPMX": 7,
+        "PHMAX": 7.8
+      }
+    },
+    "asparagus": {
+      "matchedBy": "binomial",
+      "catalogName": "Asparagus officinalis",
+      "ecocrop": {
+        "NAME": "Asparagus",
+        "SCIENTNAME": "Asparagus officinalis L.",
+        "CODE": 353,
+        "PHMIN": 4.5,
+        "PHOPMN": 6,
+        "PHOPMX": 6.7,
+        "PHMAX": 8.2
+      }
+    },
+    "globe-artichoke": {
+      "matchedBy": "hand",
+      "catalogName": "Cynara cardunculus",
+      "ecocrop": {
+        "NAME": "Globe artichoke",
+        "SCIENTNAME": "Cynara scolymus L.",
+        "CODE": 362,
+        "PHMIN": 5.5,
+        "PHOPMN": 6,
+        "PHOPMX": 6.5,
+        "PHMAX": 8.3
+      }
+    },
+    "grape": {
+      "matchedBy": "binomial",
+      "catalogName": "Vitis vinifera",
+      "ecocrop": {
+        "NAME": "European wine grape",
+        "SCIENTNAME": "Vitis vinifera L.",
+        "CODE": 3,
+        "PHMIN": 4.5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 7.5,
+        "PHMAX": 8.5
+      }
+    },
+    "apple": {
+      "matchedBy": "binomial",
+      "catalogName": "Malus domestica",
+      "ecocrop": {
+        "NAME": "Apple",
+        "SCIENTNAME": "Malus domestica Borkh.",
+        "CODE": 1697,
+        "PHMIN": 4.5,
+        "PHOPMN": 6,
+        "PHOPMX": 7,
+        "PHMAX": 8
+      }
+    },
+    "quince": {
+      "matchedBy": "binomial",
+      "catalogName": "Cydonia oblonga",
+      "ecocrop": {
+        "NAME": "Quince *",
+        "SCIENTNAME": "Cydonia oblonga Mill.",
+        "CODE": 432,
+        "PHMIN": 5.5,
+        "PHOPMN": 6,
+        "PHOPMX": 6.5,
+        "PHMAX": 7
+      }
+    },
+    "pear": {
+      "matchedBy": "binomial",
+      "catalogName": "Pyrus communis",
+      "ecocrop": {
+        "NAME": "Pear",
+        "SCIENTNAME": "Pyrus communis L.",
+        "CODE": 431,
+        "PHMIN": 4.5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 6.5,
+        "PHMAX": 8.3
+      }
+    },
+    "peach": {
+      "matchedBy": "binomial",
+      "catalogName": "Prunus persica",
+      "ecocrop": {
+        "NAME": "Peach",
+        "SCIENTNAME": "Prunus persica (L.) Batsch",
+        "CODE": 96,
+        "PHMIN": 4.5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 6.3,
+        "PHMAX": 7.5
+      }
+    },
+    "almond": {
+      "matchedBy": "hand",
+      "catalogName": "Prunus dulcis",
+      "ecocrop": {
+        "NAME": "Almond",
+        "SCIENTNAME": "Prunus amygdalus Batsch.",
+        "CODE": 69,
+        "PHMIN": 5.5,
+        "PHOPMN": 6.5,
+        "PHOPMX": 7,
+        "PHMAX": 8
+      }
+    },
+    "pistachio": {
+      "matchedBy": "binomial",
+      "catalogName": "Pistacia vera",
+      "ecocrop": {
+        "NAME": "Pistachio nut *",
+        "SCIENTNAME": "Pistacia vera L.",
+        "CODE": 127,
+        "PHMIN": 6,
+        "PHOPMN": 7,
+        "PHOPMX": 8,
+        "PHMAX": 8.5
+      }
+    },
+    "plum": {
+      "matchedBy": "binomial",
+      "catalogName": "Prunus domestica",
+      "ecocrop": {
+        "NAME": "Plum",
+        "SCIENTNAME": "Prunus domestica L.",
+        "CODE": 98,
+        "PHMIN": 4.5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 6.1,
+        "PHMAX": 7.4
+      }
+    },
+    "cherry-sweet": {
+      "matchedBy": "binomial",
+      "catalogName": "Prunus avium",
+      "ecocrop": {
+        "NAME": "Cherry, Sweet",
+        "SCIENTNAME": "Prunus avium L.",
+        "CODE": 97,
+        "PHMIN": 4.5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 6.5,
+        "PHMAX": 7
+      }
+    },
+    "cherry-sour": {
+      "matchedBy": "binomial",
+      "catalogName": "Prunus cerasus",
+      "ecocrop": {
+        "NAME": "Cherry, Sour",
+        "SCIENTNAME": "Prunus cerasus L.",
+        "CODE": 437,
+        "PHMIN": 4.5,
+        "PHOPMN": 6,
+        "PHOPMX": 6.5,
+        "PHMAX": 7.5
+      }
+    },
+    "apricot": {
+      "matchedBy": "binomial",
+      "catalogName": "Prunus armeniaca",
+      "ecocrop": {
+        "NAME": "Apricot",
+        "SCIENTNAME": "Prunus armeniaca L.",
+        "CODE": 95,
+        "PHMIN": 5,
+        "PHOPMN": 6.5,
+        "PHOPMX": 7,
+        "PHMAX": 8
+      }
+    },
+    "fig": {
+      "matchedBy": "binomial",
+      "catalogName": "Ficus carica",
+      "ecocrop": {
+        "NAME": "Common fig *",
+        "SCIENTNAME": "Ficus carica L.",
+        "CODE": 493,
+        "PHMIN": 4.3,
+        "PHOPMN": 6,
+        "PHOPMX": 7,
+        "PHMAX": 8.6
+      }
+    },
+    "mulberry-red": {
+      "matchedBy": "binomial",
+      "catalogName": "Morus rubra",
+      "ecocrop": {
+        "NAME": "Red mulberry *",
+        "SCIENTNAME": "Morus rubra L.",
+        "CODE": 1060,
+        "PHMIN": 5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 7,
+        "PHMAX": 8
+      }
+    },
+    "mulberry-black": {
+      "matchedBy": "binomial",
+      "catalogName": "Morus nigra",
+      "ecocrop": {
+        "NAME": "Black mulberry",
+        "SCIENTNAME": "Morus nigra L.",
+        "CODE": 429,
+        "PHMIN": 4.3,
+        "PHOPMN": 5.5,
+        "PHOPMX": 7,
+        "PHMAX": 8.3
+      }
+    },
+    "pomegranate": {
+      "matchedBy": "binomial",
+      "catalogName": "Punica granatum",
+      "ecocrop": {
+        "NAME": "Pomegranate *",
+        "SCIENTNAME": "Punica granatum L.",
+        "CODE": 497,
+        "PHMIN": 5.8,
+        "PHOPMN": 6.5,
+        "PHOPMX": 7.5,
+        "PHMAX": 8.5
+      }
+    },
+    "hazelnut": {
+      "matchedBy": "binomial",
+      "catalogName": "Corylus avellana",
+      "ecocrop": {
+        "NAME": "European hazelnut",
+        "SCIENTNAME": "Corylus avellana L.",
+        "CODE": 395,
+        "PHMIN": 5.5,
+        "PHOPMN": 6,
+        "PHOPMX": 6.5,
+        "PHMAX": 7.5
+      }
+    },
+    "walnut": {
+      "matchedBy": "binomial",
+      "catalogName": "Juglans regia",
+      "ecocrop": {
+        "NAME": "English walnut *",
+        "SCIENTNAME": "Juglans regia L.",
+        "CODE": 78,
+        "PHMIN": 4.5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 6.5,
+        "PHMAX": 8.3
+      }
+    },
+    "black-walnut": {
+      "matchedBy": "binomial",
+      "catalogName": "Juglans nigra",
+      "ecocrop": {
+        "NAME": "Black walnut *",
+        "SCIENTNAME": "Juglans nigra L.",
+        "CODE": 491,
+        "PHMIN": 5.8,
+        "PHOPMN": 6.5,
+        "PHOPMX": 7.5,
+        "PHMAX": 8.3
+      }
+    },
+    "chestnut": {
+      "matchedBy": "hand",
+      "catalogName": "Castanea mollissima",
+      "ecocrop": {
+        "NAME": "Chestnut, Chinese *",
+        "SCIENTNAME": "Castanea mollisima L.",
+        "CODE": 124,
+        "PHMIN": 5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 6.5,
+        "PHMAX": 7.5
+      }
+    },
+    "pecan": {
+      "matchedBy": "hand",
+      "catalogName": "Carya illinoinensis",
+      "ecocrop": {
+        "NAME": "Pecan nut",
+        "SCIENTNAME": "Carya illinoensis Wangenh.",
+        "CODE": 103,
+        "PHMIN": 5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 7,
+        "PHMAX": 7.5
+      }
+    },
+    "persimmon": {
+      "matchedBy": "binomial",
+      "catalogName": "Diospyros kaki",
+      "ecocrop": {
+        "NAME": "Kaki *",
+        "SCIENTNAME": "Diospyros kaki L.f.",
+        "CODE": 495,
+        "PHMIN": 5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 6.5,
+        "PHMAX": 8.3
+      }
+    },
+    "american-persimmon": {
+      "matchedBy": "binomial",
+      "catalogName": "Diospyros virginiana",
+      "ecocrop": {
+        "NAME": "Persimmon *",
+        "SCIENTNAME": "Diospyros virginiana L.",
+        "CODE": 496,
+        "PHMIN": 5.8,
+        "PHOPMN": 6.5,
+        "PHOPMX": 7,
+        "PHMAX": 8
+      }
+    },
+    "sea-buckthorn": {
+      "matchedBy": "binomial",
+      "catalogName": "Hippophae rhamnoides",
+      "ecocrop": {
+        "NAME": "Sea buckthorn *",
+        "SCIENTNAME": "Hippophae rhamnoides L.",
+        "CODE": 1685,
+        "PHMIN": 6,
+        "PHOPMN": 6.5,
+        "PHOPMX": 7.5,
+        "PHMAX": 8
+      }
+    },
+    "kiwifruit": {
+      "matchedBy": "hand",
+      "catalogName": "Actinidia deliciosa",
+      "ecocrop": {
+        "NAME": "Kiwifruit *",
+        "SCIENTNAME": "Actinidia chinensis Planch.",
+        "CODE": 392,
+        "PHMIN": 5.5,
+        "PHOPMN": 6,
+        "PHOPMX": 7,
+        "PHMAX": 7.5
+      }
+    },
+    "hops": {
+      "matchedBy": "binomial",
+      "catalogName": "Humulus lupulus",
+      "ecocrop": {
+        "NAME": "Hops",
+        "SCIENTNAME": "Humulus lupulus L.",
+        "CODE": 394,
+        "PHMIN": 5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 6.5,
+        "PHMAX": 8
+      }
+    },
+    "enset": {
+      "matchedBy": "binomial",
+      "catalogName": "Ensete ventricosum",
+      "ecocrop": {
+        "NAME": "Enset *",
+        "SCIENTNAME": "Ensete ventricosum (Welw.)",
+        "CODE": 74,
+        "PHMIN": 5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 6.5,
+        "PHMAX": 7.3
+      }
+    },
+    "cassava": {
+      "matchedBy": "binomial",
+      "catalogName": "Manihot esculenta",
+      "ecocrop": {
+        "NAME": "Cassava",
+        "SCIENTNAME": "Manihot esculenta Crantz.",
+        "CODE": 5,
+        "PHMIN": 4,
+        "PHOPMN": 5.5,
+        "PHOPMX": 8,
+        "PHMAX": 9
+      }
+    },
+    "taro": {
+      "matchedBy": "hand",
+      "catalogName": "Colocasia esculenta",
+      "ecocrop": {
+        "NAME": "Cocoyam",
+        "SCIENTNAME": "Colocasia esculenta (L.) S.",
+        "CODE": 32,
+        "PHMIN": 4.3,
+        "PHOPMN": 5.5,
+        "PHOPMX": 6.5,
+        "PHMAX": 8.2
+      }
+    },
+    "malanga": {
+      "matchedBy": "binomial",
+      "catalogName": "Xanthosoma sagittifolium",
+      "ecocrop": {
+        "NAME": "Tannia",
+        "SCIENTNAME": "Xanthosoma sagittifolium L.",
+        "CODE": 31,
+        "PHMIN": 4.5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 7,
+        "PHMAX": 7.8
+      }
+    },
+    "yam-greater": {
+      "matchedBy": "binomial",
+      "catalogName": "Dioscorea alata",
+      "ecocrop": {
+        "NAME": "Greater yam",
+        "SCIENTNAME": "Dioscorea alata L.",
+        "CODE": 309,
+        "PHMIN": 4.8,
+        "PHOPMN": 5.5,
+        "PHOPMX": 6.5,
+        "PHMAX": 8.5
+      }
+    },
+    "rice-upland": {
+      "matchedBy": "hand",
+      "catalogName": "Oryza sativa",
+      "ecocrop": {
+        "NAME": "Rice upland (Japonica)",
+        "SCIENTNAME": "Oryza sativa L. s. japonica",
+        "CODE": 1211,
+        "PHMIN": 4.5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 7,
+        "PHMAX": 9
+      }
+    },
+    "sugarcane": {
+      "matchedBy": "binomial",
+      "catalogName": "Saccharum officinarum",
+      "ecocrop": {
+        "NAME": "Sugarcane",
+        "SCIENTNAME": "Saccharum officinarum L.",
+        "CODE": 10,
+        "PHMIN": 4.5,
+        "PHOPMN": 5,
+        "PHOPMX": 8,
+        "PHMAX": 9
+      }
+    },
+    "lemon": {
+      "matchedBy": "binomial",
+      "catalogName": "Citrus x limon",
+      "ecocrop": {
+        "NAME": "Lemon",
+        "SCIENTNAME": "Citrus limon (L.) Burm. f.",
+        "CODE": 147,
+        "PHMIN": 5.5,
+        "PHOPMN": 6.5,
+        "PHOPMX": 7,
+        "PHMAX": 8
+      }
+    },
+    "orange": {
+      "matchedBy": "binomial",
+      "catalogName": "Citrus sinensis",
+      "ecocrop": {
+        "NAME": "Sweet orange",
+        "SCIENTNAME": "Citrus sinensis (L.) Osbeck",
+        "CODE": 19,
+        "PHMIN": 4,
+        "PHOPMN": 5,
+        "PHOPMX": 6,
+        "PHMAX": 8.3
+      }
+    },
+    "grapefruit": {
+      "matchedBy": "binomial",
+      "catalogName": "Citrus x paradisi",
+      "ecocrop": {
+        "NAME": "Grapefruit",
+        "SCIENTNAME": "Citrus paradisi Macfad.Hook",
+        "CODE": 149,
+        "PHMIN": 6,
+        "PHOPMN": 6.5,
+        "PHOPMX": 7.3,
+        "PHMAX": 8.3
+      }
+    },
+    "lime": {
+      "matchedBy": "binomial",
+      "catalogName": "Citrus x latifolia",
+      "ecocrop": {
+        "NAME": "Tahiti lime",
+        "SCIENTNAME": "Citrus latifolia Tan.",
+        "CODE": 411,
+        "PHMIN": 5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 6.5,
+        "PHMAX": 7.5
+      }
+    },
+    "mandarin": {
+      "matchedBy": "binomial",
+      "catalogName": "Citrus reticulata",
+      "ecocrop": {
+        "NAME": "Mandarin",
+        "SCIENTNAME": "Citrus reticulata Blanco x",
+        "CODE": 151,
+        "PHMIN": 5.5,
+        "PHOPMN": 6,
+        "PHOPMX": 6.8,
+        "PHMAX": 8.3
+      }
+    },
+    "mango": {
+      "matchedBy": "binomial",
+      "catalogName": "Mangifera indica",
+      "ecocrop": {
+        "NAME": "Mango",
+        "SCIENTNAME": "Mangifera indica L.",
+        "CODE": 53,
+        "PHMIN": 4.3,
+        "PHOPMN": 5.5,
+        "PHOPMX": 7.5,
+        "PHMAX": 8.5
+      }
+    },
+    "guava": {
+      "matchedBy": "binomial",
+      "catalogName": "Psidium guajava",
+      "ecocrop": {
+        "NAME": "Guava",
+        "SCIENTNAME": "Psidium guajava L.",
+        "CODE": 75,
+        "PHMIN": 4,
+        "PHOPMN": 5.5,
+        "PHOPMX": 7.5,
+        "PHMAX": 8.5
+      }
+    },
+    "jackfruit": {
+      "matchedBy": "binomial",
+      "catalogName": "Artocarpus heterophyllus",
+      "ecocrop": {
+        "NAME": "Jackfruit",
+        "SCIENTNAME": "Artocarpus heterophyllus L.",
+        "CODE": 421,
+        "PHMIN": 4.3,
+        "PHOPMN": 5.5,
+        "PHOPMX": 7.5,
+        "PHMAX": 8
+      }
+    },
+    "breadfruit": {
+      "matchedBy": "binomial",
+      "catalogName": "Artocarpus altilis",
+      "ecocrop": {
+        "NAME": "Breadfruit",
+        "SCIENTNAME": "Artocarpus altilis (Park.)",
+        "CODE": 559,
+        "PHMIN": 4.3,
+        "PHOPMN": 5.5,
+        "PHOPMX": 6.5,
+        "PHMAX": 8.7
+      }
+    },
+    "coconut": {
+      "matchedBy": "binomial",
+      "catalogName": "Cocos nucifera",
+      "ecocrop": {
+        "NAME": "Coconut",
+        "SCIENTNAME": "Cocos nucifera L.",
+        "CODE": 14,
+        "PHMIN": 4.3,
+        "PHOPMN": 5,
+        "PHOPMX": 8,
+        "PHMAX": 8.7
+      }
+    },
+    "cashew": {
+      "matchedBy": "binomial",
+      "catalogName": "Anacardium occidentale",
+      "ecocrop": {
+        "NAME": "Cashew",
+        "SCIENTNAME": "Anacardium occidentale L.",
+        "CODE": 55,
+        "PHMIN": 3.8,
+        "PHOPMN": 4.5,
+        "PHOPMX": 6.5,
+        "PHMAX": 8.7
+      }
+    },
+    "lychee": {
+      "matchedBy": "binomial",
+      "catalogName": "Litchi chinensis",
+      "ecocrop": {
+        "NAME": "Lychee",
+        "SCIENTNAME": "Litchi chinensis Sonn.",
+        "CODE": 101,
+        "PHMIN": 5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 6.5,
+        "PHMAX": 8.5
+      }
+    },
+    "papaya": {
+      "matchedBy": "binomial",
+      "catalogName": "Carica papaya",
+      "ecocrop": {
+        "NAME": "Papaya",
+        "SCIENTNAME": "Carica papaya L.",
+        "CODE": 54,
+        "PHMIN": 4.5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 7,
+        "PHMAX": 8
+      }
+    },
+    "pigeon-pea": {
+      "matchedBy": "binomial",
+      "catalogName": "Cajanus cajan",
+      "ecocrop": {
+        "NAME": "Pigeon Pea",
+        "SCIENTNAME": "Cajanus cajan (L.) Mill ssp",
+        "CODE": 71,
+        "PHMIN": 4.5,
+        "PHOPMN": 5,
+        "PHOPMX": 7,
+        "PHMAX": 8.4
+      }
+    },
+    "sesame": {
+      "matchedBy": "binomial",
+      "catalogName": "Sesamum indicum",
+      "ecocrop": {
+        "NAME": "Sesame seed",
+        "SCIENTNAME": "Sesamum indicum L.",
+        "CODE": 23,
+        "PHMIN": 4.5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 7.5,
+        "PHMAX": 8
+      }
+    },
+    "moringa": {
+      "matchedBy": "binomial",
+      "catalogName": "Moringa oleifera",
+      "ecocrop": {
+        "NAME": "Benoil tree",
+        "SCIENTNAME": "Moringa oleifera Lam.",
+        "CODE": 420,
+        "PHMIN": 5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 7,
+        "PHMAX": 7.5
+      }
+    },
+    "pearl-millet": {
+      "matchedBy": "binomial",
+      "catalogName": "Pennisetum glaucum",
+      "ecocrop": {
+        "NAME": "Pearl millet",
+        "SCIENTNAME": "Pennisetum glaucum (L)R.Br.",
+        "CODE": 195,
+        "PHMIN": 4.5,
+        "PHOPMN": 5,
+        "PHOPMX": 6.5,
+        "PHMAX": 8.3
+      }
+    },
+    "finger-millet": {
+      "matchedBy": "binomial",
+      "catalogName": "Eleusine coracana",
+      "ecocrop": {
+        "NAME": "Finger millet",
+        "SCIENTNAME": "Eleusine coracana (L)Gaertn",
+        "CODE": 586,
+        "PHMIN": 5.5,
+        "PHOPMN": 6,
+        "PHOPMX": 6.5,
+        "PHMAX": 7.5
+      }
+    },
+    "foxtail-millet": {
+      "matchedBy": "binomial",
+      "catalogName": "Setaria italica",
+      "ecocrop": {
+        "NAME": "Italian millet *",
+        "SCIENTNAME": "Setaria italica (L.) Beauv.",
+        "CODE": 198,
+        "PHMIN": 5.5,
+        "PHOPMN": 6,
+        "PHOPMX": 6.8,
+        "PHMAX": 8.3
+      }
+    },
+    "sorghum-grain": {
+      "matchedBy": "hand",
+      "catalogName": "Sorghum bicolor",
+      "ecocrop": {
+        "NAME": "Sorghum (low altitude)",
+        "SCIENTNAME": "Sorghum bicolor (L.) Moench",
+        "CODE": 6,
+        "PHMIN": 5,
+        "PHOPMN": 6,
+        "PHOPMX": 7,
+        "PHMAX": 8.5
+      }
+    },
+    "mung-bean": {
+      "matchedBy": "binomial",
+      "catalogName": "Vigna radiata",
+      "ecocrop": {
+        "NAME": "Mung bean",
+        "SCIENTNAME": "Vigna radiata (L.) Wilczek",
+        "CODE": 113,
+        "PHMIN": 4.3,
+        "PHOPMN": 5.5,
+        "PHOPMX": 6.2,
+        "PHMAX": 8.3
+      }
+    },
+    "adzuki-bean": {
+      "matchedBy": "binomial",
+      "catalogName": "Vigna angularis",
+      "ecocrop": {
+        "NAME": "Adzuki bean",
+        "SCIENTNAME": "Vigna angularis (Willd.) O.",
+        "CODE": 90,
+        "PHMIN": 5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 6.5,
+        "PHMAX": 7.5
+      }
+    },
+    "teff": {
+      "matchedBy": "binomial",
+      "catalogName": "Eragrostis tef",
+      "ecocrop": {
+        "NAME": "Teff *",
+        "SCIENTNAME": "Eragrostis tef (Zucc.) Trot",
+        "CODE": 595,
+        "PHMIN": 5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 6.5,
+        "PHMAX": 8.2
+      }
+    },
+    "olive": {
+      "matchedBy": "binomial",
+      "catalogName": "Olea europaea",
+      "ecocrop": {
+        "NAME": "Olive, Europaen",
+        "SCIENTNAME": "Olea europaea L.",
+        "CODE": 42,
+        "PHMIN": 5.3,
+        "PHOPMN": 6,
+        "PHOPMX": 7,
+        "PHMAX": 8.5
+      }
+    },
+    "avocado": {
+      "matchedBy": "hand",
+      "catalogName": "Persea americana",
+      "ecocrop": {
+        "NAME": "Avocado * (Guatemalan)",
+        "SCIENTNAME": "Persea americana Mill.",
+        "CODE": 1214,
+        "PHMIN": 4.5,
+        "PHOPMN": 5,
+        "PHOPMX": 7,
+        "PHMAX": 8.3
+      }
+    },
+    "coffee": {
+      "matchedBy": "binomial",
+      "catalogName": "Coffea arabica",
+      "ecocrop": {
+        "NAME": "Coffee arabica",
+        "SCIENTNAME": "Coffea arabica L.",
+        "CODE": 12,
+        "PHMIN": 4.3,
+        "PHOPMN": 5.5,
+        "PHOPMX": 7,
+        "PHMAX": 8.4
+      }
+    },
+    "black-pepper": {
+      "matchedBy": "binomial",
+      "catalogName": "Piper nigrum",
+      "ecocrop": {
+        "NAME": "Pepper, black or white",
+        "SCIENTNAME": "Piper nigrum L.",
+        "CODE": 39,
+        "PHMIN": 5,
+        "PHOPMN": 6,
+        "PHOPMX": 7,
+        "PHMAX": 7.5
+      }
+    },
+    "vanilla": {
+      "matchedBy": "binomial",
+      "catalogName": "Vanilla planifolia",
+      "ecocrop": {
+        "NAME": "Vanilla *",
+        "SCIENTNAME": "Vanilla planifolia Andrews",
+        "CODE": 718,
+        "PHMIN": 4.3,
+        "PHOPMN": 5,
+        "PHOPMX": 6.2,
+        "PHMAX": 8
+      }
+    },
+    "tea": {
+      "matchedBy": "binomial",
+      "catalogName": "Camellia sinensis",
+      "ecocrop": {
+        "NAME": "Tea",
+        "SCIENTNAME": "Camellia sinensis (L) O.K.",
+        "CODE": 11,
+        "PHMIN": 4,
+        "PHOPMN": 4.5,
+        "PHOPMX": 5.5,
+        "PHMAX": 6
+      }
+    },
+    "cacao": {
+      "matchedBy": "binomial",
+      "catalogName": "Theobroma cacao",
+      "ecocrop": {
+        "NAME": "Cacao",
+        "SCIENTNAME": "Theobroma cacao L.",
+        "CODE": 25,
+        "PHMIN": 4,
+        "PHOPMN": 5,
+        "PHOPMX": 6.5,
+        "PHMAX": 8
+      }
+    },
+    "banana": {
+      "matchedBy": "hand",
+      "catalogName": "Musa acuminata",
+      "ecocrop": {
+        "NAME": "Banana",
+        "SCIENTNAME": "Musa acuminata Colla",
+        "CODE": 15,
+        "PHMIN": 4,
+        "PHOPMN": 5.5,
+        "PHOPMX": 7.5,
+        "PHMAX": 8.4
+      }
+    },
+    "pineapple": {
+      "matchedBy": "binomial",
+      "catalogName": "Ananas comosus",
+      "ecocrop": {
+        "NAME": "Pineapple",
+        "SCIENTNAME": "Ananas comosus (L) Merr.",
+        "CODE": 43,
+        "PHMIN": 3.5,
+        "PHOPMN": 4.5,
+        "PHOPMX": 8,
+        "PHMAX": 9
+      }
+    },
+    "passion-fruit": {
+      "matchedBy": "hand",
+      "catalogName": "Passiflora edulis",
+      "ecocrop": {
+        "NAME": "Purple passionfruit *",
+        "SCIENTNAME": "Passiflora edulis v edulis",
+        "CODE": 102,
+        "PHMIN": 5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 7.5,
+        "PHMAX": 8
+      }
+    },
+    "borage": {
+      "matchedBy": "binomial",
+      "catalogName": "Borago officinalis",
+      "ecocrop": {
+        "NAME": "Borage *",
+        "SCIENTNAME": "Borago officinalis L.",
+        "CODE": 722,
+        "PHMIN": 6,
+        "PHOPMN": 6.5,
+        "PHOPMX": 7.5,
+        "PHMAX": 8.3
+      }
+    },
+    "calendula": {
+      "matchedBy": "binomial",
+      "catalogName": "Calendula officinalis",
+      "ecocrop": {
+        "NAME": "Calendula *",
+        "SCIENTNAME": "Calendula officinalis L.",
+        "CODE": 1163,
+        "PHMIN": 4.5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 7,
+        "PHMAX": 8.3
+      }
+    },
+    "sunflower": {
+      "matchedBy": "binomial",
+      "catalogName": "Helianthus annuus",
+      "ecocrop": {
+        "NAME": "Sunflower",
+        "SCIENTNAME": "Helianthus annuus L v macro",
+        "CODE": 46,
+        "PHMIN": 5.5,
+        "PHOPMN": 6,
+        "PHOPMX": 7.5,
+        "PHMAX": 8
+      }
+    },
+    "buckwheat": {
+      "matchedBy": "binomial",
+      "catalogName": "Fagopyrum esculentum",
+      "ecocrop": {
+        "NAME": "Common buckwheat *",
+        "SCIENTNAME": "Fagopyrum esculentum Moench",
+        "CODE": 444,
+        "PHMIN": 4.4,
+        "PHOPMN": 5,
+        "PHOPMX": 6.5,
+        "PHMAX": 7.5
+      }
+    },
+    "clover-crimson": {
+      "matchedBy": "binomial",
+      "catalogName": "Trifolium incarnatum",
+      "ecocrop": {
+        "NAME": "Crimson clover *",
+        "SCIENTNAME": "Trifolium incarnatum L.",
+        "CODE": 487,
+        "PHMIN": 4.8,
+        "PHOPMN": 6,
+        "PHOPMX": 7,
+        "PHMAX": 8.3
+      }
+    },
+    "clover-white": {
+      "matchedBy": "binomial",
+      "catalogName": "Trifolium repens",
+      "ecocrop": {
+        "NAME": "White clover",
+        "SCIENTNAME": "Trifolium repens L.",
+        "CODE": 145,
+        "PHMIN": 4.5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 7,
+        "PHMAX": 8.2
+      }
+    },
+    "clover-red": {
+      "matchedBy": "binomial",
+      "catalogName": "Trifolium pratense",
+      "ecocrop": {
+        "NAME": "Red clover",
+        "SCIENTNAME": "Trifolium pratense L.",
+        "CODE": 144,
+        "PHMIN": 4.5,
+        "PHOPMN": 6,
+        "PHOPMX": 6.5,
+        "PHMAX": 8.2
+      }
+    },
+    "alfalfa": {
+      "matchedBy": "binomial",
+      "catalogName": "Medicago sativa",
+      "ecocrop": {
+        "NAME": "Alfalfa",
+        "SCIENTNAME": "Medicago sativa L.",
+        "CODE": 40,
+        "PHMIN": 5.5,
+        "PHOPMN": 6.5,
+        "PHOPMX": 7.5,
+        "PHMAX": 8
+      }
+    },
+    "ryegrass-perennial": {
+      "matchedBy": "binomial",
+      "catalogName": "Lolium perenne",
+      "ecocrop": {
+        "NAME": "Perennial reygrass",
+        "SCIENTNAME": "Lolium perenne L.",
+        "CODE": 137,
+        "PHMIN": 4.5,
+        "PHOPMN": 5,
+        "PHOPMX": 6.5,
+        "PHMAX": 8.3
+      }
+    },
+    "vetch-hairy": {
+      "matchedBy": "hand",
+      "catalogName": "Vicia villosa",
+      "ecocrop": {
+        "NAME": "Woolypod vetch",
+        "SCIENTNAME": "Vicia villosa Roth",
+        "CODE": 767,
+        "PHMIN": 4.9,
+        "PHOPMN": 6,
+        "PHOPMX": 7,
+        "PHMAX": 8.2
+      }
+    },
+    "field-pea": {
+      "matchedBy": "binomial",
+      "catalogName": "Pisum sativum",
+      "ecocrop": {
+        "NAME": "Pea",
+        "SCIENTNAME": "Pisum sativum L.",
+        "CODE": 48,
+        "PHMIN": 4.5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 7,
+        "PHMAX": 8.3
+      }
+    },
+    "mustard-cover": {
+      "matchedBy": "binomial",
+      "catalogName": "Sinapis alba",
+      "ecocrop": {
+        "NAME": "Mustard, White",
+        "SCIENTNAME": "Sinapis alba L.",
+        "CODE": 366,
+        "PHMIN": 5.5,
+        "PHOPMN": 6.5,
+        "PHOPMX": 7.5,
+        "PHMAX": 8.5
+      }
+    },
+    "sorghum-sudangrass": {
+      "matchedBy": "binomial",
+      "catalogName": "Sorghum x drummondii",
+      "ecocrop": {
+        "NAME": "Sudan grass",
+        "SCIENTNAME": "Sorghum x drummondii (S.)",
+        "CODE": 202,
+        "PHMIN": 5,
+        "PHOPMN": 6,
+        "PHOPMX": 7,
+        "PHMAX": 8.2
+      }
+    },
+    "sunn-hemp": {
+      "matchedBy": "binomial",
+      "catalogName": "Crotalaria juncea",
+      "ecocrop": {
+        "NAME": "Sunn hemp",
+        "SCIENTNAME": "Crotalaria juncea L.",
+        "CODE": 86,
+        "PHMIN": 5,
+        "PHOPMN": 6,
+        "PHOPMX": 7,
+        "PHMAX": 8.4
+      }
+    },
+    "desmodium": {
+      "matchedBy": "binomial",
+      "catalogName": "Desmodium intortum",
+      "ecocrop": {
+        "NAME": "Greenleaf desmodium",
+        "SCIENTNAME": "Desmodium intortum (Mill) U",
+        "CODE": 208,
+        "PHMIN": 4.5,
+        "PHOPMN": 5.5,
+        "PHOPMX": 6.5,
+        "PHMAX": 7.5
+      }
+    },
+    "napier-grass": {
+      "matchedBy": "hand",
+      "catalogName": "Cenchrus purpureus",
+      "ecocrop": {
+        "NAME": "Elephant grass",
+        "SCIENTNAME": "Pennisetum purpureum Schum.",
+        "CODE": 197,
+        "PHMIN": 4.5,
+        "PHOPMN": 5,
+        "PHOPMX": 6.5,
+        "PHMAX": 8.2
+      }
+    },
+    "fenugreek": {
+      "matchedBy": "binomial",
+      "catalogName": "Trigonella foenum-graecum",
+      "ecocrop": {
+        "NAME": "Fenugreek",
+        "SCIENTNAME": "Trigonella foenum-graecum L",
+        "CODE": 706,
+        "PHMIN": 5.3,
+        "PHOPMN": 7,
+        "PHOPMX": 7.5,
+        "PHMAX": 8.2
+      }
+    }
+  }
+}

@@ -96,6 +96,7 @@ const realisticDesign = (): PersistedDesign => ({
   answers: {
     ...DEFAULT_WIZARD_ANSWERS,
     ambition: 'fruiting-and-berries',
+    surroundingsShadePercent: 45,
     mounting: 'ground-rows',
     maxHeightM: meters(2.4),
     irrigationAvailable: false,
@@ -221,6 +222,28 @@ describe('what is persisted', () => {
     expect(loaded.design?.sidebarStep).toBe('place')
   })
 
+  /** The step holds a typed figure to 0 to 100, so a stored one past either end didn't come from it */
+  it('drops a set of answers whose shade figure is out of range or not a number', () => {
+    for (const figure of [150, -5, '45']) {
+      const design = realisticDesign()
+      const storage = memoryStorage()
+      writeDesign(
+        storage,
+        {
+          ...design,
+          answers: {
+            ...design.answers,
+            surroundingsShadePercent: figure,
+          } as unknown as typeof design.answers,
+        },
+        AT,
+      )
+      const loaded = loadDesign(storage)
+      expect(loaded.status.outcome, String(figure)).toBe('repaired')
+      expect(loaded.design?.answers, String(figure)).toEqual(DEFAULT_WIZARD_ANSWERS)
+    }
+  })
+
   it('recomputes bed area and array metrics, whatever the stored ones say', () => {
     const design = realisticDesign()
     const plot = design.plot as GardenPlot
@@ -248,6 +271,37 @@ describe('what is persisted', () => {
       plot.arrays[0]?.derived.groundCoverRatio ?? 0,
       6,
     )
+  })
+
+  it('reads a bed saved as None but still flagged watered as unwatered', () => {
+    const design = realisticDesign()
+    const plot = design.plot as GardenPlot
+    const storage = memoryStorage()
+    // what the bed panel wrote before the flag and the depth followed the method
+    writeDesign(
+      storage,
+      {
+        ...design,
+        plot: {
+          ...plot,
+          beds: plot.beds.map((bed) => ({
+            ...bed,
+            irrigation: {
+              method: 'none',
+              available: true,
+              appliedMmPerYear: 180 as Bed['irrigation']['appliedMmPerYear'],
+            },
+          })),
+        },
+      },
+      AT,
+    )
+    const back = loadDesign(storage).design as PersistedDesign
+    expect(back.plot?.beds[0]?.irrigation).toEqual({
+      method: 'none',
+      available: false,
+      appliedMmPerYear: 0,
+    })
   })
 
   it('lifts a saved tracker to its floor, whatever height and spacing were stored', () => {
@@ -452,6 +506,38 @@ describe('schema version', () => {
     expect(loaded.status.outcome).toBe('restored')
     expect(loaded.design?.plot?.obstructions).toEqual([])
     expect(loaded.design?.plot?.beds.length).toBe(plot.beds.length)
+  })
+
+  /** A design saved before a shade figure could be typed holds none, so its card still stands */
+  it('restores a whole design saved at schema 5 with no shade figure typed', () => {
+    const design = realisticDesign()
+    const { surroundingsShadePercent: _figure, ...olderAnswers } = design.answers
+    const storage = memoryStorage()
+    storage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({
+        version: 5,
+        savedAtUtcMillis: AT,
+        design: { ...design, answers: { ...olderAnswers, exposure: 'partly-sheltered' } },
+      }),
+    )
+    const loaded = loadDesign(storage)
+    expect(loaded.status.outcome).toBe('restored')
+    expect(loaded.design?.answers).toEqual({
+      ...olderAnswers,
+      exposure: 'partly-sheltered',
+      surroundingsShadePercent: null,
+    })
+  })
+
+  it('leaves a shade figure the visitor actually typed alone', () => {
+    const result = migrateDesign(5, { answers: { surroundingsShadePercent: 45 } })
+    expect(result.ok).toBe(true)
+    if (result.ok) {
+      expect((result.design as { answers?: unknown }).answers).toEqual({
+        surroundingsShadePercent: 45,
+      })
+    }
   })
 
   it('leaves the seasons a visitor actually ran alone', () => {

@@ -65,3 +65,22 @@ test('saying the space is in shade most of the day dims every bed and the rankin
   ).toHaveText('Not suited', { timeout: AUTORUN_TIMEOUT_MS })
   expect(app.errors).toEqual([])
 })
+
+test('a shade figure typed beside the three answers takes that figure off every bed', async ({
+  page,
+}) => {
+  test.setTimeout(SITE_TIMEOUT_MS + 60_000)
+  const app = await openApp(page)
+  await expect(page.getByTestId('status-site')).toBeHidden({ timeout: SITE_TIMEOUT_MS })
+
+  await step(page, 'light')
+  await expect(page.getByTestId('readout-bed-light-open-bed-1')).toBeVisible()
+
+  await step(page, 'ground')
+  await page.getByTestId('control-onboarding-shade-known').check()
+  await page.getByTestId('control-onboarding-shade-percent').fill('45')
+
+  await step(page, 'light')
+  await expect(page.getByTestId('readout-bed-light-surroundings')).toContainText('45%')
+  expect(app.errors).toEqual([])
+})

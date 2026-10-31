@@ -8,6 +8,8 @@ export interface NumberFieldProps {
   readonly max?: number
   readonly step?: number
   readonly unit?: string
+  /** Grayed and unchangeable, for a field something else is answering for now */
+  readonly disabled?: boolean
   onChange(value: number): void
 }
 
@@ -19,6 +21,7 @@ export const NumberField = ({
   max,
   step = 1,
   unit,
+  disabled,
   onChange,
 }: NumberFieldProps): ReactElement => (
   <label className="field">
@@ -33,6 +36,7 @@ export const NumberField = ({
       min={min}
       max={max}
       step={step}
+      disabled={disabled}
       onChange={(event) => onChange(Number(event.target.value))}
     />
   </label>
@@ -50,6 +54,7 @@ export const SliderField = ({
   max = 1,
   step = 0.01,
   display,
+  disabled,
   onChange,
 }: SliderFieldProps): ReactElement => (
   <label className="field">
@@ -64,6 +69,7 @@ export const SliderField = ({
       min={min}
       max={max}
       step={step}
+      disabled={disabled}
       onChange={(event) => onChange(Number(event.target.value))}
     />
   </label>
@@ -153,15 +159,24 @@ export interface ToggleProps {
   readonly testId: string
   readonly label: string
   readonly checked: boolean
+  /** Grayed and unchangeable, for a switch something else is answering for now */
+  readonly disabled?: boolean
   onChange(checked: boolean): void
 }
 
-export const Toggle = ({ testId, label, checked, onChange }: ToggleProps): ReactElement => (
+export const Toggle = ({
+  testId,
+  label,
+  checked,
+  disabled,
+  onChange,
+}: ToggleProps): ReactElement => (
   <label className="field field-toggle">
     <input
       type="checkbox"
       data-testid={testId}
       checked={checked}
+      disabled={disabled}
       onChange={(event) => onChange(event.target.checked)}
     />
     <span className="field-label">{label}</span>

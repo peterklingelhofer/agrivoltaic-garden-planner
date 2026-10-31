@@ -27,6 +27,7 @@ import type { CompanionRule, RotationConstraint } from '../types/companion'
 import type { ComplianceCheck } from '../types/compliance'
 import type { Crop } from '../types/crop'
 import type { Bed, GardenPlot, House, Obstruction } from '../types/garden'
+import { irrigationOf } from '../types/garden'
 import type { Polygon2D } from '../types/geo'
 import { arrayId, bedId, plotId } from '../types/ids'
 import type { CropId } from '../types/ids'
@@ -51,7 +52,15 @@ import type { ModuleSpec, PvArray, RowGeometry, TrackerConfig } from '../types/p
 import type { CropRecommendation } from '../types/recommend'
 import type { Site } from '../types/site'
 import type { Degrees, Fraction, KilowattHours, Meters, MolPerM2Day } from '../types/units'
-import { degrees, fraction, meters, millimeters, squareMeters, wattsPeak } from '../types/units'
+import {
+  degrees,
+  fraction,
+  meters,
+  millimeters,
+  millimetersPerYear,
+  squareMeters,
+  wattsPeak,
+} from '../types/units'
 import type { BedRain, RainField, RainWind } from '../types/water'
 import type { SolarPositionSeries, TmySeries } from '../types/weather'
 import { placeBeds } from './layout'
@@ -61,7 +70,7 @@ import { rainGround, rainOnBed, rainWind, type RainGround } from './rain'
 import { climateGate } from './stages/climate-gate'
 import { lightGate } from './stages/light-gate'
 import { DEFAULT_WEIGHTS, scoreOf } from './stages/rank'
-import { SURROUNDINGS_SHADE, shadedBySurroundings } from './surroundings'
+import { shadedBySurroundings, surroundingsShare } from './surroundings'
 import { bedShortfallMm, waterBalanceShared, waterBalances } from './water'
 import { landEquivalentRatio } from './yield'
 
@@ -201,11 +210,11 @@ export const AMBITION_SHADE_BUDGET: Readonly<Record<GrowingAmbition, number>> = 
 
 /**
  * A site that is already shaded by something else has less shade left to spend on panels. The
- * share the surroundings take is the one table the bed light is dimmed by (`surroundings.ts`),
+ * share the surroundings take is the one share the bed light is dimmed by (`surroundingsShare`),
  * so the search and the ranking read the same answer
  */
 export const shadeBudgetFor = (answers: OnboardingAnswers): Fraction =>
-  fraction(AMBITION_SHADE_BUDGET[answers.ambition] * (1 - SURROUNDINGS_SHADE[answers.exposure]))
+  fraction(AMBITION_SHADE_BUDGET[answers.ambition] * (1 - surroundingsShare(answers)))
 
 // The energy optimum is about 0.85 of the latitude, and agrivoltaic designs run below it to shorten
 // the shadow and lower the structure. `energy-first` takes its fixed tilt from a sweep on the
@@ -754,13 +763,10 @@ const plotFor = (
     footprint,
     areaM2: squareMeters(answers.plotWidthM * answers.plotDepthM),
     soil: site.soil,
-    irrigation: {
-      method: answers.irrigationAvailable ? 'drip' : 'none',
-      available: answers.irrigationAvailable,
-      appliedMmPerYear: (answers.irrigationAvailable
-        ? 300
-        : 0) as Bed['irrigation']['appliedMmPerYear'],
-    },
+    irrigation: irrigationOf(
+      answers.irrigationAvailable ? 'drip' : 'none',
+      millimetersPerYear(300),
+    ),
     raisedHeightM: meters(0),
     modifiers: [],
     waterHarvesting: [],
@@ -1017,6 +1023,7 @@ const shortfallJudge = (
     catalog: deps.catalog,
     rain: fieldOf(ground, []),
   })
+  const share = surroundingsShare(answers)
   return (footprints) => {
     let sumMm = 0
     let areaSumM2 = 0
@@ -1028,7 +1035,7 @@ const shortfallJudge = (
         footprint,
         areaM2: polygonAreaM2(footprint),
       }
-      const light = shadedBySurroundings(bedLightOf(raster, bed.id, footprint), answers.exposure)
+      const light = shadedBySurroundings(bedLightOf(raster, bed.id, footprint), share)
       const rain = rainOnBed(ground, plot.arrays, bed)
       sumMm += bedShortfallMm(balanceShared, bed, light, rain) * bed.areaM2
       areaSumM2 += bed.areaM2
@@ -1130,7 +1137,7 @@ const evaluate = (
   const sets = runRecommendationPipeline({
     site: deps.site,
     plot,
-    bedLight: [shadedBySurroundings(light, answers.exposure)],
+    bedLight: [shadedBySurroundings(light, surroundingsShare(answers))],
     catalog: deps.catalog,
     companionRules: deps.companionRules,
     rotationConstraints: deps.rotationConstraints,
@@ -1176,7 +1183,7 @@ const evaluate = (
     raster,
     window,
     maxBeds: answers.maxBeds ?? undefined,
-    exposure: answers.exposure,
+    surroundings: surroundingsShare(answers),
     houses: houseFootprints(plot),
     shortfallMm,
   })

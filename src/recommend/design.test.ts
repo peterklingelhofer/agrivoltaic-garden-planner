@@ -49,6 +49,7 @@ const answersFor = (patch: Partial<OnboardingAnswers> = {}): OnboardingAnswers =
   objective: { food: 0.4, energy: 0.3, water: 0.2, simplicity: 0.1 },
   ambition: 'mixed-vegetables',
   exposure: 'open',
+  surroundingsShadePercent: null,
   mounting: 'any',
   maxHeightM: null,
   irrigationAvailable: true,
@@ -286,6 +287,10 @@ describe('the growing ambition bounds the shade budget', () => {
     expect(shadeBudgetFor(answersFor({ exposure: 'overshadowed' }))).toBeLessThan(
       shadeBudgetFor(answersFor({ exposure: 'open' })),
     )
+    // a typed figure takes off what the card it matches takes, whichever card is chosen
+    expect(
+      shadeBudgetFor(answersFor({ exposure: 'open', surroundingsShadePercent: 60 })),
+    ).toBeCloseTo(shadeBudgetFor(answersFor({ exposure: 'overshadowed' })), 9)
   })
 
   it('never lets any archetype spend more shade than the budget allows', () => {

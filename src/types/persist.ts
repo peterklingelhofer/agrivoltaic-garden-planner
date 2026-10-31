@@ -5,7 +5,7 @@ import type { EpochMillis } from './units'
  * shape changes and register the step that carries the old shape forward. A payload whose
  * version can't be walked to this one is discarded whole
  */
-export const SCHEMA_VERSION = 5
+export const SCHEMA_VERSION = 6
 
 export interface PersistEnvelope<TDesign> {
   readonly version: number

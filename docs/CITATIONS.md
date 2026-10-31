@@ -1,6 +1,6 @@
 # Citation corpus
 
-528 sources (176 crossref-verified, 1 datacite-verified, 16 unverified, 335 url-verified). Machine-readable companion: [`CITATIONS.csl.json`](./CITATIONS.csl.json) (CSL-JSON).
+530 sources (176 crossref-verified, 1 datacite-verified, 16 unverified, 337 url-verified). Machine-readable companion: [`CITATIONS.csl.json`](./CITATIONS.csl.json) (CSL-JSON).
 A record enters this corpus verified against the Crossref REST API, against the DataCite REST API,
 or by a fetch of the authoritative publisher, standards-body or government URL, with an Internet
 Archive snapshot standing in where a live page withholds its text.
@@ -72,21 +72,21 @@ lookup folds the spellings together.
 | crossref-verified | 176 |
 | datacite-verified | 1 |
 | unverified | 16 |
-| url-verified | 335 |
-| **total** | **528** |
+| url-verified | 337 |
+| **total** | **530** |
 
 | Access level | n |
 |---|---|
-| open-access | 80 |
+| open-access | 81 |
 | paywalled | 115 |
-| public-domain | 333 |
+| public-domain | 334 |
 
 | Evidence tier | n |
 |---|---|
 | A | 40 |
 | B | 75 |
-| C | 319 |
-| null (not applicable) | 94 |
+| C | 320 |
+| null (not applicable) | 95 |
 
 ---
 
@@ -1065,7 +1065,7 @@ Yavari, Rouhangiz; Zaliwciw, Demetrius; Cibin, Raj; McPhillips, Lauren. (2022). 
 
 ## Horticulture & crop physiology
 
-369 sources.
+370 sources.
 
 #### `adhikary2025-clubroot-review`
 
@@ -5786,6 +5786,17 @@ Utah State University Extension, TreeBrowser. (n.d.). *Pistachio (Pistacia vera)
     - "Prefers full sun and well-drained soils." (Utah State University Extension TreeBrowser, Pistachio (Pistacia vera) page, General description)
 - **Caveat:** Published outside a peer-reviewed journal.
 
+#### `ut-w362d-youth-gardening`
+
+Gonzalez, Emily A. (n.d.). *Youth Gardening in Tennessee: Ten Favorite Plants for Youth Gardeners in Tennessee*. University of Tennessee Extension W 362-D
+
+- URL: <https://knox.tennessee.edu/wp-content/uploads/sites/202/2020/11/W362D-Youth-Gardening-in-TN-10-Favorite-Plants-for-Youth.pdf>
+- Verification: URL-verified | Access: public-domain, evidence tier **C**
+- Backs:
+  - arugula optimum soil pH 6 to 6.8
+    - "Prefers rich, humus soil with pH of 6 to 6.8" (University of Tennessee Extension, W 362-D, Arugula, Soil Conditions, page 2)
+- **Caveat:** A youth-gardening guide, so the figure is a garden preference and no trial. The sheet prints no outer bounds, so the catalog's absolute bounds for arugula stay the default's 5 and 8 around its 6 to 6.8 optimum.
+
 #### `uvah-coaker1984-mixed-cropping`
 
 Uvah, I. I. I.; Coaker, T. H. (1984). *Effect of mixed cropping on some insect pests of carrots and onions*. Entomologia Experimentalis et Applicata 36: 159-167
@@ -6767,7 +6778,7 @@ U.S. Food and Drug Administration. (n.d.). *Import Alert 54-10: Detention Withou
 
 ## Software & datasets
 
-12 sources.
+13 sources.
 
 #### `eia-electric-power-monthly-5-6-a`
 
@@ -6792,6 +6803,16 @@ U.S. Food and Drug Administration. (n.d.). *Import Alert 54-10: Detention Withou
   - decision 9: bundled FAO ECOCROP (~2568 species)
   - decision 10: ECOCROP trapezoidal membership with min-across-parameters, which yields the limiting factor for free
 - **Caveat:** The FAO land-resources-planning-toolbox URL that circulates for ECOCROP is a stale stub and serves none of the database. Use the GAEZ URL above.
+
+#### `hijmans-recocrop`
+
+Hijmans, Robert J. (n.d.). *Recocrop: ECOCROP model parameters (inst/parameters/ecocrop.rds)*. GitHub
+
+- URL: <https://github.com/cropmodels/Recocrop/blob/master/inst/parameters/ecocrop.rds>
+- Verification: URL-verified | Access: open-access
+- Backs:
+  - the soil pH trapezoid (absolute minimum, optimal minimum, optimal maximum, absolute maximum) of each catalog crop that matches an ECOCROP row and carries no pH transcription of its own
+- **Caveat:** It's a copy of ECOCROP. Its SCIENTNAME field stops at 27 characters and carries misspelled epithets (Carthamus tinctoius, Castanea mollisima). Its CODE isn't the EcoPort sheet id that FAO's data sheets use: cassava is CODE 5 here and sheet 1420 there. Two codes are shared by two rows each, English walnut's 78 among them, so a crop's row is named by NAME and SCIENTNAME together. A catalog row that carries its own pH transcription keeps it, and a few of those differ from this copy by more than half a pH unit at a cutoff.
 
 #### `nasa-power`
 

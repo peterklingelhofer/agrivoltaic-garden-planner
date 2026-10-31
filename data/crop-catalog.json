@@ -58,7 +58,7 @@
           "torres-purdue-dli-b",
           "runkle2011-vegetable-dli"
         ],
-        "dliCaveat": "The 15 is Runkle 2011’s figure for vine crops as a group, \"at least 15 (and preferably more than 20)\", in a sentence that names no crop. The lowest band Purdue HO-238-B-W marks acceptable for tomato and pepper is 10 to 12. The 20 to 30 is the range Virginia Cooperative Extension’s Table 3 prints for tomato. Both are greenhouse figures and neither traces to a tomato experiment. The yield curve for these crops is Laub’s fruity-vegetables group, three studies (bell pepper under nets and sweet pepper under cloth, both subtropical, and squash), none of them tomato and none under panels. The field trials cited for these crops (Mata et al. 2026 at Bridgeton, Ben Naim et al. 2025 in Israel) measured yield losses that grew with shading, with no gain measured anywhere"
+        "dliCaveat": "The 15 is Runkle 2011’s figure for vine crops as a group, \"at least 15 (and preferably more than 20)\", in a sentence that names no crop. The lowest band Purdue HO-238-B-W marks acceptable for tomato and pepper is 10 to 12. The 20 to 30 is the range Virginia Cooperative Extension’s Table 3 prints for tomato. Both are greenhouse figures and neither traces to a tomato experiment. The yield curve for these crops is Laub’s fruity-vegetables group, three studies (bell pepper under nets and sweet pepper under cloth, both subtropical, and squash), none of them tomato. The field trials cited for these crops (Mata et al. 2026 at Bridgeton, Ben Naim et al. 2025 in Israel) measured yield losses that grew with shading, with no gain measured anywhere"
       }
     },
     {
@@ -90,7 +90,7 @@
           "torres-purdue-dli-b",
           "runkle2011-vegetable-dli"
         ],
-        "dliCaveat": "The 15 is Runkle 2011’s figure for vine crops as a group, \"at least 15 (and preferably more than 20)\", in a sentence that names no crop. The lowest band Purdue HO-238-B-W marks acceptable for tomato and pepper is 10 to 12. The 20 to 30 is the range Virginia Cooperative Extension’s Table 3 prints for tomato. Both are greenhouse figures and neither traces to a tomato experiment. The yield curve for these crops is Laub’s fruity-vegetables group, three studies (bell pepper under nets and sweet pepper under cloth, both subtropical, and squash), none of them tomato and none under panels. The field trials cited for these crops (Mata et al. 2026 at Bridgeton, Ben Naim et al. 2025 in Israel) measured yield losses that grew with shading, with no gain measured anywhere"
+        "dliCaveat": "The 15 is Runkle 2011’s figure for vine crops as a group, \"at least 15 (and preferably more than 20)\", in a sentence that names no crop. The lowest band Purdue HO-238-B-W marks acceptable for tomato and pepper is 10 to 12. The 20 to 30 is the range Virginia Cooperative Extension’s Table 3 prints for tomato. Both are greenhouse figures and neither traces to a tomato experiment. The yield curve for these crops is Laub’s fruity-vegetables group, three studies (bell pepper under nets and sweet pepper under cloth, both subtropical, and squash), none of them tomato. The field trials cited for these crops (Mata et al. 2026 at Bridgeton, Ben Naim et al. 2025 in Israel) measured yield losses that grew with shading, with no gain measured anywhere"
       }
     },
     {
@@ -122,7 +122,7 @@
           "torres-purdue-dli-b",
           "runkle2011-vegetable-dli"
         ],
-        "dliCaveat": "The 15 is Runkle 2011’s figure for vine crops as a group, \"at least 15 (and preferably more than 20)\", in a sentence that names no crop. The lowest band Purdue HO-238-B-W marks acceptable for tomato and pepper is 10 to 12. The 20 to 30 is the range Virginia Cooperative Extension’s Table 3 prints for tomato. Both are greenhouse figures and neither traces to a tomato experiment. The yield curve for these crops is Laub’s fruity-vegetables group, three studies (bell pepper under nets and sweet pepper under cloth, both subtropical, and squash), none of them tomato and none under panels. The field trials cited for these crops (Mata et al. 2026 at Bridgeton, Ben Naim et al. 2025 in Israel) measured yield losses that grew with shading, with no gain measured anywhere"
+        "dliCaveat": "The 15 is Runkle 2011’s figure for vine crops as a group, \"at least 15 (and preferably more than 20)\", in a sentence that names no crop. The lowest band Purdue HO-238-B-W marks acceptable for tomato and pepper is 10 to 12. The 20 to 30 is the range Virginia Cooperative Extension’s Table 3 prints for tomato. Both are greenhouse figures and neither traces to a tomato experiment. The yield curve for these crops is Laub’s fruity-vegetables group, three studies (bell pepper under nets and sweet pepper under cloth, both subtropical, and squash), none of them tomato. The field trials cited for these crops (Mata et al. 2026 at Bridgeton, Ben Naim et al. 2025 in Israel) measured yield losses that grew with shading, with no gain measured anywhere"
       }
     },
     {
@@ -223,7 +223,7 @@
           "stallknecht2025-vce-dli",
           "runkle2011-vegetable-dli"
         ],
-        "dliCaveat": "The 15 is Runkle 2011’s figure for vine crops as a group, \"at least 15 (and preferably more than 20)\", in a sentence that names no crop. The lowest band Purdue HO-238-B-W marks acceptable for tomato and pepper is 10 to 12. The 20 to 30 is the range Virginia Cooperative Extension’s Table 3 prints for tomato. Both are greenhouse figures and neither traces to a tomato experiment. The yield curve for these crops is Laub’s fruity-vegetables group, three studies (bell pepper under nets and sweet pepper under cloth, both subtropical, and squash), none of them tomato and none under panels. The field trials cited for these crops (Mata et al. 2026 at Bridgeton, Ben Naim et al. 2025 in Israel) measured yield losses that grew with shading, with no gain measured anywhere"
+        "dliCaveat": "The 15 is Runkle 2011’s figure for vine crops as a group, \"at least 15 (and preferably more than 20)\", in a sentence that names no crop. The lowest band Purdue HO-238-B-W marks acceptable for tomato and pepper is 10 to 12. The 20 to 30 is the range Virginia Cooperative Extension’s Table 3 prints for tomato. Both are greenhouse figures and neither traces to a tomato experiment. The yield curve for these crops is Laub’s fruity-vegetables group, three studies (bell pepper under nets and sweet pepper under cloth, both subtropical, and squash), none of them tomato. The field trials cited for these crops (Mata et al. 2026 at Bridgeton, Ben Naim et al. 2025 in Israel) measured yield losses that grew with shading, with no gain measured anywhere"
       }
     },
     {
@@ -2085,7 +2085,17 @@
       "heightM": 0.25,
       "widthM": 0.2,
       "overrides": {
-        "succession": 10
+        "succession": 10,
+        "ph": [
+          5,
+          6,
+          6.8,
+          8
+        ],
+        "envCitations": [
+          "fao-ecocrop",
+          "ut-w362d-youth-gardening"
+        ]
       }
     },
     {
@@ -3797,7 +3807,6 @@
           "tirmenstein1991-lingonberry-feis"
         ],
         "maxRsr": 0.5,
-        "maxRsrTier": "C",
         "harvest": {
           "afterFreezeDays": 126,
           "seasonDays": 195,
@@ -3923,8 +3932,7 @@
         "envCitations": [
           "coladonato1994-teaberry-feis"
         ],
-        "maxRsr": 0.75,
-        "maxRsrTier": "C"
+        "maxRsr": 0.75
       }
     },
     {
@@ -3987,7 +3995,6 @@
         "chillHours": 800,
         "deciduous": true,
         "maxRsr": 0.45,
-        "maxRsrTier": "C",
         "harvest": {
           "afterFreezeDays": 69,
           "seasonDays": 178,
@@ -4024,7 +4031,6 @@
         "chillHours": 800,
         "deciduous": true,
         "maxRsr": 0.4,
-        "maxRsrTier": "C",
         "harvest": {
           "afterFreezeDays": 69,
           "seasonDays": 178,
@@ -4061,7 +4067,6 @@
         "chillHours": 800,
         "deciduous": true,
         "maxRsr": 0.45,
-        "maxRsrTier": "C",
         "harvest": {
           "afterFreezeDays": 69,
           "seasonDays": 178,
@@ -4189,7 +4194,6 @@
         "coldC": -34,
         "yearsToMature": 3,
         "maxRsr": 0.1,
-        "maxRsrTier": "C",
         "laubNote": "No crop in the nine groups is harvested the way this one is, so the group is an analogy this app chose",
         "harvest": {
           "afterFreezeDays": 12,
@@ -4262,7 +4266,6 @@
         "deciduous": true,
         "support": "trellis",
         "maxRsr": 0.1,
-        "maxRsrTier": "C",
         "harvest": {
           "afterFreezeDays": 114,
           "seasonDays": 178,
@@ -4298,7 +4301,6 @@
         "yearsToMature": 6,
         "chillHours": 800,
         "maxRsr": 0.1,
-        "maxRsrTier": "C",
         "harvest": {
           "afterFreezeDays": 89,
           "seasonDays": 212,
@@ -4334,7 +4336,6 @@
         "coldC": -28.9,
         "chillHours": 300,
         "maxRsr": 0.1,
-        "maxRsrTier": "C",
         "harvest": {
           "afterFreezeDays": 181,
           "seasonDays": 212,
@@ -4370,7 +4371,6 @@
         "yearsToMature": 6,
         "chillHours": 700,
         "maxRsr": 0.1,
-        "maxRsrTier": "C",
         "harvest": {
           "afterFreezeDays": 120,
           "seasonDays": 212,
@@ -4406,7 +4406,6 @@
         "yearsToMature": 4,
         "chillHours": 750,
         "maxRsr": 0.1,
-        "maxRsrTier": "C",
         "harvest": {
           "afterFreezeDays": 124,
           "seasonDays": 212,
@@ -4442,7 +4441,6 @@
         "chillHours": 750,
         "coldC": -28.9,
         "maxRsr": 0.1,
-        "maxRsrTier": "C",
         "zr": 1.5,
         "p": 0.4,
         "harvest": {
@@ -4480,7 +4478,6 @@
         "chillHours": 1000,
         "coldC": -12.2,
         "maxRsr": 0.1,
-        "maxRsrTier": "C",
         "zr": 1.25,
         "p": 0.4,
         "harvest": {
@@ -4518,7 +4515,6 @@
         "yearsToMature": 5,
         "chillHours": 800,
         "maxRsr": 0.1,
-        "maxRsrTier": "C",
         "harvest": {
           "afterFreezeDays": 151,
           "seasonDays": 212,
@@ -4554,7 +4550,6 @@
         "yearsToMature": 6,
         "chillHours": 1000,
         "maxRsr": 0.1,
-        "maxRsrTier": "C",
         "harvest": {
           "afterFreezeDays": 63,
           "seasonDays": 206,
@@ -4590,7 +4585,6 @@
         "yearsToMature": 5,
         "chillHours": 1100,
         "maxRsr": 0.1,
-        "maxRsrTier": "C",
         "harvest": {
           "afterFreezeDays": 89,
           "seasonDays": 212,
@@ -4626,7 +4620,6 @@
         "yearsToMature": 4,
         "chillHours": 700,
         "maxRsr": 0.1,
-        "maxRsrTier": "C",
         "harvest": {
           "afterFreezeDays": 89,
           "seasonDays": 212,
@@ -4662,7 +4655,6 @@
         "yearsToMature": 4,
         "deciduous": true,
         "maxRsr": 0.1,
-        "maxRsrTier": "C",
         "harvest": {
           "afterFreezeDays": 120,
           "seasonDays": 212,
@@ -4698,7 +4690,6 @@
         "coldC": -28.9,
         "deciduous": true,
         "maxRsr": 0.1,
-        "maxRsrTier": "C",
         "harvest": {
           "afterFreezeDays": 31,
           "seasonDays": 218,
@@ -4734,7 +4725,6 @@
         "coldC": -17.8,
         "deciduous": true,
         "maxRsr": 0.1,
-        "maxRsrTier": "C",
         "harvest": {
           "afterFreezeDays": 41,
           "seasonDays": 234,
@@ -4769,7 +4759,6 @@
         "yearsToMature": 3,
         "coldC": -12.5,
         "maxRsr": 0.1,
-        "maxRsrTier": "C",
         "harvest": {
           "afterFreezeDays": 167,
           "seasonDays": 253,
@@ -4804,7 +4793,6 @@
         "yearsToMature": 2,
         "coldC": -28.9,
         "maxRsr": 0.1,
-        "maxRsrTier": "C",
         "harvest": {
           "afterFreezeDays": 151,
           "seasonDays": 274,
@@ -4840,8 +4828,6 @@
         "yearsToMature": 6,
         "chillHours": 800,
         "deciduous": true,
-        "maxRsr": 0.3,
-        "maxRsrTier": "C",
         "harvest": {
           "afterFreezeDays": 144,
           "seasonDays": 212,
@@ -4878,7 +4864,6 @@
         "deciduous": true,
         "coldC": -29,
         "maxRsr": 0.1,
-        "maxRsrTier": "C",
         "harvest": {
           "afterFreezeDays": 181,
           "seasonDays": 212,
@@ -4915,7 +4900,6 @@
         "deciduous": true,
         "coldC": -34.4,
         "maxRsr": 0.1,
-        "maxRsrTier": "C",
         "harvest": {
           "afterFreezeDays": 147,
           "seasonDays": 205,
@@ -4951,7 +4935,6 @@
         "deciduous": true,
         "coldC": -28.9,
         "maxRsr": 0.1,
-        "maxRsrTier": "C",
         "harvest": {
           "afterFreezeDays": 147,
           "seasonDays": 205,
@@ -4987,7 +4970,6 @@
         "deciduous": true,
         "coldC": -34.4,
         "maxRsr": 0.1,
-        "maxRsrTier": "C",
         "harvest": {
           "afterFreezeDays": 221,
           "seasonDays": 258,
@@ -5023,7 +5005,6 @@
         "yearsToMature": 7,
         "deciduous": true,
         "maxRsr": 0.45,
-        "maxRsrTier": "C",
         "harvest": {
           "afterFreezeDays": 132,
           "seasonDays": 192,
@@ -5058,7 +5039,6 @@
         "yearsToMature": 7,
         "coldC": -26,
         "maxRsr": 0.45,
-        "maxRsrTier": "C",
         "harvest": {
           "afterFreezeDays": 241,
           "seasonDays": 275,
@@ -5093,7 +5073,6 @@
         "yearsToMature": 3,
         "coldC": -26,
         "maxRsr": 0.45,
-        "maxRsrTier": "C",
         "harvest": {
           "afterFreezeDays": 130,
           "seasonDays": 180,
@@ -5329,7 +5308,6 @@
         "yearsToMature": 7,
         "chillHours": 800,
         "maxRsr": 0.2,
-        "maxRsrTier": "C",
         "harvestDays": 30
       }
     },
@@ -5357,7 +5335,6 @@
         "yearsToMature": 4,
         "deciduous": true,
         "maxRsr": 0.45,
-        "maxRsrTier": "C",
         "harvestDays": 21
       }
     },
@@ -5385,7 +5362,6 @@
         "coldC": -29,
         "coldWinterOnly": true,
         "maxRsr": 0.75,
-        "maxRsrTier": "C",
         "survivalCeiling": 36.4,
         "survivalCeilingTier": "B",
         "survivalCeilingCitations": [
@@ -5421,7 +5397,6 @@
           5
         ],
         "maxRsr": 0.75,
-        "maxRsrTier": "C",
         "harvest": {
           "afterFreezeDays": 6,
           "seasonDays": 202,
@@ -5912,7 +5887,6 @@
         "zr": 1.3,
         "p": 0.5,
         "maxRsr": 0.1,
-        "maxRsrTier": "C",
         "harvest": {
           "afterFreezeDays": 271,
           "seasonDays": 332,
@@ -5985,7 +5959,6 @@
         "zr": 1.3,
         "p": 0.5,
         "maxRsr": 0.1,
-        "maxRsrTier": "C",
         "harvest": {
           "afterFreezeDays": 323,
           "seasonDays": 344,
@@ -6054,7 +6027,6 @@
         "zr": 1.35,
         "p": 0.5,
         "maxRsr": 0.1,
-        "maxRsrTier": "C",
         "harvest": {
           "afterFreezeDays": 280,
           "seasonDays": 350,
@@ -6117,7 +6089,6 @@
         "zr": 1.3,
         "p": 0.5,
         "maxRsr": 0.1,
-        "maxRsrTier": "C",
         "harvest": {
           "afterFreezeDays": 201,
           "seasonDays": 344,
@@ -6188,7 +6159,6 @@
         "zr": 1.3,
         "p": 0.5,
         "maxRsr": 0.1,
-        "maxRsrTier": "C",
         "harvest": {
           "afterFreezeDays": 323,
           "seasonDays": 344,
@@ -6256,7 +6226,6 @@
           "Csb"
         ],
         "maxRsr": 0.1,
-        "maxRsrTier": "C",
         "laubNote": "The meta-analysis took data from temperate and subtropical sites only, and this crop is grown outside that range, so the curve is an extrapolation"
       }
     },
@@ -6319,7 +6288,6 @@
           "Cwb"
         ],
         "maxRsr": 0.1,
-        "maxRsrTier": "C",
         "laubNote": "The meta-analysis took data from temperate and subtropical sites only, and this crop is grown outside that range, so the curve is an extrapolation"
       }
     },
@@ -6380,7 +6348,6 @@
           "Cwb"
         ],
         "maxRsr": 0.1,
-        "maxRsrTier": "C",
         "laubNote": "The meta-analysis took data from temperate and subtropical sites only, and this crop is grown outside that range, so the curve is an extrapolation"
       }
     },
@@ -6435,7 +6402,6 @@
           "Am"
         ],
         "maxRsr": 0.1,
-        "maxRsrTier": "C",
         "laubNote": "The meta-analysis took data from temperate and subtropical sites only, and this crop is grown outside that range, so the curve is an extrapolation"
       }
     },
@@ -6490,7 +6456,6 @@
           "Am"
         ],
         "maxRsr": 0.1,
-        "maxRsrTier": "C",
         "harvest": {
           "wholeSeason": true,
           "citations": [
@@ -6555,7 +6520,6 @@
           "Cwb"
         ],
         "maxRsr": 0.1,
-        "maxRsrTier": "C",
         "laubNote": "The meta-analysis took data from temperate and subtropical sites only, and this crop is grown outside that range, so the curve is an extrapolation"
       }
     },
@@ -6614,7 +6578,6 @@
           "Cwb"
         ],
         "maxRsr": 0.1,
-        "maxRsrTier": "C",
         "laubNote": "The meta-analysis took data from temperate and subtropical sites only, and this crop is grown outside that range, so the curve is an extrapolation"
       }
     },
@@ -7285,6 +7248,7 @@
           "Csa",
           "Csb"
         ],
+        "maxRsr": 0.1,
         "laubNote": "The meta-analysis took data from temperate and subtropical sites only, and this crop is grown outside that range, so the curve is an extrapolation",
         "harvest": {
           "afterFreezeDays": 241,
@@ -7348,7 +7312,6 @@
           "Am"
         ],
         "maxRsr": 0.1,
-        "maxRsrTier": "C",
         "laubNote": "The meta-analysis took data from temperate and subtropical sites only, and this crop is grown outside that range, so the curve is an extrapolation"
       }
     },
@@ -7398,7 +7361,6 @@
           365
         ],
         "maxRsr": 0.1,
-        "maxRsrTier": "C",
         "laubNote": "The meta-analysis took data from temperate and subtropical sites only, and this crop is grown outside that range, so the curve is an extrapolation"
       }
     },

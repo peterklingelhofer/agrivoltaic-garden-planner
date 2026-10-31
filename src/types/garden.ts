@@ -11,6 +11,7 @@ import type {
   MillimetersPerYear,
   SquareMeters,
 } from './units'
+import { millimetersPerYear } from './units'
 
 export type IrrigationMethod = 'none' | 'hand' | 'sprinkler' | 'drip' | 'subsurface-drip' | 'flood'
 
@@ -19,6 +20,23 @@ export interface Irrigation {
   readonly available: boolean
   readonly appliedMmPerYear: MillimetersPerYear
 }
+
+/** What a bed is watered with by default, the drip figure `makeBed` has always used */
+export const DEFAULT_IRRIGATION_MM_PER_YEAR = millimetersPerYear(180)
+
+/**
+ * The watering a bed gets, from the method alone. "None" is the one answer that means no water
+ * to count on, so the rules' `available` flag and the applied depth follow it, and nothing can
+ * set a method that disagrees with the flag
+ */
+export const irrigationOf = (
+  method: IrrigationMethod,
+  appliedMmPerYear: MillimetersPerYear = DEFAULT_IRRIGATION_MM_PER_YEAR,
+): Irrigation => ({
+  method,
+  available: method !== 'none',
+  appliedMmPerYear: method === 'none' ? millimetersPerYear(0) : appliedMmPerYear,
+})
 
 export type CanopyTier = 'overstory' | 'mid-canopy' | 'shrub' | 'herb-ground'
 

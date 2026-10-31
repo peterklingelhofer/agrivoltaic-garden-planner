@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState, type RefObject } from 'react'
 import { geocode, type GeocodeHit } from '../data/geocode'
 import { messageOf } from '../state/safe'
-import { useAppStore } from '../state/store'
+import type { LatLon } from '../types/geo'
 
 /** Nominatim policy: at most one request a second, from the identity src/data/http.ts attaches */
 export const NOMINATIM_MIN_INTERVAL_MS = 1100
@@ -24,8 +24,16 @@ export interface AddressSearch {
   clear(): void
 }
 
-/** The address lookup both the site panel and the guided setup run, throttle and all */
-export const useAddressSearch = (inputRef: RefObject<HTMLInputElement | null>): AddressSearch => {
+/** The address lookup the place search runs, throttle and all */
+export const useAddressSearch = (
+  inputRef: RefObject<HTMLInputElement | null>,
+  /**
+   * The place the garden is at, so a name shared by seven towns lists the near one first:
+   * without it, a common town name lists every match nationwide in no useful order, and the
+   * wrong one is an easy pick
+   */
+  near: LatLon | null,
+): AddressSearch => {
   const [query, setQuery] = useState('')
   const [hits, setHits] = useState<readonly GeocodeHit[]>([])
   const [error, setError] = useState<string | null>(null)
@@ -33,10 +41,6 @@ export const useAddressSearch = (inputRef: RefObject<HTMLInputElement | null>): 
   const [activeIndex, setActiveIndex] = useState(0)
   const lastRequest = useRef(0)
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
-  // the place the garden is at, so a name shared by seven towns lists the near one first:
-  // without it, a common town name lists every match nationwide in no useful order, and the
-  // wrong one is an easy pick
-  const near = useAppStore((s) => (s.site.status === 'ready' ? s.site.value.location : null))
 
   useEffect(() => () => (timer.current ? clearTimeout(timer.current) : undefined), [])
 

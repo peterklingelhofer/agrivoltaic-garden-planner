@@ -48,8 +48,10 @@ export const autoRunKey = (s: AppState): string =>
     s.wildlife.favorNative,
     s.wildlife.favorPollinators,
     // the surroundings answer dims every bed's light before the ranking reads it, and the store
-    // re-reads the beds off the raster when the answer moves, so the ranking has to follow
+    // re-reads the beds off the raster when the answer moves, so the ranking has to follow. The
+    // card and the typed figure are both that answer
     s.answers.exposure,
+    s.answers.surroundingsShadePercent,
     /*
       The rooting depth is in here for the same reason the wildlife switches are: `stages/space.ts`
       excludes a crop whose roots want more than `soil.effectiveDepthM + raisedHeightM`, and the

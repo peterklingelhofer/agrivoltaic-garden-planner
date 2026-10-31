@@ -141,6 +141,20 @@ export default defineConfig(({ command }) => {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
       },
     },
+    /*
+      Two pages from one build: the planner, and the crop finder at /crops/, which shares the
+      planner's components and rules and none of its scene, store or physics core. The planner's
+      key stays `index`, since its entry chunk is named after the key and `verify-deploy` reads the
+      served page for `assets/index-*.js`
+    */
+    build: {
+      rolldownOptions: {
+        input: {
+          index: fileURLToPath(new URL('./index.html', import.meta.url)),
+          crops: fileURLToPath(new URL('./crops/index.html', import.meta.url)),
+        },
+      },
+    },
     server: {
       // WORKER_PROXY_BASE is a relative path, so without this PVGIS and NSRDB fall back
       // silently under plain `bun run dev` and only work under `bun run dev:worker`

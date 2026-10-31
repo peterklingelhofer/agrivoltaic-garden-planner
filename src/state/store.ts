@@ -30,7 +30,7 @@ import {
   suggestPolycultures,
   withAmbition,
 } from '../recommend/suggest'
-import { exposureInForce, shadedBySurroundings } from '../recommend/surroundings'
+import { shadedBySurroundings, surroundingsInForce } from '../recommend/surroundings'
 import { bedLight as bedLightOf } from '../sim/aggregate'
 import { checkAllRegimes } from '../sim/compliance'
 import { equatorFacingAzimuth } from '../sim/geometry'
@@ -319,9 +319,9 @@ const rederiveBedLight = (s: MutableState): void => {
   if (s.raster.status !== 'ready' || s.plot === null) return
   if (s.lightGeometry !== lightGeometryKey(s.plot)) return
   const raster = s.raster.value
-  const exposure = exposureInForce(s.plot.obstructions, s.answers.exposure)
+  const share = surroundingsInForce(s.plot.obstructions, s.answers)
   s.bedLight = s.plot.beds.map((bed) =>
-    shadedBySurroundings(bedLightOf(raster, bed.id, bed.footprint), exposure),
+    shadedBySurroundings(bedLightOf(raster, bed.id, bed.footprint), share),
   )
   s.bedLightSubdivision = raster.quality.subdivision
 }
@@ -443,8 +443,8 @@ const runBake = async (
     // the surroundings answer as it stands when the bake lands, after any change made mid-bake:
     // the raster is the panels' shade alone, and every bed figure carries the answer on top,
     // unless the plot this run was handed already carries a house, which answers it instead
-    const exposure = exposureInForce(plot.obstructions, s.answers.exposure)
-    s.bedLight = bedLight.map((light) => shadedBySurroundings(light, exposure))
+    const share = surroundingsInForce(plot.obstructions, s.answers)
+    s.bedLight = bedLight.map((light) => shadedBySurroundings(light, share))
     s.bedLightSubdivision = raster.quality.subdivision
     s.compliance = compliance
     // stamped from the plot this run was handed, since an edit made while the bake was in flight
@@ -2173,7 +2173,9 @@ export const useAppStore = create<AppState>()(
           // One the search never reads doesn't: see `SEARCH_ANSWER_FIELDS`
           const stale = staleSearchAfter(patch)
           const exposureMoved =
-            patch.exposure !== undefined && patch.exposure !== s.answers.exposure
+            (patch.exposure !== undefined && patch.exposure !== s.answers.exposure) ||
+            (patch.surroundingsShadePercent !== undefined &&
+              patch.surroundingsShadePercent !== s.answers.surroundingsShadePercent)
           s.answers = { ...s.answers, ...patch }
           // the surroundings dim every bed's light before the ranking reads it, so a new answer
           // re-reads the beds off the raster already baked
@@ -2462,7 +2464,9 @@ export const useAppStore = create<AppState>()(
         const searchAnswersMoved = SEARCH_ANSWER_FIELDS.some(
           (field) => before.answers[field] !== snapshot.answers[field],
         )
-        const exposureMoved = before.answers.exposure !== snapshot.answers.exposure
+        const exposureMoved =
+          before.answers.exposure !== snapshot.answers.exposure ||
+          before.answers.surroundingsShadePercent !== snapshot.answers.surroundingsShadePercent
         // the raster's stamp is read against the plot coming back, since a raster that is stale for
         // the plot on screen can be fresh for that one. The light bullet above says more
         const lightFits =

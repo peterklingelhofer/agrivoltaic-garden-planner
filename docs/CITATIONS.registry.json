@@ -1,5 +1,5 @@
 {
-  "checked": "2026-10-20T12:18:52.536Z",
+  "checked": "2026-10-29T15:56:03.769Z",
   "dois": {
     "adhikary2025-clubroot-review": {
       "agrees": {
@@ -9869,6 +9869,13 @@
       "status": 200,
       "url": "https://hdl.handle.net/10568/104208"
     },
+    "hijmans-recocrop": {
+      "bodySha256": "3edfe74d1fc5d21864dad5fc9716e50d1435569673d869e017114828b437c451",
+      "checked": "2026-10-29T14:36:50.190Z",
+      "finalUrl": "https://github.com/cropmodels/Recocrop/blob/master/inst/parameters/ecocrop.rds",
+      "status": 200,
+      "url": "https://github.com/cropmodels/Recocrop/blob/master/inst/parameters/ecocrop.rds"
+    },
     "iastate-extension-2015-aronia": {
       "bodySha256": "31ab310d3e9d3b513817c8b794b1373ca9e30ffe0ba612be4482c33b9171b46f",
       "checked": "2026-10-17T22:25:07.639Z",
@@ -11737,6 +11744,13 @@
       "finalUrl": "https://extension.usu.edu/treebrowser/catalog/pistachio",
       "status": 200,
       "url": "https://extension.usu.edu/treebrowser/catalog/pistachio"
+    },
+    "ut-w362d-youth-gardening": {
+      "bodySha256": "b870101b2db67a756d0c86dcc0a7d142168f88d16f850590123fd91530427f87",
+      "checked": "2026-10-29T15:56:04.014Z",
+      "finalUrl": "https://knox.tennessee.edu/wp-content/uploads/sites/202/2020/11/W362D-Youth-Gardening-in-TN-10-Favorite-Plants-for-Youth.pdf",
+      "status": 200,
+      "url": "https://knox.tennessee.edu/wp-content/uploads/sites/202/2020/11/W362D-Youth-Gardening-in-TN-10-Favorite-Plants-for-Youth.pdf"
     },
     "uwextension-honeyberries": {
       "bodySha256": "99f7daf187f895c16db65f2b43855bb99155e9a196a374f7c30258cc87558c1b",

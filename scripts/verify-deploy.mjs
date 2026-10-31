@@ -30,6 +30,7 @@ const wantAgent = process.env.AGENT === 'on'
 const AGENT_MARKER = 'action-toolbar-ask'
 const MODEL_CONFIG = '/models/Xenova/all-MiniLM-L6-v2/config.json'
 const CROP_PAGE = '/docs/crops.html'
+const CROPS_PAGE = '/crops/'
 const CROP_CSV = '/docs/crop-light.csv'
 
 const failures = []
@@ -80,6 +81,14 @@ if (cropCsv.body.startsWith('id,crop,')) {
 } else {
   failures.push(
     `${CROP_CSV} isn't the crop table's CSV (content-type ${cropCsv.type}), so the docs step never ran or its output wasn't deployed`,
+  )
+}
+// the crop finder is the build's second page. The SPA fallback would answer for it with the
+// planner's HTML if the page was never built, so the body is read, as with the crop page
+const cropsPage = await get(CROPS_PAGE)
+if (!cropsPage.body.includes('<title>Crop finder')) {
+  failures.push(
+    `${CROPS_PAGE} isn't the crop finder (content-type ${cropsPage.type}), so the build left out its page or its output wasn't deployed`,
   )
 }
 

@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, mock } from 'bun:test'
 import { vi } from '../../test/vi'
 import { CROWN_TRANSMITTANCE_IN_LEAF, CROWN_TRANSMITTANCE_LEAFLESS } from '../data/canopy'
 import type { DesignProgress, SimulationRunner } from '../recommend/design'
+import { surroundingsShare } from '../recommend/surroundings'
 import { siteFixture, tmyFixture } from '../recommend/testkit'
 import type { GardenPlot } from '../types/garden'
 import { epochMillis, meters } from '../types/units'
@@ -129,6 +130,19 @@ describe('the answers reach the engine contract', () => {
     expect(full({ exposure: 'overshadowed' }, plot).exposure).toBe('overshadowed')
     const withHouse = { ...plot, obstructions: [makeHouse(1, plot.boundary, 'south')] }
     expect(full({ exposure: 'overshadowed' }, withHouse).exposure).toBe('open')
+  })
+
+  /** A typed figure stands in for the cards, so a drawing sets it aside the way it sets them aside */
+  it('hands the search the typed figure in force: none with a house drawn, the figure otherwise', () => {
+    const plot = plotOf(10, 8)
+    const typed = full({ exposure: 'overshadowed', surroundingsShadePercent: 45 }, plot)
+    expect(typed.surroundingsShadePercent).toBe(45)
+    expect(surroundingsShare(typed)).toBeCloseTo(0.45, 12)
+    const withHouse = { ...plot, obstructions: [makeHouse(1, plot.boundary, 'south')] }
+    const drawn = full({ exposure: 'overshadowed', surroundingsShadePercent: 45 }, withHouse)
+    expect(drawn.exposure).toBe('open')
+    expect(drawn.surroundingsShadePercent).toBeNull()
+    expect(surroundingsShare(drawn)).toBe(0)
   })
 
   it('normalizes the objective on the way out, whatever the sliders left behind', () => {
@@ -634,6 +648,7 @@ describe('a finished layout search survives an answer the search never reads', (
       { objective: { food: 1, energy: 0, water: 0, simplicity: 0 } },
       { ambition: 'leafy-and-herbs' as const },
       { exposure: 'partly-sheltered' as const },
+      { surroundingsShadePercent: 45 },
       { mounting: 'ground-rows' as const },
       { maxHeightM: meters(2.4) },
       { irrigationAvailable: false },

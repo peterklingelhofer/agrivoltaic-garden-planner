@@ -1,7 +1,7 @@
 import { SITE_PARTS, type SitePart } from '../data/site'
 import { LIMED_BED_PH_MAX, LIMED_BED_PH_MIN } from '../recommend/stages/soil-water'
 import type { AsyncState } from '../state/slices'
-import { isMapSoil, type SoilProfile } from '../types/site'
+import { isMapSoil, type SoilProfile, type TemperatureHardinessRating } from '../types/site'
 
 const LOOKING_UP_EVERYTHING = 'Looking up the weather, soil and frost dates for this place…'
 
@@ -106,6 +106,23 @@ export const soilSampledNote = (soil: { readonly sampledKm?: number }): string |
  * crop that wants a different pH and never rules it out. Null for a typed value, the assumed
  * loam, or a map reading inside the band
  */
+export const OSM_ATTRIBUTION = '© OpenStreetMap contributors'
+
+/** What the place step says before anything has been asked for, and the crop finder with it */
+export const SITE_IDLE = 'No place looked up yet. Search an address above'
+
+/**
+ * "usda-2023 6a" is a dataset id. A gardener reads "zone 6a (USDA)". Outside the map's grid the
+ * zone is computed from thirty years of daily minima, and the label says so and makes no claim
+ * to the map
+ */
+export const zoneWords = (rating: TemperatureHardinessRating): string =>
+  rating.scheme.startsWith('usda')
+    ? rating.basis === 'weather-record'
+      ? `zone ${rating.zoneLabel}, USDA-style, computed from the weather record`
+      : `zone ${rating.zoneLabel} (USDA)`
+    : `${rating.scheme} ${rating.zoneLabel}`
+
 export const soilPhNote = (soil: Pick<SoilProfile, 'phUnits' | 'sourceId'>): string | null =>
   isMapSoil(soil) && (soil.phUnits < LIMED_BED_PH_MIN || soil.phUnits > LIMED_BED_PH_MAX)
     ? `The soil map reads pH ${soil.phUnits.toFixed(1)} here. Vegetable beds are usually limed to ${String(LIMED_BED_PH_MIN)} to ${String(LIMED_BED_PH_MAX)}, so this reading counts against a crop that wants a different pH without ruling it out. Type your bed's pH if you've tested it.`

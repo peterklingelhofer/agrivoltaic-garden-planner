@@ -27,7 +27,7 @@
     "lint": "biome lint . && eslint .",
     "format": "biome format --write .",
     "typecheck": "tsc -b",
-    "generate": "node scripts/generate-citations.mjs && node scripts/render-citations-md.mjs && node scripts/generate-laub.mjs && node scripts/generate-rust-tables.mjs && node scripts/generate-catalog.mjs",
+    "generate": "node scripts/generate-citations.mjs && node scripts/render-citations-md.mjs && node scripts/generate-laub.mjs && node scripts/generate-ecocrop.mjs && node scripts/generate-rust-tables.mjs && node scripts/generate-catalog.mjs",
     "check": "biome check --write .",
     "dev:worker": "wrangler dev",
     "preview:worker": "bun run build:deploy && wrangler dev --env production",

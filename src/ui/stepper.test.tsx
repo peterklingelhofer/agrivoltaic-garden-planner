@@ -308,6 +308,16 @@ describe('auto-run', () => {
   })
 
   /**
+   * And a typed shade figure, which dims every bed's light the way the cards do. The beds are read
+   * again when it moves and their count stays the same, so the key has to carry the figure itself
+   */
+  it('re-ranks when a shade figure is typed, because it dims the light every bed is ranked on', () => {
+    const before = autoRunKey(useAppStore.getState())
+    useAppStore.getState().answerOnboarding({ surroundingsShadePercent: 45 })
+    expect(autoRunKey(useAppStore.getState())).not.toBe(before)
+  })
+
+  /**
    * A guided apply carries the search's own per-bed light into `bedLight` without baking the
    * editor's raster, so a raster test would call a fully planted garden blocked
    */
