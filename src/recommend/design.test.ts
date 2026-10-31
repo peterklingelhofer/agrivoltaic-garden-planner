@@ -365,13 +365,15 @@ describe('a full five-scenario run', () => {
     elapsedMs = Date.now() - started
   }, 600_000)
 
-  it('bakes all five archetypes inside the interactive budget', () => {
+  it('bakes all five archetypes in bounded time', () => {
     expect(result.scenarios).toHaveLength(5)
     expect(new Set(result.scenarios.map((entry) => entry.candidate.archetype)).size).toBe(5)
-    // recorded so a regression in the search cost is visible: the CPU reference backend in
-    // node is the slow path, the browser runs the same bake on WebGL2 or WebGPU
+    // a hang guard, not a budget: the CPU reference backend in node is the slow path (the
+    // browser runs the same bake on WebGL2 or WebGPU), and a shared CI runner took 80 s for
+    // the same five bakes that pass in under a minute elsewhere. The search's cost is held by
+    // the geometry count the next test pins, which no runner's speed can move
     expect(elapsedMs).toBeGreaterThan(0)
-    expect(elapsedMs).toBeLessThan(60_000)
+    expect(elapsedMs).toBeLessThan(300_000)
   })
 
   it('says how far the search went, so a truncation is never silent', () => {
