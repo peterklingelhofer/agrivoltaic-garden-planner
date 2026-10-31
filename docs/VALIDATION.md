@@ -93,6 +93,20 @@ was "higher and more stable" under drought stress, without a comparison yield ra
 pin. Laub's inclusion criteria exclude modeling work, so the paper sits outside the meta-analysis
 as well as outside this table. It appears below as a qualitative check.
 
+**Mata et al. 2026 (`mata2026-rutgers-solanaceous`)** reports the first season of the Rutgers
+trial at Bridgeton NJ: eggplant, bell pepper and fresh-market tomato in drip-irrigated beds 2.1 to
+8.3 m from a north-south single-axis tracker row, pivot 2.44 m, rows 10 m apart, under single or
+double portrait modules. Every crop yielded less under the trackers than in the open plot, less
+under double modules than under single, and least in the beds nearest the row. The fruity-vegetables
+curve these crops read keeps its central estimate above 100% up to about 44% RSR, so wherever the
+single-module rows cast less shade than that, the trial measured a loss where the curve's center
+predicts a gain. The catalog's tomato and pepper rows carry that as their caveat, and
+`docs/00-DECISIONS.md` says why in its fruity-vegetables section. The paper prints its yields only
+as fitted curves in a figure marked preliminary, measured no light and ran one block, so no shade level
+can be paired with a yield ratio and the trial has no row in the table above. Running this app at
+the trial's geometry would supply the shade level once the trackers' control schedule is known, and
+the data are available from the authors on request.
+
 ## 3. What the water-limitation gate can and can't do
 
 Decision Record 6 gates the shade-benefit pathway on water limitation. It cites Barron-Gafford's
